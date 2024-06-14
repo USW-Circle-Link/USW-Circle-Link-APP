@@ -1,13 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:usw_circle_link/views/screens/MainScreen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(const CircleLink());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class CircleLink extends StatelessWidget {
+  const CircleLink({super.key});
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: const MainScreen(),
+    );
   }
 }
