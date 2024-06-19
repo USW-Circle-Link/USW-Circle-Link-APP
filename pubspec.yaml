@@ -87,5 +87,10 @@ flutter:
       fonts:
         - asset: assets/fonts/Jalnan2TTF.ttf
           style: normal
+
+    - family: Pretendard-Regular
+      fonts:
+        - asset: assets/fonts/Pretendard-Regular.ttf
+          style: normal
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
