@@ -59,17 +59,16 @@ class _MainScreenState extends State<MainScreen> {
                 ),
                 Container(
                     child: Row(
-                  children: [
-                    Container(
-                        child: IconButton(
-                      onPressed: () {},
-                      icon: SvgPicture.asset(
-                        'assets/images/bell.svg',
-                      ),
-                    )),
-                  ],
-                ))
-              ],
+                      children: [
+                        Container(
+                          child: IconButton(
+                            onPressed: () {},
+                            icon: SvgPicture.asset('assets/images/bell.svg',),
+                          )
+                        ),
+                      ],
+                    )
+                ),],
             ),
           ),
         ),
