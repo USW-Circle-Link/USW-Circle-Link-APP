@@ -1,10 +1,14 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+  MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -133,8 +137,6 @@ class _MainScreenState extends State<MainScreen> {
                   UswClubList(),
                   UswClubList(),
                   UswClubList(),
-                  UswClubList(),
-                  // 필요한 만큼 UswClubList() 추가
                 ],
               ),
             ),
@@ -145,15 +147,121 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
+// ignore: non_constant_identifier_names
+Widget Card({required Container child}) {
+  return Container(
+    margin: EdgeInsets.only(top: 12.h, right: 6.w),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Image.asset(
+          'assets/images/gullisae.png',
+          width: 120.w,
+          height: 140.h,
+        ),
+        SizedBox(height: 8.h),
+        Row(
+          children: [
+            SizedBox(width: 6.w),
+            TextFontWidget.fontRegular(
+                text: '굴리세',
+                fontSize: 14.sp,
+                color: Colors.black,
+                fontweight: FontWeight.w500),
+          ],
+        ),
+        SizedBox(height: 8.h),
+        Row(
+          children: [
+            SizedBox(width: 4.w),
+            Container(
+              alignment: Alignment.center,
+              height: 20.h,
+              width: 47.w,
+              margin: EdgeInsets.only(right: 5.w),
+              decoration: BoxDecoration(
+                color: Color(0xffF0F2F5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4.0),
+                ),
+              ),
+              child: TextFontWidget.fontRegular(
+                  text: '# 볼링',
+                  fontSize: 12.sp,
+                  color: Color(0xff989898),
+                  fontweight: FontWeight.w400),
+            ),
+            Container(
+              alignment: Alignment.center,
+              height: 20.h,
+              width: 47.w,
+              margin: EdgeInsets.only(right: 5.w),
+              decoration: BoxDecoration(
+                color: Color(0xffF0F2F5),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(4.0),
+                ),
+              ),
+              child: TextFontWidget.fontRegular(
+                  text: '# 친목',
+                  fontSize: 12.sp,
+                  color: Color(0xff989898),
+                  fontweight: FontWeight.w400),
+            ),
+          ],
+        )
+      ],
+    ),
+  );
+}
+
 Widget UswClubList() {
   return Container(
     width: double.infinity,
     height: 250.h,
     margin: EdgeInsets.only(top: 12.h),
-    padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+    padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
     color: Colors.white,
     child: Row(
-      children: [],
+      children: [
+        Expanded(
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: 4, // 실제 데이터 개수로 대체
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.only(right: 8.w), // 카드 간격 조정
+                child: Card(
+                  child: Container(
+                    width: 150.w, // 카드의 너비
+                    height: 200.h, // 카드의 높이
+                    child: Center(
+                      child: Text('Card $index'), // 카드 내용
+                    ),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
     ),
   );
 }
+
+/*Widget UswClubList() {
+  //api 나오면 ListView.builder() 사용
+  return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        width: double.infinity,
+        height: 250.h,
+        margin: EdgeInsets.only(top: 12.h),
+        padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 24.w),
+        color: Colors.white,
+        child: Row(
+          children: [Card(), Card(), Card()],
+        ),
+      ));
+}
+*/
