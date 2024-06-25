@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -34,7 +35,9 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 Container(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => LoginScreen()));
+                    },
                     icon: SvgPicture.asset(
                       'assets/images/menubt.svg',
                     ),
