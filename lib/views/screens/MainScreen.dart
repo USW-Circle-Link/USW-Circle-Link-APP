@@ -1,6 +1,9 @@
+//import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -67,7 +70,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        drawer: Menubar(),
+        drawer: Menubar(context),
         body: Column(
           children: [
             Row(
@@ -142,7 +145,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 // ignore: non_constant_identifier_names
-Widget Menubar() {
+Widget Menubar(BuildContext context) {
   return Drawer(
     backgroundColor: const Color(0xffF0F2F5),
     width: 290.w,
@@ -153,24 +156,29 @@ Widget Menubar() {
           decoration: BoxDecoration(
             color: Colors.white,
           ),
-          child: Center(
-              child: Row(
-            children: [
-              SizedBox(width: 3.w),
-              SvgPicture.asset(
-                'assets/images/profile.svg',
-              ),
-              SizedBox(width: 16.w),
-              TextFontWidget.fontRegular(
-                  text: '로그인',
-                  fontSize: 18.sp,
-                  color: Colors.black,
-                  fontweight: FontWeight.w600),
-              SvgPicture.asset(
-                'assets/images/>.svg',
-              ),
-            ],
-          )),
+          child: GestureDetector(
+            onTap: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+            },
+            child: Center(
+                child: Row(
+              children: [
+                SizedBox(width: 3.w),
+                SvgPicture.asset(
+                  'assets/images/profile.svg',
+                ),
+                SizedBox(width: 16.w),
+                TextFontWidget.fontRegular(
+                    text: '로그인',
+                    fontSize: 18.sp,
+                    color: Colors.black,
+                    fontweight: FontWeight.w600),
+                SvgPicture.asset(
+                  'assets/images/>.svg',
+                ),
+              ],
+            )),
+          ),
         ),
         buildDrawerItem(
           title: '내 정보',
