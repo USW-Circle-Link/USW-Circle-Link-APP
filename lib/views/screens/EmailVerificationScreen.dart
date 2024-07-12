@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -142,7 +140,9 @@ class EmailVerificationScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () {
+                              Navigator.popUntil(context, ModalRoute.withName('/'));
+                            },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
