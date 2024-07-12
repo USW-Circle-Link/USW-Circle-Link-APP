@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedDropdown.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -350,11 +350,12 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         child: OutlinedButton(
                             onPressed: () {
                               setState(() {
-                                pwIsInvalid = !pwIsInvalid;
-                                errorMessage =
-                                    "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
-                                errorMessageVisivility = pwIsInvalid;
+                                // pwIsInvalid = !pwIsInvalid;
+                                // errorMessage =
+                                //     "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
+                                // errorMessageVisivility = pwIsInvalid;
                               });
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>EmailVerificationScreen()));
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
