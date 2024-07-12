@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
 
 void main() {
@@ -13,7 +11,7 @@ class CircleLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MainScreen(),
+      home: SignUpScreen(),
     );
   }
 }
