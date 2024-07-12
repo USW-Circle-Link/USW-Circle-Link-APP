@@ -17,6 +17,7 @@ class RoundedDropdown extends StatelessWidget {
   final List<String> items;
   final Color? borderColor, backgroundColor;
   final bool isBackgroundFilled;
+  final String? initValue;
 
   final Function(String? value) onChanged;
 
@@ -35,8 +36,9 @@ class RoundedDropdown extends StatelessWidget {
       required this.items,
       this.borderColor,
       this.backgroundColor,
-      this.isBackgroundFilled = false, 
-      required this.onChanged})
+      this.isBackgroundFilled = false,
+      required this.onChanged,
+      this.initValue})
       : super(key: key);
 
   @override
@@ -62,11 +64,11 @@ class RoundedDropdown extends StatelessWidget {
         ),
         hint: TextFontWidget.fontRegular(
           text: hintText ?? "",
-          color: Color(0xFFCECECE),
+          color: Color(0xFF767676),
           fontSize: 14.sp,
           fontweight: FontWeight.w400,
         ),
-        value: null,
+        value: initValue,
         onChanged: onChanged,
         items: items.map<DropdownMenuItem<String>>((String value) {
           return DropdownMenuItem<String>(
@@ -86,12 +88,12 @@ class RoundedDropdown extends StatelessWidget {
   InputDecoration setInputDecoration() {
     return InputDecoration(
       isDense: true,
-      contentPadding: EdgeInsets.only(left : 16.w,top:16.h,bottom:8.h),
+      contentPadding: EdgeInsets.only(left: 16.w, top: 16.h, bottom: 8.h),
       filled: isBackgroundFilled,
       fillColor: backgroundColor ?? Colors.white,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: borderColor ?? const Color(0xFFDBDBDB),
+          color: borderColor ?? const Color(0xFFCECECE),
           width: borderWidth ?? 0, // borderWidth must not be null!
         ),
         borderRadius: BorderRadius.only(
@@ -103,7 +105,7 @@ class RoundedDropdown extends StatelessWidget {
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: borderColor ?? const Color(0xFFDBDBDB),
+          color: borderColor ?? const Color(0xFFCECECE),
           width: borderWidth ?? 0, // borderWidth must not be null!
         ),
         borderRadius: BorderRadius.only(

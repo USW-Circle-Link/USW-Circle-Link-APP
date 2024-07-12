@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
@@ -36,8 +37,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool phoneNumberIsInvalid = false;
   bool studentNumberIsInvalid = false;
 
-  String college = "";
-  String major = "";
+  String? college;
+  String? major;
+
+  String? selectedCollege;
+  String? selectedMajor;
 
   @override
   void initState() {
@@ -330,7 +334,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         textInputType: TextInputType.none,
                         textAlign: TextAlign.left,
                         textInputAction: TextInputAction.done,
-                        hintText: '학과',
+                        hintText: (selectedCollege == null || selectedMajor == null)?'학과':'${selectedCollege} ${selectedMajor}',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_bookmark.svg',
@@ -355,7 +359,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 //     "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
                                 // errorMessageVisivility = pwIsInvalid;
                               });
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>EmailVerificationScreen()));
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EmailVerificationScreen()));
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
@@ -417,25 +425,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
   }
 
   void showCustomDialog(BuildContext context) async {
-    String? selectedCollege;
-    String? selectedMajor;
-
     final result = await showDialog(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 16.w),
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15),
+              borderRadius: BorderRadius.circular(15.r),
               color: Colors.white,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 RoundedDropdown(
+                  initValue: selectedCollege,
                   onChanged: (String? newValue) {
-                    selectedCollege = newValue;
+                    setState(() {
+                      selectedCollege = newValue;
+                    });
                   },
                   items: <String>['College 1', 'College 2', 'College 3'],
                   hintText: '단과대학 선택',
@@ -443,13 +450,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   leftBottomCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
                   rightBottomCornerRadius: 8.r,
+                  borderColor: Color(0xFFCECECE),
                   borderWidth: 1.w,
                   marginTop: 32.h,
+                  marginLeft: 16.w,
+                  marginRight: 16.w,
                 ),
                 SizedBox(height: 8),
                 RoundedDropdown(
+                  initValue: selectedMajor,
                   onChanged: (String? newValue) {
-                    selectedMajor = newValue;
+                    setState(() {
+                      selectedMajor = newValue;
+                    });
                   },
                   items: <String>['Major 1', 'Major 2', 'Major 3'],
                   hintText: '학부(학과) 선택',
@@ -457,27 +470,37 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   leftBottomCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
                   rightBottomCornerRadius: 8.r,
+                  borderColor: Color(0xFFCECECE),
                   borderWidth: 1.w,
+                  marginLeft: 16.w,
+                  marginRight: 16.w,
                 ),
                 SizedBox(height: 20),
-                ElevatedButton(
+                SizedBox.fromSize(
+                  size: Size.fromHeight(1.h),
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(color: Color(0xFFCECECE)),
+                  ),
+                ),
+                TextButton(
                   onPressed: () {
                     Navigator.of(context).pop(
                         {'college': selectedCollege, 'major': selectedMajor});
                   },
-                  style: ElevatedButton.styleFrom(
+                  style: TextButton.styleFrom(
+                    minimumSize: Size.fromHeight(50.h),
                     //primary: Colors.white,
                     //onPrimary: Colors.blue,
-                    side: BorderSide(color: Colors.blue),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(20),
+                      borderRadius: BorderRadius.vertical(
+                          top: Radius.zero, bottom: Radius.circular(15.r)),
                     ),
                   ),
-                  child: Text(
-                    "확인",
-                    style: TextStyle(
-                      color: Colors.blue,
-                    ),
+                  child: TextFontWidget.fontRegular(
+                    text: "확인",
+                    color: Color(0xFF0085FF),
+                    fontSize: 18.sp,
+                    fontweight: FontWeight.w500,
                   ),
                 ),
               ],
@@ -489,9 +512,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
     setState(() {
       if (result != null) {
-        college = result['college'] ?? "";
-        major = result['major'] ?? "";
+        college = result['college'];
+        major = result['major'];
         debugPrint('${college} - ${major}');
+        debugPrint('${selectedCollege} - ${selectedMajor}');
       }
     });
   }
