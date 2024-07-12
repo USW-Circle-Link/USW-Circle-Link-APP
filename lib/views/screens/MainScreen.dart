@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
+import 'package:usw_circle_link/views/screens/CircleScreen.dart';
+
+
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -34,7 +37,12 @@ class _MainScreenState extends State<MainScreen> {
               children: [
                 Container(
                   child: IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const CircleScreen()),
+                      );
+                    },
                     icon: SvgPicture.asset(
                       'assets/images/menubt.svg',
                     ),
