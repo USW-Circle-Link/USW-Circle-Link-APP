@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
+import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -191,6 +192,7 @@ Widget Menubar(BuildContext context) {
           title: '나의 소속 동아리',
           svgPath: 'assets/images/menubar2.svg',
           onTap: () {
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCircleScreen()));
             // 나의 소속 동아리 화면으로 이동
           },
         ),
