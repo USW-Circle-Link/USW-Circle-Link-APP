@@ -59,6 +59,7 @@ class EmailVerificationScreen extends StatelessWidget {
                       Container(
                         height: 46.h,
                         child: TextField(
+                          textAlignVertical: TextAlignVertical.center,
                           controller: emailEditController,
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
