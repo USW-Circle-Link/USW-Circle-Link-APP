@@ -114,7 +114,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         suffixIcon: Container(
-                          margin: EdgeInsets.only(
+                          margin: EdgeInsets.only( // top : 4, bottom : 4
                               top: 6.h, bottom: 6.h, right: 8.w),
                           width: 83.w,
                           //height: 38.h, //not working -> margin으로 높이 조절
@@ -132,7 +132,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.r),
+                                borderRadius: BorderRadius.circular(16.r), // radius 18
                               ),
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
@@ -245,7 +245,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       RoundedTextField(
                         height: 50.h,
                         textInputAction: TextInputAction.next,
-                        textEditController: idController,
+                        textEditController: nameController,
                         leftBottomCornerRadius: 0.r,
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 8.r,
@@ -269,7 +269,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       ),
                       RoundedTextField(
                         height: 50.h,
-                        textEditController: passwordConfirmController,
+                        textEditController: phoneNumberController,
                         leftBottomCornerRadius: 0.r,
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 0.r,

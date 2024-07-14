@@ -54,7 +54,7 @@ class EmailVerificationScreen extends StatelessWidget {
                       SizedBox(
                         height: 32.h,
                       ),
-                      Container(
+                      SizedBox(
                         height: 46.h,
                         child: TextField(
                           textAlignVertical: TextAlignVertical.center,
@@ -62,6 +62,7 @@ class EmailVerificationScreen extends StatelessWidget {
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
+                            hintText: "포털 이메일 입력",
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFF6E78D8)),
                             ),
