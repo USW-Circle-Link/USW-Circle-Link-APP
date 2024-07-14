@@ -3,11 +3,16 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class EmailVerificationScreen extends StatelessWidget {
-  EmailVerificationScreen({Key? key}) : super(key: key);
+class ApplicationWritingScreen extends StatefulWidget {
+  const ApplicationWritingScreen({Key? key}) : super(key: key);
 
-  final TextEditingController emailEditController = TextEditingController();
+  @override
+  _ApplicationWritingScreenState createState() =>
+      _ApplicationWritingScreenState();
+}
 
+class _ApplicationWritingScreenState extends State<ApplicationWritingScreen> {
+  bool? isDone = false;
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -35,7 +40,7 @@ class EmailVerificationScreen extends StatelessWidget {
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                          text: '회원가입',
+                          text: '지원하기',
                           fontSize: 18.sp,
                           color: Color(0xFF111111),
                           fontweight: FontWeight.w600),
@@ -54,66 +59,6 @@ class EmailVerificationScreen extends StatelessWidget {
                       SizedBox(
                         height: 32.h,
                       ),
-                      Container(
-                        height: 46.h,
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: emailEditController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          decoration: InputDecoration(
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF6E78D8)),
-                            ),
-                            contentPadding: EdgeInsets.only(left:8.w),
-                            suffixIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFontWidget.fontRegular(
-                                  text:'@ suwon.ac.kr',
-                                  fontSize: 16.sp,
-                                      color: Colors.black,
-                                      fontweight: FontWeight.w400
-                                )
-                              ],
-                            ),
-                          ),
-                          textInputAction: TextInputAction.done,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 48.h,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              text: "* 입력하신 메일로 ",
-                              style: TextStyle(
-                                  fontFamily: 'Pretendard-Regular',
-                                  fontSize: 12.sp,
-                                  color: const Color(0xFF989898),
-                                  fontWeight: FontWeight.w400),
-                              children: const [
-                                TextSpan(
-                                  text: "인증 URL",
-                                  style: TextStyle(
-                                      color: Color(0xFF6E6EDE),
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                TextSpan(
-                                  text: '을 전송합니다',
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 12.h,
-                      ),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -129,10 +74,50 @@ class EmailVerificationScreen extends StatelessWidget {
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '인증메일 전송',
+                                text: '지원서 작성',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
+                      ),
+                      SizedBox(
+                        height: 12.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text:
+                                  "지원서를 작성 완료후 '지원 완료' 버튼을 눌러 주세요.\n 지원서를 잘못 작성할 경우, 책임은 본인에게 있습니다.\n신중히 작성후 '지원 완료' 버튼을 눌러 주세요.",
+                              style: TextStyle(
+                                  fontFamily: 'Pretendard-Regular',
+                                  fontSize: 12.sp,
+                                  color: const Color(0xFF989898),
+                                  fontWeight: FontWeight.w400),
+                              children: const [
+                                // TextSpan(
+                                //   text: "인증 URL",
+                                //   style: TextStyle(
+                                //       color: Color(0xFF6E6EDE),
+                                //       fontWeight: FontWeight.w600),
+                                // ),
+                                // TextSpan(
+                                //   text: '을 전송합니다',
+                                // ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      Checkbox(
+                        value: isDone,
+                        onChanged: (bool? value) {
+                          setState(() {
+                            debugPrint('${isDone}');
+                            isDone = value;
+                          });
+                        },
                       ),
                       SizedBox(
                         height: 12.h,
@@ -141,9 +126,7 @@ class EmailVerificationScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.popUntil(context, ModalRoute.withName('/'));
-                            },
+                            onPressed: () {},
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -154,7 +137,7 @@ class EmailVerificationScreen extends StatelessWidget {
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '회원가입 완료',
+                                text: '지원 완료',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
