@@ -128,7 +128,7 @@ class CircleList extends StatelessWidget {
     required this.PhoneNumber,
     required this.status,
   });
-
+// 응답상태 (pass, fail, wait으로 받아옴,  pass,fail 시 응답완료, wait 시 대기 중)
   @override
   Widget build(BuildContext context) {
     return Center(
