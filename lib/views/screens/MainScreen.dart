@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
+import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -184,7 +185,10 @@ Widget Menubar(BuildContext context) {
           title: '내 정보',
           svgPath: 'assets/images/menubar1.svg',
           onTap: () {
-            // 내 정보 화면으로 이동
+            Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Updateprofilescreen()),
+            );
           },
         ),
         buildDrawerItem(
