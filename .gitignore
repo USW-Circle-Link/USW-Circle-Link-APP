@@ -66,3 +66,8 @@ lib/generated_plugin_registrant.dart
 !/packages/flutter_tools/test/data/dart_dependencies_test/**/.packages
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter
+# Ignore workspace.xml
+*.xml
+# Alternatively, specify the exact path if you only want to ignore this specific file
+.idea/workspace.xml
+.idea/misc.xml

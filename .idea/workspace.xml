@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a58259ae-f3f6-41b2-bf16-c0173d978f85" name="Changes" comment="" />
+    <list default="true" id="a58259ae-f3f6-41b2-bf16-c0173d978f85" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/USW-Circle-Link-APP.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/USW-Circle-Link-APP.iml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
