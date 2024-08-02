@@ -1,12 +1,9 @@
-//import 'dart:js';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/CircleScreen.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
-import 'package:usw_circle_link/views/screens/CircleScreen.dart';
-
 
 
 class MainScreen extends StatefulWidget {
@@ -33,57 +30,6 @@ class _MainScreenState extends State<MainScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-<<<<<<< HEAD
-          title: Container(
-            height: 52.h,
-            padding: EdgeInsets.zero,
-            margin: EdgeInsets.zero,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => const CircleScreen()),
-                      );
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/menubt.svg',
-                    ),
-                  ),
-                ),
-                Row(
-                  children: [
-                    SizedBox(
-                      child: Image.asset(
-                        'assets/images/duck.png',
-                        width: 19.w,
-                        height: 19.h,
-                      ),
-                    ),
-                    SizedBox(width: 4.w),
-                    TextFontWidget.jalnan2(
-                        text: '동구라미',
-                        fontSize: 16.sp,
-                        color: const Color(0xffFFC01D),
-                        fontweight: FontWeight.w400),
-                  ],
-                ),
-                Container(
-                    child: Row(
-                      children: [
-                        Container(
-                          child: IconButton(
-                            onPressed: () {},
-                            icon: SvgPicture.asset('assets/images/bell.svg',),
-                          )
-                        ),
-                      ],
-                    )
-                ),],
-=======
           leading: Padding(
             padding: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
             child: IconButton(
@@ -93,7 +39,6 @@ class _MainScreenState extends State<MainScreen> {
               icon: SvgPicture.asset(
                 'assets/images/menubt.svg',
               ),
->>>>>>> 28dc4892942e89e24d229326b1edadd9211a0b92
             ),
           ),
           title: Row(
@@ -142,7 +87,7 @@ class _MainScreenState extends State<MainScreen> {
                         ? const Color(0xff6E78D8)
                         : const Color(0xffEBEBEB),
                     minimumSize:
-                        Size(MediaQuery.of(context).size.width / 2, 46.h),
+                    Size(MediaQuery.of(context).size.width / 2, 46.h),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
@@ -151,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                     text: '전체',
                     fontSize: 16.sp,
                     color:
-                        isAllSelected ? Colors.white : const Color(0xffCECECE),
+                    isAllSelected ? Colors.white : const Color(0xffCECECE),
                     fontweight: FontWeight.w400,
                   ),
                 ),
@@ -166,7 +111,7 @@ class _MainScreenState extends State<MainScreen> {
                         ? const Color(0xff6E78D8)
                         : const Color(0xffEBEBEB),
                     minimumSize:
-                        Size(MediaQuery.of(context).size.width / 2, 46.h),
+                    Size(MediaQuery.of(context).size.width / 2, 46.h),
                     shape: const RoundedRectangleBorder(
                       borderRadius: BorderRadius.zero,
                     ),
@@ -175,7 +120,7 @@ class _MainScreenState extends State<MainScreen> {
                     text: '모집 중',
                     fontSize: 16.sp,
                     color:
-                        isAllSelected ? const Color(0xffCECECE) : Colors.white,
+                    isAllSelected ? const Color(0xffCECECE) : Colors.white,
                     fontweight: FontWeight.w400,
                   ),
                 ),
@@ -217,22 +162,22 @@ Widget Menubar(BuildContext context) {
             },
             child: Center(
                 child: Row(
-              children: [
-                SizedBox(width: 3.w),
-                SvgPicture.asset(
-                  'assets/images/profile.svg',
-                ),
-                SizedBox(width: 16.w),
-                TextFontWidget.fontRegular(
-                    text: '로그인',
-                    fontSize: 18.sp,
-                    color: Colors.black,
-                    fontweight: FontWeight.w600),
-                SvgPicture.asset(
-                  'assets/images/>.svg',
-                ),
-              ],
-            )),
+                  children: [
+                    SizedBox(width: 3.w),
+                    SvgPicture.asset(
+                      'assets/images/profile.svg',
+                    ),
+                    SizedBox(width: 16.w),
+                    TextFontWidget.fontRegular(
+                        text: '로그인',
+                        fontSize: 18.sp,
+                        color: Colors.black,
+                        fontweight: FontWeight.w600),
+                    SvgPicture.asset(
+                      'assets/images/arrow_right.svg',
+                    ),
+                  ],
+                )),
           ),
         ),
         buildDrawerItem(
@@ -328,72 +273,75 @@ Widget buildDrawerItem({
   );
 }
 
-Widget CustomCard({required Container child}) {
-  return Container(
-    margin: EdgeInsets.only(top: 12.h, right: 6.w),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(
-          'assets/images/gullisae.png',
-          width: 120.w,
-          height: 140.h,
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 6.w),
-            TextFontWidget.fontRegular(
-              text: '굴리세',
-              fontSize: 14.sp,
-              color: Colors.black,
-              fontweight: FontWeight.w500,
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 4.w),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
+Widget CustomCard({required Widget child, required VoidCallback onTap}) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Container(
+      margin: EdgeInsets.only(top: 12.h, right: 6.w),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Image.asset(
+            'assets/images/gullisae.png',
+            width: 120.w,
+            height: 140.h,
+          ),
+          SizedBox(height: 8.h),
+          Row(
+            children: [
+              SizedBox(width: 6.w),
+              TextFontWidget.fontRegular(
+                text: '굴리세',
+                fontSize: 14.sp,
+                color: Colors.black,
+                fontweight: FontWeight.w500,
+              ),
+            ],
+          ),
+          SizedBox(height: 8.h),
+          Row(
+            children: [
+              SizedBox(width: 4.w),
+              Container(
+                alignment: Alignment.center,
+                height: 20.h,
+                width: 47.w,
+                margin: EdgeInsets.only(right: 5.w),
+                decoration: BoxDecoration(
+                  color: Color(0xffF0F2F5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(4.0),
+                  ),
+                ),
+                child: TextFontWidget.fontRegular(
+                  text: '# 볼링',
+                  fontSize: 12.sp,
+                  color: Color(0xff989898),
+                  fontweight: FontWeight.w400,
                 ),
               ),
-              child: TextFontWidget.fontRegular(
-                text: '# 볼링',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
+              Container(
+                alignment: Alignment.center,
+                height: 20.h,
+                width: 47.w,
+                margin: EdgeInsets.only(right: 5.w),
+                decoration: BoxDecoration(
+                  color: Color(0xffF0F2F5),
+                  borderRadius: BorderRadius.all(
+                    Radius.circular(4.0),
+                  ),
+                ),
+                child: TextFontWidget.fontRegular(
+                  text: '# 친목',
+                  fontSize: 12.sp,
+                  color: Color(0xff989898),
+                  fontweight: FontWeight.w400,
                 ),
               ),
-              child: TextFontWidget.fontRegular(
-                text: '# 친목',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     ),
   );
 }
@@ -421,6 +369,12 @@ Widget UswClubList() {
                     child: Text('Card $index'),
                   ),
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => CircleScreen()), // 새로운 화면으로 전환
+                  );
+                },
               );
             },
           ),

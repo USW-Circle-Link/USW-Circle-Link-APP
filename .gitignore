@@ -70,9 +70,7 @@ lib/generated_plugin_registrant.dart
 *.xml
 # Alternatively, specify the exact path if you only want to ignore this specific file
 .idea/workspace.xml
-<<<<<<< HEAD
 .idea/misc.xml
-=======
 .idea/vcs.xml
 .idea/.gitignore
->>>>>>> 28dc4892942e89e24d229326b1edadd9211a0b92
+
