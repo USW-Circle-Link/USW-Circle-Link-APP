@@ -1,28 +1,12 @@
-import 'package:flutter/material.dart';
-import 'package:usw_circle_link/api_service.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/viewmodels/CircleRepository.dart';
 import 'package:usw_circle_link/model/Circle.dart';
 
+final circleRepositoryProvider = Provider<CircleRepository>((ref) {
+  return CircleRepository();
+});
 
-class CircleViewModel extends ChangeNotifier {
-  final ApiService apiService;
-  List<Circle> circles = [];
-  bool isLoading = false;
-  String? errorMessage;
-
-  CircleViewModel({required this.apiService});
-
-  Future<void> fetchCircles(String uuid) async {
-    isLoading = true;
-    errorMessage = null;
-    notifyListeners();
-
-    try {
-      circles = await apiService.fetchCircles(uuid);
-    } catch (error) {
-      errorMessage = error.toString();
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
-}
+final circleListProvider = FutureProvider.family<List<Circle>, String>((ref, uuId) {
+  final repository = ref.watch(circleRepositoryProvider);
+  return repository.fetchCircles(uuId);
+});

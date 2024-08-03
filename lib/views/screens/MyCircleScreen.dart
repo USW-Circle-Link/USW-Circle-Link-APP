@@ -1,18 +1,17 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
 
-class MyCircleScreen extends StatefulWidget {
+class MyCircleScreen extends ConsumerWidget {
   const MyCircleScreen({super.key});
 
   @override
-  State<MyCircleScreen> createState() => _MyCircleScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
+    final uuId = '2718DFBE-092B-47F4-A139-C4C25264EF3C';
+    final circlesAsyncValue = ref.watch(circleListProvider(uuId));
 
-class _MyCircleScreenState extends State<MyCircleScreen> {
-  @override
-  Widget build(BuildContext context) {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -60,47 +59,23 @@ class _MyCircleScreenState extends State<MyCircleScreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 24.h,),
-              CircleList(
-                  CircleLeader: '홍길동',
-                  CircleName: 'FLAG',
-                  ImageUrl: 'assets/images/flaglogo.png',
-                  KakaoId: '@Kakao',
-                  PhoneNumber: '010-1234-5678',
-                ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-              ),
-            ],
+        body: circlesAsyncValue.when(
+          data: (circles) => ListView.builder(
+            itemCount: circles.length,
+            itemBuilder: (context, index) {
+              final circle = circles[index];
+              return CircleList(
+                CircleLeader: circle.leaderName,
+                CircleName: circle.clubName,
+                ImageUrl: circle.mainPhotoPath,
+                KakaoId: circle.katalkID,
+                InstaId: circle.clubInsta,
+              );
+            },
           ),
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
+
         ),
       ),
     );
@@ -111,7 +86,7 @@ class CircleList extends StatelessWidget {
   final String CircleName;
   final String ImageUrl;
   final String CircleLeader;
-  final String PhoneNumber;
+  final String InstaId;
   final String KakaoId;
 
   const CircleList({
@@ -119,9 +94,9 @@ class CircleList extends StatelessWidget {
     required this.CircleName,
     required this.ImageUrl,
     required this.KakaoId,
-    required this.PhoneNumber,
+    required this.InstaId,
   });
-//test
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -198,7 +173,7 @@ class CircleList extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          PhoneNumber,
+                          InstaId,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),

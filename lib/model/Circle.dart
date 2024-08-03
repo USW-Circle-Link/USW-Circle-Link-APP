@@ -5,7 +5,6 @@ class Circle {
   final String leaderName;
   final String katalkID;
   final String clubInsta;
-  final String aplictStatus;
 
   Circle({
     required this.clubId,
@@ -14,7 +13,6 @@ class Circle {
     required this.leaderName,
     required this.katalkID,
     required this.clubInsta,
-    required this.aplictStatus,
   });
 
   factory Circle.fromJson(Map<String, dynamic> json) {
@@ -25,7 +23,6 @@ class Circle {
       leaderName: json['leaderName'],
       katalkID: json['katalkID'],
       clubInsta: json['clubInsta'],
-      aplictStatus: json['aplictStatus'],
     );
   }
 }
