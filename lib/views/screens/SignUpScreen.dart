@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/RoundedDropdown.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -57,8 +57,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  // TODO : icon padding 문제
-                  padding: EdgeInsets.only(left: 22.w, right: 22.w),
+                  padding: EdgeInsets.only(left: 22.w, right: 22.w), // icon에 10.w 정도의 여백이 기본적으로 존재
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -334,7 +333,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         textInputType: TextInputType.none,
                         textAlign: TextAlign.left,
                         textInputAction: TextInputAction.done,
-                        hintText: (selectedCollege == null || selectedMajor == null)?'학과':'${selectedCollege} ${selectedMajor}',
+                        hintText: (selectedCollege == null || selectedMajor == null)?'학과':'$selectedCollege $selectedMajor',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_bookmark.svg',
@@ -359,11 +358,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                                 //     "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
                                 // errorMessageVisivility = pwIsInvalid;
                               });
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          EmailVerificationScreen()));
+                              context.go('/login/sign_up/email_verification');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
