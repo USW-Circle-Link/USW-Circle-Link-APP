@@ -8,6 +8,7 @@ import 'package:usw_circle_link/views/screens/FindIDScreen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
+import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -241,7 +242,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FindPWScreen()));
+                        },
                         child: TextFontWidget.fontRegular(
                             text: '비밀번호 찾기',
                             fontSize: 14.sp,
