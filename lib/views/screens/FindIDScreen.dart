@@ -51,9 +51,7 @@ class FindIDScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 32.h,
-                      ),
+                      
                       SizedBox(
                         height: 46.h,
                         child: TextField(
