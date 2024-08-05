@@ -14,7 +14,7 @@ class Applicationcirclerepository {
       return data.map((circle) => Circle.fromJson(circle)).toList();
     } else {
       print('Failed to fetch data: ${response.statusCode}'); // 에러 코드 출력
-      throw Exception('소속 동아리 목록 조회에 실패하였습니다');
+      throw Exception('지원 동아리 목록 조회에 실패하였습니다');
     }
   }
 }
