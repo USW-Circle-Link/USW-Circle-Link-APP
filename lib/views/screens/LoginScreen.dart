@@ -1,18 +1,23 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
+import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
 
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -26,6 +31,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(loginViewModelProvider);
+    ref.listen<UserModelBase?>(loginViewModelProvider,
+        (UserModelBase? previous, UserModelBase? next) {
+      log('$next');
+    });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -33,17 +44,19 @@ class _LoginScreenState extends State<LoginScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
-          title: Padding( // TODO : icon padding 문제
-            padding: EdgeInsets.only(left:22.w),
+          title: Padding(            
+            padding: EdgeInsets.only(left: 22.w), // icon에 10.w 정도의 여백이 기본적으로 존재
             child: Row(
               children: [
                 IconButton(
-              onPressed: () {
-                // Navigate back to the previous screen by popping the current route
-                Navigator.of(context).pop();
-              },
-              icon: SvgPicture.asset('assets/images/ic_back_arrow.svg',),
-            ),
+                  onPressed: () {
+                    // Navigate back to the previous screen by popping the current route
+                    Navigator.of(context).pop();
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/ic_back_arrow.svg',
+                  ),
+                ),
               ],
             ),
           ),
@@ -162,7 +175,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   height: 8.h,
                 ),
                 Visibility(
-                    visible: false,
+                    visible: state is UserModelError,
                     child: TextFontWidget.fontRegular(
                         text: "* 올바르지 않은 아이디 혹은 비밀번호입니다",
                         fontSize: 12.sp,
@@ -175,7 +188,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   width: double.infinity,
                   height: 56.h,
                   child: OutlinedButton(
-                      onPressed: () {},
+                      onPressed: state is UserModelLoading
+                          ? null
+                          : () async {
+                              log('id:${idController.text} pw:${passwordController.text}');
+                              if (idController.text.isNotEmpty &&
+                                  passwordController.text.isNotEmpty) {
+                                await ref.read(loginViewModelProvider.notifier).login(
+                                      id: idController.text,
+                                      password: passwordController.text,
+                                    );
+                              }
+                            },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xFF4F5BD0),
                         side: const BorderSide(
@@ -231,7 +255,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                         onPressed: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SignUpScreen()));
+                          context.go('/login/sign_up');
                         },
                         child: TextFontWidget.fontRegular(
                             text: '회원가입',
