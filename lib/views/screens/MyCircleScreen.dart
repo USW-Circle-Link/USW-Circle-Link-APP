@@ -9,7 +9,7 @@ class MyCircleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final uuId = '2718DFBE-092B-47F4-A139-C4C25264EF3C';
+    final uuId = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
     final circlesAsyncValue = ref.watch(circleListProvider(uuId));
 
     return ScreenUtilInit(
@@ -64,18 +64,32 @@ class MyCircleScreen extends ConsumerWidget {
             itemCount: circles.length,
             itemBuilder: (context, index) {
               final circle = circles[index];
-              return CircleList(
-                CircleLeader: circle.leaderName,
-                CircleName: circle.clubName,
-                ImageUrl: circle.mainPhotoPath,
-                KakaoId: circle.katalkID,
-                InstaId: circle.clubInsta,
-              );
+              if (index == 0) {
+                return Column(
+                  children: [
+                    SizedBox(height: 24.h), // 첫 번째 아이템 위에 SizedBox 추가
+                    CircleList(
+                      CircleLeader: circle.leaderName,
+                      CircleName: circle.clubName,
+                      ImageUrl: circle.mainPhotoPath,
+                      KakaoId: circle.katalkID,
+                      InstaId: circle.clubInsta,
+                    ),
+                  ],
+                );
+              } else {
+                return CircleList(
+                  CircleLeader: circle.leaderName,
+                  CircleName: circle.clubName,
+                  ImageUrl: circle.mainPhotoPath,
+                  KakaoId: circle.katalkID,
+                  InstaId: circle.clubInsta,
+                );
+              }
             },
           ),
           loading: () => Center(child: CircularProgressIndicator()),
           error: (error, stack) => Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
-
         ),
       ),
     );
@@ -115,12 +129,14 @@ class CircleList extends StatelessWidget {
                   height: 100.sp,
                   width: 100.sp,
                   margin: EdgeInsets.all(16.sp),
-                  child: Image.asset(ImageUrl,),
+                  child: Image(
+                    image: NetworkImage(ImageUrl),
+                  )
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 26.h,),
+                    SizedBox(height: 26.h),
                     Row(
                       children: [
                         Text(
@@ -211,7 +227,7 @@ class CircleList extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 12.h,)
+          SizedBox(height: 12.h),
         ],
       ),
     );

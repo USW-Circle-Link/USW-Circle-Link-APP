@@ -7,7 +7,8 @@ class CircleRepository {
     final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/$uuId/my-clubs'));
 
     if (response.statusCode == 200) {
-      final responseBody = response.body;
+      final responseBodyBytes = response.bodyBytes;
+      final responseBody = utf8.decode(responseBodyBytes); // UTF-8로 수동 디코드 기본 값으로 할시 한글 꺠지는 문제 발생해서 수정함
       print('Server response: $responseBody'); // 서버 응답을 출력
       final data = json.decode(responseBody)['data'] as List;
       return data.map((circle) => Circle.fromJson(circle)).toList();
