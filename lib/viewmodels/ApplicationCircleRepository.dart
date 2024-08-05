@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:usw_circle_link/model/Circle.dart';
 
-class CircleRepository {
+class Applicationcirclerepository {
   Future<List<Circle>> fetchCircles(String uuId) async {
     final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/$uuId/my-clubs'));
 

@@ -2,17 +2,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/viewmodels/ApplicationCircleViewModel.dart';
 
-class Applicationcirclescreen extends StatefulWidget {
+class Applicationcirclescreen extends ConsumerStatefulWidget {
   const Applicationcirclescreen({super.key});
 
   @override
-  State<Applicationcirclescreen> createState() => _ApplicationcirclescreenState();
+  _ApplicationcirclescreenState createState() => _ApplicationcirclescreenState();
 }
 
-class _ApplicationcirclescreenState extends State<Applicationcirclescreen> {
+class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescreen> {
   @override
   Widget build(BuildContext context) {
+    final uuId = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
+    final circlesAsyncValue = ref.watch(circleListProvider(uuId));
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -60,52 +64,39 @@ class _ApplicationcirclescreenState extends State<Applicationcirclescreen> {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(height: 24.h,),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-                status: true,
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-                status: false,
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-                status: true,
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-                status: false,
-              ),
-              CircleList(
-                CircleLeader: '홍길동',
-                CircleName: 'FLAG',
-                ImageUrl: 'assets/images/flaglogo.png',
-                KakaoId: '@Kakao',
-                PhoneNumber: '010-1234-5678',
-                status: true,
-              ),
-            ],
+        body: circlesAsyncValue.when(
+          data: (circles) => ListView.builder(
+            itemCount: circles.length,
+            itemBuilder: (context, index) {
+              final circle = circles[index];
+              if (index == 0) {
+                return Column(
+                  children: [
+                    SizedBox(height: 24.h), // 첫 번째 아이템 위에 SizedBox 추가
+                    CircleList(
+                      CircleLeader: circle.leaderName,
+                      CircleName: circle.clubName,
+                      ImageUrl: circle.mainPhotoPath,
+                      KakaoId: circle.katalkID,
+                      InstaId: circle.clubInsta,
+                      status: circle.status,
+                    ),
+                  ],
+                );
+              } else {
+                return CircleList(
+                  CircleLeader: circle.leaderName,
+                  CircleName: circle.clubName,
+                  ImageUrl: circle.mainPhotoPath,
+                  KakaoId: circle.katalkID,
+                  InstaId: circle.clubInsta,
+                  status: circle.status,
+                );
+              }
+            },
           ),
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('지원 동아리 목록 조회에 실패하였습니다: $error')),
         ),
       ),
     );
@@ -116,21 +107,35 @@ class CircleList extends StatelessWidget {
   final String CircleName;
   final String ImageUrl;
   final String CircleLeader;
-  final String PhoneNumber;
+  final String InstaId;
   final String KakaoId;
-  final bool status;
+  final String status;
 
   const CircleList({
     required this.CircleLeader,
     required this.CircleName,
     required this.ImageUrl,
     required this.KakaoId,
-    required this.PhoneNumber,
+    required this.InstaId,
     required this.status,
   });
-// 응답상태 (pass, fail, wait으로 받아옴,  pass,fail 시 응답완료, wait 시 대기 중)
+
   @override
   Widget build(BuildContext context) {
+    Color statusColor;
+    String statusText;
+
+    if (status == 'WAIT') {
+      statusColor = const Color(0xffBFBFBF);
+      statusText = '대기 중';
+    } else if (status == 'PASS') {
+      statusColor = const Color(0xff6E78D8);
+      statusText = '응답 완료';
+    } else {
+      statusColor = const Color(0xffFF0000); // FAIL의 경우 색상을 변경
+      statusText = '응답 실패'; // FAIL의 경우 텍스트를 변경
+    }
+
     return Center(
       child: Column(
         children: [
@@ -148,13 +153,17 @@ class CircleList extends StatelessWidget {
                     Container(
                       height: 100.sp,
                       width: 100.sp,
-                      margin: EdgeInsets.fromLTRB(12, 16, 16, 16),
-                      child: Image.asset(ImageUrl,),
+                      margin: EdgeInsets.all(16.sp),
+                      child: Image(
+                        image: NetworkImage(
+                          ImageUrl
+                        ),
+                      )
                     ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 26.h,),
+                        SizedBox(height: 26.h),
                         Row(
                           children: [
                             Text(
@@ -207,7 +216,7 @@ class CircleList extends StatelessWidget {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              PhoneNumber,
+                              InstaId,
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
                                 color: const Color(0xFF353549),
@@ -238,7 +247,7 @@ class CircleList extends StatelessWidget {
                                 letterSpacing: -0.35.sp,
                               ),
                             ),
-                            SizedBox(width: 61.w,),
+                            SizedBox(width: 61.w),
                           ],
                         ),
                       ],
@@ -251,11 +260,11 @@ class CircleList extends StatelessWidget {
                   child: Container(
                     padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
                     decoration: BoxDecoration(
-                      color: status ? const Color(0xff6E78D8) : const Color(0xffBFBFBF),
+                      color: statusColor,
                       borderRadius: BorderRadius.circular(16.sp),
                     ),
                     child: Text(
-                      status ? '응답 완료' : '대기 중',
+                      statusText,
                       style: TextStyle(
                         fontFamily: 'Pretendard',
                         color: const Color(0xffFFFFFF),
@@ -270,7 +279,7 @@ class CircleList extends StatelessWidget {
               ],
             ),
           ),
-          SizedBox(height: 12.h,)
+          SizedBox(height: 12.h),
         ],
       ),
     );
