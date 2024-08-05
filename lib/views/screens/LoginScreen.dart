@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/FindIDScreen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
@@ -222,7 +223,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FindIDScreen()));
+                        },
                         child: TextFontWidget.fontRegular(
                             text: '아이디 찾기',
                             fontSize: 14.sp,
