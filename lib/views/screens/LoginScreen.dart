@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
 import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -214,7 +215,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {},
+                        onPressed: () {
+                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FindPWScreen()));
+                        },
                         child: TextFontWidget.fontRegular(
                             text: '비밀번호 찾기',
                             fontSize: 14.sp,
