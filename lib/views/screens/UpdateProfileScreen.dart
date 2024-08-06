@@ -1,31 +1,42 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/viewmodels/UpdateProfileViewmodel.dart';
 import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedDropdown.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
-import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class Updateprofilescreen extends StatefulWidget {
+class Updateprofilescreen extends ConsumerStatefulWidget {
   const Updateprofilescreen({super.key});
 
   @override
-  State<Updateprofilescreen> createState() => _UpdateprofilescreenState();
+  _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
 }
 
-class _UpdateprofilescreenState extends State<Updateprofilescreen> {
-  TextEditingController nameController = TextEditingController();
-  TextEditingController phonenumberController = TextEditingController();
-  TextEditingController studentnumberController = TextEditingController();
-  TextEditingController departmentController = TextEditingController();
-  String? college;
-  String? major;
-
+class _UpdateProfileScreenState extends ConsumerState<Updateprofilescreen> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phonenumberController = TextEditingController();
+  final TextEditingController studentnumberController = TextEditingController();
+  final TextEditingController departmentController = TextEditingController();
   String? selectedCollege;
   String? selectedMajor;
 
   @override
+  void dispose() {
+    nameController.dispose();
+    phonenumberController.dispose();
+    studentnumberController.dispose();
+    departmentController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final uuId = '';
+    final profileAsyncValue = ref.watch(updateProfileViewmodel(uuId));
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -93,14 +104,13 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h,),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   SizedBox(width: 32.w),
                   Container(
                     width: 311.w,
-                    child:
-                    RoundedTextField(
+                    child: RoundedTextField(
                       height: 50.h,
                       textEditController: nameController,
                       leftBottomCornerRadius: 8.r,
@@ -125,7 +135,7 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   )
                 ],
               ),
-              SizedBox(height: 16.h,),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   SizedBox(width: 36.w),
@@ -142,14 +152,13 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h,),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   SizedBox(width: 32.w),
                   Container(
                     width: 311.w,
-                    child:
-                    RoundedTextField(
+                    child: RoundedTextField(
                       height: 50.h,
                       textEditController: phonenumberController,
                       leftBottomCornerRadius: 8.r,
@@ -174,7 +183,7 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   )
                 ],
               ),
-              SizedBox(height: 16.h,),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   SizedBox(width: 36.w),
@@ -191,14 +200,13 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h,),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   SizedBox(width: 32.w),
                   Container(
                     width: 311.w,
-                    child:
-                    RoundedTextField(
+                    child: RoundedTextField(
                       height: 50.h,
                       textEditController: studentnumberController,
                       leftBottomCornerRadius: 8.r,
@@ -223,7 +231,7 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   )
                 ],
               ),
-              SizedBox(height: 16.h,),
+              SizedBox(height: 16.h),
               Row(
                 children: [
                   SizedBox(width: 36.w),
@@ -240,61 +248,70 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   ),
                 ],
               ),
-              SizedBox(height: 8.h,),
+              SizedBox(height: 8.h),
               Row(
                 children: [
                   SizedBox(width: 32.w),
                   Container(
                     width: 311.w,
-                    child:
-                    RoundedTextField(
-                      height: 50.h,
-                      readOnly: true,
-                      onTab: () async {
-                        showCustomDialog(context);
+                    child: GestureDetector(
+                      onTap: () async {
+                        await showCustomDialog(context);
                       },
-                      leftBottomCornerRadius: 8.r,
-                      rightBottomCornerRadius: 8.r,
-                      leftTopCornerRadius: 8.r,
-                      rightTopCornerRadius: 8.r,
-                      borderColor: const Color(0xffDBDBDB),
-                      borderWidth: 1.w,
-                      maxLines: 1,
-                      textInputType: TextInputType.none,
-                      textAlign: TextAlign.left,
-                      textInputAction: TextInputAction.done,
-                      prefixIcon: SvgPicture.asset(
-                        'assets/images/ic_bookmark.svg',
-                        width: 13.w,
-                        height: 16.h,
-                        fit: BoxFit.scaleDown,
+                      child: AbsorbPointer(
+                        child: RoundedTextField(
+                          height: 50.h,
+                          textEditController: departmentController,
+                          leftBottomCornerRadius: 8.r,
+                          rightBottomCornerRadius: 8.r,
+                          leftTopCornerRadius: 8.r,
+                          rightTopCornerRadius: 8.r,
+                          borderColor: const Color(0xffDBDBDB),
+                          borderWidth: 1.w,
+                          maxLines: 1,
+                          textInputType: TextInputType.none,
+                          textAlign: TextAlign.left,
+                          textInputAction: TextInputAction.done,
+                          prefixIcon: SvgPicture.asset(
+                            'assets/images/ic_bookmark.svg',
+                            width: 13.w,
+                            height: 16.h,
+                            fit: BoxFit.scaleDown,
+                          ),
+                          suffixIcon: SvgPicture.asset(
+                            'assets/images/>.svg',
+                            width: 32.w,
+                            height: 32.h,
+                            fit: BoxFit.scaleDown,
+                          ),
+                          hintText: (selectedCollege == null || selectedMajor == null)
+                              ? '학과'
+                              : '${selectedMajor}',
+                          hintStyle: TextStyle(
+                              fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          isAnimatedHint: false,
+                        ),
                       ),
-                      suffixIcon: SvgPicture.asset(
-                        'assets/images/>.svg',
-                        width: 32.w,
-                        height: 32.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      hintText: (selectedCollege == null || selectedMajor == null)?'학과':'${selectedMajor}',
-                      hintStyle: TextStyle(
-                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                      isAnimatedHint: false,
                     ),
                   )
                 ],
               ),
-              SizedBox(height: 48.h,),
-              CustomButton(text: '수정 완료', onPressed: () {
-                showalarmCustomDialog(context);
-              }),
+              SizedBox(height: 48.h),
+              CustomButton(
+                text: '수정 완료',
+                onPressed: () {
+                  showalarmCustomDialog(context);
+                },
+              ),
             ],
           ),
         ),
       ),
     );
   }
-  void showCustomDialog(BuildContext context) async {
-    final result = await showDialog(
+
+  Future<void> showCustomDialog(BuildContext context) async {
+    final result = await showDialog<Map<String, String?>>(
       context: context,
       builder: (BuildContext context) {
         return Dialog(
@@ -325,7 +342,7 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   marginLeft: 16.w,
                   marginRight: 16.w,
                 ),
-                SizedBox(height: 8),
+                SizedBox(height: 8.h),
                 RoundedDropdown(
                   initValue: selectedMajor,
                   onChanged: (String? newValue) {
@@ -340,12 +357,11 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   rightTopCornerRadius: 8.r,
                   rightBottomCornerRadius: 8.r,
                   borderColor: Color(0xFFCECECE),
-
                   borderWidth: 1.w,
                   marginLeft: 16.w,
                   marginRight: 16.w,
                 ),
-                SizedBox(height: 20),
+                SizedBox(height: 20.h),
                 SizedBox.fromSize(
                   size: Size.fromHeight(1.h),
                   child: DecoratedBox(
@@ -359,18 +375,19 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
                   },
                   style: TextButton.styleFrom(
                     minimumSize: Size.fromHeight(50.h),
-                    //primary: Colors.white,
-                    //onPrimary: Colors.blue,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
                           top: Radius.zero, bottom: Radius.circular(15.r)),
                     ),
                   ),
-                  child: TextFontWidget.fontRegular(
-                    text: "확인",
-                    color: Color(0xFF0085FF),
-                    fontSize: 18.sp,
-                    fontweight: FontWeight.w500,
+                  child: Text(
+                    "확인",
+                    style: TextStyle(
+                      color: Color(0xFF0085FF),
+                      fontSize: 18.sp,
+                      fontWeight: FontWeight.w500,
+                      fontFamily: 'Pretendard',
+                    ),
                   ),
                 ),
               ],
@@ -380,80 +397,89 @@ class _UpdateprofilescreenState extends State<Updateprofilescreen> {
       },
     );
 
-    setState(() {
-      if (result != null) {
-        college = result['college'];
-        major = result['major'];
-        debugPrint('${college} - ${major}');
-        debugPrint('${selectedCollege} - ${selectedMajor}');
-      }
-    });
+    if (result != null) {
+      setState(() {
+        selectedCollege = result['college'];
+        selectedMajor = result['major'];
+      });
+    }
   }
 
   void showalarmCustomDialog(BuildContext context) async {
-    final result = showDialog(context: context, builder: (BuildContext context) {
-      return Dialog(
-        child: Container(
-          padding: EdgeInsets.zero,
-          width: 270.w,
-          height: 125.h,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.r),
-            color: const Color(0xffffffff),
-
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SizedBox(height: 15.h,),
-              Text("알림" , style: TextStyle(
-                color: const Color(0xff111111),
-                fontWeight: FontWeight.w600,
-                fontSize: 18.sp,
-                fontFamily: "Pretendard",
-                fontStyle: FontStyle.normal,
-                height: 1.11.sp,
-              ),),
-              SizedBox(height: 8.h,),
-              Text("내 정보가 수정되었습니다", style: TextStyle(
-                color: const Color(0xff767676),
-                fontWeight: FontWeight.w400,
-                fontSize: 14.sp,
-                fontFamily: "Pretendard",
-                fontStyle: FontStyle.normal,
-                height: 1.14.sp,
-              ),),
-              SizedBox(height: 15.h,),
-              Container(
-                  width: 275.w,
-                  height: 1.h,
-                  decoration:     BoxDecoration(
-                      color: Color(0xffdadada))
-              ),
-              SizedBox(height: 1.h,),
-              TextButton(onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),);
-              }, child: Text("확인", style: TextStyle(
-                color: const Color(0xff0085FF),
-                fontWeight: FontWeight.w500,
-                fontSize: 18.sp,
-                fontFamily: "Pretendard",
-                fontStyle: FontStyle.normal,
-                height: 1.11.sp,
-              ),),
-                style: ButtonStyle(
-
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          child: Container(
+            padding: EdgeInsets.zero,
+            width: 270.w,
+            height: 125.h,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(15.r),
+              color: const Color(0xffffffff),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 15.h),
+                Text(
+                  "알림",
+                  style: TextStyle(
+                    color: const Color(0xff111111),
+                    fontWeight: FontWeight.w600,
+                    fontSize: 18.sp,
+                    fontFamily: "Pretendard",
+                    fontStyle: FontStyle.normal,
+                    height: 1.11.sp,
+                  ),
                 ),
-              )
-            ],
+                SizedBox(height: 8.h),
+                Text(
+                  "내 정보가 수정되었습니다",
+                  style: TextStyle(
+                    color: const Color(0xff767676),
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14.sp,
+                    fontFamily: "Pretendard",
+                    fontStyle: FontStyle.normal,
+                    height: 1.14.sp,
+                  ),
+                ),
+                SizedBox(height: 15.h),
+                Container(
+                    width: 275.w,
+                    height: 1.h,
+                    decoration: BoxDecoration(color: Color(0xffdadada))),
+                SizedBox(height: 1.h),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => MainScreen()),
+                    );
+                  },
+                  child: Text(
+                    "확인",
+                    style: TextStyle(
+                      color: const Color(0xff0085FF),
+                      fontWeight: FontWeight.w500,
+                      fontSize: 18.sp,
+                      fontFamily: "Pretendard",
+                      fontStyle: FontStyle.normal,
+                      height: 1.11.sp,
+                    ),
+                  ),
+                  style: ButtonStyle(),
+                )
+              ],
+            ),
           ),
-        ),
-      );
-    });
+        );
+      },
+    );
   }
 }
+
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
@@ -487,5 +513,4 @@ class CustomButton extends StatelessWidget {
       ),
     );
   }
-
 }
