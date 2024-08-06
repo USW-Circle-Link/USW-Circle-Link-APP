@@ -74,3 +74,6 @@ lib/generated_plugin_registrant.dart
 .idea/vcs.xml
 .idea/.gitignore
 
+# Ignore all IntelliJ IDEA settings except for .idea/workspace.xml
+.idea/*
+!.idea/workspace.xml
