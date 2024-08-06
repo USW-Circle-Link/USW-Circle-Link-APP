@@ -187,7 +187,7 @@ Widget Menubar(BuildContext context) {
           onTap: () {
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Updateprofilescreen()),
+                MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
             );
           },
         ),

@@ -4,15 +4,15 @@ import 'package:http/http.dart' as http;
 import 'package:usw_circle_link/model/Circle.dart';
 
 class UpdateprofileViewmodel {
-  Future<List<Circle>> fetchCircles(String uuId) async {
-    final response = await http.get(Uri.parse("http://localhost:8080/profile/update-profile"));
+  Future<Circle> fetchCircles(String uuId) async {
+    final response = await http.get(Uri.parse("http://43.200.140.186:8080/profiles/$uuId"));
 
     if (response.statusCode == 200) {
       final responseBodyBytes = response.bodyBytes;
       final responseBody = utf8.decode(responseBodyBytes);
       print('Server response: $responseBody');
-      final data = json.decode(responseBody)['data'] as List;
-      return data.map((circle) => Circle.fromJson(circle)).toList();
+      final data = json.decode(responseBody)['data'];
+      return Circle.fromJson(data);
     } else {
       print('Failed to fetch data: ${response.statusCode}');
       throw Exception('내 정보 조회에 실패하였습니다.');
@@ -20,8 +20,8 @@ class UpdateprofileViewmodel {
   }
 
   Future<void> updateProfile(String uuId, Circle updatedProfile) async {
-    final response = await http.put(
-      Uri.parse("http://localhost:8080/profile/update-profile"),
+    final response = await http.patch(
+      Uri.parse("http://43.200.140.186:8080/profiles/$uuId"),
       headers: {"Content-Type": "application/json"},
       body: json.encode({
         "userName": updatedProfile.userName,
@@ -44,7 +44,7 @@ final ProfileProvider = Provider<UpdateprofileViewmodel>((ref) {
   return UpdateprofileViewmodel();
 });
 
-final updateProfileViewmodel = FutureProvider.family<List<Circle>, String>((ref, uuId) {
+final updateProfileViewmodel = FutureProvider.family<Circle, String>((ref, uuId) {
   final repository = ref.watch(ProfileProvider);
   return repository.fetchCircles(uuId);
 });
