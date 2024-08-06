@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:usw_circle_link/model/Circle.dart';
 import 'package:usw_circle_link/viewmodels/UpdateProfileViewmodel.dart';
 import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedDropdown.dart';
@@ -300,7 +301,19 @@ class _UpdateProfileScreenState extends ConsumerState<Updateprofilescreen> {
               CustomButton(
                 text: '수정 완료',
                 onPressed: () {
-                  showalarmCustomDialog(context);
+                  final updatedProfile = Circle(
+                    userName: nameController.text,
+                    studentNumber: int.tryParse(studentnumberController.text) ?? 0,
+                    userHp: int.tryParse(phonenumberController.text) ?? 0,
+                    major: departmentController.text,
+                  );
+
+                  ref.read(ProfileProvider).updateProfile(uuId, updatedProfile).then((_) {
+                    showalarmCustomDialog(context);
+                  }).catchError((error) {
+                    // Handle error
+                    print('Error: $error');
+                  });
                 },
               ),
             ],
@@ -479,7 +492,6 @@ class _UpdateProfileScreenState extends ConsumerState<Updateprofilescreen> {
     );
   }
 }
-
 class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
