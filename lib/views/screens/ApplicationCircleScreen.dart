@@ -15,7 +15,7 @@ class Applicationcirclescreen extends ConsumerStatefulWidget {
 class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescreen> {
   @override
   Widget build(BuildContext context) {
-    final uuId = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
+    final uuId = '2a2de9d6-deff-4acf-8327-32c749211f64';
     final circlesAsyncValue = ref.watch(circleListProvider(uuId));
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -133,7 +133,7 @@ class CircleList extends StatelessWidget {
       statusText = '응답 완료';
     } else {
       statusColor = const Color(0xffFF0000); // FAIL의 경우 색상을 변경
-      statusText = '응답 실패'; // FAIL의 경우 텍스트를 변경
+      statusText = '응답 완료'; // FAIL의 경우 텍스트를 변경
     }
 
     return Center(

@@ -4,7 +4,7 @@ import 'package:usw_circle_link/model/Circle.dart';
 
 class Applicationcirclerepository {
   Future<List<Circle>> fetchCircles(String uuId) async {
-    final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/$uuId/my-clubs'));
+    final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/$uuId/aplict-clubs'));
 
     if (response.statusCode == 200) {
       final responseBodyBytes = response.bodyBytes;
