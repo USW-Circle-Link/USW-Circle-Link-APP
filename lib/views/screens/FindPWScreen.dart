@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class FindPWScreen extends StatefulWidget {
@@ -27,7 +27,7 @@ class _FindPWScreenState extends State<FindPWScreen> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-// TODO : icon padding 문제
+                  // TODO : icon padding 문제
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -125,7 +125,7 @@ class _FindPWScreenState extends State<FindPWScreen> {
                                   fontWeight: FontWeight.w400),
                               children: const [
                                 TextSpan(
-                                  text: "인증 코드",
+                                  text: "임시 비밀번호",
                                   style: TextStyle(
                                       color: Color(0xFF6E6EDE),
                                       fontWeight: FontWeight.w600),
@@ -156,7 +156,7 @@ class _FindPWScreenState extends State<FindPWScreen> {
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '인증코드 전송',
+                                text: '이메일 전송',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
@@ -164,59 +164,27 @@ class _FindPWScreenState extends State<FindPWScreen> {
                       SizedBox(
                         height: 12.h,
                       ),
-                      RoundedTextField(
-                        height: 50.h,
-                        textInputAction: TextInputAction.next,
-                        textEditController: verificationCodeController,
-                        leftBottomCornerRadius: 8.r,
-                        rightBottomCornerRadius: 8.r,
-                        leftTopCornerRadius: 8.r,
-                        rightTopCornerRadius: 8.r,
-                        borderWidth: 1.w,
-                        maxLines: 1,
-                        textInputType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        hintText: '인증코드 4자리 입력',
-                        borderColor: verificationCodeIsInvalid
-                            ? const Color(0xFFFF3F3F)
-                            : null,
-                        isAnimatedHint: false,
-                        suffixIcon: Container(
-                          margin: EdgeInsets.only(
-                              // top : 4, bottom : 4
-                              top: 6.h,
-                              bottom: 6.h,
-                              right: 8.w),
-                          width: 70.w,
-//height: 38.h, //not working -> margin으로 높이 조절
-                          child: OutlinedButton(
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56.h,
+                        child: OutlinedButton(
                             onPressed: () {
-                              setState(() {
-                                verificationCodeIsInvalid =
-                                    !verificationCodeIsInvalid;
-                              });
+                              context.go('/login');
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF111111),
+                              backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius:
-                                    BorderRadius.circular(16.r), // radius 18
+                                borderRadius: BorderRadius.circular(8.r),
                               ),
-                              minimumSize: Size.zero,
-                              padding: EdgeInsets.zero,
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '확인',
-                                fontSize: 14.sp,
-                                color: Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600),
-                          ),
-                        ),
-                        hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                                text: '로그인하러 가기',
+                                fontSize: 18.sp,
+                                color: const Color(0xFFFFFFFF),
+                                fontweight: FontWeight.w600)),
                       ),
                     ],
                   ),

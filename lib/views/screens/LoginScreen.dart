@@ -4,11 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/views/screens/FindIDScreen.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
-import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -225,7 +223,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FindIDScreen()));
+                          context.go('/login/find_id');
                         },
                         child: TextFontWidget.fontRegular(
                             text: '아이디 찾기',
@@ -243,7 +241,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FindPWScreen()));
+                          context.go('/login/find_pw');
                         },
                         child: TextFontWidget.fontRegular(
                             text: '비밀번호 찾기',
