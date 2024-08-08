@@ -9,6 +9,7 @@ import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
+import 'package:usw_circle_link/views/screens/WebViewScreen.dart';
 
 final routerProvider = Provider<GoRouter>((ref) {
   final provider = ref.read(authProvider);
@@ -43,11 +44,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
               path: 'application_writing',
-              builder: (_, __) => ApplicationWritingScreen()),
+              builder: (_, __) => ApplicationWritingScreen(),
+              routes: [
+                GoRoute(
+                    path: ':encodedUrl',
+                    builder: (context, state) =>
+                        WebViewScreen(encodedUrl: state.pathParameters['encodedUrl']!))
+              ]),
         ],
       ),
     ],
-    initialLocation: '/',
+    initialLocation: '/application_writing/${Uri.encodeComponent("https://forms.gle/JhcnYwrtzE8ja5mV8")}',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,
     debugLogDiagnostics: true,
