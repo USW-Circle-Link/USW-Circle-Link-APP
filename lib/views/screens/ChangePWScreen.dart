@@ -1,28 +1,40 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/ChangePWModel.dart';
+import 'package:usw_circle_link/viewmodels/ChangePWViewModel.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class ChangePWScreen extends StatefulWidget {
+class ChangePWScreen extends ConsumerStatefulWidget {
   const ChangePWScreen({Key? key}) : super(key: key);
 
   @override
   _ChangePWScreenState createState() => _ChangePWScreenState();
 }
 
-class _ChangePWScreenState extends State<ChangePWScreen> {
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController passwordConfirmController = TextEditingController();
+class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
+  TextEditingController currentPWController = TextEditingController();
+  TextEditingController newPWController = TextEditingController();
+  TextEditingController newPWConfirmController = TextEditingController();
 
-  bool passwordVisible = false;
-  bool passwordConfirmVisible = false;
+  bool currentPWVisible = false;
+  bool newPWVisible = false;
+  bool newPWConfirmVisible = false;
 
   String errorMessage = "";
   bool errorMessageVisivility = false;
 
-  bool pwIsInvalid = false;
-  bool pwConfirmIsInvalid = false;
+  final RegExp passwordRegExp =
+      RegExp(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{6,20}$');
+
+  bool currentPWIsInvalid = false; // 서버로부터 유효값 체크
+  bool newPWIsInvalid = false; // 로컬에서 정규식 체크
+  bool newPWConfirmIsInvalid = false; // 로컬에서 체크
 
   @override
   void initState() {
@@ -31,6 +43,12 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(changePWViewModelProvider);
+    ref.listen<ChangePWModelBase?>(changePWViewModelProvider,
+        (ChangePWModelBase? previous, ChangePWModelBase? next) {
+      log('$next');
+    });
+    
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -74,17 +92,58 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
                     children: [
                       RoundedTextField(
                         height: 50.h,
-                        textEditController: passwordController,
+                        textEditController: currentPWController,
                         leftBottomCornerRadius: 0.r,
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 8.r,
                         rightTopCornerRadius: 8.r,
                         borderColor:
-                            pwIsInvalid ? const Color(0xFFFF3F3F) : null,
+                            currentPWIsInvalid ? const Color(0xFFFF3F3F) : null,
                         borderWidth: 1.w,
                         maxLines: 1,
                         textInputType: TextInputType.text,
-                        obscureText: !passwordVisible,
+                        obscureText: !currentPWVisible,
+                        textInputAction: TextInputAction.next,
+                        textAlign: TextAlign.left,
+                        hintText: '현재 비밀번호',
+                        isAnimatedHint: false,
+                        prefixIcon: SvgPicture.asset(
+                          'assets/images/ic_password.svg',
+                          width: 13.w,
+                          height: 16.h,
+                          fit: BoxFit.scaleDown,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              currentPWVisible = !currentPWVisible;
+                            });
+                          },
+                          icon: SvgPicture.asset(
+                            currentPWVisible
+                                ? 'assets/images/ic_eye_open.svg'
+                                : 'assets/images/ic_eye_slash.svg',
+                            width: 25.w,
+                            height: 25.h,
+                            fit: BoxFit.scaleDown,
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                      ),
+                      RoundedTextField(
+                        height: 50.h,
+                        textEditController: newPWController,
+                        leftBottomCornerRadius: 0.r,
+                        rightBottomCornerRadius: 0.r,
+                        leftTopCornerRadius: 0.r,
+                        rightTopCornerRadius: 0.r,
+                        borderColor:
+                            newPWIsInvalid ? const Color(0xFFFF3F3F) : null,
+                        borderWidth: 1.w,
+                        maxLines: 1,
+                        textInputType: TextInputType.text,
+                        obscureText: !newPWVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
                         hintText: '새 비밀번호 (문자, 숫자 포함 6~20자)',
@@ -98,11 +157,11 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              passwordVisible = !passwordVisible;
+                              newPWVisible = !newPWVisible;
                             });
                           },
                           icon: SvgPicture.asset(
-                            passwordVisible
+                            newPWVisible
                                 ? 'assets/images/ic_eye_open.svg'
                                 : 'assets/images/ic_eye_slash.svg',
                             width: 25.w,
@@ -115,17 +174,18 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
                       ),
                       RoundedTextField(
                         height: 50.h,
-                        textEditController: passwordConfirmController,
+                        textEditController: newPWConfirmController,
                         leftBottomCornerRadius: 8.r,
                         rightBottomCornerRadius: 8.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
-                        borderColor:
-                            pwConfirmIsInvalid ? const Color(0xFFFF3F3F) : null,
+                        borderColor: newPWConfirmIsInvalid
+                            ? const Color(0xFFFF3F3F)
+                            : null,
                         borderWidth: 1.w,
                         maxLines: 1,
                         textInputType: TextInputType.text,
-                        obscureText: !passwordConfirmVisible,
+                        obscureText: !newPWConfirmVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
                         hintText: '비밀번호 확인',
@@ -139,11 +199,11 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
                         suffixIcon: IconButton(
                           onPressed: () {
                             setState(() {
-                              passwordConfirmVisible = !passwordConfirmVisible;
+                              newPWConfirmVisible = !newPWConfirmVisible;
                             });
                           },
                           icon: SvgPicture.asset(
-                            passwordConfirmVisible
+                            newPWConfirmVisible
                                 ? 'assets/images/ic_eye_open.svg'
                                 : 'assets/images/ic_eye_slash.svg',
                             width: 25.w,
@@ -171,14 +231,51 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
+                            onPressed: () async {
+                              // 공백이 아닌지 확인
+                              // 비밀번호 규칙 체크
+                              final currentPW = currentPWController.text;
+                              final newPW = newPWController.text;
+                              final newPWConfirm = newPWConfirmController.text;
                               setState(() {
-                                pwIsInvalid = !pwIsInvalid;
-                                errorMessage =
-                                    "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
-                                errorMessageVisivility = pwIsInvalid;
+                                currentPWIsInvalid = currentPW.isEmpty;
+                                newPWIsInvalid = !passwordRegExp.hasMatch(newPW);
+                                newPWConfirmIsInvalid = newPW != newPWConfirm;
+
+                                errorMessageVisivility = currentPWIsInvalid ||
+                                    newPWIsInvalid ||
+                                    newPWConfirmIsInvalid;
+
+                                errorMessage = "";
+                                if (currentPWIsInvalid) {
+                                  errorMessage += "* 현재 비밀번호를 입력해주세요!\n";
+                                } 
+                                if (newPWIsInvalid) {
+                                  errorMessage +=
+                                      "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!\n";
+                                }
+                                if (newPWConfirmIsInvalid) {
+                                  errorMessage += "* 비밀번호가 일치하지 않습니다!";
+                                }
                               });
-                              // 홈으로 라우팅
+
+                              if (!errorMessageVisivility) {
+                                final result = await ref
+                                    .read(changePWViewModelProvider.notifier)
+                                    .changePW(
+                                        userPw: currentPW,
+                                        newPw: newPW,
+                                        confirmNewPw: newPWConfirm);
+                                if (result is ChangePWModel) { // 비밀번호 변경 완료
+                                  if (context.mounted){ // 비동기에서 context 처리 시 
+                                    context.go('/');
+                                  } else {
+                                    log('Not Mounted!');
+                                  }
+                                } else if (result is ChangePWModelError) { // 비밀번호 변경 에러
+                                  log(result.message);
+                                }
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
@@ -201,5 +298,4 @@ class _ChangePWScreenState extends State<ChangePWScreen> {
               ),
             ));
   }
-
- }
+}

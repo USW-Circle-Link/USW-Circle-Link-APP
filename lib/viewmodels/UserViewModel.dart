@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
 import 'package:usw_circle_link/repositories/UserMeRepository.dart';
@@ -78,5 +79,23 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       storage.delete(key: accessTokenKey),
       storage.delete(key: refreshTokenKey),
     ]);
+  }
+
+  Future<ChangePWModelBase> changePW({
+    required String userPw,
+    required String newPw,
+    required String confirmNewPw,
+  }) async {
+    try {
+      final response = await authRepository.changePW(userPw: userPw, newPw: newPw, confirmNewPw: confirmNewPw);
+      // 비밀번호 변경되는 경우
+      // 1. 사용자가 직접 비밀번호 변경
+      // 2. 비밀번호 찾기를 통한 비밀번호 변경
+      // -->> 두 경우 모두 다시 로그인하는 과정 필요!
+      logout();
+      return response;
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

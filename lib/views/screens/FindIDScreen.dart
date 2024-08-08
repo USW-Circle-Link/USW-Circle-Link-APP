@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class FindIDScreen extends StatelessWidget {
@@ -141,7 +142,7 @@ class FindIDScreen extends StatelessWidget {
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () {
-                              Navigator.popUntil(context, ModalRoute.withName('/'));
+                              context.go('/login');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),

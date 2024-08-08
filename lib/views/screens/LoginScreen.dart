@@ -225,7 +225,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   children: [
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context) => FindIDScreen()));
+                          context.go('/login/find_id');
                         },
                         child: TextFontWidget.fontRegular(
                             text: '아이디 찾기',
@@ -243,7 +243,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     TextButton(
                         onPressed: () {
-                          Navigator.of(context).push(MaterialPageRoute(builder: (context)=>FindPWScreen()));
+                          context.go('/login/find_pw');
                         },
                         child: TextFontWidget.fontRegular(
                             text: '비밀번호 찾기',
