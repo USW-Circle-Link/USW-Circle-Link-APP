@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
@@ -23,7 +25,7 @@ class TokenInterceptor extends Interceptor {
       // 헤더 삭제
       options.headers.remove('accessToken');
 
-      final token = await storage.read(key: accessTokenKey);
+      final token = await storage.read(key: accessTokenKey); // ?? "590370d1-5e3d-43b2-a78e-8d515dd16d40"; 테스트용 코드 
 
       if (token == null) {
         return handler.reject(DioException(
@@ -34,7 +36,8 @@ class TokenInterceptor extends Interceptor {
 
       if (options.headers['onPath'] == 'true') {
         // 토큰을 path에 담는 경우
-        options.path.replaceAll(':accessToken', token);
+        options.path = options.path.replaceAll(':accessToken', token);
+        log('TokenInterceptor - onRequest - 요청 Uri : ${options.uri}');
       } else {
         // 토큰을 헤더에 담는 경우
 

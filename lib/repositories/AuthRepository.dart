@@ -66,8 +66,8 @@ class AuthRepository {
 
     if (response.statusCode == 200) {
       return ChangePWModel.fromJson(response.data);
-    } else {
-      throw Exception(ChangePWModel.fromJson(response.data).message);
+    } else { // Bad Request
+      return ChangePWModelError.fromJson(response.data);
     }
   }
 }

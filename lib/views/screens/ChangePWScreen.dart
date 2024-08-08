@@ -46,7 +46,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
     final state = ref.watch(changePWViewModelProvider);
     ref.listen<ChangePWModelBase?>(changePWViewModelProvider,
         (ChangePWModelBase? previous, ChangePWModelBase? next) {
-      log('$next');
+      log('상태변경 - $next');
     });
     
     return ScreenUtilInit(
@@ -273,7 +273,20 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
                                     log('Not Mounted!');
                                   }
                                 } else if (result is ChangePWModelError) { // 비밀번호 변경 에러
-                                  log(result.message);
+                                  log("예외발생 - ${result.message}");
+                                  setState(() {
+                                    switch (result.code) {
+                                      case "USR-204": // 현재 비밀번호 불일치
+                                        currentPWIsInvalid = true;
+                                        errorMessage = "현재 비밀번호가 일치하지 않습니다";
+                                        errorMessageVisivility = true;                                        
+                                        break;
+                                      case "USR-202": // 새 비밀번호 확인 불일치
+                                        break;
+                                      case "USR-203": // 새 비밀번호 빈칸
+                                        break;
+                                    }
+                                  });
                                 }
                               }
                             },

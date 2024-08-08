@@ -149,3 +149,226 @@ abstract class _ChangePWModel implements ChangePWModel {
   _$$ChangePWModelImplCopyWith<_$ChangePWModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
+
+ChangePWModelError _$ChangePWModelErrorFromJson(Map<String, dynamic> json) {
+  return _ChangePWModelError.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ChangePWModelError {
+  String get message => throw _privateConstructorUsedError;
+  String? get exception => throw _privateConstructorUsedError;
+  String? get code => throw _privateConstructorUsedError;
+  int? get status => throw _privateConstructorUsedError;
+  String? get error => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ChangePWModelErrorCopyWith<ChangePWModelError> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ChangePWModelErrorCopyWith<$Res> {
+  factory $ChangePWModelErrorCopyWith(
+          ChangePWModelError value, $Res Function(ChangePWModelError) then) =
+      _$ChangePWModelErrorCopyWithImpl<$Res, ChangePWModelError>;
+  @useResult
+  $Res call(
+      {String message,
+      String? exception,
+      String? code,
+      int? status,
+      String? error});
+}
+
+/// @nodoc
+class _$ChangePWModelErrorCopyWithImpl<$Res, $Val extends ChangePWModelError>
+    implements $ChangePWModelErrorCopyWith<$Res> {
+  _$ChangePWModelErrorCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? exception = freezed,
+    Object? code = freezed,
+    Object? status = freezed,
+    Object? error = freezed,
+  }) {
+    return _then(_value.copyWith(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      exception: freezed == exception
+          ? _value.exception
+          : exception // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ChangePWModelErrorImplCopyWith<$Res>
+    implements $ChangePWModelErrorCopyWith<$Res> {
+  factory _$$ChangePWModelErrorImplCopyWith(_$ChangePWModelErrorImpl value,
+          $Res Function(_$ChangePWModelErrorImpl) then) =
+      __$$ChangePWModelErrorImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String message,
+      String? exception,
+      String? code,
+      int? status,
+      String? error});
+}
+
+/// @nodoc
+class __$$ChangePWModelErrorImplCopyWithImpl<$Res>
+    extends _$ChangePWModelErrorCopyWithImpl<$Res, _$ChangePWModelErrorImpl>
+    implements _$$ChangePWModelErrorImplCopyWith<$Res> {
+  __$$ChangePWModelErrorImplCopyWithImpl(_$ChangePWModelErrorImpl _value,
+      $Res Function(_$ChangePWModelErrorImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? exception = freezed,
+    Object? code = freezed,
+    Object? status = freezed,
+    Object? error = freezed,
+  }) {
+    return _then(_$ChangePWModelErrorImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      exception: freezed == exception
+          ? _value.exception
+          : exception // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      status: freezed == status
+          ? _value.status
+          : status // ignore: cast_nullable_to_non_nullable
+              as int?,
+      error: freezed == error
+          ? _value.error
+          : error // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ChangePWModelErrorImpl implements _ChangePWModelError {
+  _$ChangePWModelErrorImpl(
+      {required this.message,
+      this.exception,
+      this.code,
+      this.status,
+      this.error});
+
+  factory _$ChangePWModelErrorImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ChangePWModelErrorImplFromJson(json);
+
+  @override
+  final String message;
+  @override
+  final String? exception;
+  @override
+  final String? code;
+  @override
+  final int? status;
+  @override
+  final String? error;
+
+  @override
+  String toString() {
+    return 'ChangePWModelError(message: $message, exception: $exception, code: $code, status: $status, error: $error)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ChangePWModelErrorImpl &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.exception, exception) ||
+                other.exception == exception) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.status, status) || other.status == status) &&
+            (identical(other.error, error) || other.error == error));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode =>
+      Object.hash(runtimeType, message, exception, code, status, error);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
+      __$$ChangePWModelErrorImplCopyWithImpl<_$ChangePWModelErrorImpl>(
+          this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ChangePWModelErrorImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ChangePWModelError implements ChangePWModelError {
+  factory _ChangePWModelError(
+      {required final String message,
+      final String? exception,
+      final String? code,
+      final int? status,
+      final String? error}) = _$ChangePWModelErrorImpl;
+
+  factory _ChangePWModelError.fromJson(Map<String, dynamic> json) =
+      _$ChangePWModelErrorImpl.fromJson;
+
+  @override
+  String get message;
+  @override
+  String? get exception;
+  @override
+  String? get code;
+  @override
+  int? get status;
+  @override
+  String? get error;
+  @override
+  @JsonKey(ignore: true)
+  _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
+      throw _privateConstructorUsedError;
+}

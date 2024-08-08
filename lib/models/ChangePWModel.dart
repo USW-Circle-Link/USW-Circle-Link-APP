@@ -7,19 +7,26 @@ abstract class ChangePWModelBase {}
 
 @freezed
 class ChangePWModel extends ChangePWModelBase with _$ChangePWModel {
-
   factory ChangePWModel({
     required String message,
   }) = _ChangePWModel;
 
-  factory ChangePWModel.fromJson(Map<String, dynamic> json) => _$ChangePWModelFromJson(json);
+  factory ChangePWModel.fromJson(Map<String, dynamic> json) =>
+      _$ChangePWModelFromJson(json);
 }
 
 class ChangePWModelLoading extends ChangePWModelBase {}
 
-class ChangePWModelError extends ChangePWModelBase {
-  final String message;
-  ChangePWModelError({
-    required this.message,
-  });
+@freezed
+class ChangePWModelError extends ChangePWModelBase with _$ChangePWModelError {
+  factory ChangePWModelError({
+    required String message,
+    String? exception,
+    String? code,
+    int? status,
+    String? error,
+  }) = _ChangePWModelError;
+
+  factory ChangePWModelError.fromJson(Map<String, dynamic> json) =>
+      _$ChangePWModelErrorFromJson(json);
 }

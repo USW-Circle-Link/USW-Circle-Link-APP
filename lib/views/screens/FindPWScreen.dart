@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class FindPWScreen extends StatefulWidget {
@@ -28,7 +27,7 @@ class _FindPWScreenState extends State<FindPWScreen> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-// TODO : icon padding 문제
+                  // TODO : icon padding 문제
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

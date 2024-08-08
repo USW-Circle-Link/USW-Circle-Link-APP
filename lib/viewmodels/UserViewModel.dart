@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
@@ -95,6 +97,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       logout();
       return response;
     } catch (e) {
+      log("2 $e");
       throw Exception(e);
     }
   }
