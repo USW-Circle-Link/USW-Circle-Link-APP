@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/views/screens/ApplicationWritingScreen.dart';
+import 'package:usw_circle_link/views/screens/ChangePWScreen.dart';
 
 void main() {
   runApp(
@@ -16,7 +16,7 @@ class CircleLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: ApplicationWritingScreen(),
+      home: ChangePWScreen(),
     );
   }
 }
