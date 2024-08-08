@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/views/screens/LoginScreen.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends StatefulWidget {
@@ -158,7 +158,7 @@ Widget Menubar(BuildContext context) {
           ),
           child: GestureDetector(
             onTap: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginScreen()));
+              context.go('/login');
             },
             child: Center(
                 child: Row(

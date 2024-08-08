@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/views/screens/ChangePWScreen.dart';
 
 void main() {
-  runApp(const CircleLink());
+  runApp(
+    ProviderScope(
+      child: CircleLink(),
+    ),
+  );
 }
 
 class CircleLink extends StatelessWidget {
@@ -11,7 +16,7 @@ class CircleLink extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SignUpScreen(),
+      home: ChangePWScreen(),
     );
   }
 }
