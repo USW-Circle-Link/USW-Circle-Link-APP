@@ -54,7 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    initialLocation: '/application_writing/${Uri.encodeComponent("https://forms.gle/JhcnYwrtzE8ja5mV8")}',
+    initialLocation: '/application_writing',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,
     debugLogDiagnostics: true,

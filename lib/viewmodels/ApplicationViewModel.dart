@@ -1,6 +1,9 @@
+import 'dart:developer';
+
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/repositories/ApplicationRepository.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final applicationViewModelProvider =
     StateNotifierProvider<ApplicationViewModel, ApplicationModelBase?>((ref) {
@@ -25,6 +28,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
 
       return applicationResponse;
     } catch (e) {
+      logger.d('지원서 가져오기 실패 - $e');
       state = ApplicationModelError();
 
       // 반환되는 값은 `ApplicationModelError`임
@@ -46,6 +50,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
 
       return applicationResponse;
     } catch (e) {
+      logger.d('지원서 작성 실패 - $e');
       state = ApplicationModelError();
 
       // 반환되는 값은 `ApplicationModelError`임

@@ -22,14 +22,13 @@ abstract class ApplicationRepository {
       _ApplicationRepository;
 
   @GET('/apply/{clud_id}')
-  @Headers(
-      {'accessToken': 'false'}) // Retrofit Headers 를 사용하기 위해 Dio Headers는 hide
-  Future<ApplicationModel> getApplication(@Path() int cludId);
+  @Headers({'accessToken': 'false'}) // Retrofit Headers 를 사용하기 위해 Dio Headers는 hide
+  Future<ApplicationModel> getApplication(@Path("club_id") int cludId);
 
   @GET('/apply/{clud_id}')
   @Headers({'accessToken': 'true'})
-  Future<ApplicationModel> apply({
-    @Path() required int clubId,
+  Future<ApplicationModelComplete> apply({
+    @Path("club_id") required int clubId,
     required String aplictGoogleFormUrl,
   });
 }

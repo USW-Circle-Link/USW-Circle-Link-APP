@@ -47,7 +47,7 @@ class _ApplicationRepository implements ApplicationRepository {
   }
 
   @override
-  Future<ApplicationModel> apply({
+  Future<ApplicationModelComplete> apply({
     required int clubId,
     required String aplictGoogleFormUrl,
   }) async {
@@ -56,8 +56,8 @@ class _ApplicationRepository implements ApplicationRepository {
     final _headers = <String, dynamic>{r'accessToken': 'true'};
     _headers.removeWhere((k, v) => v == null);
     final Map<String, dynamic>? _data = null;
-    final _result = await _dio
-        .fetch<Map<String, dynamic>>(_setStreamType<ApplicationModel>(Options(
+    final _result = await _dio.fetch<Map<String, dynamic>>(
+        _setStreamType<ApplicationModelComplete>(Options(
       method: 'GET',
       headers: _headers,
       extra: _extra,
@@ -73,7 +73,7 @@ class _ApplicationRepository implements ApplicationRepository {
               _dio.options.baseUrl,
               baseUrl,
             ))));
-    final value = ApplicationModel.fromJson(_result.data!);
+    final value = ApplicationModelComplete.fromJson(_result.data!);
     return value;
   }
 

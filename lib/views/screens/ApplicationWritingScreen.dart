@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ApplicationViewModel.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -23,10 +24,33 @@ class _ApplicationWritingScreenState
   bool isDone = false;
 
   final int clubId = 1;
-  String? aplictGoogleFormUrl;
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(applicationViewModelProvider);
+    ref.listen<ApplicationModelBase?>(applicationViewModelProvider,
+        (ApplicationModelBase? previous, ApplicationModelBase? next) {
+      logger.d(next.toString());
+      if (next is ApplicationModelComplete) {
+        logger.d('지원서 작성 성공! - ${next.message}');
+        //지원서 작성 완료 페이지로 라우팅
+      }
+      if (next is ApplicationModel) {
+        logger.d('지원서 url : ${next.data}');
+        context.go('/application_writing/${Uri.encodeComponent(next.data)}');
+      }
+      if (next is ApplicationModelError) {
+        // TODO:어떤 에러인지에 따라 분기
+        // switch (next.) {
+        //   case value:
+            
+        //     break;
+        //   default:
+        // }
+        logger.d('지원서 불러오기 실패 : ${next}');
+        logger.d('지원서 작성 실패 : ${next}');
+      }
+    });
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -76,21 +100,9 @@ class _ApplicationWritingScreenState
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () async {
-                              final result = await ref
+                              await ref
                                   .read(applicationViewModelProvider.notifier)
                                   .getApplication(clubId);
-                              // 이부분을 ref.listen 을 이용한 DataBinding 으로 처리할지 결정
-                              if (result is ApplicationModel) {
-                                log('지원서 url : ${result.data}');
-                                setState(() {
-                                  aplictGoogleFormUrl = result.data;
-                                });
-                                if (context.mounted) {
-                                  context.go('/application_writing/${Uri.encodeComponent(aplictGoogleFormUrl!)}');
-                                }
-                              } else if (result is ApplicationModelError) {
-                                log('지원서 불러오기 실패 : ${result}');
-                              }
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
@@ -111,51 +123,50 @@ class _ApplicationWritingScreenState
                         height: 90.h,
                       ),
                       RichText(
-                          textAlign: TextAlign.left,
-                          text: TextSpan(
-                            text:
-                                "지원서를 작성 완료 후 ",
-                            style: TextStyle(
-                                fontFamily: 'Pretendard-Regular',
-                                fontSize: 14.sp,
-                                color: const Color(0xFF989898),
-                                fontWeight: FontWeight.w400),
-                            children: const [
-                              TextSpan(
-                                text: "지원 완료 ",
-                                style: TextStyle(
-                                    color: Color(0xFF6E6EDE),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(
-                                text: "버튼을 눌러 주세요.\n지원서를 잘못 작성할 경우, 책임은 ",
-                              ),
-                              TextSpan(
-                                text: "본인",
-                                style: TextStyle(
-                                    color: Color(0xFF6E6EDE),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(
-                                text: "에게 있습니다.\n신중히 작성후 '지원 완료' 버튼을 눌러 주세요.",
-                              ),
-                            ],
-                          ),
+                        textAlign: TextAlign.left,
+                        text: TextSpan(
+                          text: "지원서를 작성 완료 후 ",
+                          style: TextStyle(
+                              fontFamily: 'Pretendard-Regular',
+                              fontSize: 14.sp,
+                              color: const Color(0xFF989898),
+                              fontWeight: FontWeight.w400),
+                          children: const [
+                            TextSpan(
+                              text: "지원 완료 ",
+                              style: TextStyle(
+                                  color: Color(0xFF6E6EDE),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            TextSpan(
+                              text: "버튼을 눌러 주세요.\n지원서를 잘못 작성할 경우, 책임은 ",
+                            ),
+                            TextSpan(
+                              text: "본인",
+                              style: TextStyle(
+                                  color: Color(0xFF6E6EDE),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            TextSpan(
+                              text: "에게 있습니다.\n신중히 작성후 '지원 완료' 버튼을 눌러 주세요.",
+                            ),
+                          ],
                         ),
+                      ),
                       Checkbox(
                         value: isDone,
                         onChanged: (bool? value) {
-                          if (aplictGoogleFormUrl == null) {
+                          if (state is ApplicationModel && state.data != null) {
+                            setState(() {
+                              isDone = value ?? false;
+                            });
+                          } else {
                             // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
                             setState(() {
                               value = false;
                             });
-                          } else {
-                            setState(() {
-                              isDone = value ?? false;
-                            });
                           }
-                          log('지원서 작성 완료에 동의함 : $isDone');
+                          logger.d('지원서 작성 완료에 동의함 : $isDone');
                         },
                       ),
                       SizedBox(
@@ -166,16 +177,15 @@ class _ApplicationWritingScreenState
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () async {
-                              if (isDone) {
-                                final result = await ref
+                              if (isDone &&
+                                  state is ApplicationModel) {
+                                await ref
                                     .read(applicationViewModelProvider.notifier)
-                                    .apply(clubId:clubId, aplictGoogleFormUrl: aplictGoogleFormUrl!);
-                                if (result is ApplicationModel) {
-                                  log('지원서 작성 성공 ${result.message}');
-                                  // 작성완료 페이지로 라우팅
-                                } else if (result is ApplicationModelError) {
-                                  log('지원서 작성 실패');
-                                }
+                                    .apply(
+                                        clubId: clubId,
+                                        aplictGoogleFormUrl: state.data!);
+                              } else {
+                                // 지원서 작성 완료 후 동의함 체크 부탁~
                               }
                             },
                             style: OutlinedButton.styleFrom(
