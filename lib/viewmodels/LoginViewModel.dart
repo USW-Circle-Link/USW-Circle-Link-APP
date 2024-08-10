@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
