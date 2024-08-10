@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -34,9 +35,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(loginViewModelProvider);
     ref.listen<UserModelBase?>(loginViewModelProvider,
         (UserModelBase? previous, UserModelBase? next) {
-      log('$next');
+      logger.d('$next');
       if (next is UserModelError) {
-        log(next.message);
+        logger.d(next.message);
       }
       if (next is UserModel) {
         // 로그인 성공
@@ -200,7 +201,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                           : () async {
                               final id = idController.text,
                                   password = passwordController.text;
-                              log('id:$id / pw:$password');
+                              logger.d('id:$id / pw:$password');
                               if (id.isNotEmpty && password.isNotEmpty) {
                                 await ref
                                     .read(loginViewModelProvider.notifier)

@@ -8,6 +8,7 @@ abstract class UserModelBase {}
 
 @freezed
 class UserModel extends UserModelBase with _$UserModel {
+  @JsonSerializable(explicitToJson: true)
   const factory UserModel({
     required String message,
     @JWTConverter() required LoginData data,

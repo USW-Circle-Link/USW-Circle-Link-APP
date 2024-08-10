@@ -119,7 +119,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$UserModelImpl implements _UserModel {
   const _$UserModelImpl(
       {required this.message, @JWTConverter() required this.data});

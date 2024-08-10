@@ -46,7 +46,7 @@ dependencies:
   http: ^1.2.1
   dio: ^5.5.0+1
   retrofit: '>=4.0.0 <5.0.0'
-  logger: any  #for logging purpose
+  logger: ^2.4.0  #for logging purpose
   json_annotation: ^4.9.0
 
   # Routing

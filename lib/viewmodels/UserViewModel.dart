@@ -9,6 +9,7 @@ import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
 import 'package:usw_circle_link/repositories/UserMeRepository.dart';
 import 'package:usw_circle_link/secure_storage/SecureStorage.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModelBase?>>((ref) {
@@ -55,7 +56,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
         id: id,
         password: password,
       );
-      log('UserViewModel - 로그인 완료!');
+      logger.d('UserViewModel - 로그인 완료!');
 
       if (response is UserModel) {
         // secure storage에 Token 보관
@@ -67,8 +68,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
         // 디버깅용 확인 코드
         final accessToken = await storage.read(key: accessTokenKey);
         final clubIdsJsonString = await storage.read(key: clubIdsKey);
-        final List<String> clubIds = jsonDecode(clubIdsJsonString ?? "");
-        log('UserViewModel - AccessToken : $accessToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+        final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "");
+        logger.d('UserViewModel - AccessToken : $accessToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
       }
       state = AsyncValue.data(response); // UserModel
 
@@ -105,7 +106,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       logout();
       return response;
     } catch (e) {
-      log("UserViewModel - changePW - $e");
+      logger.d("UserViewModel - changePW - $e");
       throw Exception(e);
     }
   }

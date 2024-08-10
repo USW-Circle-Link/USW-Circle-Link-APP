@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 
 final loginViewModelProvider =
@@ -30,7 +31,7 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
 
       final userResponse =
           await userViewModel.login(id: id, password: password);
-      log('LoginViewModel - 로그인 완료');
+      logger.d('LoginViewModel - 로그인 완료');
 
       state = userResponse;
 
@@ -39,7 +40,7 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
       if (e is UserModelError) {
         state = e;
       } else {
-        state = UserModelError(message: '로그인 실패: $e');
+        state = UserModelError(message: '예외발생 : $e');
       }
 
       // 반환되는 값은 `UserModelError`임

@@ -7,6 +7,7 @@ import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -41,11 +42,11 @@ class AuthRepository {
       options: Options(
         headers: {
           'Content-Type': 'application/json',
-        },
+        }
       ),
     );
 
-    log('AuthRepository - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d('AuthRepository - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return UserModel.fromJson(response.data);
