@@ -1,15 +1,14 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/ChangePWModel.dart';
-import 'package:usw_circle_link/models/LoginResponse.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
- 
+
   return AuthRepository(
     baseUrl: 'http://$host:$port/users',
     dio: dio,
@@ -19,28 +18,38 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
 class AuthRepository {
   final String baseUrl;
   final Dio dio;
- 
+
   AuthRepository({
     required this.baseUrl,
     required this.dio,
   });
- 
-  Future<LoginResponse> login({
+
+  Future<UserModelBase> login({
     required String id,
     required String password,
   }) async {
-        final serialized = base64Encode(utf8.encode('$id:$password'));
- 
+    final body = {
+      'account': id,
+      'password': password,
+    };
+
     final response = await dio.post(
       '$baseUrl/login',
+      data: body,
       options: Options(
         headers: {
-          'authorization': 'Basic $serialized',
-        },
+          'Content-Type': 'application/json',
+        }
       ),
     );
- 
-    return LoginResponse.fromJson(response.data);
+
+    logger.d('AuthRepository - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return UserModel.fromJson(response.data);
+    } else { // Bad Request
+      throw  UserModelError.fromJson(response.data);
+    }
   }
 
   Future<ChangePWModelBase> changePW({
@@ -48,25 +57,18 @@ class AuthRepository {
     required String newPw,
     required String confirmNewPw,
   }) async {
- 
-    final response = await dio.patch(
-      '$baseUrl/:accessToken/userpw',
-      data: {
-        'userPw':userPw,
-        'newPw':newPw,
-        'confirmNewPw':confirmNewPw,
-      },
-      options: Options(
-        headers: {
-          'accessToken' : 'true',
-          'onPath' : 'true'
-        }
-      )
-    );
+    final response = await dio.patch('$baseUrl/:accessToken/userpw',
+        data: {
+          'userPw': userPw,
+          'newPw': newPw,
+          'confirmNewPw': confirmNewPw,
+        },
+        options: Options(headers: {'accessToken': 'true', 'onPath': 'true'}));
 
     if (response.statusCode == 200) {
       return ChangePWModel.fromJson(response.data);
-    } else { // Bad Request
+    } else {
+      // Bad Request
       return ChangePWModelError.fromJson(response.data);
     }
   }
