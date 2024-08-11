@@ -54,7 +54,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    initialLocation: '/application_writing',
+    initialLocation: '/',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,
     debugLogDiagnostics: true,

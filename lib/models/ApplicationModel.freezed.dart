@@ -410,8 +410,9 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ApplicationModelErrorImpl implements _ApplicationModelError {
-  _$ApplicationModelErrorImpl({required this.message, this.errorType});
+class _$ApplicationModelErrorImpl extends _ApplicationModelError {
+  _$ApplicationModelErrorImpl({required this.message, this.errorType})
+      : super._();
 
   factory _$ApplicationModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$ApplicationModelErrorImplFromJson(json);
@@ -455,11 +456,12 @@ class _$ApplicationModelErrorImpl implements _ApplicationModelError {
   }
 }
 
-abstract class _ApplicationModelError implements ApplicationModelError {
+abstract class _ApplicationModelError extends ApplicationModelError {
   factory _ApplicationModelError(
           {required final String message,
           final ApplicationModelErrorType? errorType}) =
       _$ApplicationModelErrorImpl;
+  _ApplicationModelError._() : super._();
 
   factory _ApplicationModelError.fromJson(Map<String, dynamic> json) =
       _$ApplicationModelErrorImpl.fromJson;

@@ -33,6 +33,8 @@ enum ApplicationModelErrorType {getApplication, apply}
 @freezed
 class ApplicationModelError extends ApplicationModelBase with _$ApplicationModelError {
 
+  ApplicationModelError._();
+
   factory ApplicationModelError({
     required String message,
     ApplicationModelErrorType? errorType,
