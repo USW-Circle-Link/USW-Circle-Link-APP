@@ -22,14 +22,17 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
       state = ApplicationModelLoading();
 
       final applicationResponse =
-          await applicationRepository.getApplication(clubId);
+          await applicationRepository.getApplication(clubId:clubId);
 
       state = applicationResponse;
 
       return applicationResponse;
     } catch (e) {
-      logger.d('지원서 가져오기 실패 - $e');
-      state = ApplicationModelError();
+      if (e is ApplicationModelError) {
+        state = e;
+      } else {
+        state = ApplicationModelError(message: '에외발생 - $e');
+      }
 
       // 반환되는 값은 `ApplicationModelError`임
       return Future.value(state);
@@ -44,14 +47,18 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
       // 첫 state는 Loading 상태
       state = ApplicationModelLoading();
 
-      final applicationResponse = await applicationRepository.apply(clubId: clubId, aplictGoogleFormUrl:aplictGoogleFormUrl);
+      final applicationResponse = await applicationRepository.apply(
+          clubId: clubId, aplictGoogleFormUrl: aplictGoogleFormUrl);
 
       state = applicationResponse;
 
       return applicationResponse;
     } catch (e) {
-      logger.d('지원서 작성 실패 - $e');
-      state = ApplicationModelError();
+      if (e is ApplicationModelError) {
+        state = e;
+      } else {
+        state = ApplicationModelError(message: '에외발생 - $e');
+      }
 
       // 반환되는 값은 `ApplicationModelError`임
       return Future.value(state);

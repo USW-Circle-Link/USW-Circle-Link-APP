@@ -35,6 +35,7 @@ class TokenInterceptor extends Interceptor {
 
       if (options.headers['onPath'] == 'true') {
         // 토큰을 path에 담는 경우
+        options.headers.remove('onPath');
         options.path = options.path.replaceAll(':accessToken', token);
         logger.d('TokenInterceptor - onRequest - 요청 Uri : ${options.uri}');
       } else {
@@ -42,7 +43,7 @@ class TokenInterceptor extends Interceptor {
 
         // 실제 토큰으로 대체
         options.headers.addAll({
-          'authorization': 'Bearer $token',
+          'User-uuid': token,
         });
       }
     } else if (options.headers['refreshToken'] == 'true') {

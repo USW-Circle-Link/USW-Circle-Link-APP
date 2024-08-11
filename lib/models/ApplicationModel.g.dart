@@ -31,3 +31,23 @@ Map<String, dynamic> _$$ApplicationModelCompleteImplToJson(
     <String, dynamic>{
       'message': instance.message,
     };
+
+_$ApplicationModelErrorImpl _$$ApplicationModelErrorImplFromJson(
+        Map<String, dynamic> json) =>
+    _$ApplicationModelErrorImpl(
+      message: json['message'] as String,
+      errorType: $enumDecodeNullable(
+          _$ApplicationModelErrorTypeEnumMap, json['errorType']),
+    );
+
+Map<String, dynamic> _$$ApplicationModelErrorImplToJson(
+        _$ApplicationModelErrorImpl instance) =>
+    <String, dynamic>{
+      'message': instance.message,
+      'errorType': _$ApplicationModelErrorTypeEnumMap[instance.errorType],
+    };
+
+const _$ApplicationModelErrorTypeEnumMap = {
+  ApplicationModelErrorType.getApplication: 'getApplication',
+  ApplicationModelErrorType.apply: 'apply',
+};

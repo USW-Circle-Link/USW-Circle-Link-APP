@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -40,15 +38,16 @@ class _ApplicationWritingScreenState
         context.go('/application_writing/${Uri.encodeComponent(next.data)}');
       }
       if (next is ApplicationModelError) {
-        // TODO:어떤 에러인지에 따라 분기
-        // switch (next.) {
-        //   case value:
-            
-        //     break;
-        //   default:
-        // }
-        logger.d('지원서 불러오기 실패 : ${next}');
-        logger.d('지원서 작성 실패 : ${next}');
+        switch (next.errorType) {
+          case ApplicationModelErrorType.getApplication:
+            logger.d('지원서 불러오기 실패 : ${next}');
+            break;
+          case ApplicationModelErrorType.apply:
+            logger.d('지원서 작성 실패 : ${next}');
+            break;
+          default:
+            logger.d('@ : ${next}');
+        }
       }
     });
     return ScreenUtilInit(
@@ -156,7 +155,7 @@ class _ApplicationWritingScreenState
                       Checkbox(
                         value: isDone,
                         onChanged: (bool? value) {
-                          if (state is ApplicationModel && state.data != null) {
+                          if (state is ApplicationModel) {
                             setState(() {
                               isDone = value ?? false;
                             });
@@ -177,8 +176,7 @@ class _ApplicationWritingScreenState
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () async {
-                              if (isDone &&
-                                  state is ApplicationModel) {
+                              if (isDone && state is ApplicationModel) {
                                 await ref
                                     .read(applicationViewModelProvider.notifier)
                                     .apply(

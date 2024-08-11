@@ -28,4 +28,19 @@ class ApplicationModelComplete extends ApplicationModelBase with _$ApplicationMo
   factory ApplicationModelComplete.fromJson(Map<String, dynamic> json) => _$ApplicationModelCompleteFromJson(json);
 }
 
-class ApplicationModelError extends ApplicationModelBase {}
+enum ApplicationModelErrorType {getApplication, apply}
+
+@freezed
+class ApplicationModelError extends ApplicationModelBase with _$ApplicationModelError {
+
+  factory ApplicationModelError({
+    required String message,
+    ApplicationModelErrorType? errorType,
+  }) = _ApplicationModelError;
+
+  factory ApplicationModelError.fromJson(Map<String, dynamic> json) => _$ApplicationModelErrorFromJson(json);
+
+  ApplicationModelError type(ApplicationModelErrorType _errorType) {
+    return ApplicationModelError(message: message, errorType: _errorType);
+  }
+}

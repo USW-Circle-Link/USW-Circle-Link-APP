@@ -311,3 +311,165 @@ abstract class _ApplicationModelComplete implements ApplicationModelComplete {
   _$$ApplicationModelCompleteImplCopyWith<_$ApplicationModelCompleteImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
+
+ApplicationModelError _$ApplicationModelErrorFromJson(
+    Map<String, dynamic> json) {
+  return _ApplicationModelError.fromJson(json);
+}
+
+/// @nodoc
+mixin _$ApplicationModelError {
+  String get message => throw _privateConstructorUsedError;
+  ApplicationModelErrorType? get errorType =>
+      throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $ApplicationModelErrorCopyWith<ApplicationModelError> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $ApplicationModelErrorCopyWith<$Res> {
+  factory $ApplicationModelErrorCopyWith(ApplicationModelError value,
+          $Res Function(ApplicationModelError) then) =
+      _$ApplicationModelErrorCopyWithImpl<$Res, ApplicationModelError>;
+  @useResult
+  $Res call({String message, ApplicationModelErrorType? errorType});
+}
+
+/// @nodoc
+class _$ApplicationModelErrorCopyWithImpl<$Res,
+        $Val extends ApplicationModelError>
+    implements $ApplicationModelErrorCopyWith<$Res> {
+  _$ApplicationModelErrorCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? errorType = freezed,
+  }) {
+    return _then(_value.copyWith(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      errorType: freezed == errorType
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelErrorType?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$ApplicationModelErrorImplCopyWith<$Res>
+    implements $ApplicationModelErrorCopyWith<$Res> {
+  factory _$$ApplicationModelErrorImplCopyWith(
+          _$ApplicationModelErrorImpl value,
+          $Res Function(_$ApplicationModelErrorImpl) then) =
+      __$$ApplicationModelErrorImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({String message, ApplicationModelErrorType? errorType});
+}
+
+/// @nodoc
+class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
+    extends _$ApplicationModelErrorCopyWithImpl<$Res,
+        _$ApplicationModelErrorImpl>
+    implements _$$ApplicationModelErrorImplCopyWith<$Res> {
+  __$$ApplicationModelErrorImplCopyWithImpl(_$ApplicationModelErrorImpl _value,
+      $Res Function(_$ApplicationModelErrorImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? errorType = freezed,
+  }) {
+    return _then(_$ApplicationModelErrorImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      errorType: freezed == errorType
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelErrorType?,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$ApplicationModelErrorImpl implements _ApplicationModelError {
+  _$ApplicationModelErrorImpl({required this.message, this.errorType});
+
+  factory _$ApplicationModelErrorImpl.fromJson(Map<String, dynamic> json) =>
+      _$$ApplicationModelErrorImplFromJson(json);
+
+  @override
+  final String message;
+  @override
+  final ApplicationModelErrorType? errorType;
+
+  @override
+  String toString() {
+    return 'ApplicationModelError(message: $message, errorType: $errorType)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$ApplicationModelErrorImpl &&
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.errorType, errorType) ||
+                other.errorType == errorType));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, message, errorType);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
+      get copyWith => __$$ApplicationModelErrorImplCopyWithImpl<
+          _$ApplicationModelErrorImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$ApplicationModelErrorImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _ApplicationModelError implements ApplicationModelError {
+  factory _ApplicationModelError(
+          {required final String message,
+          final ApplicationModelErrorType? errorType}) =
+      _$ApplicationModelErrorImpl;
+
+  factory _ApplicationModelError.fromJson(Map<String, dynamic> json) =
+      _$ApplicationModelErrorImpl.fromJson;
+
+  @override
+  String get message;
+  @override
+  ApplicationModelErrorType? get errorType;
+  @override
+  @JsonKey(ignore: true)
+  _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
