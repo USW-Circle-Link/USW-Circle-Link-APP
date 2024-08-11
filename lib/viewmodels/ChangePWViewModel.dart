@@ -22,11 +22,11 @@ class ChangePWViewModel extends StateNotifier<ChangePWModelBase?> {
       // 첫 state는 Loading 상태
       state = ChangePWModelLoading();
 
-      final userResponse = await userViewModel.changePW(userPw: userPw, newPw: newPw, confirmNewPw: confirmNewPw);
+      final changePWResponse = await userViewModel.changePW(userPw: userPw, newPw: newPw, confirmNewPw: confirmNewPw);
       
-      state = userResponse;
+      state = changePWResponse;
       
-      return userResponse;
+      return changePWResponse;
     } catch (e) {
       state = ChangePWModelError(message: '비밀번호 변경 실패: $e');
 

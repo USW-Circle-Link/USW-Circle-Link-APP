@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/LoginViewModel.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -34,7 +33,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final state = ref.watch(loginViewModelProvider);
     ref.listen<UserModelBase?>(loginViewModelProvider,
         (UserModelBase? previous, UserModelBase? next) {
-      log('$next');
+      logger.d('$next');
+      if (next is UserModelError) {
+        logger.d(next.message);
+      }
+      if (next is UserModel) {
+        // 로그인 성공
+        context.go('/');
+      }
     });
 
     return ScreenUtilInit(
@@ -44,7 +50,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         appBar: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
-          title: Padding(            
+          title: Padding(
             padding: EdgeInsets.only(left: 22.w), // icon에 10.w 정도의 여백이 기본적으로 존재
             child: Row(
               children: [
@@ -177,7 +183,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Visibility(
                     visible: state is UserModelError,
                     child: TextFontWidget.fontRegular(
-                        text: "* 올바르지 않은 아이디 혹은 비밀번호입니다",
+                        text: getErrorMessage(state),
                         fontSize: 12.sp,
                         color: const Color(0xFFFF3F3F),
                         fontweight: FontWeight.w400)),
@@ -191,12 +197,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: state is UserModelLoading
                           ? null
                           : () async {
-                              log('id:${idController.text} pw:${passwordController.text}');
-                              if (idController.text.isNotEmpty &&
-                                  passwordController.text.isNotEmpty) {
-                                await ref.read(loginViewModelProvider.notifier).login(
-                                      id: idController.text,
-                                      password: passwordController.text,
+                              final id = idController.text,
+                                  password = passwordController.text;
+                              logger.d('id:$id / pw:$password');
+                              if (id.isNotEmpty && password.isNotEmpty) {
+                                await ref
+                                    .read(loginViewModelProvider.notifier)
+                                    .login(
+                                      id: id,
+                                      password: password,
                                     );
                               }
                             },
@@ -274,5 +283,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     );
+  }
+
+  String getErrorMessage(UserModelBase? state) {
+    if (state is UserModelError) {
+      if (state.code == "USR-211"){
+      return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
+      } else {
+      return "* 로그인 중에 문제가 발생했습니다";
+      }
+    }
+    return "";
   }
 }

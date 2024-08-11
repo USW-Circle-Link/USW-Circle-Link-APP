@@ -1,4 +1,4 @@
-import 'dart:developer';
+import 'dart:convert';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -8,6 +8,7 @@ import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
 import 'package:usw_circle_link/repositories/UserMeRepository.dart';
 import 'package:usw_circle_link/secure_storage/SecureStorage.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModelBase?>>((ref) {
@@ -15,7 +16,6 @@ final userViewModelProvider =
   final userMeRepository = ref.watch(userMeRepositoryProvider);
   final storage = ref.watch(secureStorageProvider);
 
-  userMeRepository.getMe();
   return UserViewModel(
     authRepository: authRepository,
     userMeRepository: userMeRepository,
@@ -55,20 +55,27 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
         id: id,
         password: password,
       );
+      logger.d('UserViewModel - 로그인 완료!');
 
-      // secure storage에 Token 보관
-      await storage.write(key: accessTokenKey, value: response.accessToken);
-      await storage.write(key: refreshTokenKey, value: response.refreshToken);
+      if (response is UserModel) {
+        // secure storage에 Token 보관
+        await storage.write(
+            key: accessTokenKey, value: response.data.accessToken);
+        await storage.write(
+            key: clubIdsKey, value:jsonEncode(response.data.clubIds??[]));
+        
+        // 디버깅용 확인 코드
+        final accessToken = await storage.read(key: accessTokenKey);
+        final clubIdsJsonString = await storage.read(key: clubIdsKey);
+        final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "");
+        logger.d('UserViewModel - AccessToken : $accessToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+      }
+      state = AsyncValue.data(response); // UserModel
 
-      final userResponse = await userMeRepository.getMe();
-
-      // 현 state를 userReponse로 받음
-      state = AsyncValue.data(userResponse);
-
-      return userResponse;
-    } catch (e) {
+      return response;
+    } catch (e) { // 단순로그인 실패 및 예상 범위 밖 에러(네트워크 에러 ...)
       await logout();
-      throw Exception(e);
+      rethrow;
     }
   }
 
@@ -79,7 +86,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
     // Secure Storage에서 Access Token과 Refresh Token 삭제
     await Future.wait([
       storage.delete(key: accessTokenKey),
-      storage.delete(key: refreshTokenKey),
+      storage.delete(key: clubIdsKey),
     ]);
   }
 
@@ -89,7 +96,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
     required String confirmNewPw,
   }) async {
     try {
-      final response = await authRepository.changePW(userPw: userPw, newPw: newPw, confirmNewPw: confirmNewPw);
+      final response = await authRepository.changePW(
+          userPw: userPw, newPw: newPw, confirmNewPw: confirmNewPw);
       // 비밀번호 변경되는 경우
       // 1. 사용자가 직접 비밀번호 변경
       // 2. 비밀번호 찾기를 통한 비밀번호 변경
@@ -97,7 +105,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       logout();
       return response;
     } catch (e) {
-      log("2 $e");
+      logger.d("UserViewModel - changePW - $e");
       throw Exception(e);
     }
   }
