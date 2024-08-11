@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "471002286759",
+    "project_id": "dongramitest",
+    "storage_bucket": "dongramitest.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:471002286759:android:b738a8c3a807b5c98ce982",
+        "android_client_info": {
+          "package_name": "com.example.usw_circle_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAw84o_qf_re8cVjLeJGUXiI5pMi55T9hc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
