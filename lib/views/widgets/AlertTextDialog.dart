@@ -35,6 +35,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                       color: Color(0xFF000000),
                       fontSize: 16.sp,
                       fontweight: FontWeight.w500,
+                      textAlign: TextAlign.center,
                     ),
                     SizedBox(height: 20),
                     SizedBox.fromSize(

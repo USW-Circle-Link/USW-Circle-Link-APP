@@ -237,8 +237,10 @@ class _EmailVerificationScreenState
                                               emailVerificationViewModelProvider
                                                   .notifier)
                                           .resendMail(
-                                              emailTokenId: state.data.emailTokenId);
-                                    } : null,
+                                              emailTokenId:
+                                                  state.data.emailTokenId);
+                                    }
+                                  : null,
                               child: Center(
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',
@@ -286,9 +288,16 @@ class _EmailVerificationScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state is EmailVerificationModel ? () async {
-                              await ref.read(emailVerificationViewModelProvider.notifier).signUp(emailTokenId: state.data.emailTokenId);
-                            } : null,
+                            onPressed: state is EmailVerificationModel
+                                ? () async {
+                                    await ref
+                                        .read(emailVerificationViewModelProvider
+                                            .notifier)
+                                        .signUp(
+                                            emailTokenId:
+                                                state.data.emailTokenId);
+                                  }
+                                : null,
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -310,7 +319,7 @@ class _EmailVerificationScreenState
               ),
             ));
   }
-  
+
   void showAlertDialog(BuildContext context, String text) async {
     await showDialog(
         context: context,

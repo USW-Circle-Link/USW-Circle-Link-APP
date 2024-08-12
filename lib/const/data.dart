@@ -9,6 +9,8 @@ const clubIdsKey = 'club_ids';
 const iatKey = 'iat';
 const expKey = 'exp';
 
+const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";
+
 const testId = "user1";
 const testPassword = "1234";
 const testUserName = "user";

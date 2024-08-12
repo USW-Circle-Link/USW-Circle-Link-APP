@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ApplicationViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class ApplicationWritingScreen extends ConsumerStatefulWidget {
@@ -41,12 +43,14 @@ class _ApplicationWritingScreenState
         switch (next.errorType) {
           case ApplicationModelErrorType.getApplication:
             logger.d('지원서 불러오기 실패 : ${next}');
+            showAlertDialog(context, "일시적으로 지원서를 불러올 수 없습니다.\n잠시후에 다시 시도해주세요!");
             break;
           case ApplicationModelErrorType.apply:
             logger.d('지원서 작성 실패 : ${next}');
+            showAlertDialog(context, "일시적으로 지원작성을 할 수 없습니다.\n잠시후에 다시 시도해주세요!");
             break;
           default:
-            logger.d('@ : ${next}');
+            logger.d('예외발생! : ${next}');
         }
       }
     });
@@ -162,7 +166,7 @@ class _ApplicationWritingScreenState
                           } else {
                             // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
                             setState(() {
-                              value = false;
+                              isDone = false;
                             });
                           }
                           logger.d('지원서 작성 완료에 동의함 : $isDone');
@@ -183,7 +187,8 @@ class _ApplicationWritingScreenState
                                         clubId: clubId,
                                         aplictGoogleFormUrl: state.data!);
                               } else {
-                                // 지원서 작성 완료 후 동의함 체크 부탁~
+                                showAlertDialog(
+                                    context, "지원서 작성 후 동의함 체크 부탁드립니다!");
                               }
                             },
                             style: OutlinedButton.styleFrom(
@@ -205,6 +210,17 @@ class _ApplicationWritingScreenState
                   ),
                 ),
               ),
+            ));
+  }
+
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
             ));
   }
 }
