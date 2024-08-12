@@ -69,7 +69,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         ],
       ),
     ],
-    initialLocation: '/login/sign_up',
+    initialLocation: '/',
     //initialLocation: '/login/sign_up/email_verification?account=${testId}&password=${testPassword}&userName=${testUserName}&telephone=${testTelephone}&studentNumber=${testStudentNumber}&major=${testMajor}',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,
