@@ -4,8 +4,11 @@ import 'package:http/http.dart' as http;
 import 'package:usw_circle_link/model/Circle.dart';
 
 class UpdateprofileViewmodel {
-  Future<Circle> fetchCircles(String uuId) async {
-    final response = await http.get(Uri.parse("http://43.200.140.186:8080/profiles/$uuId"));
+  Future<Circle> fetchCircles(String token) async {
+    final response = await http.get(Uri.parse("http://43.200.140.186:8080/profiles/"),
+    headers: {
+      'Authorization' : 'Bearer $token'
+    });
 
     if (response.statusCode == 200) {
       final responseBodyBytes = response.bodyBytes;
@@ -44,7 +47,7 @@ final ProfileProvider = Provider<UpdateprofileViewmodel>((ref) {
   return UpdateprofileViewmodel();
 });
 
-final updateProfileViewmodel = FutureProvider.family<Circle, String>((ref, uuId) {
+final updateProfileViewmodel = FutureProvider.family<Circle, String>((ref, token) {
   final repository = ref.watch(ProfileProvider);
-  return repository.fetchCircles(uuId);
+  return repository.fetchCircles(token);
 });

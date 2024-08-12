@@ -26,6 +26,103 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
   bool isInitialized = false;
 
+  final Map<String, List<String>> collegeMajorMap = {
+    '인문사회융합대학': [
+      '인문학부',
+      '국어국문학과',
+      '사학과',
+      '외국어학부',
+      '영어영문학과',
+      '프랑스어문학과',
+      '러시아어문학과',
+      '일어일문학과',
+      '중어중문학과',
+      '법행정학부',
+      '법학과',
+      '행정학과',
+      '미디어커뮤니케이션학과',
+      '소방행정학과',
+    ],
+    '경영공학대학': [
+      '경영학부',
+      '경영학과',
+      '글로벌비즈니스학과',
+      '회계학과',
+      '경제학부',
+      '경제금융학과',
+      '국제개발협력학과',
+      '호텔관광학부',
+      '호텔경영학과',
+      '외식경영학과',
+      '관광경영학과',
+    ],
+    '혁신공과대학': [
+      '바이오화학산업학부',
+      '바이오공학및마케팅학과',
+      '융합화학산업학과',
+      '건성환경에너지공학부',
+      '건설환경공학과',
+      '환경에너지공학과',
+      '건축도시부동산학부',
+      '건축학과',
+      '도시부동산학과',
+      '산업및기계공학부',
+      '산업공학과',
+      '기계공학과',
+      '반도체공학과',
+      '전기전자공학부',
+      '전기공학과',
+      '전자공학과',
+      '화학공학신소재공학부',
+      '신소재공학과',
+      '화학공학과',
+    ],
+    '지능형SW융합대학': [
+      '컴퓨터학부',
+      '컴퓨터SW학과',
+      '미디어SW학과',
+      '정보통신학부',
+      '정보통신학과',
+      '정보보호학과',
+      '데이터과학부',
+    ],
+    '라이프케어사이언스대학': [
+      '간호학과',
+      '아동가족복지학과',
+      '의류학과',
+      '식품영양학과',
+      '스포츠과학부',
+      '체육학과',
+      '레저스포츠학과',
+      '운동건강관리학과',
+    ],
+    '디자인앤아트대학': [
+      '조형예술학부',
+      '회화과',
+      '조소과',
+      '디자인학부',
+      '커뮤니케이션디자인과',
+      '패션디자인과',
+      '공예디자인과',
+    ],
+    '음악테크놀로지대학': [
+      '아트앤테크놀로지작곡과',
+      '성악과',
+      '피아노과',
+      '관현악과',
+      '국악과',
+    ],
+    '문화예술융합대학': [
+      '아트앤엔터테인먼트학부',
+      '영화술과',
+      '연기예술과',
+      '디지털콘텐츠과',
+    ],
+    '글로벌인재대학': [
+      '자유전공학부',
+    ],
+  };
+
   @override
   void initState() {
     super.initState();
@@ -35,8 +132,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   }
 
   void fetchProfileData() {
-    final uuId = '2a2de9d6-deff-4acf-8327-32c749211f64';
-    ref.read(updateProfileViewmodel(uuId).future).then((profile) {
+    final token = '2a2de9d6-deff-4acf-8327-32c749211f64';
+    ref.read(updateProfileViewmodel(token).future).then((profile) {
       if (mounted) {
         setState(() {
           nameController.text = profile.userName;
@@ -366,6 +463,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   }
 
   Future<void> showCustomDialog(BuildContext context) async {
+    setState(() {});
     final result = await showDialog<Map<String, String?>>(
       context: context,
       builder: (BuildContext context) {
@@ -385,7 +483,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                       selectedCollege = newValue;
                     });
                   },
-                  items: <String>['지능형SW융합대학', 'College 2', 'College 3'],
+                  items: collegeMajorMap.keys.toList(),
                   hintText: '단과대학 선택',
                   leftTopCornerRadius: 8.r,
                   leftBottomCornerRadius: 8.r,
@@ -406,7 +504,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                       departmentController.text = newValue ?? '';
                     });
                   },
-                  items: <String>['정보통신학부', '정보보호', '정보통신학과'],
+                  items: getMajorsForSelectedCollege(),
                   hintText: '학부(학과) 선택',
                   leftTopCornerRadius: 8.r,
                   leftBottomCornerRadius: 8.r,
@@ -460,6 +558,14 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       });
     }
   }
+
+  List<String> getMajorsForSelectedCollege() {
+    if (selectedCollege != null && collegeMajorMap.containsKey(selectedCollege)) {
+      return collegeMajorMap[selectedCollege]!;
+    }
+    return [];
+  }
+
 
   Future<void> showalarmCustomDialog(BuildContext context) async {
     await showDialog(
