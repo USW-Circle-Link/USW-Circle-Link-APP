@@ -57,7 +57,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             break;
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
-            context.go('/login/sign_up/email_verification');
+            context.go('/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text}&studentNumber=${studentNumberController.text}&major=$major');
             break;
           default: // 예외발생!
             logger.e('예외발생! - $next');

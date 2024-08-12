@@ -53,5 +53,5 @@ class SignUpModelError extends SignUpModelBase with _$SignUpModelError implement
 
   factory SignUpModelError.fromJson(Map<String, dynamic> json) => _$SignUpModelErrorFromJson(json);
 
-  SignUpModelError setType(SignUpModelType _type) => SignUpModelError(message: message, type: _type);
+  SignUpModelError setType(SignUpModelType _type) => SignUpModelError(exception: exception, code: code, error: error, status: status, message: message, type: _type);
 }

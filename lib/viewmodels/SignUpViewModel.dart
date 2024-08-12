@@ -85,6 +85,8 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
             type: SignUpModelType.validatePasswordMatch);
       }
 
+      state = SignUpModelLoading();
+
       final response = await authRepository.validatePasswordMatch(
         password: password,
         passwordConfirm: passwordConfirm,
