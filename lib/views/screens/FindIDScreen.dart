@@ -1,16 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/FindIdViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class FindIDScreen extends StatelessWidget {
+class FindIDScreen extends ConsumerWidget {
   FindIDScreen({Key? key}) : super(key: key);
 
   final TextEditingController emailEditController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = ref.watch(findIdViewModelProvider);
+    ref.listen(findIdViewModelProvider, (previous, next) {
+      logger.d(next);
+      if (next is FindIdModel) {
+        switch (next.type) {
+          case FindIdModelType.findId:
+            break;
+          default:
+            logger.d('예외발생 - $next');
+        }
+      }
+
+      if (next is FindIdModelError) {
+        switch (next.type) {
+          case FindIdModelType.findId:
+            showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+            break;
+          default:
+            logger.d('예외발생 - $next');
+        }
+      }
+    });
+
+    emailEditController.addListener((){
+      ref.read(findIdViewModelProvider.notifier).initState();
+    },);
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -52,7 +83,6 @@ class FindIDScreen extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      
                       SizedBox(
                         height: 46.h,
                         child: TextField(
@@ -65,16 +95,15 @@ class FindIDScreen extends StatelessWidget {
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFF6E78D8)),
                             ),
-                            contentPadding: EdgeInsets.only(left:8.w),
+                            contentPadding: EdgeInsets.only(left: 8.w),
                             suffixIcon: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextFontWidget.fontRegular(
-                                  text:'@ suwon.ac.kr',
-                                  fontSize: 16.sp,
-                                      color: Colors.black,
-                                      fontweight: FontWeight.w400
-                                )
+                                    text: '@ suwon.ac.kr',
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                    fontweight: FontWeight.w400)
                               ],
                             ),
                           ),
@@ -118,7 +147,15 @@ class FindIDScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: state == null
+                                ? () async {
+                                    ref
+                                        .read(findIdViewModelProvider.notifier)
+                                        .findId(
+                                            email: emailEditController.text
+                                                .trim());
+                                  }
+                                : null,
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -129,13 +166,52 @@ class FindIDScreen extends StatelessWidget {
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '확인메일 전송',
+                                text: '이메일 전송',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
                       ),
                       SizedBox(
                         height: 12.h,
+                      ),
+                      Visibility(
+                        visible: state is FindIdModel,
+                        child: Column(
+                          children: [
+                            Center(
+                              child: TextFontWidget.fontRegular(
+                                  text: '이메일이 오지 않았나요?',
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontweight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            GestureDetector(
+                              onTap: state is FindIdModel
+                                  ? () {
+                                      ref
+                                          .read(
+                                              findIdViewModelProvider.notifier)
+                                          .findId(
+                                              email: emailEditController.text
+                                                  .trim());
+                                    }
+                                  : null,
+                              child: Center(
+                                child: TextFontWidget.fontRegular(
+                                    text: '메일 재전송',
+                                    fontSize: 16.sp,
+                                    color: Color(0XFF4F5BD0),
+                                    fontweight: FontWeight.w400),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -163,6 +239,17 @@ class FindIDScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ));
+  }
+
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
             ));
   }
 }

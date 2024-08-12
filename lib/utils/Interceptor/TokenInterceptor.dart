@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 
 class TokenInterceptor extends Interceptor {
@@ -36,14 +35,15 @@ class TokenInterceptor extends Interceptor {
 
       if (options.headers['onPath'] == 'true') {
         // 토큰을 path에 담는 경우
+        options.headers.remove('onPath');
         options.path = options.path.replaceAll(':accessToken', token);
-        log('TokenInterceptor - onRequest - 요청 Uri : ${options.uri}');
+        logger.d('TokenInterceptor - onRequest - 요청 Uri : ${options.uri}');
       } else {
         // 토큰을 헤더에 담는 경우
 
         // 실제 토큰으로 대체
         options.headers.addAll({
-          'authorization': 'Bearer $token',
+          'User-uuid': token,
         });
       }
     } else if (options.headers['refreshToken'] == 'true') {

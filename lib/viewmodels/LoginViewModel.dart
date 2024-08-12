@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 
 final loginViewModelProvider =
@@ -15,7 +16,8 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
   final UserViewModel userViewModel;
   LoginViewModel({
     required this.userViewModel,
-  }) : super(userViewModel.state.value); // Login Page 에 들어왔다는 것은 User 정보가 없다는 얘기
+  }) : super(
+            userViewModel.state.value); // Login Page 에 들어왔다는 것은 User 정보가 없다는 얘기
 
   Future<UserModelBase> login({
     required String id,
@@ -25,13 +27,19 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
       // 첫 state는 Loading 상태
       state = UserModelLoading();
 
-      final userResponse = await userViewModel.login(id: id, password: password);
-      
+      final userResponse =
+          await userViewModel.login(id: id, password: password);
+      logger.d('LoginViewModel - 로그인 완료');
+
       state = userResponse;
-      
+
       return userResponse;
     } catch (e) {
-      state = UserModelError(message: '로그인 실패: $e');
+      if (e is UserModelError) {
+        state = e;
+      } else {
+        state = UserModelError(message: '예외발생 : $e');
+      }
 
       // 반환되는 값은 `UserModelError`임
       return Future.value(state);
