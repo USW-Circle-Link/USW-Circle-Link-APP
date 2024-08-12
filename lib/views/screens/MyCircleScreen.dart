@@ -9,8 +9,8 @@ class MyCircleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final uuId = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
-    final circlesAsyncValue = ref.watch(circleListProvider(uuId));
+    final token = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
+    final circlesAsyncValue = ref.watch(circleListProvider(token));
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),

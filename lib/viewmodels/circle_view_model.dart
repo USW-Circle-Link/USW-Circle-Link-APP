@@ -6,7 +6,7 @@ final circleRepositoryProvider = Provider<CircleRepository>((ref) {
   return CircleRepository();
 });
 
-final circleListProvider = FutureProvider.family<List<Circle>, String>((ref, uuId) {
+final circleListProvider = FutureProvider.family<List<Circle>, String>((ref, token) {
   final repository = ref.watch(circleRepositoryProvider);
-  return repository.fetchCircles(uuId);
+  return repository.fetchCircles(token);
 });

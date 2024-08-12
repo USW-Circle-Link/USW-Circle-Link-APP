@@ -3,8 +3,12 @@ import 'package:http/http.dart' as http;
 import 'package:usw_circle_link/model/Circle.dart';
 
 class CircleRepository {
-  Future<List<Circle>> fetchCircles(String uuId) async {
-    final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/$uuId/my-clubs'));
+  Future<List<Circle>> fetchCircles(String token) async {
+    final response = await http.get(Uri.parse('http://43.200.140.186:8080/mypages/my-clubs'),
+      headers: {
+      'Authorization' : 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       final responseBodyBytes = response.bodyBytes;
