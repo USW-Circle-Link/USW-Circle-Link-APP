@@ -13,6 +13,7 @@ class CircleScreen extends StatefulWidget {
 
 class _CircleScreenState extends State<CircleScreen> {
   int activeIndex = 0;
+  String recruitstate = "CLOSE";
 
   final List<String> images = [
     'assets/images/circleimage.png',
@@ -88,7 +89,8 @@ class _CircleScreenState extends State<CircleScreen> {
             child: Column(
               children: [
                 SizedBox(height: 12.h),
-                CustomButton(text: '지원하기', onPressed: () {}),
+                if (recruitstate == "CLOSE") CustomButton(text: '모집마감', isEnabled: false, onPressed: () {  },)
+                else CustomButton(text: '지원하기', isEnabled: true, onPressed: () {  },),
               ],
             ),
           ),
@@ -253,7 +255,7 @@ class _CircleScreenState extends State<CircleScreen> {
                                 ),
                                 SizedBox(width: 6.w),
                                 Text(
-                                  '@kakao',
+                                  '@INSTAGRAM',
                                   style: TextStyle(
                                     fontFamily: 'Pretendard',
                                     color: const Color(0xFF353549),
@@ -326,34 +328,41 @@ class _CircleScreenState extends State<CircleScreen> {
 
 }
 
-class CustomButton extends StatelessWidget {
+class CustomButton extends StatefulWidget {
   final String text;
+  final bool isEnabled;
   final VoidCallback onPressed;
 
   const CustomButton({
     required this.text,
+    required this.isEnabled,
     required this.onPressed,
   });
 
   @override
+  State<CustomButton> createState() => _CustomButtonState();
+}
+
+class _CustomButtonState extends State<CustomButton> {
+  @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56.sp,
-      width: 327.sp,
+      height: 56,
+      width: 327,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8.sp),
-        color: const Color(0xff4F5BD0),
+        borderRadius: BorderRadius.circular(8),
+        color: widget.isEnabled ? const Color(0xff4F5BD0) : Colors.grey,
       ),
       child: TextButton(
-        onPressed: onPressed,
+        onPressed: widget.isEnabled ? widget.onPressed : null,
         child: Text(
-          text,
+          widget.text,
           style: TextStyle(
             color: const Color(0xffffffff),
-            fontSize: 18.sp,
+            fontSize: 18,
             fontWeight: FontWeight.w600,
             fontFamily: 'Pretendard',
-            height: 1.111.sp,
+            height: 1.111,
           ),
         ),
       ),
