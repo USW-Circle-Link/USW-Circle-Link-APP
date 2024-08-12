@@ -66,6 +66,9 @@ final routerProvider = Provider<GoRouter>((ref) {
                     builder: (context, state) => WebViewScreen(
                         encodedUrl: state.pathParameters['encodedUrl']!))
               ]),
+          GoRoute(
+              path: 'change_pw',
+              builder: (_, __) => ChangePWScreen(),),
         ],
       ),
     ],
