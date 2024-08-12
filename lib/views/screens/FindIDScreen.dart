@@ -31,7 +31,14 @@ class FindIDScreen extends ConsumerWidget {
       if (next is FindIdModelError) {
         switch (next.type) {
           case FindIdModelType.findId:
-            showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+            switch (next.code) {
+              case "EML-F100":
+                showAlertDialog(context, '이메일을 입력해주세요!');
+                break;
+              default:
+                showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+                break;
+            }
             break;
           default:
             logger.d('예외발생 - $next');
@@ -39,9 +46,11 @@ class FindIDScreen extends ConsumerWidget {
       }
     });
 
-    emailEditController.addListener((){
-      ref.read(findIdViewModelProvider.notifier).initState();
-    },);
+    emailEditController.addListener(
+      () {
+        ref.read(findIdViewModelProvider.notifier).initState();
+      },
+    );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(

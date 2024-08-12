@@ -1,25 +1,74 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/FindPWModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/FindPWViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class FindPWScreen extends StatefulWidget {
+class FindPWScreen extends ConsumerStatefulWidget {
   const FindPWScreen({Key? key}) : super(key: key);
 
   @override
   _FindPWScreenState createState() => _FindPWScreenState();
 }
 
-class _FindPWScreenState extends State<FindPWScreen> {
-  final TextEditingController verificationCodeController =
-      TextEditingController();
+class _FindPWScreenState extends ConsumerState<FindPWScreen> {
+  final TextEditingController idEditController = TextEditingController();
   final TextEditingController emailEditController = TextEditingController();
-
-  bool verificationCodeIsInvalid = false;
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(findPWViewModelProvider);
+    ref.listen(findPWViewModelProvider, (previous, next) {
+      logger.d(next);
+      if (next is FindPWModel) {
+        switch (next.type) {
+          case FindPWModelType.findPW:
+            break;
+          case FindPWModelType.resendMail:
+            break;
+          default:
+            logger.d('예외발생 - $next');
+        }
+      }
+      if (next is FindPWModelError) {
+        switch (next.type) {
+          case FindPWModelType.findPW:
+            switch (next.code) {
+              case "EML-F100":
+                showAlertDialog(context, '이메일을 입력해주세요!');
+                break;
+              case "EML-F200":
+                showAlertDialog(context, '아이디를 입력해주세요!');
+                break;
+              default:
+                showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+                break;
+            }
+            break;
+          case FindPWModelType.resendMail:
+            break;
+          default:
+            logger.d('예외발생 - $next');
+        }
+      }
+    });
+
+    idEditController.addListener(
+      () {
+        ref.read(findPWViewModelProvider.notifier).initState();
+      },
+    );
+
+    emailEditController.addListener(
+      () {
+        ref.read(findPWViewModelProvider.notifier).initState();
+      },
+    );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -65,7 +114,7 @@ class _FindPWScreenState extends State<FindPWScreen> {
                         height: 46.h,
                         child: TextField(
                           textAlignVertical: TextAlignVertical.center,
-                          controller: emailEditController,
+                          controller: idEditController,
                           keyboardType: TextInputType.text,
                           textAlign: TextAlign.left,
                           decoration: InputDecoration(
@@ -73,7 +122,8 @@ class _FindPWScreenState extends State<FindPWScreen> {
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFF6E78D8)),
                             ),
-                            contentPadding: EdgeInsets.only(left: 8.w, bottom: 8.h),
+                            contentPadding:
+                                EdgeInsets.only(left: 8.w, bottom: 8.h),
                           ),
                           textInputAction: TextInputAction.next,
                         ),
@@ -145,7 +195,9 @@ class _FindPWScreenState extends State<FindPWScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: () async {
+                              ref.read(findPWViewModelProvider.notifier).findPW(account: idEditController.text.trim(), email: emailEditController.text.trim());
+                            },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -163,6 +215,47 @@ class _FindPWScreenState extends State<FindPWScreen> {
                       ),
                       SizedBox(
                         height: 12.h,
+                      ),
+                      Visibility(
+                        visible: state is FindPWModel,
+                        child: Column(
+                          children: [
+                            Center(
+                              child: TextFontWidget.fontRegular(
+                                  text: '이메일이 오지 않았나요?',
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontweight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            GestureDetector(
+                              onTap: state is FindPWModel
+                                  ? () {
+                                      ref
+                                          .read(
+                                              findPWViewModelProvider.notifier)
+                                          .findPW(
+                                              account:
+                                                  idEditController.text.trim(),
+                                              email: emailEditController.text
+                                                  .trim());
+                                    }
+                                  : null,
+                              child: Center(
+                                child: TextFontWidget.fontRegular(
+                                    text: '메일 재전송',
+                                    fontSize: 16.sp,
+                                    color: Color(0XFF4F5BD0),
+                                    fontweight: FontWeight.w400),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                          ],
+                        ),
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -191,5 +284,23 @@ class _FindPWScreenState extends State<FindPWScreen> {
                 ),
               ),
             ));
+  }
+
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
+            ));
+  }
+
+  @override
+  void dispose() {
+    idEditController.dispose();
+    emailEditController.dispose();
+    super.dispose();
   }
 }

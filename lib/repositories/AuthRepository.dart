@@ -5,6 +5,7 @@ import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/EmailVerificationModel.dart';
 import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/models/FindPWModel.dart';
 import 'package:usw_circle_link/models/SignUpModel.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -212,6 +213,21 @@ class AuthRepository {
       return FindIdModel.fromJson(response.data);
     } else {
       throw FindIdModelError.fromJson(response.data);
+    }
+  }
+
+  Future<FindPWModel> findPW({
+    required String account,
+    required String email,
+  }) async {
+    final response = await dio.get(
+      '$baseUrl/find-password/${account}' // URL 수정 필요
+    );
+
+    if (response.statusCode == 200){
+      return FindPWModel.fromJson(response.data);
+    } else {
+      throw FindPWModelError.fromJson(response.data);
     }
   }
 }
