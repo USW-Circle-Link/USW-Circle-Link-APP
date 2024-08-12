@@ -26,6 +26,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
   bool isInitialized = false;
 
+  bool isNameValid = true;
+  bool isPhoneNumberValid = true;
+  bool isStudentNumberValid = true;
+
   final Map<String, List<String>> collegeMajorMap = {
     '인문사회융합대학': [
       '인문학부',
@@ -145,6 +149,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
         });
       }
     });
+
+
+
   }
 
   @override
@@ -154,6 +161,21 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     studentnumberController.dispose();
     departmentController.dispose();
     super.dispose();
+  }
+
+  bool validateName(String name) {
+    final nameRegex = RegExp(r'^[가-힣]+$'); // 한글만 허용
+    return nameRegex.hasMatch(name);
+  }
+
+  bool validatePhoneNumber(String phoneNumber) {
+    final phoneNumberRegex = RegExp(r'^\d+$'); // 숫자만 허용
+    return phoneNumberRegex.hasMatch(phoneNumber);
+  }
+
+  bool validateStudentNumber(String studentNumber) {
+    final studentNumberRegex = RegExp(r'^\d+$'); // 숫자만 허용
+    return studentNumberRegex.hasMatch(studentNumber);
   }
 
   @override
@@ -208,345 +230,348 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             ),
           ),
         ),
-        body: profileAsyncValue.when(
-          data: (profile) {
-            if (!isInitialized) {
-              nameController.text = profile.userName;
-              phonenumberController.text = profile.userHp;
-              studentnumberController.text = profile.studentNumber;
-              departmentController.text = profile.major;
-              selectedMajor = profile.major;
-              isInitialized = true;
-            }
-
-            return SingleChildScrollView(
-              child: Column(
+        body: isInitialized
+            ? SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(height: 30.h),
+              Row(
                 children: [
-                  SizedBox(height: 30.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 36.w),
-                      Text(
-                        '이름',
-                        style: TextStyle(
-                          color: const Color(0xff000000),
-                          fontFamily: 'Pretendard',
-                          fontSize: 16.sp,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w400,
-                          height: 1.12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 32.w),
-                      Container(
-                        width: 311.w,
-                        child: RoundedTextField(
-                          height: 50.h,
-                          textEditController: nameController,
-                          leftBottomCornerRadius: 8.r,
-                          rightBottomCornerRadius: 8.r,
-                          leftTopCornerRadius: 8.r,
-                          rightTopCornerRadius: 8.r,
-                          borderColor: const Color(0xffDBDBDB),
-                          borderWidth: 1.w,
-                          maxLines: 1,
-                          textInputType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          hintText: "이름",
-                          prefixIcon: SvgPicture.asset(
-                            'assets/images/ic_person.svg',
-                            width: 13.w,
-                            height: 16.h,
-                            fit: BoxFit.scaleDown,
-                          ),
-                          hintStyle: TextStyle(
-                              fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 36.w),
-                      Text(
-                        '전화번호',
-                        style: TextStyle(
-                          color: const Color(0xff000000),
-                          fontFamily: 'Pretendard',
-                          fontSize: 16.sp,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w400,
-                          height: 1.12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 32.w),
-                      Container(
-                        width: 311.w,
-                        child: RoundedTextField(
-                          height: 50.h,
-                          textEditController: phonenumberController,
-                          leftBottomCornerRadius: 8.r,
-                          rightBottomCornerRadius: 8.r,
-                          leftTopCornerRadius: 8.r,
-                          rightTopCornerRadius: 8.r,
-                          borderColor: const Color(0xffDBDBDB),
-                          borderWidth: 1.w,
-                          maxLines: 1,
-                          textInputType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          prefixIcon: SvgPicture.asset(
-                            'assets/images/ic_phone.svg',
-                            width: 13.w,
-                            height: 16.h,
-                            fit: BoxFit.scaleDown,
-                          ),
-                          hintText: "전화번호 (- 제외입력)",
-                          hintStyle: TextStyle(
-                              fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 36.w),
-                      Text(
-                        '학번',
-                        style: TextStyle(
-                          color: const Color(0xff000000),
-                          fontFamily: 'Pretendard',
-                          fontSize: 16.sp,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w400,
-                          height: 1.12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 32.w),
-                      Container(
-                        width: 311.w,
-                        child: RoundedTextField(
-                          height: 50.h,
-                          textEditController: studentnumberController,
-                          leftBottomCornerRadius: 8.r,
-                          rightBottomCornerRadius: 8.r,
-                          leftTopCornerRadius: 8.r,
-                          rightTopCornerRadius: 8.r,
-                          borderColor: const Color(0xffDBDBDB),
-                          borderWidth: 1.w,
-                          maxLines: 1,
-                          textInputType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          prefixIcon: SvgPicture.asset(
-                            'assets/images/ic_tag.svg',
-                            width: 13.w,
-                            height: 16.h,
-                            fit: BoxFit.scaleDown,
-                          ),
-                          hintText: "학번",
-                          hintStyle: TextStyle(
-                              fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 16.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 36.w),
-                      Text(
-                        '학과',
-                        style: TextStyle(
-                          color: const Color(0xff000000),
-                          fontFamily: 'Pretendard',
-                          fontSize: 16.sp,
-                          fontStyle: FontStyle.normal,
-                          fontWeight: FontWeight.w400,
-                          height: 1.12.sp,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 8.h),
-                  Row(
-                    children: [
-                      SizedBox(width: 32.w),
-                      Container(
-                        width: 311.w,
-                        child: GestureDetector(
-                          onTap: () async {
-                            await showCustomDialog(context);
-                          },
-                          child: AbsorbPointer(
-                            child: RoundedTextField(
-                              height: 50.h,
-                              textEditController: departmentController,
-                              leftBottomCornerRadius: 8.r,
-                              rightBottomCornerRadius: 8.r,
-                              leftTopCornerRadius: 8.r,
-                              rightTopCornerRadius: 8.r,
-                              borderColor: const Color(0xffDBDBDB),
-                              borderWidth: 1.w,
-                              maxLines: 1,
-                              textInputType: TextInputType.none,
-                              textAlign: TextAlign.left,
-                              textInputAction: TextInputAction.done,
-                              prefixIcon: SvgPicture.asset(
-                                'assets/images/ic_bookmark.svg',
-                                width: 13.w,
-                                height: 16.h,
-                                fit: BoxFit.scaleDown,
-                              ),
-                              suffixIcon: SvgPicture.asset(
-                                'assets/images/>.svg',
-                                width: 32.w,
-                                height: 32.h,
-                                fit: BoxFit.scaleDown,
-                              ),
-                              hintText: selectedMajor ?? '학과',
-                              hintStyle: TextStyle(
-                                  fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                              isAnimatedHint: false,
-                            ),
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: 48.h),
-                  CustomButton(
-                    text: '수정 완료',
-                    onPressed: () {
-                      final updatedProfile = Circle(
-                        userName: nameController.text,
-                        studentNumber: studentnumberController.text,
-                        userHp: phonenumberController.text,
-                        major: selectedMajor ?? departmentController.text,
-                      );
-
-                      ref.read(ProfileProvider).updateProfile(uuId, updatedProfile).then((_) {
-                        ref.refresh(updateProfileViewmodel(uuId));
-                        showalarmCustomDialog(context).then((_) {
-                          Navigator.pop(context);
-                        });
-                      }).catchError((error) {
-                        // Handle error
-                        print('Error: $error');
-                      });
-                    },
+                  SizedBox(width: 36.w),
+                  Text(
+                    '이름',
+                    style: TextStyle(
+                      color: const Color(0xff000000),
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
                   ),
                 ],
               ),
-            );
-          },
-          loading: () => Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('Failed to load profile data')),
-        ),
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  SizedBox(width: 32.w),
+                  Container(
+                    width: 311.w,
+                    child: RoundedTextField(
+                      height: 50.h,
+                      textEditController: nameController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: isNameValid ? const Color(0xffDBDBDB) : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      hintText: "이름",
+                      prefixIcon: SvgPicture.asset(
+                        'assets/images/ic_person.svg',
+                        width: 13.w,
+                        height: 16.h,
+                        fit: BoxFit.scaleDown,
+                      ),
+                      hintStyle: TextStyle(
+                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  SizedBox(width: 36.w),
+                  Text(
+                    '전화번호',
+                    style: TextStyle(
+                      color: const Color(0xff000000),
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  SizedBox(width: 32.w),
+                  Container(
+                    width: 311.w,
+                    child: RoundedTextField(
+                      height: 50.h,
+                      textEditController: phonenumberController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: isPhoneNumberValid ? const Color(0xffDBDBDB) : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      prefixIcon: SvgPicture.asset(
+                        'assets/images/ic_phone.svg',
+                        width: 13.w,
+                        height: 16.h,
+                        fit: BoxFit.scaleDown,
+                      ),
+                      hintText: "전화번호 (- 제외입력)",
+                      hintStyle: TextStyle(
+                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  SizedBox(width: 36.w),
+                  Text(
+                    '학번',
+                    style: TextStyle(
+                      color: const Color(0xff000000),
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  SizedBox(width: 32.w),
+                  Container(
+                    width: 311.w,
+                    child: RoundedTextField(
+                      height: 50.h,
+                      textEditController: studentnumberController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: isStudentNumberValid ? const Color(0xffDBDBDB) : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      prefixIcon: SvgPicture.asset(
+                        'assets/images/ic_tag.svg',
+                        width: 13.w,
+                        height: 16.h,
+                        fit: BoxFit.scaleDown,
+                      ),
+                      hintText: "학번",
+                      hintStyle: TextStyle(
+                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 16.h),
+              Row(
+                children: [
+                  SizedBox(width: 36.w),
+                  Text(
+                    '학과',
+                    style: TextStyle(
+                      color: const Color(0xff000000),
+                      fontFamily: 'Pretendard',
+                      fontSize: 16.sp,
+                      fontStyle: FontStyle.normal,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(height: 8.h),
+              Row(
+                children: [
+                  SizedBox(width: 32.w),
+                  Container(
+                    width: 311.w,
+                    child: GestureDetector(
+                      onTap: () async {
+                        await showCustomDialog(context);
+                      },
+                      child: AbsorbPointer(
+                        child: RoundedTextField(
+                          height: 50.h,
+                          textEditController: departmentController,
+                          leftBottomCornerRadius: 8.r,
+                          rightBottomCornerRadius: 8.r,
+                          leftTopCornerRadius: 8.r,
+                          rightTopCornerRadius: 8.r,
+                          borderColor: const Color(0xffDBDBDB),
+                          borderWidth: 1.w,
+                          maxLines: 1,
+                          textInputType: TextInputType.none,
+                          textAlign: TextAlign.left,
+                          textInputAction: TextInputAction.done,
+                          prefixIcon: SvgPicture.asset(
+                            'assets/images/ic_bookmark.svg',
+                            width: 13.w,
+                            height: 16.h,
+                            fit: BoxFit.scaleDown,
+                          ),
+                          suffixIcon: SvgPicture.asset(
+                            'assets/images/>.svg',
+                            width: 32.w,
+                            height: 32.h,
+                            fit: BoxFit.scaleDown,
+                          ),
+                          hintText: selectedMajor ?? '학과',
+                          hintStyle: TextStyle(
+                              fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          isAnimatedHint: false,
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+              SizedBox(height: 48.h),
+              CustomButton(
+                text: '수정 완료',
+                onPressed: () {
+                  setState(() {
+                    isNameValid = validateName(nameController.text);
+                    isPhoneNumberValid = validatePhoneNumber(phonenumberController.text);
+                    isStudentNumberValid = validateStudentNumber(studentnumberController.text);
+                  });
+
+                  if (isNameValid && isPhoneNumberValid && isStudentNumberValid) {
+                    final updatedProfile = Circle(
+                      userName: nameController.text,
+                      studentNumber: studentnumberController.text,
+                      userHp: phonenumberController.text,
+                      major: selectedMajor ?? departmentController.text,
+                    );
+
+                    // 더미 동작
+                    ref.read(ProfileProvider).updateProfile(uuId, updatedProfile).then((_) {
+                      ref.refresh(updateProfileViewmodel(uuId));
+                      showalarmCustomDialog(context).then((_) {
+                        Navigator.pop(context);
+                      });
+                    }).catchError((error) {
+                      // Handle error
+                      print('Error: $error');
+                    });
+                  };
+                },
+              ),
+            ],
+          ),
+        )
+            : Center(child: CircularProgressIndicator()),
       ),
     );
   }
 
   Future<void> showCustomDialog(BuildContext context) async {
-    setState(() {});
     final result = await showDialog<Map<String, String?>>(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                RoundedDropdown(
-                  initValue: selectedCollege,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCollege = newValue;
-                    });
-                  },
-                  items: collegeMajorMap.keys.toList(),
-                  hintText: '단과대학 선택',
-                  leftTopCornerRadius: 8.r,
-                  leftBottomCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  borderColor: Color(0xFFCECECE),
-                  borderWidth: 1.w,
-                  marginTop: 32.h,
-                  marginLeft: 16.w,
-                  marginRight: 16.w,
+        String? localSelectedCollege = selectedCollege;
+        String? localSelectedMajor = selectedMajor;
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Dialog(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15.r),
+                  color: Colors.white,
                 ),
-                SizedBox(height: 8.h),
-                RoundedDropdown(
-                  initValue: selectedMajor,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedMajor = newValue;
-                      departmentController.text = newValue ?? '';
-                    });
-                  },
-                  items: getMajorsForSelectedCollege(),
-                  hintText: '학부(학과) 선택',
-                  leftTopCornerRadius: 8.r,
-                  leftBottomCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  borderColor: Color(0xFFCECECE),
-                  borderWidth: 1.w,
-                  marginLeft: 16.w,
-                  marginRight: 16.w,
-                ),
-                SizedBox(height: 20.h),
-                SizedBox.fromSize(
-                  size: Size.fromHeight(1.h),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(color: Color(0xFFCECECE)),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(
-                        {'college': selectedCollege, 'major': selectedMajor});
-                  },
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.fromHeight(50.h),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.zero, bottom: Radius.circular(15.r)),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    RoundedDropdown(
+                      initValue: localSelectedCollege,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          localSelectedCollege = newValue;
+                          localSelectedMajor = null; // 학과를 초기화합니다.
+                        });
+                      },
+                      items: collegeMajorMap.keys.toList(),
+                      hintText: '단과대학 선택',
+                      leftTopCornerRadius: 8.r,
+                      leftBottomCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      borderColor: const Color(0xFFCECECE),
+                      borderWidth: 1.w,
+                      marginTop: 32.h,
+                      marginLeft: 16.w,
+                      marginRight: 16.w,
                     ),
-                  ),
-                  child: Text(
-                    "확인",
-                    style: TextStyle(
-                      color: Color(0xFF0085FF),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
-                      fontFamily: 'Pretendard',
+                    SizedBox(height: 8.h),
+                    RoundedDropdown(
+                      initValue: localSelectedMajor,
+                      onChanged: (String? newValue) {
+                        setState(() {
+                          localSelectedMajor = newValue;
+                          departmentController.text = newValue ?? '';
+                        });
+                      },
+                      items: collegeMajorMap[localSelectedCollege] ?? [],
+                      hintText: '학부(학과) 선택',
+                      leftTopCornerRadius: 8.r,
+                      leftBottomCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      borderColor: const Color(0xFFCECECE),
+                      borderWidth: 1.w,
+                      marginLeft: 16.w,
+                      marginRight: 16.w,
                     ),
-                  ),
+                    SizedBox(height: 20.h),
+                    SizedBox.fromSize(
+                      size: Size.fromHeight(1.h),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: Color(0xFFCECECE)),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.of(context).pop(
+                            {'college': localSelectedCollege, 'major': localSelectedMajor});
+                      },
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.fromHeight(50.h),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(
+                              top: Radius.zero, bottom: Radius.circular(15.r)),
+                        ),
+                      ),
+                      child: Text(
+                        "확인",
+                        style: TextStyle(
+                          color: Color(0xFF0085FF),
+                          fontSize: 18.sp,
+                          fontWeight: FontWeight.w500,
+                          fontFamily: 'Pretendard',
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -565,7 +590,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     }
     return [];
   }
-
 
   Future<void> showalarmCustomDialog(BuildContext context) async {
     await showDialog(
