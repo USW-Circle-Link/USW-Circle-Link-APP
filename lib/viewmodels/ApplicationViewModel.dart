@@ -31,7 +31,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
       if (e is ApplicationModelError) {
         state = e;
       } else {
-        state = ApplicationModelError(message: '에외발생 - $e');
+        state = ApplicationModelError(message: '에외발생 - $e', errorType: ApplicationModelErrorType.getApplication);
       }
 
       // 반환되는 값은 `ApplicationModelError`임
