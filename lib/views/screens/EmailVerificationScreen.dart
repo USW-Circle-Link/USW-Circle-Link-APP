@@ -262,7 +262,7 @@ class _EmailVerificationScreenState
                         child: OutlinedButton(
                             onPressed: () {
                               final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr/index.html');
+                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                               context.push(
                                   '/login/sign_up/email_verification/${encodedUrl}');

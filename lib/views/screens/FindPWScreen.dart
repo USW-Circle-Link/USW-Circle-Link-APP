@@ -180,7 +180,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                                   fontWeight: FontWeight.w400),
                               children: const [
                                 TextSpan(
-                                  text: "임시 비밀번호",
+                                  text: "인증코드",
                                   style: TextStyle(
                                       color: Color(0xFF6E6EDE),
                                       fontWeight: FontWeight.w600),
@@ -272,7 +272,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                         child: OutlinedButton(
                             onPressed: () {
                               final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr/index.html');
+                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                               context.push('/login/find_pw/${encodedUrl}');
                             },

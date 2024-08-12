@@ -4,6 +4,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({Key? key, required this.encodedUrl}) : super(key: key);
@@ -146,42 +147,41 @@ class _WebViewScreenState extends State<WebViewScreen> {
                           },
                           onCreateWindow:
                               (controller, createWindowRequest) async {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  content: SizedBox(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 400,
-                                    child: InAppWebView(
-                                      // Setting the windowId property is important here!
-                                      windowId: createWindowRequest.windowId,
-                                      initialOptions: InAppWebViewGroupOptions(
-                                        android: AndroidInAppWebViewOptions(
-                                          builtInZoomControls: true,
-                                          thirdPartyCookiesEnabled: true,
-                                        ),
-                                        crossPlatform: InAppWebViewOptions(
-                                            cacheEnabled: true,
-                                            javaScriptEnabled: true,
-                                            userAgent:
-                                                "Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36"),
-                                        ios: IOSInAppWebViewOptions(
-                                          allowsInlineMediaPlayback: true,
-                                          allowsBackForwardNavigationGestures:
-                                              true,
-                                        ),
-                                      ),
-                                      onCloseWindow: (controller) async {
-                                        if (Navigator.canPop(context)) {
-                                          Navigator.pop(context);
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            );
+                                final encodedUrl = Uri.encodeComponent(createWindowRequest.request.url.toString());
+                                context.push('/application_writing/$encodedUrl');
+                            // showDialog(
+                            //   context: context,
+                            //   builder: (context) {
+                            //     return Padding(
+                            //       padding: EdgeInsets.only(top:52.h),
+                            //       child: InAppWebView(
+                            //           // Setting the windowId property is important here!
+                            //           windowId: createWindowRequest.windowId,
+                            //           initialOptions: InAppWebViewGroupOptions(
+                            //             android: AndroidInAppWebViewOptions(
+                            //               builtInZoomControls: true,
+                            //               thirdPartyCookiesEnabled: true,
+                            //             ),
+                            //             crossPlatform: InAppWebViewOptions(
+                            //                 cacheEnabled: true,
+                            //                 javaScriptEnabled: true,
+                            //                 userAgent:
+                            //                     "Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36"),
+                            //             ios: IOSInAppWebViewOptions(
+                            //               allowsInlineMediaPlayback: true,
+                            //               allowsBackForwardNavigationGestures:
+                            //                   true,
+                            //             ),
+                            //           ),
+                            //           onCloseWindow: (controller) async {
+                            //             if (Navigator.canPop(context)) {
+                            //               Navigator.pop(context);
+                            //             }
+                            //           },
+                            //         ),
+                            //     );
+                            //   },
+                            // );
                             return true;
                           },
                         )

@@ -217,7 +217,7 @@ class FindIDScreen extends ConsumerWidget {
                         child: OutlinedButton(
                             onPressed: () {
                               final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr/index.html');
+                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                               context.push('/login/find_id/${encodedUrl}');
                             },

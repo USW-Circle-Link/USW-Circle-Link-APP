@@ -30,14 +30,15 @@ class _MainScreenState extends State<MainScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
+          leading: Container(
+            margin: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
             child: IconButton(
               onPressed: () {
                 _scaffoldKey.currentState?.openDrawer();
               },
               icon: SvgPicture.asset(
                 'assets/images/menubt.svg',
+                fit: BoxFit.fitHeight,
               ),
             ),
           ),
