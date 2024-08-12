@@ -826,7 +826,7 @@ EmailVerificationModelComplete _$EmailVerificationModelCompleteFromJson(
 mixin _$EmailVerificationModelComplete {
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
-  bool get data => throw _privateConstructorUsedError;
+  String get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -842,7 +842,7 @@ abstract class $EmailVerificationModelCompleteCopyWith<$Res> {
       _$EmailVerificationModelCompleteCopyWithImpl<$Res,
           EmailVerificationModelComplete>;
   @useResult
-  $Res call({EmailVerificationModelType? type, String message, bool data});
+  $Res call({EmailVerificationModelType? type, String message, String data});
 }
 
 /// @nodoc
@@ -875,7 +875,7 @@ class _$EmailVerificationModelCompleteCopyWithImpl<$Res,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as String,
     ) as $Val);
   }
 }
@@ -889,7 +889,7 @@ abstract class _$$EmailVerificationModelCompleteImplCopyWith<$Res>
       __$$EmailVerificationModelCompleteImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({EmailVerificationModelType? type, String message, bool data});
+  $Res call({EmailVerificationModelType? type, String message, String data});
 }
 
 /// @nodoc
@@ -921,13 +921,14 @@ class __$$EmailVerificationModelCompleteImplCopyWithImpl<$Res>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as bool,
+              as String,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$EmailVerificationModelCompleteImpl
     extends _EmailVerificationModelComplete {
   _$EmailVerificationModelCompleteImpl(
@@ -943,7 +944,7 @@ class _$EmailVerificationModelCompleteImpl
   @override
   final String message;
   @override
-  final bool data;
+  final String data;
 
   @override
   String toString() {
@@ -985,7 +986,7 @@ abstract class _EmailVerificationModelComplete
   factory _EmailVerificationModelComplete(
       {final EmailVerificationModelType? type,
       required final String message,
-      required final bool data}) = _$EmailVerificationModelCompleteImpl;
+      required final String data}) = _$EmailVerificationModelCompleteImpl;
   _EmailVerificationModelComplete._() : super._();
 
   factory _EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =
@@ -996,7 +997,7 @@ abstract class _EmailVerificationModelComplete
   @override
   String get message;
   @override
-  bool get data;
+  String get data;
   @override
   @JsonKey(ignore: true)
   _$$EmailVerificationModelCompleteImplCopyWith<

@@ -16,23 +16,12 @@ class SignUpModel extends SignUpModelBase with _$SignUpModel {
   factory SignUpModel({
     SignUpModelType? type,
     required String message,
-    SignUpData? data,
+    String? data,
   }) = _SignUpModel;
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => _$SignUpModelFromJson(json);
 
   SignUpModel setType(SignUpModelType _type) => SignUpModel(message: message, data: data, type: _type);
-}
-
-@freezed
-class SignUpData with _$SignUpData {
-
-  factory SignUpData({
-    required String emailTokenId,
-    required String account,
-  }) = _SignUpData;
-
-  factory SignUpData.fromJson(Map<String, dynamic> json) => _$SignUpDataFromJson(json);
 }
 
 class SignUpModelLoading extends SignUpModelBase {}

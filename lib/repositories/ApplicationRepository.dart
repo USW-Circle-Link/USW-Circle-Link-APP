@@ -2,16 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
-import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ApplicationRepository(
-    baseUrl: 'http://$host:$port/user/me',
+    baseUrl: 'http://$host:$port/apply',
     dio: dio,
   );
 });
@@ -29,9 +27,10 @@ class ApplicationRepository {
     required int clubId,
   }) async {
     final response = await dio.get(
-      '$baseUrl/apply/$clubId',
-      options: Options(headers: {'accessToken': 'false'}),
+      '$baseUrl/$clubId',
     );
+
+    logger.d('${response.data}');
 
     logger.d('${response.realUri} 로 요청 성공! (${response.statusCode})');
 
@@ -39,7 +38,7 @@ class ApplicationRepository {
       return ApplicationModel.fromJson(response.data);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).type(ApplicationModelErrorType.getApplication);
+      throw ApplicationModelError.fromJson(response.data).setType(ApplicationModelErrorType.getApplication);
     }
   }
 
@@ -47,7 +46,7 @@ class ApplicationRepository {
     required int clubId,
     required String aplictGoogleFormUrl,
   }) async {
-    final response = await dio.post('$baseUrl/apply/$clubId',
+    final response = await dio.post('$baseUrl/$clubId',
         data: {
           'aplictGoogleFormUrl': aplictGoogleFormUrl,
         },
@@ -57,7 +56,7 @@ class ApplicationRepository {
       return ApplicationModelComplete.fromJson(response.data);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).type(ApplicationModelErrorType.apply);
+      throw ApplicationModelError.fromJson(response.data).setType(ApplicationModelErrorType.apply);
     }
   }
 }

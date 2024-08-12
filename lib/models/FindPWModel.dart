@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'FindPWModel.freezed.dart';
 part 'FindPWModel.g.dart';
 
-enum FindPWModelType {findPW, resendMail}
+enum FindPWModelType {sendCode, verifyCode}
 
 abstract class FindPWModelBase {}
 

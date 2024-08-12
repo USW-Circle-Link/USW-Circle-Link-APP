@@ -10,34 +10,20 @@ _$SignUpModelImpl _$$SignUpModelImplFromJson(Map<String, dynamic> json) =>
     _$SignUpModelImpl(
       type: $enumDecodeNullable(_$SignUpModelTypeEnumMap, json['type']),
       message: json['message'] as String,
-      data: json['data'] == null
-          ? null
-          : SignUpData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'] as String?,
     );
 
 Map<String, dynamic> _$$SignUpModelImplToJson(_$SignUpModelImpl instance) =>
     <String, dynamic>{
       'type': _$SignUpModelTypeEnumMap[instance.type],
       'message': instance.message,
-      'data': instance.data?.toJson(),
+      'data': instance.data,
     };
 
 const _$SignUpModelTypeEnumMap = {
   SignUpModelType.verify: 'verify',
   SignUpModelType.validatePasswordMatch: 'validatePasswordMatch',
 };
-
-_$SignUpDataImpl _$$SignUpDataImplFromJson(Map<String, dynamic> json) =>
-    _$SignUpDataImpl(
-      emailTokenId: json['emailTokenId'] as String,
-      account: json['account'] as String,
-    );
-
-Map<String, dynamic> _$$SignUpDataImplToJson(_$SignUpDataImpl instance) =>
-    <String, dynamic>{
-      'emailTokenId': instance.emailTokenId,
-      'account': instance.account,
-    };
 
 _$SignUpModelErrorImpl _$$SignUpModelErrorImplFromJson(
         Map<String, dynamic> json) =>

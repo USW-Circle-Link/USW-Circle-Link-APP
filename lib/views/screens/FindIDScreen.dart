@@ -20,28 +20,17 @@ class FindIDScreen extends ConsumerWidget {
     ref.listen(findIdViewModelProvider, (previous, next) {
       logger.d(next);
       if (next is FindIdModel) {
-        switch (next.type) {
-          case FindIdModelType.findId:
-            break;
-          default:
-            logger.d('예외발생 - $next');
-        }
+        showAlertDialog(context, '이메일을 전송했습니다!');
       }
 
       if (next is FindIdModelError) {
-        switch (next.type) {
-          case FindIdModelType.findId:
-            switch (next.code) {
-              case "EML-F100":
-                showAlertDialog(context, '이메일을 입력해주세요!');
-                break;
-              default:
-                showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
-                break;
-            }
+        switch (next.code) {
+          case "EML-F100":
+            showAlertDialog(context, '이메일을 입력해주세요!');
             break;
           default:
-            logger.d('예외발생 - $next');
+            showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+            break;
         }
       }
     });
@@ -221,6 +210,34 @@ class FindIDScreen extends ConsumerWidget {
                             ),
                           ],
                         ),
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56.h,
+                        child: OutlinedButton(
+                            onPressed: () {
+                              final encodedUrl = Uri.encodeComponent(
+                                  'https://mail.suwon.ac.kr/index.html');
+
+                              context.push('/login/find_id/${encodedUrl}');
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: const Color(0xFF4F5BD0),
+                              side: const BorderSide(
+                                width: 0.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                            ),
+                            child: TextFontWidget.fontRegular(
+                                text: '포털로 이동하기',
+                                fontSize: 18.sp,
+                                color: const Color(0xFFFFFFFF),
+                                fontweight: FontWeight.w600)),
+                      ),
+                      SizedBox(
+                        height: 12.h,
                       ),
                       SizedBox(
                         width: double.infinity,

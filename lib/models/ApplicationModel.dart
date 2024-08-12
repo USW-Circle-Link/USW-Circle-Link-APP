@@ -42,7 +42,7 @@ class ApplicationModelError extends ApplicationModelBase with _$ApplicationModel
 
   factory ApplicationModelError.fromJson(Map<String, dynamic> json) => _$ApplicationModelErrorFromJson(json);
 
-  ApplicationModelError type(ApplicationModelErrorType _errorType) {
+  ApplicationModelError setType(ApplicationModelErrorType _errorType) {
     return ApplicationModelError(message: message, errorType: _errorType);
   }
 }

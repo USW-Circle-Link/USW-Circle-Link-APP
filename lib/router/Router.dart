@@ -27,10 +27,26 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'find_id',
                 builder: (_, __) => FindIDScreen(),
+                routes: [
+                  GoRoute(
+                      path: ':encodedUrl',
+                      builder: (context, state) => WebViewScreen(
+                          encodedUrl: state.pathParameters['encodedUrl']!))
+                ],
               ),
               GoRoute(
                 path: 'find_pw',
                 builder: (_, __) => FindPWScreen(),
+                routes: [
+                  GoRoute(
+                      path: ':encodedUrl',
+                      builder: (context, state) => WebViewScreen(
+                          encodedUrl: state.pathParameters['encodedUrl']!)),
+                  GoRoute(
+                    path: 'change_pw',
+                    builder: (_, __) => ChangePWScreen(checkCurrentPassword:false),
+                  )
+                ],
               ),
               GoRoute(
                 path: 'sign_up',
@@ -39,12 +55,13 @@ final routerProvider = Provider<GoRouter>((ref) {
                   GoRoute(
                       path: 'email_verification',
                       builder: (_, state) => EmailVerificationScreen(
-                            account:state.uri.queryParameters['account']!,
-                            password:state.uri.queryParameters['password']!,
-                            userName:state.uri.queryParameters['userName']!,
-                            telephone:state.uri.queryParameters['telephone']!,
-                            studentNumber:state.uri.queryParameters['studentNumber']!,
-                            major:state.uri.queryParameters['major']!,
+                            account: state.uri.queryParameters['account']!,
+                            password: state.uri.queryParameters['password']!,
+                            userName: state.uri.queryParameters['userName']!,
+                            telephone: state.uri.queryParameters['telephone']!,
+                            studentNumber:
+                                state.uri.queryParameters['studentNumber']!,
+                            major: state.uri.queryParameters['major']!,
                           ),
                       routes: [
                         GoRoute(
@@ -67,13 +84,14 @@ final routerProvider = Provider<GoRouter>((ref) {
                         encodedUrl: state.pathParameters['encodedUrl']!))
               ]),
           GoRoute(
-              path: 'change_pw',
-              builder: (_, __) => ChangePWScreen(),),
+            path: 'change_pw',
+            builder: (_, __) => ChangePWScreen(),
+          ),
         ],
       ),
     ],
     initialLocation: '/',
-    //initialLocation: '/login/sign_up/email_verification?account=${testId}&password=${testPassword}&userName=${testUserName}&telephone=${testTelephone}&studentNumber=${testStudentNumber}&major=${testMajor}',
+    // initialLocation: '/login/sign_up/email_verification?account=${testId}&password=${testPassword}&userName=${testUserName}&telephone=${testTelephone}&studentNumber=${testStudentNumber}&major=${testMajor}',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,
     debugLogDiagnostics: true,

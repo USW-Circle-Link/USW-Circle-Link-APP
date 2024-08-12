@@ -74,10 +74,11 @@ class EmailVerificationModelError extends EmailVerificationModelBase
 class EmailVerificationModelComplete extends EmailVerificationModelBase
     with _$EmailVerificationModelComplete {
   EmailVerificationModelComplete._();
+  @JsonSerializable(explicitToJson: true)
   factory EmailVerificationModelComplete({
     EmailVerificationModelType? type,
     required String message,
-    required bool data,
+    required String data,
   }) = _EmailVerificationModelComplete;
 
   factory EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =>

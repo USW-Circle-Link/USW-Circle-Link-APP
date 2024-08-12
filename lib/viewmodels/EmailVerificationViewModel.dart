@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/EmailVerificationModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
 
-final emailVerificationViewModelProvider = StateNotifierProvider<
+final emailVerificationViewModelProvider = StateNotifierProvider.autoDispose<
     EmailVerificationViewModel, EmailVerificationModelBase?>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
   return EmailVerificationViewModel(authRepository: authRepository);
@@ -62,17 +62,17 @@ class EmailVerificationViewModel
   }
 
   Future<EmailVerificationModelBase?> signUp({
-    required String emailTokenId,
+    required String account,
   }) async {
     try {
       state = EmailVerificationModelLoading();
       final response =
-          await authRepository.signUp(emailTokenId: emailTokenId);
+          await authRepository.signUp(account: account);
       state = response;
     } on EmailVerificationModelError catch (e) {
       state = e;
     } catch (e) {
-      state = EmailVerificationModelError(message: '예외발생 - $e');
+      state = EmailVerificationModelError(message: '예외발생 - $e',type: EmailVerificationModelType.completeSignUp);
     }
     return Future.value(state);
   }

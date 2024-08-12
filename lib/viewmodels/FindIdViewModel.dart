@@ -3,7 +3,7 @@ import 'package:usw_circle_link/models/FindIdModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
 
 final findIdViewModelProvider =
-    StateNotifierProvider<FindIdViewModel, FindIdModelBase?>((ref) {
+    StateNotifierProvider.autoDispose<FindIdViewModel, FindIdModelBase?>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
   return FindIdViewModel(authRepository: authRepository);
 });
@@ -27,7 +27,7 @@ class FindIdViewModel extends StateNotifier<FindIdModelBase?> {
       state = e;
     } catch (e) {
       state =
-          FindIdModelError(message: '예외발생 - $e', type: FindIdModelType.findId);
+          FindIdModelError(message: '예외발생 - $e');
     }
 
     return Future.value(state);

@@ -58,7 +58,7 @@ class AuthRepository {
     };
 
     final response = await dio.post(
-      '$baseUrl/users/validate-passwords-match',
+      '$baseUrl/validate-passwords-match',
       data: body,
     );
 
@@ -106,10 +106,12 @@ class AuthRepository {
         .d('sendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModel.fromJson(response.data);
+      return EmailVerificationModel.fromJson(response.data)
+          .setType(EmailVerificationModelType.sendMail);
     } else {
       // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data);
+      throw EmailVerificationModelError.fromJson(response.data)
+          .setType(EmailVerificationModelType.sendMail);
     }
   }
 
@@ -128,33 +130,46 @@ class AuthRepository {
       }),
     );
 
-    logger
-        .d('resendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d(
+        'resendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModel.fromJson(response.data);
+      return EmailVerificationModel.fromJson(response.data)
+          .setType(EmailVerificationModelType.resendMail);
     } else {
       // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data);
+      throw EmailVerificationModelError.fromJson(response.data)
+          .setType(EmailVerificationModelType.resendMail);
     }
   }
 
   Future<EmailVerificationModelComplete> signUp({
-    required String emailTokenId,
+    required String account,
   }) async {
-    final response = await dio.get(
-      '$baseUrl/email/verify-token?emailToken_uuid=$emailTokenId',
+    final body = {
+      'account': account,
+    };
+    final response = await dio.post(
+      '$baseUrl/finish-signup',
+      data: body,
+      options: Options(headers: {
+        'Content-Type': 'application/json',
+      }),
     );
 
+    logger.d('signUp - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
     if (response.statusCode == 200) {
-      return EmailVerificationModelComplete.fromJson(response.data);
+      return EmailVerificationModelComplete.fromJson(response.data)
+          .setType(EmailVerificationModelType.completeSignUp);
     } else {
       // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data);
+      throw EmailVerificationModelError.fromJson(response.data)
+          .setType(EmailVerificationModelType.completeSignUp);
     }
   }
 
-  Future<UserModelBase> login({
+  Future<UserModel> login({
     required String id,
     required String password,
   }) async {
@@ -181,7 +196,7 @@ class AuthRepository {
     }
   }
 
-  Future<ChangePWModelBase> changePW({
+  Future<ChangePWModel> changePW({
     required String userPw,
     required String newPw,
     required String confirmNewPw,
@@ -198,36 +213,80 @@ class AuthRepository {
       return ChangePWModel.fromJson(response.data);
     } else {
       // Bad Request
-      return ChangePWModelError.fromJson(response.data);
+      throw ChangePWModelError.fromJson(response.data);
+    }
+  }
+
+  Future<ChangePWModel> resetPW({
+    required String newPw,
+    required String confirmNewPw,
+  }) async {
+    final response = await dio.patch(
+      '$baseUrl/reset-password',
+      data: {
+        'password': newPw,
+        'confirmPassword': confirmNewPw,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return ChangePWModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw ChangePWModelError.fromJson(response.data);
     }
   }
 
   Future<FindIdModel> findId({
     required String email,
   }) async {
-    final response = await dio.get(
-      '$baseUrl/find-account/${email}'
-    );
+    final response =
+        await dio.get('$baseUrl/find-account/${email}' // TODO: URL 수정 필요
+            );
 
-    if (response.statusCode == 200){
+    if (response.statusCode == 200) {
       return FindIdModel.fromJson(response.data);
     } else {
       throw FindIdModelError.fromJson(response.data);
     }
   }
 
-  Future<FindPWModel> findPW({
+  Future<FindPWModel> sendCode({
     required String account,
     required String email,
   }) async {
-    final response = await dio.get(
-      '$baseUrl/find-password/${account}' // URL 수정 필요
+    final body = {
+      "userAccount": account,
+      "email": email,
+    };
+    final response = await dio.post(
+      '$baseUrl/auth/send-code',
+      data: body,
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+        },
+      ),
     );
 
-    if (response.statusCode == 200){
-      return FindPWModel.fromJson(response.data);
+    if (response.statusCode == 200) {
+      return FindPWModel.fromJson(response.data)
+          .setType(FindPWModelType.sendCode);
     } else {
-      throw FindPWModelError.fromJson(response.data);
+      throw FindPWModelError.fromJson(response.data)
+          .setType(FindPWModelType.sendCode);
+    }
+  }
+
+  Future<FindPWModel> verifyCode({required String code}) async {
+    final response = await dio.post('$baseUrl/auth/verify-token');
+
+    if (response.statusCode == 200) {
+      return FindPWModel.fromJson(response.data)
+          .setType(FindPWModelType.verifyCode);
+    } else {
+      throw FindPWModelError.fromJson(response.data)
+          .setType(FindPWModelType.verifyCode);
     }
   }
 }

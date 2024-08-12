@@ -1,12 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/repositories/ApplicationRepository.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final applicationViewModelProvider =
-    StateNotifierProvider<ApplicationViewModel, ApplicationModelBase?>((ref) {
+    StateNotifierProvider.autoDispose<ApplicationViewModel, ApplicationModelBase?>((ref) {
   final ApplicationRepository applicationRepository =
       ref.read(applicationRepositoryProvider);
   return ApplicationViewModel(applicationRepository: applicationRepository);

@@ -5,7 +5,7 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
 
 final signUpViewModelProvider =
-    StateNotifierProvider<SignUpViewModel, SignUpModelBase?>((ref) {
+    StateNotifierProvider.autoDispose<SignUpViewModel, SignUpModelBase?>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
   return SignUpViewModel(authRepository: authRepository);
 });
@@ -13,7 +13,9 @@ final signUpViewModelProvider =
 class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
   final AuthRepository authRepository;
 
-  SignUpViewModel({required this.authRepository}) : super(null);
+  SignUpViewModel({
+    required this.authRepository,
+  }) : super(null);
 
   Future<SignUpModelBase> verifyId({required String id}) async {
     try {
@@ -32,7 +34,7 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
       if (e is SignUpModelError) {
         state = e;
       } else {
-        state = SignUpModelError(message: '예외발생 - $e');
+        state = SignUpModelError(message: '예외발생 - $e',type: SignUpModelType.verify);
       }
 
       return Future.value(state);

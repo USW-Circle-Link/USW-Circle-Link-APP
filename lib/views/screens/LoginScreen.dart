@@ -23,19 +23,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   bool passwordVisible = false;
 
   @override
-  void initState() {
-    super.initState();
-    passwordVisible = false;
-  }
-
-  @override
   Widget build(BuildContext context) {
     final state = ref.watch(loginViewModelProvider);
     ref.listen<UserModelBase?>(loginViewModelProvider,
         (UserModelBase? previous, UserModelBase? next) {
       logger.d('$next');
       if (next is UserModelError) {
-        logger.d(next.message);
+        logger.e(next.message);
       }
       if (next is UserModel) {
         // 로그인 성공
@@ -197,17 +191,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: state is UserModelLoading
                           ? null
                           : () async {
-                              final id = idController.text,
-                                  password = passwordController.text;
+                              final id = idController.text.trim(),
+                                  password = passwordController.text.trim();
                               logger.d('id:$id / pw:$password');
-                              if (id.isNotEmpty && password.isNotEmpty) {
-                                await ref
-                                    .read(loginViewModelProvider.notifier)
-                                    .login(
-                                      id: id,
-                                      password: password,
-                                    );
-                              }
+
+                              await ref
+                                  .read(loginViewModelProvider.notifier)
+                                  .login(
+                                    id: id,
+                                    password: password,
+                                  );
                             },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xFF4F5BD0),
@@ -287,10 +280,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   String getErrorMessage(UserModelBase? state) {
     if (state is UserModelError) {
-      if (state.code == "USR-211"){
-      return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
-      } else {
-      return "* 로그인 중에 문제가 발생했습니다";
+      switch (state.code) {
+        case "USR-F800":
+          return "* 아이디와 비밀번호를 입력해주세요!";
+        case "USR-211":
+          return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
+        default:
+          return "* 로그인 중에 문제가 발생했습니다";
       }
     }
     return "";

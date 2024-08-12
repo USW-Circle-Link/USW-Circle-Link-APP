@@ -32,7 +32,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool passwordVisible = false;
   bool passwordConfirmVisible = false;
 
-  bool idVerified =false;
+  bool idVerified = false;
 
   String? college;
   String? major;
@@ -51,24 +51,26 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         switch (next.type) {
           case SignUpModelType.verify:
             // 아이디 중복확인 완료!
+            showAlertDialog(context, '아이디 사용이 가능합니다!');
             setState(() {
               idVerified = true;
             });
             break;
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
-            context.go('/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text}&studentNumber=${studentNumberController.text}&major=$major');
+            context.go(
+                '/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text.addDash()}&studentNumber=${studentNumberController.text}&major=$major');
             break;
           default: // 예외발생!
             logger.e('예외발생! - $next');
         }
       } else if (next is SignUpModelError) {
-        if (next.code == null) {
-          showAlertDialog(context, '서버에 문제가 발생했습니다...');
-        }
         switch (next.type) {
           case SignUpModelType.verify:
             // 아이디 중복확인 실패!
+            if (next.code == null) {
+              showAlertDialog(context, '중복확인 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!');
+            }
             break;
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 실패!
@@ -384,7 +386,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         height: 50.h,
                         readOnly: true,
                         onTab: () async {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                           showMajorPickerDialog(context);
                         },
                         leftBottomCornerRadius: 8.r,
@@ -396,10 +400,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textInputType: TextInputType.none,
                         textAlign: TextAlign.left,
                         textInputAction: TextInputAction.done,
-                        hintText:
-                            (college == null && major == null)
-                                ? '학과'
-                                : '${college??""} / ${major??""}',
+                        hintText: (college == null && major == null)
+                            ? '학과'
+                            : '${college ?? ""} / ${major ?? ""}',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_bookmark.svg',
@@ -519,15 +522,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         majors: majors,
         selectedCollege: college,
         selectedMajor: major,
-        onCollegeChanged: (String? newValue) {
-          
-        },
-        onMajorChanged: (String? newValue) {
-          
-        },
+        onCollegeChanged: (String? newValue) {},
+        onMajorChanged: (String? newValue) {},
         onConfirmPressed: (college, major) {
-          Navigator.of(context)
-              .pop({'college': college, 'major': major});
+          Navigator.of(context).pop({'college': college, 'major': major});
         },
       ),
     );

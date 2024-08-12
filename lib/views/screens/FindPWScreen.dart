@@ -5,8 +5,10 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/FindPWModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/FindIdViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FindPWViewModel.dart';
 import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
+import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class FindPWScreen extends ConsumerStatefulWidget {
@@ -19,6 +21,7 @@ class FindPWScreen extends ConsumerStatefulWidget {
 class _FindPWScreenState extends ConsumerState<FindPWScreen> {
   final TextEditingController idEditController = TextEditingController();
   final TextEditingController emailEditController = TextEditingController();
+  final TextEditingController codeEditController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -27,9 +30,11 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
       logger.d(next);
       if (next is FindPWModel) {
         switch (next.type) {
-          case FindPWModelType.findPW:
+          case FindPWModelType.sendCode:
+            showAlertDialog(context, '인증코드가 전송되었습니다.');
             break;
-          case FindPWModelType.resendMail:
+          case FindPWModelType.verifyCode:
+            context.go('/login/find_pw/change_pw');
             break;
           default:
             logger.d('예외발생 - $next');
@@ -37,7 +42,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
       }
       if (next is FindPWModelError) {
         switch (next.type) {
-          case FindPWModelType.findPW:
+          case FindPWModelType.sendCode:
             switch (next.code) {
               case "EML-F100":
                 showAlertDialog(context, '이메일을 입력해주세요!');
@@ -50,7 +55,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                 break;
             }
             break;
-          case FindPWModelType.resendMail:
+          case FindPWModelType.verifyCode:
             break;
           default:
             logger.d('예외발생 - $next');
@@ -196,7 +201,11 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () async {
-                              ref.read(findPWViewModelProvider.notifier).findPW(account: idEditController.text.trim(), email: emailEditController.text.trim());
+                              ref
+                                  .read(findPWViewModelProvider.notifier)
+                                  .sendCode(
+                                      account: idEditController.text.trim(),
+                                      email: emailEditController.text.trim());
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
@@ -236,7 +245,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                                       ref
                                           .read(
                                               findPWViewModelProvider.notifier)
-                                          .findPW(
+                                          .sendCode(
                                               account:
                                                   idEditController.text.trim(),
                                               email: emailEditController.text
@@ -262,10 +271,13 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () {
-                              context.go('/login');
+                              final encodedUrl = Uri.encodeComponent(
+                                  'https://mail.suwon.ac.kr/index.html');
+
+                              context.push('/login/find_pw/${encodedUrl}');
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000000),
+                              backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -274,10 +286,67 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '로그인하러 가기',
+                                text: '포털로 이동하기',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
+                      ),
+                      SizedBox(
+                        height: 12.h,
+                      ),
+                      RoundedTextField(
+                        height: 50.h,
+                        textInputAction: TextInputAction.next,
+                        textEditController: codeEditController,
+                        leftBottomCornerRadius: 8.r,
+                        rightBottomCornerRadius: 8.r,
+                        leftTopCornerRadius: 8.r,
+                        rightTopCornerRadius: 8.r,
+                        borderWidth: 1.w,
+                        maxLines: 1,
+                        textInputType: TextInputType.text,
+                        textAlign: TextAlign.left,
+                        hintText: '인증코드 4자리 입력',
+                        borderColor: codeIsInvalid(state)
+                            ? const Color(0xFFFF3F3F)
+                            : null,
+                        isAnimatedHint: false,
+                        suffixIcon: Container(
+                          margin: EdgeInsets.only(
+                              // top : 4, bottom : 4
+                              top: 6.h,
+                              bottom: 6.h,
+                              right: 8.w),
+                          width: 83.w,
+                          //height: 38.h, //not working -> margin으로 높이 조절
+                          child: OutlinedButton(
+                            onPressed: () async {
+                              final code = codeEditController.text.trim();
+                              await ref
+                                  .read(findPWViewModelProvider.notifier)
+                                  .verifyCode(code: code);
+                            },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: const Color(0xFF000000),
+                              side: const BorderSide(
+                                width: 0.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.circular(16.r), // radius 18
+                              ),
+                              minimumSize: Size.zero,
+                              padding: EdgeInsets.zero,
+                            ),
+                            child: TextFontWidget.fontRegular(
+                                text: '확인',
+                                fontSize: 14.sp,
+                                color: Color(0xFFFFFFFF),
+                                fontweight: FontWeight.w600),
+                          ),
+                        ),
+                        hintStyle: TextStyle(
+                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
                       ),
                     ],
                   ),
@@ -302,5 +371,9 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
     idEditController.dispose();
     emailEditController.dispose();
     super.dispose();
+  }
+
+  bool codeIsInvalid(FindPWModelBase? state) {
+    return false;
   }
 }

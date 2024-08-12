@@ -18,7 +18,7 @@ class ChangePWModel extends ChangePWModelBase with _$ChangePWModel {
 class ChangePWModelLoading extends ChangePWModelBase {}
 
 @freezed
-class ChangePWModelError extends ChangePWModelBase with _$ChangePWModelError {
+class ChangePWModelError extends ChangePWModelBase with _$ChangePWModelError implements Exception {
   factory ChangePWModelError({
     required String message,
     String? exception,

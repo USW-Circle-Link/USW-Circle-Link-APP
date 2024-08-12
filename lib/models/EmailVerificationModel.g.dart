@@ -90,7 +90,7 @@ _$EmailVerificationModelCompleteImpl
           type: $enumDecodeNullable(
               _$EmailVerificationModelTypeEnumMap, json['type']),
           message: json['message'] as String,
-          data: json['data'] as bool,
+          data: json['data'] as String,
         );
 
 Map<String, dynamic> _$$EmailVerificationModelCompleteImplToJson(

@@ -21,8 +21,8 @@ Map<String, dynamic> _$$FindPWModelImplToJson(_$FindPWModelImpl instance) =>
     };
 
 const _$FindPWModelTypeEnumMap = {
-  FindPWModelType.findPW: 'findPW',
-  FindPWModelType.resendMail: 'resendMail',
+  FindPWModelType.sendCode: 'sendCode',
+  FindPWModelType.verifyCode: 'verifyCode',
 };
 
 _$FindPWModelErrorImpl _$$FindPWModelErrorImplFromJson(

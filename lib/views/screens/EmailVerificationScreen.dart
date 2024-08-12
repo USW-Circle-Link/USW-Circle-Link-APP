@@ -37,7 +37,7 @@ class EmailVerificationScreen extends ConsumerStatefulWidget {
 class _EmailVerificationScreenState
     extends ConsumerState<EmailVerificationScreen> {
   final TextEditingController emailEditController = TextEditingController();
-  bool hadSent = true;
+  bool hadSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +50,7 @@ class _EmailVerificationScreenState
             setState(() {
               hadSent = true;
             });
+            context.go('/login');
             break;
           case EmailVerificationModelType.resendMail:
             break;
@@ -294,8 +295,8 @@ class _EmailVerificationScreenState
                                         .read(emailVerificationViewModelProvider
                                             .notifier)
                                         .signUp(
-                                            emailTokenId:
-                                                state.data.emailTokenId);
+                                            account:
+                                                widget.account);
                                   }
                                 : null,
                             style: OutlinedButton.styleFrom(
