@@ -2,11 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/ApplicationCircleRepository.dart';
 import 'package:usw_circle_link/model/Circle.dart';
 
-final circleRepositoryProvider = Provider<Applicationcirclerepository>((ref) {
-  return Applicationcirclerepository();
+final circleRepositoryProvider = Provider<ApplicationCircleRepository>((ref) {
+  return ApplicationCircleRepository();
 });
 
-final circleListProvider = FutureProvider.family<List<Circle>, String>((ref, uuId) {
+final circleListProvider = FutureProvider.family<List<Circle>, String>((ref, token) {
   final repository = ref.watch(circleRepositoryProvider);
-  return repository.fetchCircles(uuId);
+  return repository.fetchCircles(token);
 });
