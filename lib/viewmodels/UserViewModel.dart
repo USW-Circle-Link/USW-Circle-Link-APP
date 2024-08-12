@@ -6,6 +6,7 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/repositories/AuthRepository.dart';
+import 'package:usw_circle_link/repositories/FCMRepository.dart';
 import 'package:usw_circle_link/repositories/UserMeRepository.dart';
 import 'package:usw_circle_link/secure_storage/SecureStorage.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -14,11 +15,13 @@ final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModelBase?>>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   final userMeRepository = ref.watch(userMeRepositoryProvider);
+  final fcmRepository = ref.watch(fcmRepositoryProvider);
   final storage = ref.watch(secureStorageProvider);
 
   return UserViewModel(
     authRepository: authRepository,
     userMeRepository: userMeRepository,
+    fcmRepository: fcmRepository,
     storage: storage,
   );
 });
@@ -26,17 +29,26 @@ final userViewModelProvider =
 class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
   final AuthRepository authRepository;
   final UserMeRepository userMeRepository;
+  final FCMRepository fcmRepository;
   final FlutterSecureStorage storage;
 
   UserViewModel({
     required this.authRepository,
     required this.userMeRepository,
+    required this.fcmRepository,
     required this.storage,
   }) : super(AsyncValue.loading()) {
     getMe();
   }
 
   Future<void> getMe() async {
+    //fcm token 가져오기
+    try {
+    final token = await fcmRepository.getToken();
+    logger.d(token);
+    } catch (e) {
+      logger.e('FCM 토큰 가져오기 실패 - $e');
+    }
     try {
       final user = await userMeRepository.getMe();
       state = AsyncValue.data(user);
@@ -56,6 +68,10 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
         password: password,
       );
       logger.d('UserViewModel - 로그인 완료! $response');
+
+      //fcm token 가져오기
+      final token = await fcmRepository.getToken();
+      logger.d(token);
 
       // secure storage에 Token 보관
       await storage.write(
@@ -131,7 +147,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       );
       return response;
     } on ChangePWModelError catch (e) {
-      // 예외처리 안 실패 
+      // 예외처리 안 실패
       logger.d(e);
       rethrow;
     } catch (e) {
