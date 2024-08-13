@@ -9,7 +9,7 @@ class MyCircleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWY2NTJjOC1hZWNmLTQwZTgtYTI2NS04YzZhMDVkMGIyZGQiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM1ODc5LCJleHAiOjE3MjM1Mzc2Nzl9.YN2m5aXZQEjVCZ3CEmBtVP6bFNpp6SzY66DcZf8bF2Y';
+    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0YzM0NmNjYS04ZjFkLTQ5OGQtOGQ1NS0zMjZmNjkzNjYzZjIiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM4NDI4LCJleHAiOjE3MjM1NDAyMjh9.UoCa60fsmnqWRCkgHHdPtb8otuQKfBF3Vy6bEFztMOo';
     final circlesAsyncValue = ref.watch(circleListProvider(token));
 
     return ScreenUtilInit(
