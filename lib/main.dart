@@ -13,6 +13,7 @@ void main() async {
 
 class CircleLink extends ConsumerWidget {
   const CircleLink({super.key});
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp.router(
