@@ -1,7 +1,7 @@
 class Circle {
   final String userName;
-  final String studentNumber; // Changed to String as per the response
-  final String userHp; // Changed to String as per the response
+  final String studentNumber;
+  final String userHp;
   final String major;
 
   Circle({

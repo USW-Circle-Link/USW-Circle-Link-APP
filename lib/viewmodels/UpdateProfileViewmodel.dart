@@ -5,10 +5,12 @@ import 'package:usw_circle_link/model/Circle.dart';
 
 class UpdateprofileViewmodel {
   Future<Circle> fetchCircles(String token) async {
-    final response = await http.get(Uri.parse("http://43.200.140.186:8080/profiles/"),
-    headers: {
-      'Authorization' : 'Bearer $token'
-    });
+    final response = await http.get(
+      Uri.parse("http://43.200.140.186:8080/profiles/me"),
+      headers: {
+        'Authorization': 'Bearer $token',
+      },
+    );
 
     if (response.statusCode == 200) {
       final responseBodyBytes = response.bodyBytes;
@@ -24,10 +26,11 @@ class UpdateprofileViewmodel {
 
   Future<void> updateProfile(String token, Circle updatedProfile) async {
     final response = await http.patch(
-      Uri.parse("http://43.200.140.186:8080/profiles/"),
-        headers: {
-          'Authorization' : 'Bearer $token'
-        });
+      Uri.parse("http://43.200.140.186:8080/profiles/change"),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
       body: json.encode({
         "userName": updatedProfile.userName,
         "studentNumber": updatedProfile.studentNumber,
