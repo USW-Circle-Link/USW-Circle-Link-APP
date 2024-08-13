@@ -30,7 +30,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   bool isPhoneNumberValid = true;
   bool isStudentNumberValid = true;
 
-  final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWY2NTJjOC1hZWNmLTQwZTgtYTI2NS04YzZhMDVkMGIyZGQiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM3MjUwLCJleHAiOjE3MjM1MzkwNTB9.jQ7zK_ETp9G5EsbSrbiqc-qRCS--ZQB_EsYOQsHj4hg';
+  final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0YzM0NmNjYS04ZjFkLTQ5OGQtOGQ1NS0zMjZmNjkzNjYzZjIiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM4NDI4LCJleHAiOjE3MjM1NDAyMjh9.UoCa60fsmnqWRCkgHHdPtb8otuQKfBF3Vy6bEFztMOo';
 
   final Map<String, List<String>> collegeMajorMap = {
     '인문사회융합대학': [
@@ -514,11 +514,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     RoundedDropdown(
-                      initValue: localSelectedCollege,
+                      initValue: selectedCollege,
                       onChanged: (String? newValue) {
                         setState(() {
-                          localSelectedCollege = newValue;
-                          localSelectedMajor = null; // 학과를 초기화합니다.
+                          selectedCollege = newValue;
+                          selectedMajor = null; // 단과대학이 바뀌면 학과도 초기화합니다.
                         });
                       },
                       items: collegeMajorMap.keys.toList(),
@@ -535,14 +535,14 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     ),
                     SizedBox(height: 8.h),
                     RoundedDropdown(
-                      initValue: localSelectedMajor,
+                      initValue: selectedMajor, // 여기에 selectedMajor를 전달
                       onChanged: (String? newValue) {
                         setState(() {
-                          localSelectedMajor = newValue;
+                          selectedMajor = newValue;
                           departmentController.text = newValue ?? '';
                         });
                       },
-                      items: collegeMajorMap[localSelectedCollege] ?? [],
+                      items: collegeMajorMap[selectedCollege] ?? [],
                       hintText: '학부(학과) 선택',
                       leftTopCornerRadius: 8.r,
                       leftBottomCornerRadius: 8.r,
