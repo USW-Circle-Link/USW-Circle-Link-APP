@@ -4,6 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class RoundedDropdown extends StatelessWidget {
+  final GlobalKey<FormFieldState>? globalKey;
   final double? marginLeft,
       marginTop,
       marginRight,
@@ -14,7 +15,7 @@ class RoundedDropdown extends StatelessWidget {
       rightBottomCornerRadius,
       borderWidth;
   final String? hintText;
-  final List<String> items;
+  final List<DropdownMenuItem<String>> items;
   final Color? borderColor, backgroundColor;
   final bool isBackgroundFilled;
   final String? initValue;
@@ -23,6 +24,7 @@ class RoundedDropdown extends StatelessWidget {
 
   const RoundedDropdown(
       {Key? key,
+      this.globalKey,
       this.marginLeft,
       this.marginTop,
       this.marginRight,
@@ -41,6 +43,7 @@ class RoundedDropdown extends StatelessWidget {
       this.initValue})
       : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -52,6 +55,7 @@ class RoundedDropdown extends StatelessWidget {
         bottom: marginBottom ?? 0,
       ),
       child: DropdownButtonFormField<String>(
+        key: globalKey,
         decoration: setInputDecoration(),
         icon: Align(
           alignment: Alignment.centerRight,
@@ -70,17 +74,7 @@ class RoundedDropdown extends StatelessWidget {
         ),
         value: initValue,
         onChanged: onChanged,
-        items: items.map<DropdownMenuItem<String>>((String value) {
-          return DropdownMenuItem<String>(
-            value: value,
-            child: TextFontWidget.fontRegular(
-              text: value,
-              color: Color(0xFF000000),
-              fontSize: 14.sp,
-              fontweight: FontWeight.w400,
-            ),
-          );
-        }).toList(),
+        items: items,
       ),
     );
   }
