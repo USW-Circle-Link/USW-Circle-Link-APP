@@ -32,17 +32,19 @@ class ApplicationRepository {
 
     logger.d('${response.data}');
 
-    logger.d('${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d('getApplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return ApplicationModel.fromJson(response.data);
+      return ApplicationModel.fromJson(response.data)
+          .setType(ApplicationModelType.getApplication);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).setType(ApplicationModelErrorType.getApplication);
+      throw ApplicationModelError.fromJson(response.data)
+          .setType(ApplicationModelType.getApplication);
     }
   }
 
-  Future<ApplicationModelComplete> apply({
+  Future<ApplicationModel> apply({
     required int clubId,
     required String aplictGoogleFormUrl,
   }) async {
@@ -52,11 +54,17 @@ class ApplicationRepository {
         },
         options: Options(headers: {'accessToken': 'true'}));
 
+    logger.d('${response.data}');
+
+    logger.d('apply - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
     if (response.statusCode == 200) {
-      return ApplicationModelComplete.fromJson(response.data);
+      return ApplicationModel.fromJson(response.data)
+          .setType(ApplicationModelType.apply);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).setType(ApplicationModelErrorType.apply);
+      throw ApplicationModelError.fromJson(response.data)
+          .setType(ApplicationModelType.apply);
     }
   }
 }

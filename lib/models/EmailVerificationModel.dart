@@ -22,14 +22,19 @@ class EmailVerificationModel extends EmailVerificationModelBase
   factory EmailVerificationModel.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelFromJson(json);
 
-  EmailVerificationModel setType(EmailVerificationModelType _type) => EmailVerificationModel(message: message, data: data, type: _type);
+  EmailVerificationModel setType(EmailVerificationModelType _type) =>
+      EmailVerificationModel(
+        message: message,
+        data: data,
+        type: _type,
+      );
 }
 
 @freezed
 class EmailVerificationData with _$EmailVerificationData {
   factory EmailVerificationData({
-    required String emailTokenId,
     required String account,
+    required String emailToken_uuid,
   }) = _EmailVerificationData;
 
   factory EmailVerificationData.fromJson(Map<String, dynamic> json) =>
@@ -37,8 +42,9 @@ class EmailVerificationData with _$EmailVerificationData {
 }
 
 @freezed
-class EmailVerificationModelResend with _$EmailVerificationModelResend {
-  const EmailVerificationModelResend._();
+class EmailVerificationModelResend extends EmailVerificationModelBase
+    with _$EmailVerificationModelResend {
+  EmailVerificationModelResend._();
   factory EmailVerificationModelResend({
     required String message,
     required String data,
@@ -47,7 +53,32 @@ class EmailVerificationModelResend with _$EmailVerificationModelResend {
 
   factory EmailVerificationModelResend.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelResendFromJson(json);
-  EmailVerificationModelResend setType(EmailVerificationModelType _type) => EmailVerificationModelResend(message: message, data: data, type: _type);
+  EmailVerificationModelResend setType(EmailVerificationModelType _type) =>
+      EmailVerificationModelResend(
+        message: message,
+        data: data,
+        type: _type,
+      );
+}
+
+@freezed
+class EmailVerificationModelComplete extends EmailVerificationModelBase
+    with _$EmailVerificationModelComplete {
+  EmailVerificationModelComplete._();
+  factory EmailVerificationModelComplete({
+    required String message,
+    required String data,
+    EmailVerificationModelType? type,
+  }) = _EmailVerificationModelComplete;
+
+  factory EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =>
+      _$EmailVerificationModelCompleteFromJson(json);
+  EmailVerificationModelComplete setType(EmailVerificationModelType _type) =>
+      EmailVerificationModelComplete(
+        message: message,
+        data: data,
+        type: _type,
+      );
 }
 
 @freezed
@@ -67,24 +98,15 @@ class EmailVerificationModelError extends EmailVerificationModelBase
   factory EmailVerificationModelError.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelErrorFromJson(json);
 
-    EmailVerificationModelError setType(EmailVerificationModelType _type) => EmailVerificationModelError(message: message, exception: exception, code: code, error: error, status: status, type: _type);
-}
-
-@freezed
-class EmailVerificationModelComplete extends EmailVerificationModelBase
-    with _$EmailVerificationModelComplete {
-  EmailVerificationModelComplete._();
-  @JsonSerializable(explicitToJson: true)
-  factory EmailVerificationModelComplete({
-    EmailVerificationModelType? type,
-    required String message,
-    required String data,
-  }) = _EmailVerificationModelComplete;
-
-  factory EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =>
-      _$EmailVerificationModelCompleteFromJson(json);
-  EmailVerificationModelComplete setType(EmailVerificationModelType _type) =>
-      EmailVerificationModelComplete(message: message, data: data, type: _type);
+  EmailVerificationModelError setType(EmailVerificationModelType _type) =>
+      EmailVerificationModelError(
+        message: message,
+        exception: exception,
+        code: code,
+        error: error,
+        status: status,
+        type: _type,
+      );
 }
 
 class EmailVerificationModelLoading extends EmailVerificationModelBase {}

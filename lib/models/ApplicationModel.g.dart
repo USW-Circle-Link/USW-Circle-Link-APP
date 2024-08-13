@@ -9,45 +9,34 @@ part of 'ApplicationModel.dart';
 _$ApplicationModelImpl _$$ApplicationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$ApplicationModelImpl(
-      data: json['data'] as String,
       message: json['message'] as String,
+      data: json['data'] as String?,
+      type: $enumDecodeNullable(_$ApplicationModelTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$$ApplicationModelImplToJson(
         _$ApplicationModelImpl instance) =>
     <String, dynamic>{
+      'message': instance.message,
       'data': instance.data,
-      'message': instance.message,
+      'type': _$ApplicationModelTypeEnumMap[instance.type],
     };
 
-_$ApplicationModelCompleteImpl _$$ApplicationModelCompleteImplFromJson(
-        Map<String, dynamic> json) =>
-    _$ApplicationModelCompleteImpl(
-      message: json['message'] as String,
-    );
-
-Map<String, dynamic> _$$ApplicationModelCompleteImplToJson(
-        _$ApplicationModelCompleteImpl instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-    };
+const _$ApplicationModelTypeEnumMap = {
+  ApplicationModelType.getApplication: 'getApplication',
+  ApplicationModelType.apply: 'apply',
+};
 
 _$ApplicationModelErrorImpl _$$ApplicationModelErrorImplFromJson(
         Map<String, dynamic> json) =>
     _$ApplicationModelErrorImpl(
       message: json['message'] as String,
-      errorType: $enumDecodeNullable(
-          _$ApplicationModelErrorTypeEnumMap, json['errorType']),
+      type: $enumDecodeNullable(_$ApplicationModelTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$$ApplicationModelErrorImplToJson(
         _$ApplicationModelErrorImpl instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'errorType': _$ApplicationModelErrorTypeEnumMap[instance.errorType],
+      'type': _$ApplicationModelTypeEnumMap[instance.type],
     };
-
-const _$ApplicationModelErrorTypeEnumMap = {
-  ApplicationModelErrorType.getApplication: 'getApplication',
-  ApplicationModelErrorType.apply: 'apply',
-};

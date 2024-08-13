@@ -9,6 +9,7 @@ import 'package:usw_circle_link/repositories/AuthRepository.dart';
 import 'package:usw_circle_link/repositories/FCMRepository.dart';
 import 'package:usw_circle_link/repositories/UserMeRepository.dart';
 import 'package:usw_circle_link/secure_storage/SecureStorage.dart';
+import 'package:usw_circle_link/utils/decoder/JWTDecoder.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final userViewModelProvider =
@@ -42,17 +43,12 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
   }
 
   Future<void> getMe() async {
-    //fcm token 가져오기
-    try {
-    final token = await fcmRepository.getToken();
-    logger.d(token);
-    } catch (e) {
-      logger.e('FCM 토큰 가져오기 실패 - $e');
-    }
     try {
       final user = await userMeRepository.getMe();
+      logger.d('로그인 정보 확인 성공! : $user');
       state = AsyncValue.data(user);
     } catch (e) {
+      logger.d('로그인 정보 확인 실패! : $e');
       state = AsyncValue.data(null);
     }
   }
@@ -62,22 +58,27 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
     required String password,
   }) async {
     try {
-      // 이 부분은 앞에서 본 부분과 동일
+      //fcm token 가져오기
+      final token = await fcmRepository.getToken();
+      logger.d('FCMToken - $token');
+
       final response = await authRepository.login(
         id: id,
         password: password,
+        fcmToken: token,
       );
       logger.d('UserViewModel - 로그인 완료! $response');
 
-      //fcm token 가져오기
-      final token = await fcmRepository.getToken();
-      logger.d(token);
+      final payload = JwtDecoder.decode(response.data.accessToken);
+
+      logger.d('payload - $payload');
 
       // secure storage에 Token 보관
       await storage.write(
           key: accessTokenKey, value: response.data.accessToken);
+      // await storage.write(key: refreshTokenKey, value: response.data.refreshToken);
       await storage.write(
-          key: clubIdsKey, value: jsonEncode(response.data.clubIds ?? []));
+          key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
 
       // 디버깅용 확인 코드
       final accessToken = await storage.read(key: accessTokenKey);
@@ -93,6 +94,10 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       logger.d(e);
       await logout();
       rethrow;
+    } on FCMTokenNotFoundException catch (e) {
+      logger.d(e);
+      await logout();
+      rethrow;
     } catch (e) {
       logger.e('예외발생 - $e');
       await logout();
@@ -101,14 +106,31 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
   }
 
   Future<void> logout() async {
-    // 로그아웃 시 User 상태를 null로 초기화
-    state = AsyncValue.data(null);
+    try {
+      await authRepository.logout();
+      // 로그아웃 시 User 상태를 null로 초기화
+      state = AsyncValue.data(null);
 
-    // Secure Storage에서 Access Token과 Refresh Token 삭제
-    await Future.wait([
-      storage.delete(key: accessTokenKey),
-      storage.delete(key: clubIdsKey),
-    ]);
+      // Secure Storage에서 Access Token과 Refresh Token, clubIds 삭제
+      await Future.wait([
+        storage.delete(key: accessTokenKey),
+        storage.delete(key: refreshTokenKey),
+        storage.delete(key: clubIdsKey),
+      ]);
+
+      final accessToken = await storage.read(key: accessTokenKey);
+      final refreshToken = await storage.read(key: refreshTokenKey);
+      final clubIdsJsonString = await storage.read(key: clubIdsKey);
+      final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+      logger.d(
+          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
+    } on UserModelError catch (e) {
+      logger.d(e);
+      rethrow;
+    } catch (e) {
+      logger.e('예외발생 - $e');
+      rethrow;
+    }
   }
 
   Future<ChangePWModel> changePW({
@@ -142,8 +164,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       {required String newPw, required String confirmNewPw}) async {
     try {
       final response = await authRepository.resetPW(
-        newPw: newPw,
-        confirmNewPw: confirmNewPw,
+        password: newPw,
+        confirmPassword: confirmNewPw,
       );
       return response;
     } on ChangePWModelError catch (e) {

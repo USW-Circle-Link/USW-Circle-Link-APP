@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ApplicationViewModel.dart';
@@ -31,26 +30,35 @@ class _ApplicationWritingScreenState
     ref.listen<ApplicationModelBase?>(applicationViewModelProvider,
         (ApplicationModelBase? previous, ApplicationModelBase? next) {
       logger.d(next.toString());
-      if (next is ApplicationModelComplete) {
-        logger.d('지원서 작성 성공! - ${next.message}');
-        //지원서 작성 완료 페이지로 라우팅
-      }
       if (next is ApplicationModel) {
-        logger.d('지원서 url : ${next.data}');
-        context.go('/application_writing/${Uri.encodeComponent(next.data)}');
-      }
-      if (next is ApplicationModelError) {
-        switch (next.errorType) {
-          case ApplicationModelErrorType.getApplication:
-            logger.d('지원서 불러오기 실패 : ${next}');
-            showAlertDialog(context, "일시적으로 지원서를 불러올 수 없습니다.\n잠시후에 다시 시도해주세요!");
+        switch (next.type) {
+          case ApplicationModelType.getApplication:
+            logger.d('지원서 url : ${next.data}');
+            context.go(
+                '/application_writing/webview/${Uri.encodeComponent(next.data!)}');
             break;
-          case ApplicationModelErrorType.apply:
-            logger.d('지원서 작성 실패 : ${next}');
-            showAlertDialog(context, "일시적으로 지원작성을 할 수 없습니다.\n잠시후에 다시 시도해주세요!");
+          case ApplicationModelType.apply:
+            logger.d('지원서 제출 성공! - ${next.message}');
+            // TODO:지원서 제출 완료 페이지로 라우팅
             break;
           default:
-            logger.d('예외발생! : ${next}');
+            logger.e('예외발생! : $next');
+            break;
+        }
+      }
+      if (next is ApplicationModelError) {
+        switch (next.type) {
+          case ApplicationModelType.getApplication:
+            logger.d('지원서 불러오기 실패 : $next');
+            showAlertDialog(context, "일시적으로 지원서를 불러올 수 없습니다.\n잠시후에 다시 시도해주세요!");
+            break;
+          case ApplicationModelType.apply:
+            logger.d('지원서 제출 실패 : $next');
+            showAlertDialog(context, "일시적으로 지원제출을 할 수 없습니다.\n잠시후에 다시 시도해주세요!");
+            break;
+          default:
+            logger.e('예외발생! : $next');
+            break;
         }
       }
     });

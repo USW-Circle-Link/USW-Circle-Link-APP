@@ -616,19 +616,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       switch (state.code) {
         case "USR-207":
           return "* 이미 존재하는 아이디입니다!";
-        case "USR-F100":
+        case "USR-F100": // 아이디 규칙 X
           return "* 아이디는 5~20자 이내 숫자,문자만 가능합니다!";
-        case "USR-F200":
+        case "USR-F200": // 비밀번호 규칙 X
           return "* 비밀번호는 5~20자 이내 숫자,문자,특수문자만 가능합니다!";
-        case "USR-F300":
+        case "USR-F300": // 비밀번호 일치 X
           return "* 비밀번호가 일치하지 않습니다!";
-        case "USR-F400":
+        case "USR-F400": // 이름 공백
           return "* 이름이 형식에 맞지 않습니다!";
-        case "USR-F500":
+        case "USR-F500": // 전화번호 형식에 맞지 않음
           return "* 전화번호가 형식에 맞지 않습니다!";
-        case "USR-F600":
+        case "USR-F600": // 학번이 공백 혹은 8자리가 아님
           return "* 학번이 형식에 맞지 않습니다!";
-        case "USR-F700":
+        case "USR-F700": // 학과가 선택되지 않음
           return "* 단과대학/학과를 선택해주세요!";
         default:
           return "";

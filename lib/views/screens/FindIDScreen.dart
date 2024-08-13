@@ -25,7 +25,7 @@ class FindIDScreen extends ConsumerWidget {
 
       if (next is FindIdModelError) {
         switch (next.code) {
-          case "EML-F100":
+          case "EML-F100": // 이메일 공백
             showAlertDialog(context, '이메일을 입력해주세요!');
             break;
           default:
@@ -36,9 +36,7 @@ class FindIDScreen extends ConsumerWidget {
     });
 
     emailEditController.addListener(
-      () {
-        ref.read(findIdViewModelProvider.notifier).initState();
-      },
+      () => ref.read(findIdViewModelProvider.notifier).initState(),
     );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -219,7 +217,8 @@ class FindIDScreen extends ConsumerWidget {
                               final encodedUrl = Uri.encodeComponent(
                                   'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                              context.push('/login/find_id/${encodedUrl}');
+                              context
+                                  .push('/login/find_id/webview/$encodedUrl');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),

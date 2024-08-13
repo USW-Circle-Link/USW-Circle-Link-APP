@@ -5,6 +5,8 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({Key? key, required this.encodedUrl}) : super(key: key);
@@ -50,32 +52,32 @@ class _WebViewScreenState extends State<WebViewScreen> {
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
-          appBar: AppBar(
-                automaticallyImplyLeading: false,
-                titleSpacing: 0.0,
-                title: Padding(
-                  // TODO : icon padding 문제
-                  padding: EdgeInsets.only(left: 22.w, right: 22.w),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 52.w,
-                        height: 52.h,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: SvgPicture.asset(
-                            'assets/images/ic_back_arrow.svg',
-                          ),
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              titleSpacing: 0.0,
+              title: Padding(
+                // TODO : icon padding 문제
+                padding: EdgeInsets.only(left: 22.w, right: 22.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    SizedBox(
+                      width: 52.w,
+                      height: 52.h,
+                      child: IconButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        icon: SvgPicture.asset(
+                          'assets/images/ic_back_arrow.svg',
                         ),
                       ),
-                      SizedBox(width: 52.w, height: 52.h)
-                    ],
-                  ),
+                    ),
+                    SizedBox(width: 52.w, height: 52.h)
+                  ],
                 ),
               ),
+            ),
             body: SafeArea(
                 child: PopScope(
                     onPopInvoked: (_) => _goBack(context),
@@ -117,12 +119,23 @@ class _WebViewScreenState extends State<WebViewScreen> {
                           pullToRefreshController: pullToRefreshController,
                           onLoadStart:
                               (InAppWebViewController controller, _uri) {
+                            logger.d('onLoadStart - $_uri');
                             setState(() {
                               uri = _uri!;
                             });
                           },
+                          onLoadError: (controller, url, code, message) {
+                            logger.e(
+                                "url - $url (code : $code) / message - $message");
+                          },
+                          onLoadHttpError:
+                              (controller, url, statusCode, description) {
+                            logger.e(
+                                "url - $url (code : $statusCode) / message - $description");
+                          },
                           onLoadStop:
                               (InAppWebViewController controller, _uri) {
+                            logger.d('onLoadStop - $_uri');
                             setState(() {
                               uri = _uri!;
                             });
@@ -147,41 +160,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
                           },
                           onCreateWindow:
                               (controller, createWindowRequest) async {
-                                final encodedUrl = Uri.encodeComponent(createWindowRequest.request.url.toString());
-                                context.push('/application_writing/$encodedUrl');
-                            // showDialog(
-                            //   context: context,
-                            //   builder: (context) {
-                            //     return Padding(
-                            //       padding: EdgeInsets.only(top:52.h),
-                            //       child: InAppWebView(
-                            //           // Setting the windowId property is important here!
-                            //           windowId: createWindowRequest.windowId,
-                            //           initialOptions: InAppWebViewGroupOptions(
-                            //             android: AndroidInAppWebViewOptions(
-                            //               builtInZoomControls: true,
-                            //               thirdPartyCookiesEnabled: true,
-                            //             ),
-                            //             crossPlatform: InAppWebViewOptions(
-                            //                 cacheEnabled: true,
-                            //                 javaScriptEnabled: true,
-                            //                 userAgent:
-                            //                     "Mozilla/5.0 (Linux; Android 9; LG-H870 Build/PKQ1.190522.001) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/83.0.4103.106 Mobile Safari/537.36"),
-                            //             ios: IOSInAppWebViewOptions(
-                            //               allowsInlineMediaPlayback: true,
-                            //               allowsBackForwardNavigationGestures:
-                            //                   true,
-                            //             ),
-                            //           ),
-                            //           onCloseWindow: (controller) async {
-                            //             if (Navigator.canPop(context)) {
-                            //               Navigator.pop(context);
-                            //             }
-                            //           },
-                            //         ),
-                            //     );
-                            //   },
-                            // );
+                            final url =
+                                createWindowRequest.request.url.toString();
+                            final encodedUrl = Uri.encodeComponent(url);
+                            context.push('/webview/$encodedUrl');
                             return true;
                           },
                         )

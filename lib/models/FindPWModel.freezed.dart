@@ -21,7 +21,7 @@ FindPWModel _$FindPWModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$FindPWModel {
   String get message => throw _privateConstructorUsedError;
-  String get data => throw _privateConstructorUsedError;
+  String? get data => throw _privateConstructorUsedError;
   FindPWModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,7 +36,7 @@ abstract class $FindPWModelCopyWith<$Res> {
           FindPWModel value, $Res Function(FindPWModel) then) =
       _$FindPWModelCopyWithImpl<$Res, FindPWModel>;
   @useResult
-  $Res call({String message, String data, FindPWModelType? type});
+  $Res call({String message, String? data, FindPWModelType? type});
 }
 
 /// @nodoc
@@ -53,7 +53,7 @@ class _$FindPWModelCopyWithImpl<$Res, $Val extends FindPWModel>
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
@@ -61,10 +61,10 @@ class _$FindPWModelCopyWithImpl<$Res, $Val extends FindPWModel>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -81,7 +81,7 @@ abstract class _$$FindPWModelImplCopyWith<$Res>
       __$$FindPWModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String data, FindPWModelType? type});
+  $Res call({String message, String? data, FindPWModelType? type});
 }
 
 /// @nodoc
@@ -96,7 +96,7 @@ class __$$FindPWModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? type = freezed,
   }) {
     return _then(_$FindPWModelImpl(
@@ -104,10 +104,10 @@ class __$$FindPWModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -119,8 +119,7 @@ class __$$FindPWModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$FindPWModelImpl extends _FindPWModel {
-  _$FindPWModelImpl({required this.message, required this.data, this.type})
-      : super._();
+  _$FindPWModelImpl({required this.message, this.data, this.type}) : super._();
 
   factory _$FindPWModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FindPWModelImplFromJson(json);
@@ -128,7 +127,7 @@ class _$FindPWModelImpl extends _FindPWModel {
   @override
   final String message;
   @override
-  final String data;
+  final String? data;
   @override
   final FindPWModelType? type;
 
@@ -168,7 +167,7 @@ class _$FindPWModelImpl extends _FindPWModel {
 abstract class _FindPWModel extends FindPWModel {
   factory _FindPWModel(
       {required final String message,
-      required final String data,
+      final String? data,
       final FindPWModelType? type}) = _$FindPWModelImpl;
   _FindPWModel._() : super._();
 
@@ -178,7 +177,7 @@ abstract class _FindPWModel extends FindPWModel {
   @override
   String get message;
   @override
-  String get data;
+  String? get data;
   @override
   FindPWModelType? get type;
   @override

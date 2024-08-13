@@ -11,7 +11,7 @@ class UserModel extends UserModelBase with _$UserModel {
   @JsonSerializable(explicitToJson: true)
   const factory UserModel({
     required String message,
-    @JWTConverter() required LoginData data,
+     required LoginData data,
   }) = _UserModel;
 
   factory UserModel.fromJson(Map<String, dynamic> json) => _$UserModelFromJson(json);

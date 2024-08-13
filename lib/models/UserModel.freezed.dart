@@ -21,7 +21,6 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserModel {
   String get message => throw _privateConstructorUsedError;
-  @JWTConverter()
   LoginData get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -35,7 +34,7 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String message, @JWTConverter() LoginData data});
+  $Res call({String message, LoginData data});
 
   $LoginDataCopyWith<$Res> get data;
 }
@@ -85,7 +84,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, @JWTConverter() LoginData data});
+  $Res call({String message, LoginData data});
 
   @override
   $LoginDataCopyWith<$Res> get data;
@@ -122,8 +121,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$UserModelImpl implements _UserModel {
-  const _$UserModelImpl(
-      {required this.message, @JWTConverter() required this.data});
+  const _$UserModelImpl({required this.message, required this.data});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -131,7 +129,6 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String message;
   @override
-  @JWTConverter()
   final LoginData data;
 
   @override
@@ -169,7 +166,7 @@ class _$UserModelImpl implements _UserModel {
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {required final String message,
-      @JWTConverter() required final LoginData data}) = _$UserModelImpl;
+      required final LoginData data}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -177,7 +174,6 @@ abstract class _UserModel implements UserModel {
   @override
   String get message;
   @override
-  @JWTConverter()
   LoginData get data;
   @override
   @JsonKey(ignore: true)

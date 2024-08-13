@@ -45,29 +45,40 @@ class _EmailVerificationScreenState
     ref.listen(emailVerificationViewModelProvider, (previous, next) {
       logger.d(next);
       if (next is EmailVerificationModel) {
-        switch (next.type) {
-          case EmailVerificationModelType.sendMail:
-            setState(() {
-              hadSent = true;
-            });
-            context.go('/login');
-            break;
-          case EmailVerificationModelType.resendMail:
-            break;
-          case EmailVerificationModelType.completeSignUp:
-            context.go('/login');
-            break;
-          default:
-            logger.e('예외발생 - $next');
-        }
+        logger.d('이메일 보내기 성공!');
+        setState(() {
+          hadSent = true;
+        });
+      } else if (next is EmailVerificationModelResend) {
+        logger.d('이메일 재전송 성공!');
+      } else if (next is EmailVerificationModelComplete) {
+        logger.d('이메일 인증 후 회원가입 성공!');
+        context.go('/login');
       } else if (next is EmailVerificationModelError) {
         switch (next.type) {
           case EmailVerificationModelType.sendMail:
-            showAlertDialog(context, "이메일을 입력해주세요!");
+            switch (next.code) {
+              case "EML-F100":
+                showAlertDialog(context, "이메일을 입력해주세요!");
+                break;
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
             break;
           case EmailVerificationModelType.resendMail:
+            switch (next.code) {
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
             break;
           case EmailVerificationModelType.completeSignUp:
+            switch (next.code) {
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
             break;
           default:
             logger.e('예외발생 - $next');
@@ -231,15 +242,23 @@ class _EmailVerificationScreenState
                               height: 6.h,
                             ),
                             GestureDetector(
-                              onTap: state is EmailVerificationModel
+                              onTap: state is EmailVerificationModel ||
+                                      state is EmailVerificationModelResend
                                   ? () {
+                                      String emailToken_uuid = "";
+                                      if (state is EmailVerificationModel) {
+                                        emailToken_uuid =
+                                            state.data.emailToken_uuid;
+                                      } else if (state
+                                          is EmailVerificationModelResend) {
+                                        emailToken_uuid = state.data;
+                                      }
                                       ref
                                           .read(
                                               emailVerificationViewModelProvider
                                                   .notifier)
                                           .resendMail(
-                                              emailTokenId:
-                                                  state.data.emailTokenId);
+                                              emailToken_uuid: emailToken_uuid);
                                     }
                                   : null,
                               child: Center(
@@ -265,7 +284,7 @@ class _EmailVerificationScreenState
                                   'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                               context.push(
-                                  '/login/sign_up/email_verification/${encodedUrl}');
+                                  '/login/sign_up/email_verification/webview/$encodedUrl');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
@@ -289,14 +308,13 @@ class _EmailVerificationScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state is EmailVerificationModel
+                            onPressed: state is EmailVerificationModel ||
+                                    state is EmailVerificationModelResend
                                 ? () async {
                                     await ref
                                         .read(emailVerificationViewModelProvider
                                             .notifier)
-                                        .signUp(
-                                            account:
-                                                widget.account);
+                                        .signUp(account: widget.account);
                                   }
                                 : null,
                             style: OutlinedButton.styleFrom(

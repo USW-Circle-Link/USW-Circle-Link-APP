@@ -14,7 +14,7 @@ class FindPWModel extends FindPWModelBase with _$FindPWModel {
 
   factory FindPWModel({
     required String message,
-    required String data,
+   String? data,
     FindPWModelType? type,
   }) = _FindPWModel;
 

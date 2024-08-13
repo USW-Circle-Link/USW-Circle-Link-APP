@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/FindPWModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
-import 'package:usw_circle_link/viewmodels/FindIdViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FindPWViewModel.dart';
 import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
@@ -34,7 +33,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
             showAlertDialog(context, '인증코드가 전송되었습니다.');
             break;
           case FindPWModelType.verifyCode:
-            context.go('/login/find_pw/change_pw');
+            context.push('/login/find_pw/change_pw');
             break;
           default:
             logger.d('예외발생 - $next');
@@ -44,18 +43,29 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
         switch (next.type) {
           case FindPWModelType.sendCode:
             switch (next.code) {
-              case "EML-F100":
+              case "EML-F100": // 이메일 공백
                 showAlertDialog(context, '이메일을 입력해주세요!');
                 break;
-              case "EML-F200":
+              case "EML-F200": // 아이디 공백
                 showAlertDialog(context, '아이디를 입력해주세요!');
                 break;
+              case "EML-F300": // 액세스토큰 NULL
+                showAlertDialog(context, '이메일 전송에 실패했습니다!');
+                break;
               default:
-                showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+                showAlertDialog(context, '메일을 전송하는데 실패했습니다.\n잠시후 다시 시도해주세요!');
                 break;
             }
             break;
           case FindPWModelType.verifyCode:
+            switch (next.code) {
+              case "VC-F100": // 인증코드 공백
+                showAlertDialog(context, '인증코드를 입력해주세요!');
+                break;
+              default:
+                showAlertDialog(context, '인증코드를 확인하는데 실패했습니다.\n잠시후 다시 시도해주세요!');
+                break;
+            }
             break;
           default:
             logger.d('예외발생 - $next');
@@ -64,15 +74,11 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
     });
 
     idEditController.addListener(
-      () {
-        ref.read(findPWViewModelProvider.notifier).initState();
-      },
+      () => ref.read(findPWViewModelProvider.notifier).initState(),
     );
 
     emailEditController.addListener(
-      () {
-        ref.read(findPWViewModelProvider.notifier).initState();
-      },
+      () => ref.read(findPWViewModelProvider.notifier).initState(),
     );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -274,7 +280,8 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                               final encodedUrl = Uri.encodeComponent(
                                   'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                              context.push('/login/find_pw/${encodedUrl}');
+                              context
+                                  .push('/login/find_pw/webview/${encodedUrl}');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),

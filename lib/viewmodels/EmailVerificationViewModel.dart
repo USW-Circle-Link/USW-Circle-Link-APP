@@ -25,7 +25,9 @@ class EmailVerificationViewModel
     try {
       if (email.isEmpty) {
         throw EmailVerificationModelError(
-            message: '이메일이 형식에 맞지 않습니다.', code: 'EML-F100', type: EmailVerificationModelType.sendMail);
+            message: '이메일이 형식에 맞지 않습니다.',
+            code: 'EML-F100',
+            type: EmailVerificationModelType.sendMail);
       }
       state = EmailVerificationModelLoading();
       final response = await authRepository.sendMail(
@@ -40,23 +42,25 @@ class EmailVerificationViewModel
     } on EmailVerificationModelError catch (e) {
       state = e;
     } catch (e) {
-      state = EmailVerificationModelError(message: '예외발생 - $e');
+      state = EmailVerificationModelError(
+          message: '예외발생 - $e', type: EmailVerificationModelType.sendMail);
     }
     return Future.value(state);
   }
 
   Future<EmailVerificationModelBase?> resendMail({
-    required String emailTokenId,
+    required String emailToken_uuid,
   }) async {
     try {
       state = EmailVerificationModelLoading();
       final response =
-          await authRepository.resendMail(emailTokenId: emailTokenId);
+          await authRepository.resendMail(emailTokenId: emailToken_uuid);
       state = response;
     } on EmailVerificationModelError catch (e) {
       state = e;
     } catch (e) {
-      state = EmailVerificationModelError(message: '예외발생 - $e');
+      state = EmailVerificationModelError(
+          message: '예외발생 - $e', type: EmailVerificationModelType.resendMail);
     }
     return Future.value(state);
   }
@@ -66,13 +70,14 @@ class EmailVerificationViewModel
   }) async {
     try {
       state = EmailVerificationModelLoading();
-      final response =
-          await authRepository.signUp(account: account);
+      final response = await authRepository.signUp(account: account);
       state = response;
     } on EmailVerificationModelError catch (e) {
       state = e;
     } catch (e) {
-      state = EmailVerificationModelError(message: '예외발생 - $e',type: EmailVerificationModelType.completeSignUp);
+      state = EmailVerificationModelError(
+          message: '예외발생 - $e',
+          type: EmailVerificationModelType.completeSignUp);
     }
     return Future.value(state);
   }

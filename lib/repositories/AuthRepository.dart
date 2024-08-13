@@ -28,12 +28,15 @@ class AuthRepository {
     required this.dio,
   });
 
+  /////////// 회원가입 관련 API ///////////
   Future<SignUpModel> verifyId({
     required String id,
   }) async {
     final response = await dio.get(
       '$baseUrl/verify-duplicate/$id',
     );
+
+    logger.d(response.data);
 
     logger
         .d('verifyId - ${response.realUri} 로 요청 성공! (${response.statusCode})');
@@ -43,8 +46,8 @@ class AuthRepository {
           .setType(SignUpModelType.verify);
     } else {
       // Bad Request
-      throw SignUpModel.fromJson(response.data)
-          .setType(SignUpModelType.validatePasswordMatch);
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.verify);
     }
   }
 
@@ -60,6 +63,11 @@ class AuthRepository {
     final response = await dio.post(
       '$baseUrl/validate-passwords-match',
       data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
     );
 
     logger.d(
@@ -102,6 +110,8 @@ class AuthRepository {
       }),
     );
 
+    logger.d(response.data);
+
     logger
         .d('sendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
@@ -115,7 +125,7 @@ class AuthRepository {
     }
   }
 
-  Future<EmailVerificationModel> resendMail({
+  Future<EmailVerificationModelResend> resendMail({
     required String emailTokenId,
   }) async {
     final body = {
@@ -125,16 +135,20 @@ class AuthRepository {
     final response = await dio.post(
       '$baseUrl/email/resend-confirmation',
       data: body,
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
     );
+
+    logger.d(response.data);
 
     logger.d(
         'resendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModel.fromJson(response.data)
+      return EmailVerificationModelResend.fromJson(response.data)
           .setType(EmailVerificationModelType.resendMail);
     } else {
       // Bad Request
@@ -152,10 +166,14 @@ class AuthRepository {
     final response = await dio.post(
       '$baseUrl/finish-signup',
       data: body,
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
     );
+
+    logger.d(response.data);
 
     logger.d('signUp - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
@@ -168,23 +186,31 @@ class AuthRepository {
           .setType(EmailVerificationModelType.completeSignUp);
     }
   }
+  ////////////////////////////////////
 
+  /////////// 로그인 관련 API ///////////
   Future<UserModel> login({
     required String id,
     required String password,
+    required String fcmToken,
   }) async {
     final body = {
       'account': id,
       'password': password,
+      'fcmToken': fcmToken,
     };
 
     final response = await dio.post(
       '$baseUrl/login',
       data: body,
-      options: Options(headers: {
-        'Content-Type': 'application/json',
-      }),
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      ),
     );
+
+    logger.d(response.data);
 
     logger.d('login - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
@@ -196,53 +222,75 @@ class AuthRepository {
     }
   }
 
+  Future<void> logout() async {
+    final response = await dio.post(
+      'http://$host:$port/integration/logout',
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+        },
+      ),
+    );
+
+    logger.d(response.data);
+
+    logger.d('logout - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return;
+    } else {
+      // Bad Request
+      throw UserModelError.fromJson(response.data);
+    }
+  }
+  ////////////////////////////////////
+
+  /////////// 프로필 수정 관련 API ///////////
   Future<ChangePWModel> changePW({
     required String userPw,
     required String newPw,
     required String confirmNewPw,
   }) async {
-    final response = await dio.patch('$baseUrl/:accessToken/userpw',
-        data: {
-          'userPw': userPw,
-          'newPw': newPw,
-          'confirmNewPw': confirmNewPw,
-        },
-        options: Options(headers: {'accessToken': 'true', 'onPath': 'true'}));
-
-    if (response.statusCode == 200) {
-      return ChangePWModel.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw ChangePWModelError.fromJson(response.data);
-    }
-  }
-
-  Future<ChangePWModel> resetPW({
-    required String newPw,
-    required String confirmNewPw,
-  }) async {
     final response = await dio.patch(
-      '$baseUrl/reset-password',
+      '$baseUrl/userpw',
       data: {
-        'password': newPw,
-        'confirmPassword': confirmNewPw,
+        'userPw': userPw,
+        'newPw': newPw,
+        'confirmNewPw': confirmNewPw,
       },
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+          'Content-Type': 'application/json',
+        },
+      ),
     );
 
+    logger.d(response.data);
+
+    logger
+        .d('changePW - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
     if (response.statusCode == 200) {
-      return ChangePWModel.fromJson(response.data);
+      return ChangePWModel.fromJson(response.data)
+          .setType(ChangePWModelType.changePW);
     } else {
       // Bad Request
-      throw ChangePWModelError.fromJson(response.data);
+      throw ChangePWModelError.fromJson(response.data)
+          .setType(ChangePWModelType.changePW);
     }
   }
+  ///////////////////////////////////////
 
+  /////////// 계정복구 관련 API ///////////
   Future<FindIdModel> findId({
     required String email,
   }) async {
-    final response =
-        await dio.get('$baseUrl/find-account/${email}' // TODO: URL 수정 필요
-            );
+    final response = await dio.get('$baseUrl/find-account/$email');
+
+    logger.d(response.data);
+
+    logger.d('findId - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return FindIdModel.fromJson(response.data);
@@ -264,10 +312,15 @@ class AuthRepository {
       data: body,
       options: Options(
         headers: {
-          'accessToken': 'true',
+          'Content-Type': 'application/json',
         },
       ),
     );
+
+    logger.d(response.data);
+
+    logger
+        .d('sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return FindPWModel.fromJson(response.data)
@@ -279,7 +332,24 @@ class AuthRepository {
   }
 
   Future<FindPWModel> verifyCode({required String code}) async {
-    final response = await dio.post('$baseUrl/auth/verify-token');
+    final body = {
+      "authCode": code,
+    };
+    final response = await dio.post(
+      '$baseUrl/auth/verify-token',
+      data: body,
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'verifyCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return FindPWModel.fromJson(response.data)
@@ -289,4 +359,36 @@ class AuthRepository {
           .setType(FindPWModelType.verifyCode);
     }
   }
+
+  Future<ChangePWModel> resetPW({
+    required String password,
+    required String confirmPassword,
+  }) async {
+    final response = await dio.patch(
+      '$baseUrl/reset-password',
+      data: {
+        'password': password,
+        'confirmPassword': confirmPassword,
+      },
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+        },
+      ),
+    );
+
+    logger.d(response.data);
+
+    logger.d('resetPW - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return ChangePWModel.fromJson(response.data)
+          .setType(ChangePWModelType.resetPW);
+    } else {
+      // Bad Request
+      throw ChangePWModelError.fromJson(response.data)
+          .setType(ChangePWModelType.resetPW);
+    }
+  }
+  ////////////////////////////////////
 }

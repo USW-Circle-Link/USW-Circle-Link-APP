@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/ChangePWModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ChangePWViewModel.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
@@ -41,13 +40,29 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
     final state = ref.watch(changePWViewModelProvider);
     ref.listen<ChangePWModelBase?>(changePWViewModelProvider,
         (ChangePWModelBase? previous, ChangePWModelBase? next) {
-      log('상태변경 - $next');
-      if (next is ChangePWModel) {
-        // 비밀번호 변경 완료
+      logger.d(next);
+      if (next is ChangePWModel) {// 비밀번호 변경 완료
+        switch (next.type) {
+          case ChangePWModelType.changePW:
+            break;
+          case ChangePWModelType.resetPW:
+            break;
+          default:
+            logger.e("예외발생 - $next");
+            break;
+        }
+
         context.go('/login');
-      } else if (next is ChangePWModelError) {
-        // 비밀번호 변경 에러
-        log("예외발생 - ${next.message}");
+      } else if (next is ChangePWModelError) {// 비밀번호 변경 에러
+        switch (next.type) {
+          case ChangePWModelType.changePW:
+            break;
+          case ChangePWModelType.resetPW:
+            break;
+          default:
+            logger.e("예외발생 - $next");
+            break;
+        }
       }
     });
 
@@ -142,8 +157,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
                         textEditController: newPWController,
                         leftBottomCornerRadius: 0.r,
                         rightBottomCornerRadius: 0.r,
-                        leftTopCornerRadius: 0.r,
-                        rightTopCornerRadius: 0.r,
+                        leftTopCornerRadius:
+                            widget.checkCurrentPassword ? 8.r : 0.r,
+                        rightTopCornerRadius:
+                            widget.checkCurrentPassword ? 8.r : 0.r,
                         borderColor: newPWIsInvalid(state)
                             ? const Color(0xFFFF3F3F)
                             : null,
@@ -252,7 +269,13 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
                                         userPw: currentPW,
                                         newPw: newPW,
                                         confirmNewPw: newPWConfirm);
-                              } else {}
+                              } else {
+                                ref
+                                    .read(changePWViewModelProvider.notifier)
+                                    .resetPW(
+                                        newPw: newPW,
+                                        confirmNewPw: newPWConfirm);
+                              }
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
@@ -280,7 +303,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
     if (state is ChangePWModelError) {
       switch (state.code) {
         // 모바일 에러코드
-        case "USR-F900":
+        case "USR-F900": // 현재 비밀번호 공백
           return "* 현재 비밀번호를 입력해주세요!";
         case "USR-F200":
           return "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";

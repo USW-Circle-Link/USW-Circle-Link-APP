@@ -1,24 +1,34 @@
 //import 'dart:js';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class MainScreen extends StatefulWidget {
+class MainScreen extends ConsumerStatefulWidget {
   MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
+    // null -> 로그아웃 상태
+    // UserModel -> 로그인 상태
+    final state = ref.watch(userViewModelProvider); 
+    ref.listen(userViewModelProvider, (previous, next) {
+      // 유저 정보 불러오기
+      logger.d(next);
+    });
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -71,7 +81,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        drawer: Menubar(context),
+        drawer: Menubar(context, ref),
         body: Column(
           children: [
             Row(
@@ -130,11 +140,11 @@ class _MainScreenState extends State<MainScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
                 ],
               ),
             ),
@@ -146,7 +156,7 @@ class _MainScreenState extends State<MainScreen> {
 }
 
 // ignore: non_constant_identifier_names
-Widget Menubar(BuildContext context) {
+Widget Menubar(BuildContext context, WidgetRef ref) {
   return Drawer(
     backgroundColor: const Color(0xffF0F2F5),
     width: 290.w,
@@ -225,7 +235,9 @@ Widget Menubar(BuildContext context) {
                         fontweight: FontWeight.w500),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await ref.read(userViewModelProvider.notifier).logout();
+                    },
                     child: TextFontWidget.fontRegular(
                         text: '로그아웃',
                         fontSize: 12.sp,
@@ -274,7 +286,7 @@ Widget buildDrawerItem({
   );
 }
 
-Widget CustomCard({required Container child}) {
+Widget CustomCard({required Container child, required WidgetRef ref}) {
   return Container(
     margin: EdgeInsets.only(top: 12.h, right: 6.w),
     child: Column(
@@ -345,7 +357,7 @@ Widget CustomCard({required Container child}) {
 }
 
 // ignore: non_constant_identifier_names
-Widget UswClubList() {
+Widget UswClubList(WidgetRef ref) {
   return Container(
     width: double.infinity,
     height: 250.h,
@@ -360,6 +372,7 @@ Widget UswClubList() {
             itemCount: 4,
             itemBuilder: (context, index) {
               return CustomCard(
+                ref: ref,
                 child: Container(
                   width: 150.w,
                   height: 200.h,

@@ -9,7 +9,7 @@ part of 'FindPWModel.dart';
 _$FindPWModelImpl _$$FindPWModelImplFromJson(Map<String, dynamic> json) =>
     _$FindPWModelImpl(
       message: json['message'] as String,
-      data: json['data'] as String,
+      data: json['data'] as String?,
       type: $enumDecodeNullable(_$FindPWModelTypeEnumMap, json['type']),
     );
 

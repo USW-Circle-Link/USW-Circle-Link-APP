@@ -12,6 +12,13 @@ import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
 import 'package:usw_circle_link/views/screens/WebViewScreen.dart';
 
+final webviewRouter = GoRoute(
+  path: 'webview/:encodedUrl',
+  builder: (context, state) => WebViewScreen(
+    encodedUrl: state.pathParameters['encodedUrl']!,
+  ),
+);
+
 final routerProvider = Provider<GoRouter>((ref) {
   final provider = ref.read(authProvider);
   return GoRouter(
@@ -28,23 +35,18 @@ final routerProvider = Provider<GoRouter>((ref) {
                 path: 'find_id',
                 builder: (_, __) => FindIDScreen(),
                 routes: [
-                  GoRoute(
-                      path: ':encodedUrl',
-                      builder: (context, state) => WebViewScreen(
-                          encodedUrl: state.pathParameters['encodedUrl']!))
+                  webviewRouter,
                 ],
               ),
               GoRoute(
                 path: 'find_pw',
                 builder: (_, __) => FindPWScreen(),
                 routes: [
-                  GoRoute(
-                      path: ':encodedUrl',
-                      builder: (context, state) => WebViewScreen(
-                          encodedUrl: state.pathParameters['encodedUrl']!)),
+                  webviewRouter,
                   GoRoute(
                     path: 'change_pw',
-                    builder: (_, __) => ChangePWScreen(checkCurrentPassword:false),
+                    builder: (_, __) =>
+                        ChangePWScreen(checkCurrentPassword: false),
                   )
                 ],
               ),
@@ -53,23 +55,20 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (_, __) => SignUpScreen(),
                 routes: [
                   GoRoute(
-                      path: 'email_verification',
-                      builder: (_, state) => EmailVerificationScreen(
-                            account: state.uri.queryParameters['account']!,
-                            password: state.uri.queryParameters['password']!,
-                            userName: state.uri.queryParameters['userName']!,
-                            telephone: state.uri.queryParameters['telephone']!,
-                            studentNumber:
-                                state.uri.queryParameters['studentNumber']!,
-                            major: state.uri.queryParameters['major']!,
-                          ),
-                      routes: [
-                        GoRoute(
-                            path: ':encodedUrl',
-                            builder: (context, state) => WebViewScreen(
-                                encodedUrl:
-                                    state.pathParameters['encodedUrl']!))
-                      ]),
+                    path: 'email_verification',
+                    builder: (_, state) => EmailVerificationScreen(
+                      account: state.uri.queryParameters['account']!,
+                      password: state.uri.queryParameters['password']!,
+                      userName: state.uri.queryParameters['userName']!,
+                      telephone: state.uri.queryParameters['telephone']!,
+                      studentNumber:
+                          state.uri.queryParameters['studentNumber']!,
+                      major: state.uri.queryParameters['major']!,
+                    ),
+                    routes: [
+                      webviewRouter,
+                    ],
+                  ),
                 ],
               ),
             ],
@@ -77,20 +76,17 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
               path: 'application_writing',
               builder: (_, __) => ApplicationWritingScreen(),
-              routes: [
-                GoRoute(
-                    path: ':encodedUrl',
-                    builder: (context, state) => WebViewScreen(
-                        encodedUrl: state.pathParameters['encodedUrl']!))
-              ]),
+              routes: [webviewRouter]),
           GoRoute(
             path: 'change_pw',
             builder: (_, __) => ChangePWScreen(),
           ),
+          webviewRouter,
         ],
       ),
     ],
     initialLocation: '/',
+    // initialLocation: '/login/find_id/webview/${Uri.encodeComponent("https://dummy.restapiexample.com/api/v1/employees")}',
     // initialLocation: '/login/sign_up/email_verification?account=${testId}&password=${testPassword}&userName=${testUserName}&telephone=${testTelephone}&studentNumber=${testStudentNumber}&major=${testMajor}',
     refreshListenable: provider,
     //redirect: provider.redirectLogic,

@@ -281,7 +281,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   String getErrorMessage(UserModelBase? state) {
     if (state is UserModelError) {
       switch (state.code) {
-        case "USR-F800":
+        case "USR-F800": // 아이디 혹은 비밀번호 공백
           return "* 아이디와 비밀번호를 입력해주세요!";
         case "USR-211":
           return "* 올바르지 않은 아이디 혹은 비밀번호입니다";

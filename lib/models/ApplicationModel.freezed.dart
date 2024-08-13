@@ -20,8 +20,9 @@ ApplicationModel _$ApplicationModelFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$ApplicationModel {
-  String get data => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
+  String? get data => throw _privateConstructorUsedError;
+  ApplicationModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $ApplicationModelCopyWith<$Res> {
           ApplicationModel value, $Res Function(ApplicationModel) then) =
       _$ApplicationModelCopyWithImpl<$Res, ApplicationModel>;
   @useResult
-  $Res call({String data, String message});
+  $Res call({String message, String? data, ApplicationModelType? type});
 }
 
 /// @nodoc
@@ -51,18 +52,23 @@ class _$ApplicationModelCopyWithImpl<$Res, $Val extends ApplicationModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? data = null,
     Object? message = null,
+    Object? data = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelType?,
     ) as $Val);
   }
 }
@@ -75,7 +81,7 @@ abstract class _$$ApplicationModelImplCopyWith<$Res>
       __$$ApplicationModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String data, String message});
+  $Res call({String message, String? data, ApplicationModelType? type});
 }
 
 /// @nodoc
@@ -89,38 +95,46 @@ class __$$ApplicationModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? data = null,
     Object? message = null,
+    Object? data = freezed,
+    Object? type = freezed,
   }) {
     return _then(_$ApplicationModelImpl(
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      data: freezed == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelType?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ApplicationModelImpl implements _ApplicationModel {
-  _$ApplicationModelImpl({required this.data, required this.message});
+class _$ApplicationModelImpl extends _ApplicationModel {
+  _$ApplicationModelImpl({required this.message, this.data, this.type})
+      : super._();
 
   factory _$ApplicationModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ApplicationModelImplFromJson(json);
 
   @override
-  final String data;
-  @override
   final String message;
+  @override
+  final String? data;
+  @override
+  final ApplicationModelType? type;
 
   @override
   String toString() {
-    return 'ApplicationModel(data: $data, message: $message)';
+    return 'ApplicationModel(message: $message, data: $data, type: $type)';
   }
 
   @override
@@ -128,13 +142,14 @@ class _$ApplicationModelImpl implements _ApplicationModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ApplicationModelImpl &&
+            (identical(other.message, message) || other.message == message) &&
             (identical(other.data, data) || other.data == data) &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, data, message);
+  int get hashCode => Object.hash(runtimeType, message, data, type);
 
   @JsonKey(ignore: true)
   @override
@@ -151,165 +166,26 @@ class _$ApplicationModelImpl implements _ApplicationModel {
   }
 }
 
-abstract class _ApplicationModel implements ApplicationModel {
+abstract class _ApplicationModel extends ApplicationModel {
   factory _ApplicationModel(
-      {required final String data,
-      required final String message}) = _$ApplicationModelImpl;
+      {required final String message,
+      final String? data,
+      final ApplicationModelType? type}) = _$ApplicationModelImpl;
+  _ApplicationModel._() : super._();
 
   factory _ApplicationModel.fromJson(Map<String, dynamic> json) =
       _$ApplicationModelImpl.fromJson;
 
   @override
-  String get data;
-  @override
   String get message;
+  @override
+  String? get data;
+  @override
+  ApplicationModelType? get type;
   @override
   @JsonKey(ignore: true)
   _$$ApplicationModelImplCopyWith<_$ApplicationModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
-}
-
-ApplicationModelComplete _$ApplicationModelCompleteFromJson(
-    Map<String, dynamic> json) {
-  return _ApplicationModelComplete.fromJson(json);
-}
-
-/// @nodoc
-mixin _$ApplicationModelComplete {
-  String get message => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $ApplicationModelCompleteCopyWith<ApplicationModelComplete> get copyWith =>
-      throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $ApplicationModelCompleteCopyWith<$Res> {
-  factory $ApplicationModelCompleteCopyWith(ApplicationModelComplete value,
-          $Res Function(ApplicationModelComplete) then) =
-      _$ApplicationModelCompleteCopyWithImpl<$Res, ApplicationModelComplete>;
-  @useResult
-  $Res call({String message});
-}
-
-/// @nodoc
-class _$ApplicationModelCompleteCopyWithImpl<$Res,
-        $Val extends ApplicationModelComplete>
-    implements $ApplicationModelCompleteCopyWith<$Res> {
-  _$ApplicationModelCompleteCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_value.copyWith(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$ApplicationModelCompleteImplCopyWith<$Res>
-    implements $ApplicationModelCompleteCopyWith<$Res> {
-  factory _$$ApplicationModelCompleteImplCopyWith(
-          _$ApplicationModelCompleteImpl value,
-          $Res Function(_$ApplicationModelCompleteImpl) then) =
-      __$$ApplicationModelCompleteImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message});
-}
-
-/// @nodoc
-class __$$ApplicationModelCompleteImplCopyWithImpl<$Res>
-    extends _$ApplicationModelCompleteCopyWithImpl<$Res,
-        _$ApplicationModelCompleteImpl>
-    implements _$$ApplicationModelCompleteImplCopyWith<$Res> {
-  __$$ApplicationModelCompleteImplCopyWithImpl(
-      _$ApplicationModelCompleteImpl _value,
-      $Res Function(_$ApplicationModelCompleteImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-  }) {
-    return _then(_$ApplicationModelCompleteImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$ApplicationModelCompleteImpl implements _ApplicationModelComplete {
-  _$ApplicationModelCompleteImpl({required this.message});
-
-  factory _$ApplicationModelCompleteImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ApplicationModelCompleteImplFromJson(json);
-
-  @override
-  final String message;
-
-  @override
-  String toString() {
-    return 'ApplicationModelComplete(message: $message)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$ApplicationModelCompleteImpl &&
-            (identical(other.message, message) || other.message == message));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, message);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$ApplicationModelCompleteImplCopyWith<_$ApplicationModelCompleteImpl>
-      get copyWith => __$$ApplicationModelCompleteImplCopyWithImpl<
-          _$ApplicationModelCompleteImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ApplicationModelCompleteImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _ApplicationModelComplete implements ApplicationModelComplete {
-  factory _ApplicationModelComplete({required final String message}) =
-      _$ApplicationModelCompleteImpl;
-
-  factory _ApplicationModelComplete.fromJson(Map<String, dynamic> json) =
-      _$ApplicationModelCompleteImpl.fromJson;
-
-  @override
-  String get message;
-  @override
-  @JsonKey(ignore: true)
-  _$$ApplicationModelCompleteImplCopyWith<_$ApplicationModelCompleteImpl>
-      get copyWith => throw _privateConstructorUsedError;
 }
 
 ApplicationModelError _$ApplicationModelErrorFromJson(
@@ -320,8 +196,7 @@ ApplicationModelError _$ApplicationModelErrorFromJson(
 /// @nodoc
 mixin _$ApplicationModelError {
   String get message => throw _privateConstructorUsedError;
-  ApplicationModelErrorType? get errorType =>
-      throw _privateConstructorUsedError;
+  ApplicationModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -335,7 +210,7 @@ abstract class $ApplicationModelErrorCopyWith<$Res> {
           $Res Function(ApplicationModelError) then) =
       _$ApplicationModelErrorCopyWithImpl<$Res, ApplicationModelError>;
   @useResult
-  $Res call({String message, ApplicationModelErrorType? errorType});
+  $Res call({String message, ApplicationModelType? type});
 }
 
 /// @nodoc
@@ -353,17 +228,17 @@ class _$ApplicationModelErrorCopyWithImpl<$Res,
   @override
   $Res call({
     Object? message = null,
-    Object? errorType = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      errorType: freezed == errorType
-          ? _value.errorType
-          : errorType // ignore: cast_nullable_to_non_nullable
-              as ApplicationModelErrorType?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelType?,
     ) as $Val);
   }
 }
@@ -377,7 +252,7 @@ abstract class _$$ApplicationModelErrorImplCopyWith<$Res>
       __$$ApplicationModelErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, ApplicationModelErrorType? errorType});
+  $Res call({String message, ApplicationModelType? type});
 }
 
 /// @nodoc
@@ -393,17 +268,17 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? errorType = freezed,
+    Object? type = freezed,
   }) {
     return _then(_$ApplicationModelErrorImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      errorType: freezed == errorType
-          ? _value.errorType
-          : errorType // ignore: cast_nullable_to_non_nullable
-              as ApplicationModelErrorType?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ApplicationModelType?,
     ));
   }
 }
@@ -411,8 +286,7 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ApplicationModelErrorImpl extends _ApplicationModelError {
-  _$ApplicationModelErrorImpl({required this.message, this.errorType})
-      : super._();
+  _$ApplicationModelErrorImpl({required this.message, this.type}) : super._();
 
   factory _$ApplicationModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$ApplicationModelErrorImplFromJson(json);
@@ -420,11 +294,11 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
   @override
   final String message;
   @override
-  final ApplicationModelErrorType? errorType;
+  final ApplicationModelType? type;
 
   @override
   String toString() {
-    return 'ApplicationModelError(message: $message, errorType: $errorType)';
+    return 'ApplicationModelError(message: $message, type: $type)';
   }
 
   @override
@@ -433,13 +307,12 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
         (other.runtimeType == runtimeType &&
             other is _$ApplicationModelErrorImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.errorType, errorType) ||
-                other.errorType == errorType));
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, errorType);
+  int get hashCode => Object.hash(runtimeType, message, type);
 
   @JsonKey(ignore: true)
   @override
@@ -458,9 +331,8 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
 
 abstract class _ApplicationModelError extends ApplicationModelError {
   factory _ApplicationModelError(
-          {required final String message,
-          final ApplicationModelErrorType? errorType}) =
-      _$ApplicationModelErrorImpl;
+      {required final String message,
+      final ApplicationModelType? type}) = _$ApplicationModelErrorImpl;
   _ApplicationModelError._() : super._();
 
   factory _ApplicationModelError.fromJson(Map<String, dynamic> json) =
@@ -469,7 +341,7 @@ abstract class _ApplicationModelError extends ApplicationModelError {
   @override
   String get message;
   @override
-  ApplicationModelErrorType? get errorType;
+  ApplicationModelType? get type;
   @override
   @JsonKey(ignore: true)
   _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
