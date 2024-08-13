@@ -180,8 +180,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final uuId = '2a2de9d6-deff-4acf-8327-32c749211f64';
-    final profileAsyncValue = ref.watch(updateProfileViewmodel(uuId));
+    final token = '2a2de9d6-deff-4acf-8327-32c749211f64';
+    final profileAsyncValue = ref.watch(updateProfileViewmodel(token));
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),

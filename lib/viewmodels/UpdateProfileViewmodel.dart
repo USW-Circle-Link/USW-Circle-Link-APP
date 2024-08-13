@@ -22,10 +22,12 @@ class UpdateprofileViewmodel {
     }
   }
 
-  Future<void> updateProfile(String uuId, Circle updatedProfile) async {
+  Future<void> updateProfile(String token, Circle updatedProfile) async {
     final response = await http.patch(
-      Uri.parse("http://43.200.140.186:8080/profiles/$uuId"),
-      headers: {"Content-Type": "application/json"},
+      Uri.parse("http://43.200.140.186:8080/profiles/"),
+        headers: {
+          'Authorization' : 'Bearer $token'
+        });
       body: json.encode({
         "userName": updatedProfile.userName,
         "studentNumber": updatedProfile.studentNumber,
