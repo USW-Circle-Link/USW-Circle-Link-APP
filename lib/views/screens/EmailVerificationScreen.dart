@@ -1,15 +1,90 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/EmailVerificationModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/EmailVerificationViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class EmailVerificationScreen extends StatelessWidget {
-  EmailVerificationScreen({Key? key}) : super(key: key);
+class EmailVerificationScreen extends ConsumerStatefulWidget {
+  const EmailVerificationScreen({
+    Key? key,
+    required this.account,
+    required this.password,
+    required this.userName,
+    required this.telephone,
+    required this.studentNumber,
+    required this.major,
+  }) : super(key: key);
 
+  final String account;
+  final String password;
+  final String userName;
+  final String telephone;
+  final String studentNumber;
+  final String major;
+
+  @override
+  _EmailVerificationScreenState createState() =>
+      _EmailVerificationScreenState();
+}
+
+class _EmailVerificationScreenState
+    extends ConsumerState<EmailVerificationScreen> {
   final TextEditingController emailEditController = TextEditingController();
+  bool hadSent = false;
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(emailVerificationViewModelProvider);
+    ref.listen(emailVerificationViewModelProvider, (previous, next) {
+      logger.d(next);
+      if (next is EmailVerificationModel) {
+        logger.d('이메일 보내기 성공!');
+        setState(() {
+          hadSent = true;
+        });
+      } else if (next is EmailVerificationModelResend) {
+        logger.d('이메일 재전송 성공!');
+      } else if (next is EmailVerificationModelComplete) {
+        logger.d('이메일 인증 후 회원가입 성공!');
+        context.go('/login');
+      } else if (next is EmailVerificationModelError) {
+        switch (next.type) {
+          case EmailVerificationModelType.sendMail:
+            switch (next.code) {
+              case "EML-F100":
+                showAlertDialog(context, "이메일을 입력해주세요!");
+                break;
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
+            break;
+          case EmailVerificationModelType.resendMail:
+            switch (next.code) {
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
+            break;
+          case EmailVerificationModelType.completeSignUp:
+            switch (next.code) {
+              default:
+                logger.e('예외발생 - $next');
+                break;
+            }
+            break;
+          default:
+            logger.e('예외발생 - $next');
+        }
+      }
+    });
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -66,16 +141,15 @@ class EmailVerificationScreen extends StatelessWidget {
                             focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Color(0xFF6E78D8)),
                             ),
-                            contentPadding: EdgeInsets.only(left:8.w),
+                            contentPadding: EdgeInsets.only(left: 8.w),
                             suffixIcon: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextFontWidget.fontRegular(
-                                  text:'@ suwon.ac.kr',
-                                  fontSize: 16.sp,
-                                      color: Colors.black,
-                                      fontweight: FontWeight.w400
-                                )
+                                    text: '@ suwon.ac.kr',
+                                    fontSize: 16.sp,
+                                    color: Colors.black,
+                                    fontweight: FontWeight.w400)
                               ],
                             ),
                           ),
@@ -119,7 +193,22 @@ class EmailVerificationScreen extends StatelessWidget {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {},
+                            onPressed: hadSent
+                                ? null
+                                : () {
+                                    ref
+                                        .read(emailVerificationViewModelProvider
+                                            .notifier)
+                                        .sendMail(
+                                            account: widget.account,
+                                            password: widget.password,
+                                            userName: widget.userName,
+                                            telephone: widget.telephone,
+                                            studentNumber: widget.studentNumber,
+                                            major: widget.major,
+                                            email: emailEditController.text
+                                                .trim());
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -138,13 +227,96 @@ class EmailVerificationScreen extends StatelessWidget {
                       SizedBox(
                         height: 12.h,
                       ),
+                      Visibility(
+                        visible: hadSent,
+                        child: Column(
+                          children: [
+                            Center(
+                              child: TextFontWidget.fontRegular(
+                                  text: '이메일이 오지 않았나요?',
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontweight: FontWeight.w400),
+                            ),
+                            SizedBox(
+                              height: 6.h,
+                            ),
+                            GestureDetector(
+                              onTap: state is EmailVerificationModel ||
+                                      state is EmailVerificationModelResend
+                                  ? () {
+                                      String emailToken_uuid = "";
+                                      if (state is EmailVerificationModel) {
+                                        emailToken_uuid =
+                                            state.data.emailToken_uuid;
+                                      } else if (state
+                                          is EmailVerificationModelResend) {
+                                        emailToken_uuid = state.data;
+                                      }
+                                      ref
+                                          .read(
+                                              emailVerificationViewModelProvider
+                                                  .notifier)
+                                          .resendMail(
+                                              emailToken_uuid: emailToken_uuid);
+                                    }
+                                  : null,
+                              child: Center(
+                                child: TextFontWidget.fontRegular(
+                                    text: '메일 재전송',
+                                    fontSize: 16.sp,
+                                    color: Color(0XFF4F5BD0),
+                                    fontweight: FontWeight.w400),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12.h,
+                            ),
+                          ],
+                        ),
+                      ),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: () {
-                              Navigator.popUntil(context, ModalRoute.withName('/'));
+                              final encodedUrl = Uri.encodeComponent(
+                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
+
+                              context.push(
+                                  '/login/sign_up/email_verification/webview/$encodedUrl');
                             },
+                            style: OutlinedButton.styleFrom(
+                              backgroundColor: const Color(0xFF4F5BD0),
+                              side: const BorderSide(
+                                width: 0.0,
+                              ),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                            ),
+                            child: TextFontWidget.fontRegular(
+                                text: '포털로 이동하기',
+                                fontSize: 18.sp,
+                                color: const Color(0xFFFFFFFF),
+                                fontweight: FontWeight.w600)),
+                      ),
+                      SizedBox(
+                        height: 12.h,
+                      ),
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56.h,
+                        child: OutlinedButton(
+                            onPressed: state is EmailVerificationModel ||
+                                    state is EmailVerificationModelResend
+                                ? () async {
+                                    await ref
+                                        .read(emailVerificationViewModelProvider
+                                            .notifier)
+                                        .signUp(account: widget.account);
+                                  }
+                                : null,
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -164,6 +336,17 @@ class EmailVerificationScreen extends StatelessWidget {
                   ),
                 ),
               ),
+            ));
+  }
+
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
             ));
   }
 }

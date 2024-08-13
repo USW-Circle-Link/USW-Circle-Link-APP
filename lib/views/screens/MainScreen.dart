@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/riverpod/notification_state_notifier.dart';
 import 'package:usw_circle_link/view_models/FirbaseVM.dart';
-import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -50,6 +53,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // null -> 로그아웃 상태
+    // UserModel -> 로그인 상태
+    final state = ref.watch(userViewModelProvider); 
+    ref.listen(userViewModelProvider, (previous, next) {
+      // 유저 정보 불러오기
+      logger.d(next);
+    });
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -61,8 +71,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: Padding(
-            padding: EdgeInsets.only(left: 24.w),
+          leading: Container(
+            margin: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
             child: IconButton(
               onPressed: () {
                 _scaffoldKey.currentState?.openDrawer();
@@ -102,7 +112,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        drawer: Menubar(context),
+        drawer: Menubar(context, ref),
         body: Column(
           children: [
             Row(
@@ -161,11 +171,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             Expanded(
               child: ListView(
                 children: [
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
-                  UswClubList(),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
+                  UswClubList(ref),
                 ],
               ),
             ),
@@ -253,8 +263,7 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
 
 // ignore: non_constant_identifier_names
 bool isMyInfoExpanded = false; // 내 정보가 확장되었는지 여부를 확인
-
-Widget Menubar(BuildContext context) {
+Widget Menubar(BuildContext context, WidgetRef ref) {
   return Drawer(
     backgroundColor: const Color(0xffF0F2F5),
     width: 290.w,
@@ -271,8 +280,7 @@ Widget Menubar(BuildContext context) {
                 ),
                 child: GestureDetector(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (context) => LoginScreen()));
+                    context.go('/login');
                   },
                   child: Center(
                       child: Row(
@@ -402,7 +410,9 @@ Widget Menubar(BuildContext context) {
                         fontweight: FontWeight.w500),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () async {
+                      await ref.read(userViewModelProvider.notifier).logout();
+                    },
                     child: TextFontWidget.fontRegular(
                         text: '로그아웃',
                         fontSize: 12.sp,
@@ -462,7 +472,7 @@ Widget buildDrawerItem({
   );
 }
 
-Widget CustomCard({required Container child}) {
+Widget CustomCard({required Container child, required WidgetRef ref}) {
   return Container(
     margin: EdgeInsets.only(top: 12.h, right: 6.w),
     child: Column(
@@ -533,7 +543,7 @@ Widget CustomCard({required Container child}) {
 }
 
 // ignore: non_constant_identifier_names
-Widget UswClubList() {
+Widget UswClubList(WidgetRef ref) {
   return Container(
     width: double.infinity,
     height: 250.h,
@@ -548,6 +558,7 @@ Widget UswClubList() {
             itemCount: 4,
             itemBuilder: (context, index) {
               return CustomCard(
+                ref: ref,
                 child: Container(
                   width: 150.w,
                   height: 200.h,
