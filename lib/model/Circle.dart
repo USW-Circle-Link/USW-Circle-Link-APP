@@ -3,7 +3,7 @@ class Circle {
   final String mainPhotoPath;
   final String clubName;
   final String leaderName;
-  final String katalkID;
+  final String leaderHp;
   final String clubInsta;
   final String status;
 
@@ -12,7 +12,7 @@ class Circle {
     required this.mainPhotoPath,
     required this.clubName,
     required this.leaderName,
-    required this.katalkID,
+    required this.leaderHp,
     required this.clubInsta,
     required this.status,
   });
@@ -23,7 +23,7 @@ class Circle {
       mainPhotoPath: json['mainPhotoPath'],
       clubName: json['clubName'],
       leaderName: json['leaderName'],
-      katalkID: json['katalkID'],
+      leaderHp: json['leaderHp'],
       clubInsta: json['clubInsta'],
       status: json['aplictStatus'],
     );

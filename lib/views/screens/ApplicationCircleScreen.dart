@@ -15,7 +15,7 @@ class Applicationcirclescreen extends ConsumerStatefulWidget {
 class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescreen> {
   @override
   Widget build(BuildContext context) {
-    final token = '2a2de9d6-deff-4acf-8327-32c749211f64';
+    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWY2NTJjOC1hZWNmLTQwZTgtYTI2NS04YzZhMDVkMGIyZGQiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM1ODc5LCJleHAiOjE3MjM1Mzc2Nzl9.YN2m5aXZQEjVCZ3CEmBtVP6bFNpp6SzY66DcZf8bF2Y';
     final circlesAsyncValue = ref.watch(circleListProvider(token));
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -77,7 +77,7 @@ class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescree
                       CircleLeader: circle.leaderName,
                       CircleName: circle.clubName,
                       ImageUrl: circle.mainPhotoPath,
-                      KakaoId: circle.katalkID,
+                      leaderHp: circle.leaderHp,
                       InstaId: circle.clubInsta,
                       status: circle.status,
                     ),
@@ -88,7 +88,7 @@ class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescree
                   CircleLeader: circle.leaderName,
                   CircleName: circle.clubName,
                   ImageUrl: circle.mainPhotoPath,
-                  KakaoId: circle.katalkID,
+                  leaderHp: circle.leaderHp,
                   InstaId: circle.clubInsta,
                   status: circle.status,
                 );
@@ -108,14 +108,14 @@ class CircleList extends StatelessWidget {
   final String ImageUrl;
   final String CircleLeader;
   final String InstaId;
-  final String KakaoId;
+  final String leaderHp;
   final String status;
 
   const CircleList({
     required this.CircleLeader,
     required this.CircleName,
     required this.ImageUrl,
-    required this.KakaoId,
+    required this.leaderHp,
     required this.InstaId,
     required this.status,
   });
@@ -216,7 +216,7 @@ class CircleList extends StatelessWidget {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              InstaId,
+                              leaderHp,
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
                                 color: const Color(0xFF353549),
@@ -237,7 +237,7 @@ class CircleList extends StatelessWidget {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              KakaoId,
+                              InstaId,
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
                                 color: const Color(0xFF353549),
