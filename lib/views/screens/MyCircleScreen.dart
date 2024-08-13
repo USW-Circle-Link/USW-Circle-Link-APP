@@ -9,7 +9,7 @@ class MyCircleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final token = '7d1c3f8d-7017-4786-b41a-00d50dfab391';
+    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI3OWY2NTJjOC1hZWNmLTQwZTgtYTI2NS04YzZhMDVkMGIyZGQiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM1ODc5LCJleHAiOjE3MjM1Mzc2Nzl9.YN2m5aXZQEjVCZ3CEmBtVP6bFNpp6SzY66DcZf8bF2Y';
     final circlesAsyncValue = ref.watch(circleListProvider(token));
 
     return ScreenUtilInit(
@@ -72,7 +72,7 @@ class MyCircleScreen extends ConsumerWidget {
                       CircleLeader: circle.leaderName,
                       CircleName: circle.clubName,
                       ImageUrl: circle.mainPhotoPath,
-                      KakaoId: circle.katalkID,
+                      leaderHp: circle.leaderHp,
                       InstaId: circle.clubInsta,
                     ),
                   ],
@@ -82,7 +82,7 @@ class MyCircleScreen extends ConsumerWidget {
                   CircleLeader: circle.leaderName,
                   CircleName: circle.clubName,
                   ImageUrl: circle.mainPhotoPath,
-                  KakaoId: circle.katalkID,
+                  leaderHp: circle.leaderHp,
                   InstaId: circle.clubInsta,
                 );
               }
@@ -101,13 +101,13 @@ class CircleList extends StatelessWidget {
   final String ImageUrl;
   final String CircleLeader;
   final String InstaId;
-  final String KakaoId;
+  final String leaderHp;
 
   const CircleList({
     required this.CircleLeader,
     required this.CircleName,
     required this.ImageUrl,
-    required this.KakaoId,
+    required this.leaderHp,
     required this.InstaId,
   });
 
@@ -189,7 +189,7 @@ class CircleList extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          InstaId,
+                          leaderHp,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),
@@ -210,7 +210,7 @@ class CircleList extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          KakaoId,
+                          InstaId,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),
