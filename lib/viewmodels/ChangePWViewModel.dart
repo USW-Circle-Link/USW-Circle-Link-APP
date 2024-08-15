@@ -55,6 +55,7 @@ class ChangePWViewModel extends StateNotifier<ChangePWModelBase?> {
   Future<ChangePWModelBase> resetPW({
     required String newPw,
     required String confirmNewPw,
+    required String uuid,
   }) async {
     try {
       if (!passwordRegExp.hasMatch(newPw)) {
@@ -71,6 +72,7 @@ class ChangePWViewModel extends StateNotifier<ChangePWModelBase?> {
       final changePWResponse = await userViewModel.resetPW(
         newPw: newPw,
         confirmNewPw: confirmNewPw,
+        uuid: uuid,
       );
 
       state = changePWResponse;

@@ -9,18 +9,26 @@ import 'package:usw_circle_link/viewmodels/FindIdViewModel.dart';
 import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class FindIDScreen extends ConsumerWidget {
+class FindIDScreen extends ConsumerStatefulWidget {
   FindIDScreen({Key? key}) : super(key: key);
 
+  @override
+  _FindIDScreenState createState() => _FindIDScreenState();
+}
+
+class _FindIDScreenState extends ConsumerState<FindIDScreen> {
   final TextEditingController emailEditController = TextEditingController();
 
+  bool hadSent = false;
+
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
     final state = ref.watch(findIdViewModelProvider);
     ref.listen(findIdViewModelProvider, (previous, next) {
       logger.d(next);
       if (next is FindIdModel) {
-        showAlertDialog(context, '이메일을 전송했습니다!');
+        hadSent = true;
+        showAlertDialog(context, '확인메일이 전송되었습니다!');
       }
 
       if (next is FindIdModelError) {
@@ -28,15 +36,21 @@ class FindIDScreen extends ConsumerWidget {
           case "EML-F100": // 이메일 공백
             showAlertDialog(context, '이메일을 입력해주세요!');
             break;
-          default:
-            showAlertDialog(context, '메일을 전송하는데 실패했습니다!');
+          case "USR-201": // 해당 이메일을 가진 회원 존재 X
+            showAlertDialog(context, '해당 정보로 가입된 회원이 없습니다!');
+            break;
+          default: // EML-501 : 서버에서 메일전송 실패 (Internal Server Error 500)
+            showAlertDialog(context, '이메일을 전송하는 데 실패했습니다!');
             break;
         }
       }
     });
 
     emailEditController.addListener(
-      () => ref.read(findIdViewModelProvider.notifier).initState(),
+      () {
+        hadSent = false;
+        ref.read(findIdViewModelProvider.notifier).initState();
+      },
     );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -143,15 +157,14 @@ class FindIDScreen extends ConsumerWidget {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state == null
-                                ? () async {
+                            onPressed: hadSent || state is FindIdModelLoading
+                                ? null : () async {
                                     ref
                                         .read(findIdViewModelProvider.notifier)
                                         .findId(
                                             email: emailEditController.text
                                                 .trim());
-                                  }
-                                : null,
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -171,7 +184,7 @@ class FindIDScreen extends ConsumerWidget {
                         height: 12.h,
                       ),
                       Visibility(
-                        visible: state is FindIdModel,
+                        visible: hadSent,
                         child: Column(
                           children: [
                             Center(
@@ -185,16 +198,15 @@ class FindIDScreen extends ConsumerWidget {
                               height: 6.h,
                             ),
                             GestureDetector(
-                              onTap: state is FindIdModel
-                                  ? () {
+                              onTap: !hadSent || state is FindIdModelLoading
+                                  ? null : () {
                                       ref
                                           .read(
                                               findIdViewModelProvider.notifier)
                                           .findId(
                                               email: emailEditController.text
                                                   .trim());
-                                    }
-                                  : null,
+                                    },
                               child: Center(
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',

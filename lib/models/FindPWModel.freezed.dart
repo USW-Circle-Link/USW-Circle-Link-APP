@@ -24,8 +24,12 @@ mixin _$FindPWModel {
   String? get data => throw _privateConstructorUsedError;
   FindPWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this FindPWModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindPWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindPWModelCopyWith<FindPWModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$FindPWModelCopyWithImpl<$Res, $Val extends FindPWModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindPWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$FindPWModelImplCopyWithImpl<$Res>
       _$FindPWModelImpl _value, $Res Function(_$FindPWModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindPWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -146,11 +154,13 @@ class _$FindPWModelImpl extends _FindPWModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindPWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindPWModelImplCopyWith<_$FindPWModelImpl> get copyWith =>
@@ -180,8 +190,11 @@ abstract class _FindPWModel extends FindPWModel {
   String? get data;
   @override
   FindPWModelType? get type;
+
+  /// Create a copy of FindPWModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindPWModelImplCopyWith<_$FindPWModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -199,8 +212,12 @@ mixin _$FindPWModelError {
   int? get status => throw _privateConstructorUsedError;
   FindPWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this FindPWModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindPWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindPWModelErrorCopyWith<FindPWModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -230,6 +247,8 @@ class _$FindPWModelErrorCopyWithImpl<$Res, $Val extends FindPWModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindPWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -294,6 +313,8 @@ class __$$FindPWModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$FindPWModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindPWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -380,12 +401,14 @@ class _$FindPWModelErrorImpl extends _FindPWModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, exception, code, message, error, status, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindPWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindPWModelErrorImplCopyWith<_$FindPWModelErrorImpl> get copyWith =>
@@ -425,8 +448,11 @@ abstract class _FindPWModelError extends FindPWModelError {
   int? get status;
   @override
   FindPWModelType? get type;
+
+  /// Create a copy of FindPWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindPWModelErrorImplCopyWith<_$FindPWModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -23,8 +23,12 @@ mixin _$ChangePWModel {
   String get message => throw _privateConstructorUsedError;
   ChangePWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ChangePWModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChangePWModelCopyWith<ChangePWModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$ChangePWModelCopyWithImpl<$Res, $Val extends ChangePWModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$ChangePWModelImplCopyWithImpl<$Res>
       _$ChangePWModelImpl _value, $Res Function(_$ChangePWModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,11 +140,13 @@ class _$ChangePWModelImpl extends _ChangePWModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChangePWModelImplCopyWith<_$ChangePWModelImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _ChangePWModel extends ChangePWModel {
   String get message;
   @override
   ChangePWModelType? get type;
+
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChangePWModelImplCopyWith<_$ChangePWModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -182,8 +195,12 @@ mixin _$ChangePWModelError {
   String? get error => throw _privateConstructorUsedError;
   ChangePWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ChangePWModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChangePWModelErrorCopyWith<ChangePWModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -213,6 +230,8 @@ class _$ChangePWModelErrorCopyWithImpl<$Res, $Val extends ChangePWModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -277,6 +296,8 @@ class __$$ChangePWModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$ChangePWModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -363,12 +384,14 @@ class _$ChangePWModelErrorImpl extends _ChangePWModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, message, exception, code, status, error, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
@@ -408,8 +431,11 @@ abstract class _ChangePWModelError extends ChangePWModelError {
   String? get error;
   @override
   ChangePWModelType? get type;
+
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ChangePWViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -13,9 +14,11 @@ class ChangePWScreen extends ConsumerStatefulWidget {
   const ChangePWScreen({
     Key? key,
     this.checkCurrentPassword = true,
+    this.uuid = "",
   }) : super(key: key);
 
   final bool checkCurrentPassword;
+  final String uuid;
 
   @override
   _ChangePWScreenState createState() => _ChangePWScreenState();
@@ -41,7 +44,8 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
     ref.listen<ChangePWModelBase?>(changePWViewModelProvider,
         (ChangePWModelBase? previous, ChangePWModelBase? next) {
       logger.d(next);
-      if (next is ChangePWModel) {// 비밀번호 변경 완료
+      if (next is ChangePWModel) {
+        // 비밀번호 변경 완료
         switch (next.type) {
           case ChangePWModelType.changePW:
             break;
@@ -51,9 +55,11 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
             logger.e("예외발생 - $next");
             break;
         }
-
-        context.go('/login');
-      } else if (next is ChangePWModelError) {// 비밀번호 변경 에러
+        showAlertDialog(context, '비밀번호가 변경되었습니다', () {
+          context.go('/login');
+        });
+      } else if (next is ChangePWModelError) {
+        // 비밀번호 변경 에러
         switch (next.type) {
           case ChangePWModelType.changePW:
             break;
@@ -255,28 +261,35 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () async {
-                              // 공백이 아닌지 확인
-                              // 비밀번호 규칙 체크
-                              final currentPW = currentPWController.text.trim();
-                              final newPW = newPWController.text.trim();
-                              final newPWConfirm =
-                                  newPWConfirmController.text.trim();
-                              if (widget.checkCurrentPassword) {
-                                await ref
-                                    .read(changePWViewModelProvider.notifier)
-                                    .changePW(
-                                        userPw: currentPW,
-                                        newPw: newPW,
-                                        confirmNewPw: newPWConfirm);
-                              } else {
-                                ref
-                                    .read(changePWViewModelProvider.notifier)
-                                    .resetPW(
-                                        newPw: newPW,
-                                        confirmNewPw: newPWConfirm);
-                              }
-                            },
+                            onPressed: state is ChangePWModelLoading
+                                ? null
+                                : () async {
+                                    // 공백이 아닌지 확인
+                                    // 비밀번호 규칙 체크
+                                    final currentPW =
+                                        currentPWController.text.trim();
+                                    final newPW = newPWController.text.trim();
+                                    final newPWConfirm =
+                                        newPWConfirmController.text.trim();
+                                    if (widget.checkCurrentPassword) {
+                                      await ref
+                                          .read(changePWViewModelProvider
+                                              .notifier)
+                                          .changePW(
+                                              userPw: currentPW,
+                                              newPw: newPW,
+                                              confirmNewPw: newPWConfirm);
+                                    } else {
+                                      ref
+                                          .read(changePWViewModelProvider
+                                              .notifier)
+                                          .resetPW(
+                                            newPw: newPW,
+                                            confirmNewPw: newPWConfirm,
+                                            uuid: widget.uuid,
+                                          );
+                                    }
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -313,11 +326,13 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
         case "USR-204": // 현재 비밀번호 불일치
           return "현재 비밀번호가 일치하지 않습니다";
         case "USR-202": // 새 비밀번호 확인 불일치
+        case "USR-212": // 새 비밀번호 확인 불일치
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-203": // 새 비밀번호 빈칸
           return "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
+        case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         default:
-          return "* 비밀번호를 변경하는데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
+          return "* 비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
       }
     }
     return "";
@@ -351,5 +366,20 @@ class _ChangePWScreenState extends ConsumerState<ChangePWScreen> {
       }
     }
     return false;
+  }
+
+  void showAlertDialog(
+      BuildContext context, String text, Function()? onConfirmPressed) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () async {
+                Navigator.of(context).pop();
+                if (onConfirmPressed != null) {
+                  await onConfirmPressed();
+                }
+              },
+            ));
   }
 }

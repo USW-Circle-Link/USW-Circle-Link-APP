@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/riverpod/notification_state_notifier.dart';
+import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 
 class CloudMessaging extends ConsumerStatefulWidget {
   final String text;

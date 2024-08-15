@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/router/AuthNotifier.dart';
+import 'package:usw_circle_link/notifier/AuthNotifier.dart';
 import 'package:usw_circle_link/views/screens/ApplicationWritingScreen.dart';
 import 'package:usw_circle_link/views/screens/ChangePWScreen.dart';
 import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
@@ -45,8 +45,10 @@ final routerProvider = Provider<GoRouter>((ref) {
                   webviewRouter,
                   GoRoute(
                     path: 'change_pw',
-                    builder: (_, __) =>
-                        ChangePWScreen(checkCurrentPassword: false),
+                    builder: (_, state) => ChangePWScreen(
+                      checkCurrentPassword: false,
+                      uuid: state.uri.queryParameters['uuid'] ?? "",
+                    ),
                   )
                 ],
               ),

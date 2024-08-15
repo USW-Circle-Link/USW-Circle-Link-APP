@@ -23,8 +23,12 @@ mixin _$FindIdModel {
   String get message => throw _privateConstructorUsedError;
   String get data => throw _privateConstructorUsedError;
 
+  /// Serializes this FindIdModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindIdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindIdModelCopyWith<FindIdModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -48,6 +52,8 @@ class _$FindIdModelCopyWithImpl<$Res, $Val extends FindIdModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -86,6 +92,8 @@ class __$$FindIdModelImplCopyWithImpl<$Res>
       _$FindIdModelImpl _value, $Res Function(_$FindIdModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -132,11 +140,13 @@ class _$FindIdModelImpl extends _FindIdModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindIdModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindIdModelImplCopyWith<_$FindIdModelImpl> get copyWith =>
@@ -163,8 +173,11 @@ abstract class _FindIdModel extends FindIdModel {
   String get message;
   @override
   String get data;
+
+  /// Create a copy of FindIdModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindIdModelImplCopyWith<_$FindIdModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -181,8 +194,12 @@ mixin _$FindIdModelError {
   String? get error => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
 
+  /// Serializes this FindIdModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of FindIdModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $FindIdModelErrorCopyWith<FindIdModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -211,6 +228,8 @@ class _$FindIdModelErrorCopyWithImpl<$Res, $Val extends FindIdModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of FindIdModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -269,6 +288,8 @@ class __$$FindIdModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$FindIdModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of FindIdModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -346,12 +367,14 @@ class _$FindIdModelErrorImpl extends _FindIdModelError {
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, exception, code, message, error, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of FindIdModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$FindIdModelErrorImplCopyWith<_$FindIdModelErrorImpl> get copyWith =>
@@ -388,8 +411,11 @@ abstract class _FindIdModelError extends FindIdModelError {
   String? get error;
   @override
   int? get status;
+
+  /// Create a copy of FindIdModelError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$FindIdModelErrorImplCopyWith<_$FindIdModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

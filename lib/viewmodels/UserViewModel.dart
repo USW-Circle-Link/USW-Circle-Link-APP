@@ -27,7 +27,7 @@ final userViewModelProvider =
   );
 });
 
-class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
+class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
   final UserMeRepository userMeRepository;
   final FCMRepository fcmRepository;
@@ -76,16 +76,17 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       // secure storage에 Token 보관
       await storage.write(
           key: accessTokenKey, value: response.data.accessToken);
-      // await storage.write(key: refreshTokenKey, value: response.data.refreshToken);
+      await storage.write(key: refreshTokenKey, value: response.data.refreshToken);
       await storage.write(
           key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
 
       // 디버깅용 확인 코드
       final accessToken = await storage.read(key: accessTokenKey);
+      final refreshToken = await storage.read(key: refreshTokenKey);
       final clubIdsJsonString = await storage.read(key: clubIdsKey);
-      final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "");
+      final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
       logger.d(
-          'UserViewModel - AccessToken : $accessToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
       state = AsyncValue.data(response); // UserModel
 
       return response;
@@ -107,10 +108,10 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
 
   Future<void> logout() async {
     try {
-      await authRepository.logout();
       // 로그아웃 시 User 상태를 null로 초기화
       state = AsyncValue.data(null);
 
+      String? _accessToken = await storage.read(key: accessTokenKey);
       // Secure Storage에서 Access Token과 Refresh Token, clubIds 삭제
       await Future.wait([
         storage.delete(key: accessTokenKey),
@@ -124,6 +125,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
       final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
+
+      await authRepository.logout(accessToken: _accessToken??"");
     } on UserModelError catch (e) {
       logger.d(e);
       rethrow;
@@ -160,12 +163,16 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModelBase?>> {
     }
   }
 
-  Future<ChangePWModel> resetPW(
-      {required String newPw, required String confirmNewPw}) async {
+  Future<ChangePWModel> resetPW({
+    required String newPw,
+    required String confirmNewPw,
+    required String uuid,
+  }) async {
     try {
       final response = await authRepository.resetPW(
         password: newPw,
         confirmPassword: confirmNewPw,
+        uuid: uuid,
       );
       return response;
     } on ChangePWModelError catch (e) {

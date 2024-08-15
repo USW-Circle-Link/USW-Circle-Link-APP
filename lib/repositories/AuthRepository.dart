@@ -128,16 +128,11 @@ class AuthRepository {
   Future<EmailVerificationModelResend> resendMail({
     required String emailTokenId,
   }) async {
-    final body = {
-      "emailToken_uuid": emailTokenId,
-    };
-
     final response = await dio.post(
       '$baseUrl/email/resend-confirmation',
-      data: body,
       options: Options(
         headers: {
-          'Content-Type': 'application/json',
+          "emailToken_uuid": emailTokenId,
         },
       ),
     );
@@ -222,12 +217,14 @@ class AuthRepository {
     }
   }
 
-  Future<void> logout() async {
+  Future<void> logout({
+    required String accessToken,
+  }) async {
     final response = await dio.post(
       'http://$host:$port/integration/logout',
       options: Options(
         headers: {
-          'accessToken': 'true',
+          'Authorization': 'Bearer $accessToken',
         },
       ),
     );
@@ -331,7 +328,10 @@ class AuthRepository {
     }
   }
 
-  Future<FindPWModel> verifyCode({required String code}) async {
+  Future<FindPWModel> verifyCode({
+    required String code,
+    required String uuid,
+  }) async {
     final body = {
       "authCode": code,
     };
@@ -341,7 +341,7 @@ class AuthRepository {
       options: Options(
         headers: {
           'Content-Type': 'application/json',
-          'accessToken': 'true',
+          'uuid': uuid,
         },
       ),
     );
@@ -363,6 +363,7 @@ class AuthRepository {
   Future<ChangePWModel> resetPW({
     required String password,
     required String confirmPassword,
+    required String uuid,
   }) async {
     final response = await dio.patch(
       '$baseUrl/reset-password',
@@ -372,7 +373,8 @@ class AuthRepository {
       },
       options: Options(
         headers: {
-          'accessToken': 'true',
+          'Content-Type': 'application/json',
+          'uuid': uuid,
         },
       ),
     );

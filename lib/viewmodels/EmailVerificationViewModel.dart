@@ -81,4 +81,8 @@ class EmailVerificationViewModel
     }
     return Future.value(state);
   }
+
+  void initState() {
+    state = null;
+  }
 }

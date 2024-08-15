@@ -24,8 +24,12 @@ mixin _$ApplicationModel {
   String? get data => throw _privateConstructorUsedError;
   ApplicationModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ApplicationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ApplicationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ApplicationModelCopyWith<ApplicationModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -49,6 +53,8 @@ class _$ApplicationModelCopyWithImpl<$Res, $Val extends ApplicationModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ApplicationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -92,6 +98,8 @@ class __$$ApplicationModelImplCopyWithImpl<$Res>
       $Res Function(_$ApplicationModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ApplicationModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -147,11 +155,13 @@ class _$ApplicationModelImpl extends _ApplicationModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ApplicationModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ApplicationModelImplCopyWith<_$ApplicationModelImpl> get copyWith =>
@@ -182,8 +192,11 @@ abstract class _ApplicationModel extends ApplicationModel {
   String? get data;
   @override
   ApplicationModelType? get type;
+
+  /// Create a copy of ApplicationModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ApplicationModelImplCopyWith<_$ApplicationModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -198,8 +211,12 @@ mixin _$ApplicationModelError {
   String get message => throw _privateConstructorUsedError;
   ApplicationModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ApplicationModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ApplicationModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ApplicationModelErrorCopyWith<ApplicationModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -224,6 +241,8 @@ class _$ApplicationModelErrorCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ApplicationModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -264,6 +283,8 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$ApplicationModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ApplicationModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -310,11 +331,13 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ApplicationModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
@@ -342,8 +365,11 @@ abstract class _ApplicationModelError extends ApplicationModelError {
   String get message;
   @override
   ApplicationModelType? get type;
+
+  /// Create a copy of ApplicationModelError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

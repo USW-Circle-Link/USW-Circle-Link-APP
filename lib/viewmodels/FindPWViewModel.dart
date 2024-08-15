@@ -72,7 +72,10 @@ class FindPWViewModel extends StateNotifier<FindPWModelBase?> {
     state = null;
   }
 
-  Future<FindPWModelBase> verifyCode({required String code}) async {
+  Future<FindPWModelBase> verifyCode({
+    required String code,
+    required String? uuid,
+  }) async {
     try {
       if (code.isEmpty) {
         throw FindPWModelError(
@@ -81,8 +84,18 @@ class FindPWViewModel extends StateNotifier<FindPWModelBase?> {
           type: FindPWModelType.verifyCode,
         );
       }
+      if (uuid == null) {
+        throw FindPWModelError(
+          message: 'uuid가 존재하지 않습니다.',
+          code: 'VC-F200',
+          type: FindPWModelType.verifyCode,
+        );
+      }
       state = FindPWModelLoading();
-      final response = await authRepository.verifyCode(code: code);
+      final response = await authRepository.verifyCode(
+        code: code,
+        uuid: uuid,
+      );
       state = response;
     } on FindPWModelError catch (e) {
       state = e;

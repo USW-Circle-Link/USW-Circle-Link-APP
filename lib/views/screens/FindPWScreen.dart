@@ -22,6 +22,9 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
   final TextEditingController emailEditController = TextEditingController();
   final TextEditingController codeEditController = TextEditingController();
 
+  String? uuid;
+  bool hadSent = false;
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(findPWViewModelProvider);
@@ -30,10 +33,12 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
       if (next is FindPWModel) {
         switch (next.type) {
           case FindPWModelType.sendCode:
-            showAlertDialog(context, '인증코드가 전송되었습니다.');
+            hadSent = true;
+            showAlertDialog(context, '인증코드가 전송되었습니다');
+            uuid = next.data;
             break;
           case FindPWModelType.verifyCode:
-            context.push('/login/find_pw/change_pw');
+            context.push('/login/find_pw/change_pw?uuid=${uuid!}');
             break;
           default:
             logger.d('예외발생 - $next');
@@ -50,10 +55,13 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                 showAlertDialog(context, '아이디를 입력해주세요!');
                 break;
               case "EML-F300": // 액세스토큰 NULL
-                showAlertDialog(context, '이메일 전송에 실패했습니다!');
+                showAlertDialog(context, '이메일 전송하는 데 실패했습니다\n잠시후 다시 시도해주세요!');
                 break;
-              default:
-                showAlertDialog(context, '메일을 전송하는데 실패했습니다.\n잠시후 다시 시도해주세요!');
+              case "USR-209": // 이메일, 아이디 일치 X
+                showAlertDialog(context, '해당 정보로 가입된 회원이 없습니다!');
+                break;
+              default: // EML-501
+                showAlertDialog(context, '이메일을 전송하는 데 실패했습니다.\n잠시후 다시 시도해주세요!');
                 break;
             }
             break;
@@ -62,8 +70,19 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
               case "VC-F100": // 인증코드 공백
                 showAlertDialog(context, '인증코드를 입력해주세요!');
                 break;
+              case "VC-F200": // uuid 가 존재하지 않음
+                showAlertDialog(context, '"이메일 전송" 버튼을 먼저 눌러주세요!');
+                break;
+              case "USR-210": // 해당 정보로 인증 중인 회원존재 X
+                showAlertDialog(
+                    context, '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시동해주세요!');
+                break;
+              case "AC-101": // 인증코드가 일치하지 않습니다
+                showAlertDialog(context, '인증코드가 일치하지 않습니다');
+                break;
               default:
-                showAlertDialog(context, '인증코드를 확인하는데 실패했습니다.\n잠시후 다시 시도해주세요!');
+                showAlertDialog(
+                    context, '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시도해주세요!');
                 break;
             }
             break;
@@ -74,11 +93,17 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
     });
 
     idEditController.addListener(
-      () => ref.read(findPWViewModelProvider.notifier).initState(),
+      () {
+        hadSent = false;
+        ref.read(findPWViewModelProvider.notifier).initState();
+      },
     );
 
     emailEditController.addListener(
-      () => ref.read(findPWViewModelProvider.notifier).initState(),
+      () {
+        hadSent = false;
+        ref.read(findPWViewModelProvider.notifier).initState();
+      },
     );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
@@ -206,13 +231,17 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () async {
-                              ref
-                                  .read(findPWViewModelProvider.notifier)
-                                  .sendCode(
-                                      account: idEditController.text.trim(),
-                                      email: emailEditController.text.trim());
-                            },
+                            onPressed: hadSent || state is FindPWModelLoading
+                                ? null
+                                : () async {
+                                    ref
+                                        .read(findPWViewModelProvider.notifier)
+                                        .sendCode(
+                                            account:
+                                                idEditController.text.trim(),
+                                            email: emailEditController.text
+                                                .trim());
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -232,7 +261,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                         height: 12.h,
                       ),
                       Visibility(
-                        visible: state is FindPWModel,
+                        visible: hadSent,
                         child: Column(
                           children: [
                             Center(
@@ -246,8 +275,9 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                               height: 6.h,
                             ),
                             GestureDetector(
-                              onTap: state is FindPWModel
-                                  ? () {
+                              onTap: !hadSent || state is FindPWModelLoading
+                                  ? null
+                                  : () {
                                       ref
                                           .read(
                                               findPWViewModelProvider.notifier)
@@ -256,8 +286,7 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                                                   idEditController.text.trim(),
                                               email: emailEditController.text
                                                   .trim());
-                                    }
-                                  : null,
+                                    },
                               child: Center(
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',
@@ -327,12 +356,17 @@ class _FindPWScreenState extends ConsumerState<FindPWScreen> {
                           width: 83.w,
                           //height: 38.h, //not working -> margin으로 높이 조절
                           child: OutlinedButton(
-                            onPressed: () async {
-                              final code = codeEditController.text.trim();
-                              await ref
-                                  .read(findPWViewModelProvider.notifier)
-                                  .verifyCode(code: code);
-                            },
+                            onPressed: state is FindPWModelLoading
+                                ? null
+                                : () async {
+                                    final code = codeEditController.text.trim();
+                                    await ref
+                                        .read(findPWViewModelProvider.notifier)
+                                        .verifyCode(
+                                          code: code,
+                                          uuid: uuid,
+                                        );
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(

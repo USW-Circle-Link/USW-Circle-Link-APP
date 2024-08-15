@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:http/http.dart' as http;
-import 'package:usw_circle_link/riverpod/notification_state_notifier.dart';
+import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 
 final notificationViewModelProvider = Provider<NotificationViewModel>((ref) {
   return NotificationViewModel(ref: ref);

@@ -110,11 +110,14 @@ class _ApplicationWritingScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () async {
-                              await ref
-                                  .read(applicationViewModelProvider.notifier)
-                                  .getApplication(clubId);
-                            },
+                            onPressed: state is ApplicationModelLoading
+                                ? null
+                                : () async {
+                                    await ref
+                                        .read(applicationViewModelProvider
+                                            .notifier)
+                                        .getApplication(clubId);
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(

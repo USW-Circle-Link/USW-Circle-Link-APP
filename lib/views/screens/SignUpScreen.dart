@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/SignUpModel.dart';
+import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/SignUpViewModel.dart';
 import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
@@ -180,12 +181,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           width: 83.w,
                           //height: 38.h, //not working -> margin으로 높이 조절
                           child: OutlinedButton(
-                            onPressed: () async {
-                              final id = idController.text.trim();
-                              await ref
-                                  .read(signUpViewModelProvider.notifier)
-                                  .verifyId(id: id);
-                            },
+                            onPressed: state is UserModelLoading
+                                ? null
+                                : () async {
+                                    final id = idController.text.trim();
+                                    await ref
+                                        .read(signUpViewModelProvider.notifier)
+                                        .verifyId(id: id);
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -420,30 +423,39 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () async {
-                              if (idVerified && major != null) {
-                                await ref
-                                    .read(signUpViewModelProvider.notifier)
-                                    .signUpTemporary(
-                                        id: idController.text.trim(),
-                                        password:
-                                            passwordController.text.trim(),
-                                        passwordConfirm:
-                                            passwordConfirmController.text
-                                                .trim(),
-                                        username: nameController.text.trim(),
-                                        telephone:
-                                            phoneNumberController.text.trim(),
-                                        studentNumber:
-                                            studentNumberController.text.trim(),
-                                        major: major!.trim());
-                              } else if (!idVerified) {
-                                // 아이디 중복확인 필요
-                                showAlertDialog(context, '아이디 중복확인이 필요합니다.');
-                              } else if (major == null) {
-                                showAlertDialog(context, '단과대학/학과를 선택해주세요.');
-                              }
-                            },
+                            onPressed: state is UserModelLoading
+                                ? null
+                                : () async {
+                                    if (idVerified && major != null) {
+                                      await ref
+                                          .read(
+                                              signUpViewModelProvider.notifier)
+                                          .signUpTemporary(
+                                              id: idController.text.trim(),
+                                              password: passwordController
+                                                  .text
+                                                  .trim(),
+                                              passwordConfirm:
+                                                  passwordConfirmController.text
+                                                      .trim(),
+                                              username:
+                                                  nameController.text.trim(),
+                                              telephone: phoneNumberController
+                                                  .text
+                                                  .trim(),
+                                              studentNumber:
+                                                  studentNumberController.text
+                                                      .trim(),
+                                              major: major!.trim());
+                                    } else if (!idVerified) {
+                                      // 아이디 중복확인 필요
+                                      showAlertDialog(
+                                          context, '아이디 중복확인이 필요합니다.');
+                                    } else if (major == null) {
+                                      showAlertDialog(
+                                          context, '단과대학/학과를 선택해주세요.');
+                                    }
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -616,6 +628,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       switch (state.code) {
         case "USR-207":
           return "* 이미 존재하는 아이디입니다!";
+        case "USR-212": // 새 비밀번호 확인 불일치
+          return "* 비밀번호가 일치하지 않습니다!";
         case "USR-F100": // 아이디 규칙 X
           return "* 아이디는 5~20자 이내 숫자,문자만 가능합니다!";
         case "USR-F200": // 비밀번호 규칙 X

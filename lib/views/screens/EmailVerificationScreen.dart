@@ -46,11 +46,13 @@ class _EmailVerificationScreenState
       logger.d(next);
       if (next is EmailVerificationModel) {
         logger.d('이메일 보내기 성공!');
+        showAlertDialog(context, "인증 메일이 전송되었습니다!");
         setState(() {
           hadSent = true;
         });
       } else if (next is EmailVerificationModelResend) {
         logger.d('이메일 재전송 성공!');
+        showAlertDialog(context, "인증 메일이 재전송되었습니다!");
       } else if (next is EmailVerificationModelComplete) {
         logger.d('이메일 인증 후 회원가입 성공!');
         context.go('/login');
@@ -61,20 +63,27 @@ class _EmailVerificationScreenState
               case "EML-F100":
                 showAlertDialog(context, "이메일을 입력해주세요!");
                 break;
-              default:
+              default: // EML-501
+                showAlertDialog(context, "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!");
                 logger.e('예외발생 - $next');
                 break;
             }
             break;
           case EmailVerificationModelType.resendMail:
             switch (next.code) {
-              default:
+              case "EMAIL_TOKEN-001":
+                showAlertDialog(context, "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!");
+                break;
+              default: // EML-501
                 logger.e('예외발생 - $next');
                 break;
             }
             break;
           case EmailVerificationModelType.completeSignUp:
             switch (next.code) {
+              case "USR-208": // 존재하지 않는 계정
+                showAlertDialog(context, "회원가입을 완료하는 데 실패했습니다\n잠시후 다시 시도해주세요!");
+                break;
               default:
                 logger.e('예외발생 - $next');
                 break;
@@ -85,6 +94,13 @@ class _EmailVerificationScreenState
         }
       }
     });
+
+    emailEditController.addListener(
+      () {
+        hadSent = false;
+        ref.read(emailVerificationViewModelProvider.notifier).initState();
+      },
+    );
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -193,7 +209,8 @@ class _EmailVerificationScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: hadSent
+                            onPressed: hadSent ||
+                                    state is EmailVerificationModelLoading
                                 ? null
                                 : () {
                                     ref
@@ -242,9 +259,13 @@ class _EmailVerificationScreenState
                               height: 6.h,
                             ),
                             GestureDetector(
-                              onTap: state is EmailVerificationModel ||
-                                      state is EmailVerificationModelResend
-                                  ? () {
+                              // state 가
+                              onTap: !(state is EmailVerificationModel ||
+                                          state
+                                              is EmailVerificationModelResend) ||
+                                      state is EmailVerificationModelLoading
+                                  ? null
+                                  : () {
                                       String emailToken_uuid = "";
                                       if (state is EmailVerificationModel) {
                                         emailToken_uuid =
@@ -259,8 +280,7 @@ class _EmailVerificationScreenState
                                                   .notifier)
                                           .resendMail(
                                               emailToken_uuid: emailToken_uuid);
-                                    }
-                                  : null,
+                                    },
                               child: Center(
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',
@@ -348,5 +368,11 @@ class _EmailVerificationScreenState
                 Navigator.of(context).pop();
               },
             ));
+  }
+
+  @override
+  void dispose() {
+    emailEditController.dispose();
+    super.dispose();
   }
 }

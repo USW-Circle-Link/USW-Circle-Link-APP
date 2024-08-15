@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:usw_circle_link/riverpod/notification_state_notifier.dart';
-import 'package:usw_circle_link/view_models/FirbaseVM.dart';
+import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
@@ -351,7 +351,9 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            context.go('/change_pw');
+                          },
                           child: TextFontWidget.fontRegular(
                             text: '비밀번호 변경',
                             fontSize: 12.sp,

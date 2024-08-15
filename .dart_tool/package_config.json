@@ -335,7 +335,7 @@
       "name": "js",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/js-0.7.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "json_annotation",
@@ -689,7 +689,7 @@
       "name": "watcher",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/watcher-1.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.0"
     },
     {
       "name": "web",
@@ -734,7 +734,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-08-13T14:55:37.201918Z",
+  "generated": "2024-08-14T14:00:04.929544Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/jeong-woochang/development/flutter",
