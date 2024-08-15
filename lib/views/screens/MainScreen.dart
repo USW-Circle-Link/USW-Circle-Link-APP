@@ -348,6 +348,7 @@ Widget CustomCard({required Widget child, required VoidCallback onTap}) {
 
 // ignore: non_constant_identifier_names
 Widget UswClubList() {
+  final String token = "ddddd";
   return Container(
     width: double.infinity,
     height: 250.h,
@@ -372,8 +373,8 @@ Widget UswClubList() {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => CircleScreen()), // 새로운 화면으로 전환
-                  );
+                    MaterialPageRoute(builder: (context) => CircleScreen(token: token,), // 새로운 화면으로 전환
+                  ));
                 },
               );
             },
