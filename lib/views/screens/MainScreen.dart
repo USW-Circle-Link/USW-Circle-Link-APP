@@ -3,13 +3,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
+import 'package:usw_circle_link/notifier/Notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
+
+import 'package:usw_circle_link/views/screens/RecruitingList.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
+import 'UswClubListScreen.dart'; // Import the UswClubListScreen
+// Import the RecruitingListScreen
 
 class MainScreen extends ConsumerStatefulWidget {
   MainScreen({super.key});
@@ -53,11 +57,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // null -> 로그아웃 상태
-    // UserModel -> 로그인 상태
-    final state = ref.watch(userViewModelProvider); 
+    final state = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
-      // 유저 정보 불러오기
       logger.d(next);
     });
     return ScreenUtilInit(
@@ -72,7 +73,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           elevation: 0.0,
           backgroundColor: Colors.white,
           leading: Container(
-            margin: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
+            margin: EdgeInsets.only(left: 24.w),
             child: IconButton(
               onPressed: () {
                 _scaffoldKey.currentState?.openDrawer();
@@ -169,15 +170,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ],
             ),
             Expanded(
-              child: ListView(
-                children: [
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                ],
-              ),
+              child: isAllSelected
+                  ? UswClubListScreen(ref)
+                  : RecruitingListScreen(ref),
             ),
           ],
         ),
@@ -351,9 +346,7 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
                           ),
                         ),
                         TextButton(
-                          onPressed: () {
-                            context.go('/change_pw');
-                          },
+                          onPressed: () {},
                           child: TextFontWidget.fontRegular(
                             text: '비밀번호 변경',
                             fontSize: 12.sp,
@@ -470,109 +463,6 @@ Widget buildDrawerItem({
       ),
       trailing: SvgPicture.asset(trailingSvgPath),
       onTap: onTap,
-    ),
-  );
-}
-
-Widget CustomCard({required Container child, required WidgetRef ref}) {
-  return Container(
-    margin: EdgeInsets.only(top: 12.h, right: 6.w),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(
-          'assets/images/gullisae.png',
-          width: 120.w,
-          height: 140.h,
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 6.w),
-            TextFontWidget.fontRegular(
-              text: '굴리세',
-              fontSize: 14.sp,
-              color: Colors.black,
-              fontweight: FontWeight.w500,
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 4.w),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
-                ),
-              ),
-              child: TextFontWidget.fontRegular(
-                text: '# 볼링',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
-                ),
-              ),
-              child: TextFontWidget.fontRegular(
-                text: '# 친목',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-// ignore: non_constant_identifier_names
-Widget UswClubList(WidgetRef ref) {
-  return Container(
-    width: double.infinity,
-    height: 250.h,
-    margin: EdgeInsets.only(top: 12.h),
-    padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
-    color: Colors.white,
-    child: Row(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return CustomCard(
-                ref: ref,
-                child: Container(
-                  width: 150.w,
-                  height: 200.h,
-                  child: Center(
-                    child: Text('Card $index'),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
     ),
   );
 }
