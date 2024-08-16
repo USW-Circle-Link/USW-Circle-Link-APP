@@ -1,5 +1,5 @@
 class ClubIntro {
-  final String clubId;
+  final int clubId;
   final String mainPhotoPath;
   final String? introPhotoPath;
   final String clubName;

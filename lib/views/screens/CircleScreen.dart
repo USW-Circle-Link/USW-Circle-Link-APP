@@ -110,25 +110,29 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
             children: [
               Stack(
                 children: [
-                  clubIntro.introPhotoPath != null
-                      ? CarouselSlider.builder(
-                    itemCount: 1,
-                    itemBuilder: (context, index, realIndex) {
-                      return buildImage(clubIntro.introPhotoPath!, index);
-                    },
-                    options: CarouselOptions(
-                      height: 250.h,
-                      viewportFraction: 1,
-                      onPageChanged: (index, reason) =>
-                          setState(() => activeIndex = index),
-                    ),
-                  )
-                      : Center(
-                    child: Text(
-                      '사진이 없습니다.',
-                      style: TextStyle(
-                        fontFamily: 'Pretendard',
-                        fontSize: 16.sp,
+                  Container(
+                    width: 375.w,  // 고정된 너비 설정
+                    height: 250.h, // 고정된 높이 설정
+                    child: clubIntro.introPhotoPath != null
+                        ? CarouselSlider.builder(
+                      itemCount: 1,
+                      itemBuilder: (context, index, realIndex) {
+                        return buildImage(clubIntro.introPhotoPath!, index);
+                      },
+                      options: CarouselOptions(
+                        height: 250.h,  // 고정된 높이 설정
+                        viewportFraction: 1,
+                        onPageChanged: (index, reason) =>
+                            setState(() => activeIndex = index),
+                      ),
+                    )
+                        : Center(
+                      child: Text(
+                        '사진이 없습니다.',
+                        style: TextStyle(
+                          fontFamily: 'Pretendard',
+                          fontSize: 16.sp,
+                        ),
                       ),
                     ),
                   ),
@@ -186,7 +190,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 child: Row(
                   children: [
                     SizedBox(width: 24.w),
-                    Image.network(clubIntro.mainPhotoPath),
+                    Image.network(clubIntro.mainPhotoPath,
+                      height: 100.h, width: 100.w,
+                      fit: BoxFit.cover,),
                     SizedBox(width: 16.w),
                     Container(
                       width: 160,
