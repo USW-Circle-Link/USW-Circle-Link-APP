@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/views/screens/MainScreen.dart';
 import 'package:usw_circle_link/router/Router.dart';
 
 void main() async {
@@ -7,6 +8,7 @@ void main() async {
   runApp(
     ProviderScope(
       child: CircleLink(),
+
     ),
   );
 }

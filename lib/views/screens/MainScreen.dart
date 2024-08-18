@@ -2,13 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
+import 'package:usw_circle_link/views/screens/LoginScreen.dart';
+import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -335,7 +337,12 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => UpdateProfileScreen()),
+                            );
+                          },
                           child: TextFontWidget.fontRegular(
                             text: '내 정보 수정',
                             fontSize: 12.sp,
@@ -394,7 +401,6 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
             ],
           ),
         ),
-        // 하단 버튼을 화면 하단에 고정
         Column(
           children: [
             Container(
