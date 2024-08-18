@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/CircleListModel.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/MainViewModel.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
-<<<<<<< HEAD
 import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
+import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
 import 'package:usw_circle_link/views/screens/RecruitingListScreen.dart';
+import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
 import 'package:usw_circle_link/views/screens/UswClubListScreen.dart';
-=======
->>>>>>> develop
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/widgets/LoggedInMenu.dart';
 import 'package:usw_circle_link/views/widgets/LoggedOutMenu.dart';
@@ -187,20 +187,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ],
             ),
-            circleListState is CircleListModel ? 
             Expanded(
-<<<<<<< HEAD
               child:  isAllSelected
                   ? UswClubListScreen(ref)
                   : RecruitingListscreen(ref),
-              ),
-            
-=======
-              child: CircleList(state:circleListState),
-            ) : Container(),
->>>>>>> develop
-          ],
-        ),
+              )
+          
+ 
+        
+        ],),
       ),
     );
   }
@@ -280,7 +275,6 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
   void updateList() {
     setState(() {});
   }
-<<<<<<< HEAD
 }
 
 // ignore: non_constant_identifier_names
@@ -500,6 +494,3 @@ Widget buildDrawerItem({
   );
 }
 
-=======
-}
->>>>>>> develop
