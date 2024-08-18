@@ -59,8 +59,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
-    test();
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
     final state = ref.watch(userViewModelProvider); 
