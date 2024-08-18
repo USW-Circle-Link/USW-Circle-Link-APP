@@ -11,6 +11,7 @@ import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
+import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
@@ -378,7 +379,7 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
                 title: '나의 소속 동아리',
                 svgPath: 'assets/images/menubar2.svg',
                 onTap: () {
-                  // 나의 소속 동아리 화면으로 이동
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>MyCircleScreen()));
                 },
                 trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
               ),
