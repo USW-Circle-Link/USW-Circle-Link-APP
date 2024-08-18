@@ -72,3 +72,5 @@ lib/generated_plugin_registrant.dart
 .idea/workspace.xml
 .idea/vcs.xml
 .idea/.gitignore
+.idea/misc.xml
+

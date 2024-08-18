@@ -8,6 +8,7 @@ import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
+import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
@@ -15,6 +16,7 @@ import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
+
   MainScreen({super.key});
 
   @override
@@ -387,7 +389,7 @@ Widget Menubar(BuildContext context, WidgetRef ref) {
                 title: '지원 현황 확인하기',
                 svgPath: 'assets/images/menubar3.svg',
                 onTap: () {
-                  // 지원 현황 확인 화면으로 이동
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>Applicationcirclescreen()));
                 },
                 trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
               ),

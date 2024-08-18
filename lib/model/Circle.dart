@@ -1,5 +1,4 @@
 class Circle {
-
   final String userName;
   final String studentNumber;
   final String userHp;
@@ -15,7 +14,6 @@ class Circle {
 
   factory Circle.fromJson(Map<String, dynamic> json) {
     return Circle(
-
       userName: json['userName'],
       studentNumber: json['studentNumber'],
       userHp: json['userHp'],
