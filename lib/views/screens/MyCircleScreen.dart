@@ -9,10 +9,9 @@ class MyCircleScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0YzM0NmNjYS04ZjFkLTQ5OGQtOGQ1NS0zMjZmNjkzNjYzZjIiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM4NDI4LCJleHAiOjE3MjM1NDAyMjh9.UoCa60fsmnqWRCkgHHdPtb8otuQKfBF3Vy6bEFztMOo';
+    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYjRkYTMzZi1mMzJhLTQ2OWItYjUzOC0wYWU5NGE4YzQyYzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzOTgxOTQxLCJleHAiOjE3MjM5ODM3NDF9.T0wtZmfJwdZ2Msp038NepAmSegWBxR1sf73iU0kki4U';
     final circlesAsyncValue = ref.watch(circleListProvider(token));
 
-    // 기본 UI를 먼저 표시하고 서버 응답이 오면 데이터를 업데이트하는 방식
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -60,68 +59,42 @@ class MyCircleScreen extends ConsumerWidget {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            // 기본 UI 부분 (서버 응답 전에도 표시될 부분)
-            Expanded(
-              child: ListView(
-                children: [
-                  SizedBox(height: 24.h),
-                  const CircleList(
-                    CircleLeader: '미정',
-                    CircleName: '미정 동아리',
-                    ImageUrl: 'https://via.placeholder.com/100', // 기본 이미지
-                    leaderHp: '미정',
-                    InstaId: '미정',
-                  ),
-                ],
-              ),
-            ),
-
-            // 서버에서 데이터를 받아왔을 때 UI 업데이트
-            Expanded(
-              child: circlesAsyncValue.when(
-                data: (circles) => ListView.builder(
-                  itemCount: circles.length,
-                  itemBuilder: (context, index) {
-                    final circle = circles[index];
-                    if (index == 0) {
-                      return Column(
-                        children: [
-                          SizedBox(height: 24.h),
-                          CircleList(
-                            CircleLeader: circle.leaderName,
-                            CircleName: circle.clubName,
-                            ImageUrl: circle.mainPhotoPath,
-                            leaderHp: circle.leaderHp,
-                            InstaId: circle.clubInsta,
-                          ),
-                        ],
-                      );
-                    } else {
-                      return CircleList(
-                        CircleLeader: circle.leaderName,
-                        CircleName: circle.clubName,
-                        ImageUrl: circle.mainPhotoPath,
-                        leaderHp: circle.leaderHp,
-                        InstaId: circle.clubInsta,
-                      );
-                    }
-                  },
-                ),
-                loading: () => const SizedBox(), // 기본 UI만 표시하므로 로딩 표시 제거
-                error: (error, stack) => Center(
-                    child: Text(
-                        '소속 동아리 목록 조회에 실패하였습니다: $error')),
-              ),
-            ),
-          ],
+        body: circlesAsyncValue.when(
+          data: (circles) => ListView.builder(
+            itemCount: circles.length,
+            itemBuilder: (context, index) {
+              final circle = circles[index];
+              if (index == 0) {
+                return Column(
+                  children: [
+                    SizedBox(height: 24.h), // 첫 번째 아이템 위에 SizedBox 추가
+                    CircleList(
+                      CircleLeader: circle.leaderName,
+                      CircleName: circle.clubName,
+                      ImageUrl: circle.mainPhotoPath,
+                      leaderHp: circle.leaderHp,
+                      InstaId: circle.clubInsta,
+                    ),
+                  ],
+                );
+              } else {
+                return CircleList(
+                  CircleLeader: circle.leaderName,
+                  CircleName: circle.clubName,
+                  ImageUrl: circle.mainPhotoPath,
+                  leaderHp: circle.leaderHp,
+                  InstaId: circle.clubInsta,
+                );
+              }
+            },
+          ),
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stack) => Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
         ),
       ),
     );
   }
 }
-
 
 class CircleList extends StatelessWidget {
   final String CircleName;
@@ -153,12 +126,12 @@ class CircleList extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                  height: 100.sp,
-                  width: 100.sp,
-                  margin: EdgeInsets.all(16.sp),
-                  child: Image(
-                    image: NetworkImage(ImageUrl),
-                  )
+                    height: 100.sp,
+                    width: 100.sp,
+                    margin: EdgeInsets.all(16.sp),
+                    child: Image(
+                      image: NetworkImage(ImageUrl),
+                    )
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,7 +210,7 @@ class CircleList extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          InstaId,
+                          '@'+InstaId,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),

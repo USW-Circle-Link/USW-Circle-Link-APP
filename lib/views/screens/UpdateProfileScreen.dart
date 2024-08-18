@@ -30,7 +30,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   bool isPhoneNumberValid = true;
   bool isStudentNumberValid = true;
 
-  final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0YzM0NmNjYS04ZjFkLTQ5OGQtOGQ1NS0zMjZmNjkzNjYzZjIiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTM4NDI4LCJleHAiOjE3MjM1NDAyMjh9.UoCa60fsmnqWRCkgHHdPtb8otuQKfBF3Vy6bEFztMOo';
+  final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYjRkYTMzZi1mMzJhLTQ2OWItYjUzOC0wYWU5NGE4YzQyYzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzOTgxOTQxLCJleHAiOjE3MjM5ODM3NDF9.T0wtZmfJwdZ2Msp038NepAmSegWBxR1sf73iU0kki4U';
 
   final Map<String, List<String>> collegeMajorMap = {
     '인문사회융합대학': [
@@ -488,7 +488,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     );
   }
 
-
   Future<void> showCustomDialog(BuildContext context) async {
     final result = await showDialog<Map<String, String?>>(
       context: context,
@@ -508,11 +507,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
                     RoundedDropdown(
-                      initValue: selectedCollege,
+                      initValue: localSelectedCollege, // 수정: 로컬 변수 사용
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedCollege = newValue;
-                          selectedMajor = null; // 단과대학이 바뀌면 학과도 초기화합니다.
+                          localSelectedCollege = newValue;
+                          localSelectedMajor = null; // 단과대학이 바뀌면 학과도 초기화
                         });
                       },
                       items: collegeMajorMap.keys
@@ -535,14 +534,13 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     ),
                     SizedBox(height: 8.h),
                     RoundedDropdown(
-                      initValue: selectedMajor, // 여기에 selectedMajor를 전달
+                      initValue: localSelectedMajor, // 수정: 로컬 변수 사용
                       onChanged: (String? newValue) {
                         setState(() {
-                          selectedMajor = newValue;
-                          departmentController.text = newValue ?? '';
+                          localSelectedMajor = newValue;
                         });
                       },
-                      items: (collegeMajorMap[selectedCollege] ?? []).map<DropdownMenuItem<String>>((String value) {
+                      items: (collegeMajorMap[localSelectedCollege] ?? []).map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -600,9 +598,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       setState(() {
         selectedCollege = result['college'];
         selectedMajor = result['major'];
+
+        // 학과가 선택되면 departmentController에 설정
+        if (selectedMajor != null) {
+          departmentController.text = selectedMajor!;
+        }
       });
     }
   }
+
 
   List<String> getMajorsForSelectedCollege() {
     if (selectedCollege != null && collegeMajorMap.containsKey(selectedCollege)) {
