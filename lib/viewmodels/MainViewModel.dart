@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/CircleListModel.dart';
 import 'package:usw_circle_link/repositories/CircleListRepository.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final mainViewModelProvider =
     StateNotifierProvider.autoDispose<MainViewModel, CircleListModelBase?>(
@@ -26,6 +27,7 @@ class MainViewModel extends StateNotifier<CircleListModelBase?> {
     } on CircleListModelError catch (e) {
       state = e;
     } catch (e) {
+      logger.e(e);
       state = CircleListModelError(type: CircleListModelType.all);
     }
   }
@@ -40,6 +42,7 @@ class MainViewModel extends StateNotifier<CircleListModelBase?> {
     } on CircleListModelError catch (e) {
       state = e;
     } catch (e) {
+      logger.e(e);
       state = CircleListModelError(type: CircleListModelType.department);
     }
   }

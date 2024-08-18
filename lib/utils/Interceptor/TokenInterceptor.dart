@@ -36,7 +36,7 @@ class TokenInterceptor extends Interceptor {
 
       // 실제 토큰으로 대체
       options.headers.addAll({
-        'Authorization': accessToken,
+        'Authorization': 'Bearer $accessToken',
         // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNDcyNjJjYi04YjZjLTQ4OTYtOGM4NC05YzkwMDIyNzMzNDUiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTQzOTQ0LCJleHAiOjE3MjM1NDU3NDR9.m0XOvjuvbDT2pVGeHPVfOSgCL6Oa6-dCMctXGuCbL2A',
       });
     } else if (options.headers['refreshToken'] == 'true') {

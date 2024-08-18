@@ -10,7 +10,7 @@ final CircleListRepositoryPrivider = Provider<CircleListRepository>((ref) {
   
   return CircleListRepository(
     dio: dio,
-    baseUrl: 'https://$host:$port/clubs',
+    baseUrl: 'http://$host:$port/clubs',
   );
 });
 
@@ -26,11 +26,6 @@ class CircleListRepository {
   Future<CircleListModel> fetchAllCircleList() async {
     final response = await dio.get(
       '$baseUrl/ACADEMIC',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
     );
 
     logger.d('${response.data}');
@@ -49,13 +44,8 @@ class CircleListRepository {
   }
 
   Future<CircleListModel> fetchDepartmentCircleList() async {
-    final response = await dio.post(
+    final response = await dio.get(
       '$baseUrl/ACADEMIC/OPEN',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
     );
 
     logger.d('${response.data}');

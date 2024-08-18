@@ -56,6 +56,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
     final userState = ref.watch(userViewModelProvider);
@@ -127,6 +128,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               children: [
                 ElevatedButton(
                   onPressed: () async {
+                    if (isAllSelected){
+                      return;
+                    }
                     setState(() {
                       isAllSelected = true;
                     });
@@ -154,6 +158,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
                 ElevatedButton(
                   onPressed: () async {
+                    if (!isAllSelected){
+                      return;
+                    }
                     setState(() {
                       isAllSelected = false;
                     });
