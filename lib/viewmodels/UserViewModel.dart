@@ -13,7 +13,7 @@ import 'package:usw_circle_link/utils/decoder/JWTDecoder.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final userViewModelProvider =
-    StateNotifierProvider<UserViewModel, AsyncValue<UserModelBase?>>((ref) {
+    StateNotifierProvider<UserViewModel, AsyncValue<UserModel?>>((ref) {
   final authRepository = ref.watch(authRepositoryProvider);
   final userMeRepository = ref.watch(userMeRepositoryProvider);
   final fcmRepository = ref.watch(fcmRepositoryProvider);
