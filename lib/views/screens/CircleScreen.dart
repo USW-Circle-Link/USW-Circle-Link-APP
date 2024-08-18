@@ -16,11 +16,21 @@ class CircleScreen extends ConsumerStatefulWidget {
 
 class _CircleScreenState extends ConsumerState<CircleScreen> {
   int activeIndex = 0;
+  bool serverError = false;
 
   @override
   void initState() {
     super.initState();
-    ref.read(clubIntroProvider.notifier).fetchClubIntro(widget.token);
+    fetchClubIntro();
+  }
+
+  void fetchClubIntro() async {
+    try {
+      await ref.read(clubIntroProvider.notifier).fetchClubIntro(widget.token);
+      serverError = false;
+    } catch (e) {
+      serverError = true;
+    }
   }
 
   @override
@@ -74,7 +84,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
             ),
           ),
         ),
-        bottomNavigationBar: clubIntro == null
+        bottomNavigationBar: !serverError && clubIntro == null
             ? SizedBox.shrink()
             : Padding(
           padding: EdgeInsets.zero,
@@ -94,7 +104,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
             child: Column(
               children: [
                 SizedBox(height: 12.h),
-                clubIntro.recruitmentStatus == "CLOSE"
+                serverError || clubIntro == null || clubIntro.recruitmentStatus == "CLOSE"
                     ? CustomButton(text: '모집마감', isEnabled: false, onPressed: () {})
                     : CustomButton(text: '지원하기', isEnabled: true, onPressed: () {}),
               ],
@@ -103,6 +113,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         ),
         body: isLoading
             ? Center(child: CircularProgressIndicator())
+            : serverError
+            ? Center(child: Text('서버에 연결할 수 없습니다. UI는 표시됩니다.'))
             : clubIntro == null
             ? Center(child: Text('동아리 정보를 불러오지 못했습니다.'))
             : SingleChildScrollView(
@@ -111,8 +123,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
               Stack(
                 children: [
                   Container(
-                    width: 375.w,  // 고정된 너비 설정
-                    height: 250.h, // 고정된 높이 설정
+                    width: 375.w,
+                    height: 250.h,
                     child: clubIntro.introPhotoPath != null
                         ? CarouselSlider.builder(
                       itemCount: 1,
@@ -120,7 +132,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                         return buildImage(clubIntro.introPhotoPath!, index);
                       },
                       options: CarouselOptions(
-                        height: 250.h,  // 고정된 높이 설정
+                        height: 250.h,
                         viewportFraction: 1,
                         onPageChanged: (index, reason) =>
                             setState(() => activeIndex = index),
