@@ -10,6 +10,8 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
 import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
+import 'package:usw_circle_link/views/screens/RecruitingListScreen.dart';
+import 'package:usw_circle_link/views/screens/UswClubListScreen.dart';
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
@@ -175,16 +177,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ],
             ),
             Expanded(
-              child: ListView(
-                children: [
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                  UswClubList(ref),
-                ],
+              child:  isAllSelected
+                  ? UswClubListScreen(ref)
+                  : RecruitingListscreen(ref),
               ),
-            ),
+            
           ],
         ),
       ),
@@ -204,6 +201,7 @@ class _NotificationOverlay extends StatefulWidget {
   @override
   _NotificationOverlayState createState() => _NotificationOverlayState();
 }
+
 
 class _NotificationOverlayState extends State<_NotificationOverlay> {
   @override
@@ -488,105 +486,3 @@ Widget buildDrawerItem({
   );
 }
 
-Widget CustomCard({required Container child, required WidgetRef ref}) {
-  return Container(
-    margin: EdgeInsets.only(top: 12.h, right: 6.w),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Image.asset(
-          'assets/images/gullisae.png',
-          width: 120.w,
-          height: 140.h,
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 6.w),
-            TextFontWidget.fontRegular(
-              text: '굴리세',
-              fontSize: 14.sp,
-              color: Colors.black,
-              fontweight: FontWeight.w500,
-            ),
-          ],
-        ),
-        SizedBox(height: 8.h),
-        Row(
-          children: [
-            SizedBox(width: 4.w),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
-                ),
-              ),
-              child: TextFontWidget.fontRegular(
-                text: '# 볼링',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              height: 20.h,
-              width: 47.w,
-              margin: EdgeInsets.only(right: 5.w),
-              decoration: BoxDecoration(
-                color: Color(0xffF0F2F5),
-                borderRadius: BorderRadius.all(
-                  Radius.circular(4.0),
-                ),
-              ),
-              child: TextFontWidget.fontRegular(
-                text: '# 친목',
-                fontSize: 12.sp,
-                color: Color(0xff989898),
-                fontweight: FontWeight.w400,
-              ),
-            ),
-          ],
-        ),
-      ],
-    ),
-  );
-}
-
-// ignore: non_constant_identifier_names
-Widget UswClubList(WidgetRef ref) {
-  return Container(
-    width: double.infinity,
-    height: 250.h,
-    margin: EdgeInsets.only(top: 12.h),
-    padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
-    color: Colors.white,
-    child: Row(
-      children: [
-        Expanded(
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: 4,
-            itemBuilder: (context, index) {
-              return CustomCard(
-                ref: ref,
-                child: Container(
-                  width: 150.w,
-                  height: 200.h,
-                  child: Center(
-                    child: Text('Card $index'),
-                  ),
-                ),
-              );
-            },
-          ),
-        ),
-      ],
-    ),
-  );
-}
