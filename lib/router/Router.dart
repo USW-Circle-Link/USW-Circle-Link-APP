@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/notifier/AuthNotifier.dart';
+import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
 import 'package:usw_circle_link/views/screens/ApplicationWritingScreen.dart';
 import 'package:usw_circle_link/views/screens/ChangePWScreen.dart';
 import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
@@ -9,7 +10,9 @@ import 'package:usw_circle_link/views/screens/FindIDScreen.dart';
 import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
 import 'package:usw_circle_link/views/screens/LoginScreen.dart';
 import 'package:usw_circle_link/views/screens/MainScreen.dart';
+import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
 import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
+import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
 import 'package:usw_circle_link/views/screens/WebViewScreen.dart';
 
 final webviewRouter = GoRoute(
@@ -84,6 +87,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => ChangePWScreen(),
           ),
           webviewRouter,
+          GoRoute(
+            path: 'application_circle',
+            builder: (_, __) => Applicationcirclescreen(),
+          ),
+          GoRoute(
+            path: 'my_circle',
+            builder: (_, __) => MyCircleScreen(),
+          ),
+          GoRoute(
+            path: 'update_profile',
+            builder: (_, __) => UpdateProfileScreen(),
+          ),
         ],
       ),
     ],

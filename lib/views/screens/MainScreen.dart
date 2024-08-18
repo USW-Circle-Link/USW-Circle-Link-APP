@@ -2,24 +2,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
-import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/CircleListModel.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
-import 'package:usw_circle_link/repositories/FCMRepository.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/MainViewModel.dart';
 import 'package:usw_circle_link/viewmodels/UserViewModel.dart';
 import 'package:usw_circle_link/viewmodels/FirbaseVM.dart';
+<<<<<<< HEAD
 import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
 import 'package:usw_circle_link/views/screens/RecruitingListScreen.dart';
 import 'package:usw_circle_link/views/screens/UswClubListScreen.dart';
+=======
+>>>>>>> develop
 import 'package:usw_circle_link/views/widgets/CloudMessaging.dart';
-import 'package:usw_circle_link/views/screens/LoginScreen.dart';
-import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
-import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
+import 'package:usw_circle_link/views/widgets/LoggedInMenu.dart';
+import 'package:usw_circle_link/views/widgets/LoggedOutMenu.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
+import 'package:usw_circle_link/views/widgets/CircleList.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-
   MainScreen({super.key});
 
   @override
@@ -42,7 +43,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void _showOverlay(BuildContext context) {
     if (_overlayEntry == null) {
       _overlayEntry = _createOverlayEntry(context);
-      Overlay.of(context)?.insert(_overlayEntry!);
+      Overlay.of(context).insert(_overlayEntry!);
     } else {
       (_overlayEntry!.builder as _NotificationOverlayState).updateList();
     }
@@ -63,9 +64,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Widget build(BuildContext context) {
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
-    final state = ref.watch(userViewModelProvider); 
+    final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       // 유저 정보 불러오기
+      logger.d(next);
+    });
+    final circleListState = ref.watch(mainViewModelProvider);
+    ref.listen(mainViewModelProvider, (previous, next) {
       logger.d(next);
     });
     return ScreenUtilInit(
@@ -120,17 +125,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        drawer: Menubar(context, ref),
+        drawer: userState.value == null ? LoggedOutMenu() : LoggedInMenu(),
         body: Column(
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       isAllSelected = true;
                     });
+                    await ref
+                        .read(mainViewModelProvider.notifier)
+                        .fetchAllCircleList();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isAllSelected
@@ -151,10 +159,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   ),
                 ),
                 ElevatedButton(
-                  onPressed: () {
+                  onPressed: () async {
                     setState(() {
                       isAllSelected = false;
                     });
+                    await ref
+                        .read(mainViewModelProvider.notifier)
+                        .fetchDepartmentCircleList();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: !isAllSelected
@@ -176,20 +187,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ],
             ),
+            circleListState is CircleListModel ? 
             Expanded(
+<<<<<<< HEAD
               child:  isAllSelected
                   ? UswClubListScreen(ref)
                   : RecruitingListscreen(ref),
               ),
             
+=======
+              child: CircleList(state:circleListState),
+            ) : Container(),
+>>>>>>> develop
           ],
         ),
       ),
     );
-  }
-  
-  void test() async {
-    print(await ref.read(fcmRepositoryProvider).getToken());
   }
 }
 
@@ -267,6 +280,7 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
   void updateList() {
     setState(() {});
   }
+<<<<<<< HEAD
 }
 
 // ignore: non_constant_identifier_names
@@ -486,3 +500,6 @@ Widget buildDrawerItem({
   );
 }
 
+=======
+}
+>>>>>>> develop

@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+<<<<<<< HEAD
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:usw_circle_link/views/screens/MainScreen.dart';
+=======
+>>>>>>> develop
 import 'package:usw_circle_link/router/Router.dart';
 
 void main() async {

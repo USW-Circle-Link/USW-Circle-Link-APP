@@ -29,15 +29,23 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: <Widget>[
-                    SizedBox(height: 20),
+                    SizedBox(height: 15.h),
                     TextFontWidget.fontRegular(
-                      text: this.widget.text,
+                      text: '알림',
                       color: Color(0xFF000000),
-                      fontSize: 16.sp,
-                      fontweight: FontWeight.w500,
+                      fontSize: 18.sp,
+                      fontweight: FontWeight.w600,
                       textAlign: TextAlign.center,
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 8.h),
+                    TextFontWidget.fontRegular(
+                      text: this.widget.text,
+                      color: Color(0xFF767676),
+                      fontSize: 14.sp,
+                      fontweight: FontWeight.w400,
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 15.h),
                     SizedBox.fromSize(
                       size: Size.fromHeight(1.h),
                       child: DecoratedBox(
