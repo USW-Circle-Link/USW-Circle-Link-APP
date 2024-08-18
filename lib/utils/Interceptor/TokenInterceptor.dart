@@ -24,28 +24,21 @@ class TokenInterceptor extends Interceptor {
       // 헤더 삭제
       options.headers.remove('accessToken');
 
-      final token = await storage.read(key: accessTokenKey); // ?? "590370d1-5e3d-43b2-a78e-8d515dd16d40"; 테스트용 코드 
+      final accessToken = await storage.read(key: accessTokenKey);
+      logger.d("accessToken - $accessToken");
 
-      if (token == null) {
+      if (accessToken == null) {
         return handler.reject(DioException(
             requestOptions: options,
-            message: "저장소애 토큰이 존재하지 않습니다",
+            message: "저장소에 토큰이 존재하지 않습니다",
             type: DioExceptionType.cancel));
       }
 
-      if (options.headers['onPath'] == 'true') {
-        // 토큰을 path에 담는 경우
-        options.headers.remove('onPath');
-        options.path = options.path.replaceAll(':accessToken', token);
-        logger.d('TokenInterceptor - onRequest - 요청 Uri : ${options.uri}');
-      } else {
-        // 토큰을 헤더에 담는 경우
-
-        // 실제 토큰으로 대체
-        options.headers.addAll({
-          'User-uuid': token,
-        });
-      }
+      // 실제 토큰으로 대체
+      options.headers.addAll({
+        'Authorization': accessToken,
+        // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNDcyNjJjYi04YjZjLTQ4OTYtOGM4NC05YzkwMDIyNzMzNDUiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTQzOTQ0LCJleHAiOjE3MjM1NDU3NDR9.m0XOvjuvbDT2pVGeHPVfOSgCL6Oa6-dCMctXGuCbL2A',
+      });
     } else if (options.headers['refreshToken'] == 'true') {
       // 헤더 삭제
       options.headers.remove('refreshToken');
@@ -54,7 +47,7 @@ class TokenInterceptor extends Interceptor {
 
       // 실제 토큰으로 대체
       options.headers.addAll({
-        'authorization': 'Bearer $token',
+        'Authorization': 'Bearer $token',
       });
     }
 
@@ -73,8 +66,9 @@ class TokenInterceptor extends Interceptor {
       return handler.reject(err);
     }
 
+    // **** 토큰 만료 코드의 경우 response 예외에서 제외 필요 [DefaultInterceptor] ****
     final isStatus401 = err.response?.statusCode == 401;
-    final isPathRefresh = err.requestOptions.path == '/auth/token';
+    final isPathRefresh = err.requestOptions.path == '/auth/refresh-token';
 
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
     if (isStatus401 && !isPathRefresh) {
@@ -84,25 +78,27 @@ class TokenInterceptor extends Interceptor {
 
       try {
         final response = await dio.post(
-          'http://$host:$port/auth/token',
+          'http://$host:$port/auth/refresh-token',
           options: Options(
             headers: {
-              'authorization': 'Bearer $refreshToken',
+              'Authorization': 'Bearer $refreshToken',
             },
           ),
         );
 
         final accessToken = response.data['accessToken'];
+        final newRefreshToken = response.data['refreshToken'];
 
         final options = err.requestOptions;
 
         // 요청의 헤더에 새로 발급받은 accessToken으로 변경하기
         options.headers.addAll({
-          'authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer $accessToken',
         });
 
         // secure storage도 update
         await storage.write(key: accessTokenKey, value: accessToken);
+        await storage.write(key: refreshTokenKey, value: newRefreshToken);
 
         // 원래 보내려던 요청 재전송
         final newResponse = await dio.fetch(options);

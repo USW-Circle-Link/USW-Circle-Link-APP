@@ -7,9 +7,11 @@ class TextFontWidget {
     required double fontSize,
     required Color color,
     required FontWeight fontweight,
+    TextAlign? textAlign,
   }) {
     return Text(
       text,
+      textAlign: textAlign,
       style: TextStyle(
         fontFamily: 'Pretendard-Regular',
         fontSize: fontSize,

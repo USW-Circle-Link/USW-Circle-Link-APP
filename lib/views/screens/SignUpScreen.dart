@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/views/widgets/RoundedDropdown.dart';
+import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/SignUpModel.dart';
+import 'package:usw_circle_link/models/UserModel.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/SignUpViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
+import 'package:usw_circle_link/views/widgets/MajorPickerDialog.dart';
 import 'package:usw_circle_link/views/widgets/RoundedTextField.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
-class SignUpScreen extends StatefulWidget {
+class SignUpScreen extends ConsumerStatefulWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignUpScreenState extends State<SignUpScreen> {
+class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   TextEditingController idController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController passwordConfirmController = TextEditingController();
@@ -26,22 +33,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
   bool passwordVisible = false;
   bool passwordConfirmVisible = false;
 
-  String errorMessage = "";
-  bool errorMessageVisivility = false;
-
-  bool idIsInvalid = false;
-  bool pwIsInvalid = false;
-  bool pwConfirmIsInvalid = false;
-
-  bool nameIsInvalid = false;
-  bool phoneNumberIsInvalid = false;
-  bool studentNumberIsInvalid = false;
+  bool idVerified = false;
 
   String? college;
   String? major;
-
-  String? selectedCollege;
-  String? selectedMajor;
 
   @override
   void initState() {
@@ -50,6 +45,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var state = ref.watch(signUpViewModelProvider);
+    ref.listen(signUpViewModelProvider, (previous, next) {
+      logger.d(next);
+      if (next is SignUpModel) {
+        switch (next.type) {
+          case SignUpModelType.verify:
+            // 아이디 중복확인 완료!
+            showAlertDialog(context, '아이디 사용이 가능합니다!');
+            setState(() {
+              idVerified = true;
+            });
+            break;
+          case SignUpModelType.validatePasswordMatch:
+            // 회원가입 성공 -> 이메일 인증으로 이동
+            context.go(
+                '/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text.addDash()}&studentNumber=${studentNumberController.text}&major=$major');
+            break;
+          default: // 예외발생!
+            logger.e('예외발생! - $next');
+        }
+      } else if (next is SignUpModelError) {
+        switch (next.type) {
+          case SignUpModelType.verify:
+            // 아이디 중복확인 실패!
+            if (next.code == null) {
+              showAlertDialog(context, '중복확인 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!');
+            }
+            break;
+          case SignUpModelType.validatePasswordMatch:
+            // 회원가입 실패!
+            break;
+          default: // 예외발생!
+            logger.e('예외발생! - $next');
+        }
+      }
+    });
+
+    idController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+      setState(() {
+        idVerified = false;
+      });
+    });
+
+    passwordController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+    });
+
+    passwordConfirmController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+    });
+
+    nameController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+    });
+
+    studentNumberController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+    });
+
+    phoneNumberController.addListener(() {
+      ref.read(signUpViewModelProvider.notifier).initState();
+    });
+
     return ScreenUtilInit(
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
@@ -57,7 +116,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  padding: EdgeInsets.only(left: 22.w, right: 22.w), // icon에 10.w 정도의 여백이 기본적으로 존재
+                  padding: EdgeInsets.only(
+                      left: 22.w, right: 22.w), // icon에 10.w 정도의 여백이 기본적으로 존재
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -102,9 +162,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         maxLines: 1,
                         textInputType: TextInputType.text,
                         textAlign: TextAlign.left,
-                        hintText: '아이디 (4~16자)',
+                        hintText: '아이디 (5~20자)',
                         borderColor:
-                            idIsInvalid ? const Color(0xFFFF3F3F) : null,
+                            idIsInvalid(state) ? const Color(0xFFFF3F3F) : null,
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_person.svg',
@@ -113,25 +173,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         suffixIcon: Container(
-                          margin: EdgeInsets.only( // top : 4, bottom : 4
-                              top: 6.h, bottom: 6.h, right: 8.w),
+                          margin: EdgeInsets.only(
+                              // top : 4, bottom : 4
+                              top: 6.h,
+                              bottom: 6.h,
+                              right: 8.w),
                           width: 83.w,
                           //height: 38.h, //not working -> margin으로 높이 조절
                           child: OutlinedButton(
-                            onPressed: () {
-                              setState(() {
-                                idIsInvalid = !idIsInvalid;
-                                errorMessage = "* 아이디는 4자 이상 16자 이내로 작성해세요!";
-                                errorMessageVisivility = idIsInvalid;
-                              });
-                            },
+                            onPressed: state is UserModelLoading
+                                ? null
+                                : () async {
+                                    final id = idController.text.trim();
+                                    await ref
+                                        .read(signUpViewModelProvider.notifier)
+                                        .verifyId(id: id);
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(16.r), // radius 18
+                                borderRadius:
+                                    BorderRadius.circular(16.r), // radius 18
                               ),
                               minimumSize: Size.zero,
                               padding: EdgeInsets.zero,
@@ -154,14 +219,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
                         borderColor:
-                            pwIsInvalid ? const Color(0xFFFF3F3F) : null,
+                            pwIsInvalid(state) ? const Color(0xFFFF3F3F) : null,
                         borderWidth: 1.w,
                         maxLines: 1,
                         textInputType: TextInputType.text,
-                        obscureText: !passwordConfirmVisible,
+                        obscureText: !passwordVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '비밀번호 (문자, 숫자 포함 6~20자)',
+                        hintText: '문자,숫자,특수문자 포함 5~20자',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
@@ -194,8 +259,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         rightBottomCornerRadius: 8.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
-                        borderColor:
-                            pwConfirmIsInvalid ? const Color(0xFFFF3F3F) : null,
+                        borderColor: pwConfirmIsInvalid(state)
+                            ? const Color(0xFFFF3F3F)
+                            : null,
                         borderWidth: 1.w,
                         maxLines: 1,
                         textInputType: TextInputType.text,
@@ -232,9 +298,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 8.h,
                       ),
                       Visibility(
-                          visible: errorMessageVisivility,
+                          visible: state is SignUpModelError,
                           child: TextFontWidget.fontRegular(
-                              text: errorMessage,
+                              text: getErrorMessage(state),
                               fontSize: 12.sp,
                               color: const Color(0xFFFF3F3F),
                               fontweight: FontWeight.w400)),
@@ -249,8 +315,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 8.r,
                         rightTopCornerRadius: 8.r,
-                        borderColor:
-                            nameIsInvalid ? const Color(0xFFFF3F3F) : null,
+                        borderColor: nameIsInvalid(state)
+                            ? const Color(0xFFFF3F3F)
+                            : null,
                         borderWidth: 1.w,
                         maxLines: 1,
                         textInputType: TextInputType.text,
@@ -273,7 +340,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
-                        borderColor: phoneNumberIsInvalid
+                        borderColor: phoneNumberIsInvalid(state)
                             ? const Color(0xFFFF3F3F)
                             : null,
                         borderWidth: 1.w,
@@ -299,7 +366,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
-                        borderColor: studentNumberIsInvalid
+                        borderColor: studentNumberIsInvalid(state)
                             ? const Color(0xFFFF3F3F)
                             : null,
                         borderWidth: 1.w,
@@ -322,7 +389,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         height: 50.h,
                         readOnly: true,
                         onTab: () async {
-                          showCustomDialog(context);
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
+                          showMajorPickerDialog(context);
                         },
                         leftBottomCornerRadius: 8.r,
                         rightBottomCornerRadius: 8.r,
@@ -333,7 +403,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         textInputType: TextInputType.none,
                         textAlign: TextAlign.left,
                         textInputAction: TextInputAction.done,
-                        hintText: (selectedCollege == null || selectedMajor == null)?'학과':'$selectedCollege $selectedMajor',
+                        hintText: (college == null && major == null)
+                            ? '학과'
+                            : '${college ?? ""} / ${major ?? ""}',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_bookmark.svg',
@@ -351,15 +423,39 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
-                              setState(() {
-                                // pwIsInvalid = !pwIsInvalid;
-                                // errorMessage =
-                                //     "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
-                                // errorMessageVisivility = pwIsInvalid;
-                              });
-                              context.go('/login/sign_up/email_verification');
-                            },
+                            onPressed: state is UserModelLoading
+                                ? null
+                                : () async {
+                                    if (idVerified && major != null) {
+                                      await ref
+                                          .read(
+                                              signUpViewModelProvider.notifier)
+                                          .signUpTemporary(
+                                              id: idController.text.trim(),
+                                              password: passwordController
+                                                  .text
+                                                  .trim(),
+                                              passwordConfirm:
+                                                  passwordConfirmController.text
+                                                      .trim(),
+                                              username:
+                                                  nameController.text.trim(),
+                                              telephone: phoneNumberController
+                                                  .text
+                                                  .trim(),
+                                              studentNumber:
+                                                  studentNumberController.text
+                                                      .trim(),
+                                              major: major!.trim());
+                                    } else if (!idVerified) {
+                                      // 아이디 중복확인 필요
+                                      showAlertDialog(
+                                          context, '아이디 중복확인이 필요합니다.');
+                                    } else if (major == null) {
+                                      showAlertDialog(
+                                          context, '단과대학/학과를 선택해주세요.');
+                                    }
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               side: const BorderSide(
@@ -419,99 +515,150 @@ class _SignUpScreenState extends State<SignUpScreen> {
             ));
   }
 
-  void showCustomDialog(BuildContext context) async {
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
+            ));
+  }
+
+  void showMajorPickerDialog(BuildContext context) async {
     final result = await showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              color: Colors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                RoundedDropdown(
-                  initValue: selectedCollege,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedCollege = newValue;
-                    });
-                  },
-                  items: <String>['College 1', 'College 2', 'College 3'],
-                  hintText: '단과대학 선택',
-                  leftTopCornerRadius: 8.r,
-                  leftBottomCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  borderColor: Color(0xFFCECECE),
-                  borderWidth: 1.w,
-                  marginTop: 32.h,
-                  marginLeft: 16.w,
-                  marginRight: 16.w,
-                ),
-                SizedBox(height: 8),
-                RoundedDropdown(
-                  initValue: selectedMajor,
-                  onChanged: (String? newValue) {
-                    setState(() {
-                      selectedMajor = newValue;
-                    });
-                  },
-                  items: <String>['Major 1', 'Major 2', 'Major 3'],
-                  hintText: '학부(학과) 선택',
-                  leftTopCornerRadius: 8.r,
-                  leftBottomCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  borderColor: Color(0xFFCECECE),
-                  borderWidth: 1.w,
-                  marginLeft: 16.w,
-                  marginRight: 16.w,
-                ),
-                SizedBox(height: 20),
-                SizedBox.fromSize(
-                  size: Size.fromHeight(1.h),
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(color: Color(0xFFCECECE)),
-                  ),
-                ),
-                TextButton(
-                  onPressed: () {
-                    Navigator.of(context).pop(
-                        {'college': selectedCollege, 'major': selectedMajor});
-                  },
-                  style: TextButton.styleFrom(
-                    minimumSize: Size.fromHeight(50.h),
-                    //primary: Colors.white,
-                    //onPrimary: Colors.blue,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.vertical(
-                          top: Radius.zero, bottom: Radius.circular(15.r)),
-                    ),
-                  ),
-                  child: TextFontWidget.fontRegular(
-                    text: "확인",
-                    color: Color(0xFF0085FF),
-                    fontSize: 18.sp,
-                    fontweight: FontWeight.w500,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
-      },
+      builder: (_) => MajorPickerDialog(
+        colleges: colleges,
+        majors: majors,
+        selectedCollege: college,
+        selectedMajor: major,
+        onCollegeChanged: (String? newValue) {},
+        onMajorChanged: (String? newValue) {},
+        onConfirmPressed: (college, major) {
+          Navigator.of(context).pop({'college': college, 'major': major});
+        },
+      ),
     );
 
     setState(() {
       if (result != null) {
         college = result['college'];
         major = result['major'];
-        debugPrint('${college} - ${major}');
-        debugPrint('${selectedCollege} - ${selectedMajor}');
+        logger.d('$college - $major');
       }
     });
+  }
+
+  bool idIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-207":
+        case "USR-F100":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool pwIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F200":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool pwConfirmIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F300":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool nameIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F400":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool phoneNumberIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F500":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool studentNumberIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F600":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  bool collegeMajorIsInvalid(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      switch (state.code) {
+        case "USR-F700":
+          return true;
+      }
+    }
+    return false;
+  }
+
+  String getErrorMessage(SignUpModelBase? state) {
+    if (state is SignUpModelError) {
+      logger.d(state.code);
+      switch (state.code) {
+        case "USR-207":
+          return "* 이미 존재하는 아이디입니다!";
+        case "USR-212": // 새 비밀번호 확인 불일치
+          return "* 비밀번호가 일치하지 않습니다!";
+        case "USR-F100": // 아이디 규칙 X
+          return "* 아이디는 5~20자 이내 숫자,문자만 가능합니다!";
+        case "USR-F200": // 비밀번호 규칙 X
+          return "* 비밀번호는 5~20자 이내 숫자,문자,특수문자만 가능합니다!";
+        case "USR-F300": // 비밀번호 일치 X
+          return "* 비밀번호가 일치하지 않습니다!";
+        case "USR-F400": // 이름 공백
+          return "* 이름이 형식에 맞지 않습니다!";
+        case "USR-F500": // 전화번호 형식에 맞지 않음
+          return "* 전화번호가 형식에 맞지 않습니다!";
+        case "USR-F600": // 학번이 공백 혹은 8자리가 아님
+          return "* 학번이 형식에 맞지 않습니다!";
+        case "USR-F700": // 학과가 선택되지 않음
+          return "* 단과대학/학과를 선택해주세요!";
+        default:
+          return "";
+      }
+    }
+    return "";
+  }
+
+  @override
+  void dispose() {
+    idController.dispose();
+    passwordController.dispose();
+    passwordConfirmController.dispose();
+    nameController.dispose();
+    phoneNumberController.dispose();
+    studentNumberController.dispose();
+    super.dispose();
   }
 }

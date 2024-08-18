@@ -9,26 +9,25 @@ part of 'UserModel.dart';
 _$UserModelImpl _$$UserModelImplFromJson(Map<String, dynamic> json) =>
     _$UserModelImpl(
       message: json['message'] as String,
-      data: const JWTConverter().fromJson(json['data'] as LoginData),
+      data: LoginData.fromJson(json['data'] as Map<String, dynamic>),
     );
 
 Map<String, dynamic> _$$UserModelImplToJson(_$UserModelImpl instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'data': const JWTConverter().toJson(instance.data),
+      'data': instance.data.toJson(),
     };
 
 _$LoginDataImpl _$$LoginDataImplFromJson(Map<String, dynamic> json) =>
     _$LoginDataImpl(
       accessToken: json['accessToken'] as String,
-      clubIds:
-          (json['clubIds'] as List<dynamic>?)?.map((e) => e as String).toList(),
+      refreshToken: json['refreshToken'] as String,
     );
 
 Map<String, dynamic> _$$LoginDataImplToJson(_$LoginDataImpl instance) =>
     <String, dynamic>{
       'accessToken': instance.accessToken,
-      'clubIds': instance.clubIds,
+      'refreshToken': instance.refreshToken,
     };
 
 _$UserModelErrorImpl _$$UserModelErrorImplFromJson(Map<String, dynamic> json) =>

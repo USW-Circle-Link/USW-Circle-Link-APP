@@ -21,9 +21,14 @@ ChangePWModel _$ChangePWModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ChangePWModel {
   String get message => throw _privateConstructorUsedError;
+  ChangePWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ChangePWModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChangePWModelCopyWith<ChangePWModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -34,7 +39,7 @@ abstract class $ChangePWModelCopyWith<$Res> {
           ChangePWModel value, $Res Function(ChangePWModel) then) =
       _$ChangePWModelCopyWithImpl<$Res, ChangePWModel>;
   @useResult
-  $Res call({String message});
+  $Res call({String message, ChangePWModelType? type});
 }
 
 /// @nodoc
@@ -47,16 +52,23 @@ class _$ChangePWModelCopyWithImpl<$Res, $Val extends ChangePWModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? message = null,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ChangePWModelType?,
     ) as $Val);
   }
 }
@@ -69,7 +81,7 @@ abstract class _$$ChangePWModelImplCopyWith<$Res>
       __$$ChangePWModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message});
+  $Res call({String message, ChangePWModelType? type});
 }
 
 /// @nodoc
@@ -80,34 +92,43 @@ class __$$ChangePWModelImplCopyWithImpl<$Res>
       _$ChangePWModelImpl _value, $Res Function(_$ChangePWModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? message = null,
+    Object? type = freezed,
   }) {
     return _then(_$ChangePWModelImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ChangePWModelType?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ChangePWModelImpl implements _ChangePWModel {
-  _$ChangePWModelImpl({required this.message});
+class _$ChangePWModelImpl extends _ChangePWModel {
+  _$ChangePWModelImpl({required this.message, this.type}) : super._();
 
   factory _$ChangePWModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChangePWModelImplFromJson(json);
 
   @override
   final String message;
+  @override
+  final ChangePWModelType? type;
 
   @override
   String toString() {
-    return 'ChangePWModel(message: $message)';
+    return 'ChangePWModel(message: $message, type: $type)';
   }
 
   @override
@@ -115,14 +136,17 @@ class _$ChangePWModelImpl implements _ChangePWModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ChangePWModelImpl &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(runtimeType, message);
+  int get hashCode => Object.hash(runtimeType, message, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChangePWModelImplCopyWith<_$ChangePWModelImpl> get copyWith =>
@@ -136,8 +160,11 @@ class _$ChangePWModelImpl implements _ChangePWModel {
   }
 }
 
-abstract class _ChangePWModel implements ChangePWModel {
-  factory _ChangePWModel({required final String message}) = _$ChangePWModelImpl;
+abstract class _ChangePWModel extends ChangePWModel {
+  factory _ChangePWModel(
+      {required final String message,
+      final ChangePWModelType? type}) = _$ChangePWModelImpl;
+  _ChangePWModel._() : super._();
 
   factory _ChangePWModel.fromJson(Map<String, dynamic> json) =
       _$ChangePWModelImpl.fromJson;
@@ -145,7 +172,12 @@ abstract class _ChangePWModel implements ChangePWModel {
   @override
   String get message;
   @override
-  @JsonKey(ignore: true)
+  ChangePWModelType? get type;
+
+  /// Create a copy of ChangePWModel
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChangePWModelImplCopyWith<_$ChangePWModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -161,9 +193,14 @@ mixin _$ChangePWModelError {
   String? get code => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
+  ChangePWModelType? get type => throw _privateConstructorUsedError;
 
+  /// Serializes this ChangePWModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $ChangePWModelErrorCopyWith<ChangePWModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -179,7 +216,8 @@ abstract class $ChangePWModelErrorCopyWith<$Res> {
       String? exception,
       String? code,
       int? status,
-      String? error});
+      String? error,
+      ChangePWModelType? type});
 }
 
 /// @nodoc
@@ -192,6 +230,8 @@ class _$ChangePWModelErrorCopyWithImpl<$Res, $Val extends ChangePWModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -200,6 +240,7 @@ class _$ChangePWModelErrorCopyWithImpl<$Res, $Val extends ChangePWModelError>
     Object? code = freezed,
     Object? status = freezed,
     Object? error = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -222,6 +263,10 @@ class _$ChangePWModelErrorCopyWithImpl<$Res, $Val extends ChangePWModelError>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ChangePWModelType?,
     ) as $Val);
   }
 }
@@ -239,7 +284,8 @@ abstract class _$$ChangePWModelErrorImplCopyWith<$Res>
       String? exception,
       String? code,
       int? status,
-      String? error});
+      String? error,
+      ChangePWModelType? type});
 }
 
 /// @nodoc
@@ -250,6 +296,8 @@ class __$$ChangePWModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$ChangePWModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -258,6 +306,7 @@ class __$$ChangePWModelErrorImplCopyWithImpl<$Res>
     Object? code = freezed,
     Object? status = freezed,
     Object? error = freezed,
+    Object? type = freezed,
   }) {
     return _then(_$ChangePWModelErrorImpl(
       message: null == message
@@ -280,19 +329,25 @@ class __$$ChangePWModelErrorImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ChangePWModelType?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ChangePWModelErrorImpl implements _ChangePWModelError {
+class _$ChangePWModelErrorImpl extends _ChangePWModelError {
   _$ChangePWModelErrorImpl(
       {required this.message,
       this.exception,
       this.code,
       this.status,
-      this.error});
+      this.error,
+      this.type})
+      : super._();
 
   factory _$ChangePWModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$ChangePWModelErrorImplFromJson(json);
@@ -307,10 +362,12 @@ class _$ChangePWModelErrorImpl implements _ChangePWModelError {
   final int? status;
   @override
   final String? error;
+  @override
+  final ChangePWModelType? type;
 
   @override
   String toString() {
-    return 'ChangePWModelError(message: $message, exception: $exception, code: $code, status: $status, error: $error)';
+    return 'ChangePWModelError(message: $message, exception: $exception, code: $code, status: $status, error: $error, type: $type)';
   }
 
   @override
@@ -323,15 +380,18 @@ class _$ChangePWModelErrorImpl implements _ChangePWModelError {
                 other.exception == exception) &&
             (identical(other.code, code) || other.code == code) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, message, exception, code, status, error);
+      Object.hash(runtimeType, message, exception, code, status, error, type);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
@@ -346,13 +406,15 @@ class _$ChangePWModelErrorImpl implements _ChangePWModelError {
   }
 }
 
-abstract class _ChangePWModelError implements ChangePWModelError {
+abstract class _ChangePWModelError extends ChangePWModelError {
   factory _ChangePWModelError(
       {required final String message,
       final String? exception,
       final String? code,
       final int? status,
-      final String? error}) = _$ChangePWModelErrorImpl;
+      final String? error,
+      final ChangePWModelType? type}) = _$ChangePWModelErrorImpl;
+  _ChangePWModelError._() : super._();
 
   factory _ChangePWModelError.fromJson(Map<String, dynamic> json) =
       _$ChangePWModelErrorImpl.fromJson;
@@ -368,7 +430,12 @@ abstract class _ChangePWModelError implements ChangePWModelError {
   @override
   String? get error;
   @override
-  @JsonKey(ignore: true)
+  ChangePWModelType? get type;
+
+  /// Create a copy of ChangePWModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @override
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$ChangePWModelErrorImplCopyWith<_$ChangePWModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

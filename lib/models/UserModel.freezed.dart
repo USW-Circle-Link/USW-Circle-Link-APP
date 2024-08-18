@@ -21,11 +21,14 @@ UserModel _$UserModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$UserModel {
   String get message => throw _privateConstructorUsedError;
-  @JWTConverter()
   LoginData get data => throw _privateConstructorUsedError;
 
+  /// Serializes this UserModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserModelCopyWith<UserModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -35,7 +38,7 @@ abstract class $UserModelCopyWith<$Res> {
   factory $UserModelCopyWith(UserModel value, $Res Function(UserModel) then) =
       _$UserModelCopyWithImpl<$Res, UserModel>;
   @useResult
-  $Res call({String message, @JWTConverter() LoginData data});
+  $Res call({String message, LoginData data});
 
   $LoginDataCopyWith<$Res> get data;
 }
@@ -50,6 +53,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -68,6 +73,8 @@ class _$UserModelCopyWithImpl<$Res, $Val extends UserModel>
     ) as $Val);
   }
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $LoginDataCopyWith<$Res> get data {
@@ -85,7 +92,7 @@ abstract class _$$UserModelImplCopyWith<$Res>
       __$$UserModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, @JWTConverter() LoginData data});
+  $Res call({String message, LoginData data});
 
   @override
   $LoginDataCopyWith<$Res> get data;
@@ -99,6 +106,8 @@ class __$$UserModelImplCopyWithImpl<$Res>
       _$UserModelImpl _value, $Res Function(_$UserModelImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -122,8 +131,7 @@ class __$$UserModelImplCopyWithImpl<$Res>
 
 @JsonSerializable(explicitToJson: true)
 class _$UserModelImpl implements _UserModel {
-  const _$UserModelImpl(
-      {required this.message, @JWTConverter() required this.data});
+  const _$UserModelImpl({required this.message, required this.data});
 
   factory _$UserModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelImplFromJson(json);
@@ -131,7 +139,6 @@ class _$UserModelImpl implements _UserModel {
   @override
   final String message;
   @override
-  @JWTConverter()
   final LoginData data;
 
   @override
@@ -148,11 +155,13 @@ class _$UserModelImpl implements _UserModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode => Object.hash(runtimeType, message, data);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
@@ -169,7 +178,7 @@ class _$UserModelImpl implements _UserModel {
 abstract class _UserModel implements UserModel {
   const factory _UserModel(
       {required final String message,
-      @JWTConverter() required final LoginData data}) = _$UserModelImpl;
+      required final LoginData data}) = _$UserModelImpl;
 
   factory _UserModel.fromJson(Map<String, dynamic> json) =
       _$UserModelImpl.fromJson;
@@ -177,10 +186,12 @@ abstract class _UserModel implements UserModel {
   @override
   String get message;
   @override
-  @JWTConverter()
   LoginData get data;
+
+  /// Create a copy of UserModel
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserModelImplCopyWith<_$UserModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -192,10 +203,14 @@ LoginData _$LoginDataFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$LoginData {
   String get accessToken => throw _privateConstructorUsedError;
-  List<String>? get clubIds => throw _privateConstructorUsedError;
+  String get refreshToken => throw _privateConstructorUsedError;
 
+  /// Serializes this LoginData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $LoginDataCopyWith<LoginData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -205,7 +220,7 @@ abstract class $LoginDataCopyWith<$Res> {
   factory $LoginDataCopyWith(LoginData value, $Res Function(LoginData) then) =
       _$LoginDataCopyWithImpl<$Res, LoginData>;
   @useResult
-  $Res call({String accessToken, List<String>? clubIds});
+  $Res call({String accessToken, String refreshToken});
 }
 
 /// @nodoc
@@ -218,21 +233,23 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? accessToken = null,
-    Object? clubIds = freezed,
+    Object? refreshToken = null,
   }) {
     return _then(_value.copyWith(
       accessToken: null == accessToken
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
               as String,
-      clubIds: freezed == clubIds
-          ? _value.clubIds
-          : clubIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      refreshToken: null == refreshToken
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String,
     ) as $Val);
   }
 }
@@ -245,7 +262,7 @@ abstract class _$$LoginDataImplCopyWith<$Res>
       __$$LoginDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String accessToken, List<String>? clubIds});
+  $Res call({String accessToken, String refreshToken});
 }
 
 /// @nodoc
@@ -256,21 +273,23 @@ class __$$LoginDataImplCopyWithImpl<$Res>
       _$LoginDataImpl _value, $Res Function(_$LoginDataImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
     Object? accessToken = null,
-    Object? clubIds = freezed,
+    Object? refreshToken = null,
   }) {
     return _then(_$LoginDataImpl(
       accessToken: null == accessToken
           ? _value.accessToken
           : accessToken // ignore: cast_nullable_to_non_nullable
               as String,
-      clubIds: freezed == clubIds
-          ? _value._clubIds
-          : clubIds // ignore: cast_nullable_to_non_nullable
-              as List<String>?,
+      refreshToken: null == refreshToken
+          ? _value.refreshToken
+          : refreshToken // ignore: cast_nullable_to_non_nullable
+              as String,
     ));
   }
 }
@@ -278,27 +297,19 @@ class __$$LoginDataImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginDataImpl implements _LoginData {
-  _$LoginDataImpl({required this.accessToken, final List<String>? clubIds})
-      : _clubIds = clubIds;
+  _$LoginDataImpl({required this.accessToken, required this.refreshToken});
 
   factory _$LoginDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginDataImplFromJson(json);
 
   @override
   final String accessToken;
-  final List<String>? _clubIds;
   @override
-  List<String>? get clubIds {
-    final value = _clubIds;
-    if (value == null) return null;
-    if (_clubIds is EqualUnmodifiableListView) return _clubIds;
-    // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(value);
-  }
+  final String refreshToken;
 
   @override
   String toString() {
-    return 'LoginData(accessToken: $accessToken, clubIds: $clubIds)';
+    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken)';
   }
 
   @override
@@ -308,15 +319,17 @@ class _$LoginDataImpl implements _LoginData {
             other is _$LoginDataImpl &&
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
-            const DeepCollectionEquality().equals(other._clubIds, _clubIds));
+            (identical(other.refreshToken, refreshToken) ||
+                other.refreshToken == refreshToken));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, accessToken, const DeepCollectionEquality().hash(_clubIds));
+  int get hashCode => Object.hash(runtimeType, accessToken, refreshToken);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>
@@ -333,7 +346,7 @@ class _$LoginDataImpl implements _LoginData {
 abstract class _LoginData implements LoginData {
   factory _LoginData(
       {required final String accessToken,
-      final List<String>? clubIds}) = _$LoginDataImpl;
+      required final String refreshToken}) = _$LoginDataImpl;
 
   factory _LoginData.fromJson(Map<String, dynamic> json) =
       _$LoginDataImpl.fromJson;
@@ -341,9 +354,12 @@ abstract class _LoginData implements LoginData {
   @override
   String get accessToken;
   @override
-  List<String>? get clubIds;
+  String get refreshToken;
+
+  /// Create a copy of LoginData
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -360,8 +376,12 @@ mixin _$UserModelError {
   String? get error => throw _privateConstructorUsedError;
   int? get status => throw _privateConstructorUsedError;
 
+  /// Serializes this UserModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of UserModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   $UserModelErrorCopyWith<UserModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -390,6 +410,8 @@ class _$UserModelErrorCopyWithImpl<$Res, $Val extends UserModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
+  /// Create a copy of UserModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -448,6 +470,8 @@ class __$$UserModelErrorImplCopyWithImpl<$Res>
       _$UserModelErrorImpl _value, $Res Function(_$UserModelErrorImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of UserModelError
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -524,12 +548,14 @@ class _$UserModelErrorImpl implements _UserModelError {
             (identical(other.status, status) || other.status == status));
   }
 
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   int get hashCode =>
       Object.hash(runtimeType, message, code, exception, error, status);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of UserModelError
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$UserModelErrorImplCopyWith<_$UserModelErrorImpl> get copyWith =>
@@ -565,8 +591,11 @@ abstract class _UserModelError implements UserModelError {
   String? get error;
   @override
   int? get status;
+
+  /// Create a copy of UserModelError
+  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(ignore: true)
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$UserModelErrorImplCopyWith<_$UserModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

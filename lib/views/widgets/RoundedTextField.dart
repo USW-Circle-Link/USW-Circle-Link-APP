@@ -3,8 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class RoundedTextField extends StatelessWidget {
   final TextEditingController? textEditController;
-  final double? 
-      height,
+  final double? height,
       marginLeft,
       marginTop,
       marginRight,
@@ -14,14 +13,14 @@ class RoundedTextField extends StatelessWidget {
       leftBottomCornerRadius,
       rightBottomCornerRadius,
       borderWidth;
-  
+
   final Color? borderColor, backgroundColor;
   final bool? isBackgroundFilled;
-  
+
   final bool isAnimatedHint;
   final String? hintText;
   final TextStyle? hintStyle;
-  
+
   final bool obscureText;
   final bool readOnly;
   final int? maxLines;

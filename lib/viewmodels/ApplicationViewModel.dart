@@ -1,12 +1,9 @@
-import 'dart:developer';
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/repositories/ApplicationRepository.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
 
-final applicationViewModelProvider =
-    StateNotifierProvider<ApplicationViewModel, ApplicationModelBase?>((ref) {
+final applicationViewModelProvider = StateNotifierProvider.autoDispose<
+    ApplicationViewModel, ApplicationModelBase?>((ref) {
   final ApplicationRepository applicationRepository =
       ref.read(applicationRepositoryProvider);
   return ApplicationViewModel(applicationRepository: applicationRepository);
@@ -22,21 +19,16 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
       state = ApplicationModelLoading();
 
       final applicationResponse =
-          await applicationRepository.getApplication(clubId:clubId);
+          await applicationRepository.getApplication(clubId: clubId);
 
       state = applicationResponse;
-
-      return applicationResponse;
+    } on ApplicationModelError catch (e) {
+      state = e;
     } catch (e) {
-      if (e is ApplicationModelError) {
-        state = e;
-      } else {
-        state = ApplicationModelError(message: '에외발생 - $e');
-      }
-
-      // 반환되는 값은 `ApplicationModelError`임
-      return Future.value(state);
+      state = ApplicationModelError(
+          message: '에외발생 - $e', type: ApplicationModelType.getApplication);
     }
+    return Future.value(state);
   }
 
   Future<ApplicationModelBase> apply({
@@ -53,15 +45,11 @@ class ApplicationViewModel extends StateNotifier<ApplicationModelBase?> {
       state = applicationResponse;
 
       return applicationResponse;
+    } on ApplicationModelError catch (e) {
+      state = e;
     } catch (e) {
-      if (e is ApplicationModelError) {
-        state = e;
-      } else {
-        state = ApplicationModelError(message: '에외발생 - $e');
-      }
-
-      // 반환되는 값은 `ApplicationModelError`임
-      return Future.value(state);
+      state = ApplicationModelError(message: '에외발생 - $e', type: ApplicationModelType.apply);
     }
+    return Future.value(state);
   }
 }

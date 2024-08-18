@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/ApplicationViewModel.dart';
+import 'package:usw_circle_link/views/widgets/AlertTextDialog.dart';
 import 'package:usw_circle_link/views/widgets/TextFontWidget.dart';
 
 class ApplicationWritingScreen extends ConsumerStatefulWidget {
@@ -29,24 +30,35 @@ class _ApplicationWritingScreenState
     ref.listen<ApplicationModelBase?>(applicationViewModelProvider,
         (ApplicationModelBase? previous, ApplicationModelBase? next) {
       logger.d(next.toString());
-      if (next is ApplicationModelComplete) {
-        logger.d('지원서 작성 성공! - ${next.message}');
-        //지원서 작성 완료 페이지로 라우팅
-      }
       if (next is ApplicationModel) {
-        logger.d('지원서 url : ${next.data}');
-        context.go('/application_writing/${Uri.encodeComponent(next.data)}');
-      }
-      if (next is ApplicationModelError) {
-        switch (next.errorType) {
-          case ApplicationModelErrorType.getApplication:
-            logger.d('지원서 불러오기 실패 : ${next}');
+        switch (next.type) {
+          case ApplicationModelType.getApplication:
+            logger.d('지원서 url : ${next.data}');
+            context.go(
+                '/application_writing/webview/${Uri.encodeComponent(next.data!)}');
             break;
-          case ApplicationModelErrorType.apply:
-            logger.d('지원서 작성 실패 : ${next}');
+          case ApplicationModelType.apply:
+            logger.d('지원서 제출 성공! - ${next.message}');
+            // TODO:지원서 제출 완료 페이지로 라우팅
             break;
           default:
-            logger.d('@ : ${next}');
+            logger.e('예외발생! : $next');
+            break;
+        }
+      }
+      if (next is ApplicationModelError) {
+        switch (next.type) {
+          case ApplicationModelType.getApplication:
+            logger.d('지원서 불러오기 실패 : $next');
+            showAlertDialog(context, "일시적으로 지원서를 불러올 수 없습니다.\n잠시후에 다시 시도해주세요!");
+            break;
+          case ApplicationModelType.apply:
+            logger.d('지원서 제출 실패 : $next');
+            showAlertDialog(context, "일시적으로 지원제출을 할 수 없습니다.\n잠시후에 다시 시도해주세요!");
+            break;
+          default:
+            logger.e('예외발생! : $next');
+            break;
         }
       }
     });
@@ -98,11 +110,14 @@ class _ApplicationWritingScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () async {
-                              await ref
-                                  .read(applicationViewModelProvider.notifier)
-                                  .getApplication(clubId);
-                            },
+                            onPressed: state is ApplicationModelLoading
+                                ? null
+                                : () async {
+                                    await ref
+                                        .read(applicationViewModelProvider
+                                            .notifier)
+                                        .getApplication(clubId);
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
                               side: const BorderSide(
@@ -162,7 +177,7 @@ class _ApplicationWritingScreenState
                           } else {
                             // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
                             setState(() {
-                              value = false;
+                              isDone = false;
                             });
                           }
                           logger.d('지원서 작성 완료에 동의함 : $isDone');
@@ -183,7 +198,8 @@ class _ApplicationWritingScreenState
                                         clubId: clubId,
                                         aplictGoogleFormUrl: state.data!);
                               } else {
-                                // 지원서 작성 완료 후 동의함 체크 부탁~
+                                showAlertDialog(
+                                    context, "지원서 작성 후 동의함 체크 부탁드립니다!");
                               }
                             },
                             style: OutlinedButton.styleFrom(
@@ -205,6 +221,17 @@ class _ApplicationWritingScreenState
                   ),
                 ),
               ),
+            ));
+  }
+
+  void showAlertDialog(BuildContext context, String text) async {
+    await showDialog(
+        context: context,
+        builder: (_) => AlertTextDialog(
+              text: text,
+              onConfirmPressed: () {
+                Navigator.of(context).pop();
+              },
             ));
   }
 }

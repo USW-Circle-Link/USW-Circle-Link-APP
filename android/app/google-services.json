@@ -1,0 +1,67 @@
+{
+  "project_info": {
+    "project_number": "189705439962",
+    "project_id": "usw-circle-link",
+    "storage_bucket": "usw-circle-link.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189705439962:android:3bef59236e624d529873e3",
+        "android_client_info": {
+          "package_name": "Usw.Circle.Link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHDObNz_8-GenD5mEJX7W2lP4sLVvne6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189705439962:android:e748fd22d6a039689873e3",
+        "android_client_info": {
+          "package_name": "com.example.usw_circle_l"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHDObNz_8-GenD5mEJX7W2lP4sLVvne6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:189705439962:android:c7594de8c05d67dc9873e3",
+        "android_client_info": {
+          "package_name": "com.example.usw_circle_link"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHDObNz_8-GenD5mEJX7W2lP4sLVvne6M"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

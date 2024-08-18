@@ -2,16 +2,14 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/ApplicationModel.dart';
-import 'package:usw_circle_link/models/ChangePWModel.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/UserModel.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ApplicationRepository(
-    baseUrl: 'http://$host:$port/user/me',
+    baseUrl: 'http://$host:$port/apply',
     dio: dio,
   );
 });
@@ -29,35 +27,44 @@ class ApplicationRepository {
     required int clubId,
   }) async {
     final response = await dio.get(
-      '$baseUrl/apply/$clubId',
-      options: Options(headers: {'accessToken': 'false'}),
+      '$baseUrl/$clubId',
     );
 
-    logger.d('${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d('${response.data}');
+
+    logger.d('getApplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return ApplicationModel.fromJson(response.data);
+      return ApplicationModel.fromJson(response.data)
+          .setType(ApplicationModelType.getApplication);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).type(ApplicationModelErrorType.getApplication);
+      throw ApplicationModelError.fromJson(response.data)
+          .setType(ApplicationModelType.getApplication);
     }
   }
 
-  Future<ApplicationModelComplete> apply({
+  Future<ApplicationModel> apply({
     required int clubId,
     required String aplictGoogleFormUrl,
   }) async {
-    final response = await dio.post('$baseUrl/apply/$clubId',
+    final response = await dio.post('$baseUrl/$clubId',
         data: {
           'aplictGoogleFormUrl': aplictGoogleFormUrl,
         },
         options: Options(headers: {'accessToken': 'true'}));
 
+    logger.d('${response.data}');
+
+    logger.d('apply - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
     if (response.statusCode == 200) {
-      return ApplicationModelComplete.fromJson(response.data);
+      return ApplicationModel.fromJson(response.data)
+          .setType(ApplicationModelType.apply);
     } else {
       // Bad Request
-      throw ApplicationModelError.fromJson(response.data).type(ApplicationModelErrorType.apply);
+      throw ApplicationModelError.fromJson(response.data)
+          .setType(ApplicationModelType.apply);
     }
   }
 }
