@@ -372,7 +372,7 @@ Widget UswClubList() {
                 ),
                 onTap: () {
                   Navigator.push(
-                    context,ㅌ
+                    context,
                     MaterialPageRoute(builder: (context) => CircleScreen(token: "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiI0NDkwNjIxNy0yMzQzLTRkYjgtYmZiZC1mY2M5MzVmM2M2YzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNzkzMDQwLCJleHAiOjE3MjM3OTQ4NDB9.z_Cggg58T0IPYgmjkfOmHMSLqkKzeVSSMe0Gj4ZJDnQ",), // 새로운 화면으로 전환
                   ));
                 },
