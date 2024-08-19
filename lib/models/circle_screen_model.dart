@@ -1,7 +1,9 @@
+import 'package:usw_circle_link/utils/logger/logger.dart';
+
 class ClubIntro {
-  final int clubId;
+  final int? clubId;
   final String mainPhotoPath;
-  final String? introPhotoPath;
+  final List<dynamic>? introPhotoPath;
   final String clubName;
   final String leaderName;
   final String leaderHp;
@@ -10,7 +12,7 @@ class ClubIntro {
   final String recruitmentStatus;
 
   ClubIntro({
-    required this.clubId,
+    this.clubId,
     required this.mainPhotoPath,
     this.introPhotoPath,
     required this.clubName,
@@ -22,15 +24,16 @@ class ClubIntro {
   });
 
   factory ClubIntro.fromJson(Map<String, dynamic> json) {
+    logger.d(json);
     return ClubIntro(
       clubId: json['clubId'],
-      mainPhotoPath: json['mainPhotoPath'],
-      introPhotoPath: json['introPhotoPath'],
+      mainPhotoPath: json['mainPhoto'],
+      introPhotoPath: json['introPhotos'],
       clubName: json['clubName'],
       leaderName: json['leaderName'],
       leaderHp: json['leaderHp'],
       clubInsta: json['clubInsta'],
-      introContent: json['introContent'],
+      introContent: json['clubIntro'],
       recruitmentStatus: json['recruitmentStatus'],
     );
   }

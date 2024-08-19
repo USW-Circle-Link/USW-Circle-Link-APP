@@ -1,13 +1,17 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:permission_handler/permission_handler.dart';  
+=======
+import 'package:go_router/go_router.dart';
+>>>>>>> develop
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
@@ -20,9 +24,9 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key, this.haveToFetch = true});
+  MainScreen({super.key, required this.haveToFetch});
 
-  bool? haveToFetch;
+  bool haveToFetch;
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -36,6 +40,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
     _requestNotificationPermission();
     initializeFCM();
   }
@@ -53,6 +58,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       provisional: false,
       sound: true,
     );
+=======
+>>>>>>> develop
 
     print('User granted permission: ${settings.authorizationStatus}');
 
@@ -67,27 +74,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         await openAppSettings();
       }
     }
-  }
-
-  // FCM 초기화 및 백그라운드 메시지 핸들러 설정
-  void initializeFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      final notificationBody = message.notification?.body ?? 'No message body';
-      ref.read(notificationProvider.notifier).addNotification(notificationBody);
-    });
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  // 백그라운드 메시지 핸들러
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    final notificationBody = message.notification?.body ?? 'No message body';
-
-    // SharedPreferences를 사용하여 백그라운드에서 알림을 저장
-    final prefs = await SharedPreferences.getInstance();
-    final notifications = prefs.getStringList('notifications') ?? [];
-    notifications.add(notificationBody);
-    await prefs.setStringList('notifications', notifications);
   }
 
   void _showOverlay(BuildContext context) {
@@ -113,7 +99,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((duration) {
+<<<<<<< HEAD
       if (widget.haveToFetch ?? true) {
+=======
+      if (widget.haveToFetch) {
+>>>>>>> develop
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }
@@ -258,7 +248,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ],
             ),
             circleListState is CircleListModel
-                ? Expanded(child: CircleList(state: circleListState))
+                ? Expanded(
+                    child: CircleList(
+                    state: circleListState,
+                    onItemClicked: (clubId) {
+                      context.go('/circle?clubId=1');
+                    },
+                  ))
                 : Container(),
           ],
         ),
@@ -339,5 +335,10 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
 
   void updateList() {
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

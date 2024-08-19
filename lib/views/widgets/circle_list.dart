@@ -6,15 +6,17 @@ class CircleList extends StatelessWidget {
   const CircleList({
     Key? key,
     required this.state,
+    required this.onItemClicked,
   }) : super(key: key);
 
   final CircleListModel state;
+  final Function(int clubId) onItemClicked;
 
   @override
   Widget build(BuildContext context) {
     return ListView(
       children: state.data.getClassifiedList().entries.map((entry) {
-        return CircleGroup(department: entry);
+        return CircleGroup(department: entry, onItemClicked: onItemClicked);
       }).toList(),
     );
   }
