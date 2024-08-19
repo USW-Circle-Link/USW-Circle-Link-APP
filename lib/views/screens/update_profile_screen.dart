@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/update_profile_model.dart';
 import 'package:usw_circle_link/repositories/update_profile_repository.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
@@ -138,8 +139,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     });
   }
 
-  void fetchProfileData() {
-    ref.read(getProfileProvider.future).then((profile) {
+  Future<void> fetchProfileData() async {
+    try {
+      final profile = await ref.read(getProfileProvider.future);
       if (mounted && profile != null) {
         setState(() {
           nameController.text = profile.userName;
@@ -150,10 +152,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           isInitialized = true;
         });
       }
-    }).catchError((error) {
+    } catch (error) {
       print('Error fetching profile: $error');
-    });
+    }
   }
+
 
 
 
@@ -460,15 +463,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             onPressed: () {
               setState(() {
                 isNameValid = validateName(nameController.text);
-                isPhoneNumberValid =
-                    validatePhoneNumber(phonenumberController.text);
-                isStudentNumberValid =
-                    validateStudentNumber(studentnumberController.text);
+                isPhoneNumberValid = validatePhoneNumber(phonenumberController.text);
+                isStudentNumberValid = validateStudentNumber(studentnumberController.text);
               });
 
-              if (isNameValid &&
-                  isPhoneNumberValid &&
-                  isStudentNumberValid) {
+              if (isNameValid && isPhoneNumberValid && isStudentNumberValid) {
                 final updatedProfile = Circle(
                   userName: nameController.text,
                   studentNumber: studentnumberController.text,
@@ -477,9 +476,22 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                 );
 
                 ref.read(updateProfileViewModel(updatedProfile).future).then((_) {
-                  showalarmCustomDialog(context).then((_) {
-                    Navigator.pop(context);
-                  });
+                  // 프로필 데이터를 새로고침하여 다시 불러옴
+                  ref.refresh(getProfileProvider);
+
+                  // UI 상태 처리
+                  ref.watch(getProfileProvider).when(
+                    data: (profile) {
+                      // 데이터가 성공적으로 업데이트되었으면 다이얼로그를 표시하고 메인 화면으로 이동
+                      showalarmCustomDialog(context).then((_) {
+                        if (mounted) {
+                          context.go("/");
+                        }
+                      });
+                    },
+                    loading: () => CircularProgressIndicator(), // 로딩 중일 때 UI 처리
+                    error: (err, stack) => Text('Error: $err'), // 에러 발생 시 UI 처리
+                  );
                 }).catchError((error) {
                   // 오류 처리
                   print('Error: $error');
@@ -487,6 +499,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
               }
             },
           )
+
         ],
       ),
     );
@@ -667,10 +680,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                 SizedBox(height: 1.h),
                 TextButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => MainScreen()),
-                    );
+                    if (mounted) {
+                      context.go("/", extra: true);
+                    }
                   },
                   child: Text(
                     "확인",
