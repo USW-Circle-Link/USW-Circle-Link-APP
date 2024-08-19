@@ -34,12 +34,9 @@ dependencies:
   # UI
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.0.10+1
-
-
-
+  carousel_slider: ^4.2.1
+  smooth_page_indicator: ^1.0.0+2
   flutter_inappwebview: ^5.8.0
-
-
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -69,6 +66,8 @@ dependencies:
   # Firebase
   firebase_messaging: ^15.0.4
   firebase_core: ^3.3.0
+
+  # International
   intl: ^0.19.0
 
   # url_lancher
