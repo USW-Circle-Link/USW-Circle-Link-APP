@@ -28,6 +28,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
 
+   @override
+  void initState() {
+    super.initState();
+
+    // ViewModel을 통해 FCM 초기화
+    ref.read(notificationViewModelProvider).initializeFCM();
+  }
+
+
   void _showOverlay(BuildContext context) {
     if (_overlayEntry == null) {
       _overlayEntry = _createOverlayEntry(context);

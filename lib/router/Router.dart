@@ -14,6 +14,7 @@ import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
+import 'package:usw_circle_link/views/screens/terms_of_service_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
@@ -107,9 +108,14 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: ':noticeId/detail',
-                builder: (_, state) => NoticeDetailScreen(noticeId: int.parse(state.pathParameters['noticeId']!)),
+                builder: (_, state) => NoticeDetailScreen(
+                    noticeId: int.parse(state.pathParameters['noticeId']!)),
               ),
             ],
+          ),
+          GoRoute(
+            path: 'tems_of_serice',
+            builder: (_, __) => TermsOfServiceScreen(),
           ),
         ],
       ),

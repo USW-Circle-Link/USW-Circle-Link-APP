@@ -71,6 +71,9 @@ dependencies:
   firebase_core: ^3.3.0
   intl: ^0.19.0
 
+  # url_lancher
+  url_launcher: ^6.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

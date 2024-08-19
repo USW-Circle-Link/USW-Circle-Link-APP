@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
+import 'package:usw_circle_link/viewmodels/my_circle_view_model.dart';
 
 class MyCircleScreen extends ConsumerWidget {
   const MyCircleScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYjRkYTMzZi1mMzJhLTQ2OWItYjUzOC0wYWU5NGE4YzQyYzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzOTgxOTQxLCJleHAiOjE3MjM5ODM3NDF9.T0wtZmfJwdZ2Msp038NepAmSegWBxR1sf73iU0kki4U';
-    final circlesAsyncValue = ref.watch(circleListProvider(token));
+
+    final circlesAsyncValue = ref.watch(MyCircleListProvider);
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),

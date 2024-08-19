@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/models/Circle.dart';
+import 'package:usw_circle_link/models/update_profile_model.dart';
+import 'package:usw_circle_link/repositories/update_profile_repository.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
@@ -30,7 +31,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   bool isPhoneNumberValid = true;
   bool isStudentNumberValid = true;
 
-  final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYjRkYTMzZi1mMzJhLTQ2OWItYjUzOC0wYWU5NGE4YzQyYzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzOTgxOTQxLCJleHAiOjE3MjM5ODM3NDF9.T0wtZmfJwdZ2Msp038NepAmSegWBxR1sf73iU0kki4U';
+
 
   final Map<String, List<String>> collegeMajorMap = {
     '인문사회융합대학': [
@@ -138,8 +139,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   }
 
   void fetchProfileData() {
-    ref.read(updateProfileViewmodel(token).future).then((profile) {
-      if (mounted) {
+    ref.read(getProfileProvider.future).then((profile) {
+      if (mounted && profile != null) {
         setState(() {
           nameController.text = profile.userName;
           phonenumberController.text = profile.userHp;
@@ -149,8 +150,12 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           isInitialized = true;
         });
       }
+    }).catchError((error) {
+      print('Error fetching profile: $error');
     });
   }
+
+
 
   @override
   void dispose() {
@@ -178,7 +183,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileAsyncValue = ref.watch(updateProfileViewmodel(token));
+    final profileAsyncValue = ref.watch(getProfileProvider);
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -471,7 +476,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   major: selectedMajor ?? departmentController.text,
                 );
 
-                ref.read(ProfileProvider).updateProfile(token, updatedProfile).then((_) {
+                ref.read(updateProfileViewModel(updatedProfile).future).then((_) {
                   showalarmCustomDialog(context).then((_) {
                     Navigator.pop(context);
                   });
