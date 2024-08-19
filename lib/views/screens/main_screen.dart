@@ -19,7 +19,7 @@ import 'package:usw_circle_link/views/widgets/circle_list.dart';
 class MainScreen extends ConsumerStatefulWidget {
   MainScreen({super.key, this.haveToFetch = true});
 
-  bool haveToFetch;
+  bool? haveToFetch;
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -64,7 +64,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch) {
+      if (widget.haveToFetch??true) {
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }
