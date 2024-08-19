@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
+import 'package:usw_circle_link/notifier/Notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -24,6 +24,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
+
+   @override
+  void initState() {
+    super.initState();
+
+    // ViewModel을 통해 FCM 초기화
+    ref.read(notificationViewModelProvider).initializeFCM();
+  }
+
 
   void _showOverlay(BuildContext context) {
     if (_overlayEntry == null) {

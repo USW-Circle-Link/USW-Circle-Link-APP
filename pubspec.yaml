@@ -73,6 +73,9 @@ dependencies:
 
   smooth_page_indicator: ^1.0.0+2
 
+  # url_lancher
+  url_launcher: ^6.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

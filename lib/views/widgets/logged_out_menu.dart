@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class LoggedOutMenu extends StatelessWidget {
@@ -84,13 +86,23 @@ class LoggedOutMenu extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     TextButton(
-                      onPressed: () {},
+                      onPressed: () => context.go('/tems_of_serice'),
                       child: TextFontWidget.fontRegular(
                           text: '이용약관',
                           fontSize: 12.sp,
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
+                     TextButton(
+                      onPressed:  _launchURL,
+                      
+                      child: TextFontWidget.fontRegular(
+                          text: '피드백',
+                          fontSize: 12.sp,
+                          color: Colors.black,
+                          fontweight: FontWeight.w500),
+                    ),
+
                   ],
                 ),
               ),
@@ -101,6 +113,17 @@ class LoggedOutMenu extends StatelessWidget {
     );
   }
 }
+
+void _launchURL() async {
+    const url = '$feedback'; 
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'URL을 열 수 없습니다: $url';
+    }
+  }
+
 
 Widget buildDrawerItem({
   required String title,
