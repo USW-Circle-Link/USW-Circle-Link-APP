@@ -2,6 +2,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Background message handler
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  final notificationBody = message.notification?.body ?? 'No message body';
+
+  // SharedPreferences를 사용하여 백그라운드에서도 알림을 저장
+  final prefs = await SharedPreferences.getInstance();
+  final notifications = prefs.getStringList('notifications') ?? [];
+  notifications.add(notificationBody);
+  await prefs.setStringList('notifications', notifications);
+}
+
 class NotificationStateNotifier extends StateNotifier<List<String>> {
   NotificationStateNotifier() : super([]) {
     _loadNotifications();
@@ -50,11 +61,12 @@ class NotificationViewModel {
   NotificationViewModel({required this.ref});
 
   void initializeFCM() {
+    // 백그라운드 메시지 핸들러 등록
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       final notificationBody = message.notification?.body ?? 'No message body';
       ref.read(notificationProvider.notifier).addNotification(notificationBody);
-
     });
   }
-
 }
