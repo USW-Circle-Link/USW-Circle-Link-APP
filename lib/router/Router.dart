@@ -11,6 +11,7 @@ import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
+import 'package:usw_circle_link/views/screens/terms_of_service_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
@@ -97,6 +98,10 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'update_profile',
             builder: (_, __) => UpdateProfileScreen(),
+          ),
+           GoRoute(
+            path: 'tems_of_serice',
+            builder: (_, __) => TermsOfServiceScreen(),
           ),
         ],
       ),

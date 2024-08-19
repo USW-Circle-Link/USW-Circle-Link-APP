@@ -1,3 +1,4 @@
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -38,3 +39,22 @@ final notificationProvider =
     StateNotifierProvider<NotificationStateNotifier, List<String>>((ref) {
   return NotificationStateNotifier();
 });
+
+final notificationViewModelProvider = Provider<NotificationViewModel>((ref) {
+  return NotificationViewModel(ref: ref);
+});
+
+class NotificationViewModel {
+  final Ref ref;
+
+  NotificationViewModel({required this.ref});
+
+  void initializeFCM() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final notificationBody = message.notification?.body ?? 'No message body';
+      ref.read(notificationProvider.notifier).addNotification(notificationBody);
+
+    });
+  }
+
+}
