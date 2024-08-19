@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:permission_handler/permission_handler.dart';  
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -35,10 +36,37 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
+    _requestNotificationPermission();
     initializeFCM();
+  }
 
-    // ViewModel을 통해 FCM 초기화
-    ref.read(notificationViewModelProvider).initializeFCM();
+  // 알림 권한 요청
+  Future<void> _requestNotificationPermission() async {
+    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+
+    final NotificationSettings settings = await messaging.requestPermission(
+      alert: true,
+      announcement: false,
+      badge: true,
+      carPlay: false,
+      criticalAlert: false,
+      provisional: false,
+      sound: true,
+    );
+
+    print('User granted permission: ${settings.authorizationStatus}');
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print("Notification permission granted.");
+      ref.read(notificationViewModelProvider).initializeFCM();
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print("Notification permission granted provisionally.");
+    } else {
+      print("Notification permission denied.");
+      if (settings.authorizationStatus == AuthorizationStatus.denied) {
+        await openAppSettings();
+      }
+    }
   }
 
   // FCM 초기화 및 백그라운드 메시지 핸들러 설정
@@ -71,7 +99,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     }
   }
 
-
   OverlayEntry _createOverlayEntry(BuildContext context) {
     return OverlayEntry(
       builder: (context) => _NotificationOverlay(
@@ -85,30 +112,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-    // null -> 로그아웃 상태
-    // UserModel -> 로그인 상태
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch??true) {
+      if (widget.haveToFetch ?? true) {
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }
     });
+
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
-      // 유저 정보 불러오기
       logger.d(next);
       ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-      //ref.read(profileViewModelProvider.notifier).getProfile();
     });
+
     final circleListState = ref.watch(mainViewModelProvider);
     ref.listen(mainViewModelProvider, (previous, next) {
       logger.d(next);
     });
+
     final profileState = ref.watch(profileViewModelProvider);
     ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(

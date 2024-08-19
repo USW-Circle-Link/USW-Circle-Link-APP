@@ -2,7 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Background message handler
+// 백그라운드 메시지 핸들러
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   final notificationBody = message.notification?.body ?? 'No message body';
 
@@ -46,8 +46,7 @@ class NotificationStateNotifier extends StateNotifier<List<String>> {
 }
 
 // StateNotifierProvider 정의
-final notificationProvider =
-    StateNotifierProvider<NotificationStateNotifier, List<String>>((ref) {
+final notificationProvider = StateNotifierProvider<NotificationStateNotifier, List<String>>((ref) {
   return NotificationStateNotifier();
 });
 
