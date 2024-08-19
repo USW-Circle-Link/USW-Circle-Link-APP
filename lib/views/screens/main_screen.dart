@@ -17,7 +17,9 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key});
+  MainScreen({super.key, this.haveToFetch = true});
+
+  bool haveToFetch;
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -28,14 +30,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
 
-   @override
+  @override
   void initState() {
     super.initState();
 
     // ViewModel을 통해 FCM 초기화
     ref.read(notificationViewModelProvider).initializeFCM();
   }
-
 
   void _showOverlay(BuildContext context) {
     if (_overlayEntry == null) {
@@ -62,15 +63,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
-    WidgetsBinding.instance.addPostFrameCallback((duration){
-      // ref.read(profileViewModelProvider.notifier).getProfile();
+    WidgetsBinding.instance.addPostFrameCallback((duration) {
+      if (widget.haveToFetch) {
+        ref.read(profileViewModelProvider.notifier).getProfile();
+        widget.haveToFetch = false;
+      }
     });
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       // 유저 정보 불러오기
       logger.d(next);
       ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-      ref.read(profileViewModelProvider.notifier).getProfile();
+      //ref.read(profileViewModelProvider.notifier).getProfile();
     });
     final circleListState = ref.watch(mainViewModelProvider);
     ref.listen(mainViewModelProvider, (previous, next) {

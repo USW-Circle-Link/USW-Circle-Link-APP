@@ -31,7 +31,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, __) => MainScreen(),
+        builder: (_, state) => MainScreen(haveToFetch:state.extra as bool),
         routes: [
           GoRoute(
             path: 'login',
