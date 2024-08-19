@@ -5,6 +5,7 @@ import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/views/screens/application_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
 import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
+import 'package:usw_circle_link/views/screens/circle_screen.dart';
 import 'package:usw_circle_link/views/screens/email_verification_screen.dart';
 import 'package:usw_circle_link/views/screens/find_id_screen.dart';
 import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
@@ -117,6 +118,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'tems_of_serice',
             builder: (_, __) => TermsOfServiceScreen(),
           ),
+ 
         ],
       ),
     ],

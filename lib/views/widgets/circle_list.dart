@@ -6,9 +6,11 @@ class CircleList extends StatelessWidget {
   const CircleList({
     Key? key,
     required this.state,
+    required this.onItemClicked,
   }) : super(key: key);
 
   final CircleListModel state;
+  final Function(int clubId) onItemClicked;
 
   @override
   Widget build(BuildContext context) {

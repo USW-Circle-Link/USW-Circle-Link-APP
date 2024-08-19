@@ -1,12 +1,12 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
@@ -35,31 +35,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   void initState() {
     super.initState();
-    initializeFCM();
 
     // ViewModel을 통해 FCM 초기화
     ref.read(notificationViewModelProvider).initializeFCM();
-  }
-
-  // FCM 초기화 및 백그라운드 메시지 핸들러 설정
-  void initializeFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      final notificationBody = message.notification?.body ?? 'No message body';
-      ref.read(notificationProvider.notifier).addNotification(notificationBody);
-    });
-
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  // 백그라운드 메시지 핸들러
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    final notificationBody = message.notification?.body ?? 'No message body';
-
-    // SharedPreferences를 사용하여 백그라운드에서 알림을 저장
-    final prefs = await SharedPreferences.getInstance();
-    final notifications = prefs.getStringList('notifications') ?? [];
-    notifications.add(notificationBody);
-    await prefs.setStringList('notifications', notifications);
   }
 
   void _showOverlay(BuildContext context) {
@@ -70,7 +48,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       (_overlayEntry!.builder as _NotificationOverlayState).updateList();
     }
   }
-
 
   OverlayEntry _createOverlayEntry(BuildContext context) {
     return OverlayEntry(
@@ -89,7 +66,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch??true) {
+      if (widget.haveToFetch ?? true) {
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }
@@ -232,7 +209,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ],
             ),
             circleListState is CircleListModel
-                ? Expanded(child: CircleList(state: circleListState))
+                ? Expanded(
+                    child: CircleList(
+                    state: circleListState,
+                    onItemClicked: (clubId) {
+                      context.go('/');
+                    },
+                  ))
                 : Container(),
           ],
         ),
