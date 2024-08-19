@@ -15,8 +15,7 @@ class Applicationcirclescreen extends ConsumerStatefulWidget {
 class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescreen> {
   @override
   Widget build(BuildContext context) {
-    final token = 'eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhYjRkYTMzZi1mMzJhLTQ2OWItYjUzOC0wYWU5NGE4YzQyYzEiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzOTgxOTQxLCJleHAiOjE3MjM5ODM3NDF9.T0wtZmfJwdZ2Msp038NepAmSegWBxR1sf73iU0kki4U';
-    final circlesAsyncValue = ref.watch(circleListProvider(token));
+    final circlesAsyncValue = ref.watch(applicationCircleListProvider);
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
