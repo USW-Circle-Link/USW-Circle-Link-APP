@@ -3,13 +3,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
 
 
 class CircleScreen extends ConsumerStatefulWidget {
-  final String token;
+  final String clubId;
 
-  const CircleScreen({required this.token, super.key});
+  const CircleScreen({required this.clubId, super.key});
 
   @override
   ConsumerState<CircleScreen> createState() => _CircleScreenState();
@@ -27,7 +28,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
 
   void fetchClubIntro() async {
     try {
-      await ref.read(clubIntroProvider.notifier).fetchClubIntro(widget.token);
+      await ref.read(clubIntroProvider.notifier).fetchClubIntro(widget.clubId);
       serverError = false;
     } catch (e) {
       serverError = true;
@@ -107,7 +108,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 SizedBox(height: 12.h),
                 serverError || clubIntro == null || clubIntro.recruitmentStatus == "CLOSE"
                     ? CustomButton(text: '모집마감', isEnabled: false, onPressed: () {})
-                    : CustomButton(text: '지원하기', isEnabled: true, onPressed: () {}),
+                    : CustomButton(text: '지원하기', isEnabled: true, onPressed: () {
+                      context.go('/circle/application_writing?clubId=${widget.clubId}',);
+                }),
               ],
             ),
           ),

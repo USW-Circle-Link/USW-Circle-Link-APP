@@ -34,6 +34,14 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: '/',
         builder: (_, state) => MainScreen(haveToFetch:state.extra as bool?),
         routes: [
+          GoRoute(path: 'circle',
+          builder: (_, state) => CircleScreen(clubId: state.uri.queryParameters["clubId"]! ,),
+          routes: [
+            GoRoute(
+                path: 'application_writing',
+                builder: (_, state) => ApplicationWritingScreen(),
+                routes: [webviewRouter]),
+          ]),
           GoRoute(
             path: 'login',
             builder: (_, __) => LoginScreen(),
@@ -82,10 +90,6 @@ final routerProvider = Provider<GoRouter>((ref) {
               ),
             ],
           ),
-          GoRoute(
-              path: 'application_writing',
-              builder: (_, __) => ApplicationWritingScreen(),
-              routes: [webviewRouter]),
           GoRoute(
             path: 'change_pw',
             builder: (_, __) => ChangePwScreen(),
