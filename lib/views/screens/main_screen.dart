@@ -1,13 +1,15 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-<<<<<<< HEAD
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';  
-=======
+import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
->>>>>>> develop
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -39,41 +41,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    super.initState();
-<<<<<<< HEAD
-    _requestNotificationPermission();
     initializeFCM();
+    super.initState();
   }
 
-  // 알림 권한 요청
-  Future<void> _requestNotificationPermission() async {
-    final FirebaseMessaging messaging = FirebaseMessaging.instance;
+  // FCM 초기화 및 백그라운드 메시지 핸들러 설정
+  void initializeFCM() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      final notificationBody = message.notification?.body ?? 'No message body';
+      ref.read(notificationProvider.notifier).addNotification(notificationBody);
+    });
 
-    final NotificationSettings settings = await messaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true,
-    );
-=======
->>>>>>> develop
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+  }
 
-    print('User granted permission: ${settings.authorizationStatus}');
-
-    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
-      print("Notification permission granted.");
-      ref.read(notificationViewModelProvider).initializeFCM();
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
-      print("Notification permission granted provisionally.");
-    } else {
-      print("Notification permission denied.");
-      if (settings.authorizationStatus == AuthorizationStatus.denied) {
-        await openAppSettings();
-      }
-    }
+  Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print("Handling a background message: ${message.messageId}");
   }
 
   void _showOverlay(BuildContext context) {
@@ -99,11 +84,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   @override
   Widget build(BuildContext context) {
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-<<<<<<< HEAD
-      if (widget.haveToFetch ?? true) {
-=======
       if (widget.haveToFetch) {
->>>>>>> develop
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }

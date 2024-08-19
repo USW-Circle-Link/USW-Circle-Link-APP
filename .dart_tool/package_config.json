@@ -146,6 +146,18 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "device_info_plus",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/device_info_plus-10.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "device_info_plus_platform_interface",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/device_info_plus_platform_interface-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/dio-5.6.0",
       "packageUri": "lib/",
@@ -800,6 +812,18 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "win32",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/win32-5.5.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "win32_registry",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/win32_registry-1.1.4",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
       "name": "xdg_directories",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/xdg_directories-1.0.4",
       "packageUri": "lib/",
@@ -824,7 +848,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-08-19T17:23:40.309327Z",
+  "generated": "2024-08-19T17:42:37.998734Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/jeong-woochang/development/flutter",

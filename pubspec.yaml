@@ -73,6 +73,9 @@ dependencies:
   # url_lancher
   url_launcher: ^6.3.0
 
+  # Permission
+  device_info_plus: ^10.1.2
+
   permission_handler: ^11.3.1
 
 dev_dependencies:
