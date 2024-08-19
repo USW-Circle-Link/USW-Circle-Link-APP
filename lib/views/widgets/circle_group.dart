@@ -5,9 +5,14 @@ import 'package:usw_circle_link/views/widgets/circle_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleGroup extends StatelessWidget {
-  const CircleGroup({Key? key, required this.department}) : super(key: key);
+  const CircleGroup({
+    Key? key,
+    required this.department,
+    required this.onItemClicked,
+  }) : super(key: key);
 
   final MapEntry<String, List<CircleListData>> department;
+  final Function(int clubId) onItemClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +39,8 @@ class CircleGroup extends StatelessWidget {
               itemCount: department.value.length,
               itemBuilder: (context, index) {
                 return CircleItem(
-                  imagePath: department.value[index].mainPhoto,
-                  title: department.value[index].clubName,
+                  circle: department.value[index],
+                  onItemClicked: onItemClicked,
                 );
               },
             ),

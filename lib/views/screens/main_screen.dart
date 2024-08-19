@@ -19,9 +19,9 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key, this.haveToFetch = true});
+  MainScreen({super.key, required this.haveToFetch});
 
-  bool? haveToFetch;
+  bool haveToFetch;
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -66,7 +66,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
     WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch ?? true) {
+      if (widget.haveToFetch) {
         ref.read(profileViewModelProvider.notifier).getProfile();
         widget.haveToFetch = false;
       }
@@ -213,7 +213,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     child: CircleList(
                     state: circleListState,
                     onItemClicked: (clubId) {
-                      context.go('/');
+                      context.go('/circle?clubId=1');
                     },
                   ))
                 : Container(),
@@ -296,5 +296,10 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
 
   void updateList() {
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

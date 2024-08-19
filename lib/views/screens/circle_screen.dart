@@ -131,9 +131,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                     height: 250.h,
                     child: clubIntro.introPhotoPath != null
                         ? CarouselSlider.builder(
-                      itemCount: 1,
+                      itemCount: clubIntro.introPhotoPath?.length??0,
                       itemBuilder: (context, index, realIndex) {
-                        return buildImage(clubIntro.introPhotoPath!, index);
+                        return buildImage(clubIntro.introPhotoPath![index], index);
                       },
                       options: CarouselOptions(
                         height: 250.h,

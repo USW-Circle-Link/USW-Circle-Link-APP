@@ -16,7 +16,7 @@ class CircleList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       children: state.data.getClassifiedList().entries.map((entry) {
-        return CircleGroup(department: entry);
+        return CircleGroup(department: entry, onItemClicked: onItemClicked);
       }).toList(),
     );
   }
