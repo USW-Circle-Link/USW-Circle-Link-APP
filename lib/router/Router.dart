@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/views/screens/application_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
@@ -10,6 +11,8 @@ import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
 import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
+import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
+import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
@@ -97,6 +100,16 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
             path: 'update_profile',
             builder: (_, __) => UpdateProfileScreen(),
+          ),
+          GoRoute(
+            path: 'notices',
+            builder: (_, __) => NoticeListScreen(),
+            routes: [
+              GoRoute(
+                path: ':noticeId/detail',
+                builder: (_, state) => NoticeDetailScreen(noticeId: int.parse(state.pathParameters['noticeId']!)),
+              ),
+            ],
           ),
         ],
       ),

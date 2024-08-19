@@ -10,7 +10,7 @@ class DefaultInterceptor extends Interceptor {
     RequestInterceptorHandler handler,
   ) async {
     options.validateStatus = (status) {
-      return status != null && status < 500;
+      return status != null && status < 500 && status != 401;
     };
 
     super.onRequest(options, handler);
@@ -18,6 +18,6 @@ class DefaultInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
-    return handler.reject(err);
+    return handler.next(err);
   }
 }

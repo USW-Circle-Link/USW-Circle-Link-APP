@@ -37,7 +37,6 @@ class TokenInterceptor extends Interceptor {
       // 실제 토큰으로 대체
       options.headers.addAll({
         'Authorization': 'Bearer $accessToken',
-        // 'Authorization': 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJkNDcyNjJjYi04YjZjLTQ4OTYtOGM4NC05YzkwMDIyNzMzNDUiLCJyb2xlIjoiVVNFUiIsImNsdWJJZHMiOlsxXSwiaWF0IjoxNzIzNTQzOTQ0LCJleHAiOjE3MjM1NDU3NDR9.m0XOvjuvbDT2pVGeHPVfOSgCL6Oa6-dCMctXGuCbL2A',
       });
     } else if (options.headers['refreshToken'] == 'true') {
       // 헤더 삭제
@@ -60,6 +59,7 @@ class TokenInterceptor extends Interceptor {
     // 토큰을 재발급받는 시도를 하고, 토큰이 재발급되면
     // 다시 새로운 토큰을 요청한다.
     final refreshToken = await storage.read(key: refreshTokenKey);
+    logger.d('refreshToken - $refreshToken');
 
     // refreshToken이 null이면 에러 반환
     if (refreshToken == null) {
@@ -70,6 +70,7 @@ class TokenInterceptor extends Interceptor {
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh = err.requestOptions.path == '/auth/refresh-token';
 
+    logger.d('isStatus401:$isStatus401/isPathRefresh:$isPathRefresh');
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
     if (isStatus401 && !isPathRefresh) {
       // 기존의 refresh token으로 새로운 accessToken 발급 시도
@@ -85,6 +86,11 @@ class TokenInterceptor extends Interceptor {
             },
           ),
         );
+
+        logger.d(response.data);
+
+        logger.d(
+            'refreshAccessToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
         final accessToken = response.data['accessToken'];
         final newRefreshToken = response.data['refreshToken'];

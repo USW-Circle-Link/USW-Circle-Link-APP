@@ -3,9 +3,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/models/profile_model.dart';
+import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
+import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/cloud_messaging.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
@@ -54,9 +57,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref.listen(userViewModelProvider, (previous, next) {
       // 유저 정보 불러오기
       logger.d(next);
+      ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
+      ref.read(profileViewModelProvider.notifier).getProfile();
     });
     final circleListState = ref.watch(mainViewModelProvider);
     ref.listen(mainViewModelProvider, (previous, next) {
+      logger.d(next);
+    });
+    final profileState = ref.watch(profileViewModelProvider);
+    ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
     return ScreenUtilInit(
@@ -111,7 +120,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        drawer: userState.value == null ? LoggedOutMenu() : LoggedInMenu(),
+        drawer: userState.value is UserModel && profileState is ProfileModel
+            ? LoggedInMenu(state: profileState)
+            : LoggedOutMenu(),
         body: Column(
           children: [
             Row(

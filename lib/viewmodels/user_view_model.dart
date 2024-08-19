@@ -76,7 +76,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       // secure storage에 Token 보관
       await storage.write(
           key: accessTokenKey, value: response.data.accessToken);
-      await storage.write(key: refreshTokenKey, value: response.data.refreshToken);
+      await storage.write(
+          key: refreshTokenKey, value: response.data.refreshToken);
       await storage.write(
           key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
 
@@ -126,7 +127,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
 
-      await authRepository.logout(accessToken: _accessToken??"");
+      await authRepository.logout(accessToken: _accessToken ?? "");
     } on UserModelError catch (e) {
       logger.d(e);
       rethrow;

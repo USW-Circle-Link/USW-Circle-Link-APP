@@ -1,4 +1,5 @@
 import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/models/notice_model.dart';
 
 const host = "15.164.246.244";
 const port = "8080";
@@ -12,6 +13,22 @@ const iatKey = 'iat';
 const expKey = 'exp';
 
 const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";
+
+var testNotices = <NoticeData>[
+  NoticeData(noticeId: 1, noticeTitle: 'test1', adminName: 'admin1', noticeCreatedAt: '2024-10-11'),
+  NoticeData(noticeId: 2, noticeTitle: 'test2', adminName: 'admin2', noticeCreatedAt: '2024-10-12'),
+  NoticeData(noticeId: 3, noticeTitle: 'test3', adminName: 'admin3', noticeCreatedAt: '2024-10-13'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
+];
 
 const testId = "user1";
 const testPassword = "1234";

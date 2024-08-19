@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class LoggedOutMenu extends StatelessWidget {
+class LoggedOutMenu extends ConsumerWidget {
   const LoggedOutMenu({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
       backgroundColor: const Color(0xffF0F2F5),
       width: 290.w,
@@ -69,7 +71,10 @@ class LoggedOutMenu extends StatelessWidget {
                 buildDrawerItem(
                   title: '공지 사항',
                   svgPath: 'assets/images/menubar4.svg',
-                  onTap: () => context.go('/login'),
+                  onTap: () {
+                    
+                    context.go('/notices');
+                  },
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
               ],

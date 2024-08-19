@@ -3,11 +3,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/profile_model.dart';
+import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class LoggedInMenu extends ConsumerStatefulWidget {
-  const LoggedInMenu({Key? key}) : super(key: key);
+  const LoggedInMenu({
+    Key? key,
+    required this.state,
+  }) : super(key: key);
+
+  final ProfileModel state;
 
   @override
   _LoggedInMenuState createState() => _LoggedInMenuState();
@@ -15,10 +22,6 @@ class LoggedInMenu extends ConsumerStatefulWidget {
 
 class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
   bool isMyInfoExpanded = false;
-
-  String username = "테스트";
-  String profileImage =
-      "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp";
 
   @override
   Widget build(BuildContext context) {
@@ -48,7 +51,8 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                           decoration: BoxDecoration(
                             image: DecorationImage(
                                 fit: BoxFit.cover,
-                                image: NetworkImage('https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp')),
+                                image: NetworkImage(
+                                    'https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp')),
                             borderRadius:
                                 BorderRadius.all(Radius.circular(27.r)),
                             color: Colors.redAccent,
@@ -56,7 +60,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
-                            text: username,
+                            text: widget.state.data.userName,
                             fontSize: 18.sp,
                             color: Colors.black,
                             fontweight: FontWeight.w600),
@@ -150,8 +154,9 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   title: '공지 사항',
                   svgPath: 'assets/images/menubar4.svg',
                   onTap: () {
-                    // 공지 사항 화면으로 이동
-                  },
+                    
+                    context.go('/notices');
+                    },
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
               ],
