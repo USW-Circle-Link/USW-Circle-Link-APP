@@ -1,19 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/notifier/AuthNotifier.dart';
-import 'package:usw_circle_link/views/screens/ApplicationCircleScreen.dart';
-import 'package:usw_circle_link/views/screens/ApplicationWritingScreen.dart';
-import 'package:usw_circle_link/views/screens/ChangePWScreen.dart';
-import 'package:usw_circle_link/views/screens/EmailVerificationScreen.dart';
-import 'package:usw_circle_link/views/screens/FindIDScreen.dart';
-import 'package:usw_circle_link/views/screens/FindPWScreen.dart';
-import 'package:usw_circle_link/views/screens/LoginScreen.dart';
-import 'package:usw_circle_link/views/screens/MainScreen.dart';
-import 'package:usw_circle_link/views/screens/MyCircleScreen.dart';
-import 'package:usw_circle_link/views/screens/SignUpScreen.dart';
-import 'package:usw_circle_link/views/screens/UpdateProfileScreen.dart';
-import 'package:usw_circle_link/views/screens/WebViewScreen.dart';
+import 'package:usw_circle_link/notifier/auth_notifier.dart';
+import 'package:usw_circle_link/views/screens/application_circle_screen.dart';
+import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
+import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
+import 'package:usw_circle_link/views/screens/email_verification_screen.dart';
+import 'package:usw_circle_link/views/screens/find_id_screen.dart';
+import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
+import 'package:usw_circle_link/views/screens/login_screen.dart';
+import 'package:usw_circle_link/views/screens/main_screen.dart';
+import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
+import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
+import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
+import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
 final webviewRouter = GoRoute(
   path: 'webview/:encodedUrl',
@@ -36,19 +35,19 @@ final routerProvider = Provider<GoRouter>((ref) {
             routes: [
               GoRoute(
                 path: 'find_id',
-                builder: (_, __) => FindIDScreen(),
+                builder: (_, __) => FindIdScreen(),
                 routes: [
                   webviewRouter,
                 ],
               ),
               GoRoute(
                 path: 'find_pw',
-                builder: (_, __) => FindPWScreen(),
+                builder: (_, __) => FindPwScreen(),
                 routes: [
                   webviewRouter,
                   GoRoute(
                     path: 'change_pw',
-                    builder: (_, state) => ChangePWScreen(
+                    builder: (_, state) => ChangePwScreen(
                       checkCurrentPassword: false,
                       uuid: state.uri.queryParameters['uuid'] ?? "",
                     ),
@@ -84,7 +83,7 @@ final routerProvider = Provider<GoRouter>((ref) {
               routes: [webviewRouter]),
           GoRoute(
             path: 'change_pw',
-            builder: (_, __) => ChangePWScreen(),
+            builder: (_, __) => ChangePwScreen(),
           ),
           webviewRouter,
           GoRoute(
@@ -103,10 +102,7 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
     initialLocation: '/',
-    // initialLocation: '/login/find_id/webview/${Uri.encodeComponent("https://dummy.restapiexample.com/api/v1/employees")}',
-    // initialLocation: '/login/sign_up/email_verification?account=${testId}&password=${testPassword}&userName=${testUserName}&telephone=${testTelephone}&studentNumber=${testStudentNumber}&major=${testMajor}',
     refreshListenable: provider,
-    //redirect: provider.redirectLogic,
     debugLogDiagnostics: true,
   );
 });

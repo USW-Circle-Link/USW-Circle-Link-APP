@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/viewmodels/CircleRepository.dart';
-import 'package:usw_circle_link/model/MyCircleModel.dart';
+import 'package:usw_circle_link/repositories/circle_repository.dart';
+import 'package:usw_circle_link/models/my_circle_model.dart';
 
 final circleRepositoryProvider = Provider<CircleRepository>((ref) {
   return CircleRepository();
