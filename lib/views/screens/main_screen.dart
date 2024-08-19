@@ -62,6 +62,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
     // null -> 로그아웃 상태
     // UserModel -> 로그인 상태
+    WidgetsBinding.instance.addPostFrameCallback((duration){
+      // ref.read(profileViewModelProvider.notifier).getProfile();
+    });
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       // 유저 정보 불러오기
