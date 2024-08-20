@@ -81,11 +81,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
-      ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
+      if (isAllSelected) {
+        ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
+      } else {
+        ref.read(mainViewModelProvider.notifier).fetchDepartmentCircleList();
+      }
     });
 
     final circleListState = ref.watch(mainViewModelProvider);
@@ -150,9 +153,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        drawer: userState.value is UserModel && profileState.value is ProfileModel
-            ? LoggedInMenu(state: profileState.value as ProfileModel)
-            : LoggedOutMenu(),
+        drawer:
+            userState.value is UserModel && profileState.value is ProfileModel
+                ? LoggedInMenu(state: profileState.value as ProfileModel)
+                : LoggedOutMenu(),
         body: Column(
           children: [
             Row(

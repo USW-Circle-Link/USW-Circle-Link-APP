@@ -11,7 +11,10 @@ import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class ApplicationWritingScreen extends ConsumerStatefulWidget {
-  const ApplicationWritingScreen({Key? key}) : super(key: key);
+  const ApplicationWritingScreen({Key? key, required this.clubId})
+      : super(key: key);
+
+  final int clubId;
 
   @override
   _ApplicationWritingScreenState createState() =>
@@ -21,8 +24,6 @@ class ApplicationWritingScreen extends ConsumerStatefulWidget {
 class _ApplicationWritingScreenState
     extends ConsumerState<ApplicationWritingScreen> {
   bool isDone = false;
-
-  final int clubId = 1;
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,6 @@ class _ApplicationWritingScreenState
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  // TODO : icon padding 문제
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -87,24 +87,38 @@ class _ApplicationWritingScreenState
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                          text: '지원하기',
-                          fontSize: 18.sp,
-                          color: Color(0xFF111111),
-                          fontweight: FontWeight.w600),
-                      SizedBox(width: 52.w, height: 52.h)
+                        text: '지원하기',
+                        fontSize: 18.sp,
+                        color: Color(0xFF111111),
+                        fontweight: FontWeight.w600,
+                      ),
+                      SizedBox(width: 52.w, height: 52.h),
                     ],
                   ),
                 ),
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 60.h),
+                  margin: EdgeInsets.only(top: 24.h),
                   padding: EdgeInsets.only(left: 32.w, right: 32.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          SvgPicture.asset('assets/images/ic_pen.svg'),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          TextFontWidget.fontRegular(
+                              text: '지원서 작성',
+                              fontSize: 14.sp,
+                              color: const Color(0xFF353549),
+                              fontweight: FontWeight.w600),
+                        ],
+                      ),
                       SizedBox(
-                        height: 32.h,
+                        height: 10.h,
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -116,10 +130,11 @@ class _ApplicationWritingScreenState
                                     await ref
                                         .read(applicationViewModelProvider
                                             .notifier)
-                                        .getApplication(clubId);
+                                        .getApplication(widget.clubId);
                                   },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xFF000000),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -134,20 +149,37 @@ class _ApplicationWritingScreenState
                                 fontweight: FontWeight.w600)),
                       ),
                       SizedBox(
-                        height: 90.h,
+                        height: 20.h,
+                      ),
+                      Row(
+                        children: [
+                          Icon(Icons.error_outline),
+                          SizedBox(
+                            width: 5.w,
+                          ),
+                          TextFontWidget.fontRegular(
+                              text: '지원서 제출 시 유의사항',
+                              fontSize: 16.sp,
+                              color: const Color(0xFF353549),
+                              fontweight: FontWeight.w900),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
                       ),
                       RichText(
                         textAlign: TextAlign.left,
                         text: TextSpan(
                           text: "지원서를 작성 완료 후 ",
                           style: TextStyle(
+                              height: 2,
                               fontFamily: 'Pretendard-Regular',
-                              fontSize: 14.sp,
+                              fontSize: 13.sp,
                               color: const Color(0xFF989898),
                               fontWeight: FontWeight.w400),
                           children: const [
                             TextSpan(
-                              text: "지원 완료 ",
+                              text: "지원서 제출하기 ",
                               style: TextStyle(
                                   color: Color(0xFF6E6EDE),
                                   fontWeight: FontWeight.w600),
@@ -162,29 +194,56 @@ class _ApplicationWritingScreenState
                                   fontWeight: FontWeight.w600),
                             ),
                             TextSpan(
-                              text: "에게 있습니다.\n신중히 작성후 '지원 완료' 버튼을 눌러 주세요.",
+                              text: "에게 있습니다.\n신중히 작성후 ",
                             ),
+                            TextSpan(
+                              text: "지원 완료 ",
+                              style: TextStyle(
+                                  color: Color(0xFF6E6EDE),
+                                  fontWeight: FontWeight.w600),
+                            ),
+                            TextSpan(text: "버튼을 눌러 주세요.")
                           ],
                         ),
                       ),
-                      Checkbox(
-                        value: isDone,
-                        onChanged: (bool? value) {
-                          if (state is ApplicationModel) {
-                            setState(() {
-                              isDone = value ?? false;
-                            });
-                          } else {
-                            // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
-                            setState(() {
-                              isDone = false;
-                            });
-                          }
-                          logger.d('지원서 작성 완료에 동의함 : $isDone');
-                        },
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          Checkbox(
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity,
+                            ),
+                            value: isDone,
+                            onChanged: (bool? value) {
+                              if (state is ApplicationModel) {
+                                setState(() {
+                                  isDone = value ?? false;
+                                });
+                              } else {
+                                // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
+                                setState(() {
+                                  isDone = false;
+                                  showAlertDialog(context, '지원서 작성을 먼저 눌러주세요!');
+                                });
+                              }
+                              logger.d('지원서 작성 완료에 동의함 : $isDone');
+                            },
+                          ),
+                          TextFontWidget.fontRegular(
+                              text: '유의사항을 확인했습니다',
+                              fontSize: 14.sp,
+                              color: const Color(0xFF353549),
+                              fontweight: FontWeight.w600),
+                        ],
                       ),
                       SizedBox(
-                        height: 12.h,
+                        height: 30.h,
                       ),
                       SizedBox(
                         width: double.infinity,
@@ -195,15 +254,16 @@ class _ApplicationWritingScreenState
                                 await ref
                                     .read(applicationViewModelProvider.notifier)
                                     .apply(
-                                        clubId: clubId,
+                                        clubId: widget.clubId,
                                         aplictGoogleFormUrl: state.data!);
                               } else {
                                 showAlertDialog(
-                                    context, "지원서 작성 후 동의함 체크 부탁드립니다!");
+                                    context, "'유의사항을 확인했습니다' 체크 부탁드립니다!");
                               }
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000000),
+                              backgroundColor: const Color(0xFF4F5BD0),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -212,7 +272,7 @@ class _ApplicationWritingScreenState
                               ),
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '지원 완료',
+                                text: '지원서 제출하기',
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),

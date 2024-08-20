@@ -27,11 +27,6 @@ class NoticeRepository {
   Future<NoticeModel> fetchNotices() async {
     final response = await dio.get(
       '$baseUrl',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
     );
 
     logger.d(response.data);
@@ -40,10 +35,12 @@ class NoticeRepository {
         'fetchNotices - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return NoticeModel.fromJson(response.data).setType(NoticeModelType.fetchAll);
+      return NoticeModel.fromJson(response.data)
+          .setType(NoticeModelType.fetchAll);
     } else {
       // Bad Request
-      throw NoticeModelError.fromJson(response.data).setType(NoticeModelType.fetchAll);
+      throw NoticeModelError.fromJson(response.data)
+          .setType(NoticeModelType.fetchAll);
     }
   }
 
@@ -52,23 +49,20 @@ class NoticeRepository {
   }) async {
     final response = await dio.get(
       '$baseUrl/$noticeId/details',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
     );
 
     logger.d(response.data);
 
-    logger.d(
-        'getDetail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger
+        .d('getDetail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return NoticeDetailModel.fromJson(response.data).setType(NoticeDetailModelType.getDetail);
+      return NoticeDetailModel.fromJson(response.data)
+          .setType(NoticeDetailModelType.getDetail);
     } else {
       // Bad Request
-      throw NoticeDetailModelError.fromJson(response.data).setType(NoticeDetailModelType.getDetail);
+      throw NoticeDetailModelError.fromJson(response.data)
+          .setType(NoticeDetailModelType.getDetail);
     }
   }
 }

@@ -32,7 +32,8 @@ class ApplicationRepository {
 
     logger.d('${response.data}');
 
-    logger.d('getApplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d(
+        'getApplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return ApplicationModel.fromJson(response.data)
@@ -48,11 +49,15 @@ class ApplicationRepository {
     required int clubId,
     required String aplictGoogleFormUrl,
   }) async {
-    final response = await dio.post('$baseUrl/$clubId',
-        data: {
-          'aplictGoogleFormUrl': aplictGoogleFormUrl,
-        },
-        options: Options(headers: {'accessToken': 'true'}));
+    final response = await dio.post(
+      '$baseUrl/$clubId',
+      data: {
+        'aplictGoogleFormUrl': aplictGoogleFormUrl,
+      },
+      options: Options(
+        headers: {'accessToken': 'true'},
+      ),
+    );
 
     logger.d('${response.data}');
 
