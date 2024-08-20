@@ -156,9 +156,8 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   title: '공지 사항',
                   svgPath: 'assets/images/menubar4.svg',
                   onTap: () {
-                    
                     context.go('/notices');
-                    },
+                  },
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
               ],
@@ -180,17 +179,14 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-                     TextButton(
-                      onPressed:  _launchURL,
-                      
+                    TextButton(
+                      onPressed: _launchURL,
                       child: TextFontWidget.fontRegular(
                           text: '피드백',
                           fontSize: 12.sp,
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-
-                    
                     TextButton(
                       onPressed: () async {
                         await ref.read(userViewModelProvider.notifier).logout();
@@ -213,14 +209,14 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
 }
 
 void _launchURL() async {
-    const url = '$feedback';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'URL을 열 수 없습니다: $url';
-    }
+  const url = '$feedback';
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'URL을 열 수 없습니다: $url';
   }
+}
 
 Widget buildDrawerItem({
   required String title,
@@ -248,7 +244,7 @@ Widget buildDrawerItem({
       color: const Color(0xffFFFFFF),
     ),
     child: ListTile(
-      contentPadding: EdgeInsets.only(left: 16.w, right: 6), // 패딩 조정
+      contentPadding: EdgeInsets.only(left: 16.w, right: isExpanded? 15.w : 6.w), // 패딩 조정
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),

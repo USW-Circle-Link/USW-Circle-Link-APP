@@ -26,9 +26,7 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key, required this.haveToFetch});
-
-  bool haveToFetch;
+  MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -83,12 +81,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch) {
-        ref.read(profileViewModelProvider.notifier).getProfile();
-        widget.haveToFetch = false;
-      }
-    });
 
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
@@ -158,8 +150,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ],
         ),
-        drawer: userState.value is UserModel && profileState is ProfileModel
-            ? LoggedInMenu(state: profileState)
+        drawer: userState.value is UserModel && profileState.value is ProfileModel
+            ? LoggedInMenu(state: profileState.value as ProfileModel)
             : LoggedOutMenu(),
         body: Column(
           children: [

@@ -204,6 +204,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                             },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xFF4F5BD0),
+                        foregroundColor: const Color(0xFFFFFFFF),
                         side: const BorderSide(
                           width: 0.0,
                         ),

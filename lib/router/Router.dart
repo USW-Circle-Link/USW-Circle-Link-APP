@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
+import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
 import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
@@ -32,7 +32,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, state) => MainScreen(haveToFetch: (state.extra ?? true) as bool),
+        builder: (_, state) => MainScreen(),
         routes: [
           GoRoute(
               path: 'circle',
@@ -131,5 +131,8 @@ final routerProvider = Provider<GoRouter>((ref) {
     initialLocation: '/',
     refreshListenable: provider,
     debugLogDiagnostics: true,
+    observers: [
+      RefreshObserver(ref:ref),
+    ],
   );
 });

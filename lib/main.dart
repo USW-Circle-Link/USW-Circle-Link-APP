@@ -19,13 +19,13 @@ void main() async {
 
 // 알림 권한 요청
 Future<void> _requestNotificationPermission() async {
-  logger.d('@@@@');
-  await Permission.notification.request();
-  logger.d('@@@@');
   if (Platform.isAndroid) {
     final int sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
 
-    if (sdkInt >= 33) {}
+    if (sdkInt >= 33) {
+      logger.d('Permission Requested!');
+      await Permission.notification.request();
+    }
   }
 }
 
