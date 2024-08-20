@@ -208,6 +208,7 @@ class CircleList extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(width: 4.w,),
                             SvgPicture.asset(
                               'assets/images/phonelogo.svg',
                               height: 16.h,
@@ -232,9 +233,11 @@ class CircleList extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Image.asset(
-                              'assets/images/kakaologo.png',
+                              width: 25.w,
+                              height: 25.h,
+                              'assets/images/Instagramlogo.png',
                             ),
-                            SizedBox(width: 6.w),
+                            SizedBox(width: 4.w),
                             Text(
                               '@'+InstaId,
                               style: TextStyle(
