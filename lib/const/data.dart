@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
@@ -12,95 +11,15 @@ const roleKey = 'role';
 const clubIdsKey = 'club_ids';
 const iatKey = 'iat';
 const expKey = 'exp';
-
-const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";
 const feedback = "https://forms.gle/auVHQJtz9xTRmXEA8";
-
-var testNotices = <NoticeData>[
-  NoticeData(noticeId: 1, noticeTitle: 'test1', adminName: 'admin1', noticeCreatedAt: '2024-10-11'),
-  NoticeData(noticeId: 2, noticeTitle: 'test2', adminName: 'admin2', noticeCreatedAt: '2024-10-12'),
-  NoticeData(noticeId: 3, noticeTitle: 'test3', adminName: 'admin3', noticeCreatedAt: '2024-10-13'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-  NoticeData(noticeId: 4, noticeTitle: 'test4', adminName: 'admin4', noticeCreatedAt: '2024-10-14'),
-];
-
-const testId = "user1";
-const testPassword = "1234";
-const testUserName = "user";
-const testTelephone = "010-1234-5678";
-const testStudentNumber = "00000000";
-const testMajor = "major1";
-var testCircleData = <CircleListData>[
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "ACADEMIC",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "ACADEMIC",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "ACADEMIC",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "ACADEMIC",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "B",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "B",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
-  ),
-  CircleListData(
-    clubName: "FLAG",
-    mainPhoto:
-        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
-  ),
-];
-
+const departments = <String, String>{
+  'ACADEMIC': '학술',
+  'RELIGION': '종교',
+  'ART': '예술',
+  'SPORT': '체육',
+  'SHOW': '공연',
+  'VOLUNTEER': '봉사',
+};
 const colleges = <String>[
   '인문사회융합대학',
   '경영공학대학',
@@ -112,7 +31,6 @@ const colleges = <String>[
   '문화예술융합대학',
   '글로벌인재대학',
 ];
-
 const majors = {
   '인문사회융합대학': <String>[
     '인문학부',
@@ -209,3 +127,140 @@ const majors = {
     '자유전공학부',
   ],
 };
+
+const testId = "user1";
+const testPassword = "1234";
+const testUserName = "user";
+const testTelephone = "010-1234-5678";
+const testStudentNumber = "00000000";
+const testMajor = "major1";
+var testCircleData = <CircleListData>[
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "ACADEMIC",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "ACADEMIC",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "ACADEMIC",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "ACADEMIC",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "B",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "B",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "C",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "C",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "C",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "C",
+  ),
+];
+const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";
+var testNotices = <NoticeData>[
+  NoticeData(
+      noticeId: 1,
+      noticeTitle: 'test1',
+      adminName: 'admin1',
+      noticeCreatedAt: '2024-10-11'),
+  NoticeData(
+      noticeId: 2,
+      noticeTitle: 'test2',
+      adminName: 'admin2',
+      noticeCreatedAt: '2024-10-12'),
+  NoticeData(
+      noticeId: 3,
+      noticeTitle: 'test3',
+      adminName: 'admin3',
+      noticeCreatedAt: '2024-10-13'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+  NoticeData(
+      noticeId: 4,
+      noticeTitle: 'test4',
+      adminName: 'admin4',
+      noticeCreatedAt: '2024-10-14'),
+];

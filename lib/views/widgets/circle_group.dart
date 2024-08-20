@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -26,7 +27,7 @@ class CircleGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFontWidget.fontRegular(
-            text: department.key,
+            text: department.key.toDepartment(),
             fontSize: 16.sp,
             color: Colors.black,
             fontweight: FontWeight.w400,
@@ -48,5 +49,14 @@ class CircleGroup extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+extension Department on String {
+  String toDepartment() {
+    if (departments.containsKey(this)) {
+      return departments[this]!;
+    }
+    return this;
   }
 }
