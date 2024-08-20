@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
-import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -47,18 +46,14 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         child: Row(
                       children: [
                         SizedBox(width: 3.w),
-                        Container(
-                          width: 54.w,
-                          height: 54.h,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    'https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp')),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(27.r)),
-                            color: Colors.redAccent,
-                          ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/profile.svg',
+                            ),
+                            Icon(Icons.person, color: const Color(0xFFD3D6F2),size: 30.w,),
+                          ],
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
@@ -244,7 +239,8 @@ Widget buildDrawerItem({
       color: const Color(0xffFFFFFF),
     ),
     child: ListTile(
-      contentPadding: EdgeInsets.only(left: 16.w, right: isExpanded? 15.w : 6.w), // 패딩 조정
+      contentPadding:
+          EdgeInsets.only(left: 16.w, right: isExpanded ? 15.w : 6.w), // 패딩 조정
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),

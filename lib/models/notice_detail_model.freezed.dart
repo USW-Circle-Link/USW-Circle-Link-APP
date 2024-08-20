@@ -24,12 +24,8 @@ mixin _$NoticeDetailModel {
   NoticeDetailData get data => throw _privateConstructorUsedError;
   NoticeDetailModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this NoticeDetailModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $NoticeDetailModelCopyWith<NoticeDetailModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -56,8 +52,6 @@ class _$NoticeDetailModelCopyWithImpl<$Res, $Val extends NoticeDetailModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -81,8 +75,6 @@ class _$NoticeDetailModelCopyWithImpl<$Res, $Val extends NoticeDetailModel>
     ) as $Val);
   }
 
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $NoticeDetailDataCopyWith<$Res> get data {
@@ -115,8 +107,6 @@ class __$$NoticeDetailModelImplCopyWithImpl<$Res>
       $Res Function(_$NoticeDetailModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -173,13 +163,11 @@ class _$NoticeDetailModelImpl extends _NoticeDetailModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NoticeDetailModelImplCopyWith<_$NoticeDetailModelImpl> get copyWith =>
@@ -210,11 +198,8 @@ abstract class _NoticeDetailModel extends NoticeDetailModel {
   NoticeDetailData get data;
   @override
   NoticeDetailModelType? get type;
-
-  /// Create a copy of NoticeDetailModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$NoticeDetailModelImplCopyWith<_$NoticeDetailModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -232,12 +217,8 @@ mixin _$NoticeDetailData {
   String get noticeCreatedAt => throw _privateConstructorUsedError;
   List<String>? get noticePhotos => throw _privateConstructorUsedError;
 
-  /// Serializes this NoticeDetailData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of NoticeDetailData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $NoticeDetailDataCopyWith<NoticeDetailData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -267,8 +248,6 @@ class _$NoticeDetailDataCopyWithImpl<$Res, $Val extends NoticeDetailData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of NoticeDetailData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -333,8 +312,6 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
       $Res Function(_$NoticeDetailDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NoticeDetailData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -434,7 +411,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
                 .equals(other._noticePhotos, _noticePhotos));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType,
@@ -445,9 +422,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
       noticeCreatedAt,
       const DeepCollectionEquality().hash(_noticePhotos));
 
-  /// Create a copy of NoticeDetailData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NoticeDetailDataImplCopyWith<_$NoticeDetailDataImpl> get copyWith =>
@@ -486,11 +461,8 @@ abstract class _NoticeDetailData implements NoticeDetailData {
   String get noticeCreatedAt;
   @override
   List<String>? get noticePhotos;
-
-  /// Create a copy of NoticeDetailData
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$NoticeDetailDataImplCopyWith<_$NoticeDetailDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -505,12 +477,8 @@ mixin _$NoticeDetailModelError {
   String get message => throw _privateConstructorUsedError;
   NoticeDetailModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this NoticeDetailModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of NoticeDetailModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $NoticeDetailModelErrorCopyWith<NoticeDetailModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -535,8 +503,6 @@ class _$NoticeDetailModelErrorCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of NoticeDetailModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -578,8 +544,6 @@ class __$$NoticeDetailModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$NoticeDetailModelErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of NoticeDetailModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -626,13 +590,11 @@ class _$NoticeDetailModelErrorImpl extends _NoticeDetailModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, type);
 
-  /// Create a copy of NoticeDetailModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NoticeDetailModelErrorImplCopyWith<_$NoticeDetailModelErrorImpl>
@@ -660,11 +622,8 @@ abstract class _NoticeDetailModelError extends NoticeDetailModelError {
   String get message;
   @override
   NoticeDetailModelType? get type;
-
-  /// Create a copy of NoticeDetailModelError
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$NoticeDetailModelErrorImplCopyWith<_$NoticeDetailModelErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

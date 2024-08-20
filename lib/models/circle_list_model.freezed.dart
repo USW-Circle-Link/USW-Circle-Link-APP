@@ -24,12 +24,8 @@ mixin _$CircleListModel {
   List<CircleListData> get data => throw _privateConstructorUsedError;
   CircleListModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this CircleListModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CircleListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $CircleListModelCopyWith<CircleListModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,8 +50,6 @@ class _$CircleListModelCopyWithImpl<$Res, $Val extends CircleListModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CircleListModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -100,8 +94,6 @@ class __$$CircleListModelImplCopyWithImpl<$Res>
       _$CircleListModelImpl _value, $Res Function(_$CircleListModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CircleListModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -168,14 +160,12 @@ class _$CircleListModelImpl extends _CircleListModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, message, const DeepCollectionEquality().hash(_data), type);
 
-  /// Create a copy of CircleListModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$CircleListModelImplCopyWith<_$CircleListModelImpl> get copyWith =>
@@ -206,11 +196,8 @@ abstract class _CircleListModel extends CircleListModel {
   List<CircleListData> get data;
   @override
   CircleListModelType? get type;
-
-  /// Create a copy of CircleListModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$CircleListModelImplCopyWith<_$CircleListModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -225,12 +212,8 @@ mixin _$CircleListData {
   String get mainPhoto => throw _privateConstructorUsedError;
   String get departmentName => throw _privateConstructorUsedError;
 
-  /// Serializes this CircleListData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CircleListData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $CircleListDataCopyWith<CircleListData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -254,8 +237,6 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CircleListData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -299,8 +280,6 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
       _$CircleListDataImpl _value, $Res Function(_$CircleListDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CircleListData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -362,14 +341,12 @@ class _$CircleListDataImpl extends _CircleListData {
                 other.departmentName == departmentName));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, clubName, mainPhoto, departmentName);
 
-  /// Create a copy of CircleListData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$CircleListDataImplCopyWith<_$CircleListDataImpl> get copyWith =>
@@ -400,11 +377,8 @@ abstract class _CircleListData extends CircleListData {
   String get mainPhoto;
   @override
   String get departmentName;
-
-  /// Create a copy of CircleListData
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$CircleListDataImplCopyWith<_$CircleListDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -417,12 +391,8 @@ CircleListModelError _$CircleListModelErrorFromJson(Map<String, dynamic> json) {
 mixin _$CircleListModelError {
   CircleListModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this CircleListModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of CircleListModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $CircleListModelErrorCopyWith<CircleListModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -447,8 +417,6 @@ class _$CircleListModelErrorCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of CircleListModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -482,8 +450,6 @@ class __$$CircleListModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$CircleListModelErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of CircleListModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -522,13 +488,11 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, type);
 
-  /// Create a copy of CircleListModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$CircleListModelErrorImplCopyWith<_$CircleListModelErrorImpl>
@@ -554,11 +518,8 @@ abstract class _CircleListModelError extends CircleListModelError {
 
   @override
   CircleListModelType? get type;
-
-  /// Create a copy of CircleListModelError
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$CircleListModelErrorImplCopyWith<_$CircleListModelErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

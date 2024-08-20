@@ -24,12 +24,8 @@ mixin _$SignUpModel {
   String get message => throw _privateConstructorUsedError;
   String? get data => throw _privateConstructorUsedError;
 
-  /// Serializes this SignUpModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of SignUpModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $SignUpModelCopyWith<SignUpModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -53,8 +49,6 @@ class _$SignUpModelCopyWithImpl<$Res, $Val extends SignUpModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of SignUpModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -98,8 +92,6 @@ class __$$SignUpModelImplCopyWithImpl<$Res>
       _$SignUpModelImpl _value, $Res Function(_$SignUpModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of SignUpModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -155,13 +147,11 @@ class _$SignUpModelImpl extends _SignUpModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, type, message, data);
 
-  /// Create a copy of SignUpModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SignUpModelImplCopyWith<_$SignUpModelImpl> get copyWith =>
@@ -191,11 +181,8 @@ abstract class _SignUpModel extends SignUpModel {
   String get message;
   @override
   String? get data;
-
-  /// Create a copy of SignUpModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$SignUpModelImplCopyWith<_$SignUpModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -213,12 +200,8 @@ mixin _$SignUpModelError {
   int? get status => throw _privateConstructorUsedError;
   String get message => throw _privateConstructorUsedError;
 
-  /// Serializes this SignUpModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of SignUpModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $SignUpModelErrorCopyWith<SignUpModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -248,8 +231,6 @@ class _$SignUpModelErrorCopyWithImpl<$Res, $Val extends SignUpModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of SignUpModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -314,8 +295,6 @@ class __$$SignUpModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$SignUpModelErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of SignUpModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -402,14 +381,12 @@ class _$SignUpModelErrorImpl extends _SignUpModelError {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, type, exception, code, error, status, message);
 
-  /// Create a copy of SignUpModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$SignUpModelErrorImplCopyWith<_$SignUpModelErrorImpl> get copyWith =>
@@ -449,11 +426,8 @@ abstract class _SignUpModelError extends SignUpModelError {
   int? get status;
   @override
   String get message;
-
-  /// Create a copy of SignUpModelError
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$SignUpModelErrorImplCopyWith<_$SignUpModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
