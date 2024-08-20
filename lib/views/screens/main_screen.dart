@@ -1,19 +1,13 @@
-import 'dart:io';
-
-import 'package:device_info_plus/device_info_plus.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';

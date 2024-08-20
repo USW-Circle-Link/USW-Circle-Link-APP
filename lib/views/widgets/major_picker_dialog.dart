@@ -4,6 +4,7 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
+// ignore: must_be_immutable
 class MajorPickerDialog extends StatefulWidget {
   MajorPickerDialog({
     Key? key,

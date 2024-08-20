@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
-import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -93,7 +92,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                         height: 16.h,
                       ),
                       TextFontWidget.fontRegular(
-                        text: state.data.noticeContent ?? "",
+                        text: state.data.noticeContent,
                         fontSize: 14.sp,
                         color: const Color(0xFF000000),
                         fontweight: FontWeight.w400,

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -46,7 +45,7 @@ class NoticeList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       TextFontWidget.fontRegular(
-                        text: state.data[index].adminName ?? "",
+                        text: state.data[index].adminName,
                         fontSize: 14.sp,
                         color: const Color(0xFF767676),
                         fontweight: FontWeight.w400,

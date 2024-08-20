@@ -1,13 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/update_profile_model.dart';
-import 'package:usw_circle_link/repositories/update_profile_repository.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
-import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -141,7 +138,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   Future<void> fetchProfileData() async {
     try {
       final profile = await ref.read(getProfileProvider.future);
-      if (mounted && profile != null) {
+      if (mounted) {
         setState(() {
           nameController.text = profile.userName;
           phonenumberController.text = profile.userHp;
@@ -479,7 +476,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     .read(updateProfileViewModel(updatedProfile).future)
                     .then((_) {
                   // 프로필 데이터를 새로고침하여 다시 불러옴
-                  ref.refresh(getProfileProvider);
+                  // ref.refresh(getProfileProvider);
 
                   // UI 상태 처리
                   ref.watch(getProfileProvider).when(
