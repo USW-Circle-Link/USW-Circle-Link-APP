@@ -147,6 +147,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: IconButton(
                 onPressed: () {
                   _showOverlay(context);
+              
                 },
                 icon: SvgPicture.asset('assets/images/bell.svg'),
               ),
