@@ -12,6 +12,10 @@
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
+
+        <meta-data
+        android:name="com.google.firebase.messaging.default_notification_channel_id"
+        android:value="com.example.usw_circle_link" />
         
         <activity
             android:name=".MainActivity"
@@ -39,9 +43,5 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
-
-        <meta-data
-        android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="default_notification_channel_id" />
     </application>
 </manifest>

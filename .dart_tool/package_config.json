@@ -188,6 +188,24 @@
       "languageVersion": "3.0"
     },
     {
+      "name": "firebase_analytics",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/firebase_analytics-11.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "firebase_analytics_platform_interface",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/firebase_analytics_platform_interface-4.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
+      "name": "firebase_analytics_web",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/firebase_analytics_web-0.5.9+1",
+      "packageUri": "lib/",
+      "languageVersion": "3.2"
+    },
+    {
       "name": "firebase_core",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/firebase_core-3.3.0",
       "packageUri": "lib/",
@@ -848,7 +866,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-08-20T14:30:00.238032Z",
+  "generated": "2024-08-21T05:40:49.239823Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/jeong-woochang/development/flutter",

@@ -1,18 +1,20 @@
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/views/widgets/cloud_messaging.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
 import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
@@ -20,7 +22,7 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key});
+  const MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -33,24 +35,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    initializeFCM();
+    _requestNotificationPermission();
     super.initState();
   }
 
-  // FCM 초기화 및 백그라운드 메시지 핸들러 설정
-  void initializeFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      final notificationBody = message.notification?.body ?? 'No message body';
-      ref.read(notificationProvider.notifier).addNotification(notificationBody);
-    });
+  // 알림 권한 요청
+  Future<void> _requestNotificationPermission() async {
+    if (Platform.isAndroid) {
+      final int sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  Future<void> _firebaseMessagingBackgroundHandler(
-      RemoteMessage message) async {
-    await Firebase.initializeApp();
-    print("Handling a background message: ${message.messageId}");
+      if (sdkInt >= 33) {
+        logger.d('Permission Requested!');
+        await Permission.notification.request();
+      }
+    }
   }
 
   void _showOverlay(BuildContext context) {
@@ -141,7 +139,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: IconButton(
                 onPressed: () {
                   _showOverlay(context);
-              
                 },
                 icon: SvgPicture.asset('assets/images/bell.svg'),
               ),
@@ -284,7 +281,8 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
                   ),
                   Expanded(
                     child: Consumer(builder: (context, ref, child) {
-                      final notifications = ref.watch(notificationProvider);
+                      final notifications =
+                          ref.watch(firebaseCloudMessagingViewModelProvider);
                       return ListView.builder(
                         itemCount: notifications.length,
                         itemBuilder: (context, index) {

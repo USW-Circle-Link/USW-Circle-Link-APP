@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 
 class CloudMessaging extends ConsumerStatefulWidget {
   final String text;
@@ -52,7 +52,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                   icon: Icon(Icons.close, size: 16.sp, color: Colors.grey),
                   onPressed: () {
                     ref
-                        .read(notificationProvider.notifier)
+                        .read(firebaseCloudMessagingViewModelProvider.notifier)
                         .removeNotification(widget.index);
                   },
                 ),

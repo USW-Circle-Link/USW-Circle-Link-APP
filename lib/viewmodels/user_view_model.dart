@@ -11,18 +11,19 @@ import 'package:usw_circle_link/repositories/user_me_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModel?>>((ref) {
-  final authRepository = ref.watch(authRepositoryProvider);
-  final userMeRepository = ref.watch(userMeRepositoryProvider);
-  final fcmRepository = ref.watch(fcmRepositoryProvider);
-  final storage = ref.watch(secureStorageProvider);
+  final authRepository = ref.read(authRepositoryProvider);
+  final userMeRepository = ref.read(userMeRepositoryProvider);
+  final firebaseCloudMessagingViewModel = ref.read(firebaseCloudMessagingViewModelProvider.notifier);
+  final storage = ref.read(secureStorageProvider);
 
   return UserViewModel(
     authRepository: authRepository,
     userMeRepository: userMeRepository,
-    fcmRepository: fcmRepository,
+    firebaseCloudMessagingViewModel: firebaseCloudMessagingViewModel,
     storage: storage,
   );
 });
@@ -30,13 +31,13 @@ final userViewModelProvider =
 class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
   final UserMeRepository userMeRepository;
-  final FCMRepository fcmRepository;
+  final FirebaseCloudMessagingViewModel firebaseCloudMessagingViewModel;
   final FlutterSecureStorage storage;
 
   UserViewModel({
     required this.authRepository,
     required this.userMeRepository,
-    required this.fcmRepository,
+    required this.firebaseCloudMessagingViewModel,
     required this.storage,
   }) : super(AsyncValue.loading()) {
     getMe();
@@ -59,8 +60,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   }) async {
     try {
       //fcm token 가져오기
-      final token = await fcmRepository.getToken();
-      logger.d('FCMToken - $token');
+      final token = await firebaseCloudMessagingViewModel.getToken();
+      logger.d('FCM Token - $token');
 
       final response = await authRepository.login(
         id: id,
