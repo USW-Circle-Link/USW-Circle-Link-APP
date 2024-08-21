@@ -76,11 +76,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
-      if (isAllSelected) {
-        ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-      } else {
-        ref.read(mainViewModelProvider.notifier).fetchDepartmentCircleList();
-      }
+      Future.wait([
+        isAllSelected
+            ? ref.read(mainViewModelProvider.notifier).fetchAllCircleList()
+            : ref
+                .read(mainViewModelProvider.notifier)
+                .fetchDepartmentCircleList(),
+        ref.read(profileViewModelProvider.notifier).getProfile(),
+      ]);
     });
 
     final circleListState = ref.watch(mainViewModelProvider);
@@ -104,16 +107,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: Container(
-            margin: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
-            child: IconButton(
-              onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              icon: Icon(
-                Icons.menu_outlined,
-                color: Colors.grey,
-              ),
+          leading: IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+            icon: Icon(
+              Icons.menu_outlined,
+              color: Colors.grey,
             ),
           ),
           title: Row(
@@ -134,14 +134,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ],
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 24.w),
-              child: IconButton(
-                onPressed: () {
-                  _showOverlay(context);
-                },
-                icon: SvgPicture.asset('assets/images/bell.svg'),
-              ),
+            IconButton(
+              onPressed: () {
+                _showOverlay(context);
+              },
+              icon: SvgPicture.asset('assets/images/bell.svg'),
             ),
           ],
         ),

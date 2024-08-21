@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
+import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
@@ -12,17 +13,21 @@ import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModel?>>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
   final userMeRepository = ref.read(userMeRepositoryProvider);
-  final firebaseCloudMessagingViewModel = ref.read(firebaseCloudMessagingViewModelProvider.notifier);
+  final profileViewModel = ref.read(profileViewModelProvider.notifier);
+  final firebaseCloudMessagingViewModel =
+      ref.read(firebaseCloudMessagingViewModelProvider.notifier);
   final storage = ref.read(secureStorageProvider);
 
   return UserViewModel(
     authRepository: authRepository,
     userMeRepository: userMeRepository,
+    profileViewModel: profileViewModel,
     firebaseCloudMessagingViewModel: firebaseCloudMessagingViewModel,
     storage: storage,
   );
@@ -31,25 +36,42 @@ final userViewModelProvider =
 class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
   final UserMeRepository userMeRepository;
+  final ProfileViewModel profileViewModel;
   final FirebaseCloudMessagingViewModel firebaseCloudMessagingViewModel;
   final FlutterSecureStorage storage;
 
   UserViewModel({
     required this.authRepository,
     required this.userMeRepository,
+    required this.profileViewModel,
     required this.firebaseCloudMessagingViewModel,
     required this.storage,
-  }) : super(AsyncValue.loading()) {
+  }) : super(AsyncValue.data(null)) {
     getMe();
   }
 
   Future<void> getMe() async {
     try {
-      final user = await userMeRepository.getMe();
-      logger.d('로그인 정보 확인 성공! : $user');
-      state = AsyncValue.data(user);
+      final profile = await profileViewModel.getProfile();
+      if (profile is ProfileModel) {
+        logger.d('로그인 정보 확인 성공! : $profile');
+      } else {
+        throw AutoLoginException(message:'로그인 정보 확인 실패! : $profile');
+      }
+
+      final accessToken = await storage.read(key: accessTokenKey);
+      final refreshToken = await storage.read(key: refreshTokenKey);
+      state = AsyncValue.data(
+        UserModel(
+          data: LoginData(
+            accessToken: accessToken!,
+            refreshToken: refreshToken!,
+          ),
+          message: '자동 로그인됨',
+        ),
+      );
     } catch (e) {
-      logger.d('로그인 정보 확인 실패! : $e');
+      logger.e('로그인 정보 확인 실패! : $e');
       state = AsyncValue.data(null);
     }
   }
@@ -186,5 +208,15 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.e('예외발생 - $e');
       rethrow;
     }
+  }
+}
+
+class AutoLoginException implements Exception {
+  final String message;
+  AutoLoginException({required this.message});
+
+  @override
+  String toString() {
+    return 'AutoLoginException(message:$message)';
   }
 }

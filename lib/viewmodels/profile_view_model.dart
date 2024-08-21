@@ -17,14 +17,13 @@ class ProfileViewModel extends StateNotifier<AsyncValue<ProfileModelBase?>> {
   
   ProfileViewModel({
     required this.profileRepository,
-  }) : super(AsyncValue.loading()) {
-    getProfile();
-  }
+  }) : super(AsyncValue.data(null));
 
-  Future<void> getProfile() async { 
+  Future<ProfileModelBase?> getProfile() async { 
     try {
       final response = await profileRepository.getProfile();
       state = AsyncValue.data(response);
+      return response;
     } on ProfileModelError catch (e) {
       // 예외처리 안 실패
       state = AsyncValue.data(e);
@@ -32,5 +31,7 @@ class ProfileViewModel extends StateNotifier<AsyncValue<ProfileModelBase?>> {
       // 예외처리 밖 에러(네트워크 에러 ...)
       state = AsyncValue.data(ProfileModelError(message: '예외발생 - $e'));
     }
+
+    return state.value;
   }
 }
