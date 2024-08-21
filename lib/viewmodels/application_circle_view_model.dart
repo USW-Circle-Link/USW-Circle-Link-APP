@@ -3,7 +3,7 @@ import 'package:usw_circle_link/models/application_cricle_model.dart';
 import 'package:usw_circle_link/repositories/application_circle_repository.dart';
 
 // ApplicationCircleRepository를 통해 동아리 데이터를 가져오는 FutureProvider 정의
-final applicationCircleListProvider = FutureProvider<List<Circle>>((ref) async {
+final applicationCircleListProvider = FutureProvider.autoDispose<List<Circle>>((ref) async {
   // ApplicationCircleRepository를 Provider에서 가져옴
   final appCirclerepository = ref.watch(ApplicationCircleRepositoryProvider);
 

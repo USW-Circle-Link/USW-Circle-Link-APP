@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -31,10 +32,13 @@ class TokenInterceptor extends Interceptor {
       logger.d("헤더에 액세스 토큰 추가 중 ... - $accessToken");
 
       if (accessToken == null) {
-        return handler.reject(DioException(
+        return handler.reject(
+          DioException(
             requestOptions: options,
             message: "저장소에 토큰이 존재하지 않습니다",
-            type: DioExceptionType.cancel));
+            type: DioExceptionType.cancel,
+          ),
+        );
       }
 
       // 실제 토큰으로 대체
@@ -89,7 +93,7 @@ class TokenInterceptor extends Interceptor {
           'http://$host:$port/auth/refresh-token',
           options: Options(
             headers: {
-              'Authorization': 'Bearer $refreshToken',
+              'Cookie': 'refreshToken=$refreshToken',
             },
           ),
         );
@@ -99,12 +103,21 @@ class TokenInterceptor extends Interceptor {
         logger.d(
             'refreshAccessToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-        final accessToken = response.data['accessToken'];
-        final newRefreshToken = response.data['refreshToken'];
+        if (response.statusCode != 200) {
+          throw DioException(
+            requestOptions: response.requestOptions,
+            message: "토큰 재발급 실패!",
+            type: DioExceptionType.cancel,
+          );
+        }
+        final data = UserModel.fromJson(response.data).data;
 
-        final payload = JwtDecoder.decode(response.data.accessToken);
+        final accessToken = data.accessToken;
+        final newRefreshToken = data.refreshToken;
 
-        logger.d('payload - $payload');
+        final payload = JwtDecoder.decode(accessToken);
+
+        logger.d('onError - payload - $payload');
         // secure storage도 update
         await storage.write(key: accessTokenKey, value: accessToken);
         await storage.write(key: refreshTokenKey, value: newRefreshToken);
@@ -123,7 +136,7 @@ class TokenInterceptor extends Interceptor {
 
         // 원래 보내려던 요청 재전송
         logger.d('새로운 액세스 토큰으로 요청보내는 중 ... ');
-        
+
         // 요청의 헤더에 새로 발급받은 accessToken으로 변경하기
         options.headers.addAll({
           'Authorization': 'Bearer $accessToken',
@@ -133,10 +146,13 @@ class TokenInterceptor extends Interceptor {
 
         return handler.resolve(newResponse);
       } on DioException catch (e) {
+        logger.e(e);
         // 새로운 Access Token임에도 에러가 발생한다면, Refresh Token마저도 만료된 것임
         await ref.read(userViewModelProvider.notifier).logout();
 
         return handler.reject(e);
+      } catch (e) {
+        logger.e(e);
       }
     }
 
