@@ -331,7 +331,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                               ),
                             ),
                             SizedBox(height: 16.h),
-                            SvgPicture.asset('assets/images/Vector15.svg'),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              child: Divider(thickness: 0.5.h,),
+                            ),
                             SizedBox(height: 24.h),
                             Row(
                               children: [

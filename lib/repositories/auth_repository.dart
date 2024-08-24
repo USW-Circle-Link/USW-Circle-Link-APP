@@ -193,6 +193,7 @@ class AuthRepository {
       'account': id,
       'password': password,
       'fcmToken': fcmToken,
+      'role': 'USER'
     };
 
     final response = await dio.post(

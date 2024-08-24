@@ -17,6 +17,7 @@ class ClubRepository {
         ),
       );
       logger.d(response.data['data']);
+      logger.d('fetchClubIntro - ${response.realUri} 로 요청 성공! (${response.statusCode})');
       return ClubIntro.fromJson(response.data['data']);
     } catch (e) {
       logger.e(e);

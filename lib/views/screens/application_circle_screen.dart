@@ -4,15 +4,18 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/application_circle_view_model.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class Applicationcirclescreen extends ConsumerStatefulWidget {
   const Applicationcirclescreen({super.key});
 
   @override
-  _ApplicationcirclescreenState createState() => _ApplicationcirclescreenState();
+  _ApplicationcirclescreenState createState() =>
+      _ApplicationcirclescreenState();
 }
 
-class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescreen> {
+class _ApplicationcirclescreenState
+    extends ConsumerState<Applicationcirclescreen> {
   @override
   Widget build(BuildContext context) {
     final circlesAsyncValue = ref.watch(applicationCircleListProvider);
@@ -95,7 +98,8 @@ class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescree
             },
           ),
           loading: () => Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('지원 동아리 목록 조회에 실패하였습니다: $error')),
+          error: (error, stack) =>
+              Center(child: Text('지원 동아리 목록 조회에 실패하였습니다: $error')),
         ),
       ),
     );
@@ -104,7 +108,7 @@ class _ApplicationcirclescreenState extends ConsumerState<Applicationcirclescree
 
 class CircleList extends StatelessWidget {
   final String CircleName;
-  final String ImageUrl;
+  final String? ImageUrl;
   final String CircleLeader;
   final String InstaId;
   final String leaderHp;
@@ -113,7 +117,7 @@ class CircleList extends StatelessWidget {
   const CircleList({
     required this.CircleLeader,
     required this.CircleName,
-    required this.ImageUrl,
+    this.ImageUrl,
     required this.leaderHp,
     required this.InstaId,
     required this.status,
@@ -152,13 +156,14 @@ class CircleList extends StatelessWidget {
                     Container(
                         height: 100.sp,
                         width: 100.sp,
+                        alignment: Alignment.center,
                         margin: EdgeInsets.all(16.sp),
-                        child: Image(
-                          image: NetworkImage(
-                              ImageUrl
-                          ),
-                        )
-                    ),
+                        child: Image.network(
+                          ImageUrl ?? "",
+                          errorBuilder: (context, error, stackTrace) {
+                            return TextFontWidget.fontRegular(text: '이미지 없음', fontSize: 14.sp, color: Colors.black, fontweight: FontWeight.w400);
+                          },
+                        )),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -208,7 +213,9 @@ class CircleList extends StatelessWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            SizedBox(width: 4.w,),
+                            SizedBox(
+                              width: 4.w,
+                            ),
                             SvgPicture.asset(
                               'assets/images/phonelogo.svg',
                               height: 16.h,
@@ -239,7 +246,7 @@ class CircleList extends StatelessWidget {
                             ),
                             SizedBox(width: 4.w),
                             Text(
-                              '@'+InstaId,
+                              '@' + InstaId,
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
                                 color: const Color(0xFF353549),
@@ -260,7 +267,8 @@ class CircleList extends StatelessWidget {
                   bottom: 12.h,
                   right: 12.w,
                   child: Container(
-                    padding: EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
+                    padding:
+                        EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),
                     decoration: BoxDecoration(
                       color: statusColor,
                       borderRadius: BorderRadius.circular(16.sp),
