@@ -157,43 +157,55 @@ var testCircleData = <CircleListData>[
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "ACADEMIC",
+    departmentName: "ART",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "B",
+    departmentName: "ART",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "B",
+    departmentName: "ART",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
+    departmentName: "SHOW",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
+    departmentName: "SHOW",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
+    departmentName: "SHOW",
   ),
   CircleListData(
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
-    departmentName: "C",
+    departmentName: "RELIGION",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "RELIGION",
+  ),
+  CircleListData(
+    clubName: "FLAG",
+    mainPhoto:
+        "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
+    departmentName: "RELIGION",
   ),
 ];
 const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";

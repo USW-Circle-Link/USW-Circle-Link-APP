@@ -79,9 +79,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       Future.wait([
         isAllSelected
             ? ref.read(mainViewModelProvider.notifier).fetchAllCircleList()
-            : ref
-                .read(mainViewModelProvider.notifier)
-                .fetchDepartmentCircleList(),
+            : ref.read(mainViewModelProvider.notifier).fetchOpenCircleList(),
         ref.read(profileViewModelProvider.notifier).getProfile(),
       ]);
     });
@@ -191,7 +189,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     });
                     await ref
                         .read(mainViewModelProvider.notifier)
-                        .fetchDepartmentCircleList();
+                        .fetchOpenCircleList();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: !isAllSelected
@@ -221,7 +219,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       context.go('/circle?clubId=1');
                     },
                   ))
-                : Container(),
+                : Expanded(
+                    child: Center(
+                        child: TextFontWidget.fontRegular(
+                            text: '동아리가 없습니다',
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontweight: FontWeight.w400)),
+                  ),
           ],
         ),
       ),

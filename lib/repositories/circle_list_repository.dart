@@ -43,7 +43,7 @@ class CircleListRepository {
     }
   }
 
-  Future<CircleListModel> fetchDepartmentCircleList() async {
+  Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
       '$baseUrl/ACADEMIC/OPEN',
     );
