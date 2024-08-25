@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_id_view_model.dart';
-import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class FindIdScreen extends ConsumerStatefulWidget {
@@ -28,19 +28,31 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
       logger.d(next);
       if (next is FindIdModel) {
         hadSent = true;
-        showAlertDialog(context, '확인메일이 전송되었습니다!');
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '확인메일이 전송되었습니다!',
+        );
       }
 
       if (next is FindIdModelError) {
         switch (next.code) {
           case "EML-F100": // 이메일 공백
-            showAlertDialog(context, '이메일을 입력해주세요!');
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '이메일을 입력해주세요!',
+            );
             break;
           case "USR-201": // 해당 이메일을 가진 회원 존재 X
-            showAlertDialog(context, '해당 정보로 가입된 회원이 없습니다!');
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '해당 정보로 가입된 회원이 없습니다!',
+            );
             break;
           default: // EML-501 : 서버에서 메일전송 실패 (Internal Server Error 500)
-            showAlertDialog(context, '이메일을 전송하는 데 실패했습니다!');
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '이메일을 전송하는 데 실패했습니다!',
+            );
             break;
         }
       }
@@ -158,7 +170,8 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         height: 56.h,
                         child: OutlinedButton(
                             onPressed: hadSent || state is FindIdModelLoading
-                                ? null : () async {
+                                ? null
+                                : () async {
                                     ref
                                         .read(findIdViewModelProvider.notifier)
                                         .findId(
@@ -199,7 +212,8 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                             ),
                             GestureDetector(
                               onTap: !hadSent || state is FindIdModelLoading
-                                  ? null : () {
+                                  ? null
+                                  : () {
                                       ref
                                           .read(
                                               findIdViewModelProvider.notifier)
@@ -276,17 +290,6 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                   ),
                 ),
               ),
-            ));
-  }
-
-  void showAlertDialog(BuildContext context, String text) async {
-    await showDialog(
-        context: context,
-        builder: (_) => AlertTextDialog(
-              text: text,
-              onConfirmPressed: () {
-                Navigator.of(context).pop();
-              },
             ));
   }
 }

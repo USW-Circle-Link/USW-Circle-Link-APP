@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -52,7 +53,11 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                             SvgPicture.asset(
                               'assets/images/profile.svg',
                             ),
-                            Icon(Icons.person, color: const Color(0xFFD3D6F2),size: 30.w,),
+                            Icon(
+                              Icons.person,
+                              color: const Color(0xFFD3D6F2),
+                              size: 30.w,
+                            ),
                           ],
                         ),
                         SizedBox(width: 16.w),
@@ -184,7 +189,17 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        await ref.read(userViewModelProvider.notifier).logout();
+                        await DialogManager.instance.showAlertDialog(
+                          context: context,
+                          title: '로그아웃 하시겠습니까?',
+                          leftButtonText: '취소',
+                          rightButtonText: '로그아웃',
+                          onRightButtonPressed: () async {
+                            await ref
+                                .read(userViewModelProvider.notifier)
+                                .logout();
+                          },
+                        );
                       },
                       child: TextFontWidget.fontRegular(
                           text: '로그아웃',

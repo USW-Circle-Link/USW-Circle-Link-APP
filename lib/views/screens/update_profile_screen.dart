@@ -636,8 +636,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertTextDialog(
-            text: '내 정보가 수정되었습니다.',
-            onConfirmPressed: () {
+            content: '내 정보가 수정되었습니다.',
+            onLeftButtonPressed: () {
               context.go('/');
             });
       },

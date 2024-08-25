@@ -1,14 +1,12 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/email_verification_view_model.dart';
-import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class EmailVerificationScreen extends ConsumerStatefulWidget {
@@ -46,13 +44,19 @@ class _EmailVerificationScreenState
       logger.d(next);
       if (next is EmailVerificationModel) {
         logger.d('이메일 보내기 성공!');
-        showAlertDialog(context, "인증 메일이 전송되었습니다!");
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: "인증 메일이 전송되었습니다!",
+        );
         setState(() {
           hadSent = true;
         });
       } else if (next is EmailVerificationModelResend) {
         logger.d('이메일 재전송 성공!');
-        showAlertDialog(context, "인증 메일이 재전송되었습니다!");
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: "인증 메일이 재전송되었습니다!",
+        );
       } else if (next is EmailVerificationModelComplete) {
         logger.d('이메일 인증 후 회원가입 성공!');
         context.go('/login');
@@ -61,10 +65,16 @@ class _EmailVerificationScreenState
           case EmailVerificationModelType.sendMail:
             switch (next.code) {
               case "EML-F100":
-                showAlertDialog(context, "이메일을 입력해주세요!");
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "이메일을 입력해주세요!",
+                );
                 break;
               default: // EML-501
-                showAlertDialog(context, "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!");
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!",
+                );
                 logger.e('예외발생 - $next');
                 break;
             }
@@ -72,7 +82,10 @@ class _EmailVerificationScreenState
           case EmailVerificationModelType.resendMail:
             switch (next.code) {
               case "EMAIL_TOKEN-001":
-                showAlertDialog(context, "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!");
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!",
+                );
                 break;
               default: // EML-501
                 logger.e('예외발생 - $next');
@@ -82,7 +95,10 @@ class _EmailVerificationScreenState
           case EmailVerificationModelType.completeSignUp:
             switch (next.code) {
               case "USR-208": // 존재하지 않는 계정
-                showAlertDialog(context, "회원가입을 완료하는 데 실패했습니다\n잠시후 다시 시도해주세요!");
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "회원가입을 완료하는 데 실패했습니다\n잠시후 다시 시도해주세요!",
+                );
                 break;
               default:
                 logger.e('예외발생 - $next');
@@ -356,17 +372,6 @@ class _EmailVerificationScreenState
                   ),
                 ),
               ),
-            ));
-  }
-
-  void showAlertDialog(BuildContext context, String text) async {
-    await showDialog(
-        context: context,
-        builder: (_) => AlertTextDialog(
-              text: text,
-              onConfirmPressed: () {
-                Navigator.of(context).pop();
-              },
             ));
   }
 

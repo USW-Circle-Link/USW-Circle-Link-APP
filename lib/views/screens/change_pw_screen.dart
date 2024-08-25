@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/change_pw_view_model.dart';
-import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -55,9 +55,13 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
             logger.e("예외발생 - $next");
             break;
         }
-        showAlertDialog(context, '비밀번호가 변경되었습니다', () {
-          context.go('/login');
-        });
+        DialogManager.instance.showAlertDialog(
+          context:context,
+          content:'비밀번호가 변경되었습니다',
+          onLeftButtonPressed: () {
+            context.go('/login');
+          },
+        );
       } else if (next is ChangePwModelError) {
         // 비밀번호 변경 에러
         switch (next.type) {
@@ -366,20 +370,5 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
       }
     }
     return false;
-  }
-
-  void showAlertDialog(
-      BuildContext context, String text, Function()? onConfirmPressed) async {
-    await showDialog(
-        context: context,
-        builder: (_) => AlertTextDialog(
-              text: text,
-              onConfirmPressed: () async {
-                Navigator.of(context).pop();
-                if (onConfirmPressed != null) {
-                  await onConfirmPressed();
-                }
-              },
-            ));
   }
 }

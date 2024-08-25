@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_pw_view_model.dart';
-import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -34,7 +34,10 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
         switch (next.type) {
           case FindPwModelType.sendCode:
             hadSent = true;
-            showAlertDialog(context, '인증코드가 전송되었습니다');
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '인증코드가 전송되었습니다',
+            );
             uuid = next.data;
             break;
           case FindPwModelType.verifyCode:
@@ -49,40 +52,68 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
           case FindPwModelType.sendCode:
             switch (next.code) {
               case "EML-F100": // 이메일 공백
-                showAlertDialog(context, '이메일을 입력해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '이메일을 입력해주세요!',
+                );
                 break;
               case "EML-F200": // 아이디 공백
-                showAlertDialog(context, '아이디를 입력해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '아이디를 입력해주세요!',
+                );
                 break;
               case "EML-F300": // 액세스토큰 NULL
-                showAlertDialog(context, '이메일 전송하는 데 실패했습니다\n잠시후 다시 시도해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '이메일 전송하는 데 실패했습니다\n잠시후 다시 시도해주세요!',
+                );
                 break;
               case "USR-209": // 이메일, 아이디 일치 X
-                showAlertDialog(context, '해당 정보로 가입된 회원이 없습니다!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '해당 정보로 가입된 회원이 없습니다!',
+                );
                 break;
               default: // EML-501
-                showAlertDialog(context, '이메일을 전송하는 데 실패했습니다.\n잠시후 다시 시도해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '이메일을 전송하는 데 실패했습니다.\n잠시후 다시 시도해주세요!',
+                );
                 break;
             }
             break;
           case FindPwModelType.verifyCode:
             switch (next.code) {
               case "VC-F100": // 인증코드 공백
-                showAlertDialog(context, '인증코드를 입력해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '인증코드를 입력해주세요!',
+                );
                 break;
               case "VC-F200": // uuid 가 존재하지 않음
-                showAlertDialog(context, '"이메일 전송" 버튼을 먼저 눌러주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '"이메일 전송" 버튼을 먼저 눌러주세요!',
+                );
                 break;
               case "USR-210": // 해당 정보로 인증 중인 회원존재 X
-                showAlertDialog(
-                    context, '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시동해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시동해주세요!',
+                );
                 break;
               case "AC-101": // 인증코드가 일치하지 않습니다
-                showAlertDialog(context, '인증코드가 일치하지 않습니다');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '인증코드가 일치하지 않습니다',
+                );
                 break;
               default:
-                showAlertDialog(
-                    context, '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시도해주세요!');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '인증코드를 확인하는 데 실패했습니다.\n잠시후 다시 시도해주세요!',
+                );
                 break;
             }
             break;
@@ -393,17 +424,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                   ),
                 ),
               ),
-            ));
-  }
-
-  void showAlertDialog(BuildContext context, String text) async {
-    await showDialog(
-        context: context,
-        builder: (_) => AlertTextDialog(
-              text: text,
-              onConfirmPressed: () {
-                Navigator.of(context).pop();
-              },
             ));
   }
 

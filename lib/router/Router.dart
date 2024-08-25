@@ -9,6 +9,7 @@ import 'package:usw_circle_link/views/screens/circle_screen.dart';
 import 'package:usw_circle_link/views/screens/email_verification_screen.dart';
 import 'package:usw_circle_link/views/screens/find_id_screen.dart';
 import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
+import 'package:usw_circle_link/views/screens/image_screen.dart';
 import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
@@ -42,7 +43,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               routes: [
                 GoRoute(
                     path: 'application_writing',
-                    builder: (_, state) => ApplicationWritingScreen(clubId: int.parse(state.uri.queryParameters['clubId']!),),
+                    builder: (_, state) => ApplicationWritingScreen(
+                          clubId:
+                              int.parse(state.uri.queryParameters['clubId']!),
+                        ),
                     routes: [webviewRouter]),
               ]),
           GoRoute(
@@ -117,13 +121,22 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: ':noticeId/detail',
                 builder: (_, state) => NoticeDetailScreen(
-                    noticeId: int.parse(state.pathParameters['noticeId']!)),
+                  noticeId: int.parse(
+                    state.pathParameters['noticeId']!,
+                  ),
+                ),
               ),
             ],
           ),
           GoRoute(
             path: 'tems_of_serice',
             builder: (_, __) => TermsOfServiceScreen(),
+          ),
+          GoRoute(
+            path: 'image',
+            name: 'image',
+            builder: (_, state) =>
+                ImageScreen(images: state.extra as List<String>),
           ),
         ],
       ),
@@ -132,7 +145,7 @@ final routerProvider = Provider<GoRouter>((ref) {
     refreshListenable: provider,
     debugLogDiagnostics: true,
     observers: [
-      RefreshObserver(ref:ref),
+      RefreshObserver(ref: ref),
     ],
   );
 });

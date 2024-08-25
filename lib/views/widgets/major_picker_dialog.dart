@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -12,16 +11,15 @@ class MajorPickerDialog extends StatefulWidget {
     required this.majors,
     this.selectedCollege,
     this.selectedMajor,
-    required this.onCollegeChanged,
-    required this.onMajorChanged,
+    this.onChanged,
     required this.onConfirmPressed,
   }) : super(key: key);
 
   final List<String> colleges;
   final Map<String, List<String>> majors;
   String? selectedCollege, selectedMajor;
-  final Function(String?) onCollegeChanged, onMajorChanged;
-  final Function(String?, String?) onConfirmPressed;
+  final void Function(String? newCollege, String? newMajor)? onChanged;
+  final void Function(String? college, String? major) onConfirmPressed;
 
   @override
   _MajorPickerDialogState createState() => _MajorPickerDialogState();
@@ -29,14 +27,14 @@ class MajorPickerDialog extends StatefulWidget {
 
 class _MajorPickerDialogState extends State<MajorPickerDialog> {
   final GlobalKey<FormFieldState> _key = GlobalKey<FormFieldState>();
-
+  bool isUserChange = true;
 
   @override
   Widget build(BuildContext context) {
     return Dialog(
       child: ScreenUtilInit(
           designSize: const Size(375, 812),
-          builder: (context, widget) {
+          builder: (context, _widget) {
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),
@@ -46,20 +44,21 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                 mainAxisSize: MainAxisSize.min,
                 children: <Widget>[
                   RoundedDropdown(
-                    initValue: this.widget.selectedCollege,
+                    initValue: widget.selectedCollege,
                     onChanged: (String? newValue) {
-                      this.widget.onCollegeChanged(newValue);
+                      isUserChange = false;
                       _key.currentState!.reset();
+                      isUserChange = true;
                       setState(() {
-                        this.widget.selectedMajor = null;
-                        this.widget.selectedCollege = newValue;
+                        widget
+                          ..selectedMajor = null
+                          ..selectedCollege = newValue;
                       });
-                      logger.d(
-                          '${this.widget.selectedCollege} ${this.widget.selectedMajor}');
+                      
+                      widget.onChanged
+                          ?.call(widget.selectedCollege, widget.selectedMajor);
                     },
-                    items: this
-                        .widget
-                        .colleges
+                    items: widget.colleges
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
@@ -85,15 +84,16 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                   SizedBox(height: 8),
                   RoundedDropdown(
                     globalKey: _key,
-                    initValue: this.widget.selectedMajor,
+                    initValue: widget.selectedMajor,
                     onChanged: (String? newValue) {
-                      this.widget.onMajorChanged(newValue);
-                      this.widget.selectedMajor = newValue;
-                      logger.d('${this.widget.selectedMajor}');
+                      if (isUserChange) { // 단과대학 변경 시 state reset 에서도 onChanged 가 호출됨!
+                        widget
+                          ..selectedMajor = newValue
+                          ..onChanged?.call(widget.selectedCollege, newValue);
+                      }
                     },
-                    items:
-                        (this.widget.majors[this.widget.selectedCollege] ?? [])
-                            .map<DropdownMenuItem<String>>((String value) {
+                    items: (widget.majors[widget.selectedCollege] ?? [])
+                        .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
                         child: TextFontWidget.fontRegular(
@@ -123,8 +123,9 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                   ),
                   TextButton(
                     onPressed: () {
-                      this.widget.onConfirmPressed(this.widget.selectedCollege,
-                          this.widget.selectedMajor);
+                      widget.onConfirmPressed(
+                          widget.selectedCollege, widget.selectedMajor);
+                      Navigator.of(context).pop();
                     },
                     style: TextButton.styleFrom(
                       minimumSize: Size.fromHeight(50.h),

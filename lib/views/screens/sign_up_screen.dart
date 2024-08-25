@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
-import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
-import 'package:usw_circle_link/views/widgets/major_picker_dialog.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -52,7 +49,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         switch (next.type) {
           case SignUpModelType.verify:
             // 아이디 중복확인 완료!
-            showAlertDialog(context, '아이디 사용이 가능합니다!');
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '아이디 사용이 가능합니다!',
+            );
             setState(() {
               idVerified = true;
             });
@@ -70,7 +70,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           case SignUpModelType.verify:
             // 아이디 중복확인 실패!
             if (next.code == null) {
-              showAlertDialog(context, '중복확인 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!');
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: '중복확인 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!',
+              );
             }
             break;
           case SignUpModelType.validatePasswordMatch:
@@ -392,7 +395,21 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ref
                               .read(signUpViewModelProvider.notifier)
                               .initState();
-                          showMajorPickerDialog(context);
+                          DialogManager.instance.showMajorPickerDialog(
+                            context: context,
+                            defaultCollege: college,
+                            defaultMajor: major,
+                            onChanged: (newCollege, newMajor) {
+                              logger.d('onChanged - $newCollege / $newMajor');
+                            },
+                            onConfirmPressed: (college, major) {
+                              setState(() {
+                                this.college = college;
+                                this.major = major;
+                                logger.d('$college - $major');
+                              });
+                            },
+                          );
                         },
                         leftBottomCornerRadius: 8.r,
                         rightBottomCornerRadius: 8.r,
@@ -449,11 +466,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                               major: major!.trim());
                                     } else if (!idVerified) {
                                       // 아이디 중복확인 필요
-                                      showAlertDialog(
-                                          context, '아이디 중복확인이 필요합니다.');
+                                      DialogManager.instance.showAlertDialog(
+                                        context: context,
+                                        content: '아이디 중복확인이 필요합니다.',
+                                      );
                                     } else if (major == null) {
-                                      showAlertDialog(
-                                          context, '단과대학/학과를 선택해주세요.');
+                                      DialogManager.instance.showAlertDialog(
+                                        context: context,
+                                        content: '단과대학/학과를 선택해주세요.',
+                                      );
                                     }
                                   },
                             style: OutlinedButton.styleFrom(
@@ -513,42 +534,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
               ),
             ));
-  }
-
-  void showAlertDialog(BuildContext context, String text) async {
-    await showDialog(
-        context: context,
-        builder: (_) => AlertTextDialog(
-              text: text,
-              onConfirmPressed: () {
-                Navigator.of(context).pop();
-              },
-            ));
-  }
-
-  void showMajorPickerDialog(BuildContext context) async {
-    final result = await showDialog(
-      context: context,
-      builder: (_) => MajorPickerDialog(
-        colleges: colleges,
-        majors: majors,
-        selectedCollege: college,
-        selectedMajor: major,
-        onCollegeChanged: (String? newValue) {},
-        onMajorChanged: (String? newValue) {},
-        onConfirmPressed: (college, major) {
-          Navigator.of(context).pop({'college': college, 'major': major});
-        },
-      ),
-    );
-
-    setState(() {
-      if (result != null) {
-        college = result['college'];
-        major = result['major'];
-        logger.d('$college - $major');
-      }
-    });
   }
 
   bool idIsInvalid(SignUpModelBase? state) {
