@@ -109,7 +109,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 serverError || clubIntro == null || clubIntro.recruitmentStatus == "CLOSE"
                     ? CustomButton(text: '모집마감', isEnabled: false, onPressed: () {})
                     : CustomButton(text: '지원하기', isEnabled: true, onPressed: () {
-                      context.go('/circle/application_writing?clubId=${widget.clubId}',);
+                      context.push('/circle/application_writing?clubId=${widget.clubId}',);
                 }),
               ],
             ),
@@ -118,7 +118,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : serverError
-            ? Center(child: Text('서버에 연결할 수 없습니다. UI는 표시됩니다.'))
+            ? Center(child: Text('서버에 연결할 수 없습니다.'))
             : clubIntro == null
             ? Center(child: Text('동아리 정보를 불러오지 못했습니다.'))
             : SingleChildScrollView(

@@ -6,7 +6,7 @@ class ClubRepository {
 
   Future<ClubIntro> fetchClubIntro(String clubId) async {
     try {
-      final response = await _dio.get('http://43.201.237.126:8080/clubs/intro/$clubId');
+      final response = await _dio.get('http://15.164.246.244:8080/clubs/intro/$clubId');
       return ClubIntro.fromJson(response.data);
     } catch (e) {
       throw Exception("Failed to fetch club intro");
