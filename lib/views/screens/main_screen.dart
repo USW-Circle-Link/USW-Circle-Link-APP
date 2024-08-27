@@ -1,17 +1,20 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:go_router/go_router.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/notifier/notification_state_notifier.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/views/widgets/cloud_messaging.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
 import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
@@ -19,9 +22,7 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
-  MainScreen({super.key, this.haveToFetch = true});
-
-  bool? haveToFetch;
+  const MainScreen({super.key});
 
   @override
   _MainScreenState createState() => _MainScreenState();
@@ -34,32 +35,20 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
+    _requestNotificationPermission();
     super.initState();
-    initializeFCM();
-
-    // ViewModel을 통해 FCM 초기화
-    ref.read(notificationViewModelProvider).initializeFCM();
   }
 
-  // FCM 초기화 및 백그라운드 메시지 핸들러 설정
-  void initializeFCM() {
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-      final notificationBody = message.notification?.body ?? 'No message body';
-      ref.read(notificationProvider.notifier).addNotification(notificationBody);
-    });
+  // 알림 권한 요청
+  Future<void> _requestNotificationPermission() async {
+    if (Platform.isAndroid) {
+      final int sdkInt = (await DeviceInfoPlugin().androidInfo).version.sdkInt;
 
-    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-  }
-
-  // 백그라운드 메시지 핸들러
-  static Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    final notificationBody = message.notification?.body ?? 'No message body';
-
-    // SharedPreferences를 사용하여 백그라운드에서 알림을 저장
-    final prefs = await SharedPreferences.getInstance();
-    final notifications = prefs.getStringList('notifications') ?? [];
-    notifications.add(notificationBody);
-    await prefs.setStringList('notifications', notifications);
+      if (sdkInt >= 33) {
+        logger.d('Permission Requested!');
+        await Permission.notification.request();
+      }
+    }
   }
 
   void _showOverlay(BuildContext context) {
@@ -70,7 +59,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       (_overlayEntry!.builder as _NotificationOverlayState).updateList();
     }
   }
-
 
   OverlayEntry _createOverlayEntry(BuildContext context) {
     return OverlayEntry(
@@ -85,30 +73,27 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-    // null -> 로그아웃 상태
-    // UserModel -> 로그인 상태
-    WidgetsBinding.instance.addPostFrameCallback((duration) {
-      if (widget.haveToFetch??true) {
-        ref.read(profileViewModelProvider.notifier).getProfile();
-        widget.haveToFetch = false;
-      }
-    });
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
-      // 유저 정보 불러오기
       logger.d(next);
-      ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
-      //ref.read(profileViewModelProvider.notifier).getProfile();
+      Future.wait([
+        isAllSelected
+            ? ref.read(mainViewModelProvider.notifier).fetchAllCircleList()
+            : ref.read(mainViewModelProvider.notifier).fetchOpenCircleList(),
+        ref.read(profileViewModelProvider.notifier).getProfile(),
+      ]);
     });
+
     final circleListState = ref.watch(mainViewModelProvider);
     ref.listen(mainViewModelProvider, (previous, next) {
       logger.d(next);
     });
+
     final profileState = ref.watch(profileViewModelProvider);
     ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -120,16 +105,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           centerTitle: true,
           elevation: 0.0,
           backgroundColor: Colors.white,
-          leading: Container(
-            margin: EdgeInsets.only(left: 24.w), // menubt.svg에 왼쪽 여백 추가
-            child: IconButton(
-              onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              icon: Icon(
-                Icons.menu_outlined,
-                color: Colors.grey,
-              ),
+          leading: IconButton(
+            onPressed: () {
+              _scaffoldKey.currentState?.openDrawer();
+            },
+            icon: Icon(
+              Icons.menu_outlined,
+              color: Colors.grey,
             ),
           ),
           title: Row(
@@ -150,20 +132,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ],
           ),
           actions: [
-            Padding(
-              padding: EdgeInsets.only(right: 24.w),
-              child: IconButton(
-                onPressed: () {
-                  _showOverlay(context);
-                },
-                icon: SvgPicture.asset('assets/images/bell.svg'),
-              ),
+            IconButton(
+              onPressed: () {
+                _showOverlay(context);
+              },
+              icon: SvgPicture.asset('assets/images/bell.svg'),
             ),
           ],
         ),
-        drawer: userState.value is UserModel && profileState is ProfileModel
-            ? LoggedInMenu(state: profileState)
-            : LoggedOutMenu(),
+        drawer:
+            userState.value is UserModel && profileState.value is ProfileModel
+                ? LoggedInMenu(state: profileState.value as ProfileModel)
+                : LoggedOutMenu(),
         body: Column(
           children: [
             Row(
@@ -209,7 +189,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     });
                     await ref
                         .read(mainViewModelProvider.notifier)
-                        .fetchDepartmentCircleList();
+                        .fetchOpenCircleList();
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: !isAllSelected
@@ -232,8 +212,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ],
             ),
             circleListState is CircleListModel
-                ? Expanded(child: CircleList(state: circleListState))
-                : Container(),
+                ? Expanded(
+                    child: CircleList(
+                    state: circleListState,
+                    onItemClicked: (clubId) {
+                      context.go('/circle?clubId=1');
+                    },
+                  ))
+                : Expanded(
+                    child: Center(
+                        child: TextFontWidget.fontRegular(
+                            text: '동아리가 없습니다',
+                            fontSize: 14.sp,
+                            color: Colors.black,
+                            fontweight: FontWeight.w400)),
+                  ),
           ],
         ),
       ),
@@ -290,7 +283,8 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
                   ),
                   Expanded(
                     child: Consumer(builder: (context, ref, child) {
-                      final notifications = ref.watch(notificationProvider);
+                      final notifications =
+                          ref.watch(firebaseCloudMessagingViewModelProvider);
                       return ListView.builder(
                         itemCount: notifications.length,
                         itemBuilder: (context, index) {
@@ -313,5 +307,10 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
 
   void updateList() {
     setState(() {});
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

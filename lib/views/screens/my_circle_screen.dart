@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/viewmodels/my_circle_view_model.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class MyCircleScreen extends ConsumerWidget {
   const MyCircleScreen({super.key});
@@ -71,7 +72,7 @@ class MyCircleScreen extends ConsumerWidget {
                     CircleList(
                       CircleLeader: circle.leaderName,
                       CircleName: circle.clubName,
-                      ImageUrl: circle.mainPhotoPath,
+                      ImageUrl: circle.mainPhotoPath?? "",
                       leaderHp: circle.leaderHp,
                       InstaId: circle.clubInsta,
                     ),
@@ -81,7 +82,7 @@ class MyCircleScreen extends ConsumerWidget {
                 return CircleList(
                   CircleLeader: circle.leaderName,
                   CircleName: circle.clubName,
-                  ImageUrl: circle.mainPhotoPath,
+                  ImageUrl: circle.mainPhotoPath??"",
                   leaderHp: circle.leaderHp,
                   InstaId: circle.clubInsta,
                 );
@@ -98,7 +99,7 @@ class MyCircleScreen extends ConsumerWidget {
 
 class CircleList extends StatelessWidget {
   final String CircleName;
-  final String ImageUrl;
+  final String? ImageUrl;
   final String CircleLeader;
   final String InstaId;
   final String leaderHp;
@@ -106,7 +107,7 @@ class CircleList extends StatelessWidget {
   const CircleList({
     required this.CircleLeader,
     required this.CircleName,
-    required this.ImageUrl,
+    this.ImageUrl,
     required this.leaderHp,
     required this.InstaId,
   });
@@ -129,9 +130,13 @@ class CircleList extends StatelessWidget {
                     height: 100.sp,
                     width: 100.sp,
                     margin: EdgeInsets.all(16.sp),
-                    child: Image(
-                      image: NetworkImage(ImageUrl),
-                    )
+                    alignment: Alignment.center,
+                    child: Image.network(
+                      ImageUrl??"",
+                      errorBuilder: (context, error, stackTrace) {
+                        return TextFontWidget.fontRegular(text: '이미지 없음', fontSize: 14.sp, color: Colors.black, fontweight: FontWeight.w400);
+                      },
+                    ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -182,6 +187,7 @@ class CircleList extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
+                        SizedBox(width: 4.w,),
                         SvgPicture.asset(
                           'assets/images/phonelogo.svg',
                           height: 16.h,
@@ -205,9 +211,11 @@ class CircleList extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'assets/images/kakaologo.png',
-                        ),
+                           Image.asset(
+                              width: 25.w,
+                              height: 25.h,
+                              'assets/images/Instagramlogo.png',
+                            ),
                         SizedBox(width: 6.w),
                         Text(
                           '@'+InstaId,

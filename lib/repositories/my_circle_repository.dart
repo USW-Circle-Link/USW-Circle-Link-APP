@@ -30,6 +30,8 @@ class MyCircleRepository {
         options: Options(headers: {'accessToken' : 'true'}),
       );
 
+      logger.d(response.data);
+
       logger.d('getMyCircles - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
       if (response.statusCode == 200) {

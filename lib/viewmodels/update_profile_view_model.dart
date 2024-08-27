@@ -3,7 +3,7 @@ import 'package:usw_circle_link/models/update_profile_model.dart';
 import 'package:usw_circle_link/repositories/update_profile_repository.dart';
 
 // 프로필 정보를 가져오는 Provider 정의
-final getProfileProvider = FutureProvider<Circle>((ref) async {
+final getProfileProvider = FutureProvider.autoDispose<Circle>((ref) async {
   final updateProfileRepository = ref.watch(UpdateProfileRepositoryProvider);
 
   // 프로필 정보 가져오기

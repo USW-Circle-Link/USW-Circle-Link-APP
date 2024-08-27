@@ -23,12 +23,8 @@ mixin _$ProfileModel {
   String get message => throw _privateConstructorUsedError;
   ProfileData get data => throw _privateConstructorUsedError;
 
-  /// Serializes this ProfileModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ProfileModelCopyWith<ProfileModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -54,8 +50,6 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -74,8 +68,6 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
     ) as $Val);
   }
 
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $ProfileDataCopyWith<$Res> get data {
@@ -107,8 +99,6 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
       _$ProfileModelImpl _value, $Res Function(_$ProfileModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -156,13 +146,11 @@ class _$ProfileModelImpl implements _ProfileModel {
             (identical(other.data, data) || other.data == data));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, data);
 
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileModelImplCopyWith<_$ProfileModelImpl> get copyWith =>
@@ -188,11 +176,8 @@ abstract class _ProfileModel implements ProfileModel {
   String get message;
   @override
   ProfileData get data;
-
-  /// Create a copy of ProfileModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProfileModelImplCopyWith<_$ProfileModelImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -208,12 +193,8 @@ mixin _$ProfileData {
   String get userHp => throw _privateConstructorUsedError;
   String get major => throw _privateConstructorUsedError;
 
-  /// Serializes this ProfileData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ProfileData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ProfileDataCopyWith<ProfileData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -238,8 +219,6 @@ class _$ProfileDataCopyWithImpl<$Res, $Val extends ProfileData>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ProfileData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -289,8 +268,6 @@ class __$$ProfileDataImplCopyWithImpl<$Res>
       _$ProfileDataImpl _value, $Res Function(_$ProfileDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProfileData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -359,14 +336,12 @@ class _$ProfileDataImpl implements _ProfileData {
             (identical(other.major, major) || other.major == major));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, userName, studentNumber, userHp, major);
 
-  /// Create a copy of ProfileData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileDataImplCopyWith<_$ProfileDataImpl> get copyWith =>
@@ -398,11 +373,8 @@ abstract class _ProfileData implements ProfileData {
   String get userHp;
   @override
   String get major;
-
-  /// Create a copy of ProfileData
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProfileDataImplCopyWith<_$ProfileDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -415,12 +387,8 @@ ProfileModelError _$ProfileModelErrorFromJson(Map<String, dynamic> json) {
 mixin _$ProfileModelError {
   String get message => throw _privateConstructorUsedError;
 
-  /// Serializes this ProfileModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of ProfileModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ProfileModelErrorCopyWith<ProfileModelError> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -444,8 +412,6 @@ class _$ProfileModelErrorCopyWithImpl<$Res, $Val extends ProfileModelError>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of ProfileModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -479,8 +445,6 @@ class __$$ProfileModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$ProfileModelErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of ProfileModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -519,13 +483,11 @@ class _$ProfileModelErrorImpl implements _ProfileModelError {
             (identical(other.message, message) || other.message == message));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message);
 
-  /// Create a copy of ProfileModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ProfileModelErrorImplCopyWith<_$ProfileModelErrorImpl> get copyWith =>
@@ -549,11 +511,8 @@ abstract class _ProfileModelError implements ProfileModelError {
 
   @override
   String get message;
-
-  /// Create a copy of ProfileModelError
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ProfileModelErrorImplCopyWith<_$ProfileModelErrorImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }

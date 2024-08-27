@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleGroup extends StatelessWidget {
-  const CircleGroup({Key? key, required this.department}) : super(key: key);
+  const CircleGroup({
+    Key? key,
+    required this.department,
+    required this.onItemClicked,
+  }) : super(key: key);
 
   final MapEntry<String, List<CircleListData>> department;
+  final Function(int clubId) onItemClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +27,7 @@ class CircleGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFontWidget.fontRegular(
-            text: department.key,
+            text: department.key.toDepartment(),
             fontSize: 16.sp,
             color: Colors.black,
             fontweight: FontWeight.w400,
@@ -34,8 +40,8 @@ class CircleGroup extends StatelessWidget {
               itemCount: department.value.length,
               itemBuilder: (context, index) {
                 return CircleItem(
-                  imagePath: department.value[index].mainPhoto,
-                  title: department.value[index].clubName,
+                  circle: department.value[index],
+                  onItemClicked: onItemClicked,
                 );
               },
             ),
@@ -43,5 +49,14 @@ class CircleGroup extends StatelessWidget {
         ],
       ),
     );
+  }
+}
+
+extension Department on String {
+  String toDepartment() {
+    if (departments.containsKey(this)) {
+      return departments[this]!;
+    }
+    return this;
   }
 }

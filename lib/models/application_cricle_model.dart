@@ -1,6 +1,6 @@
 class Circle {
   final int clubId;
-  final String mainPhotoPath;
+  final String? mainPhotoPath;
   final String clubName;
   final String leaderName;
   final String leaderHp;
@@ -9,7 +9,7 @@ class Circle {
 
   Circle({
   required this.clubId,
-  required this.mainPhotoPath,
+  this.mainPhotoPath,
   required this.clubName,
   required this.leaderName,
   required this.leaderHp,

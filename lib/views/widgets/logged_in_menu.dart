@@ -4,9 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
-import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -47,18 +47,18 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         child: Row(
                       children: [
                         SizedBox(width: 3.w),
-                        Container(
-                          width: 54.w,
-                          height: 54.h,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                fit: BoxFit.cover,
-                                image: NetworkImage(
-                                    'https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp')),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(27.r)),
-                            color: Colors.redAccent,
-                          ),
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/profile.svg',
+                            ),
+                            Icon(
+                              Icons.person,
+                              color: const Color(0xFFD3D6F2),
+                              size: 30.w,
+                            ),
+                          ],
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
@@ -156,9 +156,8 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   title: '공지 사항',
                   svgPath: 'assets/images/menubar4.svg',
                   onTap: () {
-                    
                     context.go('/notices');
-                    },
+                  },
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
               ],
@@ -180,20 +179,27 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-                     TextButton(
-                      onPressed:  _launchURL,
-                      
+                    TextButton(
+                      onPressed: _launchURL,
                       child: TextFontWidget.fontRegular(
                           text: '피드백',
                           fontSize: 12.sp,
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-
-                    
                     TextButton(
                       onPressed: () async {
-                        await ref.read(userViewModelProvider.notifier).logout();
+                        await DialogManager.instance.showAlertDialog(
+                          context: context,
+                          title: '로그아웃 하시겠습니까?',
+                          leftButtonText: '취소',
+                          rightButtonText: '로그아웃',
+                          onRightButtonPressed: () async {
+                            await ref
+                                .read(userViewModelProvider.notifier)
+                                .logout();
+                          },
+                        );
                       },
                       child: TextFontWidget.fontRegular(
                           text: '로그아웃',
@@ -213,14 +219,14 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
 }
 
 void _launchURL() async {
-    const url = '$feedback';
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'URL을 열 수 없습니다: $url';
-    }
+  const url = '$feedback';
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'URL을 열 수 없습니다: $url';
   }
+}
 
 Widget buildDrawerItem({
   required String title,
@@ -248,7 +254,8 @@ Widget buildDrawerItem({
       color: const Color(0xffFFFFFF),
     ),
     child: ListTile(
-      contentPadding: EdgeInsets.only(left: 16.w, right: 6), // 패딩 조정
+      contentPadding:
+          EdgeInsets.only(left: 16.w, right: isExpanded ? 15.w : 6.w), // 패딩 조정
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),

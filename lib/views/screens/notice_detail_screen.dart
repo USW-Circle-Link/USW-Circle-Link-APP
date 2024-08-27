@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
-import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -26,9 +27,7 @@ class NoticeDetailScreen extends ConsumerWidget {
             break;
           default:
         }
-      } else if (next is NoticeDetailModelError) {
-
-      }
+      } else if (next is NoticeDetailModelError) {}
     });
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (state == null) {
@@ -65,42 +64,93 @@ class NoticeDetailScreen extends ConsumerWidget {
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: EdgeInsets.only(top: 16.h),
-            padding: EdgeInsets.only(left: 32.w, right: 32.w),
-            child: state is NoticeDetailModel
-                ? Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFontWidget.fontRegular(
-                        text: state.data.noticeTitle,
-                        fontSize: 18.sp,
-                        color: const Color(0xFF000000),
-                        fontweight: FontWeight.w600,
-                      ),
-                      SizedBox(
-                        height: 6.h,
-                      ),
-                      TextFontWidget.fontRegular(
-                        text:
-                            '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
-                        fontSize: 14.sp,
-                        color: const Color(0xFF767676),
-                        fontweight: FontWeight.w400,
-                      ),
-                      SizedBox(
-                        height: 16.h,
-                      ),
-                      TextFontWidget.fontRegular(
-                        text: state.data.noticeContent ?? "",
-                        fontSize: 14.sp,
-                        color: const Color(0xFF000000),
-                        fontweight: FontWeight.w400,
-                      ),
-                    ],
-                  )
-                : Container(),
+        body: SafeArea(
+          child: SizedBox(
+            height: double.infinity,
+            width: double.infinity,
+            child: Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Container(
+                    width: double.infinity,
+                    margin: EdgeInsets.only(top: 16.h),
+                    padding: EdgeInsets.only(
+                      left: 32.w,
+                      right: 32.w,
+                      bottom: 100.h, // image height size 만큼 올려줘야함
+                    ),
+                    child: state is NoticeDetailModel
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              TextFontWidget.fontRegular(
+                                text: state.data.noticeTitle,
+                                fontSize: 18.sp,
+                                color: const Color(0xFF000000),
+                                fontweight: FontWeight.w600,
+                              ),
+                              SizedBox(
+                                height: 6.h,
+                              ),
+                              TextFontWidget.fontRegular(
+                                text:
+                                    '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                fontSize: 14.sp,
+                                color: const Color(0xFF767676),
+                                fontweight: FontWeight.w400,
+                              ),
+                              SizedBox(
+                                height: 16.h,
+                              ),
+                              TextFontWidget.fontRegular(
+                                text: state.data.noticeContent,
+                                fontSize: 14.sp,
+                                color: const Color(0xFF000000),
+                                fontweight: FontWeight.w400,
+                              ),
+                            ],
+                          )
+                        : Container(),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  child: state is NoticeDetailModel &&
+                          state.data.noticePhotos != null
+                      ? SizedBox(
+                          height: 100.h,
+                          width: MediaQuery.of(context).size.width,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal, // 가로 방향으로 스크롤
+                            itemCount: state.data.noticePhotos!.length,
+                            itemBuilder: (context, index) {
+                              return InkWell(
+                                onTap: () {
+                                  context.push('/image', extra: state.data.noticePhotos);
+                                },
+                                child: Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: 4.0,
+                                  ), // 이미지 사이의 여백
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.circular(8.0), // 모서리를 둥글게 설정
+                                    child: Image.network(
+                                      state.data.noticePhotos![index],
+                                      fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
+                                      width: 100.w, // 이미지의 너비
+                                      // height: 100.h, // 이미지의 높이
+                                    ),
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Container(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

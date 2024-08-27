@@ -1,13 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/update_profile_model.dart';
-import 'package:usw_circle_link/repositories/update_profile_repository.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
-import 'package:usw_circle_link/views/screens/main_screen.dart';
+import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 
@@ -31,8 +29,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   bool isNameValid = true;
   bool isPhoneNumberValid = true;
   bool isStudentNumberValid = true;
-
-
 
   final Map<String, List<String>> collegeMajorMap = {
     '인문사회융합대학': [
@@ -142,7 +138,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   Future<void> fetchProfileData() async {
     try {
       final profile = await ref.read(getProfileProvider.future);
-      if (mounted && profile != null) {
+      if (mounted) {
         setState(() {
           nameController.text = profile.userName;
           phonenumberController.text = profile.userHp;
@@ -156,9 +152,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       print('Error fetching profile: $error');
     }
   }
-
-
-
 
   @override
   void dispose() {
@@ -275,7 +268,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isNameValid ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor:
+                      isNameValid ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -325,7 +319,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
                   borderColor:
-                  isPhoneNumberValid ? const Color(0xffDBDBDB) : Colors.red,
+                      isPhoneNumberValid ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -374,8 +368,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor:
-                  isStudentNumberValid ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor: isStudentNumberValid
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -463,8 +458,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             onPressed: () {
               setState(() {
                 isNameValid = validateName(nameController.text);
-                isPhoneNumberValid = validatePhoneNumber(phonenumberController.text);
-                isStudentNumberValid = validateStudentNumber(studentnumberController.text);
+                isPhoneNumberValid =
+                    validatePhoneNumber(phonenumberController.text);
+                isStudentNumberValid =
+                    validateStudentNumber(studentnumberController.text);
               });
 
               if (isNameValid && isPhoneNumberValid && isStudentNumberValid) {
@@ -475,23 +472,23 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   major: selectedMajor ?? departmentController.text,
                 );
 
-                ref.read(updateProfileViewModel(updatedProfile).future).then((_) {
+                ref
+                    .read(updateProfileViewModel(updatedProfile).future)
+                    .then((_) {
                   // 프로필 데이터를 새로고침하여 다시 불러옴
-                  ref.refresh(getProfileProvider);
+                  // ref.refresh(getProfileProvider);
 
                   // UI 상태 처리
                   ref.watch(getProfileProvider).when(
-                    data: (profile) {
-                      // 데이터가 성공적으로 업데이트되었으면 다이얼로그를 표시하고 메인 화면으로 이동
-                      showalarmCustomDialog(context).then((_) {
-                        if (mounted) {
-                          context.go("/");
-                        }
-                      });
-                    },
-                    loading: () => CircularProgressIndicator(), // 로딩 중일 때 UI 처리
-                    error: (err, stack) => Text('Error: $err'), // 에러 발생 시 UI 처리
-                  );
+                        data: (profile) async {
+                          // 데이터가 성공적으로 업데이트되었으면 다이얼로그를 표시하고 메인 화면으로 이동
+                          await showalarmCustomDialog(context);
+                        },
+                        loading: () =>
+                            CircularProgressIndicator(), // 로딩 중일 때 UI 처리
+                        error: (err, stack) =>
+                            Text('Error: $err'), // 에러 발생 시 UI 처리
+                      );
                 }).catchError((error) {
                   // 오류 처리
                   print('Error: $error');
@@ -499,7 +496,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
               }
             },
           )
-
         ],
       ),
     );
@@ -557,7 +553,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                           localSelectedMajor = newValue;
                         });
                       },
-                      items: (collegeMajorMap[localSelectedCollege] ?? []).map<DropdownMenuItem<String>>((String value) {
+                      items: (collegeMajorMap[localSelectedCollege] ?? [])
+                          .map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),
@@ -582,8 +579,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.of(context).pop(
-                            {'college': localSelectedCollege, 'major': localSelectedMajor});
+                        Navigator.of(context).pop({
+                          'college': localSelectedCollege,
+                          'major': localSelectedMajor
+                        });
                       },
                       style: TextButton.styleFrom(
                         minimumSize: Size.fromHeight(50.h),
@@ -624,9 +623,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     }
   }
 
-
   List<String> getMajorsForSelectedCollege() {
-    if (selectedCollege != null && collegeMajorMap.containsKey(selectedCollege)) {
+    if (selectedCollege != null &&
+        collegeMajorMap.containsKey(selectedCollege)) {
       return collegeMajorMap[selectedCollege]!;
     }
     return [];
@@ -636,71 +635,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     await showDialog(
       context: context,
       builder: (BuildContext context) {
-        return Dialog(
-          child: Container(
-            padding: EdgeInsets.zero,
-            width: 270.w,
-            height: 125.h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(15.r),
-              color: const Color(0xffffffff),
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 15.h),
-                Text(
-                  "알림",
-                  style: TextStyle(
-                    color: const Color(0xff111111),
-                    fontWeight: FontWeight.w600,
-                    fontSize: 18.sp,
-                    fontFamily: "Pretendard",
-                    fontStyle: FontStyle.normal,
-                    height: 1.11.sp,
-                  ),
-                ),
-                SizedBox(height: 8.h),
-                Text(
-                  "내 정보가 수정되었습니다",
-                  style: TextStyle(
-                    color: const Color(0xff767676),
-                    fontWeight: FontWeight.w400,
-                    fontSize: 14.sp,
-                    fontFamily: "Pretendard",
-                    fontStyle: FontStyle.normal,
-                    height: 1.14.sp,
-                  ),
-                ),
-                SizedBox(height: 15.h),
-                Container(
-                    width: 275.w,
-                    height: 1.h,
-                    decoration: BoxDecoration(color: Color(0xffdadada))),
-                SizedBox(height: 1.h),
-                TextButton(
-                  onPressed: () {
-                    if (mounted) {
-                      context.go("/", extra: true);
-                    }
-                  },
-                  child: Text(
-                    "확인",
-                    style: TextStyle(
-                      color: const Color(0xff0085FF),
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.sp,
-                      fontFamily: "Pretendard",
-                      fontStyle: FontStyle.normal,
-                      height: 1.11.sp,
-                    ),
-                  ),
-                  style: ButtonStyle(),
-                )
-              ],
-            ),
-          ),
-        );
+        return AlertTextDialog(
+            content: '내 정보가 수정되었습니다.',
+            onLeftButtonPressed: () {
+              context.go('/');
+            });
       },
     );
   }

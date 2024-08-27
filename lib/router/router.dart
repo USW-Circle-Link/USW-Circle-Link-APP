@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
+import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
 import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
@@ -9,6 +9,7 @@ import 'package:usw_circle_link/views/screens/circle_screen.dart';
 import 'package:usw_circle_link/views/screens/email_verification_screen.dart';
 import 'package:usw_circle_link/views/screens/find_id_screen.dart';
 import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
+import 'package:usw_circle_link/views/screens/image_screen.dart';
 import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/my_circle_screen.dart';
@@ -32,16 +33,22 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, state) => MainScreen(haveToFetch:state.extra as bool?),
+        builder: (_, state) => MainScreen(),
         routes: [
-          GoRoute(path: 'circle',
-          builder: (_, state) => CircleScreen(clubId: state.uri.queryParameters["clubId"]! ,),
-          routes: [
-            GoRoute(
-                path: 'application_writing',
-                builder: (_, state) => ApplicationWritingScreen(),
-                routes: [webviewRouter]),
-          ]),
+          GoRoute(
+              path: 'circle',
+              builder: (_, state) => CircleScreen(
+                    clubId: state.uri.queryParameters["clubId"]!,
+                  ),
+              routes: [
+                GoRoute(
+                    path: 'application_writing',
+                    builder: (_, state) => ApplicationWritingScreen(
+                          clubId:
+                              int.parse(state.uri.queryParameters['clubId']!),
+                        ),
+                    routes: [webviewRouter]),
+              ]),
           GoRoute(
             path: 'login',
             builder: (_, __) => LoginScreen(),
@@ -114,7 +121,10 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: ':noticeId/detail',
                 builder: (_, state) => NoticeDetailScreen(
-                    noticeId: int.parse(state.pathParameters['noticeId']!)),
+                  noticeId: int.parse(
+                    state.pathParameters['noticeId']!,
+                  ),
+                ),
               ),
             ],
           ),
@@ -122,11 +132,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'tems_of_serice',
             builder: (_, __) => TermsOfServiceScreen(),
           ),
+          GoRoute(
+            path: 'image',
+            name: 'image',
+            builder: (_, state) =>
+                ImageScreen(images: state.extra as List<String>),
+          ),
         ],
       ),
     ],
     initialLocation: '/',
     refreshListenable: provider,
     debugLogDiagnostics: true,
+    observers: [
+      RefreshObserver(ref: ref),
+    ],
   );
 });

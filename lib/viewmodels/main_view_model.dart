@@ -32,11 +32,11 @@ class MainViewModel extends StateNotifier<CircleListModelBase?> {
     }
   }
 
-  Future<void> fetchDepartmentCircleList() async {
+  Future<void> fetchOpenCircleList() async {
     try {
       state = CircleListModelLoading();
 
-      final response = await circleListRepository.fetchDepartmentCircleList();
+      final response = await circleListRepository.fetchOpenCircleList();
 
       state = response;
     } on CircleListModelError catch (e) {

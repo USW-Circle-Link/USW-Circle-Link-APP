@@ -25,12 +25,8 @@ mixin _$EmailVerificationModel {
   EmailVerificationData get data => throw _privateConstructorUsedError;
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this EmailVerificationModel to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmailVerificationModelCopyWith<EmailVerificationModel> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -60,8 +56,6 @@ class _$EmailVerificationModelCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -85,8 +79,6 @@ class _$EmailVerificationModelCopyWithImpl<$Res,
     ) as $Val);
   }
 
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
   @pragma('vm:prefer-inline')
   $EmailVerificationDataCopyWith<$Res> get data {
@@ -124,8 +116,6 @@ class __$$EmailVerificationModelImplCopyWithImpl<$Res>
       $Res Function(_$EmailVerificationModelImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -183,13 +173,11 @@ class _$EmailVerificationModelImpl extends _EmailVerificationModel {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmailVerificationModelImplCopyWith<_$EmailVerificationModelImpl>
@@ -220,11 +208,8 @@ abstract class _EmailVerificationModel extends EmailVerificationModel {
   EmailVerificationData get data;
   @override
   EmailVerificationModelType? get type;
-
-  /// Create a copy of EmailVerificationModel
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$EmailVerificationModelImplCopyWith<_$EmailVerificationModelImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -239,12 +224,8 @@ mixin _$EmailVerificationData {
   String get account => throw _privateConstructorUsedError;
   String get emailToken_uuid => throw _privateConstructorUsedError;
 
-  /// Serializes this EmailVerificationData to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmailVerificationData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmailVerificationDataCopyWith<EmailVerificationData> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -269,8 +250,6 @@ class _$EmailVerificationDataCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmailVerificationData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -311,8 +290,6 @@ class __$$EmailVerificationDataImplCopyWithImpl<$Res>
       $Res Function(_$EmailVerificationDataImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmailVerificationData
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -361,13 +338,11 @@ class _$EmailVerificationDataImpl implements _EmailVerificationData {
                 other.emailToken_uuid == emailToken_uuid));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, account, emailToken_uuid);
 
-  /// Create a copy of EmailVerificationData
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmailVerificationDataImplCopyWith<_$EmailVerificationDataImpl>
@@ -394,11 +369,8 @@ abstract class _EmailVerificationData implements EmailVerificationData {
   String get account;
   @override
   String get emailToken_uuid;
-
-  /// Create a copy of EmailVerificationData
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$EmailVerificationDataImplCopyWith<_$EmailVerificationDataImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -414,12 +386,8 @@ mixin _$EmailVerificationModelResend {
   String get data => throw _privateConstructorUsedError;
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this EmailVerificationModelResend to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmailVerificationModelResend
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmailVerificationModelResendCopyWith<EmailVerificationModelResend>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -446,8 +414,6 @@ class _$EmailVerificationModelResendCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmailVerificationModelResend
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -494,8 +460,6 @@ class __$$EmailVerificationModelResendImplCopyWithImpl<$Res>
       $Res Function(_$EmailVerificationModelResendImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmailVerificationModelResend
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -553,13 +517,11 @@ class _$EmailVerificationModelResendImpl extends _EmailVerificationModelResend {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  /// Create a copy of EmailVerificationModelResend
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmailVerificationModelResendImplCopyWith<
@@ -593,11 +555,8 @@ abstract class _EmailVerificationModelResend
   String get data;
   @override
   EmailVerificationModelType? get type;
-
-  /// Create a copy of EmailVerificationModelResend
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$EmailVerificationModelResendImplCopyWith<
           _$EmailVerificationModelResendImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -614,12 +573,8 @@ mixin _$EmailVerificationModelComplete {
   String get data => throw _privateConstructorUsedError;
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this EmailVerificationModelComplete to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmailVerificationModelComplete
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmailVerificationModelCompleteCopyWith<EmailVerificationModelComplete>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -646,8 +601,6 @@ class _$EmailVerificationModelCompleteCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmailVerificationModelComplete
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -694,8 +647,6 @@ class __$$EmailVerificationModelCompleteImplCopyWithImpl<$Res>
       $Res Function(_$EmailVerificationModelCompleteImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmailVerificationModelComplete
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -754,13 +705,11 @@ class _$EmailVerificationModelCompleteImpl
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, message, data, type);
 
-  /// Create a copy of EmailVerificationModelComplete
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmailVerificationModelCompleteImplCopyWith<
@@ -794,11 +743,8 @@ abstract class _EmailVerificationModelComplete
   String get data;
   @override
   EmailVerificationModelType? get type;
-
-  /// Create a copy of EmailVerificationModelComplete
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$EmailVerificationModelCompleteImplCopyWith<
           _$EmailVerificationModelCompleteImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -818,12 +764,8 @@ mixin _$EmailVerificationModelError {
   String get message => throw _privateConstructorUsedError;
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
 
-  /// Serializes this EmailVerificationModelError to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of EmailVerificationModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $EmailVerificationModelErrorCopyWith<EmailVerificationModelError>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -856,8 +798,6 @@ class _$EmailVerificationModelErrorCopyWithImpl<$Res,
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of EmailVerificationModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -925,8 +865,6 @@ class __$$EmailVerificationModelErrorImplCopyWithImpl<$Res>
       $Res Function(_$EmailVerificationModelErrorImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of EmailVerificationModelError
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1014,14 +952,12 @@ class _$EmailVerificationModelErrorImpl extends _EmailVerificationModelError {
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode =>
       Object.hash(runtimeType, exception, code, error, status, message, type);
 
-  /// Create a copy of EmailVerificationModelError
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$EmailVerificationModelErrorImplCopyWith<_$EmailVerificationModelErrorImpl>
@@ -1063,11 +999,8 @@ abstract class _EmailVerificationModelError
   String get message;
   @override
   EmailVerificationModelType? get type;
-
-  /// Create a copy of EmailVerificationModelError
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$EmailVerificationModelErrorImplCopyWith<_$EmailVerificationModelErrorImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

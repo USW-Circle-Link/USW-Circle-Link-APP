@@ -5,7 +5,7 @@ import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
-
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
   final String clubId;
@@ -106,11 +106,20 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
             child: Column(
               children: [
                 SizedBox(height: 12.h),
-                serverError || clubIntro == null || clubIntro.recruitmentStatus == "CLOSE"
-                    ? CustomButton(text: '모집마감', isEnabled: false, onPressed: () {})
-                    : CustomButton(text: '지원하기', isEnabled: true, onPressed: () {
-                      context.push('/circle/application_writing?clubId=${widget.clubId}',);
-                }),
+                serverError ||
+                    clubIntro == null ||
+                    clubIntro.recruitmentStatus == "CLOSE"
+                    ? CustomButton(
+                    text: '모집마감', isEnabled: false, onPressed: () {})
+                    : CustomButton(
+                  text: '지원하기',
+                  isEnabled: true,
+                  onPressed: () {
+                    context.go(
+                      '/circle/application_writing?clubId=${widget.clubId}',
+                    );
+                  },
+                ),
               ],
             ),
           ),
@@ -118,7 +127,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : serverError
-            ? Center(child: Text('서버에 연결할 수 없습니다.'))
+            ? Center(child: Text('서버에 연결할 수 없습니다. UI는 표시됩니다.'))
             : clubIntro == null
             ? Center(child: Text('동아리 정보를 불러오지 못했습니다.'))
             : SingleChildScrollView(
@@ -131,15 +140,22 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                     height: 250.h,
                     child: clubIntro.introPhotoPath != null
                         ? CarouselSlider.builder(
-                      itemCount: 1,
-                      itemBuilder: (context, index, realIndex) {
-                        return buildImage(clubIntro.introPhotoPath!, index);
+                      itemCount: clubIntro
+                          .introPhotoPath?.length ??
+                          0,
+                      itemBuilder:
+                          (context, index, realIndex) {
+                        return buildImage(
+                            clubIntro
+                                .introPhotoPath![index],
+                            index);
                       },
                       options: CarouselOptions(
                         height: 250.h,
                         viewportFraction: 1,
                         onPageChanged: (index, reason) =>
-                            setState(() => activeIndex = index),
+                            setState(
+                                    () => activeIndex = index),
                       ),
                     )
                         : Center(
@@ -163,16 +179,19 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                           height: 28.h,
                           decoration: BoxDecoration(
                             color: Colors.black.withOpacity(0.7),
-                            borderRadius: BorderRadius.circular(150.sp),
+                            borderRadius:
+                            BorderRadius.circular(150.sp),
                           ),
                           child: Center(
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment:
+                              MainAxisAlignment.center,
                               children: [
                                 Text(
                                   '${activeIndex + 1}',
                                   style: TextStyle(
-                                    color: const Color(0xffBFBFBF),
+                                    color:
+                                    const Color(0xffBFBFBF),
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w700,
                                     fontFamily: 'Pretendard',
@@ -181,9 +200,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                   ),
                                 ),
                                 Text(
-                                  ' / 1',
+                                  ' / ${clubIntro.introPhotoPath?.length ?? 0}',
                                   style: TextStyle(
-                                    color: const Color(0xffBFBFBF),
+                                    color:
+                                    const Color(0xffBFBFBF),
                                     fontSize: 12.sp,
                                     fontWeight: FontWeight.w500,
                                     fontFamily: 'Pretendard',
@@ -201,18 +221,21 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 ],
               ),
               SizedBox(height: 16.h),
-              Container(
-                height: 100.h,
+              SizedBox(
                 child: Row(
                   children: [
                     SizedBox(width: 24.w),
-                    Image.network(clubIntro.mainPhotoPath,
-                      height: 100.h, width: 100.w,
-                      fit: BoxFit.cover,),
+                    Image.network(
+                      clubIntro.mainPhotoPath,
+                      height: 100.h,
+                      width: 100.w,
+                      fit: BoxFit.cover,
+                    ),
                     SizedBox(width: 16.w),
-                    Container(
-                      width: 160,
+                    SizedBox(
                       child: Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
                         children: [
                           SizedBox(height: 10.h),
                           Row(
@@ -229,7 +252,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                 ),
                               ),
                               SizedBox(width: 8.w),
-                              SvgPicture.asset('assets/images/Vector10.svg'),
+                              SvgPicture.asset(
+                                  'assets/images/Vector10.svg'),
                               SizedBox(width: 8.w),
                               Text(
                                 '동아리장',
@@ -307,7 +331,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 ),
               ),
               SizedBox(height: 16.h),
-              SvgPicture.asset('assets/images/Vector15.svg'),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Divider(thickness: 0.5.h,),
+              ),
               SizedBox(height: 24.h),
               Row(
                 children: [
@@ -354,6 +381,14 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
     child: Image.network(
       imageUrl,
       fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Center(
+            child: TextFontWidget.fontRegular(
+                text: '이미지 준비중 ...',
+                fontSize: 14.sp,
+                color: Colors.white,
+                fontweight: FontWeight.w600));
+      },
     ),
   );
 }

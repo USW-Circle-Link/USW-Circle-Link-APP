@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -33,8 +32,14 @@ class LoggedOutMenu extends ConsumerWidget {
                         child: Row(
                       children: [
                         SizedBox(width: 3.w),
-                        SvgPicture.asset(
-                          'assets/images/profile.svg',
+                        Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            SvgPicture.asset(
+                              'assets/images/profile.svg',
+                            ),
+                            Icon(Icons.person, color: const Color(0xFFD3D6F2),size: 30.w,),
+                          ],
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
