@@ -30,6 +30,7 @@ class RoundedTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
   final Function()? onTab;
+  final Function(String value)? onChanged;
   final FocusNode? focusNode;
 
   const RoundedTextField({
@@ -56,6 +57,7 @@ class RoundedTextField extends StatelessWidget {
     this.suffixIcon,
     this.hintStyle,
     this.onTab,
+    this.onChanged,
     this.isBackgroundFilled = false,
     this.isAnimatedHint = false,
     this.obscureText = false,
@@ -82,6 +84,7 @@ class RoundedTextField extends StatelessWidget {
         textAlign: textAlign ?? TextAlign.left,
         decoration: borderWidth == null ? null : setInputDecoration(),
         onTap: onTab,
+        onChanged: onChanged,
         obscureText: obscureText,
         textInputAction: textInputAction,
       ),
