@@ -35,6 +35,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   String? college;
   String? major;
 
+  final idFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -56,6 +58,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             setState(() {
               idVerified = true;
             });
+            idFocusNode.unfocus();
             break;
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
@@ -155,6 +158,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     children: [
                       RoundedTextField(
                         height: 50.h,
+                        focusNode: idFocusNode,
                         textInputAction: TextInputAction.next,
                         textEditController: idController,
                         leftBottomCornerRadius: 0.r,
@@ -194,6 +198,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
+                              foregroundColor: Colors.white,
                               side: const BorderSide(
                                 width: 0.0,
                               ),

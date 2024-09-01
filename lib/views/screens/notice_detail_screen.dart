@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
@@ -114,7 +113,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                   ),
                 ),
                 Positioned(
-                  bottom: 0,
+                  bottom: 4.h,
                   child: state is NoticeDetailModel &&
                           state.data.noticePhotos != null
                       ? SizedBox(
@@ -130,7 +129,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                 },
                                 child: Container(
                                   margin: EdgeInsets.symmetric(
-                                    horizontal: 4.0,
+                                    horizontal: 4.w,
                                   ), // 이미지 사이의 여백
                                   child: ClipRRect(
                                     borderRadius:

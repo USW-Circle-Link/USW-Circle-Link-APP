@@ -30,6 +30,7 @@ class RoundedTextField extends StatelessWidget {
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
   final Function()? onTab;
+  final FocusNode? focusNode;
 
   const RoundedTextField({
     Key? key,
@@ -59,6 +60,7 @@ class RoundedTextField extends StatelessWidget {
     this.isAnimatedHint = false,
     this.obscureText = false,
     this.readOnly = false,
+    this.focusNode,
   }) : super(key: key);
 
   @override
@@ -72,6 +74,7 @@ class RoundedTextField extends StatelessWidget {
         bottom: marginBottom ?? 0,
       ),
       child: TextField(
+        focusNode: focusNode,
         readOnly: readOnly,
         controller: textEditController,
         maxLines: maxLines,

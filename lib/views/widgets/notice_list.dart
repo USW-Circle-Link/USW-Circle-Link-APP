@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
+import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class NoticeList extends StatelessWidget {
@@ -51,7 +52,7 @@ class NoticeList extends StatelessWidget {
                         fontweight: FontWeight.w400,
                       ),
                       TextFontWidget.fontRegular(
-                        text: state.data[index].noticeCreatedAt,
+                        text: state.data[index].noticeCreatedAt.parseDateTime().getFormattedString(),
                         fontSize: 14.sp,
                         color: const Color(0xFF767676),
                         fontweight: FontWeight.w400,
