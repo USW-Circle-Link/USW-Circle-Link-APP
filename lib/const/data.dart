@@ -1,7 +1,7 @@
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
-const host = "43.200.140.186";
+const host = "15.164.246.244";
 const port = "8080";
 
 const accessTokenKey = 'access_token';

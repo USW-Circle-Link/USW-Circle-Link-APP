@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -167,23 +168,30 @@ class CircleList extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: 26.h),
+                        SizedBox(height: 20.h),
                         Row(
                           children: [
-                            Text(
-                              CircleName,
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                color: Colors.black,
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w600,
-                                height: 1.h,
-                                letterSpacing: -0.45.sp,
+                            Container(// 텍스트가 차지할 최대 너비 설정
+                              child: AutoSizeText(
+                                CircleName,
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.h,
+                                  letterSpacing: -0.45.sp,
+                                ),
+                                maxLines: 1,
+                                minFontSize: 12.sp,  // 최소 글자 크기 설정
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            SizedBox(width: 8.w),
-                            SvgPicture.asset('assets/images/Vector10.svg'),
-                            SizedBox(width: 8.w),
+                          ],
+                        ),
+                        SizedBox(height: 7.h,),
+                        Row(
+                          children: [
                             Text(
                               '동아리장',
                               style: TextStyle(
@@ -196,26 +204,29 @@ class CircleList extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 4.w),
-                            Text(
-                              CircleLeader,
-                              style: TextStyle(
-                                fontFamily: 'Pretendard',
-                                color: const Color(0xFF353549),
-                                fontSize: 14.sp,
-                                fontWeight: FontWeight.w600,
-                                height: 1.h,
-                                letterSpacing: -0.35.sp,
+                            Container(// 텍스트가 차지할 최대 너비 설정
+                              child: AutoSizeText(
+                                CircleLeader,
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  color: const Color(0xFF353549),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
+                                ),
+                                maxLines: 1,
+                                minFontSize: 10.sp,  // 최소 글자 크기 설정
+                                overflow: TextOverflow.ellipsis,
                               ),
                             ),
                           ],
                         ),
-                        SizedBox(height: 20.h),
+                        SizedBox(height: 7.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
-                            SizedBox(
-                              width: 4.w,
-                            ),
+                            SizedBox(width: 4.w,),
                             SvgPicture.asset(
                               'assets/images/phonelogo.svg',
                               height: 16.h,
@@ -233,18 +244,20 @@ class CircleList extends StatelessWidget {
                                 letterSpacing: -0.35.sp,
                               ),
                             ),
+                            SizedBox(width: 61.w),
                           ],
                         ),
-                        SizedBox(height: 11.h),
+                        SizedBox(height: 5.h),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
+                            SizedBox(width: 4.w,),
                             Image.asset(
-                              width: 25.w,
-                              height: 25.h,
-                              'assets/images/Instagramlogo.png',
+                              width: 16.w,
+                              height: 16.h,
+                              'assets/images/Instagram_logo.png',
                             ),
-                            SizedBox(width: 4.w),
+                            SizedBox(width: 6.w),
                             Text(
                               '@' + InstaId,
                               style: TextStyle(
@@ -256,7 +269,6 @@ class CircleList extends StatelessWidget {
                                 letterSpacing: -0.35.sp,
                               ),
                             ),
-                            SizedBox(width: 61.w),
                           ],
                         ),
                       ],
@@ -264,8 +276,8 @@ class CircleList extends StatelessWidget {
                   ],
                 ),
                 Positioned(
-                  bottom: 12.h,
-                  right: 12.w,
+                  bottom: 8.h,
+                  right: 8.w,
                   child: Container(
                     padding:
                         EdgeInsets.symmetric(vertical: 5.h, horizontal: 10.w),

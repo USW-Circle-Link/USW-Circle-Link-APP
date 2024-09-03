@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/viewmodels/my_circle_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:auto_size_text/auto_size_text.dart';
 
 class MyCircleScreen extends ConsumerWidget {
   const MyCircleScreen({super.key});
@@ -127,37 +128,48 @@ class CircleList extends StatelessWidget {
             child: Row(
               children: [
                 Container(
-                    height: 100.sp,
-                    width: 100.sp,
-                    margin: EdgeInsets.all(16.sp),
-                    alignment: Alignment.center,
-                    child: Image.network(
-                      ImageUrl??"",
-                      errorBuilder: (context, error, stackTrace) {
-                        return TextFontWidget.fontRegular(text: '이미지 없음', fontSize: 14.sp, color: Colors.black, fontweight: FontWeight.w400);
-                      },
-                    ),
+                  height: 100.sp,
+                  width: 100.sp,
+                  margin: EdgeInsets.all(16.sp),
+                  alignment: Alignment.center,
+                  child: Image.network(
+                    ImageUrl ?? "",
+                    errorBuilder: (context, error, stackTrace) {
+                      return TextFontWidget.fontRegular(
+                          text: '이미지 없음',
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontweight: FontWeight.w400);
+                    },
+                  ),
                 ),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    SizedBox(height: 26.h),
+                    SizedBox(height: 20.h),
                     Row(
                       children: [
-                        Text(
-                          CircleName,
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            color: Colors.black,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w600,
-                            height: 1.h,
-                            letterSpacing: -0.45.sp,
+                        Container(// 텍스트가 차지할 최대 너비 설정
+                          child: AutoSizeText(
+                            CircleName,
+                            style: TextStyle(
+                              fontFamily: 'Pretendard',
+                              color: Colors.black,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w600,
+                              height: 1.h,
+                              letterSpacing: -0.45.sp,
+                            ),
+                            maxLines: 1,
+                            minFontSize: 12.sp,  // 최소 글자 크기 설정
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        SizedBox(width: 8.w),
-                        SvgPicture.asset('assets/images/Vector10.svg'),
-                        SizedBox(width: 8.w),
+                      ],
+                    ),
+                    SizedBox(height: 7.h,),
+                    Row(
+                      children: [
                         Text(
                           '동아리장',
                           style: TextStyle(
@@ -170,20 +182,25 @@ class CircleList extends StatelessWidget {
                           ),
                         ),
                         SizedBox(width: 4.w),
-                        Text(
-                          CircleLeader,
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            color: const Color(0xFF353549),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w600,
-                            height: 1.h,
-                            letterSpacing: -0.35.sp,
+                        Container(// 텍스트가 차지할 최대 너비 설정
+                          child: AutoSizeText(
+                            CircleLeader,
+                            style: TextStyle(
+                              fontFamily: 'Pretendard',
+                              color: const Color(0xFF353549),
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w600,
+                              height: 1.h,
+                              letterSpacing: -0.35.sp,
+                            ),
+                            maxLines: 1,
+                            minFontSize: 10.sp,  // 최소 글자 크기 설정
+                            overflow: TextOverflow.ellipsis,
                           ),
                         ),
                       ],
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(height: 10.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
@@ -207,18 +224,18 @@ class CircleList extends StatelessWidget {
                         ),
                       ],
                     ),
-                    SizedBox(height: 11.h),
+                    SizedBox(height: 5.h),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                           Image.asset(
-                              width: 25.w,
-                              height: 25.h,
-                              'assets/images/Instagramlogo.png',
-                            ),
+                        SizedBox(width: 4.w,),
+                        Image.asset(
+                            width: 16.w,
+                            height: 16.h,
+                            'assets/images/Instagram_logo.png'),
                         SizedBox(width: 6.w),
                         Text(
-                          '@'+InstaId,
+                          '@' + InstaId,
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),
