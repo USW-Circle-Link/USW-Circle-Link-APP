@@ -872,10 +872,10 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-08-27T04:38:46.081713Z",
+  "generated": "2024-09-01T11:56:33.253012Z",
   "generator": "pub",
-  "generatorVersion": "3.4.3",
-  "flutterRoot": "file:///Users/yoojiseok/Documents/flutter",
-  "flutterVersion": "3.22.2",
-  "pubCache": "file:///Users/yoojiseok/.pub-cache"
+  "generatorVersion": "3.5.0",
+  "flutterRoot": "file:///Users/jeong-woochang/development/flutter",
+  "flutterVersion": "3.24.0",
+  "pubCache": "file:///Users/jeong-woochang/.pub-cache"
 }

@@ -35,6 +35,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   String? college;
   String? major;
 
+  final idFocusNode = FocusNode();
+
   @override
   void initState() {
     super.initState();
@@ -50,9 +52,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           case SignUpModelType.verify:
             // 아이디 중복확인 완료!
             DialogManager.instance.showAlertDialog(
-              context: context,
-              content: '아이디 사용이 가능합니다!',
-            );
+                context: context,
+                content: '아이디 사용이 가능합니다!',
+                onLeftButtonPressed: () {});
+            idFocusNode.unfocus();
             setState(() {
               idVerified = true;
             });
@@ -83,33 +86,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             logger.e('예외발생! - $next');
         }
       }
-    });
-
-    idController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
-      setState(() {
-        idVerified = false;
-      });
-    });
-
-    passwordController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
-    });
-
-    passwordConfirmController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
-    });
-
-    nameController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
-    });
-
-    studentNumberController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
-    });
-
-    phoneNumberController.addListener(() {
-      ref.read(signUpViewModelProvider.notifier).initState();
     });
 
     return ScreenUtilInit(
@@ -155,6 +131,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     children: [
                       RoundedTextField(
                         height: 50.h,
+                        focusNode: idFocusNode,
                         textInputAction: TextInputAction.next,
                         textEditController: idController,
                         leftBottomCornerRadius: 0.r,
@@ -169,6 +146,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         borderColor:
                             idIsInvalid(state) ? const Color(0xFFFF3F3F) : null,
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
+                          setState(() {
+                            idVerified = false;
+                          });
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_person.svg',
                           width: 13.w,
@@ -194,6 +179,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                   },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF4F5BD0),
+                              foregroundColor: Colors.white,
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -231,6 +217,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textAlign: TextAlign.left,
                         hintText: '문자,숫자,특수문자 포함 5~20자',
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref.read(signUpViewModelProvider.notifier).initState();
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
                           width: 13.w,
@@ -273,6 +262,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textAlign: TextAlign.left,
                         hintText: '비밀번호 확인',
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref.read(signUpViewModelProvider.notifier).initState();
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
                           width: 13.w,
@@ -327,6 +319,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textAlign: TextAlign.left,
                         hintText: '이름',
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref.read(signUpViewModelProvider.notifier).initState();
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_person.svg',
                           width: 13.w,
@@ -353,6 +348,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textAlign: TextAlign.left,
                         hintText: '전화번호 (- 제외입력)',
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref.read(signUpViewModelProvider.notifier).initState();
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_phone.svg',
                           width: 13.w,
@@ -379,6 +377,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textInputAction: TextInputAction.next,
                         hintText: '학번',
                         isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref.read(signUpViewModelProvider.notifier).initState();
+                        },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_tag.svg',
                           width: 13.w,

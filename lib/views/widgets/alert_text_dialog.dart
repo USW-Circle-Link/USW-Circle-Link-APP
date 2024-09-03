@@ -88,7 +88,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                   Navigator.of(context).pop();
                                 },
                                 style: TextButton.styleFrom(
-                                  minimumSize: Size.fromHeight(50.h),
+                                  minimumSize: Size.fromHeight(56.h),
                                   //primary: Colors.white,
                                   //onPrimary: Colors.blue,
                                   shape: RoundedRectangleBorder(
@@ -119,7 +119,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                   Navigator.of(context).pop();
                                 },
                                 style: TextButton.styleFrom(
-                                  minimumSize: Size.fromHeight(50.h),
+                                  minimumSize: Size.fromHeight(56.h),
                                   //primary: Colors.white,
                                   //onPrimary: Colors.blue,
                                   shape: RoundedRectangleBorder(

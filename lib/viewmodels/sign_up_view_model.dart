@@ -70,10 +70,13 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
             type: SignUpModelType.validatePasswordMatch);
       }
 
+      if (!telephoneRegExp.hasMatch(telephone)) {
+        throw FormatException();
+      }
       telephone = telephone.addDash();
       logger.d('전화번호 포맷팅 완료! - $telephone');
 
-      if (studentNumber.isEmpty || studentNumber.length != 8) {
+      if (!studentNumberRegExp.hasMatch(studentNumber)) {
         throw SignUpModelError(
             message: '학번이 형식에 않습니다!',
             code: "USR-F600",
