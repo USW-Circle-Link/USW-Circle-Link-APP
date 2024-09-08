@@ -34,12 +34,12 @@ class _ApplicationWritingScreenState
         switch (next.type) {
           case ApplicationModelType.getApplication:
             logger.d('지원서 url : ${next.data}');
-            context.go(
-                '/application_writing/webview/${Uri.encodeComponent(next.data!)}');
+            context.push(
+                '/circle/application_writing/webview/${Uri.encodeComponent(next.data!)}');
             break;
           case ApplicationModelType.apply:
             logger.d('지원서 제출 성공! - ${next.message}');
-            // TODO:지원서 제출 완료 페이지로 라우팅
+            context.go('/application_circle');
             break;
           default:
             logger.e('예외발생! : $next');
