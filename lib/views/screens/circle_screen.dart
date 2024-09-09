@@ -416,7 +416,7 @@ class _CustomButtonState extends State<CustomButton> {
       width: 327,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8),
-        color: widget.isEnabled ? const Color(0xff4F5BD0) : Colors.grey,
+        color: widget.isEnabled ? const Color(0xffffB052) : Colors.grey,
       ),
       child: TextButton(
         onPressed: widget.isEnabled ? widget.onPressed : null,

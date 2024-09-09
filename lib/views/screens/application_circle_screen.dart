@@ -133,10 +133,10 @@ class CircleList extends StatelessWidget {
       statusColor = const Color(0xffBFBFBF);
       statusText = '대기 중';
     } else if (status == 'PASS') {
-      statusColor = const Color(0xff6E78D8);
+      statusColor = const Color(0xffffB052);
       statusText = '응답 완료';
     } else {
-      statusColor = const Color(0xffFF0000); // FAIL의 경우 색상을 변경
+      statusColor = const Color(0xffffB052); // FAIL의 경우 색상을 변경
       statusText = '응답 완료'; // FAIL의 경우 텍스트를 변경
     }
 

@@ -178,7 +178,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                         .verifyId(id: id);
                                   },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               foregroundColor: Colors.white,
                               side: const BorderSide(
                                 width: 0.0,
@@ -511,7 +511,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               TextSpan(
                                 text: "서비스 이용약관 ",
                                 style: TextStyle(
-                                    color: Color(0xFF6E6EDE),
+                                    color: Color(0xffffB052),
                                     fontWeight: FontWeight.w600),
                               ),
                               TextSpan(
@@ -520,7 +520,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               TextSpan(
                                 text: "개인정보 처리방침",
                                 style: TextStyle(
-                                    color: Color(0xFF6E6EDE),
+                                    color: Color(0xffffB052),
                                     fontWeight: FontWeight.w600),
                               ),
                               TextSpan(

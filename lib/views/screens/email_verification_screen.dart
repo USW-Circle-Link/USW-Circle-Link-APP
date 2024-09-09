@@ -207,7 +207,7 @@ class _EmailVerificationScreenState
                                 TextSpan(
                                   text: "인증 URL",
                                   style: TextStyle(
-                                      color: Color(0xFF6E6EDE),
+                                      color: Color(0xffffB052),
                                       fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(
@@ -243,7 +243,7 @@ class _EmailVerificationScreenState
                                                 .trim());
                                   },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -301,7 +301,7 @@ class _EmailVerificationScreenState
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',
                                     fontSize: 16.sp,
-                                    color: Color(0XFF4F5BD0),
+                                    color: Color(0xffffB052),
                                     fontweight: FontWeight.w400),
                               ),
                             ),
@@ -323,7 +323,7 @@ class _EmailVerificationScreenState
                                   '/login/sign_up/email_verification/webview/$encodedUrl');
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               side: const BorderSide(
                                 width: 0.0,
                               ),

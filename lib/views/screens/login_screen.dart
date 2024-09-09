@@ -71,7 +71,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 Wrap(
                   children: [
                     SizedBox(
-                      child: Image.asset('assets/images/duck.png',
+                      child: Image.asset('assets/images/dongurami.png',
                           width: 24.w, height: 24.h, fit: BoxFit.contain),
                     ),
                     SizedBox(width: 4.w),
@@ -87,7 +87,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 RichText(
                   text: TextSpan(
-                    text: "재밌있는 동아리 없을까?\n",
+                    text: "재미있는 동아리 없을까?\n",
                     style: TextStyle(
                         fontFamily: 'Pretendard-Regular',
                         fontSize: 18.sp,
@@ -98,14 +98,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       TextSpan(
                         text: '취향',
                         style: TextStyle(
-                            color: Color(0xFF6E6EDE),
+                            color: Color(0xffffB052),
                             fontWeight: FontWeight.w600),
                       ),
                       TextSpan(text: "에 딱 맞는 "),
                       TextSpan(
                         text: '동아리 찾기',
                         style: TextStyle(
-                            color: Color(0xFF6E6EDE),
+                            color: Color(0xffffB052),
                             fontWeight: FontWeight.w600),
                       ),
                     ],
@@ -203,8 +203,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                   );
                             },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: const Color(0xFF4F5BD0),
-                        foregroundColor: const Color(0xFFFFFFFF),
+                        backgroundColor: const Color(0xffffB052),
+                        foregroundColor: const Color(0xffffffff),
                         side: const BorderSide(
                           width: 0.0,
                         ),

@@ -186,7 +186,7 @@ class _ApplicationWritingScreenState
                             TextSpan(
                               text: "지원서 제출하기 ",
                               style: TextStyle(
-                                  color: Color(0xFF6E6EDE),
+                                  color: Color(0xffffB052),
                                   fontWeight: FontWeight.w600),
                             ),
                             TextSpan(
@@ -195,7 +195,7 @@ class _ApplicationWritingScreenState
                             TextSpan(
                               text: "본인",
                               style: TextStyle(
-                                  color: Color(0xFF6E6EDE),
+                                  color: Color(0xffffB052),
                                   fontWeight: FontWeight.w600),
                             ),
                             TextSpan(
@@ -204,7 +204,7 @@ class _ApplicationWritingScreenState
                             TextSpan(
                               text: "지원 완료 ",
                               style: TextStyle(
-                                  color: Color(0xFF6E6EDE),
+                                  color: Color(0xffffB052),
                                   fontWeight: FontWeight.w600),
                             ),
                             TextSpan(text: "버튼을 눌러 주세요.")
@@ -272,7 +272,7 @@ class _ApplicationWritingScreenState
                               }
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
                                 width: 0.0,

@@ -118,7 +118,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/images/duck.png',
+                'assets/images/dongurami.png',
                 width: 19.w,
                 height: 19.h,
               ),
@@ -163,7 +163,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: isAllSelected
-                        ? const Color(0xff6E78D8)
+                        ? const Color(0xffffB052)
                         : const Color(0xffEBEBEB),
                     minimumSize:
                         Size(MediaQuery.of(context).size.width / 2, 46.h),
@@ -193,7 +193,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: !isAllSelected
-                        ? const Color(0xff6E78D8)
+                        ? const Color(0xffffB052)
                         : const Color(0xffEBEBEB),
                     minimumSize:
                         Size(MediaQuery.of(context).size.width / 2, 46.h),

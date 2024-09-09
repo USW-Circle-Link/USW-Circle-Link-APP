@@ -274,7 +274,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                                 .trim());
                                   },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
@@ -322,7 +322,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                 child: TextFontWidget.fontRegular(
                                     text: '메일 재전송',
                                     fontSize: 16.sp,
-                                    color: Color(0XFF4F5BD0),
+                                    color: Color(0xffffB052),
                                     fontweight: FontWeight.w400),
                               ),
                             ),
@@ -344,7 +344,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   .push('/login/find_pw/webview/${encodedUrl}');
                             },
                             style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF4F5BD0),
+                              backgroundColor: const Color(0xffffB052),
                               side: const BorderSide(
                                 width: 0.0,
                               ),
