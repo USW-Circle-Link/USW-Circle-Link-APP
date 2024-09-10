@@ -56,8 +56,11 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       if (profile is ProfileModel) {
         logger.d('로그인 정보 확인 성공! : $profile');
       } else {
-        throw AutoLoginException(message:'로그인 정보 확인 실패! : $profile');
+        throw AutoLoginException(message: '로그인 정보 확인 실패! : $profile');
       }
+
+      // FCM Token 전송
+      // await firebaseCloudMessagingViewModel.sendToken();
 
       final accessToken = await storage.read(key: accessTokenKey);
       final refreshToken = await storage.read(key: refreshTokenKey);
@@ -73,6 +76,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
     } catch (e) {
       logger.e('로그인 정보 확인 실패! : $e');
       state = AsyncValue.data(null);
+      await logout();
     }
   }
 
@@ -81,14 +85,9 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
     required String password,
   }) async {
     try {
-      //fcm token 가져오기
-      final token = await firebaseCloudMessagingViewModel.getToken();
-      logger.d('FCM Token - $token');
-
       final response = await authRepository.login(
         id: id,
         password: password,
-        fcmToken: token,
       );
       logger.d('UserViewModel - 로그인 완료! $response');
 
@@ -111,8 +110,11 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
-      state = AsyncValue.data(response); // UserModel
 
+      // FCM Token 전송
+      // await firebaseCloudMessagingViewModel.sendToken();
+
+      state = AsyncValue.data(response); // UserModel
       return response;
     } on UserModelError catch (e) {
       // 단순로그인 실패 및 예상 범위 밖 에러(네트워크 에러 ...)

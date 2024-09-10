@@ -18,8 +18,6 @@ class CircleGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: double.infinity,
-      height: 240.h,
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
       color: Colors.white,
@@ -34,7 +32,7 @@ class CircleGroup extends StatelessWidget {
           ),
           SizedBox(height: 8.h), // 텍스트와 리스트 사이에 여백 추가
           SizedBox(
-            height: 170.h, // ListView의 고정 높이 설정
+            height: 150.h, // ListView의 고정 높이 설정
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: department.value.length,

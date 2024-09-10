@@ -187,12 +187,10 @@ class AuthRepository {
   Future<UserModel> login({
     required String id,
     required String password,
-    required String fcmToken,
   }) async {
     final body = {
       'account': id,
       'password': password,
-      'fcmToken': fcmToken,
     };
 
     final response = await dio.post(

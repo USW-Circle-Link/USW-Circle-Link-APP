@@ -208,8 +208,9 @@ CircleListData _$CircleListDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CircleListData {
+  int get clubId => throw _privateConstructorUsedError;
   String get clubName => throw _privateConstructorUsedError;
-  String get mainPhoto => throw _privateConstructorUsedError;
+  String? get mainPhoto => throw _privateConstructorUsedError;
   String get departmentName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -224,7 +225,8 @@ abstract class $CircleListDataCopyWith<$Res> {
           CircleListData value, $Res Function(CircleListData) then) =
       _$CircleListDataCopyWithImpl<$Res, CircleListData>;
   @useResult
-  $Res call({String clubName, String mainPhoto, String departmentName});
+  $Res call(
+      {int clubId, String clubName, String? mainPhoto, String departmentName});
 }
 
 /// @nodoc
@@ -240,19 +242,24 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? clubId = null,
     Object? clubName = null,
-    Object? mainPhoto = null,
+    Object? mainPhoto = freezed,
     Object? departmentName = null,
   }) {
     return _then(_value.copyWith(
+      clubId: null == clubId
+          ? _value.clubId
+          : clubId // ignore: cast_nullable_to_non_nullable
+              as int,
       clubName: null == clubName
           ? _value.clubName
           : clubName // ignore: cast_nullable_to_non_nullable
               as String,
-      mainPhoto: null == mainPhoto
+      mainPhoto: freezed == mainPhoto
           ? _value.mainPhoto
           : mainPhoto // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       departmentName: null == departmentName
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
@@ -269,7 +276,8 @@ abstract class _$$CircleListDataImplCopyWith<$Res>
       __$$CircleListDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String clubName, String mainPhoto, String departmentName});
+  $Res call(
+      {int clubId, String clubName, String? mainPhoto, String departmentName});
 }
 
 /// @nodoc
@@ -283,19 +291,24 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? clubId = null,
     Object? clubName = null,
-    Object? mainPhoto = null,
+    Object? mainPhoto = freezed,
     Object? departmentName = null,
   }) {
     return _then(_$CircleListDataImpl(
+      clubId: null == clubId
+          ? _value.clubId
+          : clubId // ignore: cast_nullable_to_non_nullable
+              as int,
       clubName: null == clubName
           ? _value.clubName
           : clubName // ignore: cast_nullable_to_non_nullable
               as String,
-      mainPhoto: null == mainPhoto
+      mainPhoto: freezed == mainPhoto
           ? _value.mainPhoto
           : mainPhoto // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       departmentName: null == departmentName
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
@@ -308,8 +321,9 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CircleListDataImpl extends _CircleListData {
   _$CircleListDataImpl(
-      {required this.clubName,
-      required this.mainPhoto,
+      {required this.clubId,
+      required this.clubName,
+      this.mainPhoto,
       required this.departmentName})
       : super._();
 
@@ -317,15 +331,17 @@ class _$CircleListDataImpl extends _CircleListData {
       _$$CircleListDataImplFromJson(json);
 
   @override
+  final int clubId;
+  @override
   final String clubName;
   @override
-  final String mainPhoto;
+  final String? mainPhoto;
   @override
   final String departmentName;
 
   @override
   String toString() {
-    return 'CircleListData(clubName: $clubName, mainPhoto: $mainPhoto, departmentName: $departmentName)';
+    return 'CircleListData(clubId: $clubId, clubName: $clubName, mainPhoto: $mainPhoto, departmentName: $departmentName)';
   }
 
   @override
@@ -333,6 +349,7 @@ class _$CircleListDataImpl extends _CircleListData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CircleListDataImpl &&
+            (identical(other.clubId, clubId) || other.clubId == clubId) &&
             (identical(other.clubName, clubName) ||
                 other.clubName == clubName) &&
             (identical(other.mainPhoto, mainPhoto) ||
@@ -344,7 +361,7 @@ class _$CircleListDataImpl extends _CircleListData {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, clubName, mainPhoto, departmentName);
+      Object.hash(runtimeType, clubId, clubName, mainPhoto, departmentName);
 
   @JsonKey(ignore: true)
   @override
@@ -363,8 +380,9 @@ class _$CircleListDataImpl extends _CircleListData {
 
 abstract class _CircleListData extends CircleListData {
   factory _CircleListData(
-      {required final String clubName,
-      required final String mainPhoto,
+      {required final int clubId,
+      required final String clubName,
+      final String? mainPhoto,
       required final String departmentName}) = _$CircleListDataImpl;
   _CircleListData._() : super._();
 
@@ -372,9 +390,11 @@ abstract class _CircleListData extends CircleListData {
       _$CircleListDataImpl.fromJson;
 
   @override
+  int get clubId;
+  @override
   String get clubName;
   @override
-  String get mainPhoto;
+  String? get mainPhoto;
   @override
   String get departmentName;
   @override

@@ -207,6 +207,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         foregroundColor: const Color(0xffffffff),
                         side: const BorderSide(
                           width: 0.0,
+                          color: Colors.transparent
                         ),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),

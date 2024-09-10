@@ -141,6 +141,7 @@ class _ApplicationWritingScreenState
                               backgroundColor: const Color(0xFF000000),
                               foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
+                                color: Colors.transparent,
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
@@ -276,6 +277,7 @@ class _ApplicationWritingScreenState
                               foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
                                 width: 0.0,
+                                color: Colors.transparent,
                               ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(8.r),

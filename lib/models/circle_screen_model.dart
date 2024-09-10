@@ -2,7 +2,7 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 
 class ClubIntro {
   final int? clubId;
-  final String mainPhotoPath;
+  final String? mainPhotoPath;
   final List<dynamic>? introPhotoPath;
   final String clubName;
   final String leaderName;
@@ -13,7 +13,7 @@ class ClubIntro {
 
   ClubIntro({
     this.clubId,
-    required this.mainPhotoPath,
+    this.mainPhotoPath,
     this.introPhotoPath,
     required this.clubName,
     required this.leaderName,

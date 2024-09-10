@@ -168,9 +168,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         leftBottomCornerRadius: 0.r,
                         rightBottomCornerRadius: 0.r,
                         leftTopCornerRadius:
-                            widget.checkCurrentPassword ? 8.r : 0.r,
+                            widget.checkCurrentPassword ? 0.r : 8.r,
                         rightTopCornerRadius:
-                            widget.checkCurrentPassword ? 8.r : 0.r,
+                            widget.checkCurrentPassword ? 0.r : 8.r,
                         borderColor: newPWIsInvalid(state)
                             ? const Color(0xFFFF3F3F)
                             : null,
@@ -296,7 +296,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                                   },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
+                                color: Colors.transparent,
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(

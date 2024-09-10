@@ -89,308 +89,340 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         bottomNavigationBar: !serverError && clubIntro == null
             ? SizedBox.shrink()
             : Padding(
-          padding: EdgeInsets.zero,
-          child: Container(
-            decoration: BoxDecoration(
-              color: const Color(0xffFFFFFF),
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
-                  spreadRadius: 5,
-                  blurRadius: 7,
-                  offset: Offset(0, 3),
+                padding: EdgeInsets.zero,
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: const Color(0xffFFFFFF),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.withOpacity(0.1),
+                        spreadRadius: 5,
+                        blurRadius: 7,
+                        offset: Offset(0, 3),
+                      ),
+                    ],
+                  ),
+                  height: 116.h,
+                  child: Column(
+                    children: [
+                      SizedBox(height: 12.h),
+                      serverError ||
+                              clubIntro == null ||
+                              clubIntro.recruitmentStatus == "CLOSE"
+                          ? CustomButton(
+                              text: '모집마감', isEnabled: false, onPressed: () {})
+                          : CustomButton(
+                              text: '지원하기',
+                              isEnabled: true,
+                              onPressed: () {
+                                context.go(
+                                  '/circle/application_writing?clubId=${widget.clubId}',
+                                );
+                              },
+                            ),
+                    ],
+                  ),
                 ),
-              ],
-            ),
-            height: 116.h,
-            child: Column(
-              children: [
-                SizedBox(height: 12.h),
-                serverError ||
-                    clubIntro == null ||
-                    clubIntro.recruitmentStatus == "CLOSE"
-                    ? CustomButton(
-                    text: '모집마감', isEnabled: false, onPressed: () {})
-                    : CustomButton(
-                  text: '지원하기',
-                  isEnabled: true,
-                  onPressed: () {
-                    context.go(
-                      '/circle/application_writing?clubId=${widget.clubId}',
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
+              ),
         body: isLoading
             ? Center(child: CircularProgressIndicator())
             : serverError
-            ? Center(child: Text('서버에 연결할 수 없습니다. UI는 표시됩니다.'))
-            : clubIntro == null
-            ? Center(child: Text('동아리 정보를 불러오지 못했습니다.'))
-            : SingleChildScrollView(
-          child: Column(
-            children: [
-              Stack(
-                children: [
-                  Container(
-                    width: 375.w,
-                    height: 250.h,
-                    child: clubIntro.introPhotoPath != null
-                        ? CarouselSlider.builder(
-                      itemCount: clubIntro
-                          .introPhotoPath?.length ??
-                          0,
-                      itemBuilder:
-                          (context, index, realIndex) {
-                        return buildImage(
-                            clubIntro
-                                .introPhotoPath![index],
-                            index);
-                      },
-                      options: CarouselOptions(
-                        height: 250.h,
-                        viewportFraction: 1,
-                        onPageChanged: (index, reason) =>
-                            setState(
-                                    () => activeIndex = index),
-                      ),
-                    )
-                        : Center(
-                      child: Text(
-                        '사진이 없습니다.',
-                        style: TextStyle(
-                          fontFamily: 'Pretendard',
-                          fontSize: 16.sp,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 16.h,
-                    right: 16.w,
-                    child: Row(
-                      children: [
-                        SizedBox(width: 10.w),
-                        Container(
-                          width: 46.w,
-                          height: 28.h,
-                          decoration: BoxDecoration(
-                            color: Colors.black.withOpacity(0.7),
-                            borderRadius:
-                            BorderRadius.circular(150.sp),
-                          ),
-                          child: Center(
-                            child: Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  '${activeIndex + 1}',
-                                  style: TextStyle(
-                                    color:
-                                    const Color(0xffBFBFBF),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w700,
-                                    fontFamily: 'Pretendard',
-                                    height: 1.h,
-                                    letterSpacing: -0.3.sp,
+                ? Center(child: Text('서버에 연결할 수 없습니다. UI는 표시됩니다.'))
+                : clubIntro == null
+                    ? Center(child: Text('동아리 정보를 불러오지 못했습니다.'))
+                    : SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            SizedBox(
+                              height: 250.h,
+                              child: clubIntro.introPhotoPath != null &&
+                                      clubIntro.introPhotoPath!.isEmpty
+                                  ? Container(
+                                      color: const Color.fromARGB(
+                                          255, 164, 164, 164),
+                                      child: Center(child: Text('이미지 없음')),
+                                    )
+                                  : Stack(
+                                      children: [
+                                        SizedBox(
+                                          child: clubIntro.introPhotoPath !=
+                                                  null
+                                              ? CarouselSlider.builder(
+                                                  itemCount: clubIntro
+                                                          .introPhotoPath
+                                                          ?.length ??
+                                                      0,
+                                                  itemBuilder: (context, index,
+                                                      realIndex) {
+                                                    return buildImage(
+                                                        clubIntro
+                                                                .introPhotoPath![
+                                                            index],
+                                                        index);
+                                                  },
+                                                  options: CarouselOptions(
+                                                    height: 250.h,
+                                                    viewportFraction: 1,
+                                                    onPageChanged:
+                                                        (index, reason) =>
+                                                            setState(() =>
+                                                                activeIndex =
+                                                                    index),
+                                                  ),
+                                                )
+                                              : Center(
+                                                  child: Text(
+                                                    '사진이 없습니다.',
+                                                    style: TextStyle(
+                                                      fontFamily: 'Pretendard',
+                                                      fontSize: 16.sp,
+                                                    ),
+                                                  ),
+                                                ),
+                                        ),
+                                        Positioned(
+                                          bottom: 16.h,
+                                          right: 16.w,
+                                          child: Row(
+                                            children: [
+                                              SizedBox(width: 10.w),
+                                              Container(
+                                                width: 46.w,
+                                                height: 28.h,
+                                                decoration: BoxDecoration(
+                                                  color: Colors.black
+                                                      .withOpacity(0.7),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          150.sp),
+                                                ),
+                                                child: Center(
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Text(
+                                                        '${activeIndex + 1}',
+                                                        style: TextStyle(
+                                                          color: const Color(
+                                                              0xffBFBFBF),
+                                                          fontSize: 12.sp,
+                                                          fontWeight:
+                                                              FontWeight.w700,
+                                                          fontFamily:
+                                                              'Pretendard',
+                                                          height: 1.h,
+                                                          letterSpacing:
+                                                              -0.3.sp,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        ' / ${clubIntro.introPhotoPath?.length ?? 0}',
+                                                        style: TextStyle(
+                                                          color: const Color(
+                                                              0xffBFBFBF),
+                                                          fontSize: 12.sp,
+                                                          fontWeight:
+                                                              FontWeight.w500,
+                                                          fontFamily:
+                                                              'Pretendard',
+                                                          height: 1.h,
+                                                          letterSpacing:
+                                                              -0.3.sp,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                            ),
+                            SizedBox(height: 16.h),
+                            SizedBox(
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 24.w),
+                                  Container(
+                                    color: const Color.fromARGB(
+                                        255, 164, 164, 164),
+                                    height: 100.h,
+                                    width: 100.w,
+                                    child: Image.network(
+                                      clubIntro.mainPhotoPath ?? "",
+                                      fit: BoxFit.cover,
+                                      errorBuilder:
+                                          (context, error, stackTrace) {
+                                        return Center(child: Text('이미지 없음'));
+                                      },
+                                    ),
                                   ),
-                                ),
+                                  SizedBox(width: 16.w),
+                                  SizedBox(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 10.h),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              clubIntro.clubName,
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: Colors.black,
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.h,
+                                                letterSpacing: -0.45.sp,
+                                              ),
+                                            ),
+                                            SizedBox(width: 8.w),
+                                            SvgPicture.asset(
+                                                'assets/images/Vector10.svg'),
+                                            SizedBox(width: 8.w),
+                                            Text(
+                                              '동아리장',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF767676),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            Text(
+                                              clubIntro.leaderName,
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF353549),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 20.h),
+                                        Row(
+                                          children: [
+                                            SvgPicture.asset(
+                                              'assets/images/phonelogo.svg',
+                                              height: 16.h,
+                                              width: 16.w,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              clubIntro.leaderHp,
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF353549),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 11.h),
+                                        Row(
+                                          children: [
+                                            Image.asset(
+                                              'assets/images/kakaologo.png',
+                                              height: 16.h,
+                                              width: 16.w,
+                                            ),
+                                            SizedBox(width: 6.w),
+                                            Text(
+                                              '@${clubIntro.clubInsta}',
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF353549),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            SizedBox(height: 16.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 24.w),
+                              child: Divider(
+                                thickness: 0.5.h,
+                              ),
+                            ),
+                            SizedBox(height: 24.h),
+                            Row(
+                              children: [
+                                SizedBox(width: 24.w),
                                 Text(
-                                  ' / ${clubIntro.introPhotoPath?.length ?? 0}',
+                                  '동아리 소개',
                                   style: TextStyle(
-                                    color:
-                                    const Color(0xffBFBFBF),
-                                    fontSize: 12.sp,
-                                    fontWeight: FontWeight.w500,
                                     fontFamily: 'Pretendard',
+                                    color: const Color(0xFF353549),
+                                    fontSize: 16.sp,
+                                    fontWeight: FontWeight.w600,
                                     height: 1.h,
-                                    letterSpacing: -0.3.sp,
+                                    letterSpacing: -0.8.sp,
                                   ),
                                 ),
                               ],
                             ),
-                          ),
+                            SizedBox(height: 12.h),
+                            Container(
+                              alignment: Alignment.topLeft,
+                              height: 154.h,
+                              padding: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
+                              child: Text(
+                                clubIntro.introContent,
+                                style: TextStyle(
+                                  fontFamily: 'Pretendard',
+                                  color: const Color(0xFF111111),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 16.h),
-              SizedBox(
-                child: Row(
-                  children: [
-                    SizedBox(width: 24.w),
-                    Image.network(
-                      clubIntro.mainPhotoPath,
-                      height: 100.h,
-                      width: 100.w,
-                      fit: BoxFit.cover,
-                    ),
-                    SizedBox(width: 16.w),
-                    SizedBox(
-                      child: Column(
-                        crossAxisAlignment:
-                        CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 10.h),
-                          Row(
-                            children: [
-                              Text(
-                                clubIntro.clubName,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: Colors.black,
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.h,
-                                  letterSpacing: -0.45.sp,
-                                ),
-                              ),
-                              SizedBox(width: 8.w),
-                              SvgPicture.asset(
-                                  'assets/images/Vector10.svg'),
-                              SizedBox(width: 8.w),
-                              Text(
-                                '동아리장',
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: const Color(0xFF767676),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
-                                ),
-                              ),
-                              SizedBox(width: 4.w),
-                              Text(
-                                clubIntro.leaderName,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: const Color(0xFF353549),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 20.h),
-                          Row(
-                            children: [
-                              SvgPicture.asset(
-                                'assets/images/phonelogo.svg',
-                                height: 16.h,
-                                width: 16.w,
-                              ),
-                              SizedBox(width: 6.w),
-                              Text(
-                                clubIntro.leaderHp,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: const Color(0xFF353549),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 11.h),
-                          Row(
-                            children: [
-                              Image.asset(
-                                'assets/images/kakaologo.png',
-                                height: 16.h,
-                                width: 16.w,
-                              ),
-                              SizedBox(width: 6.w),
-                              Text(
-                                '@${clubIntro.clubInsta}',
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: const Color(0xFF353549),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Padding(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
-                child: Divider(thickness: 0.5.h,),
-              ),
-              SizedBox(height: 24.h),
-              Row(
-                children: [
-                  SizedBox(width: 24.w),
-                  Text(
-                    '동아리 소개',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      color: const Color(0xFF353549),
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.w600,
-                      height: 1.h,
-                      letterSpacing: -0.8.sp,
-                    ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 12.h),
-              Container(
-                alignment: Alignment.topLeft,
-                height: 154.h,
-                padding: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
-                child: Text(
-                  clubIntro.introContent,
-                  style: TextStyle(
-                    fontFamily: 'Pretendard',
-                    color: const Color(0xFF111111),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    height: 1.h,
-                    letterSpacing: -0.35.sp,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
       ),
     );
   }
 
   Widget buildImage(String imageUrl, int index) => Container(
-    color: Colors.grey,
-    child: Image.network(
-      imageUrl,
-      fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Center(
-            child: TextFontWidget.fontRegular(
-                text: '이미지 준비중 ...',
-                fontSize: 14.sp,
-                color: Colors.white,
-                fontweight: FontWeight.w600));
-      },
-    ),
-  );
+        color: Colors.grey,
+        child: Image.network(
+          imageUrl,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            return Center(
+                child: TextFontWidget.fontRegular(
+                    text: '이미지 준비중 ...',
+                    fontSize: 14.sp,
+                    color: Colors.white,
+                    fontweight: FontWeight.w600));
+          },
+        ),
+      );
 }
 
 class CustomButton extends StatefulWidget {

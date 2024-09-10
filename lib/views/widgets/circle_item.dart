@@ -15,27 +15,30 @@ class CircleItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: (){
-        onItemClicked(1);
+      onTap: () {
+        onItemClicked(circle.clubId);
       },
       child: Container(
+        width: 100.w,
         margin: EdgeInsets.only(right: 3.w),
-        height: 200.h,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.network(
-              circle.mainPhoto,
-              width: 120.w,
-              height: 140.h,
-              fit: BoxFit.cover,
-              errorBuilder: (BuildContext context, Object exception,
-                  StackTrace? stackTrace) {
-                return Text('이미지 없음');
-              },
+            Container(
+              color: const Color.fromARGB(255, 164, 164, 164),
+              height: 120.h,
+              child: Image.network(
+                circle.mainPhoto ?? "",
+                fit: BoxFit.cover,
+                errorBuilder: (BuildContext context, Object exception,
+                    StackTrace? stackTrace) {
+                  return Center(child: Text('이미지 없음'));
+                },
+              ),
             ),
             SizedBox(height: 8.h),
             Text(
+              overflow: TextOverflow.ellipsis,
               circle.clubName,
               style: TextStyle(
                 fontSize: 14.sp,

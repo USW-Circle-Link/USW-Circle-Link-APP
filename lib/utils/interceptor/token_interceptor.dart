@@ -153,6 +153,7 @@ class TokenInterceptor extends Interceptor {
         return handler.reject(e);
       } catch (e) {
         logger.e(e);
+        await ref.read(userViewModelProvider.notifier).logout();
       }
     }
 

@@ -136,72 +136,84 @@ const testStudentNumber = "00000000";
 const testMajor = "major1";
 var testCircleData = <CircleListData>[
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "RELIGION",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "RELIGION",
   ),
   CircleListData(
+    clubId: 1,
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",

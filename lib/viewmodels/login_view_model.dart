@@ -48,8 +48,4 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
       return Future.value(state);
     }
   }
-
-  Future<void> logout() async {
-    await userViewModel.logout();
-  }
 }

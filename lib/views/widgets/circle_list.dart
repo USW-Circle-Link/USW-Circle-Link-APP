@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_group.dart';
 
@@ -16,7 +15,7 @@ class CircleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: <CircleListData>[...state.data,...testCircleData].getClassifiedList().entries.map((entry) {
+      children: state.data.getClassifiedList().entries.map((entry) {
         return CircleGroup(department: entry, onItemClicked: onItemClicked);
       }).toList(),
     );

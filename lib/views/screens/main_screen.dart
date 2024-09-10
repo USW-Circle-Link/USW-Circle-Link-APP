@@ -76,12 +76,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
-      Future.wait([
-        isAllSelected
-            ? ref.read(mainViewModelProvider.notifier).fetchAllCircleList()
-            : ref.read(mainViewModelProvider.notifier).fetchOpenCircleList(),
-        ref.read(profileViewModelProvider.notifier).getProfile(),
-      ]);
+
     });
 
     final circleListState = ref.watch(mainViewModelProvider);
@@ -211,12 +206,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ],
             ),
-            circleListState is CircleListModel
+            circleListState.value is CircleListModel
                 ? Expanded(
                     child: CircleList(
-                    state: circleListState,
+                    state: circleListState.value as CircleListModel,
                     onItemClicked: (clubId) {
-                      context.go('/circle?clubId=1');
+                      context.go('/circle?clubId=$clubId');
                     },
                   ))
                 : Expanded(

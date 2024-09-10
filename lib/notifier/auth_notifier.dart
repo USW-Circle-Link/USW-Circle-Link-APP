@@ -22,7 +22,7 @@ class AuthNotifier extends ChangeNotifier {
   }
  
   void logout() {
-    ref.read(loginViewModelProvider.notifier).logout();
+    ref.read(userViewModelProvider.notifier).logout();
   }
  
   /// 앱을 처음 시작했을 때 토큰이 존재하는 지를 확인하고,

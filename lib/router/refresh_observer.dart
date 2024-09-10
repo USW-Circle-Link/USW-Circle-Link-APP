@@ -11,7 +11,7 @@ class RefreshObserver extends NavigatorObserver {
   final Ref ref;
 
   @override
-  void didPush(Route route, Route? previousRoute) {
+  void didPush(Route route, Route? previousRoute) async {
     logger.d('didPush - called!');
     super.didPush(route, previousRoute);
   }

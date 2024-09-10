@@ -32,8 +32,9 @@ class CircleListData with _$CircleListData {
   CircleListData._();
 
   factory CircleListData({
+    required int clubId,
     required String clubName,
-    required String mainPhoto,
+    String? mainPhoto,
     required String departmentName,
   }) = _CircleListData;
 

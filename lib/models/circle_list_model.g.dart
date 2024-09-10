@@ -31,14 +31,16 @@ const _$CircleListModelTypeEnumMap = {
 
 _$CircleListDataImpl _$$CircleListDataImplFromJson(Map<String, dynamic> json) =>
     _$CircleListDataImpl(
+      clubId: (json['clubId'] as num).toInt(),
       clubName: json['clubName'] as String,
-      mainPhoto: json['mainPhoto'] as String,
+      mainPhoto: json['mainPhoto'] as String?,
       departmentName: json['departmentName'] as String,
     );
 
 Map<String, dynamic> _$$CircleListDataImplToJson(
         _$CircleListDataImpl instance) =>
     <String, dynamic>{
+      'clubId': instance.clubId,
       'clubName': instance.clubName,
       'mainPhoto': instance.mainPhoto,
       'departmentName': instance.departmentName,

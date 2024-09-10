@@ -275,7 +275,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xffffB052),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
+                                color: Colors.transparent,
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
@@ -345,7 +347,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xffffB052),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
+                                color: Colors.transparent,
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(
@@ -400,7 +404,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
+                              foregroundColor: const Color(0xFFFFFFFF),
                               side: const BorderSide(
+                                color: Colors.transparent,
                                 width: 0.0,
                               ),
                               shape: RoundedRectangleBorder(

@@ -50,6 +50,10 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     return fcmRepository.getToken();
   }
 
+  Future<void> sendToken() async {
+    await fcmRepository.sendToken();
+  }
+
   // SharedPreferences에서 알림 목록을 불러오는 메서드
   Future<void> loadNotifications() async {
     final prefs = await SharedPreferences.getInstance();
