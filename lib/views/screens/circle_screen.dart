@@ -430,7 +430,7 @@ class CustomButton extends StatefulWidget {
   final bool isEnabled;
   final VoidCallback onPressed;
 
-  const CustomButton({
+  const CustomButton({super.key, 
     required this.text,
     required this.isEnabled,
     required this.onPressed,

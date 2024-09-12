@@ -22,10 +22,10 @@ class NoticeModel extends NoticeModelBase with _$NoticeModel {
 
   factory NoticeModel.fromJson(Map<String, dynamic> json) =>
       _$NoticeModelFromJson(json);
-  NoticeModel setType(NoticeModelType _type) => NoticeModel(
+  NoticeModel setType(NoticeModelType type) => NoticeModel(
         message: message,
         data: data,
-        type: _type,
+        type: type,
       );
 }
 
@@ -56,9 +56,9 @@ class NoticeModelError extends NoticeModelBase
   factory NoticeModelError.fromJson(Map<String, dynamic> json) =>
       _$NoticeModelErrorFromJson(json);
 
-  NoticeModelError setType(NoticeModelType _type) => NoticeModelError(
+  NoticeModelError setType(NoticeModelType type) => NoticeModelError(
         message: message,
-        type: _type,
+        type: type,
       );
 }
 

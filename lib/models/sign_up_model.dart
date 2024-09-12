@@ -23,7 +23,7 @@ class SignUpModel extends SignUpModelBase with _$SignUpModel {
 
   factory SignUpModel.fromJson(Map<String, dynamic> json) => _$SignUpModelFromJson(json);
 
-  SignUpModel setType(SignUpModelType _type) => SignUpModel(message: message, data: data, type: _type);
+  SignUpModel setType(SignUpModelType type) => SignUpModel(message: message, data: data, type: type);
 }
 
 class SignUpModelLoading extends SignUpModelBase {}
@@ -44,5 +44,5 @@ class SignUpModelError extends SignUpModelBase with _$SignUpModelError implement
 
   factory SignUpModelError.fromJson(Map<String, dynamic> json) => _$SignUpModelErrorFromJson(json);
 
-  SignUpModelError setType(SignUpModelType _type) => SignUpModelError(exception: exception, code: code, error: error, status: status, message: message, type: _type);
+  SignUpModelError setType(SignUpModelType type) => SignUpModelError(exception: exception, code: code, error: error, status: status, message: message, type: type);
 }

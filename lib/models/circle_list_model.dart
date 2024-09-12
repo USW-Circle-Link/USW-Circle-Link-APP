@@ -23,7 +23,7 @@ class CircleListModel extends CircleListModelBase with _$CircleListModel {
 
   factory CircleListModel.fromJson(Map<String, dynamic> json) => _$CircleListModelFromJson(json);
 
-  CircleListModel setType(CircleListModelType _type) => CircleListModel(message: message, data: data, type: _type,);
+  CircleListModel setType(CircleListModelType type) => CircleListModel(message: message, data: data, type: type,);
 }
 
 @freezed
@@ -52,7 +52,7 @@ class CircleListModelError extends CircleListModelBase with _$CircleListModelErr
 
   factory CircleListModelError.fromJson(Map<String, dynamic> json) => _$CircleListModelErrorFromJson(json);
   
-  CircleListModelError setType(CircleListModelType _type) =>  CircleListModelError(type:_type,);
+  CircleListModelError setType(CircleListModelType type) =>  CircleListModelError(type:type,);
 }
 
 class CircleListModelLoading extends CircleListModelBase {}

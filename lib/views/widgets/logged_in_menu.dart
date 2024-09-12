@@ -219,7 +219,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
 }
 
 void _launchURL() async {
-  const url = '$feedback';
+  const url = feedback;
   final Uri uri = Uri.parse(url);
   if (await canLaunchUrl(uri)) {
     await launchUrl(uri);

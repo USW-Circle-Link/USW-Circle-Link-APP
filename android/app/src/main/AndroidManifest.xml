@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.usw_circle_link">
+    package="com.usw.flag.usw_circle_link">
 
     <!-- 필요한 권한을 추가합니다 -->
     <uses-permission android:name="android.permission.INTERNET"/>
@@ -8,14 +8,14 @@
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
 
     <application
-        android:label="usw_circle_link"
+        android:label="동구라미"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher"
         android:usesCleartextTraffic="true">
 
         <meta-data
         android:name="com.google.firebase.messaging.default_notification_channel_id"
-        android:value="com.example.usw_circle_link" />
+        android:value="com.usw.flag.usw_circle_link" />
         
         <activity
             android:name=".MainActivity"

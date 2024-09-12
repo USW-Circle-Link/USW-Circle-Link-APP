@@ -28,7 +28,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
     return Dialog(
         child: ScreenUtilInit(
             designSize: const Size(375, 812),
-            builder: (context, _widget) {
+            builder: (context, _) {
               return Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(15.r),
@@ -44,7 +44,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                       child: Column(
                         children: [
                           ...[
-                            widget.title == null
+                             widget.title == null
                                 ? Container()
                                 : Container(
                                     margin: EdgeInsets.only(bottom: 8.h),

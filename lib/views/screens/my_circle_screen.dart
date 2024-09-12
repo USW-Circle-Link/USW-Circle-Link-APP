@@ -105,7 +105,7 @@ class CircleList extends StatelessWidget {
   final String InstaId;
   final String leaderHp;
 
-  const CircleList({
+  const CircleList({super.key, 
     required this.CircleLeader,
     required this.CircleName,
     this.ImageUrl,
@@ -235,7 +235,7 @@ class CircleList extends StatelessWidget {
                             'assets/images/Instagram_logo.png'),
                         SizedBox(width: 6.w),
                         Text(
-                          '@' + InstaId,
+                          '@$InstaId',
                           style: TextStyle(
                             fontFamily: 'Pretendard',
                             color: const Color(0xFF353549),

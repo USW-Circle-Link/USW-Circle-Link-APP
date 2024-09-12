@@ -125,7 +125,7 @@ class LoggedOutMenu extends ConsumerWidget {
 }
 
 void _launchURL() async {
-    const url = '$feedback'; 
+    const url = feedback; 
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);

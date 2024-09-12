@@ -259,7 +259,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           Row(
             children: [
               SizedBox(width: 32.w),
-              Container(
+              SizedBox(
                 width: 311.w,
                 child: RoundedTextField(
                   height: 50.h,
@@ -309,7 +309,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           Row(
             children: [
               SizedBox(width: 32.w),
-              Container(
+              SizedBox(
                 width: 311.w,
                 child: RoundedTextField(
                   height: 50.h,
@@ -359,7 +359,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           Row(
             children: [
               SizedBox(width: 32.w),
-              Container(
+              SizedBox(
                 width: 311.w,
                 child: RoundedTextField(
                   height: 50.h,
@@ -410,7 +410,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           Row(
             children: [
               SizedBox(width: 32.w),
-              Container(
+              SizedBox(
                 width: 311.w,
                 child: GestureDetector(
                   onTap: () async {
@@ -649,7 +649,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
 
-  const CustomButton({
+  const CustomButton({super.key, 
     required this.text,
     required this.onPressed,
   });

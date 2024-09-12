@@ -1,5 +1,4 @@
 import 'package:auto_size_text/auto_size_text.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -115,7 +114,7 @@ class CircleList extends StatelessWidget {
   final String leaderHp;
   final String status;
 
-  const CircleList({
+  const CircleList({super.key, 
     required this.CircleLeader,
     required this.CircleName,
     this.ImageUrl,
@@ -259,7 +258,7 @@ class CircleList extends StatelessWidget {
                             ),
                             SizedBox(width: 6.w),
                             Text(
-                              '@' + InstaId,
+                              '@$InstaId',
                               style: TextStyle(
                                 fontFamily: 'Pretendard',
                                 color: const Color(0xFF353549),

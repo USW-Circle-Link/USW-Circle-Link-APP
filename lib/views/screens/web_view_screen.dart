@@ -116,10 +116,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
                           ),
                           pullToRefreshController: pullToRefreshController,
                           onLoadStart:
-                              (InAppWebViewController controller, _uri) {
-                            logger.d('onLoadStart - $_uri');
+                              (InAppWebViewController controller, uri) {
+                            logger.d('onLoadStart - $uri');
                             setState(() {
-                              uri = _uri!;
+                              uri = uri!;
                             });
                           },
                           onLoadError: (controller, url, code, message) {
@@ -132,10 +132,10 @@ class _WebViewScreenState extends State<WebViewScreen> {
                                 "url - $url (code : $statusCode) / message - $description");
                           },
                           onLoadStop:
-                              (InAppWebViewController controller, _uri) {
-                            logger.d('onLoadStop - $_uri');
+                              (InAppWebViewController controller, uri) {
+                            logger.d('onLoadStop - $uri');
                             setState(() {
-                              uri = _uri!;
+                              uri = uri!;
                             });
                           },
                           onProgressChanged: (controller, progress) {

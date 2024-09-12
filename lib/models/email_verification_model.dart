@@ -24,11 +24,11 @@ class EmailVerificationModel extends EmailVerificationModelBase
   factory EmailVerificationModel.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelFromJson(json);
 
-  EmailVerificationModel setType(EmailVerificationModelType _type) =>
+  EmailVerificationModel setType(EmailVerificationModelType type) =>
       EmailVerificationModel(
         message: message,
         data: data,
-        type: _type,
+        type: type,
       );
 }
 
@@ -55,11 +55,11 @@ class EmailVerificationModelResend extends EmailVerificationModelBase
 
   factory EmailVerificationModelResend.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelResendFromJson(json);
-  EmailVerificationModelResend setType(EmailVerificationModelType _type) =>
+  EmailVerificationModelResend setType(EmailVerificationModelType type) =>
       EmailVerificationModelResend(
         message: message,
         data: data,
-        type: _type,
+        type: type,
       );
 }
 
@@ -75,11 +75,11 @@ class EmailVerificationModelComplete extends EmailVerificationModelBase
 
   factory EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelCompleteFromJson(json);
-  EmailVerificationModelComplete setType(EmailVerificationModelType _type) =>
+  EmailVerificationModelComplete setType(EmailVerificationModelType type) =>
       EmailVerificationModelComplete(
         message: message,
         data: data,
-        type: _type,
+        type: type,
       );
 }
 
@@ -100,14 +100,14 @@ class EmailVerificationModelError extends EmailVerificationModelBase
   factory EmailVerificationModelError.fromJson(Map<String, dynamic> json) =>
       _$EmailVerificationModelErrorFromJson(json);
 
-  EmailVerificationModelError setType(EmailVerificationModelType _type) =>
+  EmailVerificationModelError setType(EmailVerificationModelType type) =>
       EmailVerificationModelError(
         message: message,
         exception: exception,
         code: code,
         error: error,
         status: status,
-        type: _type,
+        type: type,
       );
 }
 

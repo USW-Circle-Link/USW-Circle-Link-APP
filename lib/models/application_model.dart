@@ -20,8 +20,8 @@ class ApplicationModel extends ApplicationModelBase with _$ApplicationModel {
 
   factory ApplicationModel.fromJson(Map<String, dynamic> json) => _$ApplicationModelFromJson(json);
 
-   ApplicationModel setType(ApplicationModelType _type) {
-    return ApplicationModel(message: message, type: _type, data: data);
+   ApplicationModel setType(ApplicationModelType type) {
+    return ApplicationModel(message: message, type: type, data: data);
   }
 }
 
@@ -37,8 +37,8 @@ class ApplicationModelError extends ApplicationModelBase with _$ApplicationModel
 
   factory ApplicationModelError.fromJson(Map<String, dynamic> json) => _$ApplicationModelErrorFromJson(json);
 
-  ApplicationModelError setType(ApplicationModelType _type) {
-    return ApplicationModelError(message: message, type: _type);
+  ApplicationModelError setType(ApplicationModelType type) {
+    return ApplicationModelError(message: message, type: type);
   }
 }
 

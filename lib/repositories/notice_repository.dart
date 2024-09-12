@@ -26,7 +26,7 @@ class NoticeRepository {
 
   Future<NoticeModel> fetchNotices() async {
     final response = await dio.get(
-      '$baseUrl',
+      baseUrl,
     );
 
     logger.d(response.data);

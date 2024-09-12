@@ -20,7 +20,7 @@ class FindPwModel extends FindPwModelBase with _$FindPwModel {
 
   factory FindPwModel.fromJson(Map<String, dynamic> json) => _$FindPwModelFromJson(json);
 
-  FindPwModel setType(FindPwModelType _type) => FindPwModel(message: message, data: data, type: _type);
+  FindPwModel setType(FindPwModelType type) => FindPwModel(message: message, data: data, type: type);
 }
 
 @freezed
@@ -39,7 +39,7 @@ class FindPwModelError extends FindPwModelBase with _$FindPwModelError implement
 
   factory FindPwModelError.fromJson(Map<String, dynamic> json) => _$FindPwModelErrorFromJson(json);
 
-  FindPwModelError setType(FindPwModelType _type) => FindPwModelError(message: message, exception: exception, code: code, error: error, status: status, type: _type);
+  FindPwModelError setType(FindPwModelType type) => FindPwModelError(message: message, exception: exception, code: code, error: error, status: status, type: type);
 }
 
 class FindPwModelLoading extends FindPwModelBase {}

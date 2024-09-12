@@ -232,7 +232,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 class _NotificationOverlay extends StatefulWidget {
   final VoidCallback onDismiss;
 
-  _NotificationOverlay({required this.onDismiss});
+  const _NotificationOverlay({required this.onDismiss});
 
   @override
   _NotificationOverlayState createState() => _NotificationOverlayState();

@@ -19,9 +19,9 @@ class ChangePwModel extends ChangePwModelBase with _$ChangePwModel {
   factory ChangePwModel.fromJson(Map<String, dynamic> json) =>
       _$ChangePwModelFromJson(json);
 
-  ChangePwModel setType(ChangePwModelType _type) => ChangePwModel(
+  ChangePwModel setType(ChangePwModelType type) => ChangePwModel(
         message: message,
-        type: _type,
+        type: type,
       );
 }
 
@@ -42,13 +42,13 @@ class ChangePwModelError extends ChangePwModelBase
   factory ChangePwModelError.fromJson(Map<String, dynamic> json) =>
       _$ChangePwModelErrorFromJson(json);
 
-  ChangePwModelError setType(ChangePwModelType _type) => ChangePwModelError(
+  ChangePwModelError setType(ChangePwModelType type) => ChangePwModelError(
         message: message,
         exception: exception,
         code: code,
         status: status,
         error: error,
-        type: _type,
+        type: type,
       );
 }
 

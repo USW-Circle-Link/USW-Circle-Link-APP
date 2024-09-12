@@ -34,7 +34,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
     return Dialog(
       child: ScreenUtilInit(
           designSize: const Size(375, 812),
-          builder: (context, _widget) {
+          builder: (context, _) {
             return Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15.r),

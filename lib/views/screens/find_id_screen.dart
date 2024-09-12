@@ -10,7 +10,7 @@ import 'package:usw_circle_link/viewmodels/find_id_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class FindIdScreen extends ConsumerStatefulWidget {
-  FindIdScreen({Key? key}) : super(key: key);
+  const FindIdScreen({Key? key}) : super(key: key);
 
   @override
   _FindIDScreenState createState() => _FindIDScreenState();

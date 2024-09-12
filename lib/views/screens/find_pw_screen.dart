@@ -343,7 +343,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                               context
-                                  .push('/login/find_pw/webview/${encodedUrl}');
+                                  .push('/login/find_pw/webview/$encodedUrl');
                             },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xffffB052),

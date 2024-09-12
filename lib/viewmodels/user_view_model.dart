@@ -60,7 +60,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       }
 
       // FCM Token 전송
-      // await firebaseCloudMessagingViewModel.sendToken();
+      await firebaseCloudMessagingViewModel.sendToken();
 
       final accessToken = await storage.read(key: accessTokenKey);
       final refreshToken = await storage.read(key: refreshTokenKey);
@@ -112,7 +112,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
 
       // FCM Token 전송
-      // await firebaseCloudMessagingViewModel.sendToken();
+      await firebaseCloudMessagingViewModel.sendToken();
 
       state = AsyncValue.data(response); // UserModel
       return response;
@@ -137,7 +137,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       // 로그아웃 시 User 상태를 null로 초기화
       state = AsyncValue.data(null);
 
-      String? _accessToken = await storage.read(key: accessTokenKey);
+      String? accessToken0 = await storage.read(key: accessTokenKey);
       // Secure Storage에서 Access Token과 Refresh Token, clubIds 삭제
       await Future.wait([
         storage.delete(key: accessTokenKey),
@@ -152,7 +152,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
 
-      await authRepository.logout(accessToken: _accessToken ?? "");
+      await authRepository.logout(accessToken: accessToken0 ?? "");
     } on UserModelError catch (e) {
       logger.d(e);
       rethrow;

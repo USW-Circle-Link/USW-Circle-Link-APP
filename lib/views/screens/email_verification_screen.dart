@@ -284,20 +284,20 @@ class _EmailVerificationScreenState
                                       state is EmailVerificationModelLoading
                                   ? null
                                   : () {
-                                      String emailToken_uuid = "";
+                                      String emailtokenUuid = "";
                                       if (state is EmailVerificationModel) {
-                                        emailToken_uuid =
+                                        emailtokenUuid =
                                             state.data.emailToken_uuid;
                                       } else if (state
                                           is EmailVerificationModelResend) {
-                                        emailToken_uuid = state.data;
+                                        emailtokenUuid = state.data;
                                       }
                                       ref
                                           .read(
                                               emailVerificationViewModelProvider
                                                   .notifier)
                                           .resendMail(
-                                              emailToken_uuid: emailToken_uuid);
+                                              emailToken_uuid: emailtokenUuid);
                                     },
                               child: Center(
                                 child: TextFontWidget.fontRegular(
