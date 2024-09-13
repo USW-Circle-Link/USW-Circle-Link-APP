@@ -187,10 +187,12 @@ class AuthRepository {
   Future<UserModel> login({
     required String id,
     required String password,
+    required String fcmToken,
   }) async {
     final body = {
       'account': id,
       'password': password,
+      'fcmToken': fcmToken,
     };
 
     final response = await dio.post(
@@ -217,12 +219,14 @@ class AuthRepository {
 
   Future<void> logout({
     required String accessToken,
+    required String refreshToken,
   }) async {
     final response = await dio.post(
       'http://$host:$port/integration/logout',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',
+          'Cookie': 'refreshToken=$refreshToken',
         },
       ),
     );
