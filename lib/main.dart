@@ -10,8 +10,6 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
-  final token = await FirebaseMessaging.instance.getToken();
-  logger.d('FCM Token - $token');
 
   runApp(
     ProviderScope(
