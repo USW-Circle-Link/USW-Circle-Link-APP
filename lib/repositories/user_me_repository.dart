@@ -12,7 +12,7 @@ final userMeRepositoryProvider = Provider<UserMeRepository>((ref) {
  
   return UserMeRepository(
     dio,
-    baseUrl: 'http://$host:$port/user/me',
+    baseUrl: 'https://$host:$port/user/me',
   );
 });
  

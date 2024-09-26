@@ -125,20 +125,34 @@ class NoticeDetailScreen extends ConsumerWidget {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  context.push('/image', extra: state.data.noticePhotos);
+                                  context.push('/image',
+                                      extra: state.data.noticePhotos);
                                 },
                                 child: Container(
+                                  width: 100.w, // 이미지의 너비
                                   margin: EdgeInsets.symmetric(
                                     horizontal: 4.w,
                                   ), // 이미지 사이의 여백
                                   child: ClipRRect(
-                                    borderRadius:
-                                        BorderRadius.circular(8.0), // 모서리를 둥글게 설정
-                                    child: Image.network(
-                                      state.data.noticePhotos![index],
-                                      fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
-                                      width: 100.w, // 이미지의 너비
-                                      // height: 100.h, // 이미지의 높이
+                                    borderRadius: BorderRadius.circular(
+                                        8.0), // 모서리를 둥글게 설정
+                                    child: Container(
+                                      color: Colors.grey,
+                                      child: Image.network(
+                                        state.data.noticePhotos![index],
+                                        fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Center(
+                                            child: TextFontWidget.fontRegular(
+                                                text: '이미지 없음',
+                                                fontSize: 14.sp,
+                                                color: Colors.black,
+                                                fontweight: FontWeight.w400),
+                                          );
+                                        },
+                                        // height: 100.h, // 이미지의 높이
+                                      ),
                                     ),
                                   ),
                                 ),

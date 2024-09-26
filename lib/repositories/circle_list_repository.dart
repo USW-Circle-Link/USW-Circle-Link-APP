@@ -10,7 +10,7 @@ final CircleListRepositoryPrivider = Provider<CircleListRepository>((ref) {
   
   return CircleListRepository(
     dio: dio,
-    baseUrl: 'http://$host:$port/clubs',
+    baseUrl: 'https://$host:$port/clubs',
   );
 });
 

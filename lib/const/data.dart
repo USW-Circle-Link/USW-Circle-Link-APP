@@ -1,8 +1,8 @@
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
-const host = "15.164.246.244";
-const port = "8080";
+const host = "api.donggurami.net";
+const port = "";
 
 const accessTokenKey = 'access_token';
 const refreshTokenKey = 'refresh_token';

@@ -9,7 +9,7 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ProfileRepository(
-    baseUrl: 'http://$host:$port/profiles',
+    baseUrl: 'https://$host:$port/profiles',
     dio: dio,
   );
 });

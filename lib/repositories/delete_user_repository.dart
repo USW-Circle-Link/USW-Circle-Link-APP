@@ -9,7 +9,7 @@ final deleteUserRepositoryProvider = Provider<DeleteUserRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return DeleteUserRepository(
-    baseUrl: 'http://$host:$port/users',
+    baseUrl: 'https://$host:$port/users',
     dio: dio,
   );
 });

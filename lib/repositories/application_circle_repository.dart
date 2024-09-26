@@ -10,7 +10,7 @@ final ApplicationCircleRepositoryProvider = Provider<ApplicationCircleRepository
   final dio = ref.watch(dioProvider);
 
   return ApplicationCircleRepository(
-    baseUrl: 'http://$host:$port',
+    baseUrl: 'https://$host:$port',
     dio: dio,
   );
 });

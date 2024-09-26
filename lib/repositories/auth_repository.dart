@@ -14,7 +14,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(
-    baseUrl: 'http://$host:$port/users',
+    baseUrl: 'https://$host:$port/users',
     dio: dio,
   );
 });
