@@ -4,9 +4,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
+import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
+import 'package:usw_circle_link/repositories/delete_user_repository.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/repositories/user_me_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
@@ -19,6 +21,7 @@ final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModel?>>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
   final userMeRepository = ref.read(userMeRepositoryProvider);
+  final deleteUserRepository = ref.read(deleteUserRepositoryProvider);
   final profileViewModel = ref.read(profileViewModelProvider.notifier);
   final firebaseCloudMessagingViewModel =
       ref.read(firebaseCloudMessagingViewModelProvider.notifier);
@@ -27,6 +30,7 @@ final userViewModelProvider =
   return UserViewModel(
     authRepository: authRepository,
     userMeRepository: userMeRepository,
+    deleteUserRepository: deleteUserRepository,
     profileViewModel: profileViewModel,
     firebaseCloudMessagingViewModel: firebaseCloudMessagingViewModel,
     storage: storage,
@@ -36,6 +40,7 @@ final userViewModelProvider =
 class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
   final UserMeRepository userMeRepository;
+  final DeleteUserRepository deleteUserRepository;
   final ProfileViewModel profileViewModel;
   final FirebaseCloudMessagingViewModel firebaseCloudMessagingViewModel;
   final FlutterSecureStorage storage;
@@ -43,6 +48,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   UserViewModel({
     required this.authRepository,
     required this.userMeRepository,
+    required this.deleteUserRepository,
     required this.profileViewModel,
     required this.firebaseCloudMessagingViewModel,
     required this.storage,
@@ -157,7 +163,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
 
-      await authRepository.logout(accessToken: accessToken0 ?? "", refreshToken: refreshToken0 ?? "");
+      await authRepository.logout(
+          accessToken: accessToken0 ?? "", refreshToken: refreshToken0 ?? "");
     } on UserModelError catch (e) {
       logger.d(e);
       rethrow;
@@ -215,6 +222,52 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.e('예외발생 - $e');
       rethrow;
     }
+  }
+
+  Future<DeleteUserModel> verifyCode({
+    required String code,
+  }) async {
+    try {
+      final response = await deleteUserRepository.verifyCode(code: code);
+      return response;
+    } on DeleteUserModelError catch (e) {
+      // 예외처리 안 실패
+      logger.d(e);
+      rethrow;
+    } catch (e) {
+      // 예외처리 밖 에러(네트워크 에러 ...)
+      logger.e('예외발생 - $e');
+      rethrow;
+    }
+  }
+
+  Future<DeleteUserModel> sendCode() async {
+    try {
+      final response = await deleteUserRepository.sendCode();
+      return response;
+    } on DeleteUserModelError catch (e) {
+      // 예외처리 안 실패
+      logger.d(e);
+      rethrow;
+    } catch (e) {
+      // 예외처리 밖 에러(네트워크 에러 ...)
+      logger.e('예외발생 - $e');
+      rethrow;
+    }
+  }
+
+  Future<ProfileModelBase?> updateProfile({
+    required userName,
+    required String studentNumber,
+    required String userHp,
+    required String major,
+  }) async {
+    return await profileViewModel.updateProfile(
+      userName: userName,
+      studentNumber: studentNumber,
+      userHp: userHp,
+      major: major,
+    );
   }
 }
 

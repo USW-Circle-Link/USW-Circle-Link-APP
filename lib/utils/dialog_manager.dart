@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/major_picker_dialog.dart';
+import 'package:usw_circle_link/views/widgets/policy_dialog.dart';
 
 class DialogManager {
   DialogManager._();
@@ -55,5 +56,12 @@ class DialogManager {
         onConfirmPressed: onConfirmPressed,
       ),
     );
+  }
+
+  Future<bool> showPolicyDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (_) => PolicyDialog()
+    ) ?? true;
   }
 }

@@ -48,6 +48,12 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
               content: '해당 정보로 가입된 회원이 없습니다!',
             );
             break;
+          case "ATTEMPT-503":
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!',
+            );
+            break;
           default: // EML-501 : 서버에서 메일전송 실패 (Internal Server Error 500)
             DialogManager.instance.showAlertDialog(
               context: context,

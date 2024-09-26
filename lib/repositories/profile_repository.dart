@@ -23,7 +23,6 @@ class ProfileRepository {
     required this.dio,
   });
 
-  /////////// 프로필 관련 API ///////////
   Future<ProfileModel> getProfile() async {
     final response = await dio.get(
       '$baseUrl/me',
@@ -36,15 +35,48 @@ class ProfileRepository {
 
     logger.d(response.data);
 
-    logger
-        .d('getProfile - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d(
+        'getProfile - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(response.data);
+      return ProfileModel.fromJson(response.data).setType(ProfileModelType.getProfile);
     } else {
       // Bad Request
-      throw ProfileModelError.fromJson(response.data);
+      throw ProfileModelError.fromJson(response.data).setType(ProfileModelType.getProfile);
     }
   }
-  ////////////////////////////////////
+
+  Future<ProfileModel> updateProfile({
+    required userName,
+    required String studentNumber,
+    required String userHp,
+    required String major,
+  }) async {
+    final body = {
+      'userName': userName,
+      'studentNumber': studentNumber,
+      'userHp': userHp,
+      'major': major,
+    };
+
+    final response = await dio.patch(
+      '$baseUrl/change',
+      options: Options(headers: {
+        'accessToken': 'true',
+        'Content-Type': 'application/json',
+      }),
+      data: body,
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'updateProfile - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return ProfileModel.fromJson(response.data).setType(ProfileModelType.updateProfile);
+    } else {
+      throw ProfileModelError(message: '정보 수정에 실패하였습니다', type: ProfileModelType.updateProfile);
+    }
+  }
 }

@@ -64,6 +64,12 @@ class _EmailVerificationScreenState
         switch (next.type) {
           case EmailVerificationModelType.sendMail:
             switch (next.code) {
+              case "ATTEMPT-503":
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!',
+                );
+                break;
               case "EML-F100":
                 DialogManager.instance.showAlertDialog(
                   context: context,
@@ -85,6 +91,12 @@ class _EmailVerificationScreenState
                 DialogManager.instance.showAlertDialog(
                   context: context,
                   content: "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!",
+                );
+                break;
+              case "ATTEMPT-503":
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!',
                 );
                 break;
               default: // EML-501

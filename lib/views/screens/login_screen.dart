@@ -206,9 +206,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         backgroundColor: const Color(0xffffB052),
                         foregroundColor: const Color(0xffffffff),
                         side: const BorderSide(
-                          width: 0.0,
-                          color: Colors.transparent
-                        ),
+                            width: 0.0, color: Colors.transparent),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.r),
                         ),
@@ -287,8 +285,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           return "* 아이디와 비밀번호를 입력해주세요!";
         case "USR-211":
           return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
+        case "ATTEMPT-503":
+          return "* 최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!";
         default:
-          return "* 로그인 중에 문제가 발생했습니다";
+          return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
       }
     }
     return "";

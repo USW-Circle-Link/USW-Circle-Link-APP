@@ -22,6 +22,7 @@ ProfileModel _$ProfileModelFromJson(Map<String, dynamic> json) {
 mixin _$ProfileModel {
   String get message => throw _privateConstructorUsedError;
   ProfileData get data => throw _privateConstructorUsedError;
+  ProfileModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +36,7 @@ abstract class $ProfileModelCopyWith<$Res> {
           ProfileModel value, $Res Function(ProfileModel) then) =
       _$ProfileModelCopyWithImpl<$Res, ProfileModel>;
   @useResult
-  $Res call({String message, ProfileData data});
+  $Res call({String message, ProfileData data, ProfileModelType? type});
 
   $ProfileDataCopyWith<$Res> get data;
 }
@@ -55,6 +56,7 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
   $Res call({
     Object? message = null,
     Object? data = null,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -65,6 +67,10 @@ class _$ProfileModelCopyWithImpl<$Res, $Val extends ProfileModel>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as ProfileData,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ProfileModelType?,
     ) as $Val);
   }
 
@@ -85,7 +91,7 @@ abstract class _$$ProfileModelImplCopyWith<$Res>
       __$$ProfileModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, ProfileData data});
+  $Res call({String message, ProfileData data, ProfileModelType? type});
 
   @override
   $ProfileDataCopyWith<$Res> get data;
@@ -104,6 +110,7 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
     Object? data = null,
+    Object? type = freezed,
   }) {
     return _then(_$ProfileModelImpl(
       message: null == message
@@ -114,6 +121,10 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as ProfileData,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ProfileModelType?,
     ));
   }
 }
@@ -121,8 +132,9 @@ class __$$ProfileModelImplCopyWithImpl<$Res>
 /// @nodoc
 
 @JsonSerializable(explicitToJson: true)
-class _$ProfileModelImpl implements _ProfileModel {
-  _$ProfileModelImpl({required this.message, required this.data});
+class _$ProfileModelImpl extends _ProfileModel {
+  _$ProfileModelImpl({required this.message, required this.data, this.type})
+      : super._();
 
   factory _$ProfileModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileModelImplFromJson(json);
@@ -131,10 +143,12 @@ class _$ProfileModelImpl implements _ProfileModel {
   final String message;
   @override
   final ProfileData data;
+  @override
+  final ProfileModelType? type;
 
   @override
   String toString() {
-    return 'ProfileModel(message: $message, data: $data)';
+    return 'ProfileModel(message: $message, data: $data, type: $type)';
   }
 
   @override
@@ -143,12 +157,13 @@ class _$ProfileModelImpl implements _ProfileModel {
         (other.runtimeType == runtimeType &&
             other is _$ProfileModelImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.data, data) || other.data == data) &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, data);
+  int get hashCode => Object.hash(runtimeType, message, data, type);
 
   @JsonKey(ignore: true)
   @override
@@ -164,10 +179,12 @@ class _$ProfileModelImpl implements _ProfileModel {
   }
 }
 
-abstract class _ProfileModel implements ProfileModel {
+abstract class _ProfileModel extends ProfileModel {
   factory _ProfileModel(
       {required final String message,
-      required final ProfileData data}) = _$ProfileModelImpl;
+      required final ProfileData data,
+      final ProfileModelType? type}) = _$ProfileModelImpl;
+  _ProfileModel._() : super._();
 
   factory _ProfileModel.fromJson(Map<String, dynamic> json) =
       _$ProfileModelImpl.fromJson;
@@ -176,6 +193,8 @@ abstract class _ProfileModel implements ProfileModel {
   String get message;
   @override
   ProfileData get data;
+  @override
+  ProfileModelType? get type;
   @override
   @JsonKey(ignore: true)
   _$$ProfileModelImplCopyWith<_$ProfileModelImpl> get copyWith =>
@@ -386,6 +405,8 @@ ProfileModelError _$ProfileModelErrorFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$ProfileModelError {
   String get message => throw _privateConstructorUsedError;
+  String? get code => throw _privateConstructorUsedError;
+  ProfileModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -399,7 +420,7 @@ abstract class $ProfileModelErrorCopyWith<$Res> {
           ProfileModelError value, $Res Function(ProfileModelError) then) =
       _$ProfileModelErrorCopyWithImpl<$Res, ProfileModelError>;
   @useResult
-  $Res call({String message});
+  $Res call({String message, String? code, ProfileModelType? type});
 }
 
 /// @nodoc
@@ -416,12 +437,22 @@ class _$ProfileModelErrorCopyWithImpl<$Res, $Val extends ProfileModelError>
   @override
   $Res call({
     Object? message = null,
+    Object? code = freezed,
+    Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ProfileModelType?,
     ) as $Val);
   }
 }
@@ -434,7 +465,7 @@ abstract class _$$ProfileModelErrorImplCopyWith<$Res>
       __$$ProfileModelErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message});
+  $Res call({String message, String? code, ProfileModelType? type});
 }
 
 /// @nodoc
@@ -449,30 +480,45 @@ class __$$ProfileModelErrorImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
+    Object? code = freezed,
+    Object? type = freezed,
   }) {
     return _then(_$ProfileModelErrorImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as ProfileModelType?,
     ));
   }
 }
 
 /// @nodoc
 @JsonSerializable()
-class _$ProfileModelErrorImpl implements _ProfileModelError {
-  _$ProfileModelErrorImpl({required this.message});
+class _$ProfileModelErrorImpl extends _ProfileModelError {
+  _$ProfileModelErrorImpl({required this.message, this.code, this.type})
+      : super._();
 
   factory _$ProfileModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileModelErrorImplFromJson(json);
 
   @override
   final String message;
+  @override
+  final String? code;
+  @override
+  final ProfileModelType? type;
 
   @override
   String toString() {
-    return 'ProfileModelError(message: $message)';
+    return 'ProfileModelError(message: $message, code: $code, type: $type)';
   }
 
   @override
@@ -480,12 +526,14 @@ class _$ProfileModelErrorImpl implements _ProfileModelError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$ProfileModelErrorImpl &&
-            (identical(other.message, message) || other.message == message));
+            (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
+            (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message);
+  int get hashCode => Object.hash(runtimeType, message, code, type);
 
   @JsonKey(ignore: true)
   @override
@@ -502,15 +550,22 @@ class _$ProfileModelErrorImpl implements _ProfileModelError {
   }
 }
 
-abstract class _ProfileModelError implements ProfileModelError {
-  factory _ProfileModelError({required final String message}) =
-      _$ProfileModelErrorImpl;
+abstract class _ProfileModelError extends ProfileModelError {
+  factory _ProfileModelError(
+      {required final String message,
+      final String? code,
+      final ProfileModelType? type}) = _$ProfileModelErrorImpl;
+  _ProfileModelError._() : super._();
 
   factory _ProfileModelError.fromJson(Map<String, dynamic> json) =
       _$ProfileModelErrorImpl.fromJson;
 
   @override
   String get message;
+  @override
+  String? get code;
+  @override
+  ProfileModelType? get type;
   @override
   @JsonKey(ignore: true)
   _$$ProfileModelErrorImplCopyWith<_$ProfileModelErrorImpl> get copyWith =>

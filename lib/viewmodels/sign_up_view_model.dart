@@ -34,7 +34,8 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
       if (e is SignUpModelError) {
         state = e;
       } else {
-        state = SignUpModelError(message: '예외발생 - $e',type: SignUpModelType.verify);
+        state = SignUpModelError(
+            message: '예외발생 - $e', type: SignUpModelType.verify);
       }
 
       return Future.value(state);
@@ -70,11 +71,15 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
             type: SignUpModelType.validatePasswordMatch);
       }
 
-      if (!telephoneRegExp.hasMatch(telephone)) {
-        throw FormatException();
+      if (telephone.isNotEmpty) {
+        if (!telephoneRegExp.hasMatch(telephone)) {
+          throw FormatException();
+        }
+        telephone = telephone.addDash();
+        logger.d('전화번호 포맷팅 완료! - $telephone');
+      } else {
+        logger.d('전화번호 입력되지 않음');
       }
-      telephone = telephone.addDash();
-      logger.d('전화번호 포맷팅 완료! - $telephone');
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
         throw SignUpModelError(
@@ -122,6 +127,13 @@ extension AddDashToPhoneNumber on String {
   String addDash() {
     if (length != 11) {
       throw FormatException("전화번호가 11자리가 아닙니다.");
+    }
+    return '${substring(0, 3)}-${substring(3, 7)}-${substring(7)}';
+  }
+
+  String? addDashOrNull() {
+    if (length != 11) {
+      return null;
     }
     return '${substring(0, 3)}-${substring(3, 7)}-${substring(7)}';
   }

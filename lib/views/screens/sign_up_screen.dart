@@ -31,6 +31,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool passwordConfirmVisible = false;
 
   bool idVerified = false;
+  bool policyAgree = false;
 
   String? college;
   String? major;
@@ -63,7 +64,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
             context.go(
-                '/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text.addDash()}&studentNumber=${studentNumberController.text}&major=$major');
+                '/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text.addDashOrNull()}&studentNumber=${studentNumberController.text}&major=$major');
             break;
           default: // 예외발생!
             logger.e('예외발생! - $next');
@@ -347,7 +348,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textInputType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '전화번호 (- 제외입력)',
+                        hintText: '전화번호 (- 제외입력, *선택사항)',
                         isAnimatedHint: false,
                         onChanged: (value) {
                           ref.read(signUpViewModelProvider.notifier).initState();
@@ -438,6 +439,65 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       SizedBox(
                         height: 90.h,
                       ),
+                      IntrinsicHeight(
+                        child: Row(
+                          children: [
+                            Checkbox(
+                              materialTapTargetSize:
+                                  MaterialTapTargetSize.shrinkWrap,
+                              visualDensity: const VisualDensity(
+                                horizontal: VisualDensity.minimumDensity,
+                                vertical: VisualDensity.minimumDensity,
+                              ),
+                              value: policyAgree,
+                              onChanged: (bool? value) async {
+                                final agree = await DialogManager.instance.showPolicyDialog(context);
+                                setState(() {
+                                  policyAgree = agree;
+                                });
+                                logger.d('지원서 작성 완료에 동의함 : $policyAgree');
+                              },
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            RichText(
+                              textAlign: TextAlign.center,
+                              text: TextSpan(
+                                text: "",
+                                style: TextStyle(
+                                    fontFamily: 'Pretendard-Regular',
+                                    fontSize: 12.sp,
+                                    color: const Color(0xFF989898),
+                                    fontWeight: FontWeight.w400),
+                                children: const [
+                                  TextSpan(
+                                    text: "서비스 이용약관 ",
+                                    style: TextStyle(
+                                        color: Color(0xffffB052),
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  TextSpan(
+                                    text: '및 ',
+                                  ),
+                                  TextSpan(
+                                    text: "개인정보 처리방침",
+                                    style: TextStyle(
+                                        color: Color(0xffffB052),
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                  TextSpan(
+                                    text: '에 동의함',
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
+                        height: 14.h,
+                      ),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -445,7 +505,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             onPressed: state is UserModelLoading
                                 ? null
                                 : () async {
-                                    if (idVerified && major != null) {
+                                    if (idVerified && major != null && policyAgree) {
                                       await ref
                                           .read(
                                               signUpViewModelProvider.notifier)
@@ -477,6 +537,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                         context: context,
                                         content: '단과대학/학과를 선택해주세요.',
                                       );
+                                    } else if (!policyAgree) {
+                                      DialogManager.instance.showAlertDialog(
+                                        context: context,
+                                        content: '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
+                                      );
                                     }
                                   },
                             style: OutlinedButton.styleFrom(
@@ -495,43 +560,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 fontSize: 18.sp,
                                 color: const Color(0xFFFFFFFF),
                                 fontweight: FontWeight.w600)),
-                      ),
-                      SizedBox(
-                        height: 14.h,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 19.w),
-                        child: RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "회원가입 시 ",
-                            style: TextStyle(
-                                fontFamily: 'Pretendard-Regular',
-                                fontSize: 12.sp,
-                                color: const Color(0xFF989898),
-                                fontWeight: FontWeight.w400),
-                            children: const [
-                              TextSpan(
-                                text: "서비스 이용약관 ",
-                                style: TextStyle(
-                                    color: Color(0xffffB052),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(
-                                text: '및 ',
-                              ),
-                              TextSpan(
-                                text: "개인정보 처리방침",
-                                style: TextStyle(
-                                    color: Color(0xffffB052),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              TextSpan(
-                                text: '에 동의하신 것으로 간주됩니다',
-                              ),
-                            ],
-                          ),
-                        ),
                       ),
                     ],
                   ),
