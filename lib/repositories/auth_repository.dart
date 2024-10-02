@@ -222,7 +222,7 @@ class AuthRepository {
     required String refreshToken,
   }) async {
     final response = await dio.post(
-      'http://$host:$port/integration/logout',
+      'https://$host:$port/integration/logout',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',

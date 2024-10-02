@@ -25,7 +25,7 @@ class CircleListRepository {
 
   Future<CircleListModel> fetchAllCircleList() async {
     final response = await dio.get(
-      '$baseUrl/ACADEMIC',
+      '$baseUrl',
     );
 
     logger.d('${response.data}');
@@ -45,7 +45,7 @@ class CircleListRepository {
 
   Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
-      '$baseUrl/ACADEMIC/OPEN',
+      '$baseUrl/OPEN',
     );
 
     logger.d('${response.data}');

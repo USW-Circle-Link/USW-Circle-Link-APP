@@ -255,20 +255,6 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       rethrow;
     }
   }
-
-  Future<ProfileModelBase?> updateProfile({
-    required userName,
-    required String studentNumber,
-    required String userHp,
-    required String major,
-  }) async {
-    return await profileViewModel.updateProfile(
-      userName: userName,
-      studentNumber: studentNumber,
-      userHp: userHp,
-      major: major,
-    );
-  }
 }
 
 class AutoLoginException implements Exception {

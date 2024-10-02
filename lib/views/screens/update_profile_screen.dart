@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -25,8 +26,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   String? college;
   String? major;
 
-  bool isInitialized = false;
-
   @override
   void initState() {
     super.initState();
@@ -42,13 +41,14 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final profileAsyncValue = ref.watch(getProfileProvider);
     final state = ref.watch(updateProfileViewModelProvider);
     ref.listen(updateProfileViewModelProvider, (previous, next) {
       logger.d(next);
-      if (next is ProfileModel) {
-        switch (next.type) {
+      next.when(data: (profile) {
+        logger.d('data - $profile');
+        switch (next.value?.type) {
           case ProfileModelType.getProfile:
+            bind(profile);
             break;
           case ProfileModelType.updateProfile:
             DialogManager.instance.showAlertDialog(
@@ -59,42 +59,29 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             break;
           default:
         }
-      } else if (next is ProfileModelError) {
-        switch (next.type) {
+      }, error: (error, stackTrace) {
+        error = (error as ProfileModelError);
+        logger.d('error - $stackTrace');
+        switch (error.type) {
           case ProfileModelType.getProfile:
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  "프로필을 불러오는 데 문제가 발생했습니다!",
+            );
             break;
           case ProfileModelType.updateProfile:
-            switch (next.code) {
-              case "USR-F400": // 이름 공백
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '이름이 형식에 맞지 않습니다!',
-                );
-                break;
-              case "USR-F500": // 전화번호 형식에 맞지 않음
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '전화번호가 형식에 맞지 않습니다!',
-                );
-                break;
-              case "USR-F600": // 학번이 공백 혹은 8자리가 아님
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '학번이 형식에 맞지 않습니다!',
-                );
-                break;
-              case "USR-F700": // 학과가 선택되지 않음
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '단과대학/학과를 선택해주세요!',
-                );
-                break;
-              default:
-            }
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  "프로필을 설정하는 데 문제가 발생했습니다!",
+            );
             break;
           default:
         }
-      }
+      }, loading: () {
+        logger.d('loading');
+      });
     });
 
     return ScreenUtilInit(
@@ -144,282 +131,268 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             ),
           ),
         ),
-        body: profileAsyncValue.when(
-          data: (profile) {
-            nameController.text = profile.data.userName;
-            phonenumberController.text = profile.data.userHp;
-            studentnumberController.text = profile.data.studentNumber;
-            major = profile.data.major;
-            college = majors.findCollegeByMajor(profile.data.major);
-
-            return SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.symmetric(horizontal: 32.w),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 30.h),
-                    // 이름 필드
-                    Text(
-                      '이름',
-                      style: TextStyle(
-                        color: const Color(0xff000000),
-                        fontFamily: 'Pretendard',
-                        fontSize: 16.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w400,
-                        height: 1.12.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    RoundedTextField(
-                      height: 50.h,
-                      textEditController: nameController,
-                      leftBottomCornerRadius: 8.r,
-                      rightBottomCornerRadius: 8.r,
-                      leftTopCornerRadius: 8.r,
-                      rightTopCornerRadius: 8.r,
-                      borderColor: nameIsValid(state)
-                          ? const Color(0xffDBDBDB)
-                          : Colors.red,
-                      borderWidth: 1.w,
-                      maxLines: 1,
-                      textInputType: TextInputType.text,
-                      textAlign: TextAlign.left,
-                      hintText: "이름",
-                      prefixIcon: SvgPicture.asset(
-                        'assets/images/ic_person.svg',
-                        width: 13.w,
-                        height: 16.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      hintStyle: TextStyle(
-                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                    ),
-                    SizedBox(height: 16.h),
-                    // 전화번호 필드
-                    Text(
-                      '전화번호',
-                      style: TextStyle(
-                        color: const Color(0xff000000),
-                        fontFamily: 'Pretendard',
-                        fontSize: 16.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w400,
-                        height: 1.12.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    RoundedTextField(
-                      height: 50.h,
-                      textEditController: phonenumberController,
-                      leftBottomCornerRadius: 8.r,
-                      rightBottomCornerRadius: 8.r,
-                      leftTopCornerRadius: 8.r,
-                      rightTopCornerRadius: 8.r,
-                      borderColor: phoneNumberIsValid(state)
-                          ? const Color(0xffDBDBDB)
-                          : Colors.red,
-                      borderWidth: 1.w,
-                      maxLines: 1,
-                      textInputType: TextInputType.text,
-                      textAlign: TextAlign.left,
-                      prefixIcon: SvgPicture.asset(
-                        'assets/images/ic_phone.svg',
-                        width: 13.w,
-                        height: 16.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      hintText: "전화번호 (- 제외입력)",
-                      hintStyle: TextStyle(
-                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                    ),
-                    SizedBox(height: 16.h),
-                    // 학번 필드
-                    Text(
-                      '학번',
-                      style: TextStyle(
-                        color: const Color(0xff000000),
-                        fontFamily: 'Pretendard',
-                        fontSize: 16.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w400,
-                        height: 1.12.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    RoundedTextField(
-                      height: 50.h,
-                      textEditController: studentnumberController,
-                      leftBottomCornerRadius: 8.r,
-                      rightBottomCornerRadius: 8.r,
-                      leftTopCornerRadius: 8.r,
-                      rightTopCornerRadius: 8.r,
-                      borderColor: studentNumberIsValid(state)
-                          ? const Color(0xffDBDBDB)
-                          : Colors.red,
-                      borderWidth: 1.w,
-                      maxLines: 1,
-                      textInputType: TextInputType.text,
-                      textAlign: TextAlign.left,
-                      prefixIcon: SvgPicture.asset(
-                        'assets/images/ic_tag.svg',
-                        width: 13.w,
-                        height: 16.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      hintText: "학번",
-                      hintStyle: TextStyle(
-                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                    ),
-                    SizedBox(height: 16.h),
-                    // 학과 필드
-                    Text(
-                      '학과',
-                      style: TextStyle(
-                        color: const Color(0xff000000),
-                        fontFamily: 'Pretendard',
-                        fontSize: 16.sp,
-                        fontStyle: FontStyle.normal,
-                        fontWeight: FontWeight.w400,
-                        height: 1.12.sp,
-                      ),
-                    ),
-                    SizedBox(height: 8.h),
-                    RoundedTextField(
-                      height: 50.h,
-                      readOnly: true,
-                      onTab: () async {
-                        await DialogManager.instance.showMajorPickerDialog(
-                          context: context,
-                          defaultCollege: college,
-                          defaultMajor: major,
-                          onChanged: (newCollege, newMajor) {
-                            logger.d('onChanged - $newCollege / $newMajor');
-                          },
-                          onConfirmPressed: (college, major) {
-                            setState(() {
-                              logger.d('@@ ${this.college} ${this.major}');
-                              this.college = college;
-                              this.major = major;
-                              logger.d('${this.college} - ${this.major}');
-                            });
-                          },
-                        );
-                      },
-                      leftBottomCornerRadius: 8.r,
-                      rightBottomCornerRadius: 8.r,
-                      leftTopCornerRadius: 8.r,
-                      rightTopCornerRadius: 8.r,
-                      borderWidth: 1.w,
-                      maxLines: 1,
-                      textInputType: TextInputType.none,
-                      textAlign: TextAlign.left,
-                      textInputAction: TextInputAction.done,
-                      hintText: (college == null && major == null)
-                          ? '학과'
-                          : '${college ?? ""} / ${major ?? ""}',
-                      isAnimatedHint: false,
-                      prefixIcon: SvgPicture.asset(
-                        'assets/images/ic_bookmark.svg',
-                        width: 13.w,
-                        height: 16.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                      hintStyle: TextStyle(
-                          fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
-                    ),
-                    SizedBox(height: 48.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56.h,
-                      child: OutlinedButton(
-                          onPressed: () async {
-                            final name = nameController.text.trim();
-                            final studentNumber =
-                                studentnumberController.text.trim();
-                            final userHp = phonenumberController.text.trim();
-
-                            logger.d(major);
-
-                            await ref
-                                .read(updateProfileViewModelProvider.notifier)
-                                .updateProfile(
-                                  userName: name,
-                                  studentNumber: studentNumber,
-                                  userHp: userHp,
-                                  major: major ?? "",
-                                );
-                          },
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: const Color(0xFF000000),
-                            foregroundColor: const Color(0xFFFFFFFF),
-                            side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                              text: '수정 완료',
-                              fontSize: 18.sp,
-                              color: const Color(0xFFFFFFFF),
-                              fontweight: FontWeight.w600)),
-                    ),
-                    SizedBox(height: 10.h),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 56.h,
-                      child: OutlinedButton(
-                          onPressed: () {
-                            context.go('/update_profile/delete_user');
-                          },
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor:
-                                const Color.fromARGB(255, 255, 69, 69),
-                            foregroundColor: const Color(0xFFFFFFFF),
-                            side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                              text: '회원탈퇴',
-                              fontSize: 18.sp,
-                              color: const Color(0xFFFFFFFF),
-                              fontweight: FontWeight.w600)),
-                    ),
-                  ],
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 30.h),
+                // 이름 필드
+                Text(
+                  '이름',
+                  style: TextStyle(
+                    color: const Color(0xff000000),
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.sp,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    height: 1.12.sp,
+                  ),
                 ),
-              ),
-            );
-          },
-          error: (error, stackTrace) {
-            return Container();
-          },
-          loading: () {
-            return Center(child: CircularProgressIndicator());
-          },
+                SizedBox(height: 8.h),
+                RoundedTextField(
+                  height: 50.h,
+                  textEditController: nameController,
+                  leftBottomCornerRadius: 8.r,
+                  rightBottomCornerRadius: 8.r,
+                  leftTopCornerRadius: 8.r,
+                  rightTopCornerRadius: 8.r,
+                  borderColor:
+                      isValid(state, FieldType.USERNAME) ? const Color(0xffDBDBDB) : Colors.red,
+                  borderWidth: 1.w,
+                  maxLines: 1,
+                  textInputType: TextInputType.text,
+                  textAlign: TextAlign.left,
+                  hintText: "이름",
+                  prefixIcon: SvgPicture.asset(
+                    'assets/images/ic_person.svg',
+                    width: 13.w,
+                    height: 16.h,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  hintStyle: TextStyle(
+                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                ),
+                SizedBox(height: 16.h),
+                // 전화번호 필드
+                Text(
+                  '전화번호',
+                  style: TextStyle(
+                    color: const Color(0xff000000),
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.sp,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    height: 1.12.sp,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                RoundedTextField(
+                  height: 50.h,
+                  textEditController: phonenumberController,
+                  leftBottomCornerRadius: 8.r,
+                  rightBottomCornerRadius: 8.r,
+                  leftTopCornerRadius: 8.r,
+                  rightTopCornerRadius: 8.r,
+                  borderColor: isValid(state, FieldType.PHONE_NUMBER)
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
+                  borderWidth: 1.w,
+                  maxLines: 1,
+                  textInputType: TextInputType.text,
+                  textAlign: TextAlign.left,
+                  prefixIcon: SvgPicture.asset(
+                    'assets/images/ic_phone.svg',
+                    width: 13.w,
+                    height: 16.h,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  hintText: "전화번호 (- 제외입력)",
+                  hintStyle: TextStyle(
+                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                ),
+                SizedBox(height: 16.h),
+                // 학번 필드
+                Text(
+                  '학번',
+                  style: TextStyle(
+                    color: const Color(0xff000000),
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.sp,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    height: 1.12.sp,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                RoundedTextField(
+                  height: 50.h,
+                  textEditController: studentnumberController,
+                  leftBottomCornerRadius: 8.r,
+                  rightBottomCornerRadius: 8.r,
+                  leftTopCornerRadius: 8.r,
+                  rightTopCornerRadius: 8.r,
+                  borderColor: isValid(state, FieldType.STUDENT_NUMBER)
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
+                  borderWidth: 1.w,
+                  maxLines: 1,
+                  textInputType: TextInputType.text,
+                  textAlign: TextAlign.left,
+                  prefixIcon: SvgPicture.asset(
+                    'assets/images/ic_tag.svg',
+                    width: 13.w,
+                    height: 16.h,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  hintText: "학번",
+                  hintStyle: TextStyle(
+                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                ),
+                SizedBox(height: 16.h),
+                // 학과 필드
+                Text(
+                  '학과',
+                  style: TextStyle(
+                    color: const Color(0xff000000),
+                    fontFamily: 'Pretendard',
+                    fontSize: 16.sp,
+                    fontStyle: FontStyle.normal,
+                    fontWeight: FontWeight.w400,
+                    height: 1.12.sp,
+                  ),
+                ),
+                SizedBox(height: 8.h),
+                RoundedTextField(
+                  height: 50.h,
+                  readOnly: true,
+                  onTab: () async {
+                    await DialogManager.instance.showMajorPickerDialog(
+                      context: context,
+                      defaultCollege: college,
+                      defaultMajor: major,
+                      onChanged: (newCollege, newMajor) {
+                        logger.d('onChanged - $newCollege / $newMajor');
+                      },
+                      onConfirmPressed: (college, major) {
+                        setState(() {
+                          logger.d('@@ ${this.college} ${this.major}');
+                          this.college = college;
+                          this.major = major;
+                          logger.d('${this.college} - ${this.major}');
+                        });
+                      },
+                    );
+                  },
+                  leftBottomCornerRadius: 8.r,
+                  rightBottomCornerRadius: 8.r,
+                  leftTopCornerRadius: 8.r,
+                  rightTopCornerRadius: 8.r,
+                  borderWidth: 1.w,
+                  maxLines: 1,
+                  textInputType: TextInputType.none,
+                  textAlign: TextAlign.left,
+                  textInputAction: TextInputAction.done,
+                  hintText: (college == null && major == null)
+                      ? '학과'
+                      : '${college ?? ""} / ${major ?? ""}',
+                  isAnimatedHint: false,
+                  prefixIcon: SvgPicture.asset(
+                    'assets/images/ic_bookmark.svg',
+                    width: 13.w,
+                    height: 16.h,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  hintStyle: TextStyle(
+                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                ),
+                SizedBox(height: 48.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: OutlinedButton(
+                      onPressed: () async {
+                        final name = nameController.text.trim();
+                        final studentNumber =
+                            studentnumberController.text.trim();
+                        final userHp = phonenumberController.text.trim();
+
+                        logger.d(major);
+
+                        await ref
+                            .read(updateProfileViewModelProvider.notifier)
+                            .updateProfile(
+                              userName: name,
+                              studentNumber: studentNumber,
+                              userHp: userHp,
+                              major: major ?? "",
+                            );
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: const Color(0xFF000000),
+                        foregroundColor: const Color(0xFFFFFFFF),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: TextFontWidget.fontRegular(
+                          text: '수정 완료',
+                          fontSize: 18.sp,
+                          color: const Color(0xFFFFFFFF),
+                          fontweight: FontWeight.w600)),
+                ),
+                SizedBox(height: 10.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: OutlinedButton(
+                      onPressed: () {
+                        context.go('/update_profile/delete_user');
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: const Color.fromARGB(255, 255, 69, 69),
+                        foregroundColor: const Color(0xFFFFFFFF),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r),
+                        ),
+                      ),
+                      child: TextFontWidget.fontRegular(
+                          text: '회원탈퇴',
+                          fontSize: 18.sp,
+                          color: const Color(0xFFFFFFFF),
+                          fontweight: FontWeight.w600)),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  bool studentNumberIsValid(ProfileModelBase? state) {
-    return true;
+  bool isValid(AsyncValue<ProfileModel> state, FieldType fieldType) {
+    final error = state.error as ProfileModelError?;
+    return ErrorUtil.instance.isValid(error?.code, fieldType);
   }
 
-  bool phoneNumberIsValid(ProfileModelBase? state) {
-    return true;
-  }
+  void bind(ProfileModel profile) {
+    nameController.text = profile.data.userName;
+    phonenumberController.text = profile.data.userHp;
+    studentnumberController.text = profile.data.studentNumber;
 
-  bool nameIsValid(ProfileModelBase? state) {
-    return true;
+    setState(() {
+      major = profile.data.major;
+      college = majors.findCollegeByMajor(major);
+    });
   }
 }
 

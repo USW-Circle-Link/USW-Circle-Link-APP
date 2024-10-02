@@ -3,15 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/viewmodels/my_circle_view_model.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
-import 'package:auto_size_text/auto_size_text.dart';
+import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 
 class MyCircleScreen extends ConsumerWidget {
   const MyCircleScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-
     final circlesAsyncValue = ref.watch(MyCircleListProvider);
 
     return ScreenUtilInit(
@@ -61,199 +59,29 @@ class MyCircleScreen extends ConsumerWidget {
             ),
           ),
         ),
-        body: circlesAsyncValue.when(
-          data: (circles) => ListView.builder(
-            itemCount: circles.length,
-            itemBuilder: (context, index) {
-              final circle = circles[index];
-              if (index == 0) {
-                return Column(
-                  children: [
-                    SizedBox(height: 24.h), // 첫 번째 아이템 위에 SizedBox 추가
-                    CircleList(
-                      CircleLeader: circle.leaderName,
-                      CircleName: circle.clubName,
-                      ImageUrl: circle.mainPhotoPath?? "",
-                      leaderHp: circle.leaderHp,
-                      InstaId: circle.clubInsta,
-                    ),
-                  ],
-                );
-              } else {
-                return CircleList(
-                  CircleLeader: circle.leaderName,
-                  CircleName: circle.clubName,
-                  ImageUrl: circle.mainPhotoPath??"",
-                  leaderHp: circle.leaderHp,
-                  InstaId: circle.clubInsta,
-                );
-              }
-            },
-          ),
-          loading: () => Center(child: CircularProgressIndicator()),
-          error: (error, stack) => Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
+        body: Column(
+          children: [
+            SizedBox(height: 24.h),
+            circlesAsyncValue.when(
+              data: (circles) => ListView.builder(
+                itemCount: circles.length,
+                itemBuilder: (context, index) {
+                  final circle = circles[index];
+                  return CircleDetailItem(
+                    leader: circle.leaderName,
+                    name: circle.clubName,
+                    imageUrl: circle.mainPhotoPath,
+                    leaderHp: circle.leaderHp,
+                    instaId: circle.clubInsta, 
+                  );
+                },
+              ),
+              loading: () => Center(child: CircularProgressIndicator()),
+              error: (error, stack) =>
+                  Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
+            ),
+          ],
         ),
-      ),
-    );
-  }
-}
-
-class CircleList extends StatelessWidget {
-  final String CircleName;
-  final String? ImageUrl;
-  final String CircleLeader;
-  final String InstaId;
-  final String leaderHp;
-
-  const CircleList({super.key, 
-    required this.CircleLeader,
-    required this.CircleName,
-    this.ImageUrl,
-    required this.leaderHp,
-    required this.InstaId,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Column(
-        children: [
-          Container(
-            height: 132.h,
-            width: 327.w,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16.sp),
-              color: const Color(0xffFFFFFF),
-            ),
-            child: Row(
-              children: [
-                Container(
-                  height: 100.sp,
-                  width: 100.sp,
-                  margin: EdgeInsets.all(16.sp),
-                  alignment: Alignment.center,
-                  child: Image.network(
-                    ImageUrl ?? "",
-                    errorBuilder: (context, error, stackTrace) {
-                      return TextFontWidget.fontRegular(
-                          text: '이미지 없음',
-                          fontSize: 14.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w400);
-                    },
-                  ),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 20.h),
-                    Row(
-                      children: [
-                        Container(// 텍스트가 차지할 최대 너비 설정
-                          child: AutoSizeText(
-                            CircleName,
-                            style: TextStyle(
-                              fontFamily: 'Pretendard',
-                              color: Colors.black,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w600,
-                              height: 1.h,
-                              letterSpacing: -0.45.sp,
-                            ),
-                            maxLines: 1,
-                            minFontSize: 12.sp,  // 최소 글자 크기 설정
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 7.h,),
-                    Row(
-                      children: [
-                        Text(
-                          '동아리장',
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            color: const Color(0xFF767676),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.h,
-                            letterSpacing: -0.35.sp,
-                          ),
-                        ),
-                        SizedBox(width: 4.w),
-                        Container(// 텍스트가 차지할 최대 너비 설정
-                          child: AutoSizeText(
-                            CircleLeader,
-                            style: TextStyle(
-                              fontFamily: 'Pretendard',
-                              color: const Color(0xFF353549),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w600,
-                              height: 1.h,
-                              letterSpacing: -0.35.sp,
-                            ),
-                            maxLines: 1,
-                            minFontSize: 10.sp,  // 최소 글자 크기 설정
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 4.w,),
-                        SvgPicture.asset(
-                          'assets/images/phonelogo.svg',
-                          height: 16.h,
-                          width: 16.w,
-                        ),
-                        SizedBox(width: 6.w),
-                        Text(
-                          leaderHp,
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            color: const Color(0xFF353549),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.h,
-                            letterSpacing: -0.35.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5.h),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        SizedBox(width: 4.w,),
-                        Image.asset(
-                            width: 16.w,
-                            height: 16.h,
-                            'assets/images/Instagram_logo.png'),
-                        SizedBox(width: 6.w),
-                        Text(
-                          '@$InstaId',
-                          style: TextStyle(
-                            fontFamily: 'Pretendard',
-                            color: const Color(0xFF353549),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 1.h,
-                            letterSpacing: -0.35.sp,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: 12.h),
-        ],
       ),
     );
   }
