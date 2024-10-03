@@ -121,23 +121,20 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
 
-      // FCM Token 전송
-      // await firebaseCloudMessagingViewModel.sendToken();
-
       state = AsyncValue.data(response); // UserModel
       return response;
     } on UserModelError catch (e) {
       // 단순로그인 실패 및 예상 범위 밖 에러(네트워크 에러 ...)
       logger.d(e);
-      await logout();
+      
       rethrow;
     } on FCMTokenNotFoundException catch (e) {
       logger.d(e);
-      await logout();
+      
       rethrow;
     } catch (e) {
       logger.e('예외발생 - $e');
-      await logout();
+      
       rethrow;
     }
   }

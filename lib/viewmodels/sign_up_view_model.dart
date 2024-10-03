@@ -73,24 +73,25 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
 
       if (telephone.isNotEmpty) {
         if (!telephoneRegExp.hasMatch(telephone)) {
-          throw FormatException();
+          throw SignUpModelError(
+              code: "USR-F500",
+              message: '전화번호 형식에 맞지 않습니다!',
+              type: SignUpModelType.validatePasswordMatch);
         }
-        telephone = telephone.addDash();
-        logger.d('전화번호 포맷팅 완료! - $telephone');
       } else {
         logger.d('전화번호 입력되지 않음');
       }
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
         throw SignUpModelError(
-            message: '학번이 형식에 않습니다!',
+            message: '학번이 형식에 맞지 않습니다!',
             code: "USR-F600",
             type: SignUpModelType.validatePasswordMatch);
       }
 
       if (major.isEmpty) {
         throw SignUpModelError(
-            message: '학과가 형식에 않습니다!',
+            message: '학과가 형식에 맞지 않습니다!',
             code: "USR-F700",
             type: SignUpModelType.validatePasswordMatch);
       }
@@ -104,11 +105,6 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
       state = response;
     } on SignUpModelError catch (e) {
       state = e;
-    } on FormatException catch (e) {
-      state = SignUpModelError(
-          code: "USR-F500",
-          message: '전화번호 형식 오류 - $e',
-          type: SignUpModelType.validatePasswordMatch);
     } catch (e) {
       state = SignUpModelError(
           code: null,

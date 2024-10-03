@@ -102,6 +102,8 @@ class AuthRepository {
       "email": email,
     };
 
+    logger.d('sendMail - body {$body}');
+
     final response = await dio.post(
       '$baseUrl/temporary',
       data: body,
