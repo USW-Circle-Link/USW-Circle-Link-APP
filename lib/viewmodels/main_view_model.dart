@@ -6,7 +6,7 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 final mainViewModelProvider =
     StateNotifierProvider.autoDispose<MainViewModel, AsyncValue<CircleListModelBase?>>(
         (ref) {
-  final circleListRepository = ref.read(CircleListRepositoryPrivider);
+  final circleListRepository = ref.read(circleListRepositoryProvider);
   return MainViewModel(circleListRepository: circleListRepository);
 });
 

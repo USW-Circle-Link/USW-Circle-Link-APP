@@ -2,15 +2,16 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
-final CircleListRepositoryPrivider = Provider<CircleListRepository>((ref) {
+final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   final dio = ref.watch(dioProvider);
   
   return CircleListRepository(
     dio: dio,
-    baseUrl: 'https://$host:$port/clubs',
+    baseUrl: 'https://$host:$port',
   );
 });
 
@@ -25,7 +26,7 @@ class CircleListRepository {
 
   Future<CircleListModel> fetchAllCircleList() async {
     final response = await dio.get(
-      '$baseUrl',
+      '$baseUrl/clubs',
     );
 
     logger.d('${response.data}');
@@ -45,7 +46,7 @@ class CircleListRepository {
 
   Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
-      '$baseUrl/OPEN',
+      '$baseUrl/clubs/OPEN',
     );
 
     logger.d('${response.data}');
@@ -60,6 +61,42 @@ class CircleListRepository {
       // Bad Request
       throw CircleListModelError.fromJson(response.data)
           .setType(CircleListModelType.department);
+    }
+  }
+
+  Future<CircleDetailListModel> fetchMyCircleList() async {
+    final response = await dio.get(
+      '$baseUrl/mypages/my-clubs',
+    );
+
+    logger.d('${response.data}');
+
+    logger.d(
+        'fetchMyCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return CircleDetailListModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw CircleDetailListModelError.fromJson(response.data);
+    }
+  }
+
+  Future<CircleDetailListModel> fetchMyApplicationList() async {
+    final response = await dio.get(
+      '$baseUrl/mypages/aplict-clubs',
+    );
+
+    logger.d('${response.data}');
+
+    logger.d(
+        'fetchMyApplicationList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return CircleDetailListModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw CircleDetailListModelError.fromJson(response.data);
     }
   }
 }

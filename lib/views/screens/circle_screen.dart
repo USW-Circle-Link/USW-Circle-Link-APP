@@ -247,9 +247,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                               child: Row(
                                 children: [
                                   SizedBox(width: 24.w),
-                                  Container(
-                                    color: const Color.fromARGB(
-                                        255, 164, 164, 164),
+                                  SizedBox(
                                     height: 100.h,
                                     width: 100.w,
                                     child: Image.network(
@@ -257,7 +255,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                       fit: BoxFit.cover,
                                       errorBuilder:
                                           (context, error, stackTrace) {
-                                        return Center(child: Text('이미지 없음'));
+                                        return Container(color: const Color.fromARGB(
+                                        255, 164, 164, 164),child: Center(child: Text('이미지 없음')));
                                       },
                                     ),
                                   ),

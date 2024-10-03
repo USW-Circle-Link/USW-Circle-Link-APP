@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/application_model.dart';
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
@@ -39,7 +40,7 @@ class _ApplicationWritingScreenState
             break;
           case ApplicationModelType.apply:
             logger.d('지원서 제출 성공! - ${next.message}');
-            context.go('/application_circle');
+            context.go('/circle_list', extra: CircleListType.myApplications);
             break;
           default:
             logger.e('예외발생! : $next');

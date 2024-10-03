@@ -61,12 +61,7 @@ class UpdateProfileRepository {
         'accessToken': 'true',
         'Content-Type': 'application/json',
       }),
-      data: {
-        'userName': updatedProfile.userName,
-        'studentNumber': updatedProfile.studentNumber,
-        'userHp': updatedProfile.userHp,
-        'major': updatedProfile.major,
-      },
+      data: data,
     );
 
     logger.d('updateProfile - ${response.data}');

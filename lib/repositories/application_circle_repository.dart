@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/application_cricle_model.dart';
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

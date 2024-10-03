@@ -2,15 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:usw_circle_link/viewmodels/my_circle_view_model.dart';
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 
-class MyCircleScreen extends ConsumerWidget {
-  const MyCircleScreen({super.key});
+class CircleListScreen extends ConsumerWidget {
+  final CircleListType listType;
+
+  const CircleListScreen({
+    super.key,
+    required this.listType,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final circlesAsyncValue = ref.watch(MyCircleListProvider);
+    final state = ref.watch(circleListScreenViewModelProvider(listType));
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -43,7 +49,7 @@ class MyCircleScreen extends ConsumerWidget {
                   ),
                   SizedBox(width: 62.25.w),
                   Text(
-                    '나의 소속 동아리',
+                    listType.title,
                     style: TextStyle(
                       fontFamily: 'Pretendard',
                       color: Colors.black,
@@ -59,28 +65,28 @@ class MyCircleScreen extends ConsumerWidget {
             ),
           ),
         ),
-        body: Column(
-          children: [
-            SizedBox(height: 24.h),
-            circlesAsyncValue.when(
-              data: (circles) => ListView.builder(
-                itemCount: circles.length,
-                itemBuilder: (context, index) {
-                  final circle = circles[index];
-                  return CircleDetailItem(
-                    leader: circle.leaderName,
-                    name: circle.clubName,
-                    imageUrl: circle.mainPhotoPath,
-                    leaderHp: circle.leaderHp,
-                    instaId: circle.clubInsta, 
-                  );
-                },
-              ),
-              loading: () => Center(child: CircularProgressIndicator()),
-              error: (error, stack) =>
-                  Center(child: Text('소속 동아리 목록 조회에 실패하였습니다: $error')),
+        body: state.when(
+          data: (data) => data.data.isNotEmpty ? Padding(
+            padding: EdgeInsets.fromLTRB(0, 24.h, 0, 0),
+            child: ListView.builder(
+              itemCount: data.data.length,
+              itemBuilder: (context, index) {
+                final circle = data.data[index];
+                return CircleDetailItem(
+                  clubId: circle.clubId,
+                  leader: circle.leaderName,
+                  name: circle.clubName,
+                  imageUrl: circle.mainPhotoPath,
+                  leaderHp: circle.leaderHp,
+                  instaId: circle.clubInsta,
+                  status: circle.status,
+                );
+              },
             ),
-          ],
+          ) : Center(child: Text('${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.')),
+          loading: () => Center(child: CircularProgressIndicator()),
+          error: (error, stack) =>
+              Center(child: Text('동아리 목록 조회에 실패하였습니다.')),
         ),
       ),
     );

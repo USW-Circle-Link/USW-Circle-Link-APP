@@ -24,15 +24,18 @@ class CircleItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Container(
-              color: const Color.fromARGB(255, 164, 164, 164),
+            SizedBox(
               height: 120.h,
               child: Image.network(
                 circle.mainPhoto ?? "",
                 fit: BoxFit.cover,
                 errorBuilder: (BuildContext context, Object exception,
                     StackTrace? stackTrace) {
-                  return Center(child: Text('이미지 없음'));
+                  return Container(
+                    alignment: Alignment.center,
+                    color: const Color.fromARGB(255, 164, 164, 164),
+                    child: Text('이미지 없음'),
+                  );
                 },
               ),
             ),
