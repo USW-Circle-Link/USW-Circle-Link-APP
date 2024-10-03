@@ -79,7 +79,7 @@ class CircleListScreen extends ConsumerWidget {
                   imageUrl: circle.mainPhotoPath,
                   leaderHp: circle.leaderHp,
                   instaId: circle.clubInsta,
-                  status: circle.status,
+                  status: circle.aplictStatus,
                 );
               },
             ),

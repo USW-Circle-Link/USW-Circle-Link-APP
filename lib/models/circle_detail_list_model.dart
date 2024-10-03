@@ -34,7 +34,7 @@ class Circle with _$Circle {
     required String leaderName,
     required String leaderHp,
     required String clubInsta,
-    String? status,
+    String? aplictStatus,
   }) = _Circle;
 
   factory Circle.fromJson(Map<String, dynamic> json) => _$CircleFromJson(json);
