@@ -35,7 +35,7 @@ class ProfileViewModel extends StateNotifier<AsyncValue<ProfileModelBase?>> {
   }
 
   Future<ProfileModelBase?> updateProfile({
-    required userName,
+    required String userName,
     required String studentNumber,
     required String userHp,
     required String major,

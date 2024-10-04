@@ -1,4 +1,4 @@
-import 'package:auto_size_text/auto_size_text.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -81,7 +81,7 @@ class CircleDetailItem extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              AutoSizeText(
+                              Text(
                                 name,
                                 style: TextStyle(
                                   fontFamily: 'Pretendard',
@@ -92,7 +92,6 @@ class CircleDetailItem extends StatelessWidget {
                                   letterSpacing: -0.45.sp,
                                 ),
                                 maxLines: 1,
-                                minFontSize: 12.sp, // 최소 글자 크기 설정
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ],
