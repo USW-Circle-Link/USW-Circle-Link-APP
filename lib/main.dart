@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/router/router.dart';
@@ -10,7 +11,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
-
+  await setupFlutterNotifications();
+  logger.d('asd');
   runApp(
     ProviderScope(
       child: CircleLink(),
@@ -27,6 +29,48 @@ Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
   final notifications = prefs.getStringList('notifications') ?? [];
   notifications.add(notificationBody);
   await prefs.setStringList('notifications', notifications);
+}
+
+// 필요 변수
+late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+late AndroidNotificationChannel channel;
+bool isFlutterLocalNotificationsInitialized = false; // 셋팅여부 판단 flag
+
+/// 셋팅 메소드
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel', // id
+    'High Importance Notifications', // title
+    description:
+        'This channel is used for important notifications.', // description
+    importance: Importance.high,
+  );
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+  // iOS foreground notification 권한
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+  // IOS background 권한 체킹 , 요청
+  await FirebaseMessaging.instance.requestPermission(
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
+  // 셋팅flag 설정
+  isFlutterLocalNotificationsInitialized = true;
 }
 
 class CircleLink extends ConsumerWidget {

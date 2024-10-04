@@ -1,12 +1,16 @@
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -35,8 +39,35 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    _requestNotificationPermission();
+    //_requestNotificationPermission();
+    // foreground 수신처리
+    FirebaseMessaging.onMessage.listen(showFlutterNotification);
+    // background 수신처리
     super.initState();
+  }
+
+  /// fcm 전경 처리 - 로컬 알림 보이기
+  void showFlutterNotification(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && !kIsWeb) {
+      // 웹이 아니면서 안드로이드이고, 알림이 있는경우
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            // TODO add a proper drawable resource to android, for now using
+            //      one that already exists in example app.
+            icon: 'launch_background',
+          ),
+        ),
+      );
+    }
   }
 
   // 알림 권한 요청
@@ -76,7 +107,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final userState = ref.watch(userViewModelProvider);
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
-
     });
 
     final circleListState = ref.watch(mainViewModelProvider);

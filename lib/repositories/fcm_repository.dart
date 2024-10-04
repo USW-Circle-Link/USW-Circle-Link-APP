@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/dio.dart';
@@ -8,7 +9,7 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
   final dio = ref.watch(dioProvider);
-  
+
   return FCMRepository(
     baseUrl: 'https://$host:$port/club-leader',
     dio: dio,
@@ -27,7 +28,17 @@ class FCMRepository {
   Future<String> getToken() async {
     await Firebase.initializeApp();
 
-    final token = await FirebaseMessaging.instance.getToken();
+    // iOS
+    String? token;
+    if (defaultTargetPlatform == TargetPlatform.iOS ||
+        defaultTargetPlatform == TargetPlatform.macOS) {
+      token = await FirebaseMessaging.instance.getToken();
+    }
+    // Android
+    else {
+      token = await FirebaseMessaging.instance.getToken();
+    }
+
     if (token != null) {
       return token;
     } else {
@@ -47,10 +58,7 @@ class FCMRepository {
       '$baseUrl/fcmtoken',
       data: body,
       options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken' : 'true,'
-        },
+        headers: {'Content-Type': 'application/json', 'accessToken': 'true,'},
       ),
     );
 
