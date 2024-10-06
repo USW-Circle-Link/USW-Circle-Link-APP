@@ -39,11 +39,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    //_requestNotificationPermission();
     // foreground 수신처리
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
-    // background 수신처리
+    // 알림 클릭시
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
     super.initState();
+  }
+
+  void _handleMessage(RemoteMessage message) {
+    // 내가 지정한 그 알람이면 지정한 화면으로 이동
+    if (message.data['data1'] == 'value1') {
+      // something to do ...
+      // e.g) context.go(...)
+    }
   }
 
   /// fcm 전경 처리 - 로컬 알림 보이기

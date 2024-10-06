@@ -10,9 +10,10 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   await setupFlutterNotifications();
-  logger.d('asd');
+  
   runApp(
     ProviderScope(
       child: CircleLink(),
