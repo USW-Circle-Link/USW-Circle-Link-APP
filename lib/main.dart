@@ -9,7 +9,7 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
-  logger.d('백그라운드 알림 수신 완료! - ${message.mutableContent}');
+  logger.d('백그라운드 알림 수신 완료! - contentAvailable : ${message.contentAvailable}');
   //await analytics.logEvent(name: 'message_received');
   final notificationBody = message.notification?.body ?? 'No message body';
   // SharedPreferences를 사용하여 백그라운드에서도 알림을 저장
@@ -19,7 +19,7 @@ Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
   await prefs.setStringList('notifications', notifications);
 }
 
-void onDeidReceiveNotificationResponse(NotificationResponse details) {
+void onDidReceiveNotificationResponse(NotificationResponse details) {
   logger.d(details);
 }
 
@@ -60,7 +60,9 @@ Future<void> setupFlutterNotifications() async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.initialize(DarwinInitializationSettings(),onDidReceiveNotificationResponse: onDeidReceiveNotificationResponse);
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.initialize(DarwinInitializationSettings(),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.initialize(AndroidInitializationSettings("ic_launcher"),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
   // iOS foreground notification 권한
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,

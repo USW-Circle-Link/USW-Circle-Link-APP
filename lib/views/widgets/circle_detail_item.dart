@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,18 +25,22 @@ class CircleDetailItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Color statusColor;
-    String statusText;
+    Color? statusColor;
+    String? statusText;
 
-    if (status == 'WAIT') {
-      statusColor = const Color(0xffBFBFBF);
-      statusText = '대기 중';
-    } else if (status == 'PASS') {
-      statusColor = const Color(0xffffB052);
-      statusText = '응답 완료';
-    } else {
-      statusColor = const Color(0xffffB052); // FAIL의 경우 색상을 변경
-      statusText = '응답 완료'; // FAIL의 경우 텍스트를 변경
+    switch (status) {
+      case 'WAIT':
+        statusColor = const Color(0xffBFBFBF);
+        statusText = '대기 중';
+        break;
+      case 'PASS':
+        statusColor = const Color.fromARGB(255, 82, 128, 255);
+        statusText = '합격';
+        break;
+      case 'FAIL':
+        statusColor = const Color.fromARGB(255, 255, 82, 82);
+        statusText = '불합격';
+        break;
     }
 
     return Center(
@@ -156,7 +159,6 @@ class CircleDetailItem extends StatelessWidget {
                                   letterSpacing: -0.35.sp,
                                 ),
                               ),
-                              SizedBox(width: 61.w),
                             ],
                           ),
                           SizedBox(height: 5.h),
@@ -186,28 +188,31 @@ class CircleDetailItem extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 5.h),
-                          Container(
-                            alignment: Alignment.centerRight,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  vertical: 5.h, horizontal: 10.w),
-                              decoration: BoxDecoration(
-                                color: statusColor,
-                                borderRadius: BorderRadius.circular(16.sp),
-                              ),
-                              child: Text(
-                                statusText,
-                                style: TextStyle(
-                                  fontFamily: 'Pretendard',
-                                  color: const Color(0xffFFFFFF),
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.h,
-                                  letterSpacing: -0.6.sp,
-                                ),
-                              ),
-                            ),
-                          ),
+                          statusColor != null && statusText != null
+                              ? Container(
+                                  alignment: Alignment.centerRight,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        vertical: 5.h, horizontal: 10.w),
+                                    decoration: BoxDecoration(
+                                      color: statusColor,
+                                      borderRadius:
+                                          BorderRadius.circular(16.sp),
+                                    ),
+                                    child: Text(
+                                      statusText,
+                                      style: TextStyle(
+                                        fontFamily: 'Pretendard',
+                                        color: const Color(0xffFFFFFF),
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w600,
+                                        height: 1.h,
+                                        letterSpacing: -0.6.sp,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : Container(),
                         ],
                       ),
                     ),

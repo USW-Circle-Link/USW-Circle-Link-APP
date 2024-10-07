@@ -45,7 +45,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   void _firebaseMessagingHandler(RemoteMessage message) {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
-    logger.d('showFlutterNotification - ${message.mutableContent}');
+    logger.d('showFlutterNotification - contentAvailable : ${message.contentAvailable}');
     if (notification != null && android != null && !kIsWeb) {
       // 웹이 아니면서 안드로이드이고, 알림이 있는경우
       flutterLocalNotificationsPlugin.show(

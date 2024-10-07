@@ -9,11 +9,11 @@ const servers = {
   },
   'test_server': {
     'protocol': 'http',
-    'host': '43.200.140.186',
+    'host': '15.164.246.244',
     'port': '8080',
   },
 };
-const SERVER = 'prod_server';
+const SERVER = 'test_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
