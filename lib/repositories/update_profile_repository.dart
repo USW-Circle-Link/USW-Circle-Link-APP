@@ -10,7 +10,7 @@ final updateProfileRepositoryProvider =
   final dio = ref.watch(dioProvider);
 
   return UpdateProfileRepository(
-    baseUrl: 'https://$host:$port',
+    baseUrl: '$protocol://$host:$port',
     dio: dio,
   );
 });

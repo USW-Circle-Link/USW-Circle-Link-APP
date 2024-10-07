@@ -1,6 +1,8 @@
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
+// http://15.164.246.244:8080
+const protocol = "https";
 const host = "api.donggurami.net";
 const port = "";
 

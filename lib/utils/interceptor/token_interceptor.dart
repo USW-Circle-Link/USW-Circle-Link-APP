@@ -90,7 +90,7 @@ class TokenInterceptor extends Interceptor {
 
       try {
         final response = await dio.post(
-          'https://$host:$port/auth/refresh-token',
+          '$protocol://$host:$port/auth/refresh-token',
           options: Options(
             headers: {
               'Cookie': 'refreshToken=$refreshToken',

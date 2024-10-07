@@ -1,8 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/firebase_options.dart';
+import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
@@ -38,10 +41,29 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     logger.d('Firebase 초기화 성공!');
   }
 
-  // 메시지 핸들러
-  Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
-    logger.d('알림 수신 완료 - $message');
-    //await analytics.logEvent(name: 'message_received');
+  // fcm 전경 처리 - 로컬 알림 보이기
+  void _firebaseMessagingHandler(RemoteMessage message) {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    logger.d('showFlutterNotification - ${message.mutableContent}');
+    if (notification != null && android != null && !kIsWeb) {
+      // 웹이 아니면서 안드로이드이고, 알림이 있는경우
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            // TODO add a proper drawable resource to android, for now using
+            //      one that already exists in example app.
+            icon: 'launch_background',
+          ),
+        ),
+      );
+    }
     final notificationBody = message.notification?.body ?? 'No message body';
     addNotification(notificationBody);
   }

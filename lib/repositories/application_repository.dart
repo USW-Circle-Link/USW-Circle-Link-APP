@@ -9,7 +9,7 @@ final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ApplicationRepository(
-    baseUrl: 'https://$host:$port/apply',
+    baseUrl: '$protocol://$host:$port/apply',
     dio: dio,
   );
 });

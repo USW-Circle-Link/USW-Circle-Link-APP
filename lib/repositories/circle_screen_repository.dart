@@ -9,7 +9,7 @@ class ClubRepository {
   Future<ClubIntro> fetchClubIntro(String clubId) async {
     try {
       final response = await _dio.get(
-        'https://$host:$port/clubs/intro/$clubId',
+        '$protocol://$host:$port/clubs/intro/$clubId',
         options: Options(
           headers: {
             'accessToken': 'true',

@@ -7,22 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
-  // background 수신처리
-  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
-  await setupFlutterNotifications();
-  
-  runApp(
-    ProviderScope(
-      child: CircleLink(),
-    ),
-  );
-}
-
+@pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
-  logger.d('백그라운드 알림 수신 완료 - $message');
+  logger.d('백그라운드 알림 수신 완료! - ${message.mutableContent}');
   //await analytics.logEvent(name: 'message_received');
   final notificationBody = message.notification?.body ?? 'No message body';
   // SharedPreferences를 사용하여 백그라운드에서도 알림을 저장
@@ -30,6 +17,24 @@ Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
   final notifications = prefs.getStringList('notifications') ?? [];
   notifications.add(notificationBody);
   await prefs.setStringList('notifications', notifications);
+}
+
+void onDeidReceiveNotificationResponse(NotificationResponse details) {
+  logger.d(details);
+}
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  // background 수신처리
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
+  await setupFlutterNotifications();
+
+  runApp(
+    ProviderScope(
+      child: CircleLink(),
+    ),
+  );
 }
 
 // 필요 변수
@@ -54,6 +59,8 @@ Future<void> setupFlutterNotifications() async {
       .resolvePlatformSpecificImplementation<
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
+
+  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.initialize(DarwinInitializationSettings(),onDidReceiveNotificationResponse: onDeidReceiveNotificationResponse);
   // iOS foreground notification 권한
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,

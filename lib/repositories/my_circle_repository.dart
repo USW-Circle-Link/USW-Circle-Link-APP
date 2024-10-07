@@ -9,7 +9,7 @@ final MyCircleRepositoryProvider = Provider<MyCircleRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return MyCircleRepository(
-    baseUrl: 'https://$host:$port',
+    baseUrl: '$protocol://$host:$port',
     dio: dio,
   );
 });

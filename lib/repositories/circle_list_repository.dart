@@ -11,7 +11,7 @@ final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   
   return CircleListRepository(
     dio: dio,
-    baseUrl: 'https://$host:$port',
+    baseUrl: '$protocol://$host:$port',
   );
 });
 

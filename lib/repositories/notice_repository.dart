@@ -10,7 +10,7 @@ final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return NoticeRepository(
-    baseUrl: 'https://$host:$port/my-notices',
+    baseUrl: '$protocol://$host:$port/my-notices',
     dio: dio,
   );
 });

@@ -11,7 +11,7 @@ final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return FCMRepository(
-    baseUrl: 'https://$host:$port/club-leader',
+    baseUrl: '$protocol://$host:$port/club-leader',
     dio: dio,
   );
 });

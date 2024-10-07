@@ -14,7 +14,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(
-    baseUrl: 'https://$host:$port/users',
+    baseUrl: '$protocol://$host:$port/users',
     dio: dio,
   );
 });
@@ -224,7 +224,7 @@ class AuthRepository {
     required String refreshToken,
   }) async {
     final response = await dio.post(
-      'https://$host:$port/integration/logout',
+      '$protocol://$host:$port/integration/logout',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',
