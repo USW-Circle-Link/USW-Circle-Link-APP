@@ -193,7 +193,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                           decoration: InputDecoration(
                             hintText: "아이디 입력",
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF6E78D8)),
+                              borderSide: BorderSide(color: Color(0xFFFFB052)),
                             ),
                             contentPadding:
                                 EdgeInsets.only(left: 8.w, bottom: 8.h),
@@ -214,7 +214,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                           decoration: InputDecoration(
                             hintText: "포털 이메일 입력",
                             focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFF6E78D8)),
+                              borderSide: BorderSide(color: Color(0xFFFFB052)),
                             ),
                             contentPadding: EdgeInsets.only(left: 8.w),
                             suffixIcon: Column(
