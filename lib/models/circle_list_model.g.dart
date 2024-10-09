@@ -49,11 +49,13 @@ Map<String, dynamic> _$$CircleListDataImplToJson(
 _$CircleListModelErrorImpl _$$CircleListModelErrorImplFromJson(
         Map<String, dynamic> json) =>
     _$CircleListModelErrorImpl(
+      message: json['message'] as String?,
       type: $enumDecodeNullable(_$CircleListModelTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$$CircleListModelErrorImplToJson(
         _$CircleListModelErrorImpl instance) =>
     <String, dynamic>{
+      'message': instance.message,
       'type': _$CircleListModelTypeEnumMap[instance.type],
     };

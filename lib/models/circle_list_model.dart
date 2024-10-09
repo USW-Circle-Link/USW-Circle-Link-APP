@@ -7,11 +7,8 @@ part 'circle_list_model.g.dart';
 
 enum CircleListModelType { all, department }
 
-abstract class CircleListModelBase {}
-
 @freezed
-class CircleListModel extends CircleListModelBase with _$CircleListModel {
-
+class CircleListModel with _$CircleListModel {
   CircleListModel._();
 
   @JsonSerializable(explicitToJson: true)
@@ -21,14 +18,18 @@ class CircleListModel extends CircleListModelBase with _$CircleListModel {
     CircleListModelType? type,
   }) = _CircleListModel;
 
-  factory CircleListModel.fromJson(Map<String, dynamic> json) => _$CircleListModelFromJson(json);
+  factory CircleListModel.fromJson(Map<String, dynamic> json) =>
+      _$CircleListModelFromJson(json);
 
-  CircleListModel setType(CircleListModelType type) => CircleListModel(message: message, data: data, type: type,);
+  CircleListModel setType(CircleListModelType type) => CircleListModel(
+        message: message,
+        data: data,
+        type: type,
+      );
 }
 
 @freezed
 class CircleListData with _$CircleListData {
-
   CircleListData._();
 
   factory CircleListData({
@@ -38,21 +39,28 @@ class CircleListData with _$CircleListData {
     required String departmentName,
   }) = _CircleListData;
 
-  factory CircleListData.fromJson(Map<String, dynamic> json) => _$CircleListDataFromJson(json);
+  factory CircleListData.fromJson(Map<String, dynamic> json) =>
+      _$CircleListDataFromJson(json);
 }
 
 @freezed
-class CircleListModelError extends CircleListModelBase with _$CircleListModelError implements Exception {
-
+class CircleListModelError with _$CircleListModelError implements Error {
   CircleListModelError._();
 
   factory CircleListModelError({
+    String? message,
     CircleListModelType? type,
   }) = _CircleListModelError;
 
-  factory CircleListModelError.fromJson(Map<String, dynamic> json) => _$CircleListModelErrorFromJson(json);
-  
-  CircleListModelError setType(CircleListModelType type) =>  CircleListModelError(type:type,);
-}
+  factory CircleListModelError.fromJson(Map<String, dynamic> json) =>
+      _$CircleListModelErrorFromJson(json);
 
-class CircleListModelLoading extends CircleListModelBase {}
+  CircleListModelError setType(CircleListModelType type) =>
+      CircleListModelError(
+        message: message,
+        type: type,
+      );
+
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
+}

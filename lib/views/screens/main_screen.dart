@@ -201,22 +201,33 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 ),
               ],
             ),
-            circleListState.value is CircleListModel
-                ? Expanded(
-                    child: CircleList(
-                    state: circleListState.value as CircleListModel,
-                    onItemClicked: (clubId) {
-                      context.go('/circle?clubId=$clubId');
+            Expanded(
+              child: Center(
+                child: circleListState.when<Widget>(
+                    data: (circleList) {
+                      return circleList.data.isNotEmpty
+                          ? CircleList(
+                              state: circleListState.value as CircleListModel,
+                              onItemClicked: (clubId) {
+                                context.go('/circle?clubId=$clubId');
+                              },
+                            )
+                          : TextFontWidget.fontRegular(
+                              text: '동아리가 없습니다',
+                              fontSize: 14.sp,
+                              color: Colors.black,
+                              fontweight: FontWeight.w400);
                     },
-                  ))
-                : Expanded(
-                    child: Center(
-                        child: TextFontWidget.fontRegular(
-                            text: '동아리가 없습니다',
-                            fontSize: 14.sp,
-                            color: Colors.black,
-                            fontweight: FontWeight.w400)),
-                  ),
+                    error: (error, stackTrace) {
+                      return TextFontWidget.fontRegular(
+                          text: '동아리를 불러오지 못했습니다...',
+                          fontSize: 14.sp,
+                          color: Colors.black,
+                          fontweight: FontWeight.w400);
+                    },
+                    loading: () => CircularProgressIndicator()),
+              ),
+            ),
           ],
         ),
       ),

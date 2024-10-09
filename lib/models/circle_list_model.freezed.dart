@@ -409,6 +409,7 @@ CircleListModelError _$CircleListModelErrorFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CircleListModelError {
+  String? get message => throw _privateConstructorUsedError;
   CircleListModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -423,7 +424,7 @@ abstract class $CircleListModelErrorCopyWith<$Res> {
           $Res Function(CircleListModelError) then) =
       _$CircleListModelErrorCopyWithImpl<$Res, CircleListModelError>;
   @useResult
-  $Res call({CircleListModelType? type});
+  $Res call({String? message, CircleListModelType? type});
 }
 
 /// @nodoc
@@ -440,9 +441,14 @@ class _$CircleListModelErrorCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? message = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -459,7 +465,7 @@ abstract class _$$CircleListModelErrorImplCopyWith<$Res>
       __$$CircleListModelErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({CircleListModelType? type});
+  $Res call({String? message, CircleListModelType? type});
 }
 
 /// @nodoc
@@ -473,9 +479,14 @@ class __$$CircleListModelErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
+    Object? message = freezed,
     Object? type = freezed,
   }) {
     return _then(_$CircleListModelErrorImpl(
+      message: freezed == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -487,17 +498,19 @@ class __$$CircleListModelErrorImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CircleListModelErrorImpl extends _CircleListModelError {
-  _$CircleListModelErrorImpl({this.type}) : super._();
+  _$CircleListModelErrorImpl({this.message, this.type}) : super._();
 
   factory _$CircleListModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$CircleListModelErrorImplFromJson(json);
 
   @override
+  final String? message;
+  @override
   final CircleListModelType? type;
 
   @override
   String toString() {
-    return 'CircleListModelError(type: $type)';
+    return 'CircleListModelError(message: $message, type: $type)';
   }
 
   @override
@@ -505,12 +518,13 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CircleListModelErrorImpl &&
+            (identical(other.message, message) || other.message == message) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, type);
+  int get hashCode => Object.hash(runtimeType, message, type);
 
   @JsonKey(ignore: true)
   @override
@@ -529,13 +543,16 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
 }
 
 abstract class _CircleListModelError extends CircleListModelError {
-  factory _CircleListModelError({final CircleListModelType? type}) =
-      _$CircleListModelErrorImpl;
+  factory _CircleListModelError(
+      {final String? message,
+      final CircleListModelType? type}) = _$CircleListModelErrorImpl;
   _CircleListModelError._() : super._();
 
   factory _CircleListModelError.fromJson(Map<String, dynamic> json) =
       _$CircleListModelErrorImpl.fromJson;
 
+  @override
+  String? get message;
   @override
   CircleListModelType? get type;
   @override
