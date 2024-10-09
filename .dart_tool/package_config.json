@@ -560,6 +560,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "photo_view",
+      "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/photo_view-0.15.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "platform",
       "rootUri": "file:///Users/jeong-woochang/.pub-cache/hosted/pub.dev/platform-3.1.5",
       "packageUri": "lib/",
@@ -902,7 +908,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-10-04T06:38:58.647216Z",
+  "generated": "2024-10-09T07:07:22.380005Z",
   "generator": "pub",
   "generatorVersion": "3.5.0",
   "flutterRoot": "file:///Users/jeong-woochang/development/flutter",

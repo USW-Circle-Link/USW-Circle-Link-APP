@@ -19,6 +19,7 @@ Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
   await prefs.setStringList('notifications', notifications);
 }
 
+@pragma('vm:entry-point')
 void onDidReceiveNotificationResponse(NotificationResponse details) {
   logger.d(details);
 }
@@ -48,10 +49,10 @@ Future<void> setupFlutterNotifications() async {
     return;
   }
   channel = const AndroidNotificationChannel(
-    'high_importance_channel', // id
-    'High Importance Notifications', // title
+    'com.usw.flag.donggurami.high_importance_channel', // id
+    '동구라미 알림 채널', // title
     description:
-        'This channel is used for important notifications.', // description
+        '이 채널은 합격여부 알림을 위해서 사용됩니다.', // description
     importance: Importance.high,
   );
   flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
@@ -60,9 +61,13 @@ Future<void> setupFlutterNotifications() async {
           AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.initialize(DarwinInitializationSettings(),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+  bool? result = await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<IOSFlutterLocalNotificationsPlugin>()?.initialize(DarwinInitializationSettings(),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
 
-  await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.initialize(AndroidInitializationSettings("ic_launcher"),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+  logger.d('iOS - $result');
+
+  result = await flutterLocalNotificationsPlugin.resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()?.initialize(AndroidInitializationSettings("ic_notification"),onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+
+  logger.d('Android - $result');
   // iOS foreground notification 권한
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
     alert: true,

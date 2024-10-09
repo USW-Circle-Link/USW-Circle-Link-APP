@@ -7,64 +7,70 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 class NoticeList extends StatelessWidget {
   const NoticeList({
     Key? key,
-    required this.state,
+    required this.noticeModel,
     required this.onItemClicked,
   }) : super(key: key);
 
-  final NoticeModel state;
+  final NoticeModel noticeModel;
   final Function(int noticeId) onItemClicked;
 
   @override
   Widget build(BuildContext context) {
-    return ListView.separated(
-      separatorBuilder: (context, index) {
-        return Divider(thickness: 1.h,);
-      },
-      itemCount: state.data.length,
-      itemBuilder: (context, index) {
-        return Container(
-          margin: EdgeInsets.only(top: index == 0 ? 16.h : 0.h),
-          child: InkWell(
-            onTap: (){
-              onItemClicked(state.data[index].noticeId);
+    return noticeModel.data.isNotEmpty
+        ? ListView.separated(
+            separatorBuilder: (context, index) {
+              return Divider(
+                thickness: 1.h,
+              );
             },
-            child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 16.w),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  TextFontWidget.fontRegular(
-                    text: state.data[index].noticeTitle,
-                    fontSize: 18.sp,
-                    color: const Color(0xFF000000),
-                    fontweight: FontWeight.w600,
+            itemCount: noticeModel.data.length,
+            itemBuilder: (context, index) {
+              return Container(
+                margin: EdgeInsets.only(top: index == 0 ? 16.h : 0.h),
+                child: InkWell(
+                  onTap: () {
+                    onItemClicked(noticeModel.data[index].noticeId);
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        TextFontWidget.fontRegular(
+                          text: noticeModel.data[index].noticeTitle,
+                          fontSize: 18.sp,
+                          color: const Color(0xFF000000),
+                          fontweight: FontWeight.w600,
+                        ),
+                        SizedBox(
+                          height: 20.h,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: <Widget>[
+                            TextFontWidget.fontRegular(
+                              text: noticeModel.data[index].adminName,
+                              fontSize: 14.sp,
+                              color: const Color(0xFF767676),
+                              fontweight: FontWeight.w400,
+                            ),
+                            TextFontWidget.fontRegular(
+                              text: noticeModel.data[index].noticeCreatedAt
+                                  .parseDateTime()
+                                  .getFormattedString(),
+                              fontSize: 14.sp,
+                              color: const Color(0xFF767676),
+                              fontweight: FontWeight.w400,
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    height: 20.h,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      TextFontWidget.fontRegular(
-                        text: state.data[index].adminName,
-                        fontSize: 14.sp,
-                        color: const Color(0xFF767676),
-                        fontweight: FontWeight.w400,
-                      ),
-                      TextFontWidget.fontRegular(
-                        text: state.data[index].noticeCreatedAt.parseDateTime().getFormattedString(),
-                        fontSize: 14.sp,
-                        color: const Color(0xFF767676),
-                        fontweight: FontWeight.w400,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+                ),
+              );
+            },
+          )
+        : Text('공지사항이 없습니다!');
   }
 }

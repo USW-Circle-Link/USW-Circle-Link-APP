@@ -135,28 +135,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                           children: [
                             SizedBox(
                               height: 250.h,
-                              child: clubIntro.introPhotoPath != null &&
-                                      clubIntro.introPhotoPath!.isEmpty
-                                  ? Container(
-                                      color: const Color.fromARGB(
-                                          255, 164, 164, 164),
-                                      child: Center(child: Text('이미지 없음')),
-                                    )
-                                  : Stack(
+                              child: clubIntro.getNotEmptyIntroPhotoPath() !=
+                                          null &&
+                                      clubIntro
+                                          .getNotEmptyIntroPhotoPath()!
+                                          .isNotEmpty
+                                  ? Stack(
                                       children: [
                                         SizedBox(
-                                          child: clubIntro.introPhotoPath !=
+                                          child: clubIntro
+                                                      .getNotEmptyIntroPhotoPath() !=
                                                   null
                                               ? CarouselSlider.builder(
                                                   itemCount: clubIntro
-                                                          .introPhotoPath
-                                                          ?.length ??
-                                                      0,
+                                                      .getNotEmptyIntroPhotoPath()!
+                                                      .length,
                                                   itemBuilder: (context, index,
                                                       realIndex) {
                                                     return buildImage(
                                                         clubIntro
-                                                                .introPhotoPath![
+                                                                .getNotEmptyIntroPhotoPath()![
                                                             index],
                                                         index);
                                                   },
@@ -218,7 +216,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                                         ),
                                                       ),
                                                       Text(
-                                                        ' / ${clubIntro.introPhotoPath?.length ?? 0}',
+                                                        ' / ${clubIntro.getNotEmptyIntroPhotoPath()!.length}',
                                                         style: TextStyle(
                                                           color: const Color(
                                                               0xffBFBFBF),
@@ -240,6 +238,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                           ),
                                         ),
                                       ],
+                                    )
+                                  : Container(
+                                      color: const Color.fromARGB(
+                                          255, 164, 164, 164),
+                                      child: Center(child: Text('이미지 없음')),
                                     ),
                             ),
                             SizedBox(height: 16.h),
@@ -255,8 +258,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                       fit: BoxFit.cover,
                                       errorBuilder:
                                           (context, error, stackTrace) {
-                                        return Container(color: const Color.fromARGB(
-                                        255, 164, 164, 164),child: Center(child: Text('이미지 없음')));
+                                        return Container(
+                                            color: const Color.fromARGB(
+                                                255, 164, 164, 164),
+                                            child:
+                                                Center(child: Text('이미지 없음')));
                                       },
                                     ),
                                   ),
@@ -429,7 +435,8 @@ class CustomButton extends StatefulWidget {
   final bool isEnabled;
   final VoidCallback onPressed;
 
-  const CustomButton({super.key, 
+  const CustomButton({
+    super.key,
     required this.text,
     required this.isEnabled,
     required this.onPressed,

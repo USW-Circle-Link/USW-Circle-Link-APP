@@ -90,6 +90,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         backgroundColor: const Color(0xffF0F2F5),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           toolbarHeight: 42.h,
           centerTitle: true,
           elevation: 0.0,
@@ -223,7 +224,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 }
 
-class _NotificationOverlay extends StatefulWidget {
+class _NotificationOverlay extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
   const _NotificationOverlay({required this.onDismiss});
@@ -232,9 +233,10 @@ class _NotificationOverlay extends StatefulWidget {
   _NotificationOverlayState createState() => _NotificationOverlayState();
 }
 
-class _NotificationOverlayState extends State<_NotificationOverlay> {
+class _NotificationOverlayState extends ConsumerState<_NotificationOverlay> {
   @override
   Widget build(BuildContext context) {
+    final notifications = ref.watch(firebaseCloudMessagingViewModelProvider);
     return Stack(
       children: [
         Positioned.fill(
@@ -261,7 +263,7 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.all(16.h),
+                    padding: EdgeInsets.only(top: 16.h),
                     child: Text(
                       "알림",
                       style: TextStyle(
@@ -271,10 +273,10 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
                     ),
                   ),
                   Expanded(
-                    child: Consumer(builder: (context, ref, child) {
-                      final notifications =
-                          ref.watch(firebaseCloudMessagingViewModelProvider);
-                      return ListView.builder(
+                    child: MediaQuery.removePadding(
+                      context: context,
+                      removeTop: true,
+                      child: ListView.builder(
                         itemCount: notifications.length,
                         itemBuilder: (context, index) {
                           return CloudMessaging(
@@ -282,8 +284,8 @@ class _NotificationOverlayState extends State<_NotificationOverlay> {
                             index: index,
                           );
                         },
-                      );
-                    }),
+                      ),
+                    ),
                   ),
                 ],
               ),

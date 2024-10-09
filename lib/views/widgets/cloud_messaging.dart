@@ -23,7 +23,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 0,4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -43,13 +43,15 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
                     ),
-                    overflow: _isExpanded ? TextOverflow.visible : TextOverflow.ellipsis,
+                    overflow: _isExpanded
+                        ? TextOverflow.visible
+                        : TextOverflow.ellipsis,
                     maxLines: _isExpanded ? null : 1, // 확장 시 최대 줄 수 제한 해제
                   ),
                 ),
                 SizedBox(width: 8.w),
                 IconButton(
-                  icon: Icon(Icons.close, size: 16.sp, color: Colors.grey),
+                  icon: Icon(Icons.close, size: 16.sp,color: Colors.grey),
                   onPressed: () {
                     ref
                         .read(firebaseCloudMessagingViewModelProvider.notifier)
@@ -63,7 +65,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
             Padding(
               padding: EdgeInsets.only(top: 4.h),
               child: Text(
-                widget.text.length > 35 
+                widget.text.length > 35
                     ? widget.text.substring(35) // 짤린 부분만 보여줌
                     : '', // 메시지가 짧을 경우 빈 문자열
                 style: TextStyle(

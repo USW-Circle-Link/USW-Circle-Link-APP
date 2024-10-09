@@ -390,7 +390,8 @@ class _$CircleImpl implements _Circle {
                 other.leaderHp == leaderHp) &&
             (identical(other.clubInsta, clubInsta) ||
                 other.clubInsta == clubInsta) &&
-            (identical(other.aplictStatus, aplictStatus) || other.aplictStatus == aplictStatus));
+            (identical(other.aplictStatus, aplictStatus) ||
+                other.aplictStatus == aplictStatus));
   }
 
   @JsonKey(ignore: true)

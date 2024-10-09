@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class ImageScreen extends StatelessWidget {
@@ -49,18 +50,18 @@ class ImageScreen extends StatelessWidget {
             child: CarouselSlider.builder(
               itemCount: images.length,
               itemBuilder: (context, index, realIndex) {
-                return Center(
-                  child: Image.network(
+                return PhotoView(
+                  imageProvider: NetworkImage(
                     images[index],
-                    errorBuilder: (context, error, stackTrace) {
-                      return TextFontWidget.fontRegular(
-                        text: '이미지를 불러오지 못했습니다...',
-                        fontSize: 14.sp,
-                        color: Colors.white,
-                        fontweight: FontWeight.w400,
-                      );
-                    },
                   ),
+                  errorBuilder: (context, error, stackTrace) {
+                    return TextFontWidget.fontRegular(
+                      text: '이미지를 불러오지 못했습니다...',
+                      fontSize: 14.sp,
+                      color: Colors.white,
+                      fontweight: FontWeight.w400,
+                    );
+                  },
                 );
               },
               options: CarouselOptions(

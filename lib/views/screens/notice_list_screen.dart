@@ -21,20 +21,13 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(noticeViewModelProvider);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (state == null) {
-        ref.read(noticeViewModelProvider.notifier).fetchNotices();
-      }
-    });
     ref.listen(noticeViewModelProvider, (previous, next) {
       logger.d(next);
-      if (next is NoticeModel) {
-        switch (next.type) {
-          case NoticeModelType.fetchAll:
-            break;
-          default:
-        }
-      } else if (next is NoticeModelError) {}
+      next.when(
+        data: (data) {},
+        error: (error, stackTrace) {},
+        loading: () {},
+      );
     });
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -69,16 +62,29 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
             ),
           ),
         ),
-        body: Container(
-          padding: EdgeInsets.only(left: 16.w, right: 16.w),
-          child: state is NoticeModel
-              ? NoticeList(
-                  state: state,
-                  onItemClicked: (noticeId) {
-                    context.go('/notices/$noticeId/detail');
-                  },
-                )
-              : Container(),
+        body: Center(
+          child: state.when<Widget>(
+            data: (noticeModel) {
+              return Container(
+                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
+                  child: NoticeList(
+                    noticeModel: noticeModel,
+                    onItemClicked: (noticeId) {
+                      context.go('/notices/$noticeId/detail');
+                    },
+                  ));
+            },
+            error: (error, stackTrace) {
+              error = error as NoticeModelError;
+              switch (error.type) {
+                case NoticeModelType.fetchAll:
+                  break;
+                default:
+              }
+              return Text('공지사항을 불러오지 못했습니다...');
+            },
+            loading: () => CircularProgressIndicator(),
+          ),
         ),
       ),
     );

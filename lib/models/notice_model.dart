@@ -7,10 +7,8 @@ part 'notice_model.g.dart';
 
 enum NoticeModelType { fetchAll }
 
-abstract class NoticeModelBase {}
-
 @freezed
-class NoticeModel extends NoticeModelBase with _$NoticeModel {
+class NoticeModel with _$NoticeModel {
   NoticeModel._();
 
   @JsonSerializable(explicitToJson: true)
@@ -31,7 +29,6 @@ class NoticeModel extends NoticeModelBase with _$NoticeModel {
 
 @freezed
 class NoticeData with _$NoticeData {
-  
   factory NoticeData({
     required int noticeId,
     required String noticeTitle,
@@ -44,9 +41,7 @@ class NoticeData with _$NoticeData {
 }
 
 @freezed
-class NoticeModelError extends NoticeModelBase
-    with _$NoticeModelError
-    implements Exception {
+class NoticeModelError with _$NoticeModelError implements Error {
   NoticeModelError._();
   factory NoticeModelError({
     required String message,
@@ -60,6 +55,7 @@ class NoticeModelError extends NoticeModelBase
         message: message,
         type: type,
       );
-}
 
-class NoticeModelLoading extends NoticeModelBase {}
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
+}
