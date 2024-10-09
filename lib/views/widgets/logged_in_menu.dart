@@ -57,7 +57,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                             Icon(
                               Icons.person,
                               color: const Color(0xFFFDF5EC),
-                              size: 30.w,
+                              size: 30,
                             ),
                           ],
                         ),

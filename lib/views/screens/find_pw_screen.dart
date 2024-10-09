@@ -250,7 +250,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                 TextSpan(
                                   text: "인증코드",
                                   style: TextStyle(
-                                      color: Color(0xFF6E6EDE),
+                                      color: Color(0xFFFFB052),
                                       fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(

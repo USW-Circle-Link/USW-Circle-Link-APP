@@ -157,7 +157,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                                 TextSpan(
                                   text: "가입 정보",
                                   style: TextStyle(
-                                      color: Color(0xFF6E6EDE),
+                                      color: Color(0xFFFFB052),
                                       fontWeight: FontWeight.w600),
                                 ),
                                 TextSpan(

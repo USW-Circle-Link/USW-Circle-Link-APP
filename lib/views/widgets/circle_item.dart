@@ -18,37 +18,40 @@ class CircleItem extends StatelessWidget {
       onTap: () {
         onItemClicked(circle.clubId);
       },
-      child: Container(
-        width: 100.w,
-        margin: EdgeInsets.only(right: 3.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 120.h,
-              child: Image.network(
-                circle.mainPhoto ?? "",
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: const Color.fromARGB(255, 164, 164, 164),
-                    child: Text('이미지 없음'),
-                  );
-                },
+      child: Flexible(
+        child:
+        Container(
+          width: 100.w,
+          margin: EdgeInsets.only(right: 3.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 106.h,
+                child: Image.network(
+                  circle.mainPhoto ?? "",
+                  fit: BoxFit.cover,
+                  errorBuilder: (BuildContext context, Object exception,
+                      StackTrace? stackTrace) {
+                    return Container(
+                      alignment: Alignment.center,
+                      color: const Color.fromARGB(255, 164, 164, 164),
+                      child: Text('이미지 없음'),
+                    );
+                  },
+                ),
               ),
-            ),
-            SizedBox(height: 8.h),
-            Text(
-              overflow: TextOverflow.ellipsis,
-              circle.clubName,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
+              SizedBox(height: 8.h),
+              Text(
+                overflow: TextOverflow.ellipsis,
+                circle.clubName,
+                style: TextStyle(
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w500,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

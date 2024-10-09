@@ -38,7 +38,7 @@ class LoggedOutMenu extends ConsumerWidget {
                             SvgPicture.asset(
                               'assets/images/profile.svg',
                             ),
-                            Icon(Icons.person, color: const Color(0xFFFDF5EC),size: 30.w,),
+                            Icon(Icons.person, color: const Color(0xFFFDF5EC),size: 30,),
                           ],
                         ),
                         SizedBox(width: 16.w),

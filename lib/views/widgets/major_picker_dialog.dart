@@ -42,6 +42,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
                   RoundedDropdown(
                     initValue: widget.selectedCollege,
@@ -62,11 +63,14 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: TextFontWidget.fontRegular(
-                          text: value,
-                          color: Color(0xFF000000),
-                          fontSize: 14.sp,
-                          fontweight: FontWeight.w400,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: Color(0xFF000000),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            height: 0.1,
+                        ),
                         ),
                       );
                     }).toList(),
@@ -80,6 +84,12 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                     marginTop: 32.h,
                     marginLeft: 16.w,
                     marginRight: 16.w,
+                    hintTextStyle: TextStyle(
+                      color: Color(0xFF767676),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 0.1,
+                    ),
                   ),
                   SizedBox(height: 8),
                   RoundedDropdown(
@@ -96,11 +106,14 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: TextFontWidget.fontRegular(
-                          text: value,
-                          color: Color(0xFF000000),
-                          fontSize: 14.sp,
-                          fontweight: FontWeight.w400,
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            color: Color(0xFF000000),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            height: 0.1,
+                          ),
                         ),
                       );
                     }).toList(),
@@ -113,6 +126,12 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                     borderWidth: 1.w,
                     marginLeft: 16.w,
                     marginRight: 16.w,
+                    hintTextStyle: TextStyle(
+                      color: Color(0xFF767676),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 0.1,
+                    ),
                   ),
                   SizedBox(height: 20),
                   SizedBox.fromSize(

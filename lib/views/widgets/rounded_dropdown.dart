@@ -19,6 +19,7 @@ class RoundedDropdown extends StatelessWidget {
   final Color? borderColor, backgroundColor;
   final bool isBackgroundFilled;
   final String? initValue;
+  final TextStyle? hintTextStyle;
 
   final Function(String? value) onChanged;
 
@@ -40,7 +41,8 @@ class RoundedDropdown extends StatelessWidget {
       this.backgroundColor,
       this.isBackgroundFilled = false,
       required this.onChanged,
-      this.initValue})
+      this.initValue,
+      this.hintTextStyle,})
       : super(key: key);
 
 
@@ -55,6 +57,8 @@ class RoundedDropdown extends StatelessWidget {
         bottom: marginBottom ?? 0,
       ),
       child: DropdownButtonFormField<String>(
+        alignment: Alignment.centerLeft,
+        dropdownColor: Colors.white,
         key: globalKey,
         decoration: setInputDecoration(),
         icon: Align(
@@ -66,23 +70,23 @@ class RoundedDropdown extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        hint: TextFontWidget.fontRegular(
-          text: hintText ?? "",
-          color: Color(0xFF767676),
-          fontSize: 14.sp,
-          fontweight: FontWeight.w400,
-        ),
+        hint:
+          Text(
+            hintText??"",
+            style: hintTextStyle,
+          ),
         value: initValue,
         onChanged: onChanged,
         items: items,
+        isExpanded: true,
       ),
     );
   }
 
   InputDecoration setInputDecoration() {
     return InputDecoration(
-      isDense: true,
-      contentPadding: EdgeInsets.only(left: 16.w, top: 16.h, bottom: 8.h),
+      isDense: false,
+      contentPadding: EdgeInsets.fromLTRB(16.w, 16.h, 0, 8.h),
       filled: isBackgroundFilled,
       fillColor: backgroundColor ?? Colors.white,
       enabledBorder: OutlineInputBorder(
