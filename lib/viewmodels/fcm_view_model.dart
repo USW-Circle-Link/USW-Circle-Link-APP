@@ -33,7 +33,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     logger.d('Firebase 초기화 중 ...');
     await Firebase.initializeApp(
       options: DefaultFirebaseOptions.currentPlatform,
-      name:'USW_Circle_Link',
+      name: 'USW_Circle_Link',
     );
 
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
@@ -43,9 +43,13 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   // fcm 전경 처리 - 로컬 알림 보이기
   void _firebaseMessagingHandler(RemoteMessage message) {
+    logger.d('포그라운드 알림 수신 완료!');
+    logger.d('- contentAvailable : ${message.contentAvailable}');
+    logger.d('- contentAvailable : ${message.mutableContent}');
+    logger.d('- notification : ${message.notification?.body}');
+    logger.d('- data : ${message.data}');
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
-    logger.d('showFlutterNotification - contentAvailable : ${message.contentAvailable}');
     if (notification != null && android != null && !kIsWeb) {
       // 웹이 아니면서 안드로이드이고, 알림이 있는경우
       flutterLocalNotificationsPlugin.show(
@@ -78,6 +82,8 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   // SharedPreferences에서 알림 목록을 불러오는 메서드
   Future<void> loadNotifications() async {
+    state = [];
+    logger.d('##');
     final prefs = await SharedPreferences.getInstance();
     state = prefs.getStringList('notifications') ?? [];
   }
