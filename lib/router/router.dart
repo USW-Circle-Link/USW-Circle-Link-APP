@@ -141,7 +141,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'image',
             name: 'image',
             builder: (_, state) =>
-                ImageScreen(images: state.extra as List<String>),
+                ImageScreen(image: state.extra as String),
           ),
         ],
       ),

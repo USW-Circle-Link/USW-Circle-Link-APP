@@ -126,7 +126,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                               return InkWell(
                                 onTap: () {
                                   context.push('/image',
-                                      extra: state.data.noticePhotos);
+                                      extra: state.data.noticePhotos?[index]);
                                 },
                                 child: Container(
                                   width: 100.w, // 이미지의 너비

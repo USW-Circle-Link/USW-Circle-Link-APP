@@ -368,7 +368,13 @@ class _EmailVerificationScreenState
                                             .notifier)
                                         .signUp(account: widget.account);
                                   }
-                                : null,
+                                : () async {
+                                    await DialogManager.instance
+                                        .showAlertDialog(
+                                      context: context,
+                                      content: '이메일 전송 버튼을 눌러\n이메일 인증을 완료해 주세요!'
+                                    );
+                                  },
                             style: OutlinedButton.styleFrom(
                               backgroundColor: const Color(0xFF000000),
                               foregroundColor: const Color(0xFFFFFFFF),

@@ -83,7 +83,6 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   // SharedPreferences에서 알림 목록을 불러오는 메서드
   Future<void> loadNotifications() async {
     state = [];
-    logger.d('##');
     final prefs = await SharedPreferences.getInstance();
     state = prefs.getStringList('notifications') ?? [];
   }

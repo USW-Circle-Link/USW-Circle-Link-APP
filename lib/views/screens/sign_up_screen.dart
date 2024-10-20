@@ -348,7 +348,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         textInputType: TextInputType.number,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '전화번호 (- 제외입력, *선택사항)',
+                        hintText: '전화번호 (- 제외입력)',
                         isAnimatedHint: false,
                         onChanged: (value) {
                           ref.read(signUpViewModelProvider.notifier).initState();

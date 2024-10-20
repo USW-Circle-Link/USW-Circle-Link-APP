@@ -22,7 +22,6 @@ class RefreshObserver extends NavigatorObserver {
     logger.d(previousRoute);
     if (previousRoute?.settings.name == '/'){
       await ref.read(profileViewModelProvider.notifier).getProfile();
-      logger.d('@@');
       await ref.read(firebaseCloudMessagingViewModelProvider.notifier).loadNotifications();
     }
     super.didPop(route, previousRoute);

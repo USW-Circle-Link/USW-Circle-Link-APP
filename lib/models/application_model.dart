@@ -5,10 +5,8 @@ part 'application_model.g.dart';
 
 enum ApplicationModelType {getApplication, apply}
 
-abstract class ApplicationModelBase {}
-
 @freezed
-class ApplicationModel extends ApplicationModelBase with _$ApplicationModel {
+class ApplicationModel with _$ApplicationModel {
 
   ApplicationModel._();
 
@@ -26,7 +24,7 @@ class ApplicationModel extends ApplicationModelBase with _$ApplicationModel {
 }
 
 @freezed
-class ApplicationModelError extends ApplicationModelBase with _$ApplicationModelError {
+class ApplicationModelError with _$ApplicationModelError implements Error {
 
   ApplicationModelError._();
 
@@ -40,6 +38,7 @@ class ApplicationModelError extends ApplicationModelBase with _$ApplicationModel
   ApplicationModelError setType(ApplicationModelType type) {
     return ApplicationModelError(message: message, type: type);
   }
+  
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
 }
-
-class ApplicationModelLoading extends ApplicationModelBase {}
