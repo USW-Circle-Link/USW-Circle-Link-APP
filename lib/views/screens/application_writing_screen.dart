@@ -106,10 +106,10 @@ class _ApplicationWritingScreenState
                   ),
                 ),
               ),
-              body: SingleChildScrollView(
-                child: state.isLoading
-                    ? CircularProgressIndicator()
-                    : Container(
+              body: state.isLoading
+                  ? Center(child: CircularProgressIndicator())
+                  : SingleChildScrollView(
+                      child: Container(
                         margin: EdgeInsets.only(top: 24.h),
                         padding: EdgeInsets.only(left: 32.w, right: 32.w),
                         child: Column(
@@ -233,7 +233,11 @@ class _ApplicationWritingScreenState
                                   ),
                                   value: isDone,
                                   onChanged: (bool? value) {
-                                    if (state.hasValue && state.value != null) {
+                                    logger.d('${state.value}');
+                                    if (state.hasValue &&
+                                        state.value?.type ==
+                                            ApplicationModelType
+                                                .getApplication) {
                                       setState(() {
                                         isDone = value ?? false;
                                       });
@@ -271,7 +275,8 @@ class _ApplicationWritingScreenState
                                               .notifier)
                                           .apply(
                                               clubId: widget.clubId,
-                                              aplictGoogleFormUrl: state.value?.data ?? "");
+                                              aplictGoogleFormUrl:
+                                                  state.value?.data ?? "");
                                     } else {
                                       DialogManager.instance.showAlertDialog(
                                         context: context,
@@ -299,7 +304,7 @@ class _ApplicationWritingScreenState
                           ],
                         ),
                       ),
-              ),
+                    ),
             ));
   }
 }

@@ -39,7 +39,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
               path: 'circle',
               builder: (_, state) => CircleScreen(
-                    clubId: state.uri.queryParameters["clubId"]!,
+                    clubId: int.parse(state.uri.queryParameters['clubId']!),
                   ),
               routes: [
                 GoRoute(

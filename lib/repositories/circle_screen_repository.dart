@@ -6,7 +6,7 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 class ClubRepository {
   final Dio _dio = Dio();
 
-  Future<ClubIntro> fetchClubIntro(String clubId) async {
+  Future<ClubIntro> fetchClubIntro(int clubId) async {
     try {
       final response = await _dio.get(
         '$protocol://$host:$port/clubs/intro/$clubId',

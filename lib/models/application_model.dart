@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'application_model.freezed.dart';
 part 'application_model.g.dart';
 
-enum ApplicationModelType {getApplication, apply}
+enum ApplicationModelType {getApplication, apply, checkAvailableForApplication}
 
 @freezed
 class ApplicationModel with _$ApplicationModel {
