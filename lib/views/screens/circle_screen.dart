@@ -50,9 +50,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
           switch (error.type) {
             case ApplicationModelType.checkAvailableForApplication:
               DialogManager.instance.showAlertDialog(
-                context: context,
-                content: '이미 지원한 동아리 또는 소속된 동아리입니다!'
-              );
+                  context: context, content: '이미 지원한 동아리 또는 소속된 동아리입니다!');
               break;
             default:
           }
@@ -251,8 +249,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                   ],
                                 )
                               : Container(
-                                  color:
-                                      const Color.fromARGB(255, 36, 36, 36),
+                                  color: const Color.fromARGB(255, 36, 36, 36),
                                   child: Center(child: Text('')),
                                 ),
                         ),
@@ -269,9 +266,16 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                   fit: BoxFit.cover,
                                   errorBuilder: (context, error, stackTrace) {
                                     return Container(
-                                        color: const Color.fromARGB(
-                                            255, 164, 164, 164),
-                                        child: Center(child: Text('이미지 없음')));
+                                      color: const Color.fromARGB(
+                                          255, 164, 164, 164),
+                                      child: Center(
+                                        child: Icon(
+                                          Icons.person,
+                                          color: const Color(0xFFFDF5EC),
+                                          size: 60,
+                                        ),
+                                      ),
+                                    );
                                   },
                                 ),
                               ),

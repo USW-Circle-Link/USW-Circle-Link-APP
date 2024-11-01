@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/repositories/profile_repository.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/regex.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
