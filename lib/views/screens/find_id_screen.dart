@@ -19,15 +19,12 @@ class FindIdScreen extends ConsumerStatefulWidget {
 class _FindIDScreenState extends ConsumerState<FindIdScreen> {
   final TextEditingController emailEditController = TextEditingController();
 
-  bool hadSent = false;
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(findIdViewModelProvider);
     ref.listen(findIdViewModelProvider, (previous, next) {
       logger.d(next);
       if (next is FindIdModel) {
-        hadSent = true;
         DialogManager.instance.showAlertDialog(
           context: context,
           content: '확인메일이 전송되었습니다!',
@@ -66,7 +63,6 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
 
     emailEditController.addListener(
       () {
-        hadSent = false;
         ref.read(findIdViewModelProvider.notifier).initState();
       },
     );
@@ -175,7 +171,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: hadSent || state is FindIdModelLoading
+                            onPressed: state is FindIdModelLoading
                                 ? null
                                 : () async {
                                     ref

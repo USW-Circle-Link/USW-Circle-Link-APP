@@ -20,8 +20,6 @@ class DeleteUserScreen extends ConsumerStatefulWidget {
 class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   final TextEditingController codeEditController = TextEditingController();
 
-  bool hadSent = false;
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(deleteUserViewModelProvider);

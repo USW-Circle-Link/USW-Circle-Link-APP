@@ -23,7 +23,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
   final TextEditingController codeEditController = TextEditingController();
 
   String? uuid;
-  bool hadSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -33,7 +32,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
       if (next is FindPwModel) {
         switch (next.type) {
           case FindPwModelType.sendCode:
-            hadSent = true;
             DialogManager.instance.showAlertDialog(
               context: context,
               content: '인증코드가 전송되었습니다',
@@ -131,14 +129,12 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
 
     idEditController.addListener(
       () {
-        hadSent = false;
         ref.read(findPwViewModelProvider.notifier).initState();
       },
     );
 
     emailEditController.addListener(
       () {
-        hadSent = false;
         ref.read(findPwViewModelProvider.notifier).initState();
       },
     );
@@ -268,7 +264,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: hadSent || state is FindPwModelLoading
+                            onPressed: state is FindPwModelLoading
                                 ? null
                                 : () async {
                                     ref
