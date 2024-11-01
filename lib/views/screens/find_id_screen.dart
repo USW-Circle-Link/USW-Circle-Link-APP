@@ -204,45 +204,6 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                       SizedBox(
                         height: 12.h,
                       ),
-                      Visibility(
-                        visible: hadSent,
-                        child: Column(
-                          children: [
-                            Center(
-                              child: TextFontWidget.fontRegular(
-                                  text: '이메일이 오지 않았나요?',
-                                  fontSize: 16.sp,
-                                  color: Colors.black,
-                                  fontweight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              height: 6.h,
-                            ),
-                            GestureDetector(
-                              onTap: !hadSent || state is FindIdModelLoading
-                                  ? null
-                                  : () {
-                                      ref
-                                          .read(
-                                              findIdViewModelProvider.notifier)
-                                          .findId(
-                                              email: emailEditController.text
-                                                  .trim());
-                                    },
-                              child: Center(
-                                child: TextFontWidget.fontRegular(
-                                    text: '메일 재전송',
-                                    fontSize: 16.sp,
-                                    color: Color(0xffffB052),
-                                    fontweight: FontWeight.w400),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                          ],
-                        ),
-                      ),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
