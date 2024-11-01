@@ -9,9 +9,11 @@ final applicationViewModelProvider = StateNotifierProvider.autoDispose<
   return ApplicationViewModel(applicationRepository: applicationRepository);
 });
 
-class ApplicationViewModel extends StateNotifier<AsyncValue<ApplicationModel?>> {
+class ApplicationViewModel
+    extends StateNotifier<AsyncValue<ApplicationModel?>> {
   final ApplicationRepository applicationRepository;
-  ApplicationViewModel({required this.applicationRepository}) : super(AsyncData(null));
+  ApplicationViewModel({required this.applicationRepository})
+      : super(AsyncData(null));
 
   Future<void> getApplication(int clubId) async {
     try {
@@ -23,13 +25,12 @@ class ApplicationViewModel extends StateNotifier<AsyncValue<ApplicationModel?>> 
 
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {
-      state = AsyncError(e,e.stackTrace);
+      state = AsyncError(e, e.stackTrace);
     } catch (e) {
       final error = ApplicationModelError(
           message: '에외발생 - $e', type: ApplicationModelType.getApplication);
       state = AsyncError(error, error.stackTrace);
     }
-    return Future.value(state);
   }
 
   Future<void> apply({
@@ -47,9 +48,32 @@ class ApplicationViewModel extends StateNotifier<AsyncValue<ApplicationModel?>> 
     } on ApplicationModelError catch (e) {
       state = AsyncError(e, e.stackTrace);
     } catch (e) {
-      final error = ApplicationModelError(message: '에외발생 - $e', type: ApplicationModelType.apply);
+      final error = ApplicationModelError(
+          message: '에외발생 - $e', type: ApplicationModelType.apply);
       state = AsyncError(error, error.stackTrace);
     }
-    return Future.value(state);
+  }
+
+  Future<void> checkAvailableForApplication({
+    required int clubId,
+  }) async {
+    try {
+      // 첫 state는 Loading 상태
+      state = AsyncLoading();
+
+      final applicationResponse =
+          await applicationRepository.checkAvailableForApplication(
+        clubId: clubId,
+      );
+
+      state = AsyncData(applicationResponse);
+    } on ApplicationModelError catch (e) {
+      state = AsyncError(e, e.stackTrace);
+    } catch (e) {
+      final error = ApplicationModelError(
+          message: '에외발생 - $e',
+          type: ApplicationModelType.checkAvailableForApplication);
+      state = AsyncError(error, error.stackTrace);
+    }
   }
 }

@@ -35,7 +35,6 @@ class EmailVerificationScreen extends ConsumerStatefulWidget {
 class _EmailVerificationScreenState
     extends ConsumerState<EmailVerificationScreen> {
   final TextEditingController emailEditController = TextEditingController();
-  bool hadSent = false;
 
   @override
   Widget build(BuildContext context) {
@@ -48,9 +47,6 @@ class _EmailVerificationScreenState
           context: context,
           content: "인증 메일이 전송되었습니다!",
         );
-        setState(() {
-          hadSent = true;
-        });
       } else if (next is EmailVerificationModelResend) {
         logger.d('이메일 재전송 성공!');
         DialogManager.instance.showAlertDialog(
@@ -64,6 +60,12 @@ class _EmailVerificationScreenState
         switch (next.type) {
           case EmailVerificationModelType.sendMail:
             switch (next.code) {
+              case "USR-206":
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '이미 가입된 포털 이메일입니다!',
+                );
+                break;
               case "ATTEMPT-503":
                 DialogManager.instance.showAlertDialog(
                   context: context,
@@ -125,7 +127,6 @@ class _EmailVerificationScreenState
 
     emailEditController.addListener(
       () {
-        hadSent = false;
         ref.read(emailVerificationViewModelProvider.notifier).initState();
       },
     );
@@ -133,10 +134,10 @@ class _EmailVerificationScreenState
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
               appBar: AppBar(
+                scrolledUnderElevation: 0,
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  // TODO : icon padding 문제
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -237,8 +238,7 @@ class _EmailVerificationScreenState
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: hadSent ||
-                                    state is EmailVerificationModelLoading
+                            onPressed: state is EmailVerificationModelLoading
                                 ? null
                                 : () {
                                     ref
@@ -273,57 +273,6 @@ class _EmailVerificationScreenState
                       ),
                       SizedBox(
                         height: 12.h,
-                      ),
-                      Visibility(
-                        visible: hadSent,
-                        child: Column(
-                          children: [
-                            Center(
-                              child: TextFontWidget.fontRegular(
-                                  text: '이메일이 오지 않았나요?',
-                                  fontSize: 16.sp,
-                                  color: Colors.black,
-                                  fontweight: FontWeight.w400),
-                            ),
-                            SizedBox(
-                              height: 6.h,
-                            ),
-                            GestureDetector(
-                              // state 가
-                              onTap: !(state is EmailVerificationModel ||
-                                          state
-                                              is EmailVerificationModelResend) ||
-                                      state is EmailVerificationModelLoading
-                                  ? null
-                                  : () {
-                                      String emailtokenUuid = "";
-                                      if (state is EmailVerificationModel) {
-                                        emailtokenUuid =
-                                            state.data.emailToken_uuid;
-                                      } else if (state
-                                          is EmailVerificationModelResend) {
-                                        emailtokenUuid = state.data;
-                                      }
-                                      ref
-                                          .read(
-                                              emailVerificationViewModelProvider
-                                                  .notifier)
-                                          .resendMail(
-                                              emailToken_uuid: emailtokenUuid);
-                                    },
-                              child: Center(
-                                child: TextFontWidget.fontRegular(
-                                    text: '메일 재전송',
-                                    fontSize: 16.sp,
-                                    color: Color(0xffffB052),
-                                    fontweight: FontWeight.w400),
-                              ),
-                            ),
-                            SizedBox(
-                              height: 12.h,
-                            ),
-                          ],
-                        ),
                       ),
                       SizedBox(
                         width: double.infinity,

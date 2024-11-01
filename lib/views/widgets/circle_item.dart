@@ -34,7 +34,11 @@ class CircleItem extends StatelessWidget {
                   return Container(
                     alignment: Alignment.center,
                     color: const Color.fromARGB(255, 164, 164, 164),
-                    child: Text('이미지 없음'),
+                    child: Icon(
+                      Icons.person,
+                      color: const Color(0xFFFDF5EC),
+                      size: 60,
+                    ),
                   );
                 },
               ),

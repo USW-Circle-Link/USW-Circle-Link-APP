@@ -23,6 +23,28 @@ class ApplicationRepository {
     required this.baseUrl,
   });
 
+  Future<ApplicationModel> checkAvailableForApplication({
+    required int clubId,
+  }) async {
+    final response = await dio.get(
+      '$baseUrl/can-apply/$clubId',
+    );
+
+    logger.d('${response.data}');
+
+    logger.d(
+        'checkAvailableForApplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return ApplicationModel.fromJson(response.data)
+          .setType(ApplicationModelType.checkAvailableForApplication);
+    } else {
+      // Bad Request
+      throw ApplicationModelError.fromJson(response.data)
+          .setType(ApplicationModelType.checkAvailableForApplication);
+    }
+  }
+
   Future<ApplicationModel> getApplication({
     required int clubId,
   }) async {

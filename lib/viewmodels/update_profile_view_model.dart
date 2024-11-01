@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/repositories/profile_repository.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/regex.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
@@ -46,15 +45,11 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             type: ProfileModelType.updateProfile);
       }
 
-      if (userHp.isNotEmpty) {
-        if (!telephoneRegExp.hasMatch(userHp)) {
-          throw ProfileModelError(
-              code: "USR-F500",
-              message: '전화번호 형식에 맞지 않습니다!',
-              type: ProfileModelType.updateProfile);
-        }
-      } else {
-        logger.d('전화번호 입력되지 않음');
+      if (!telephoneRegExp.hasMatch(userHp)) {
+        throw ProfileModelError(
+            code: "USR-F500",
+            message: '전화번호 형식에 맞지 않습니다!',
+            type: ProfileModelType.updateProfile);
       }
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
