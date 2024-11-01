@@ -46,15 +46,11 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             type: ProfileModelType.updateProfile);
       }
 
-      if (userHp.isNotEmpty) {
-        if (!telephoneRegExp.hasMatch(userHp)) {
-          throw ProfileModelError(
-              code: "USR-F500",
-              message: '전화번호 형식에 맞지 않습니다!',
-              type: ProfileModelType.updateProfile);
-        }
-      } else {
-        logger.d('전화번호 입력되지 않음');
+      if (!telephoneRegExp.hasMatch(userHp)) {
+        throw ProfileModelError(
+            code: "USR-F500",
+            message: '전화번호 형식에 맞지 않습니다!',
+            type: ProfileModelType.updateProfile);
       }
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
