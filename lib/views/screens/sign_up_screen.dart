@@ -33,6 +33,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool idVerified = false;
   bool policyAgree = false;
 
+  String id = "",
+      password = "",
+      name = "",
+      phoneNumber = "",
+      studentNumber = "";
   String? college;
   String? major;
 
@@ -64,7 +69,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
             context.go(
-                '/login/sign_up/email_verification?account=${idController.text}&password=${passwordController.text}&userName=${nameController.text}&telephone=${phoneNumberController.text}&studentNumber=${studentNumberController.text}&major=$major');
+                '/login/sign_up/email_verification?account=$id&password=${Uri.encodeComponent(password)}&userName=$name&telephone=$phoneNumber&studentNumber=$studentNumber&major=$major');
             break;
           default: // 예외발생!
             logger.e('예외발생! - $next');
@@ -93,6 +98,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         designSize: const Size(375, 812),
         builder: (context, child) => Scaffold(
               appBar: AppBar(
+                scrolledUnderElevation: 0,
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
@@ -220,7 +226,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         hintText: '문자,숫자,특수문자 포함 5~20자',
                         isAnimatedHint: false,
                         onChanged: (value) {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                         },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
@@ -265,7 +273,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         hintText: '비밀번호 확인',
                         isAnimatedHint: false,
                         onChanged: (value) {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                         },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
@@ -322,7 +332,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         hintText: '이름',
                         isAnimatedHint: false,
                         onChanged: (value) {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                         },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_person.svg',
@@ -351,7 +363,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         hintText: '전화번호 (- 제외입력)',
                         isAnimatedHint: false,
                         onChanged: (value) {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                         },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_phone.svg',
@@ -380,7 +394,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         hintText: '학번',
                         isAnimatedHint: false,
                         onChanged: (value) {
-                          ref.read(signUpViewModelProvider.notifier).initState();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .initState();
                         },
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_tag.svg',
@@ -451,7 +467,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               ),
                               value: policyAgree,
                               onChanged: (bool? value) async {
-                                final agree = await DialogManager.instance.showPolicyDialog(context);
+                                final agree = await DialogManager.instance
+                                    .showPolicyDialog(context);
                                 setState(() {
                                   policyAgree = agree;
                                 });
@@ -505,27 +522,31 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             onPressed: state is UserModelLoading
                                 ? null
                                 : () async {
-                                    if (idVerified && major != null && policyAgree) {
+                                    if (idVerified &&
+                                        major != null &&
+                                        policyAgree) {
+                                      id = idController.text.trim();
+                                      password = passwordController.text.trim();
+                                      final passwordConfirm =
+                                          passwordConfirmController.text.trim();
+                                      name = nameController.text.trim();
+                                      phoneNumber =
+                                          phoneNumberController.text.trim();
+                                      studentNumber =
+                                          studentNumberController.text.trim();
+                                      major = major!.trim();
                                       await ref
                                           .read(
                                               signUpViewModelProvider.notifier)
                                           .signUpTemporary(
-                                              id: idController.text.trim(),
-                                              password: passwordController
-                                                  .text
-                                                  .trim(),
-                                              passwordConfirm:
-                                                  passwordConfirmController.text
-                                                      .trim(),
-                                              username:
-                                                  nameController.text.trim(),
-                                              telephone: phoneNumberController
-                                                  .text
-                                                  .trim(),
-                                              studentNumber:
-                                                  studentNumberController.text
-                                                      .trim(),
-                                              major: major!.trim());
+                                            id: id,
+                                            password: password,
+                                            passwordConfirm: passwordConfirm,
+                                            username: name,
+                                            telephone: phoneNumber,
+                                            studentNumber: studentNumber,
+                                            major: major!,
+                                          );
                                     } else if (!idVerified) {
                                       // 아이디 중복확인 필요
                                       DialogManager.instance.showAlertDialog(
@@ -540,7 +561,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                     } else if (!policyAgree) {
                                       DialogManager.instance.showAlertDialog(
                                         context: context,
-                                        content: '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
+                                        content:
+                                            '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
                                       );
                                     }
                                   },
@@ -648,9 +670,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         case "USR-212": // 새 비밀번호 확인 불일치
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-F100": // 아이디 규칙 X
-          return "* 아이디는 5~20자 이내 숫자,문자만 가능합니다!";
+          return "* 아이디는 5~20자 이내 영어 대소문자, 숫자만 가능합니다!";
         case "USR-F200": // 비밀번호 규칙 X
-          return "* 비밀번호는 5~20자 이내 숫자,문자,특수문자만 가능합니다!";
+          return "* 비밀번호는 5~20자 이내\n  대소문자, 숫자, 특수문자 !@#\$%^&*)( 만 가능합니다!";
         case "USR-F300": // 비밀번호 일치 X
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-F400": // 이름 공백

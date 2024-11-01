@@ -83,7 +83,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'email_verification',
                     builder: (_, state) => EmailVerificationScreen(
                       account: state.uri.queryParameters['account']!,
-                      password: state.uri.queryParameters['password']!,
+                      password: Uri.decodeComponent(state.uri.queryParameters['password']!),
                       userName: state.uri.queryParameters['userName']!,
                       telephone: state.uri.queryParameters['telephone']!,
                       studentNumber:

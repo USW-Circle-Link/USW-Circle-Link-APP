@@ -47,6 +47,7 @@ class ImageScreen extends StatelessWidget {
             height: double.infinity,
             color: Colors.black,
             child: PhotoView(
+              minScale: PhotoViewComputedScale.contained * 0.8,
               imageProvider: NetworkImage(
                 image,
               ),

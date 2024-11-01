@@ -68,9 +68,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(62.h),
           child: AppBar(
+            scrolledUnderElevation: 0,
             toolbarHeight: 62.h,
             centerTitle: true,
-            elevation: 0.0,
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             title: SizedBox(
@@ -252,8 +252,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                 )
                               : Container(
                                   color:
-                                      const Color.fromARGB(255, 164, 164, 164),
-                                  child: Center(child: Text('이미지 없음')),
+                                      const Color.fromARGB(255, 36, 36, 36),
+                                  child: Center(child: Text('')),
                                 ),
                         ),
                         SizedBox(height: 16.h),
@@ -349,7 +349,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                     Row(
                                       children: [
                                         Image.asset(
-                                          'assets/images/kakaologo.png',
+                                          'assets/images/Instagram_logo.png',
                                           height: 16.h,
                                           width: 16.w,
                                         ),
