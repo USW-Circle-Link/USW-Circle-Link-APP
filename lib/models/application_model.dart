@@ -31,12 +31,17 @@ class ApplicationModelError with _$ApplicationModelError implements Error {
   factory ApplicationModelError({
     required String message,
     ApplicationModelType? type,
+    String? code,
   }) = _ApplicationModelError;
 
   factory ApplicationModelError.fromJson(Map<String, dynamic> json) => _$ApplicationModelErrorFromJson(json);
 
   ApplicationModelError setType(ApplicationModelType type) {
-    return ApplicationModelError(message: message, type: type);
+    return ApplicationModelError(message: message, type: type, code:code);
+  }
+
+  ApplicationModelError setCode(String code) {
+    return ApplicationModelError(message: message, type: type, code:code);
   }
   
   @override

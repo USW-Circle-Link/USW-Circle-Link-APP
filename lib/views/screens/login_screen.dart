@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -224,14 +225,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     TextButton(
-                        onPressed: () {
-                          context.go('/login/find_id');
-                        },
-                        child: TextFontWidget.fontRegular(
-                            text: '아이디 찾기',
-                            fontSize: 14.sp,
-                            color: const Color(0xFF767676),
-                            fontweight: FontWeight.w400)),
+                      onPressed: () {
+                        context.go('/login/find_id');
+                      },
+                      child: AutoSizeText('아이디 찾기',
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              color: const Color(0xFF767676),
+                              fontWeight: FontWeight.w400)),
+                    ),
                     SizedBox(
                       width: 2.w,
                       height: 14.h,
@@ -242,14 +244,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {
-                          context.go('/login/find_pw');
-                        },
-                        child: TextFontWidget.fontRegular(
-                            text: '비밀번호 찾기',
-                            fontSize: 14.sp,
-                            color: const Color(0xFF767676),
-                            fontweight: FontWeight.w400)),
+                      onPressed: () {
+                        context.go('/login/find_pw');
+                      },
+                      child: AutoSizeText('비밀번호 찾기',
+                          style: TextStyle(
+                              fontSize: 12.sp,
+                              color: const Color(0xFF767676),
+                              fontWeight: FontWeight.w400)),
+                    ),
                     SizedBox(
                       width: 2.w,
                       height: 14.h,
@@ -263,11 +266,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         onPressed: () {
                           context.go('/login/sign_up');
                         },
-                        child: TextFontWidget.fontRegular(
-                            text: '회원가입',
-                            fontSize: 14.sp,
-                            color: const Color(0xFF767676),
-                            fontweight: FontWeight.w400))
+                        child: AutoSizeText('회원가입',
+                            style: TextStyle(
+                                fontSize: 12.sp,
+                                color: const Color(0xFF767676),
+                                fontWeight: FontWeight.w400))),
                   ],
                 )
               ],

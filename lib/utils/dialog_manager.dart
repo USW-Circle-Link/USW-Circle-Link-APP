@@ -24,8 +24,10 @@ class DialogManager {
     String? rightButtonText,
     Function()? onLeftButtonPressed,
     Function()? onRightButtonPressed,
+    barrierDismissible=true,
   }) async {
     await showDialog(
+      barrierDismissible: barrierDismissible,
       context: context,
       builder: (_) => AlertTextDialog(
         title: title ?? "알림",

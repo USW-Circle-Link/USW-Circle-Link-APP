@@ -22,9 +22,9 @@ import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
 final webviewRouter = GoRoute(
-  path: 'webview/:encodedUrl',
+  path: 'webview/:url',
   builder: (context, state) => WebViewScreen(
-    encodedUrl: state.pathParameters['encodedUrl']!,
+    url: state.pathParameters['url']!,
   ),
 );
 

@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -38,7 +39,11 @@ class LoggedOutMenu extends ConsumerWidget {
                             SvgPicture.asset(
                               'assets/images/profile.svg',
                             ),
-                            Icon(Icons.person, color: const Color(0xFFFDF5EC),size: 30,),
+                            Icon(
+                              Icons.person,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              size: 30,
+                            ),
                           ],
                         ),
                         SizedBox(width: 16.w),
@@ -79,7 +84,6 @@ class LoggedOutMenu extends ConsumerWidget {
                   title: '공지 사항',
                   svgPath: 'assets/images/menubar4.svg',
                   onTap: () {
-                    
                     context.go('/notices');
                   },
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
@@ -103,16 +107,14 @@ class LoggedOutMenu extends ConsumerWidget {
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-                     TextButton(
-                      onPressed:  _launchURL,
-                      
+                    TextButton(
+                      onPressed: _launchURL,
                       child: TextFontWidget.fontRegular(
                           text: '피드백',
                           fontSize: 12.sp,
                           color: Colors.black,
                           fontweight: FontWeight.w500),
                     ),
-
                   ],
                 ),
               ),
@@ -125,15 +127,14 @@ class LoggedOutMenu extends ConsumerWidget {
 }
 
 void _launchURL() async {
-    const url = feedback; 
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
-    } else {
-      throw 'URL을 열 수 없습니다: $url';
-    }
+  const url = feedback;
+  final Uri uri = Uri.parse(url);
+  if (await canLaunchUrl(uri)) {
+    await launchUrl(uri);
+  } else {
+    throw 'URL을 열 수 없습니다: $url';
   }
-
+}
 
 Widget buildDrawerItem({
   required String title,
@@ -165,11 +166,14 @@ Widget buildDrawerItem({
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),
-        child: TextFontWidget.fontRegular(
-          text: title,
-          fontSize: 15.sp,
-          color: const Color(0xff353549),
-          fontweight: FontWeight.w500,
+        child: AutoSizeText(
+          title,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 15.sp,
+            color: const Color(0xff353549),
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       trailing: SvgPicture.asset(trailingSvgPath),

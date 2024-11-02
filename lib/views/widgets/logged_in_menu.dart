@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -56,7 +57,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                             ),
                             Icon(
                               Icons.person,
-                              color: const Color(0xFFFDF5EC),
+                              color: const Color.fromARGB(255, 255, 255, 255),
                               size: 30,
                             ),
                           ],
@@ -144,13 +145,15 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                 buildDrawerItem(
                   title: '나의 소속 동아리',
                   svgPath: 'assets/images/menubar2.svg',
-                  onTap: () => context.go('/circle_list',extra: CircleListType.myCircles),
+                  onTap: () => context.go('/circle_list',
+                      extra: CircleListType.myCircles),
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
                 buildDrawerItem(
                   title: '지원 현황 확인하기',
                   svgPath: 'assets/images/menubar3.svg',
-                  onTap: () => context.go('/circle_list',extra: CircleListType.myApplications),
+                  onTap: () => context.go('/circle_list',
+                      extra: CircleListType.myApplications),
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
                 buildDrawerItem(
@@ -260,11 +263,14 @@ Widget buildDrawerItem({
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),
-        child: TextFontWidget.fontRegular(
-          text: title,
-          fontSize: 15.sp,
-          color: const Color(0xff353549),
-          fontweight: FontWeight.w500,
+        child: AutoSizeText(
+          title,
+          overflow: TextOverflow.ellipsis,
+          style: TextStyle(
+            fontSize: 15.sp,
+            color: const Color(0xff353549),
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
       trailing: SvgPicture.asset(trailingSvgPath),

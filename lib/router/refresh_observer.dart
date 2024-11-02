@@ -10,11 +10,6 @@ class RefreshObserver extends NavigatorObserver {
   final Ref ref;
 
   @override
-  void didPush(Route route, Route? previousRoute) async {
-    super.didPush(route, previousRoute);
-  }
-
-  @override
   void didPop(Route route, Route? previousRoute) async {
     logger.d('didPop - called!');
     logger.d(route);

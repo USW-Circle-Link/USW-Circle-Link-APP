@@ -94,7 +94,6 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  // TODO : icon padding 문제
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,

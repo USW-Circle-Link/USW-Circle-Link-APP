@@ -152,6 +152,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         .fetchAllCircleList();
                   },
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: !isAllSelected
+                        ? const Color(0xffffB052)
+                        : const Color(0xffEBEBEB),
                     backgroundColor: isAllSelected
                         ? const Color(0xffffB052)
                         : const Color(0xffEBEBEB),
@@ -182,6 +185,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         .fetchOpenCircleList();
                   },
                   style: ElevatedButton.styleFrom(
+                    foregroundColor: !isAllSelected
+                        ? const Color(0xffEBEBEB)
+                        : const Color(0xffffB052),
                     backgroundColor: !isAllSelected
                         ? const Color(0xffffB052)
                         : const Color(0xffEBEBEB),

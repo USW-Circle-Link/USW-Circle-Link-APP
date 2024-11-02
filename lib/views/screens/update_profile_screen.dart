@@ -159,7 +159,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
                   borderColor:
-                      isValid(state, FieldType.USERNAME) ? const Color(0xffDBDBDB) : Colors.red,
+                      isValid(state, FieldType.username) ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -195,7 +195,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.PHONE_NUMBER)
+                  borderColor: isValid(state, FieldType.phoneNumber)
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,
@@ -233,7 +233,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.STUDENT_NUMBER)
+                  borderColor: isValid(state, FieldType.studentNumber)
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,

@@ -31,16 +31,22 @@ dependencies:
   flutter:
     sdk: flutter
 
-  # UI
+  ## UI
   flutter_screenutil: ^5.9.3
-  flutter_svg: ^2.0.10+1
-  carousel_slider: ^5.0.0
-  smooth_page_indicator: ^1.0.0+2
+  # 스플래쉬
+  flutter_native_splash: ^2.4.2
+  # 웹뷰
   flutter_inappwebview: ^5.8.0
-
-  # The following adds the Cupertino Icons font to your application.
-  # Use with the CupertinoIcons class for iOS style icons.
+  # 텍스트
+  auto_size_text: ^3.0.0
+  flutter_html: ^3.0.0-beta.2
+  # 이미지
   cupertino_icons: ^1.0.2
+  flutter_svg: ^2.0.10+1
+  photo_view: ^0.15.0
+  carousel_slider: ^5.0.0
+  # 기타
+  smooth_page_indicator: ^1.0.0+2
 
   # State Management
   provider: ^6.1.2
@@ -66,6 +72,7 @@ dependencies:
   # Firebase
   firebase_messaging: ^15.0.4
   firebase_core: ^3.3.0
+  firebase_analytics: ^11.2.1
 
   # Notification
   flutter_local_notifications: ^17.2.3
@@ -73,17 +80,12 @@ dependencies:
   # International
   intl: ^0.19.0
 
-  # url_lancher
+  # URL
   url_launcher: ^6.3.0
 
   # Permission
   device_info_plus: ^10.1.2
-
   permission_handler: ^11.3.1
-  firebase_analytics: ^11.2.1
-
-  auto_size_text: ^3.0.0
-  photo_view: ^0.15.0
 
 dev_dependencies:
   flutter_test:
@@ -112,7 +114,6 @@ flutter:
   # the material Icons class.
   uses-material-design: true
   assets:
-    - assets/images/duck.png
     - assets/images/
 
   # To add assets to your application, add an assets section, like this:

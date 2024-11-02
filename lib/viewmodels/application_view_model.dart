@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/repositories/application_repository.dart';
@@ -69,6 +70,12 @@ class ApplicationViewModel
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {
       state = AsyncError(e, e.stackTrace);
+    } on DioException catch (e) {
+      final error = ApplicationModelError(
+          message: '에외발생 - $e',
+          code: e.message == "저장소에 토큰이 존재하지 않습니다" ? 'USR-F401' : null,
+          type: ApplicationModelType.checkAvailableForApplication);
+      state = AsyncError(error, error.stackTrace);
     } catch (e) {
       final error = ApplicationModelError(
           message: '에외발생 - $e',

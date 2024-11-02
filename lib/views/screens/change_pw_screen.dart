@@ -57,6 +57,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
         }
         DialogManager.instance.showAlertDialog(
           context:context,
+          barrierDismissible:false,
           content:'비밀번호가 변경되었습니다',
           onLeftButtonPressed: () {
             context.go('/login');
@@ -82,8 +83,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
-                title: Padding(
-                  // TODO : icon padding 문제
+                title: Padding(                  
                   padding: EdgeInsets.only(left: 22.w, right: 22.w),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -325,7 +325,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
         case "USR-F900": // 현재 비밀번호 공백
           return "* 현재 비밀번호를 입력해주세요!";
         case "USR-F200":
-          return "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
+          return "* 비밀번호는 5~20자 이내\n  대소문자, 숫자, 특수문자 !@#\$%^&*)( 만 가능합니다!";
         case "USR-F300":
           return "* 비밀번호가 일치하지 않습니다!";
         // 서버 에러코드
@@ -335,7 +335,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
         case "USR-212": // 새 비밀번호 확인 불일치
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-203": // 새 비밀번호 빈칸
-          return "* 비밀번호는 문자, 숫자를 포함한 6~20 이내로 작성해주세요!";
+          return "* 비밀번호는 5~20자 이내\n  대소문자, 숫자, 특수문자 !@#\$%^&*)( 만 가능합니다!";
         case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         default:
           return "* 비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
@@ -49,8 +51,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
           error = error as ApplicationModelError;
           switch (error.type) {
             case ApplicationModelType.checkAvailableForApplication:
-              DialogManager.instance.showAlertDialog(
-                  context: context, content: '이미 지원한 동아리 또는 소속된 동아리입니다!');
+              switch (error.code) {
+                case "USR-F401":
+                DialogManager.instance.showAlertDialog(
+                      context: context, content: '로그인 후 이용해 주시기 바랍니다!', onLeftButtonPressed: ()=>context.go('/login'));
+                  break;
+                default:
+                  DialogManager.instance.showAlertDialog(
+                      context: context, content: '이미 지원한 동아리 또는 소속된 동아리입니다!');
+              }
               break;
             default:
           }
@@ -271,7 +280,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                       child: Center(
                                         child: Icon(
                                           Icons.person,
-                                          color: const Color(0xFFFDF5EC),
+                                          color: const Color.fromARGB(
+                                              255, 255, 255, 255),
                                           size: 60,
                                         ),
                                       ),
@@ -287,21 +297,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                     SizedBox(height: 10.h),
                                     Row(
                                       children: [
-                                        Text(
-                                          clubIntroState.value!.clubName,
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            color: Colors.black,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1.h,
-                                            letterSpacing: -0.45.sp,
+                                        SizedBox(
+                                          width: 200.w,
+                                          child: Text(
+                                            clubIntroState.value!.clubName,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              color: Colors.black,
+                                              fontSize: 18.sp,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.h,
+                                              letterSpacing: -0.45.sp,
+                                            ),
                                           ),
                                         ),
-                                        SizedBox(width: 8.w),
-                                        SvgPicture.asset(
-                                            'assets/images/Vector10.svg'),
-                                        SizedBox(width: 8.w),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Row(
+                                      children: [
                                         Text(
                                           '동아리장',
                                           style: TextStyle(
@@ -314,20 +329,24 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                           ),
                                         ),
                                         SizedBox(width: 4.w),
-                                        Text(
-                                          clubIntroState.value!.leaderName,
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            color: const Color(0xFF353549),
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1.h,
-                                            letterSpacing: -0.35.sp,
+                                        SizedBox(
+                                          width: 140.w,
+                                          child: Text(
+                                            clubIntroState.value!.leaderName,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: TextStyle(
+                                              fontFamily: 'Pretendard',
+                                              color: const Color(0xFF353549),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.h,
+                                              letterSpacing: -0.35.sp,
+                                            ),
                                           ),
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 20.h),
+                                    SizedBox(height: 10.h),
                                     Row(
                                       children: [
                                         SvgPicture.asset(
@@ -336,15 +355,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                           width: 16.w,
                                         ),
                                         SizedBox(width: 6.w),
-                                        Text(
-                                          clubIntroState.value!.leaderHp,
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            color: const Color(0xFF353549),
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            height: 1.h,
-                                            letterSpacing: -0.35.sp,
+                                        InkWell(
+                                          onTap: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: clubIntroState
+                                                    .value!.leaderHp));
+                                          },
+                                          child: SizedBox(
+                                            width: 180.w,
+                                            child: Text(
+                                              clubIntroState.value!.leaderHp,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF353549),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -358,15 +388,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                           width: 16.w,
                                         ),
                                         SizedBox(width: 6.w),
-                                        Text(
-                                          '@${clubIntroState.value!.clubInsta}',
-                                          style: TextStyle(
-                                            fontFamily: 'Pretendard',
-                                            color: const Color(0xFF353549),
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w400,
-                                            height: 1.h,
-                                            letterSpacing: -0.35.sp,
+                                        InkWell(
+                                          onTap: () {
+                                            Clipboard.setData(ClipboardData(
+                                                text: clubIntroState
+                                                    .value!.clubInsta));
+                                          },
+                                          child: SizedBox(
+                                            width: 180.w,
+                                            child: Text(
+                                              '@${clubIntroState.value!.clubInsta}',
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                fontFamily: 'Pretendard',
+                                                color: const Color(0xFF353549),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                            ),
                                           ),
                                         ),
                                       ],
@@ -406,17 +447,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                           alignment: Alignment.topLeft,
                           height: 154.h,
                           padding: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
-                          child: Text(
-                            clubIntroState.value!.introContent,
-                            style: TextStyle(
-                              fontFamily: 'Pretendard',
-                              color: const Color(0xFF111111),
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              height: 1.h,
-                              letterSpacing: -0.35.sp,
-                            ),
-                          ),
+                          child: Html(data: clubIntroState.value!.introContent),
                         ),
                       ],
                     ),

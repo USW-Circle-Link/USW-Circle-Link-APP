@@ -36,7 +36,7 @@ class CircleItem extends StatelessWidget {
                     color: const Color.fromARGB(255, 164, 164, 164),
                     child: Icon(
                       Icons.person,
-                      color: const Color(0xFFFDF5EC),
+                      color: const Color.fromARGB(255, 255, 255, 255),
                       size: 60,
                     ),
                   );

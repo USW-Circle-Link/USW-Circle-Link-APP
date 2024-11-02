@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -101,12 +102,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                               SizedBox(
                                 height: 16.h,
                               ),
-                              TextFontWidget.fontRegular(
-                                text: state.data.noticeContent,
-                                fontSize: 14.sp,
-                                color: const Color(0xFF000000),
-                                fontweight: FontWeight.w400,
-                              ),
+                              Html(data: state.data.noticeContent),
                             ],
                           )
                         : Container(),

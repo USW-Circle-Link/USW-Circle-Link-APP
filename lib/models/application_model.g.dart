@@ -25,6 +25,8 @@ Map<String, dynamic> _$$ApplicationModelImplToJson(
 const _$ApplicationModelTypeEnumMap = {
   ApplicationModelType.getApplication: 'getApplication',
   ApplicationModelType.apply: 'apply',
+  ApplicationModelType.checkAvailableForApplication:
+      'checkAvailableForApplication',
 };
 
 _$ApplicationModelErrorImpl _$$ApplicationModelErrorImplFromJson(
@@ -32,6 +34,7 @@ _$ApplicationModelErrorImpl _$$ApplicationModelErrorImplFromJson(
     _$ApplicationModelErrorImpl(
       message: json['message'] as String,
       type: $enumDecodeNullable(_$ApplicationModelTypeEnumMap, json['type']),
+      code: json['code'] as String?,
     );
 
 Map<String, dynamic> _$$ApplicationModelErrorImplToJson(
@@ -39,4 +42,5 @@ Map<String, dynamic> _$$ApplicationModelErrorImplToJson(
     <String, dynamic>{
       'message': instance.message,
       'type': _$ApplicationModelTypeEnumMap[instance.type],
+      'code': instance.code,
     };

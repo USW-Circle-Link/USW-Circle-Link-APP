@@ -1,4 +1,4 @@
-enum FieldType { USERNAME, PHONE_NUMBER, STUDENT_NUMBER, MAJOR }
+enum FieldType { username, phoneNumber, studentNumber, major }
 
 class ErrorUtil {
   ErrorUtil._();
@@ -23,13 +23,13 @@ class ErrorUtil {
   bool isValid(String? code, FieldType fieldType) {
     switch (code) {
       case "USR-F400": // 이름 공백
-        return fieldType != FieldType.USERNAME;
+        return fieldType != FieldType.username;
       case "USR-F500": // 전화번호 형식에 맞지 않음
-        return fieldType != FieldType.PHONE_NUMBER;
+        return fieldType != FieldType.phoneNumber;
       case "USR-F600": // 학번이 공백 혹은 8자리가 아님
-        return fieldType != FieldType.STUDENT_NUMBER;
+        return fieldType != FieldType.studentNumber;
       case "USR-F700": // 학과가 선택되지 않음
-        return fieldType != FieldType.MAJOR;
+        return fieldType != FieldType.major;
       default:
         return true;
     }

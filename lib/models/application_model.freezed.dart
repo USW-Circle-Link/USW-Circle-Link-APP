@@ -197,6 +197,7 @@ ApplicationModelError _$ApplicationModelErrorFromJson(
 mixin _$ApplicationModelError {
   String get message => throw _privateConstructorUsedError;
   ApplicationModelType? get type => throw _privateConstructorUsedError;
+  String? get code => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -210,7 +211,7 @@ abstract class $ApplicationModelErrorCopyWith<$Res> {
           $Res Function(ApplicationModelError) then) =
       _$ApplicationModelErrorCopyWithImpl<$Res, ApplicationModelError>;
   @useResult
-  $Res call({String message, ApplicationModelType? type});
+  $Res call({String message, ApplicationModelType? type, String? code});
 }
 
 /// @nodoc
@@ -229,6 +230,7 @@ class _$ApplicationModelErrorCopyWithImpl<$Res,
   $Res call({
     Object? message = null,
     Object? type = freezed,
+    Object? code = freezed,
   }) {
     return _then(_value.copyWith(
       message: null == message
@@ -239,6 +241,10 @@ class _$ApplicationModelErrorCopyWithImpl<$Res,
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as ApplicationModelType?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -252,7 +258,7 @@ abstract class _$$ApplicationModelErrorImplCopyWith<$Res>
       __$$ApplicationModelErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, ApplicationModelType? type});
+  $Res call({String message, ApplicationModelType? type, String? code});
 }
 
 /// @nodoc
@@ -269,6 +275,7 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
   $Res call({
     Object? message = null,
     Object? type = freezed,
+    Object? code = freezed,
   }) {
     return _then(_$ApplicationModelErrorImpl(
       message: null == message
@@ -279,6 +286,10 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as ApplicationModelType?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -286,7 +297,8 @@ class __$$ApplicationModelErrorImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$ApplicationModelErrorImpl extends _ApplicationModelError {
-  _$ApplicationModelErrorImpl({required this.message, this.type}) : super._();
+  _$ApplicationModelErrorImpl({required this.message, this.type, this.code})
+      : super._();
 
   factory _$ApplicationModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$ApplicationModelErrorImplFromJson(json);
@@ -295,10 +307,12 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
   final String message;
   @override
   final ApplicationModelType? type;
+  @override
+  final String? code;
 
   @override
   String toString() {
-    return 'ApplicationModelError(message: $message, type: $type)';
+    return 'ApplicationModelError(message: $message, type: $type, code: $code)';
   }
 
   @override
@@ -307,12 +321,13 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
         (other.runtimeType == runtimeType &&
             other is _$ApplicationModelErrorImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.type, type) || other.type == type));
+            (identical(other.type, type) || other.type == type) &&
+            (identical(other.code, code) || other.code == code));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, type);
+  int get hashCode => Object.hash(runtimeType, message, type, code);
 
   @JsonKey(ignore: true)
   @override
@@ -332,7 +347,8 @@ class _$ApplicationModelErrorImpl extends _ApplicationModelError {
 abstract class _ApplicationModelError extends ApplicationModelError {
   factory _ApplicationModelError(
       {required final String message,
-      final ApplicationModelType? type}) = _$ApplicationModelErrorImpl;
+      final ApplicationModelType? type,
+      final String? code}) = _$ApplicationModelErrorImpl;
   _ApplicationModelError._() : super._();
 
   factory _ApplicationModelError.fromJson(Map<String, dynamic> json) =
@@ -342,6 +358,8 @@ abstract class _ApplicationModelError extends ApplicationModelError {
   String get message;
   @override
   ApplicationModelType? get type;
+  @override
+  String? get code;
   @override
   @JsonKey(ignore: true)
   _$$ApplicationModelErrorImplCopyWith<_$ApplicationModelErrorImpl>
