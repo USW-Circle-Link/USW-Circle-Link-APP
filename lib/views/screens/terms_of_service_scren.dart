@@ -13,6 +13,7 @@ class TermsOfServiceScreen extends StatelessWidget {
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
           title: Padding(

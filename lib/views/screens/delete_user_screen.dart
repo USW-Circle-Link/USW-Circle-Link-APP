@@ -49,7 +49,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
               case "ATTEMPT-503":
                 DialogManager.instance.showAlertDialog(
                   context: context,
-                  content: '최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!',
+                  content: '최대 시도 횟수를 초과했습니다!\n잠시후 다시 시도해주세요!',
                 );
                 break;
               case "EML-501":
