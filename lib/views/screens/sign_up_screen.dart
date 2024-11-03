@@ -672,7 +672,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         case "USR-F100": // 아이디 규칙 X
           return "* 아이디는 5~20자 이내 영어 대소문자, 숫자만 가능합니다!";
         case "USR-F200": // 비밀번호 규칙 X
-          return "* 비밀번호는 5~20자 이내\n  대소문자, 숫자, 특수문자 !@#\$%^&*)( 만 가능합니다!";
+          return "* 비밀번호는 영문자, 숫자, 특수문자 !@#\$%^&*)( 만 가능하고 종류별 하나 이상 포함하여 5~20자 이내로 구성되어야 합니다";
         case "USR-F300": // 비밀번호 일치 X
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-F400": // 이름 공백

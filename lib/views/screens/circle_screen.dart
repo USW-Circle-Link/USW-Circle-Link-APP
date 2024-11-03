@@ -8,6 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -34,6 +35,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
     final clubIntroState = ref.watch(clubIntroProvider(widget.clubId));
     final applicationState = ref.watch(applicationViewModelProvider);
     ref.listen(applicationViewModelProvider, (previous, next) {
+      logger.d(next);
       next.when(
         data: (data) {
           switch (data?.type) {
