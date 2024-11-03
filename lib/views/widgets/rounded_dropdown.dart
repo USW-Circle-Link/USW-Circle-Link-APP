@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -22,28 +23,27 @@ class RoundedDropdown extends StatelessWidget {
 
   final Function(String? value) onChanged;
 
-  const RoundedDropdown(
-      {Key? key,
-      this.globalKey,
-      this.marginLeft,
-      this.marginTop,
-      this.marginRight,
-      this.marginBottom,
-      this.leftTopCornerRadius,
-      this.rightTopCornerRadius,
-      this.leftBottomCornerRadius,
-      this.rightBottomCornerRadius,
-      this.borderWidth,
-      this.hintText,
-      required this.items,
-      this.borderColor,
-      this.backgroundColor,
-      this.isBackgroundFilled = false,
-      required this.onChanged,
-      this.initValue,
-      this.hintTextStyle,})
-      : super(key: key);
-
+  const RoundedDropdown({
+    Key? key,
+    this.globalKey,
+    this.marginLeft,
+    this.marginTop,
+    this.marginRight,
+    this.marginBottom,
+    this.leftTopCornerRadius,
+    this.rightTopCornerRadius,
+    this.leftBottomCornerRadius,
+    this.rightBottomCornerRadius,
+    this.borderWidth,
+    this.hintText,
+    required this.items,
+    this.borderColor,
+    this.backgroundColor,
+    this.isBackgroundFilled = false,
+    required this.onChanged,
+    this.initValue,
+    this.hintTextStyle,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -69,11 +69,10 @@ class RoundedDropdown extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
-        hint:
-          Text(
-            hintText??"",
-            style: hintTextStyle,
-          ),
+        hint: AutoSizeText(
+          hintText ?? "",
+          style: hintTextStyle,
+        ),
         value: initValue,
         onChanged: onChanged,
         items: items,

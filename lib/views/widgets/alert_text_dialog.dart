@@ -45,15 +45,15 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                       child: Column(
                         children: [
                           ...[
-                             widget.title == null
+                            widget.title == null
                                 ? Container()
                                 : Container(
                                     margin: EdgeInsets.only(bottom: 8.h),
                                     child: TextFontWidget.fontRegular(
-                                      text: widget.title!,
+                                      widget.title!,
                                       color: Color(0xFF000000),
                                       fontSize: 18.sp,
-                                      fontweight: FontWeight.w600,
+                                      fontWeight: FontWeight.w800,
                                       textAlign: TextAlign.center,
                                     ),
                                   ),
@@ -61,10 +61,10 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                           widget.content == null
                               ? Container()
                               : TextFontWidget.fontRegular(
-                                  text: widget.content!,
+                                  widget.content!,
                                   color: Color(0xFF767676),
                                   fontSize: 14.sp,
-                                  fontweight: FontWeight.w400,
+                                  fontWeight: FontWeight.w400,
                                   textAlign: TextAlign.center,
                                 ),
                         ],
@@ -98,10 +98,10 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                   ),
                                 ),
                                 child: TextFontWidget.fontRegular(
-                                  text: widget.leftButtonText!,
+                                  widget.leftButtonText!,
                                   color: Color(0xFF0085FF),
                                   fontSize: 18.sp,
-                                  fontweight: FontWeight.w500,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ),
@@ -129,10 +129,10 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                   ),
                                 ),
                                 child: TextFontWidget.fontRegular(
-                                  text: widget.rightButtonText!,
+                                  widget.rightButtonText!,
                                   color: Color(0xFF0085FF),
                                   fontSize: 18.sp,
-                                  fontweight: FontWeight.w500,
+                                  fontWeight: FontWeight.w800,
                                 ),
                               ),
                             ),
@@ -156,10 +156,10 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                           ),
                         ),
                         child: TextFontWidget.fontRegular(
-                          text: widget.leftButtonText!,
+                          widget.leftButtonText!,
                           color: Color(0xFF0085FF),
                           fontSize: 18.sp,
-                          fontweight: FontWeight.w500,
+                          fontWeight: FontWeight.w800,
                         ),
                       ),
                   ],

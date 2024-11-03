@@ -28,12 +28,10 @@ class TermsOfServiceScreen extends StatelessWidget {
                     'assets/images/ic_back_arrow.svg',
                   ),
                 ),
-                Text(
+                TextFontWidget.fontRegular(
                   '이용 약관',
-                  style: TextStyle(
                     fontSize: 18.sp,
                     fontWeight: FontWeight.bold,
-                  ),
                 ),
               ],
             ),
@@ -47,9 +45,10 @@ class TermsOfServiceScreen extends StatelessWidget {
               children: [
                 // 이용약관 텍스트
                 TextFontWidget.fontRegular(
-                  text: content_of_terms_of_service,
+                  content_of_terms_of_service,
                   fontSize: 12.sp,
-                  color: Colors.black, fontweight: FontWeight.w300,
+                  color: Colors.black,
+                  fontWeight: FontWeight.w300,
                 ),
               ],
             ),

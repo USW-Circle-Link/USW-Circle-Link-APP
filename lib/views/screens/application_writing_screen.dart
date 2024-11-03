@@ -96,10 +96,10 @@ class _ApplicationWritingScreenState
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                        text: '지원하기',
+                        '지원하기',
                         fontSize: 18.sp,
                         color: Color(0xFF111111),
-                        fontweight: FontWeight.w600,
+                        fontWeight: FontWeight.w500,
                       ),
                       SizedBox(width: 52.w, height: 52.h),
                     ],
@@ -122,10 +122,11 @@ class _ApplicationWritingScreenState
                                   width: 5.w,
                                 ),
                                 TextFontWidget.fontRegular(
-                                    text: '지원서 작성',
-                                    fontSize: 14.sp,
-                                    color: const Color(0xFF353549),
-                                    fontweight: FontWeight.w600),
+                                  '지원서 작성',
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF353549),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -135,30 +136,32 @@ class _ApplicationWritingScreenState
                               width: double.infinity,
                               height: 56.h,
                               child: OutlinedButton(
-                                  onPressed: state.isLoading
-                                      ? null
-                                      : () async {
-                                          await ref
-                                              .read(applicationViewModelProvider
-                                                  .notifier)
-                                              .getApplication(widget.clubId);
-                                        },
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: const Color(0xFF000000),
-                                    foregroundColor: const Color(0xFFFFFFFF),
-                                    side: const BorderSide(
-                                      color: Colors.transparent,
-                                      width: 0.0,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
+                                onPressed: state.isLoading
+                                    ? null
+                                    : () async {
+                                        await ref
+                                            .read(applicationViewModelProvider
+                                                .notifier)
+                                            .getApplication(widget.clubId);
+                                      },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: const Color(0xFF000000),
+                                  foregroundColor: const Color(0xFFFFFFFF),
+                                  side: const BorderSide(
+                                    color: Colors.transparent,
+                                    width: 0.0,
                                   ),
-                                  child: TextFontWidget.fontRegular(
-                                      text: '지원서 작성',
-                                      fontSize: 18.sp,
-                                      color: const Color(0xFFFFFFFF),
-                                      fontweight: FontWeight.w600)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                ),
+                                child: TextFontWidget.fontRegular(
+                                  '지원서 작성',
+                                  fontSize: 18.sp,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
                             ),
                             SizedBox(
                               height: 20.h,
@@ -169,11 +172,10 @@ class _ApplicationWritingScreenState
                                 SizedBox(
                                   width: 5.w,
                                 ),
-                                TextFontWidget.fontRegular(
-                                    text: '지원서 제출 시 유의사항',
+                                TextFontWidget.fontRegular('지원서 제출 시 유의사항',
                                     fontSize: 16.sp,
                                     color: const Color(0xFF353549),
-                                    fontweight: FontWeight.w900),
+                                    fontWeight: FontWeight.w500),
                               ],
                             ),
                             SizedBox(
@@ -185,7 +187,7 @@ class _ApplicationWritingScreenState
                                 text: "지원서를 작성 완료 후 ",
                                 style: TextStyle(
                                     height: 2,
-                                    fontFamily: 'Pretendard-Regular',
+                                    fontFamily: 'SUIT',
                                     fontSize: 13.sp,
                                     color: const Color(0xFF989898),
                                     fontWeight: FontWeight.w400),
@@ -194,7 +196,7 @@ class _ApplicationWritingScreenState
                                     text: "지원서 제출하기 ",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   TextSpan(
                                     text: "버튼을 눌러 주세요.\n지원서를 잘못 작성할 경우, 책임은 ",
@@ -203,7 +205,7 @@ class _ApplicationWritingScreenState
                                     text: "본인",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   TextSpan(
                                     text: "에게 있습니다.\n신중히 작성후 ",
@@ -212,7 +214,7 @@ class _ApplicationWritingScreenState
                                     text: "지원 완료 ",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   TextSpan(text: "버튼을 눌러 주세요.")
                                 ],
@@ -255,10 +257,11 @@ class _ApplicationWritingScreenState
                                   },
                                 ),
                                 TextFontWidget.fontRegular(
-                                    text: '유의사항을 확인했습니다',
-                                    fontSize: 14.sp,
-                                    color: const Color(0xFF353549),
-                                    fontweight: FontWeight.w600),
+                                  '유의사항을 확인했습니다',
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF353549),
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ],
                             ),
                             SizedBox(
@@ -268,38 +271,40 @@ class _ApplicationWritingScreenState
                               width: double.infinity,
                               height: 56.h,
                               child: OutlinedButton(
-                                  onPressed: () async {
-                                    if (isDone && state.hasValue) {
-                                      await ref
-                                          .read(applicationViewModelProvider
-                                              .notifier)
-                                          .apply(
-                                              clubId: widget.clubId,
-                                              aplictGoogleFormUrl:
-                                                  state.value?.data ?? "");
-                                    } else {
-                                      DialogManager.instance.showAlertDialog(
-                                        context: context,
-                                        content: "'유의사항을 확인했습니다' 체크 부탁드립니다!",
-                                      );
-                                    }
-                                  },
-                                  style: OutlinedButton.styleFrom(
-                                    backgroundColor: const Color(0xffffB052),
-                                    foregroundColor: const Color(0xFFFFFFFF),
-                                    side: const BorderSide(
-                                      width: 0.0,
-                                      color: Colors.transparent,
-                                    ),
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(8.r),
-                                    ),
+                                onPressed: () async {
+                                  if (isDone && state.hasValue) {
+                                    await ref
+                                        .read(applicationViewModelProvider
+                                            .notifier)
+                                        .apply(
+                                            clubId: widget.clubId,
+                                            aplictGoogleFormUrl:
+                                                state.value?.data ?? "");
+                                  } else {
+                                    DialogManager.instance.showAlertDialog(
+                                      context: context,
+                                      content: "'유의사항을 확인했습니다' 체크 부탁드립니다!",
+                                    );
+                                  }
+                                },
+                                style: OutlinedButton.styleFrom(
+                                  backgroundColor: const Color(0xffffB052),
+                                  foregroundColor: const Color(0xFFFFFFFF),
+                                  side: const BorderSide(
+                                    width: 0.0,
+                                    color: Colors.transparent,
                                   ),
-                                  child: TextFontWidget.fontRegular(
-                                      text: '지원서 제출하기',
-                                      fontSize: 18.sp,
-                                      color: const Color(0xFFFFFFFF),
-                                      fontweight: FontWeight.w600)),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(8.r),
+                                  ),
+                                ),
+                                child: TextFontWidget.fontRegular(
+                                  '지원서 제출하기',
+                                  fontSize: 18.sp,
+                                  color: const Color(0xFFFFFFFF),
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
                             ),
                           ],
                         ),

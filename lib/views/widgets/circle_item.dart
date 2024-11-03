@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleItem extends StatelessWidget {
   final CircleListData circle;
@@ -44,13 +45,11 @@ class CircleItem extends StatelessWidget {
               ),
             ),
             SizedBox(height: 8.h),
-            Text(
+            TextFontWidget.fontRegular(
               overflow: TextOverflow.ellipsis,
               circle.clubName,
-              style: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-              ),
+              fontSize: 14.sp,
+              fontWeight: FontWeight.w600,
             ),
           ],
         ),

@@ -55,7 +55,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                           ..selectedMajor = null
                           ..selectedCollege = newValue;
                       });
-                      
+
                       widget.onChanged
                           ?.call(widget.selectedCollege, widget.selectedMajor);
                     },
@@ -63,14 +63,12 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(
+                        child: TextFontWidget.fontRegular(
                           value,
-                          style: TextStyle(
-                            color: Color(0xFF000000),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 0.1,
-                        ),
+                          color: Color(0xFF000000),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          height: 0.1,
                         ),
                       );
                     }).toList(),
@@ -96,7 +94,8 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                     globalKey: _key,
                     initValue: widget.selectedMajor,
                     onChanged: (String? newValue) {
-                      if (isUserChange) { // 단과대학 변경 시 state reset 에서도 onChanged 가 호출됨!
+                      if (isUserChange) {
+                        // 단과대학 변경 시 state reset 에서도 onChanged 가 호출됨!
                         widget
                           ..selectedMajor = newValue
                           ..onChanged?.call(widget.selectedCollege, newValue);
@@ -106,14 +105,12 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                         .map<DropdownMenuItem<String>>((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(
+                        child: TextFontWidget.fontRegular(
                           value,
-                          style: TextStyle(
-                            color: Color(0xFF000000),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            height: 0.1,
-                          ),
+                          color: Color(0xFF000000),
+                          fontSize: 14.sp,
+                          fontWeight: FontWeight.w400,
+                          height: 0.1,
                         ),
                       );
                     }).toList(),
@@ -156,10 +153,10 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                       ),
                     ),
                     child: TextFontWidget.fontRegular(
-                      text: "확인",
+                      "확인",
                       color: Color(0xFF0085FF),
                       fontSize: 18.sp,
-                      fontweight: FontWeight.w500,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

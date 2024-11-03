@@ -53,10 +53,10 @@ class ImageScreen extends StatelessWidget {
               ),
               errorBuilder: (context, error, stackTrace) {
                 return TextFontWidget.fontRegular(
-                  text: '이미지를 불러오지 못했습니다...',
+                  '이미지를 불러오지 못했습니다...',
                   fontSize: 14.sp,
                   color: Colors.white,
-                  fontweight: FontWeight.w400,
+                  fontWeight: FontWeight.w400,
                 );
               },
             ),

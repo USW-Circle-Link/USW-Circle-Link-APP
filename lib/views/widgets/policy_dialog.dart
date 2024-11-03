@@ -35,20 +35,20 @@ class _PolicyDialogState extends State<PolicyDialog> {
                       'assets/images/ic_back_arrow.svg',
                     ),
                   ),
-                  Text(
+                  TextFontWidget.fontRegular(
                     '이용 약관',
-                    style: TextStyle(
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ],
               ),
             ),
           ),
           bottomNavigationBar: Padding(
-            padding: EdgeInsets.fromLTRB(8.w,0,8.w,8.h),
-            child: OutlinedButton(onPressed: ()=>Navigator.of(context).pop(true), child: Text('동의')),
+            padding: EdgeInsets.fromLTRB(8.w, 0, 8.w, 8.h),
+            child: OutlinedButton(
+                onPressed: () => Navigator.of(context).pop(true),
+                child: TextFontWidget.fontRegular('동의')),
           ),
           body: SingleChildScrollView(
             child: Padding(
@@ -58,10 +58,10 @@ class _PolicyDialogState extends State<PolicyDialog> {
                 children: [
                   // 이용약관 텍스트
                   TextFontWidget.fontRegular(
-                    text: content_of_terms_of_service,
+                    content_of_terms_of_service,
                     fontSize: 12.sp,
                     color: Colors.black,
-                    fontweight: FontWeight.w300,
+                    fontWeight: FontWeight.w300,
                   ),
                 ],
               ),

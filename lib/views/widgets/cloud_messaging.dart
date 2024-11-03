@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CloudMessaging extends ConsumerStatefulWidget {
   final String text;
@@ -23,7 +24,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 4.h, 0,4.h),
+      padding: EdgeInsets.fromLTRB(16.w, 4.h, 0, 4.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -37,12 +38,10 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: Text(
+                  child: TextFontWidget.fontRegular(
                     widget.text,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
                     overflow: _isExpanded
                         ? TextOverflow.visible
                         : TextOverflow.ellipsis,
@@ -51,7 +50,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                 ),
                 SizedBox(width: 8.w),
                 IconButton(
-                  icon: Icon(Icons.close, size: 16.sp,color: Colors.grey),
+                  icon: Icon(Icons.close, size: 16.sp, color: Colors.grey),
                   onPressed: () {
                     ref
                         .read(firebaseCloudMessagingViewModelProvider.notifier)
@@ -64,14 +63,12 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
           if (_isExpanded) // 확장 상태에서 짤린 부분만 보여주기
             Padding(
               padding: EdgeInsets.only(top: 4.h),
-              child: Text(
+              child: TextFontWidget.fontRegular(
                 widget.text.length > 35
                     ? widget.text.substring(35) // 짤린 부분만 보여줌
                     : '', // 메시지가 짧을 경우 빈 문자열
-                style: TextStyle(
-                  fontSize: 12.sp,
-                  fontWeight: FontWeight.w400,
-                ),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w400,
               ),
             ),
         ],

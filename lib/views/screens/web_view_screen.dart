@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -6,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class WebViewScreen extends StatefulWidget {
   const WebViewScreen({Key? key, required this.url}) : super(key: key);
@@ -78,7 +78,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
         ),
         body: SafeArea(
           child: PopScope(
-            onPopInvokedWithResult:(didPop, result) => _goBack(context),
+            onPopInvokedWithResult: (didPop, result) => _goBack(context),
             child: Column(
               children: <Widget>[
                 progress < 1.0
@@ -89,7 +89,11 @@ class _WebViewScreenState extends State<WebViewScreen> {
                   child: Stack(
                     children: [
                       uri == null || !uri.hasAbsolutePath
-                          ? Center(child: AutoSizeText('페이지를 불러올 수 없습니다...'))
+                          ? Center(
+                              child: TextFontWidget.fontRegular(
+                                '페이지를 불러올 수 없습니다...',
+                              ),
+                            )
                           : InAppWebView(
                               key: webViewKey,
                               initialUrlRequest: URLRequest(url: uri),

@@ -37,10 +37,10 @@ class NoticeList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFontWidget.fontRegular(
-                          text: noticeModel.data[index].noticeTitle,
+                          noticeModel.data[index].noticeTitle,
                           fontSize: 18.sp,
                           color: const Color(0xFF000000),
-                          fontweight: FontWeight.w600,
+                          fontWeight: FontWeight.w500,
                         ),
                         SizedBox(
                           height: 20.h,
@@ -49,18 +49,18 @@ class NoticeList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             TextFontWidget.fontRegular(
-                              text: noticeModel.data[index].adminName,
+                              noticeModel.data[index].adminName,
                               fontSize: 14.sp,
                               color: const Color(0xFF767676),
-                              fontweight: FontWeight.w400,
+                              fontWeight: FontWeight.w400,
                             ),
                             TextFontWidget.fontRegular(
-                              text: noticeModel.data[index].noticeCreatedAt
+                              noticeModel.data[index].noticeCreatedAt
                                   .parseDateTime()
                                   .getFormattedString(),
                               fontSize: 14.sp,
                               color: const Color(0xFF767676),
-                              fontweight: FontWeight.w400,
+                              fontWeight: FontWeight.w400,
                             ),
                           ],
                         ),
@@ -71,6 +71,6 @@ class NoticeList extends StatelessWidget {
               );
             },
           )
-        : Text('공지사항이 없습니다!');
+        : TextFontWidget.fontRegular('공지사항이 없습니다!');
   }
 }

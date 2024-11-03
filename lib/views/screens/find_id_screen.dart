@@ -90,10 +90,11 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                          text: '아이디 찾기',
-                          fontSize: 18.sp,
-                          color: Color(0xFF111111),
-                          fontweight: FontWeight.w600),
+                        '아이디 찾기',
+                        fontSize: 18.sp,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.w800,
+                      ),
                       SizedBox(width: 52.w, height: 52.h)
                     ],
                   ),
@@ -123,10 +124,11 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextFontWidget.fontRegular(
-                                    text: '@ suwon.ac.kr',
-                                    fontSize: 16.sp,
-                                    color: Colors.black,
-                                    fontweight: FontWeight.w400)
+                                  '@ suwon.ac.kr',
+                                  fontSize: 16.sp,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w400,
+                                )
                               ],
                             ),
                           ),
@@ -144,16 +146,18 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                             text: TextSpan(
                               text: "* 입력하신 메일로 ",
                               style: TextStyle(
-                                  fontFamily: 'Pretendard-Regular',
-                                  fontSize: 12.sp,
-                                  color: const Color(0xFF989898),
-                                  fontWeight: FontWeight.w400),
+                                fontFamily: 'SUIT',
+                                fontSize: 12.sp,
+                                color: const Color(0xFF989898),
+                                fontWeight: FontWeight.w400,
+                              ),
                               children: const [
                                 TextSpan(
                                   text: "가입 정보",
                                   style: TextStyle(
-                                      color: Color(0xFFFFB052),
-                                      fontWeight: FontWeight.w600),
+                                    color: Color(0xFFFFB052),
+                                    fontWeight: FontWeight.w800,
+                                  ),
                                 ),
                                 TextSpan(
                                   text: '를 전송합니다',
@@ -170,31 +174,33 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state is FindIdModelLoading
-                                ? null
-                                : () async {
-                                    ref
-                                        .read(findIdViewModelProvider.notifier)
-                                        .findId(
-                                            email: emailEditController.text
-                                                .trim());
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                          onPressed: state is FindIdModelLoading
+                              ? null
+                              : () async {
+                                  ref
+                                      .read(findIdViewModelProvider.notifier)
+                                      .findId(
+                                          email:
+                                              emailEditController.text.trim());
+                                },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xffffB052),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '이메일 전송',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '이메일 전송',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 12.h,
@@ -203,29 +209,30 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
-                              final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                          onPressed: () {
+                            final encodedUrl = Uri.encodeComponent(
+                                'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                              context
-                                  .push('/login/find_id/webview/$encodedUrl');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                            context.push('/login/find_id/webview/$encodedUrl');
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xffffB052),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '포털로 이동하기',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '포털로 이동하기',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 12.h,
@@ -234,25 +241,27 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
-                              context.go('/login');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000000),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                          onPressed: () {
+                            context.go('/login');
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xFF000000),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '로그인 하러가기',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '로그인 하러가기',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ],
                   ),

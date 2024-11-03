@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -77,10 +76,11 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     SizedBox(width: 4.w),
                     TextFontWidget.jalnan2(
-                        text: '동구라미',
-                        fontSize: 20.sp,
-                        color: const Color(0xffFFC01D),
-                        fontweight: FontWeight.w400),
+                      '동구라미',
+                      fontSize: 20.sp,
+                      color: const Color(0xffFFC01D),
+                      fontWeight: FontWeight.w400,
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -90,24 +90,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: TextSpan(
                     text: "재미있는 동아리 없을까?\n",
                     style: TextStyle(
-                        fontFamily: 'Pretendard-Regular',
-                        fontSize: 18.sp,
-                        color: const Color(0xFF353549),
-                        fontWeight: FontWeight.w400),
+                      fontFamily: 'SUIT',
+                      fontSize: 18.sp,
+                      color: const Color(0xFF353549),
+                      fontWeight: FontWeight.w400,
+                    ),
                     children: const [
                       TextSpan(text: "내 "),
                       TextSpan(
                         text: '취향',
                         style: TextStyle(
                             color: Color(0xffffB052),
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w800),
                       ),
                       TextSpan(text: "에 딱 맞는 "),
                       TextSpan(
                         text: '동아리 찾기',
                         style: TextStyle(
                             color: Color(0xffffB052),
-                            fontWeight: FontWeight.w600),
+                            fontWeight: FontWeight.w800),
                       ),
                     ],
                   ),
@@ -176,12 +177,14 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   height: 8.h,
                 ),
                 Visibility(
-                    visible: state is UserModelError,
-                    child: TextFontWidget.fontRegular(
-                        text: getErrorMessage(state),
-                        fontSize: 12.sp,
-                        color: const Color(0xFFFF3F3F),
-                        fontweight: FontWeight.w400)),
+                  visible: state is UserModelError,
+                  child: TextFontWidget.fontRegular(
+                    getErrorMessage(state),
+                    fontSize: 12.sp,
+                    color: const Color(0xFFFF3F3F),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
                 SizedBox(
                   height: 15.h,
                 ),
@@ -189,34 +192,36 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   width: double.infinity,
                   height: 56.h,
                   child: OutlinedButton(
-                      onPressed: state is UserModelLoading
-                          ? null
-                          : () async {
-                              final id = idController.text.trim(),
-                                  password = passwordController.text.trim();
-                              logger.d('id:$id / pw:$password');
+                    onPressed: state is UserModelLoading
+                        ? null
+                        : () async {
+                            final id = idController.text.trim(),
+                                password = passwordController.text.trim();
+                            logger.d('id:$id / pw:$password');
 
-                              await ref
-                                  .read(loginViewModelProvider.notifier)
-                                  .login(
-                                    id: id,
-                                    password: password,
-                                  );
-                            },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: const Color(0xffffB052),
-                        foregroundColor: const Color(0xffffffff),
-                        side: const BorderSide(
-                            width: 0.0, color: Colors.transparent),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
+                            await ref
+                                .read(loginViewModelProvider.notifier)
+                                .login(
+                                  id: id,
+                                  password: password,
+                                );
+                          },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color(0xffffB052),
+                      foregroundColor: const Color(0xffffffff),
+                      side: const BorderSide(
+                          width: 0.0, color: Colors.transparent),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
                       ),
-                      child: TextFontWidget.fontRegular(
-                          text: '로그인',
-                          fontSize: 18.sp,
-                          color: const Color(0xFFFFFFFF),
-                          fontweight: FontWeight.w600)),
+                    ),
+                    child: TextFontWidget.fontRegular(
+                      '로그인',
+                      fontSize: 18.sp,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
                 SizedBox(
                   height: 10.h,
@@ -228,11 +233,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: () {
                         context.go('/login/find_id');
                       },
-                      child: AutoSizeText('아이디 찾기',
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              color: const Color(0xFF767676),
-                              fontWeight: FontWeight.w400)),
+                      child: TextFontWidget.fontRegular(
+                        '아이디 찾기',
+                        fontSize: 12.sp,
+                        color: const Color(0xFF767676),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     SizedBox(
                       width: 2.w,
@@ -247,11 +253,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       onPressed: () {
                         context.go('/login/find_pw');
                       },
-                      child: AutoSizeText('비밀번호 찾기',
-                          style: TextStyle(
-                              fontSize: 12.sp,
-                              color: const Color(0xFF767676),
-                              fontWeight: FontWeight.w400)),
+                      child: TextFontWidget.fontRegular(
+                        '비밀번호 찾기',
+                        fontSize: 12.sp,
+                        color: const Color(0xFF767676),
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     SizedBox(
                       width: 2.w,
@@ -263,14 +270,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                     ),
                     TextButton(
-                        onPressed: () {
-                          context.go('/login/sign_up');
-                        },
-                        child: AutoSizeText('회원가입',
-                            style: TextStyle(
-                                fontSize: 12.sp,
-                                color: const Color(0xFF767676),
-                                fontWeight: FontWeight.w400))),
+                      onPressed: () {
+                        context.go('/login/sign_up');
+                      },
+                      child: TextFontWidget.fontRegular(
+                        '회원가입',
+                        fontSize: 12.sp,
+                        color: const Color(0xFF767676),
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ],
                 )
               ],
@@ -289,7 +298,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         case "USR-211":
           return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
         case "ATTEMPT-503":
-          return "* 최대 시도 횟수를 초과했습니다!\n1분후 다시 시도해주세요!";
+          return "* 1분 최대 시도 횟수를 초과했습니다!\n잠시후 다시 시도해주세요!";
         default:
           return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
       }

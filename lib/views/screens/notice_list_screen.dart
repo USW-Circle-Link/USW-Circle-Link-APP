@@ -53,10 +53,11 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
                   ),
                 ),
                 TextFontWidget.fontRegular(
-                    text: '공지사항',
-                    fontSize: 18.sp,
-                    color: Color(0xFF111111),
-                    fontweight: FontWeight.w600),
+                  '공지사항',
+                  fontSize: 18.sp,
+                  color: Color(0xFF111111),
+                  fontWeight: FontWeight.w800,
+                ),
                 SizedBox(width: 52.w, height: 52.h)
               ],
             ),
@@ -81,7 +82,9 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
                   break;
                 default:
               }
-              return Text('공지사항을 불러오지 못했습니다...');
+              return TextFontWidget.fontRegular(
+                '공지사항을 불러오지 못했습니다...',
+              );
             },
             loading: () => CircularProgressIndicator(),
           ),

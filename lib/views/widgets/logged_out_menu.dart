@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -48,10 +47,11 @@ class LoggedOutMenu extends ConsumerWidget {
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
-                            text: '로그인',
-                            fontSize: 18.sp,
-                            color: Colors.black,
-                            fontweight: FontWeight.w600),
+                          '로그인',
+                          fontSize: 18.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                        ),
                         SvgPicture.asset(
                           'assets/images/>.svg',
                         ),
@@ -102,18 +102,20 @@ class LoggedOutMenu extends ConsumerWidget {
                     TextButton(
                       onPressed: () => context.go('/tems_of_serice'),
                       child: TextFontWidget.fontRegular(
-                          text: '이용약관',
-                          fontSize: 12.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w500),
+                        '이용약관',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     TextButton(
                       onPressed: _launchURL,
                       child: TextFontWidget.fontRegular(
-                          text: '피드백',
-                          fontSize: 12.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w500),
+                        '피드백',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
                 ),
@@ -166,14 +168,12 @@ Widget buildDrawerItem({
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),
-        child: AutoSizeText(
+        child: TextFontWidget.fontRegular(
           title,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 15.sp,
-            color: const Color(0xff353549),
-            fontWeight: FontWeight.w500,
-          ),
+          fontSize: 15.sp,
+          color: const Color(0xff353549),
+          fontWeight: FontWeight.w400,
         ),
       ),
       trailing: SvgPicture.asset(trailingSvgPath),

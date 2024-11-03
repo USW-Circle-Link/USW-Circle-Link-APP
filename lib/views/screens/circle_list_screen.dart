@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleListScreen extends ConsumerWidget {
   final CircleListType listType;
@@ -48,16 +49,13 @@ class CircleListScreen extends ConsumerWidget {
                     ),
                   ),
                   SizedBox(width: 62.25.w),
-                  Text(
+                  TextFontWidget.fontRegular(
                     listType.title,
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      height: 1.111.h,
-                      letterSpacing: -0.45.sp,
-                    ),
+                    color: Colors.black,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w800,
+                    height: 1.111.h,
+                    letterSpacing: -0.45.sp,
                   ),
                   Expanded(child: Container()),
                 ],
@@ -66,27 +64,35 @@ class CircleListScreen extends ConsumerWidget {
           ),
         ),
         body: state.when(
-          data: (data) => data.data.isNotEmpty ? Padding(
-            padding: EdgeInsets.fromLTRB(0, 24.h, 0, 0),
-            child: ListView.builder(
-              itemCount: data.data.length,
-              itemBuilder: (context, index) {
-                final circle = data.data[index];
-                return CircleDetailItem(
-                  clubId: circle.clubId,
-                  leader: circle.leaderName,
-                  name: circle.clubName,
-                  imageUrl: circle.mainPhotoPath,
-                  leaderHp: circle.leaderHp,
-                  instaId: circle.clubInsta,
-                  status: circle.aplictStatus,
-                );
-              },
-            ),
-          ) : Center(child: Text('${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.')),
+          data: (data) => data.data.isNotEmpty
+              ? Padding(
+                  padding: EdgeInsets.fromLTRB(0, 24.h, 0, 0),
+                  child: ListView.builder(
+                    itemCount: data.data.length,
+                    itemBuilder: (context, index) {
+                      final circle = data.data[index];
+                      return CircleDetailItem(
+                        clubId: circle.clubId,
+                        leader: circle.leaderName,
+                        name: circle.clubName,
+                        imageUrl: circle.mainPhotoPath,
+                        leaderHp: circle.leaderHp,
+                        instaId: circle.clubInsta,
+                        status: circle.aplictStatus,
+                      );
+                    },
+                  ),
+                )
+              : Center(
+                  child: TextFontWidget.fontRegular(
+                    '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
+                  ),
+                ),
           loading: () => Center(child: CircularProgressIndicator()),
-          error: (error, stack) =>
-              Center(child: Text('동아리 목록 조회에 실패하였습니다.')),
+          error: (error, stack) => Center(
+              child: TextFontWidget.fontRegular(
+            '동아리 목록 조회에 실패하였습니다.',
+          )),
         ),
       ),
     );

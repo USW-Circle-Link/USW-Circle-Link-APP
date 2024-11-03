@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class RoundedTextField extends StatelessWidget {
   final TextEditingController? textEditController;
@@ -120,7 +121,11 @@ class RoundedTextField extends StatelessWidget {
           ),
         ),
         hintText: isAnimatedHint ? "" : hintText ?? "",
-        label: isAnimatedHint ? Text(hintText ?? "") : null,
+        label: isAnimatedHint
+            ? TextFontWidget.fontRegular(
+                hintText ?? "",
+              )
+            : null,
         prefixIcon: prefixIcon,
         suffixIcon: suffixIcon,
         hintStyle: hintStyle

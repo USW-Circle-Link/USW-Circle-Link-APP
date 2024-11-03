@@ -1,4 +1,3 @@
-import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -64,15 +63,17 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         ),
                         SizedBox(width: 16.w),
                         TextFontWidget.fontRegular(
-                            text: widget.state.data.userName,
-                            fontSize: 18.sp,
-                            color: Colors.black,
-                            fontweight: FontWeight.w600),
+                          widget.state.data.userName,
+                          fontSize: 18.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                        ),
                         TextFontWidget.fontRegular(
-                            text: ' 님',
-                            fontSize: 14.sp,
-                            color: const Color(0xFF767676),
-                            fontweight: FontWeight.w500),
+                          ' 님',
+                          fontSize: 14.sp,
+                          color: const Color(0xFF767676),
+                          fontWeight: FontWeight.w600,
+                        ),
                       ],
                     )),
                   ),
@@ -112,10 +113,10 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                           TextButton(
                             onPressed: () => context.go('/update_profile'),
                             child: TextFontWidget.fontRegular(
-                              text: '내 정보 수정',
+                              '내 정보 수정',
                               fontSize: 12.sp,
                               color: const Color(0xff353549),
-                              fontweight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                           SizedBox(
@@ -130,10 +131,10 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                               context.go('/change_pw');
                             },
                             child: TextFontWidget.fontRegular(
-                              text: '비밀번호 변경',
+                              '비밀번호 변경',
                               fontSize: 12.sp,
                               color: const Color(0xff353549),
-                              fontweight: FontWeight.w500,
+                              fontWeight: FontWeight.w400,
                             ),
                           ),
                         ],
@@ -178,18 +179,20 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     TextButton(
                       onPressed: () => context.go('/tems_of_serice'),
                       child: TextFontWidget.fontRegular(
-                          text: '이용약관',
-                          fontSize: 12.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w500),
+                        '이용약관',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     TextButton(
                       onPressed: _launchURL,
                       child: TextFontWidget.fontRegular(
-                          text: '피드백',
-                          fontSize: 12.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w500),
+                        '피드백',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     TextButton(
                       onPressed: () async {
@@ -206,10 +209,11 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         );
                       },
                       child: TextFontWidget.fontRegular(
-                          text: '로그아웃',
-                          fontSize: 12.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w500),
+                        '로그아웃',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                   ],
                 ),
@@ -263,14 +267,12 @@ Widget buildDrawerItem({
       leading: SvgPicture.asset(svgPath),
       title: Padding(
         padding: EdgeInsets.only(left: 10.w),
-        child: AutoSizeText(
+        child: TextFontWidget.fontRegular(
           title,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            fontSize: 15.sp,
-            color: const Color(0xff353549),
-            fontWeight: FontWeight.w500,
-          ),
+          fontSize: 15.sp,
+          color: const Color(0xff353549),
+          fontWeight: FontWeight.w400,
         ),
       ),
       trailing: SvgPicture.asset(trailingSvgPath),

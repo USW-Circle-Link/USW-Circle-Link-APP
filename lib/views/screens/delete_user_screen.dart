@@ -111,10 +111,11 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                          text: '회원탈퇴',
-                          fontSize: 18.sp,
-                          color: Color(0xFF111111),
-                          fontweight: FontWeight.w600),
+                        '회원탈퇴',
+                        fontSize: 18.sp,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.w800,
+                      ),
                       SizedBox(width: 52.w, height: 52.h)
                     ],
                   ),
@@ -131,30 +132,32 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state is DeleteUserModelLoading
-                                ? null
-                                : () async {
-                                    ref
-                                        .read(deleteUserViewModelProvider
-                                            .notifier)
-                                        .sendCode();
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                          onPressed: state is DeleteUserModelLoading
+                              ? null
+                              : () async {
+                                  ref
+                                      .read(
+                                          deleteUserViewModelProvider.notifier)
+                                      .sendCode();
+                                },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xffffB052),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '인증코드 전송',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '인증코드 전송',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 12.h,
@@ -164,7 +167,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         text: TextSpan(
                           text: "* 가입하신 학교 메일로 ",
                           style: TextStyle(
-                              fontFamily: 'Pretendard-Regular',
+                              fontFamily: 'SUIT',
                               fontSize: 12.sp,
                               color: const Color(0xFF989898),
                               fontWeight: FontWeight.w400),
@@ -172,8 +175,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                             TextSpan(
                               text: "인증코드",
                               style: TextStyle(
-                                  color: Color(0xFF6E6EDE),
-                                  fontWeight: FontWeight.w600),
+                                color: Color(0xFF6E6EDE),
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                             TextSpan(
                               text: '를 전송합니다',
@@ -188,29 +192,30 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: () {
-                              final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                          onPressed: () {
+                            final encodedUrl = Uri.encodeComponent(
+                                'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                              context
-                                  .push('/login/find_pw/webview/$encodedUrl');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                            context.push('/login/find_pw/webview/$encodedUrl');
+                          },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xffffB052),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '포털로 이동하기',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '포털로 이동하기',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                       SizedBox(
                         height: 12.h,
@@ -276,14 +281,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                               padding: EdgeInsets.zero,
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '확인',
-                                fontSize: 14.sp,
-                                color: Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600),
+                              '확인',
+                              fontSize: 14.sp,
+                              color: Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                     ],
                   ),

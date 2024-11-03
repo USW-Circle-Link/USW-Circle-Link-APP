@@ -84,20 +84,19 @@ class NoticeDetailScreen extends ConsumerWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               TextFontWidget.fontRegular(
-                                text: state.data.noticeTitle,
+                                state.data.noticeTitle,
                                 fontSize: 18.sp,
                                 color: const Color(0xFF000000),
-                                fontweight: FontWeight.w600,
+                                fontWeight: FontWeight.w500,
                               ),
                               SizedBox(
                                 height: 6.h,
                               ),
                               TextFontWidget.fontRegular(
-                                text:
-                                    '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
                                 fontSize: 14.sp,
                                 color: const Color(0xFF767676),
-                                fontweight: FontWeight.w400,
+                                fontWeight: FontWeight.w400,
                               ),
                               SizedBox(
                                 height: 16.h,
@@ -141,10 +140,11 @@ class NoticeDetailScreen extends ConsumerWidget {
                                             (context, error, stackTrace) {
                                           return Center(
                                             child: TextFontWidget.fontRegular(
-                                                text: '이미지 없음',
-                                                fontSize: 14.sp,
-                                                color: Colors.black,
-                                                fontweight: FontWeight.w400),
+                                              '이미지 없음',
+                                              fontSize: 14.sp,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
                                           );
                                         },
                                         // height: 100.h, // 이미지의 높이

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleDetailItem extends StatelessWidget {
   final int clubId;
@@ -90,16 +91,13 @@ class CircleDetailItem extends StatelessWidget {
                             children: [
                               SizedBox(
                                 width: 160.w,
-                                child: Text(
+                                child: TextFontWidget.fontRegular(
                                   name,
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    color: Colors.black,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w600,
-                                    height: 1.h,
-                                    letterSpacing: -0.45.sp,
-                                  ),
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.h,
+                                  letterSpacing: -0.45.sp,
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -113,29 +111,23 @@ class CircleDetailItem extends StatelessWidget {
                             width: 179.w,
                             child: Row(
                               children: [
-                                Text(
+                                TextFontWidget.fontRegular(
                                   '동아리장',
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    color: const Color(0xFF767676),
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.h,
-                                    letterSpacing: -0.35.sp,
-                                  ),
+                                  color: const Color(0xFF767676),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
                                 ),
                                 SizedBox(width: 4.w),
                                 Flexible(
-                                  child: Text(
+                                  child: TextFontWidget.fontRegular(
                                     leader,
-                                    style: TextStyle(
-                                      fontFamily: 'Pretendard',
-                                      color: const Color(0xFF353549),
-                                      fontSize: 14.sp,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.h,
-                                      letterSpacing: -0.35.sp,
-                                    ),
+                                    color: const Color(0xFF353549),
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w800,
+                                    height: 1.h,
+                                    letterSpacing: -0.35.sp,
                                     overflow: TextOverflow.ellipsis,
                                   ),
                                 ),
@@ -157,17 +149,14 @@ class CircleDetailItem extends StatelessWidget {
                               SizedBox(width: 6.w),
                               SizedBox(
                                 width: 130.w,
-                                child: Text(
+                                child: TextFontWidget.fontRegular(
                                   leaderHp,
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    color: const Color(0xFF353549),
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.h,
-                                    letterSpacing: -0.35.sp,
-                                  ),
+                                  color: const Color(0xFF353549),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
                                 ),
                               ),
                             ],
@@ -187,17 +176,14 @@ class CircleDetailItem extends StatelessWidget {
                               SizedBox(width: 6.w),
                               SizedBox(
                                 width: 120.w,
-                                child: Text(
+                                child: TextFontWidget.fontRegular(
                                   '@$instaId',
                                   overflow: TextOverflow.ellipsis,
-                                  style: TextStyle(
-                                    fontFamily: 'Pretendard',
-                                    color: const Color(0xFF353549),
-                                    fontSize: 14.sp,
-                                    fontWeight: FontWeight.w400,
-                                    height: 1.h,
-                                    letterSpacing: -0.35.sp,
-                                  ),
+                                  color: const Color(0xFF353549),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
                                 ),
                               ),
                             ],
@@ -214,16 +200,13 @@ class CircleDetailItem extends StatelessWidget {
                                       borderRadius:
                                           BorderRadius.circular(16.sp),
                                     ),
-                                    child: Text(
+                                    child: TextFontWidget.fontRegular(
                                       statusText,
-                                      style: TextStyle(
-                                        fontFamily: 'Pretendard',
-                                        color: const Color(0xffFFFFFF),
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w600,
-                                        height: 1.h,
-                                        letterSpacing: -0.6.sp,
-                                      ),
+                                      color: const Color(0xffFFFFFF),
+                                      fontSize: 12.sp,
+                                      fontWeight: FontWeight.w800,
+                                      height: 1.h,
+                                      letterSpacing: -0.6.sp,
                                     ),
                                   ),
                                 )

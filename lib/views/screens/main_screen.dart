@@ -114,10 +114,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               ),
               SizedBox(width: 8.w),
               TextFontWidget.jalnan2(
-                text: '동구라미',
+                '동구라미',
                 fontSize: 16.sp,
                 color: const Color(0xffFFC01D),
-                fontweight: FontWeight.w400,
+                fontWeight: FontWeight.w400,
               ),
             ],
           ),
@@ -165,11 +165,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ),
                   ),
                   child: TextFontWidget.jalnan2(
-                    text: '전체',
+                    '전체',
                     fontSize: 16.sp,
                     color:
                         isAllSelected ? Colors.white : const Color(0xffCECECE),
-                    fontweight: FontWeight.w400,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
                 ElevatedButton(
@@ -198,11 +198,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ),
                   ),
                   child: TextFontWidget.jalnan2(
-                    text: '모집중',
+                    '모집중',
                     fontSize: 16.sp,
                     color:
                         !isAllSelected ? Colors.white : const Color(0xffCECECE),
-                    fontweight: FontWeight.w400,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ],
@@ -219,17 +219,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               },
                             )
                           : TextFontWidget.fontRegular(
-                              text: '동아리가 없습니다',
+                              '동아리가 없습니다',
                               fontSize: 14.sp,
                               color: Colors.black,
-                              fontweight: FontWeight.w400);
+                              fontWeight: FontWeight.w400,
+                            );
                     },
                     error: (error, stackTrace) {
                       return TextFontWidget.fontRegular(
-                          text: '동아리를 불러오지 못했습니다...',
-                          fontSize: 14.sp,
-                          color: Colors.black,
-                          fontweight: FontWeight.w400);
+                        '동아리를 불러오지 못했습니다...',
+                        fontSize: 14.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      );
                     },
                     loading: () => CircularProgressIndicator()),
               ),
@@ -281,12 +283,10 @@ class _NotificationOverlayState extends ConsumerState<_NotificationOverlay> {
                 children: [
                   Padding(
                     padding: EdgeInsets.only(top: 16.h),
-                    child: Text(
+                    child: TextFontWidget.fontRegular(
                       "알림",
-                      style: TextStyle(
-                        fontSize: 14.sp,
-                        fontWeight: FontWeight.w600,
-                      ),
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                   Expanded(

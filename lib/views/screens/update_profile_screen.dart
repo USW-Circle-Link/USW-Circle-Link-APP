@@ -114,16 +114,13 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     ),
                   ),
                   SizedBox(width: 69.8.w),
-                  Text(
+                  TextFontWidget.fontRegular(
                     '내 정보 수정',
-                    style: TextStyle(
-                      fontFamily: 'Pretendard',
-                      color: Colors.black,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                      height: 1.111.h,
-                      letterSpacing: -0.45.sp,
-                    ),
+                    color: Colors.black,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w800,
+                    height: 1.111.h,
+                    letterSpacing: -0.45.sp,
                   ),
                   Expanded(child: Container()),
                 ],
@@ -139,16 +136,12 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
               children: [
                 SizedBox(height: 30.h),
                 // 이름 필드
-                Text(
+                TextFontWidget.fontRegular(
                   '이름',
-                  style: TextStyle(
-                    color: const Color(0xff000000),
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    height: 1.12.sp,
-                  ),
+                  color: const Color(0xff000000),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.12.sp,
                 ),
                 SizedBox(height: 8.h),
                 RoundedTextField(
@@ -158,8 +151,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor:
-                      isValid(state, FieldType.username) ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor: isValid(state, FieldType.username)
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -172,20 +166,18 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fit: BoxFit.scaleDown,
                   ),
                   hintStyle: TextStyle(
-                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    fontSize: 14.sp,
+                    fontFamily: 'SUIT',
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 // 전화번호 필드
-                Text(
+                TextFontWidget.fontRegular(
                   '전화번호',
-                  style: TextStyle(
-                    color: const Color(0xff000000),
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    height: 1.12.sp,
-                  ),
+                  color: const Color(0xff000000),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.12.sp,
                 ),
                 SizedBox(height: 8.h),
                 RoundedTextField(
@@ -210,20 +202,18 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   ),
                   hintText: "전화번호 (- 제외입력)",
                   hintStyle: TextStyle(
-                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    fontSize: 14.sp,
+                    fontFamily: ',SUIT',
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 // 학번 필드
-                Text(
+                TextFontWidget.fontRegular(
                   '학번',
-                  style: TextStyle(
-                    color: const Color(0xff000000),
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    height: 1.12.sp,
-                  ),
+                  color: const Color(0xff000000),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.12.sp,
                 ),
                 SizedBox(height: 8.h),
                 RoundedTextField(
@@ -248,20 +238,18 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   ),
                   hintText: "학번",
                   hintStyle: TextStyle(
-                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    fontSize: 14.sp,
+                    fontFamily: 'SUIT',
+                  ),
                 ),
                 SizedBox(height: 16.h),
                 // 학과 필드
-                Text(
+                TextFontWidget.fontRegular(
                   '학과',
-                  style: TextStyle(
-                    color: const Color(0xff000000),
-                    fontFamily: 'Pretendard',
-                    fontSize: 16.sp,
-                    fontStyle: FontStyle.normal,
-                    fontWeight: FontWeight.w400,
-                    height: 1.12.sp,
-                  ),
+                  color: const Color(0xff000000),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w400,
+                  height: 1.12.sp,
                 ),
                 SizedBox(height: 8.h),
                 RoundedTextField(
@@ -305,71 +293,76 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fit: BoxFit.scaleDown,
                   ),
                   hintStyle: TextStyle(
-                      fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                    fontSize: 14.sp,
+                    fontFamily: 'SUIT',
+                  ),
                 ),
                 SizedBox(height: 48.h),
                 SizedBox(
                   width: double.infinity,
                   height: 56.h,
                   child: OutlinedButton(
-                      onPressed: () async {
-                        final name = nameController.text.trim();
-                        final studentNumber =
-                            studentnumberController.text.trim();
-                        final userHp = phonenumberController.text.trim();
+                    onPressed: () async {
+                      final name = nameController.text.trim();
+                      final studentNumber = studentnumberController.text.trim();
+                      final userHp = phonenumberController.text.trim();
 
-                        logger.d(major);
+                      logger.d(major);
 
-                        await ref
-                            .read(updateProfileViewModelProvider.notifier)
-                            .updateProfile(
-                              userName: name,
-                              studentNumber: studentNumber,
-                              userHp: userHp,
-                              major: major ?? "",
-                            );
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: const Color(0xFF000000),
-                        foregroundColor: const Color(0xFFFFFFFF),
-                        side: const BorderSide(
-                          color: Colors.transparent,
-                          width: 0.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
+                      await ref
+                          .read(updateProfileViewModelProvider.notifier)
+                          .updateProfile(
+                            userName: name,
+                            studentNumber: studentNumber,
+                            userHp: userHp,
+                            major: major ?? "",
+                          );
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color(0xFF000000),
+                      foregroundColor: const Color(0xFFFFFFFF),
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 0.0,
                       ),
-                      child: TextFontWidget.fontRegular(
-                          text: '수정 완료',
-                          fontSize: 18.sp,
-                          color: const Color(0xFFFFFFFF),
-                          fontweight: FontWeight.w600)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: TextFontWidget.fontRegular(
+                      '수정 완료',
+                      fontSize: 18.sp,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
                 SizedBox(height: 10.h),
                 SizedBox(
                   width: double.infinity,
                   height: 56.h,
                   child: OutlinedButton(
-                      onPressed: () {
-                        context.go('/update_profile/delete_user');
-                      },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: const Color.fromARGB(255, 255, 69, 69),
-                        foregroundColor: const Color(0xFFFFFFFF),
-                        side: const BorderSide(
-                          color: Colors.transparent,
-                          width: 0.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
+                    onPressed: () {
+                      context.go('/update_profile/delete_user');
+                    },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: const Color.fromARGB(255, 255, 69, 69),
+                      foregroundColor: const Color(0xFFFFFFFF),
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 0.0,
                       ),
-                      child: TextFontWidget.fontRegular(
-                          text: '회원탈퇴',
-                          fontSize: 18.sp,
-                          color: const Color(0xFFFFFFFF),
-                          fontweight: FontWeight.w600)),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: TextFontWidget.fontRegular(
+                      '회원탈퇴',
+                      fontSize: 18.sp,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
                 ),
               ],
             ),

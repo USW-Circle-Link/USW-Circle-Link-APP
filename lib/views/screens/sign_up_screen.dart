@@ -120,10 +120,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                          text: '회원가입',
-                          fontSize: 18.sp,
-                          color: Color(0xFF111111),
-                          fontweight: FontWeight.w600),
+                        '회원가입',
+                        fontSize: 18.sp,
+                        color: Color(0xFF111111),
+                        fontWeight: FontWeight.w800,
+                      ),
                       SizedBox(width: 52.w, height: 52.h)
                     ],
                   ),
@@ -199,14 +200,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               padding: EdgeInsets.zero,
                             ),
                             child: TextFontWidget.fontRegular(
-                                text: '중복 확인',
-                                fontSize: 14.sp,
-                                color: Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600),
+                              '중복 확인',
+                              fontSize: 14.sp,
+                              color: Color(0xFFFFFFFF),
+                              fontWeight: FontWeight.w800,
+                            ),
                           ),
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -252,7 +256,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ),
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -299,18 +305,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           ),
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       SizedBox(
                         height: 8.h,
                       ),
                       Visibility(
-                          visible: state is SignUpModelError,
-                          child: TextFontWidget.fontRegular(
-                              text: getErrorMessage(state),
-                              fontSize: 12.sp,
-                              color: const Color(0xFFFF3F3F),
-                              fontweight: FontWeight.w400)),
+                        visible: state is SignUpModelError,
+                        child: TextFontWidget.fontRegular(
+                          getErrorMessage(state),
+                          fontSize: 12.sp,
+                          color: const Color(0xFFFF3F3F),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -343,7 +353,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -374,7 +386,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -405,7 +419,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -450,7 +466,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           fit: BoxFit.scaleDown,
                         ),
                         hintStyle: TextStyle(
-                            fontSize: 14.sp, fontFamily: 'Pretendard-Regular'),
+                          fontSize: 14.sp,
+                          fontFamily: 'SUIT',
+                        ),
                       ),
                       SizedBox(
                         height: 90.h,
@@ -483,7 +501,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                               text: TextSpan(
                                 text: "",
                                 style: TextStyle(
-                                    fontFamily: 'Pretendard-Regular',
+                                    fontFamily: 'SUIT',
                                     fontSize: 12.sp,
                                     color: const Color(0xFF989898),
                                     fontWeight: FontWeight.w400),
@@ -492,7 +510,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                     text: "서비스 이용약관 ",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   TextSpan(
                                     text: '및 ',
@@ -501,7 +519,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                     text: "개인정보 처리방침",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w600),
+                                        fontWeight: FontWeight.w800),
                                   ),
                                   TextSpan(
                                     text: '에 동의함',
@@ -519,69 +537,70 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         width: double.infinity,
                         height: 56.h,
                         child: OutlinedButton(
-                            onPressed: state is UserModelLoading
-                                ? null
-                                : () async {
-                                    if (idVerified &&
-                                        major != null &&
-                                        policyAgree) {
-                                      id = idController.text.trim();
-                                      password = passwordController.text.trim();
-                                      final passwordConfirm =
-                                          passwordConfirmController.text.trim();
-                                      name = nameController.text.trim();
-                                      phoneNumber =
-                                          phoneNumberController.text.trim();
-                                      studentNumber =
-                                          studentNumberController.text.trim();
-                                      major = major!.trim();
-                                      await ref
-                                          .read(
-                                              signUpViewModelProvider.notifier)
-                                          .signUpTemporary(
-                                            id: id,
-                                            password: password,
-                                            passwordConfirm: passwordConfirm,
-                                            username: name,
-                                            telephone: phoneNumber,
-                                            studentNumber: studentNumber,
-                                            major: major!,
-                                          );
-                                    } else if (!idVerified) {
-                                      // 아이디 중복확인 필요
-                                      DialogManager.instance.showAlertDialog(
-                                        context: context,
-                                        content: '아이디 중복확인이 필요합니다.',
-                                      );
-                                    } else if (major == null) {
-                                      DialogManager.instance.showAlertDialog(
-                                        context: context,
-                                        content: '단과대학/학과를 선택해주세요.',
-                                      );
-                                    } else if (!policyAgree) {
-                                      DialogManager.instance.showAlertDialog(
-                                        context: context,
-                                        content:
-                                            '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
-                                      );
-                                    }
-                                  },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xFF000000),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                          onPressed: state is UserModelLoading
+                              ? null
+                              : () async {
+                                  if (idVerified &&
+                                      major != null &&
+                                      policyAgree) {
+                                    id = idController.text.trim();
+                                    password = passwordController.text.trim();
+                                    final passwordConfirm =
+                                        passwordConfirmController.text.trim();
+                                    name = nameController.text.trim();
+                                    phoneNumber =
+                                        phoneNumberController.text.trim();
+                                    studentNumber =
+                                        studentNumberController.text.trim();
+                                    major = major!.trim();
+                                    await ref
+                                        .read(signUpViewModelProvider.notifier)
+                                        .signUpTemporary(
+                                          id: id,
+                                          password: password,
+                                          passwordConfirm: passwordConfirm,
+                                          username: name,
+                                          telephone: phoneNumber,
+                                          studentNumber: studentNumber,
+                                          major: major!,
+                                        );
+                                  } else if (!idVerified) {
+                                    // 아이디 중복확인 필요
+                                    DialogManager.instance.showAlertDialog(
+                                      context: context,
+                                      content: '아이디 중복확인이 필요합니다.',
+                                    );
+                                  } else if (major == null) {
+                                    DialogManager.instance.showAlertDialog(
+                                      context: context,
+                                      content: '단과대학/학과를 선택해주세요.',
+                                    );
+                                  } else if (!policyAgree) {
+                                    DialogManager.instance.showAlertDialog(
+                                      context: context,
+                                      content:
+                                          '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
+                                    );
+                                  }
+                                },
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xFF000000),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                                text: '다음',
-                                fontSize: 18.sp,
-                                color: const Color(0xFFFFFFFF),
-                                fontweight: FontWeight.w600)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
+                            ),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '다음',
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
                       ),
                     ],
                   ),

@@ -25,10 +25,10 @@ class CircleGroup extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFontWidget.fontRegular(
-            text: department.key.toDepartment(),
+            department.key.toDepartment(),
             fontSize: 16.sp,
             color: Colors.black,
-            fontweight: FontWeight.w400,
+            fontWeight: FontWeight.w400,
           ),
           SizedBox(height: 8.h), // 텍스트와 리스트 사이에 여백 추가
           SizedBox(
