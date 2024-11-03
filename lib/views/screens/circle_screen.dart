@@ -11,6 +11,7 @@ import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
+import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
@@ -348,7 +349,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                                       .value!.leaderHp));
                                             },
                                             child: TextFontWidget.fontRegular(
-                                              clubIntroState.value!.leaderHp,
+                                              clubIntroState.value!.leaderHp
+                                                      .addDashOrNull() ??
+                                                  clubIntroState
+                                                      .value!.leaderHp,
                                               overflow: TextOverflow.ellipsis,
                                               color: const Color(0xFF353549),
                                               fontSize: 14.sp,

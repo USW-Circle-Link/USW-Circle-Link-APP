@@ -40,6 +40,7 @@ class NoticeDetailScreen extends ConsumerWidget {
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
           title: Padding(
@@ -87,7 +88,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                 state.data.noticeTitle,
                                 fontSize: 18.sp,
                                 color: const Color(0xFF000000),
-                                fontWeight: FontWeight.w500,
+                                fontWeight: FontWeight.w800,
                               ),
                               SizedBox(
                                 height: 6.h,

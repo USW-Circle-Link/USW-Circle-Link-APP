@@ -156,7 +156,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                       "확인",
                       color: Color(0xFF0085FF),
                       fontSize: 18.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w800,
                     ),
                   ),
                 ],

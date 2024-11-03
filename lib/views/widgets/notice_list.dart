@@ -40,7 +40,7 @@ class NoticeList extends StatelessWidget {
                           noticeModel.data[index].noticeTitle,
                           fontSize: 18.sp,
                           color: const Color(0xFF000000),
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w800,
                         ),
                         SizedBox(
                           height: 20.h,
