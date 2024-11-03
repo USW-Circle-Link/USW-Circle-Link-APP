@@ -230,7 +230,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                                     color:
                                                         const Color(0xffBFBFBF),
                                                     fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w700,
+                                                    fontWeight: FontWeight.w500,
                                                     height: 1.h,
                                                     letterSpacing: -0.3.sp,
                                                   ),
@@ -445,7 +445,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                 child: TextFontWidget.fontRegular('이미지 준비중 ...',
                     fontSize: 14.sp,
                     color: Colors.white,
-                    fontWeight: FontWeight.w500));
+                    fontWeight: FontWeight.w800));
           },
         ),
       );
