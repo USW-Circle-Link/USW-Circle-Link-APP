@@ -26,7 +26,7 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
         throw ChangePwModelError(
             message: '현재 비밀번호가 입력되지 않았습니다.', code: "USR-F900", type:ChangePwModelType.changePW);
       }
-      if (!passwordRegExp.hasMatch(newPw)) {
+      if (!newPw.validate()) {
         throw ChangePwModelError(
             message: '새로운 비밀번호가 형식에 맞지 않습니다.', code: "USR-F200", type:ChangePwModelType.changePW);
       }
@@ -58,7 +58,7 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
     required String uuid,
   }) async {
     try {
-      if (!passwordRegExp.hasMatch(newPw)) {
+      if (!newPw.validate()) {
         throw ChangePwModelError(
             message: '새로운 비밀번호가 형식에 맞지 않습니다.', code: "USR-F200", type:ChangePwModelType.resetPW);
       }

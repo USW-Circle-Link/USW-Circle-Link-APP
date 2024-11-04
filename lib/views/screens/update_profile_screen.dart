@@ -265,7 +265,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                       },
                       onConfirmPressed: (college, major) {
                         setState(() {
-                          logger.d('@@ ${this.college} ${this.major}');
                           this.college = college;
                           this.major = major;
                           logger.d('${this.college} - ${this.major}');

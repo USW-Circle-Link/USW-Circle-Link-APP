@@ -52,7 +52,8 @@ class SignUpViewModel extends StateNotifier<SignUpModelBase?> {
     required String major,
   }) async {
     try {
-      if (!passwordRegExp.hasMatch(password)) {
+      logger.d(password.validate());
+      if (!password.validate()) {
         throw SignUpModelError(
             message: '비밀번호가 형식에 맞지 않습니다!',
             code: "USR-F200",
