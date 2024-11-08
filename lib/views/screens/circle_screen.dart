@@ -424,9 +424,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                         SizedBox(height: 12.h),
                         Container(
                           alignment: Alignment.topLeft,
-                          height: 154.h,
                           padding: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
-                          child: Html(data: clubIntroState.value!.introContent),
+                          child: Html(data:clubIntroState.value!.introContent),
                         ),
                       ],
                     ),

@@ -193,7 +193,7 @@ class _ApplicationWritingScreenState
                                     fontWeight: FontWeight.w400),
                                 children: const [
                                   TextSpan(
-                                    text: "지원서 제출하기 ",
+                                    text: "지원 완료 ",
                                     style: TextStyle(
                                         color: Color(0xffffB052),
                                         fontWeight: FontWeight.w800),
@@ -299,7 +299,7 @@ class _ApplicationWritingScreenState
                                   ),
                                 ),
                                 child: TextFontWidget.fontRegular(
-                                  '지원서 제출하기',
+                                  '지원 완료',
                                   fontSize: 18.sp,
                                   color: const Color(0xFFFFFFFF),
                                   fontWeight: FontWeight.w800,

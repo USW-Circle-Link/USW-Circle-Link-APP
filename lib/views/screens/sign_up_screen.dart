@@ -227,7 +227,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         obscureText: !passwordVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '문자,숫자,특수문자 포함 5~20자',
+                        hintText: '영어,숫자,특수문자 포함 5~20자',
                         isAnimatedHint: false,
                         onChanged: (value) {
                           ref
@@ -623,6 +623,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool pwIsInvalid(SignUpModelBase? state) {
     if (state is SignUpModelError) {
       switch (state.code) {
+        case "USR-214":
+        case "USR-203":
         case "USR-F200":
           return true;
       }
@@ -633,6 +635,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool pwConfirmIsInvalid(SignUpModelBase? state) {
     if (state is SignUpModelError) {
       switch (state.code) {
+        case "USR-202": // 새 비밀번호 확인 불일치
+        case "USR-212": // 새 비밀번호 확인 불일치
         case "USR-F300":
           return true;
       }
@@ -686,10 +690,13 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       switch (state.code) {
         case "USR-207":
           return "* 이미 존재하는 아이디입니다!";
+        case "USR-202": // 새 비밀번호 확인 불일치
         case "USR-212": // 새 비밀번호 확인 불일치
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-F100": // 아이디 규칙 X
-          return "* 아이디는 5~20자 이내 영어 대소문자, 숫자만 가능합니다!";
+          return "* 아이디는 5~20자 이내 영어, 숫자만 가능합니다!";
+        case "USR-214":
+        case "USR-203":
         case "USR-F200": // 비밀번호 규칙 X
           return "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
         case "USR-F300": // 비밀번호 일치 X

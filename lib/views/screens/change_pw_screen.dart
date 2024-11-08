@@ -182,7 +182,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         obscureText: !newPWVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '새 비밀번호 (문자, 숫자 포함 6~20자)',
+                        hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 5~20자)',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
@@ -256,6 +256,12 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                       ),
                       SizedBox(
                         height: 8.h,
+                      ),
+                      TextFontWidget.fontRegular(
+                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!",
+                        fontSize: 12.sp,
+                        color: const Color(0xFF000000),
+                        fontWeight: FontWeight.w400,
                       ),
                       Visibility(
                         visible: state is ChangePwModelError,
@@ -331,21 +337,20 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
   String getErrorMessage(ChangePwModelBase? state) {
     if (state is ChangePwModelError) {
       switch (state.code) {
-        // 모바일 에러코드
         case "USR-F900": // 현재 비밀번호 공백
           return "* 현재 비밀번호를 입력해주세요!";
-        case "USR-F200":
-          return "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
         case "USR-F300":
           return "* 비밀번호가 일치하지 않습니다!";
-        // 서버 에러코드
         case "USR-204": // 현재 비밀번호 불일치
-          return "현재 비밀번호가 일치하지 않습니다";
+          return "* 현재 비밀번호가 일치하지 않습니다";
         case "USR-202": // 새 비밀번호 확인 불일치
         case "USR-212": // 새 비밀번호 확인 불일치
           return "* 비밀번호가 일치하지 않습니다!";
         case "USR-203": // 새 비밀번호 빈칸
-          return "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
+        case "USR-214": // 새 비밀번호 형식 안 맞음
+        case "USR-F200":
+          // return "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
+          return "";
         case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         default:
           return "* 비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
@@ -357,6 +362,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
   bool currentPWIsInvalid(ChangePwModelBase? state) {
     if (state is ChangePwModelError) {
       switch (state.code) {
+        case "USR-204":
         case "USR-F900":
           return true;
       }
