@@ -58,7 +58,10 @@ class FCMRepository {
       '$baseUrl/fcmtoken',
       data: body,
       options: Options(
-        headers: {'Content-Type': 'application/json', 'accessToken': 'true,'},
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': 'true',
+        },
       ),
     );
 
