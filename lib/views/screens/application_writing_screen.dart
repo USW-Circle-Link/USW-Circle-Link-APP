@@ -234,8 +234,7 @@ class _ApplicationWritingScreenState
                                     vertical: VisualDensity.minimumDensity,
                                   ),
                                   value: isDone,
-                                  onChanged: (bool? value) {
-                                    logger.d('${state.value}');
+                                  onChanged: (bool? value) {                                    
                                     if (state.hasValue &&
                                         state.value?.type ==
                                             ApplicationModelType
