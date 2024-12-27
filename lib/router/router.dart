@@ -83,7 +83,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'email_verification',
                     builder: (_, state) => EmailVerificationScreen(
                       account: state.uri.queryParameters['account']!,
-                      password: Uri.decodeComponent(state.uri.queryParameters['password']!),
+                      password: Uri.decodeComponent(
+                          state.uri.queryParameters['password']!),
                       userName: state.uri.queryParameters['userName']!,
                       telephone: state.uri.queryParameters['telephone']!,
                       studentNumber:
@@ -138,11 +139,16 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => TermsOfServiceScreen(),
           ),
           GoRoute(
-            path: 'image',
-            name: 'image',
-            builder: (_, state) =>
-                ImageScreen(image: state.extra as String),
-          ),
+              path: 'image',
+              name: 'image',
+              builder: (_, state) {
+                final Map<String, dynamic> extra = (state.extra as Map<String, dynamic>);
+                return ImageScreen(
+                  galleryItems: extra['galleryItems'],
+                  backgroundDecoration: extra['backgroundDecoration'],
+                  initialIndex: extra['index'],                  
+                );
+              }),
         ],
       ),
     ],

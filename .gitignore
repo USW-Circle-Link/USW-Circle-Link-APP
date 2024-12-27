@@ -29,6 +29,7 @@ lib/generated_plugin_registrant.dart
 **/android/key.properties
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
+**/android/app/service-account.json
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
@@ -75,3 +76,10 @@ lib/generated_plugin_registrant.dart
 .idea/.gitignore
 .idea/misc.xml
 
+.env
+Gemfile
+Gemfile.lock
+**/ios/fastlane/Appfile
+**/ios/fastlane/Fastfile
+**/android/fastlane/Appfile
+**/android/fastlane/Fastfile
