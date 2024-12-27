@@ -1,0 +1,55 @@
+name: deploy project to testFlight, playstore internal track
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  # IOS
+  deploy_ios:
+    runs-on: macOS
+    steps:    
+      - uses: actions/checkout@v4
+
+      - name: Install fastlane
+        run: brew install fastlane
+
+      # 빌드 및 배포
+      - name: Deploy Product to Store
+        run: fastlane release
+        working-directory: ios
+        env:
+          FASTLANE_TEAM_ID: ${{ secrets.FASTLANE_TEAM_ID }}
+          FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD: ${{ secrets.FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD }}
+
+  # AOS
+  deploy_android:
+    runs-on: macOS
+    needs: [ deploy_ios ]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install fastlane
+        run: brew install fastlane
+
+      # upload key 복호화
+      - name: Generate Android keystore
+        id: android_keystore
+        uses: timheuer/base64-to-file@v1.1
+        with:
+          fileName: key.jks
+          encodedString: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+
+      # key.properties 생성
+      - name: Create key properties
+        run: |
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+
+      # 빌드 및 배포
+      - name: Deploy Product to Store
+        run: fastlane deploy
+        working-directory: android

@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
+import 'package:usw_circle_link/views/screens/image_screen.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class NoticeDetailScreen extends ConsumerWidget {
@@ -121,8 +122,10 @@ class NoticeDetailScreen extends ConsumerWidget {
                             itemBuilder: (context, index) {
                               return InkWell(
                                 onTap: () {
-                                  context.push('/image',
-                                      extra: state.data.noticePhotos?[index]);
+                                  open(
+                                      context, state.data.noticePhotos!, index);
+                                  // context.push('/image',
+                                  //     extra: state.data.noticePhotos?[index]);
                                 },
                                 child: Container(
                                   width: 100.w, // 이미지의 너비
@@ -134,21 +137,25 @@ class NoticeDetailScreen extends ConsumerWidget {
                                         8.0), // 모서리를 둥글게 설정
                                     child: Container(
                                       color: Colors.grey,
-                                      child: Image.network(
-                                        state.data.noticePhotos![index],
-                                        fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
-                                        errorBuilder:
-                                            (context, error, stackTrace) {
-                                          return Center(
-                                            child: TextFontWidget.fontRegular(
-                                              '이미지 없음',
-                                              fontSize: 14.sp,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w400,
-                                            ),
-                                          );
-                                        },
-                                        // height: 100.h, // 이미지의 높이
+                                      child: Hero(
+                                        tag: state
+                                            .data.noticePhotos![index],
+                                        child: Image.network(
+                                          state.data.noticePhotos![index],
+                                          fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
+                                          errorBuilder:
+                                              (context, error, stackTrace) {
+                                            return Center(
+                                              child: TextFontWidget.fontRegular(
+                                                '이미지 없음',
+                                                fontSize: 14.sp,
+                                                color: Colors.black,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            );
+                                          },
+                                          // height: 100.h, // 이미지의 높이
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -162,6 +169,29 @@ class NoticeDetailScreen extends ConsumerWidget {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+
+  void open(BuildContext context, List<String> galleryItems, final int index) {
+    // final extra = <String, dynamic>{
+    //   'galleryItems': galleryItems,
+    //   'backgroundDecoration': const BoxDecoration(
+    //     color: Colors.black,
+    //   ),
+    //   'index': index,
+    // };
+    // context.push('/image', extra:extra);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageScreen(
+          galleryItems: galleryItems,
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+          initialIndex: index,          
         ),
       ),
     );
