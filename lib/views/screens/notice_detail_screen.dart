@@ -3,7 +3,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
+// import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';

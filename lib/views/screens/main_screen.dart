@@ -1,9 +1,10 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -17,6 +18,7 @@ import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
 import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
+import 'package:usw_circle_link/views/widgets/app_bar.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -29,6 +31,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
+
+  List<String> selectedGroups = [];
 
   @override
   void initState() {
@@ -90,11 +94,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         backgroundColor: const Color(0xffF0F2F5),
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          scrolledUnderElevation: 0,
-          toolbarHeight: 42.h,
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: Colors.white,
           leading: IconButton(
             onPressed: () {
               _scaffoldKey.currentState?.openDrawer();
@@ -136,77 +135,183 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 : LoggedOutMenu(),
         body: Column(
           children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                ElevatedButton(
-                  onPressed: () async {
-                    if (isAllSelected) {
-                      return;
-                    }
-                    setState(() {
-                      isAllSelected = true;
-                    });
-                    await ref
-                        .read(mainViewModelProvider.notifier)
-                        .fetchAllCircleList();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: !isAllSelected
-                        ? const Color(0xffffB052)
-                        : const Color(0xffEBEBEB),
-                    backgroundColor: isAllSelected
-                        ? const Color(0xffffB052)
-                        : const Color(0xffEBEBEB),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width / 2, 46.h),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  child: TextFontWidget.jalnan2(
-                    '전체',
-                    fontSize: 16.sp,
-                    color:
-                        isAllSelected ? Colors.white : const Color(0xffCECECE),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                ElevatedButton(
-                  onPressed: () async {
-                    if (!isAllSelected) {
-                      return;
-                    }
-                    setState(() {
-                      isAllSelected = false;
-                    });
-                    await ref
-                        .read(mainViewModelProvider.notifier)
-                        .fetchOpenCircleList();
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: !isAllSelected
-                        ? const Color(0xffEBEBEB)
-                        : const Color(0xffffB052),
-                    backgroundColor: !isAllSelected
-                        ? const Color(0xffffB052)
-                        : const Color(0xffEBEBEB),
-                    minimumSize:
-                        Size(MediaQuery.of(context).size.width / 2, 46.h),
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.zero,
-                    ),
-                  ),
-                  child: TextFontWidget.jalnan2(
-                    '모집중',
-                    fontSize: 16.sp,
-                    color:
-                        !isAllSelected ? Colors.white : const Color(0xffCECECE),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-              ],
+            SizedBox(
+              height: 1.h,
             ),
+            Container(
+              color: Colors.white,
+              // height: 60.h,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        DecoratedBox(
+                          decoration: isAllSelected
+                              ? BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(color: Colors.black)),
+                                )
+                              : BoxDecoration(),
+                          child: TextButton(
+                            onPressed: () async {
+                              if (isAllSelected) {
+                                return;
+                              }
+                              setState(() {
+                                isAllSelected = true;
+                              });
+                              await ref
+                                  .read(mainViewModelProvider.notifier)
+                                  .fetchAllCircleList();
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: const Color(0xffffB052),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 20.h,
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                            child: TextFontWidget.fontRegular(
+                              '전체',
+                              fontSize: 16.sp,
+                              color: isAllSelected
+                                  ? Colors.black
+                                  : const Color(0xffA8A8A8),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        DecoratedBox(
+                          decoration: !isAllSelected
+                              ? BoxDecoration(
+                                  border: Border(
+                                      bottom: BorderSide(color: Colors.black)),
+                                )
+                              : BoxDecoration(),
+                          child: TextButton(
+                            onPressed: () async {
+                              if (!isAllSelected) {
+                                return;
+                              }
+                              setState(() {
+                                isAllSelected = false;
+                              });
+                              await ref
+                                  .read(mainViewModelProvider.notifier)
+                                  .fetchOpenCircleList();
+                            },
+                            style: TextButton.styleFrom(
+                              foregroundColor: const Color(0xffffB052),
+                              padding: EdgeInsets.symmetric(
+                                horizontal: 10.w,
+                                vertical: 20.h,
+                              ),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.zero,
+                              ),
+                            ),
+                            child: TextFontWidget.fontRegular(
+                              '모집 중',
+                              fontSize: 16.sp,
+                              color: !isAllSelected
+                                  ? Colors.black
+                                  : const Color(0xffA8A8A8),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    OutlinedButton(
+                      onPressed: () {
+                        setState(() async {
+                          selectedGroups = await showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            builder: (context) {
+                              return GroupPicker(initialGroups: selectedGroups);
+                            },
+                          );
+                        });
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: selectedGroups.isEmpty
+                            ? Colors.white
+                            : Color(0xFFFFB052),
+                        foregroundColor: selectedGroups.isEmpty
+                            ? Color(0xFFFFB052)
+                            : Colors.white,
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 7.w,
+                          vertical: 5.h,
+                        ),
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                        side: BorderSide(
+                          color: selectedGroups.isEmpty
+                              ? Color(0xFF959595)
+                              : Color(0xFFFF9A21),
+                        ),
+                        shape: RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.r))),
+                      ),
+                      child: Row(
+                        children: [
+                          SvgPicture.asset(
+                            'assets/images/ic_filter.svg',
+                            colorFilter: selectedGroups.isEmpty
+                                ? null
+                                : ColorFilter.mode(
+                                    Colors.white,
+                                    BlendMode.srcIn,
+                                  ),
+                          ),
+                          TextFontWidget.fontRegular(
+                            '필터',
+                            fontWeight: FontWeight.w500,
+                            color: selectedGroups.isEmpty
+                                ? Color(0xffa8a8a8)
+                                : Colors.white,
+                          )
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(
+              height: 1.h,
+            ),
+            ...selectedGroups.isEmpty
+                ? []
+                : [
+                    Container(
+                      color: Colors.white,
+                      padding: EdgeInsets.only(left: 24.w),
+                      height: 60.h,
+                      alignment: Alignment.centerLeft,
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Wrap(
+                          spacing: 10.w,
+                          children: selectedGroups.map((label) {
+                            return _buildChip(label);
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10.h,
+                    ),
+                  ],
             Expanded(
               child: Center(
                 child: circleListState.when<Widget>(
@@ -239,6 +344,178 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildChip(String label) {
+    final isSelected = false;
+    return FilterChip(
+      labelPadding: EdgeInsets.only(left: 10.w),
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (value) {
+        setState(() {});
+      },
+      deleteIconColor: isSelected ? Colors.white : Color(0xFF434343),
+      onDeleted: () {
+        setState(() {
+          selectedGroups.remove(label);
+        });
+      },
+      showCheckmark: false,
+      selectedColor: Color(0xFFFFB052),
+      labelStyle: TextFontWidget.fontRegularStyle(
+        color: isSelected ? Colors.white : Color(0xFF434343),
+        fontWeight: FontWeight.w300,
+      ),
+      backgroundColor: Colors.white,
+      elevation: null,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Color(0xFFFF9A21)),
+        borderRadius: BorderRadius.all(Radius.circular(15.r)),
+      ),
+      padding: EdgeInsets.all(0),
+    );
+  }
+}
+
+class GroupPicker extends ConsumerStatefulWidget {
+  const GroupPicker({
+    Key? key,
+    this.initialGroups = const [],
+  }) : super(key: key);
+
+  final List<String> initialGroups;
+
+  @override
+  _GroupPickerState createState() => _GroupPickerState();
+}
+
+class _GroupPickerState extends ConsumerState<GroupPicker> {
+  late Set<String> selectedGroups;
+
+  @override
+  void initState() {
+    selectedGroups = widget.initialGroups.toSet();
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        if (!didPop) {
+          // dissmiss 나 뒤로가기
+          context.pop(selectedGroups.toList());
+        }
+      },
+      child: Container(
+        height: MediaQuery.of(context).size.height - kToolbarHeight - 50.h,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(17.r),
+          ),
+        ),
+        child: Padding(
+          padding: EdgeInsets.only(
+            right: 48.w,
+            left: 48.w,
+            top: 48.h,
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  SizedBox(width: 20.w),
+                  TextFontWidget.fontRegular(
+                    '나에게 맞는 동아리 추천 받기',
+                    color: Color(0xFF989898),
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                  IconButton(
+                    onPressed: () {
+                      context.pop(selectedGroups.toList());
+                    },
+                    style: IconButton.styleFrom(
+                      minimumSize: Size.zero,
+                      padding: EdgeInsets.zero,
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    icon: SvgPicture.asset(
+                      'assets/images/ic_close.svg',
+                    ),
+                  ),
+                ],
+              ),
+              Divider(
+                height: 70.h,
+                indent: 70.w,
+                endIndent: 70.w,
+              ),
+              Row(
+                children: <Widget>[
+                  SvgPicture.asset('assets/images/ic_category.svg'),
+                  SizedBox(
+                    width: 10.w,
+                  ),
+                  TextFontWidget.fontRegular(
+                    '관심 카테고리',
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                  )
+                ],
+              ),
+              TextFontWidget.fontRegular(
+                '* 최대 3개까지 선택해주세요.',
+                color: Color(0xff909090),
+                fontSize: 12.sp,
+                fontWeight: FontWeight.w300,
+              ),
+              SizedBox(
+                height: 20.h,
+              ),
+              Wrap(
+                spacing: 5.w,
+                children: departments.values.map((department) {
+                  return _buildChip(department);
+                }).toList(),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildChip(String label) {
+    final isSelected = selectedGroups.contains(label);
+    return FilterChip(
+      label: Text(label),
+      selected: isSelected,
+      onSelected: (value) {
+        setState(() {
+          value ? selectedGroups.add(label) : selectedGroups.remove(label);
+        });
+      },
+      showCheckmark: false,
+      selectedColor: Color(0xFFFFB052),
+      labelStyle: TextFontWidget.fontRegularStyle(
+        color: isSelected ? Colors.white : Color(0xFF434343),
+        fontWeight: FontWeight.w300,
+      ),
+      backgroundColor: Colors.white,
+      elevation: null,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(
+            color: isSelected ? Color(0xFFFF9A21) : Color(0xFFE5E5E5)),
+        borderRadius: BorderRadius.all(Radius.circular(15.r)),
+      ),
+      padding: EdgeInsets.all(0),
     );
   }
 }
