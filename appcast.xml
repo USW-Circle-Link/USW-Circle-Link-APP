@@ -2,14 +2,14 @@
 <rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
   <channel>
     <title>동구라미</title>
-    <!-- Android updates 
+    <!-- Android updates -->
     <item>
       <title>Version 1.0.3</title>
       <description>설명&#10;단락 나누고설명
       </description>
       <pubDate>Tue, 10 May 2023 00:00:00 -0700</pubDate>
       <enclosure url="https://play.google.com/store/apps/details?id=com.usw.flag.temp.usw_circle_link" sparkle:version="1.0.3" sparkle:os="android" />
-    </item>-->
+    </item>
 
     <!-- iOS updates -->
     <item>
