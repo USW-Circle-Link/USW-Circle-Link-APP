@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle">
+  <channel>
+    <title>동구라미</title>
+    <!-- Android updates -->
+    <item>
+      <title>Version 1.0.3</title>
+      <description>설명&#10;단락 나누고설명
+      </description>
+      <pubDate>Tue, 10 May 2023 00:00:00 -0700</pubDate>
+      <enclosure url="https://play.google.com/store/apps/details?id=com.usw.flag.temp.usw_circle_link" sparkle:version="1.0.3" sparkle:os="android" />
+    </item>
+
+    <!-- iOS updates -->
+    <item>
+      <title>Version 1.0.3</title>
+      <description>설명&#10;단락 나누고설명
+      </description>
+      <pubDate>Tue, 10 May 2023 00:00:00 -0700</pubDate>
+      <enclosure url="https://apps.apple.com/kr/app/%EB%8F%99%EA%B5%AC%EB%9D%BC%EB%AF%B8/id6692607046?l=en-GB" sparkle:version="새로운 버전번호" sparkle:os="ios" />
+    </item>
+  </channel>
+</rss>
