@@ -36,7 +36,7 @@ dependencies:
   # 스플래쉬
   flutter_native_splash: ^2.4.2
   # 웹뷰
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.1.0+1
   # 텍스트
   auto_size_text: ^3.0.0
   flutter_html: ^3.0.0-beta.2
