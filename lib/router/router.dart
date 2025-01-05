@@ -15,6 +15,7 @@ import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/circle_list_screen.dart';
 import 'package:usw_circle_link/views/screens/new_circle_list_screen.dart';
+import 'package:usw_circle_link/views/screens/new_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
@@ -39,7 +40,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
               path: 'circle',
-              builder: (_, state) => CircleScreen(
+              builder: (_, state) => newCircleScreen(
                     clubId: int.parse(state.uri.queryParameters['clubId']!),
                   ),
               routes: [
