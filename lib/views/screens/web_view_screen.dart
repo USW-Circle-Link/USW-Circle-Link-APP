@@ -96,7 +96,8 @@ class _WebViewScreenState extends State<WebViewScreen> {
                             )
                           : InAppWebView(
                               key: webViewKey,
-                              initialUrlRequest: URLRequest(url: uri),
+                              initialUrlRequest:
+                                  URLRequest(url: WebUri.uri(uri)),
                               initialOptions: InAppWebViewGroupOptions(
                                 crossPlatform: InAppWebViewOptions(
                                     javaScriptCanOpenWindowsAutomatically: true,

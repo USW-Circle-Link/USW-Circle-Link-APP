@@ -83,3 +83,5 @@ Gemfile.lock
 **/ios/fastlane/Fastfile
 **/android/fastlane/Appfile
 **/android/fastlane/Fastfile
+
+.DS_Store
