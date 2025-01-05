@@ -36,7 +36,7 @@ dependencies:
   # 스플래쉬
   flutter_native_splash: ^2.4.2
   # 웹뷰
-  flutter_inappwebview: ^5.8.0
+  flutter_inappwebview: ^6.1.0+1
   # 텍스트
   auto_size_text: ^3.0.0
   flutter_html: ^3.0.0-beta.2
@@ -75,16 +75,16 @@ dependencies:
   firebase_analytics: ^11.2.1
 
   # Notification
-  flutter_local_notifications: ^17.2.3
+  flutter_local_notifications: ^18.0.1
 
   # International
-  intl: ^0.19.0
+  intl: ^0.20.1
 
   # URL
   url_launcher: ^6.3.0
 
   # Permission
-  device_info_plus: ^10.1.2
+  device_info_plus: ^11.2.0
   permission_handler: ^11.3.1
 
 dev_dependencies:
@@ -96,12 +96,12 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^5.0.0
   
   build_runner: ^2.4.9
-  retrofit_generator: '>=7.0.0 <8.0.0'
+  retrofit_generator: ^9.1.7
   json_serializable: ^6.8.0
-  freezed: ^2.5.2
+  freezed: ^3.0.0-0.0.dev
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
