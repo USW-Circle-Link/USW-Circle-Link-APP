@@ -3,7 +3,6 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
@@ -138,8 +137,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                     child: Container(
                                       color: Colors.grey,
                                       child: Hero(
-                                        tag: state
-                                            .data.noticePhotos![index],
+                                        tag: state.data.noticePhotos![index],
                                         child: Image.network(
                                           state.data.noticePhotos![index],
                                           fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
@@ -191,7 +189,7 @@ class NoticeDetailScreen extends ConsumerWidget {
           backgroundDecoration: const BoxDecoration(
             color: Colors.black,
           ),
-          initialIndex: index,          
+          initialIndex: index,
         ),
       ),
     );

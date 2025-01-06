@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:upgrader/upgrader.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
@@ -109,6 +110,16 @@ Future<void> setupFlutterNotifications() async {
   isFlutterLocalNotificationsInitialized = true;
 }
 
+const appcastURL =
+    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/in-app-update-feature/appcast.xml';
+final upgrader = Upgrader(
+  debugLogging: true,
+  storeController: UpgraderStoreController(
+    onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
+    oniOS: () => UpgraderAppcastStore(appcastURL: appcastURL),
+  ),
+);
+
 class CircleLink extends ConsumerWidget {
   const CircleLink({super.key});
 
@@ -123,6 +134,13 @@ class CircleLink extends ConsumerWidget {
         ),
       ),
       routerConfig: ref.read(routerProvider),
+      builder: (context, child) {
+        return UpgradeAlert(
+          upgrader: upgrader,
+          navigatorKey: ref.read(routerProvider).routerDelegate.navigatorKey,
+          child: child,
+        );
+      },
     );
   }
 }
