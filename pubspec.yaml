@@ -62,6 +62,9 @@ dependencies:
   # Routing
   go_router: ^14.2.1
 
+  # Update Alert
+  upgrader: ^11.3.1
+
   # Storage
   shared_preferences: ^2.3.1
   flutter_secure_storage: ^4.2.1
