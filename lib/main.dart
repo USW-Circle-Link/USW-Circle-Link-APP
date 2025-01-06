@@ -113,7 +113,7 @@ Future<void> setupFlutterNotifications() async {
 }
 
 const appcastURL =
-    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/in-app-update-feature/appcast.xml';
+    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/develop/appcast.xml';
 final upgrader = Upgrader(
   debugLogging: true,
   storeController: UpgraderStoreController(
