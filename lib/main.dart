@@ -42,6 +42,8 @@ void main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   await setupFlutterNotifications();
 
+  // await Upgrader.clearSavedSettings();
+
   runApp(
     ProviderScope(
       child: CircleLink(),
@@ -136,6 +138,7 @@ class CircleLink extends ConsumerWidget {
       routerConfig: ref.read(routerProvider),
       builder: (context, child) {
         return UpgradeAlert(
+          showIgnore: false,
           upgrader: upgrader,
           navigatorKey: ref.read(routerProvider).routerDelegate.navigatorKey,
           child: child,
