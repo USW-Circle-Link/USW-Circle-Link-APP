@@ -5,7 +5,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class LoggedOutMenu extends ConsumerWidget {
@@ -72,15 +71,13 @@ class LoggedOutMenu extends ConsumerWidget {
                 buildDrawerItem(
                   title: '나의 소속 동아리',
                   svgPath: 'assets/images/menubar2.svg',
-                  onTap: () => context.go('/circle_list',
-                      extra: CircleListType.myCircles),
+                  onTap: () => context.go('/login'),
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
                 buildDrawerItem(
                   title: '지원 현황 확인하기',
                   svgPath: 'assets/images/menubar3.svg',
-                  onTap: () => context.go('/circle_list',
-                      extra: CircleListType.myApplications),
+                  onTap: () => context.go('/login'),
                   trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
                 ),
                 buildDrawerItem(
