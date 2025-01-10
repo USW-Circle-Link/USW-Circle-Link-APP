@@ -10,17 +10,20 @@ class ClubIntro {
   final String clubInsta;
   final String introContent;
   final String recruitmentStatus;
+  final String? circleRoom;
 
   ClubIntro({
     this.clubId,
     this.mainPhotoPath,
     this.introPhotoPath,
+    this.circleRoom,
     required this.clubName,
     required this.leaderName,
     required this.leaderHp,
     required this.clubInsta,
     required this.introContent,
     required this.recruitmentStatus,
+
   });
 
   List<String>? getNotEmptyIntroPhotoPath() {
@@ -39,6 +42,7 @@ class ClubIntro {
       clubInsta: json['clubInsta'],
       introContent: json['clubIntro'],
       recruitmentStatus: json['recruitmentStatus'],
+      circleRoom: json['circleRoom'],
     );
   }
 }
