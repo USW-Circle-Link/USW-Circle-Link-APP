@@ -69,7 +69,8 @@ lib/generated_plugin_registrant.dart
 
 # End of https://www.toptal.com/developers/gitignore/api/flutter
 # Ignore workspace.xml
-*.xml
+**/android/**/*.xml
+**/ios/**/*.xml
 # Alternatively, specify the exact path if you only want to ignore this specific file
 .idea/workspace.xml
 .idea/vcs.xml

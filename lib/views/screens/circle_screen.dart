@@ -261,27 +261,29 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                           child: Row(
                             children: [
                               SizedBox(width: 24.w),
-                              SizedBox(
-                                height: 100.h,
-                                width: 100.w,
-                                child: Image.network(
-                                  clubIntroState.value!.mainPhotoPath ?? "",
-                                  fit: BoxFit.cover,
-                                  errorBuilder: (context, error, stackTrace) {
-                                    return Container(
-                                      color: const Color.fromARGB(
-                                          255, 164, 164, 164),
-                                      child: Center(
-                                        child: Icon(
-                                          Icons.person,
-                                          color: const Color.fromARGB(
-                                              255, 255, 255, 255),
-                                          size: 60,
-                                        ),
-                                      ),
-                                    );
-                                  },
+                              Container(
+                                height: 82.h,
+                                width: 82.w,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: const Color(0xffc4c4c4)),
+                                  borderRadius: BorderRadius.circular(12.r),
+                                  image: clubIntroState.value!.mainPhotoPath != null
+                                      ? DecorationImage(
+                                    image: NetworkImage(clubIntroState.value!.mainPhotoPath!),
+                                    fit: BoxFit.cover,
+                                  )
+                                      : null,
+                                  color: const Color.fromARGB(255, 164, 164, 164),
                                 ),
+                                child: clubIntroState.value!.mainPhotoPath == null
+                                    ? Center(
+                                  child: Icon(
+                                    Icons.person,
+                                    color: const Color.fromARGB(255, 255, 255, 255),
+                                    size: 60,
+                                  ),
+                                )
+                                    : null,
                               ),
                               SizedBox(width: 16.w),
                               SizedBox(
