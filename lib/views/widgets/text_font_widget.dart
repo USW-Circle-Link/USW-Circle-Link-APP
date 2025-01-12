@@ -51,4 +51,24 @@ class TextFontWidget {
       ),
     );
   }
+
+  static TextStyle fontRegularStyle({
+    double? fontSize,
+    Color? color,
+    FontWeight? fontWeight,
+    TextAlign? textAlign,
+    double? height,
+    double? letterSpacing,
+    TextOverflow? overflow,
+    int? maxLines,
+  }) {
+    return TextStyle(
+      fontFamily: 'SUIT',
+      fontSize: fontSize,
+      color: color,
+      fontWeight: fontWeight,
+      height: height,
+      letterSpacing: letterSpacing,
+    );
+  }
 }
