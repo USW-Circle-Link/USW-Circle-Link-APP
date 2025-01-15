@@ -142,6 +142,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               bottomNavigationBar: SafeArea(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 32.w),
+                  margin: EdgeInsets.only(bottom: 10.h),
                   height: 56.h,
                   child: OutlinedButton(
                     onPressed: state is UserModelLoading

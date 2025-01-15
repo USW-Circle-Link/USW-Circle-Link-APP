@@ -153,6 +153,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
               ),
               Container(
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
+                margin: EdgeInsets.only(bottom: 10.h),
                 child: SizedBox(
                   width: double.infinity,
                   height: 56.h,
