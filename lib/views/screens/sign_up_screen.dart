@@ -1,8 +1,12 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -12,7 +16,11 @@ import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  SignUpScreen({Key? key, this.newMemberSignUp = true, this.selectedCircles})
+      : super(key: key);
+
+  bool newMemberSignUp;
+  List<Circle>? selectedCircles;
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -45,6 +53,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   void initState() {
+    logger.d(widget.selectedCircles?.first.clubName);
     super.initState();
   }
 
@@ -69,7 +78,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           case SignUpModelType.validatePasswordMatch:
             // 회원가입 성공 -> 이메일 인증으로 이동
             context.go(
-                '/login/sign_up/email_verification?account=$id&password=${Uri.encodeComponent(password)}&userName=$name&telephone=$phoneNumber&studentNumber=$studentNumber&major=$major');
+                '/login/sign_up_option/sign_up/email_verification?account=$id&password=${Uri.encodeComponent(password)}&userName=$name&telephone=$phoneNumber&studentNumber=$studentNumber&major=$major');
             break;
           default: // 예외발생!
             logger.e('예외발생! - $next');
@@ -120,7 +129,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         ),
                       ),
                       TextFontWidget.fontRegular(
-                        '회원가입',
+                        '${widget.newMemberSignUp ? "신규" : "기존 동아리"} 회원 가입',
                         fontSize: 18.sp,
                         color: Color(0xFF111111),
                         fontWeight: FontWeight.w800,
@@ -130,9 +139,73 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ),
               ),
+              bottomNavigationBar: SafeArea(
+                child: Container(
+                  padding: EdgeInsets.symmetric(horizontal: 32.w),
+                  height: 56.h,
+                  child: OutlinedButton(
+                    onPressed: state is UserModelLoading
+                        ? null
+                        : () async {
+                            if (idVerified && major != null && policyAgree) {
+                              id = idController.text.trim();
+                              password = passwordController.text.trim();
+                              final passwordConfirm =
+                                  passwordConfirmController.text.trim();
+                              name = nameController.text.trim();
+                              phoneNumber = phoneNumberController.text.trim();
+                              studentNumber =
+                                  studentNumberController.text.trim();
+                              major = major!.trim();
+                              await ref
+                                  .read(signUpViewModelProvider.notifier)
+                                  .signUpTemporary(
+                                    id: id,
+                                    password: password,
+                                    passwordConfirm: passwordConfirm,
+                                    username: name,
+                                    telephone: phoneNumber,
+                                    studentNumber: studentNumber,
+                                    major: major!,
+                                  );
+                            } else if (!idVerified) {
+                              // 아이디 중복확인 필요
+                              DialogManager.instance.showAlertDialog(
+                                context: context,
+                                content: '아이디 중복확인이 필요합니다.',
+                              );
+                            } else if (major == null) {
+                              DialogManager.instance.showAlertDialog(
+                                context: context,
+                                content: '단과대학/학과를 선택해주세요.',
+                              );
+                            } else if (!policyAgree) {
+                              DialogManager.instance.showAlertDialog(
+                                context: context,
+                                content: '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
+                              );
+                            }
+                          },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: accentColor,
+                      foregroundColor: const Color(0xFFFFFFFF),
+                      side: BorderSide.none,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r),
+                      ),
+                    ),
+                    child: TextFontWidget.fontRegular(
+                      '다음',
+                      fontSize: 18.sp,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ),
               body: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 60.h),
+                  margin: EdgeInsets.only(top: 40.h),
                   padding: EdgeInsets.only(left: 32.w, right: 32.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -207,9 +280,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             ),
                           ),
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       RoundedTextField(
@@ -255,9 +328,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             fit: BoxFit.scaleDown,
                           ),
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       RoundedTextField(
@@ -304,9 +377,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             fit: BoxFit.scaleDown,
                           ),
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       SizedBox(
@@ -322,7 +395,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 15.h,
+                        height: 50.h,
                       ),
                       RoundedTextField(
                         height: 50.h,
@@ -352,9 +425,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           height: 16.h,
                           fit: BoxFit.scaleDown,
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       RoundedTextField(
@@ -385,9 +458,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           height: 16.h,
                           fit: BoxFit.scaleDown,
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       RoundedTextField(
@@ -418,9 +491,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           height: 16.h,
                           fit: BoxFit.scaleDown,
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
                       RoundedTextField(
@@ -446,8 +519,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                             },
                           );
                         },
-                        leftBottomCornerRadius: 8.r,
-                        rightBottomCornerRadius: 8.r,
+                        leftBottomCornerRadius:
+                            widget.newMemberSignUp ? 8.r : 0.r,
+                        rightBottomCornerRadius:
+                            widget.newMemberSignUp ? 8.r : 0.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
                         borderWidth: 1.w,
@@ -465,142 +540,191 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           height: 16.h,
                           fit: BoxFit.scaleDown,
                         ),
-                        hintStyle: TextStyle(
+                        hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.sp,
-                          fontFamily: 'SUIT',
+                          fontWeight: FontWeight.w300,
                         ),
                       ),
-                      SizedBox(
-                        height: 90.h,
-                      ),
-                      IntrinsicHeight(
-                        child: Row(
-                          children: [
-                            Checkbox(
-                              materialTapTargetSize:
-                                  MaterialTapTargetSize.shrinkWrap,
-                              visualDensity: const VisualDensity(
-                                horizontal: VisualDensity.minimumDensity,
-                                vertical: VisualDensity.minimumDensity,
+                      !widget.newMemberSignUp
+                          ? RoundedTextField(
+                              height: 50.h,
+                              leftBottomCornerRadius: 8.r,
+                              rightBottomCornerRadius: 8.r,
+                              leftTopCornerRadius: 0.r,
+                              rightTopCornerRadius: 0.r,
+                              borderWidth: 1.w,
+                              maxLines: 1,
+                              textInputType: TextInputType.none,
+                              textAlign: TextAlign.left,
+                              textInputAction: TextInputAction.done,
+                              hintText: "포털 이메일 입력",
+                              isAnimatedHint: false,
+                              suffixIcon: Container(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w),
+                                child: Column(
+                                  // 높이 에 대해서 Unbounded Contraints 를 만들어주기 위함
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    TextFontWidget.fontRegular('@suwon.ac.kr'),
+                                  ],
+                                ),
                               ),
-                              value: policyAgree,
-                              onChanged: (bool? value) async {
-                                final agree = await DialogManager.instance
-                                    .showPolicyDialog(context);
-                                setState(() {
-                                  policyAgree = agree;
-                                });
-                                logger.d('지원서 작성 완료에 동의함 : $policyAgree');
-                              },
-                            ),
-                            SizedBox(
-                              width: 10.w,
-                            ),
-                            RichText(
-                              textAlign: TextAlign.center,
-                              text: TextSpan(
-                                text: "",
-                                style: TextStyle(
-                                    fontFamily: 'SUIT',
-                                    fontSize: 12.sp,
-                                    color: const Color(0xFF989898),
-                                    fontWeight: FontWeight.w400),
-                                children: const [
-                                  TextSpan(
-                                    text: "서비스 이용약관 ",
-                                    style: TextStyle(
-                                        color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                  TextSpan(
-                                    text: '및 ',
-                                  ),
-                                  TextSpan(
-                                    text: "개인정보 처리방침",
-                                    style: TextStyle(
-                                        color: Color(0xffffB052),
-                                        fontWeight: FontWeight.w800),
-                                  ),
-                                  TextSpan(
-                                    text: '에 동의함',
-                                  ),
-                                ],
+                              prefixIcon: SvgPicture.asset(
+                                'assets/images/ic_bookmark.svg',
+                                width: 13.w,
+                                height: 16.h,
+                                fit: BoxFit.scaleDown,
                               ),
-                            ),
-                          ],
-                        ),
-                      ),
+                              hintStyle: TextFontWidget.fontRegularStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            )
+                          : Container(),
                       SizedBox(
-                        height: 14.h,
+                        height: 20.h,
                       ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56.h,
-                        child: OutlinedButton(
-                          onPressed: state is UserModelLoading
-                              ? null
-                              : () async {
-                                  if (idVerified &&
-                                      major != null &&
-                                      policyAgree) {
-                                    id = idController.text.trim();
-                                    password = passwordController.text.trim();
-                                    final passwordConfirm =
-                                        passwordConfirmController.text.trim();
-                                    name = nameController.text.trim();
-                                    phoneNumber =
-                                        phoneNumberController.text.trim();
-                                    studentNumber =
-                                        studentNumberController.text.trim();
-                                    major = major!.trim();
-                                    await ref
-                                        .read(signUpViewModelProvider.notifier)
-                                        .signUpTemporary(
-                                          id: id,
-                                          password: password,
-                                          passwordConfirm: passwordConfirm,
-                                          username: name,
-                                          telephone: phoneNumber,
-                                          studentNumber: studentNumber,
-                                          major: major!,
-                                        );
-                                  } else if (!idVerified) {
-                                    // 아이디 중복확인 필요
-                                    DialogManager.instance.showAlertDialog(
-                                      context: context,
-                                      content: '아이디 중복확인이 필요합니다.',
-                                    );
-                                  } else if (major == null) {
-                                    DialogManager.instance.showAlertDialog(
-                                      context: context,
-                                      content: '단과대학/학과를 선택해주세요.',
-                                    );
-                                  } else if (!policyAgree) {
-                                    DialogManager.instance.showAlertDialog(
-                                      context: context,
-                                      content:
-                                          '서비스 이용약관 및 개인정보 처리방침에 동의가 필요합니다.',
-                                    );
-                                  }
-                                },
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: const Color(0xFF000000),
-                            foregroundColor: const Color(0xFFFFFFFF),
-                            side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0.0,
-                            ),
+                      Row(
+                        children: [
+                          Checkbox(
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.r))),
+                            side: BorderSide(width: 1.w),
+                            activeColor: accentColor,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity,
+                            ),
+                            value: policyAgree,
+                            onChanged: (bool? value) async {
+                              final agree = await DialogManager.instance
+                                  .showPolicyDialog(context);
+                              setState(() {
+                                policyAgree = agree;
+                              });
+                              logger.d('지원서 작성 완료에 동의함 : $policyAgree');
+                            },
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "서비스 이용약관을 확인했습니다.",
+                              style: TextFontWidget.fontRegularStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF989898),
+                              ),
+                              children: [],
                             ),
                           ),
-                          child: TextFontWidget.fontRegular(
-                            '다음',
-                            fontSize: 18.sp,
-                            color: const Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.w800,
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      TextFontWidget.fontRegular(
+                        "동구라미는 수원대학교 학생을 위한 서비스이며, 인증을 통해\n만 14세 이상만 가입할 수 있습니다.",
+                        fontSize: 10.sp,
+                        textScaleFactor: 0.78, // 일정 폰트 크기 이하로 줄어들지 않을때 사용
+                        fontWeight: FontWeight.w300,
+                        color: Color(0xFFBFBFBF),
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.r))),
+                            side: BorderSide(width: 1.w),
+                            activeColor: accentColor,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity,
+                            ),
+                            value: policyAgree,
+                            onChanged: (bool? value) async {
+                              final agree = await DialogManager.instance
+                                  .showPolicyDialog(context);
+                              setState(() {
+                                policyAgree = agree;
+                              });
+                              logger.d('지원서 작성 완료에 동의함 : $policyAgree');
+                            },
                           ),
-                        ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "개인 정보 처리 방침을 확인했습니다.",
+                              style: TextFontWidget.fontRegularStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF989898),
+                              ),
+                              children: [],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
+                      ),
+                      Row(
+                        children: [
+                          Checkbox(
+                            shape: RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5.r))),
+                            side: BorderSide(width: 1.w),
+                            activeColor: accentColor,
+                            materialTapTargetSize:
+                                MaterialTapTargetSize.shrinkWrap,
+                            visualDensity: const VisualDensity(
+                              horizontal: VisualDensity.minimumDensity,
+                              vertical: VisualDensity.minimumDensity,
+                            ),
+                            value: policyAgree,
+                            onChanged: (bool? value) async {
+                              final agree = await DialogManager.instance
+                                  .showPolicyDialog(context);
+                              setState(() {
+                                policyAgree = agree;
+                              });
+                              logger.d('지원서 작성 완료에 동의함 : $policyAgree');
+                            },
+                          ),
+                          SizedBox(
+                            width: 10.w,
+                          ),
+                          RichText(
+                            textAlign: TextAlign.center,
+                            text: TextSpan(
+                              text: "개인 정보 수집에 동의합니다.",
+                              style: TextFontWidget.fontRegularStyle(
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w600,
+                                color: const Color(0xFF989898),
+                              ),
+                              children: [],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        height: 10.h,
                       ),
                     ],
                   ),

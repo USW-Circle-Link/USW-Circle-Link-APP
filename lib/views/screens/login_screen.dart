@@ -84,37 +84,21 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: 20.h,
+                  height: 10.h,
                 ),
                 RichText(
                   text: TextSpan(
-                    text: "재미있는 동아리 없을까?\n",
-                    style: TextStyle(
-                      fontFamily: 'SUIT',
-                      fontSize: 18.sp,
-                      color: const Color(0xFF353549),
+                    text: "동아리 찾기부터 지원, 합격 통지까지!\n동구라미에서 한 번에, 간편하게!",
+                    style: TextFontWidget.fontRegularStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFF282828),
                       fontWeight: FontWeight.w400,
                     ),
-                    children: const [
-                      TextSpan(text: "내 "),
-                      TextSpan(
-                        text: '취향',
-                        style: TextStyle(
-                            color: Color(0xffffB052),
-                            fontWeight: FontWeight.w800),
-                      ),
-                      TextSpan(text: "에 딱 맞는 "),
-                      TextSpan(
-                        text: '동아리 찾기',
-                        style: TextStyle(
-                            color: Color(0xffffB052),
-                            fontWeight: FontWeight.w800),
-                      ),
-                    ],
+                    children: const [],
                   ),
                 ),
                 SizedBox(
-                  height: 40.h,
+                  height: 20.h,
                 ),
                 RoundedTextField(
                   textInputAction: TextInputAction.next,
@@ -135,44 +119,53 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     height: 16.h,
                     fit: BoxFit.scaleDown,
                   ),
+                  hintStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    color: Color(0xFF989898),
+                  ),
                 ),
                 SizedBox(
                   height: 10.h,
                 ),
                 RoundedTextField(
-                    textEditController: passwordController,
-                    leftBottomCornerRadius: 16.r,
-                    rightBottomCornerRadius: 16.r,
-                    leftTopCornerRadius: 16.r,
-                    rightTopCornerRadius: 16.r,
-                    borderWidth: 1.w,
-                    maxLines: 1,
-                    textInputType: TextInputType.text,
-                    obscureText: !passwordVisible,
-                    textAlign: TextAlign.left,
-                    hintText: '비밀번호',
-                    isAnimatedHint: false,
-                    prefixIcon: SvgPicture.asset(
-                      'assets/images/ic_password.svg',
-                      width: 13.w,
-                      height: 16.h,
+                  textEditController: passwordController,
+                  leftBottomCornerRadius: 16.r,
+                  rightBottomCornerRadius: 16.r,
+                  leftTopCornerRadius: 16.r,
+                  rightTopCornerRadius: 16.r,
+                  borderWidth: 1.w,
+                  maxLines: 1,
+                  textInputType: TextInputType.text,
+                  obscureText: !passwordVisible,
+                  textAlign: TextAlign.left,
+                  hintText: '비밀번호',
+                  isAnimatedHint: false,
+                  prefixIcon: SvgPicture.asset(
+                    'assets/images/ic_password.svg',
+                    width: 13.w,
+                    height: 16.h,
+                    fit: BoxFit.scaleDown,
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                    icon: SvgPicture.asset(
+                      passwordVisible
+                          ? 'assets/images/ic_eye_open.svg'
+                          : 'assets/images/ic_eye_slash.svg',
+                      width: 25.w,
+                      height: 25.h,
                       fit: BoxFit.scaleDown,
                     ),
-                    suffixIcon: IconButton(
-                      onPressed: () {
-                        setState(() {
-                          passwordVisible = !passwordVisible;
-                        });
-                      },
-                      icon: SvgPicture.asset(
-                        passwordVisible
-                            ? 'assets/images/ic_eye_open.svg'
-                            : 'assets/images/ic_eye_slash.svg',
-                        width: 25.w,
-                        height: 25.h,
-                        fit: BoxFit.scaleDown,
-                      ),
-                    )),
+                  ),
+                  hintStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    color: Color(0xFF989898),
+                  ),
+                ),
                 SizedBox(
                   height: 8.h,
                 ),
@@ -271,7 +264,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        context.go('/login/sign_up');
+                        context.go('/login/sign_up_option');
                       },
                       child: TextFontWidget.fontRegular(
                         '회원가입',

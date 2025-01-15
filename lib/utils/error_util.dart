@@ -15,6 +15,12 @@ class ErrorUtil {
         return '학번이 형식에 맞지 않습니다!';
       case "USR-F700": // 학과가 선택되지 않음
         return '단과대학/학과를 선택해주세요!';
+      case "EML-F100": // 이메일 형식에 맞지 않음
+        return "이메일을 입력해주세요.";
+      case "USR-206": // 이미 가입된 포털 이메일
+        return "이미 가입된 포털 이메일입니다!";
+      case "ATTEMPT-503": // 최대 시도 횟수 초과
+        return "최대 시도 횟수를 초과했습니다! 잠시후 다시 시도해주세요!";
       default:
         return null;
     }
