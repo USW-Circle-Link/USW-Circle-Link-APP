@@ -18,7 +18,7 @@ class CircleGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.h),
+      margin: EdgeInsets.only(bottom: 10.h),
       padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
       color: Colors.white,
       child: Column(
@@ -28,7 +28,7 @@ class CircleGroup extends StatelessWidget {
             department.key.toDepartment(),
             fontSize: 16.sp,
             color: Colors.black,
-            fontWeight: FontWeight.w400,
+            fontWeight: FontWeight.w700,
           ),
           SizedBox(height: 8.h), // 텍스트와 리스트 사이에 여백 추가
           SizedBox(
