@@ -49,8 +49,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 GoRoute(
                     path: 'application_writing',
                     builder: (_, state) => ApplicationWritingScreen(
-                          clubId:
-                              int.parse(state.uri.queryParameters['clubId']!),
+                          clubId: int.parse(state.uri.queryParameters['clubId']!),
                         ),
                     routes: [webviewRouter]),
               ]),
