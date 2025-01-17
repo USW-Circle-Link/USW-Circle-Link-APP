@@ -24,7 +24,11 @@ class DialogManager {
     String? rightButtonText,
     Function()? onLeftButtonPressed,
     Function()? onRightButtonPressed,
-    barrierDismissible=true,
+    bool barrierDismissible = true,
+    Color? titleColor, // 제목 색상
+    Color? contentColor, // 내용 색상
+    Color? leftButtonColor, // 왼쪽 버튼 색상
+    Color? rightButtonColor, // 오른쪽 버튼 색상
   }) async {
     await showDialog(
       barrierDismissible: barrierDismissible,
@@ -36,9 +40,14 @@ class DialogManager {
         rightButtonText: rightButtonText,
         onLeftButtonPressed: onLeftButtonPressed,
         onRightButtonPressed: onRightButtonPressed,
+        titleColor: titleColor ?? const Color(0xFF000000), // 기본 제목 색상
+        contentColor: contentColor ?? const Color(0xFF767676), // 기본 내용 색상
+        leftButtonColor: leftButtonColor ?? const Color(0xFF0085FF), // 기본 왼쪽 버튼 색상
+        rightButtonColor: rightButtonColor ?? const Color(0xFF0085FF), // 기본 오른쪽 버튼 색상
       ),
     );
   }
+
 
   Future<void> showMajorPickerDialog({
     required BuildContext context,

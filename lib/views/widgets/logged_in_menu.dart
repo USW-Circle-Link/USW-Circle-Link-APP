@@ -111,7 +111,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           TextButton(
-                            onPressed: () => context.go('/update_profile'),
+                            onPressed: () => context.go('/verify_password'),
                             child: TextFontWidget.fontRegular(
                               '내 정보 수정',
                               fontSize: 12.sp,

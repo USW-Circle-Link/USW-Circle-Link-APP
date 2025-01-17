@@ -21,7 +21,9 @@ import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
 import 'package:usw_circle_link/views/screens/terms_of_service_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
+import 'package:usw_circle_link/views/screens/verify_password_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
+
 
 final webviewRouter = GoRoute(
   path: 'webview/:url',
@@ -113,14 +115,20 @@ final routerProvider = Provider<GoRouter>((ref) {
             ),
           ),
           GoRoute(
-            path: 'update_profile',
-            builder: (_, __) => UpdateProfileScreen(),
+            path: 'verify_password',
+            builder: (_, __) => VerifyPasswordScreen(),
             routes: [
               GoRoute(
-                path: 'delete_user',
-                builder: (_, __) => DeleteUserScreen(),
+                path: 'update_profile',
+                builder: (_, __) => UpdateProfileScreen(),
+                routes: [
+                  GoRoute(
+                    path: 'delete_user',
+                    builder: (_, __) => DeleteUserScreen(),
+                  ),
+                ],
               ),
-            ],
+            ]
           ),
           GoRoute(
             path: 'notices',
