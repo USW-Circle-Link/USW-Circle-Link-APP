@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
-import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
+import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
@@ -23,12 +23,69 @@ class CircleScreen extends ConsumerStatefulWidget {
   ConsumerState<CircleScreen> createState() => _CircleScreenState();
 }
 
-class _CircleScreenState extends ConsumerState<CircleScreen> {
+class _CircleScreenState extends ConsumerState<CircleScreen>
+    with TickerProviderStateMixin {
   int activeIndex = 0;
+  final GlobalKey _iconKey = GlobalKey();
+  OverlayEntry? _overlayEntry;
+  late TabController tabController;
+  int selectedIndex = 0;
+
+  void _showOverlay(String circleRoom, String leaderHp, String clubInsta) {
+    final RenderBox renderBox =
+        _iconKey.currentContext!.findRenderObject() as RenderBox;
+    final Offset offset = renderBox.localToGlobal(Offset.zero);
+    final Size size = renderBox.size;
+
+    _overlayEntry = OverlayEntry(
+      builder: (context) => Stack(
+        children: [
+          GestureDetector(
+            onTap: _removeOverlay,
+            child: Container(
+              color: Colors.transparent,
+            ),
+          ),
+          Positioned(
+            top: offset.dy + size.height,
+            left: offset.dx - 170.w,
+            child: Material(
+              color: Colors.transparent,
+              child: CircleDetailOverlay(
+                circleRoom: circleRoom.isNotEmpty ? circleRoom : "정보 없음",
+                leaderHp: leaderHp.isNotEmpty ? leaderHp : "정보 없음",
+                clubInsta: clubInsta.isNotEmpty ? clubInsta : "정보 없음",
+                onClose: _removeOverlay,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+  }
 
   @override
   void initState() {
+    tabController = TabController(length: 2, vsync: this);
+    tabController.addListener(() {
+      setState(() {
+        selectedIndex = tabController.index;
+      });
+    });
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    tabController.dispose();
+    super.dispose();
   }
 
   @override
@@ -75,7 +132,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
-        backgroundColor: const Color(0xffFFFFFF),
+        backgroundColor: Color(0xffFFFFFF),
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(62.h),
@@ -117,39 +174,56 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
         ),
         bottomNavigationBar: !clubIntroState.hasValue
             ? SizedBox.shrink()
-            : Padding(
-                padding: EdgeInsets.zero,
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: const Color(0xffFFFFFF),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.grey.withOpacity(0.1),
-                        spreadRadius: 5,
-                        blurRadius: 7,
-                        offset: Offset(0, 3),
+            : Container(
+                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+                decoration: BoxDecoration(
+                  color: const Color(0xffFFFFFF),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.1),
+                      spreadRadius: 5,
+                      blurRadius: 7,
+                      offset: Offset(0, 3),
+                    ),
+                  ],
+                ),
+                height: 100.h,
+                alignment: Alignment.center,
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 56.h,
+                  child: Builder(builder: (context) {
+                    final isClosed =
+                        clubIntroState.value!.recruitmentStatus == "CLOSE";
+                    return OutlinedButton(
+                      onPressed: isClosed
+                          ? null
+                          : () async {
+                              await ref
+                                  .read(applicationViewModelProvider.notifier)
+                                  .checkAvailableForApplication(
+                                      clubId: widget.clubId);
+                            },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor:
+                            isClosed ? Colors.grey : Color(0xffffB052),
+                        foregroundColor: const Color(0xFFFFFFFF),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                        ),
                       ),
-                    ],
-                  ),
-                  height: 116.h,
-                  child: Column(
-                    children: [
-                      SizedBox(height: 12.h),
-                      clubIntroState.value!.recruitmentStatus == "CLOSE"
-                          ? CustomButton(
-                              text: '모집마감', isEnabled: false, onPressed: () {})
-                          : CustomButton(
-                              text: '지원하기',
-                              isEnabled: true,
-                              onPressed: () async {
-                                await ref
-                                    .read(applicationViewModelProvider.notifier)
-                                    .checkAvailableForApplication(
-                                        clubId: widget.clubId);
-                              },
-                            ),
-                    ],
-                  ),
+                      child: TextFontWidget.fontRegular(
+                        isClosed ? '모집마감' : '지원하기',
+                        fontSize: 18.sp,
+                        color: const Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w800,
+                      ),
+                    );
+                  }),
                 ),
               ),
         body: clubIntroState.isLoading || applicationState.isLoading
@@ -160,34 +234,28 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                       '동아리 정보를 불러오지 못했습니다.',
                     ),
                   )
-                : SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height: 250.h,
-                          child: clubIntroState.value!
-                                          .getNotEmptyIntroPhotoPath() !=
-                                      null &&
-                                  clubIntroState.value!
-                                      .getNotEmptyIntroPhotoPath()!
-                                      .isNotEmpty
-                              ? Stack(
-                                  children: [
-                                    SizedBox(
-                                      child: clubIntroState.value!
-                                                  .getNotEmptyIntroPhotoPath() !=
-                                              null
-                                          ? CarouselSlider.builder(
-                                              itemCount: clubIntroState.value!
-                                                  .getNotEmptyIntroPhotoPath()!
-                                                  .length,
+                : NestedScrollView(
+                    headerSliverBuilder: (context, innerBoxScrolled) {
+                      return [
+                        SliverList(
+                          delegate: SliverChildListDelegate(
+                            [
+                              SizedBox(
+                                height: 250.h,
+                                child: Builder(builder: (context) {
+                                  final introPhotos = clubIntroState.value!
+                                      .getNotEmptyIntroPhotoPath();
+                                  return introPhotos != null &&
+                                          introPhotos.isNotEmpty
+                                      ? Stack(
+                                          alignment: Alignment.bottomCenter,
+                                          children: [
+                                            CarouselSlider.builder(
+                                              itemCount: introPhotos.length,
                                               itemBuilder:
                                                   (context, index, realIndex) {
                                                 return buildImage(
-                                                    clubIntroState.value!
-                                                            .getNotEmptyIntroPhotoPath()![
-                                                        index],
-                                                    index);
+                                                    introPhotos[index], index);
                                               },
                                               options: CarouselOptions(
                                                 height: 250.h,
@@ -197,242 +265,261 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
                                                     setState(() =>
                                                         activeIndex = index),
                                               ),
-                                            )
-                                          : Center(
-                                              child: TextFontWidget.fontRegular(
-                                                '사진이 없습니다.',
-                                                fontSize: 16.sp,
-                                              ),
                                             ),
-                                    ),
-                                    Positioned(
-                                      bottom: 16.h,
-                                      right: 16.w,
-                                      child: Row(
-                                        children: [
-                                          SizedBox(width: 10.w),
-                                          Container(
-                                            width: 46.w,
-                                            height: 28.h,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  Colors.black.withOpacity(0.7),
-                                              borderRadius:
-                                                  BorderRadius.circular(150.sp),
-                                            ),
-                                            child: Center(
+                                            Positioned(
+                                              bottom: 7.h,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
-                                                children: [
-                                                  TextFontWidget.fontRegular(
-                                                    '${activeIndex + 1}',
-                                                    color:
-                                                        const Color(0xffBFBFBF),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w500,
-                                                    height: 1.h,
-                                                    letterSpacing: -0.3.sp,
-                                                  ),
-                                                  TextFontWidget.fontRegular(
-                                                    ' / ${clubIntroState.value!.getNotEmptyIntroPhotoPath()!.length}',
-                                                    color:
-                                                        const Color(0xffBFBFBF),
-                                                    fontSize: 12.sp,
-                                                    fontWeight: FontWeight.w500,
-                                                    height: 1.h,
-                                                    letterSpacing: -0.3.sp,
-                                                  ),
-                                                ],
+                                                children: List.generate(
+                                                    introPhotos.length,
+                                                    (index) {
+                                                  return Container(
+                                                    width: 7.w,
+                                                    height: 7.h,
+                                                    margin: index !=
+                                                            introPhotos.length
+                                                        ? EdgeInsets.only(
+                                                            right: 4.w)
+                                                        : null,
+                                                    decoration: BoxDecoration(
+                                                      color: index ==
+                                                              activeIndex
+                                                          ? accentColor
+                                                          : Color(0xFFD9D9D9),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100.sp),
+                                                    ),
+                                                  );
+                                                }),
                                               ),
                                             ),
+                                          ],
+                                        )
+                                      : Container(
+                                          color: const Color.fromARGB(
+                                              255, 36, 36, 36),
+                                        );
+                                }),
+                              ),
+                              SizedBox(height: 16.h),
+                              SizedBox(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(width: 24.w),
+                                    Container(
+                                      height: 82.h,
+                                      width: 82.w,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            color: const Color(0xffc4c4c4)),
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                        image: clubIntroState
+                                                    .value!.mainPhotoPath !=
+                                                null
+                                            ? DecorationImage(
+                                                image: NetworkImage(
+                                                    clubIntroState
+                                                        .value!.mainPhotoPath!),
+                                                fit: BoxFit.cover,
+                                              )
+                                            : null,
+                                        color: const Color.fromARGB(
+                                            255, 164, 164, 164),
+                                      ),
+                                      child:
+                                          clubIntroState.value!.mainPhotoPath ==
+                                                  null
+                                              ? Center(
+                                                  child: Icon(
+                                                    Icons.person,
+                                                    color: const Color.fromARGB(
+                                                        255, 255, 255, 255),
+                                                    size: 60,
+                                                  ),
+                                                )
+                                              : null,
+                                    ),
+                                    SizedBox(width: 16.w),
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(height: 8.h),
+                                          Row(
+                                            children: [
+                                              SizedBox(
+                                                child:
+                                                    TextFontWidget.fontRegular(
+                                                  clubIntroState
+                                                      .value!.clubName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color: Colors.black,
+                                                  fontSize: 18.sp,
+                                                  fontWeight: FontWeight.w900,
+                                                  height: 1.h,
+                                                  letterSpacing: -0.45.sp,
+                                                ),
+                                              ),
+                                            ],
                                           ),
+                                          SizedBox(height: 5.h),
+                                          Row(
+                                            children: [
+                                              TextFontWidget.fontRegular(
+                                                '동아리 회장',
+                                                color: const Color(0xFF767676),
+                                                fontSize: 14.sp,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.h,
+                                                letterSpacing: -0.35.sp,
+                                              ),
+                                              SizedBox(width: 4.w),
+                                              SizedBox(
+                                                child:
+                                                    TextFontWidget.fontRegular(
+                                                  clubIntroState
+                                                      .value!.leaderName,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  color:
+                                                      const Color(0xFF353549),
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w800,
+                                                  height: 1.h,
+                                                  letterSpacing: -0.35.sp,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 8.h),
+                                          SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            child: Row(
+                                              children: [
+                                                _buildChip('#label'),
+                                                SizedBox(width: 4.w),
+                                                _buildChip('#label'),
+                                                SizedBox(width: 4.w),
+                                                _buildChip('#label'),
+                                                SizedBox(width: 4.w),
+                                                _buildChip('#label'),
+                                              ],
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),
-                                  ],
-                                )
-                              : Container(
-                                  color: const Color.fromARGB(255, 36, 36, 36),
-                                ),
-                        ),
-                        SizedBox(height: 16.h),
-                        SizedBox(
-                          child: Row(
-                            children: [
-                              SizedBox(width: 24.w),
-                              Container(
-                                height: 82.h,
-                                width: 82.w,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: const Color(0xffc4c4c4)),
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  image: clubIntroState.value!.mainPhotoPath != null
-                                      ? DecorationImage(
-                                    image: NetworkImage(clubIntroState.value!.mainPhotoPath!),
-                                    fit: BoxFit.cover,
-                                  )
-                                      : null,
-                                  color: const Color.fromARGB(255, 164, 164, 164),
-                                ),
-                                child: clubIntroState.value!.mainPhotoPath == null
-                                    ? Center(
-                                  child: Icon(
-                                    Icons.person,
-                                    color: const Color.fromARGB(255, 255, 255, 255),
-                                    size: 60,
-                                  ),
-                                )
-                                    : null,
-                              ),
-                              SizedBox(width: 16.w),
-                              SizedBox(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(height: 10.h),
-                                    Row(
-                                      children: [
-                                        SizedBox(
-                                          width: 200.w,
-                                          child: TextFontWidget.fontRegular(
-                                            clubIntroState.value!.clubName,
-                                            overflow: TextOverflow.ellipsis,
-                                            color: Colors.black,
-                                            fontSize: 18.sp,
-                                            fontWeight: FontWeight.w900,
-                                            height: 1.h,
-                                            letterSpacing: -0.45.sp,
-                                          ),
-                                        ),
-                                      ],
+                                    Container(
+                                      alignment: Alignment.topRight,
+                                      child: IconButton(
+                                        key: _iconKey,
+                                        onPressed: () {
+                                          if (_overlayEntry == null) {
+                                            _showOverlay(
+                                                "임시",
+                                                clubIntroState.value!.leaderHp,
+                                                clubIntroState
+                                                    .value!.clubInsta);
+                                          } else {
+                                            _removeOverlay();
+                                          }
+                                        },
+                                        icon: Icon(Icons.more_vert),
+                                      ),
                                     ),
-                                    SizedBox(height: 5.h),
-                                    Row(
-                                      children: [
-                                        TextFontWidget.fontRegular(
-                                          '동아리장',
-                                          color: const Color(0xFF767676),
-                                          fontSize: 14.sp,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.h,
-                                          letterSpacing: -0.35.sp,
-                                        ),
-                                        SizedBox(width: 4.w),
-                                        SizedBox(
-                                          width: 140.w,
-                                          child: TextFontWidget.fontRegular(
-                                            clubIntroState.value!.leaderName,
-                                            overflow: TextOverflow.ellipsis,
-                                            color: const Color(0xFF353549),
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w800,
-                                            height: 1.h,
-                                            letterSpacing: -0.35.sp,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    Row(
-                                      children: [
-                                        SvgPicture.asset(
-                                          'assets/images/phonelogo.svg',
-                                          height: 16.h,
-                                          width: 16.w,
-                                        ),
-                                        SizedBox(width: 6.w),
-                                        SizedBox(
-                                          width: 180.w,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: clubIntroState
-                                                      .value!.leaderHp));
-                                            },
-                                            child: TextFontWidget.fontRegular(
-                                              clubIntroState.value!.leaderHp
-                                                      .addDashOrNull() ??
-                                                  clubIntroState
-                                                      .value!.leaderHp,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: const Color(0xFF353549),
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.h,
-                                              letterSpacing: -0.35.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    SizedBox(height: 11.h),
-                                    Row(
-                                      children: [
-                                        Image.asset(
-                                          'assets/images/Instagram_logo.png',
-                                          height: 16.h,
-                                          width: 16.w,
-                                        ),
-                                        SizedBox(width: 6.w),
-                                        SizedBox(
-                                          width: 180.w,
-                                          child: InkWell(
-                                            onTap: () {
-                                              Clipboard.setData(ClipboardData(
-                                                  text: clubIntroState
-                                                      .value!.clubInsta));
-                                            },
-                                            child: TextFontWidget.fontRegular(
-                                              '@${clubIntroState.value!.clubInsta}',
-                                              overflow: TextOverflow.ellipsis,
-                                              color: const Color(0xFF353549),
-                                              fontSize: 14.sp,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.h,
-                                              letterSpacing: -0.35.sp,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
+                                    SizedBox(width: 24.w),
                                   ],
                                 ),
                               ),
+                              SizedBox(height: 16.h),
                             ],
                           ),
                         ),
-                        SizedBox(height: 16.h),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 24.w),
-                          child: Divider(
-                            thickness: 0.5.h,
-                          ),
-                        ),
-                        SizedBox(height: 24.h),
-                        Row(
-                          children: [
-                            SizedBox(width: 24.w),
-                            TextFontWidget.fontRegular(
-                              '동아리 소개',
-                              color: const Color(0xFF353549),
-                              fontSize: 16.sp,
-                              fontWeight: FontWeight.w800,
-                              height: 1.h,
-                              letterSpacing: -0.8.sp,
+                        SliverPersistentHeader(
+                          delegate: _SliverAppBarDelegate(
+                            TabBar(
+                              controller: tabController,
+                              labelPadding: EdgeInsets.zero,
+                              labelColor: Color(0xFFFFFFFF),
+                              unselectedLabelColor: Color(0xFFCECECE),
+                              indicator: BoxDecoration(),
+                              tabs: [
+                                Tab(
+                                  child: SizedBox.expand(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      color: selectedIndex == 0
+                                          ? Color(0xFFFFB052)
+                                          : Color(0xFFEBEBEB),
+                                      child: TextFontWidget.fontRegular(
+                                          '동아리 소개 글'),
+                                    ),
+                                  ),
+                                ),
+                                Tab(
+                                  child: SizedBox.expand(
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      color: selectedIndex == 1
+                                          ? Color(0xFFFFB052)
+                                          : Color(0xFFEBEBEB),
+                                      child: TextFontWidget.fontRegular(
+                                          '동아리 모집 글'),
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
+                          pinned: true,
                         ),
-                        SizedBox(height: 12.h),
+                      ];
+                    },
+                    body: TabBarView(
+                      controller: tabController,
+                      children: [
                         Container(
                           alignment: Alignment.topLeft,
-                          padding: EdgeInsets.fromLTRB(24.sp, 0, 24.sp, 0),
-                          child: Html(data:clubIntroState.value!.introContent),
+                          padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
+                          child: Html(data: clubIntroState.value!.introContent),
+                        ),
+                        Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
+                          child: Html(data: "테스트"),
                         ),
                       ],
                     ),
                   ),
       ),
+    );
+  }
+
+  Widget _buildChip(String label) {
+    return Chip(
+      label: Text(label),
+      labelStyle: TextFontWidget.fontRegularStyle(
+        color: Color(0xFFFFFFFF),
+        fontWeight: FontWeight.w400,
+      ),
+      visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+      backgroundColor: Color(0xFFC0C0C0),
+      elevation: null,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.transparent),
+        borderRadius: BorderRadius.all(Radius.circular(8.r)),
+      ),
+      padding: EdgeInsets.zero,
     );
   }
 
@@ -452,42 +539,27 @@ class _CircleScreenState extends ConsumerState<CircleScreen> {
       );
 }
 
-class CustomButton extends StatefulWidget {
-  final String text;
-  final bool isEnabled;
-  final VoidCallback onPressed;
+class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
+  _SliverAppBarDelegate(this._tabBar);
 
-  const CustomButton({
-    super.key,
-    required this.text,
-    required this.isEnabled,
-    required this.onPressed,
-  });
+  final TabBar _tabBar;
 
   @override
-  State<CustomButton> createState() => _CustomButtonState();
-}
-
-class _CustomButtonState extends State<CustomButton> {
+  double get minExtent => _tabBar.preferredSize.height;
   @override
-  Widget build(BuildContext context) {
+  double get maxExtent => _tabBar.preferredSize.height;
+
+  @override
+  Widget build(
+      BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      height: 56,
-      width: 327,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(8),
-        color: widget.isEnabled ? const Color(0xffffB052) : Colors.grey,
-      ),
-      child: TextButton(
-        onPressed: widget.isEnabled ? widget.onPressed : null,
-        child: TextFontWidget.fontRegular(
-          widget.text,
-          color: const Color(0xffffffff),
-          fontSize: 18,
-          fontWeight: FontWeight.w800,
-          height: 1.111,
-        ),
-      ),
+      color: Colors.white,
+      child: _tabBar,
     );
+  }
+
+  @override
+  bool shouldRebuild(_SliverAppBarDelegate oldDelegate) {
+    return true;
   }
 }

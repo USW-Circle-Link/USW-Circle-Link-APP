@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
@@ -188,6 +190,9 @@ const content_of_terms_of_service = '동구라미 서비스 이용약관\n\n'
     '제 4 조 (면책조항)\n\n'
     '서비스 제공자는 이용자의 귀책 사유로 인한 서비스 이용의 중단 및 손해에 대해 책임을 지지 않습니다. '
     '또한, 천재지변, 전쟁 등의 불가항력적 사유로 인한 서비스 제공의 중단에 대해서도 책임을 지지 않습니다.\n\n';
+
+// Color
+const accentColor = Color(0xFFFFB052);
 
 // 테스트 데이터
 const testId = "user1";
