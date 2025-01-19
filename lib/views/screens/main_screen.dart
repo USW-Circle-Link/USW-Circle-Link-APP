@@ -229,15 +229,16 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ],
                     ),
                     OutlinedButton(
-                      onPressed: () {
-                        setState(() async {
-                          selectedGroups = await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return GroupPicker(initialGroups: selectedGroups);
-                            },
-                          );
+                      onPressed: () async {
+                        final result = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return GroupPicker(initialGroups: selectedGroups);
+                          },
+                        );
+                        setState(() {
+                          selectedGroups = result;
                         });
                       },
                       style: OutlinedButton.styleFrom(

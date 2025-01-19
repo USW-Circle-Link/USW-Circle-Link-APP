@@ -40,7 +40,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
               path: 'circle',
-              builder: (_, state) => newCircleScreen(
+              builder: (_, state) => CircleScreen(
                     clubId: int.parse(state.uri.queryParameters['clubId']!),
                   ),
               routes: [
@@ -144,11 +144,12 @@ final routerProvider = Provider<GoRouter>((ref) {
               path: 'image',
               name: 'image',
               builder: (_, state) {
-                final Map<String, dynamic> extra = (state.extra as Map<String, dynamic>);
+                final Map<String, dynamic> extra =
+                    (state.extra as Map<String, dynamic>);
                 return ImageScreen(
                   galleryItems: extra['galleryItems'],
                   backgroundDecoration: extra['backgroundDecoration'],
-                  initialIndex: extra['index'],                  
+                  initialIndex: extra['index'],
                 );
               }),
         ],
