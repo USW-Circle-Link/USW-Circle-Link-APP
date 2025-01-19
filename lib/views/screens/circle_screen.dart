@@ -419,25 +419,24 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                         ],
                                       ),
                                     ),
-                                    Container(
-                                      alignment: Alignment.topRight,
-                                      child: IconButton(
-                                        key: _iconKey,
-                                        onPressed: () {
-                                          if (_overlayEntry == null) {
-                                            _showOverlay(
-                                                "임시",
-                                                clubIntroState.value!.leaderHp,
-                                                clubIntroState
-                                                    .value!.clubInsta);
-                                          } else {
-                                            _removeOverlay();
-                                          }
-                                        },
-                                        icon: Icon(Icons.more_vert),
-                                      ),
+                                    IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(),
+                                      visualDensity: VisualDensity.compact,
+                                      key: _iconKey,
+                                      onPressed: () {
+                                        if (_overlayEntry == null) {
+                                          _showOverlay(
+                                              "임시",
+                                              clubIntroState.value!.leaderHp,
+                                              clubIntroState.value!.clubInsta);
+                                        } else {
+                                          _removeOverlay();
+                                        }
+                                      },
+                                      icon: Icon(Icons.more_vert),
                                     ),
-                                    SizedBox(width: 24.w),
+                                    SizedBox(width: 12.w),
                                   ],
                                 ),
                               ),
