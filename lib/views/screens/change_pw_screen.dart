@@ -255,13 +255,16 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 8.h,
+                        height: 10.h,
                       ),
                       TextFontWidget.fontRegular(
-                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!",
+                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 5~20자 이내로 작성해주세요!",
                         fontSize: 12.sp,
-                        color: const Color(0xFF000000),
+                        color: const Color(0xFF707070),
                         fontWeight: FontWeight.w400,
+                      ),
+                      SizedBox(
+                        height: 10.h,
                       ),
                       Visibility(
                         visible: state is ChangePwModelError,
