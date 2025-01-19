@@ -3,29 +3,27 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'find_pw_model.freezed.dart';
 part 'find_pw_model.g.dart';
 
-enum FindPwModelType {sendCode, verifyCode}
-
-abstract class FindPwModelBase {}
+enum FindPwModelType { sendCode, verifyCode }
 
 @freezed
-class FindPwModel extends FindPwModelBase with _$FindPwModel {
-
+class FindPwModel with _$FindPwModel {
   FindPwModel._();
 
   factory FindPwModel({
     required String message,
-   String? data,
+    String? data,
     FindPwModelType? type,
   }) = _FindPWModel;
 
-  factory FindPwModel.fromJson(Map<String, dynamic> json) => _$FindPwModelFromJson(json);
+  factory FindPwModel.fromJson(Map<String, dynamic> json) =>
+      _$FindPwModelFromJson(json);
 
-  FindPwModel setType(FindPwModelType type) => FindPwModel(message: message, data: data, type: type);
+  FindPwModel setType(FindPwModelType type) =>
+      FindPwModel(message: message, data: data, type: type);
 }
 
 @freezed
-class FindPwModelError extends FindPwModelBase with _$FindPwModelError implements Exception {
-
+class FindPwModelError with _$FindPwModelError implements Error {
   FindPwModelError._();
 
   factory FindPwModelError({
@@ -37,9 +35,17 @@ class FindPwModelError extends FindPwModelBase with _$FindPwModelError implement
     FindPwModelType? type,
   }) = _FindPWModelError;
 
-  factory FindPwModelError.fromJson(Map<String, dynamic> json) => _$FindPwModelErrorFromJson(json);
+  factory FindPwModelError.fromJson(Map<String, dynamic> json) =>
+      _$FindPwModelErrorFromJson(json);
 
-  FindPwModelError setType(FindPwModelType type) => FindPwModelError(message: message, exception: exception, code: code, error: error, status: status, type: type);
+  FindPwModelError setType(FindPwModelType type) => FindPwModelError(
+      message: message,
+      exception: exception,
+      code: code,
+      error: error,
+      status: status,
+      type: type);
+
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
 }
-
-class FindPwModelLoading extends FindPwModelBase {}
