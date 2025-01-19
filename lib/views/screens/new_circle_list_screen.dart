@@ -3,14 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
-import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class newCircleListScreen extends ConsumerWidget {
+class CircleListScreen extends ConsumerWidget {
   final CircleListType listType;
 
-  const newCircleListScreen({
+  const CircleListScreen({
     super.key,
     required this.listType,
   });
@@ -103,30 +102,30 @@ class newCircleListScreen extends ConsumerWidget {
         body: state.when(
           data: (data) => data.data.isNotEmpty
               ? Padding(
-            padding: EdgeInsets.fromLTRB(0, 24.h, 0, 0),
-            child: ListView.builder(
-              itemCount: data.data.length,
-              itemBuilder: (context, index) {
-                final circle = data.data[index];
-                return CircleDetailItem(
-                  clubId: circle.clubId,
-                  leader: circle.leaderName,
-                  name: circle.clubName,
-                  imageUrl: circle.mainPhotoPath ?? '',
-                  leaderHp: circle.leaderHp,
-                  instaId: circle.clubInsta,
-                  circleRoom: circle.circleRoom, // 샘플 데이터
-                  // 'status'가 없으면 null로 처리
-                  status: circle.aplictStatus,
-                );
-              },
-            ),
-          )
+                  padding: EdgeInsets.fromLTRB(0, 24.h, 0, 0),
+                  child: ListView.builder(
+                    itemCount: data.data.length,
+                    itemBuilder: (context, index) {
+                      final circle = data.data[index];
+                      return CircleDetailItem(
+                        clubId: circle.clubId,
+                        leader: circle.leaderName,
+                        name: circle.clubName,
+                        imageUrl: circle.mainPhotoPath ?? '',
+                        leaderHp: circle.leaderHp,
+                        instaId: circle.clubInsta,
+                        circleRoom: circle.circleRoom, // 샘플 데이터
+                        // 'status'가 없으면 null로 처리
+                        status: circle.aplictStatus,
+                      );
+                    },
+                  ),
+                )
               : Center(
-            child: TextFontWidget.fontRegular(
-              '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
-            ),
-          ),
+                  child: TextFontWidget.fontRegular(
+                    '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
+                  ),
+                ),
           loading: () => Center(
             child: CircularProgressIndicator(),
           ),
