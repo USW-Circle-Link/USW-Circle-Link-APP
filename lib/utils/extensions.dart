@@ -3,7 +3,8 @@ import 'package:go_router/go_router.dart';
 
 extension URLExt on String {
   bool get isValidUrl {
-    return Uri.tryParse(this) == null;
+    if (isEmpty) return false;
+    return Uri.tryParse(this) != null;
   }
 }
 
