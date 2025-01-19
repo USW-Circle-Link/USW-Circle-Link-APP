@@ -18,13 +18,19 @@ class TextFontWidget {
     double? letterSpacing,
     TextOverflow? overflow,
     int? maxLines,
+    double? textScaleFactor,
+    TextDecoration? textDecoration,
+    Color? decorationColor,
   }) {
     return AutoSizeText(
       text,
       textAlign: textAlign,
+      textScaleFactor: textScaleFactor,
       overflow: overflow,
       maxLines: maxLines,
       style: TextStyle(
+        decoration: textDecoration,
+        decorationColor: decorationColor,
         fontFamily: 'SUIT',
         fontSize: fontSize,
         color: color,

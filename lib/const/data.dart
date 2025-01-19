@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 
@@ -20,6 +21,7 @@ final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
 
+// Storage Key
 const accessTokenKey = 'access_token';
 const refreshTokenKey = 'refresh_token';
 const subKey = 'sub';
@@ -27,7 +29,11 @@ const roleKey = 'role';
 const clubIdsKey = 'club_ids';
 const iatKey = 'iat';
 const expKey = 'exp';
+// URL
 const feedback = "https://forms.gle/auVHQJtz9xTRmXEA8";
+// Color
+const accentColor = Color(0xffffB052);
+// Data
 const departments = <String, String>{
   'ACADEMIC': '학술',
   'RELIGION': '종교',
@@ -190,9 +196,6 @@ const content_of_terms_of_service = '동구라미 서비스 이용약관\n\n'
     '제 4 조 (면책조항)\n\n'
     '서비스 제공자는 이용자의 귀책 사유로 인한 서비스 이용의 중단 및 손해에 대해 책임을 지지 않습니다. '
     '또한, 천재지변, 전쟁 등의 불가항력적 사유로 인한 서비스 제공의 중단에 대해서도 책임을 지지 않습니다.\n\n';
-
-// Color
-const accentColor = Color(0xFFFFB052);
 
 // 테스트 데이터
 const testId = "user1";
@@ -369,4 +372,117 @@ const testContentPhotos = [
   "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2FFfC0H%2Fbtr5aGiI5dt%2FbdN3vFjyxbPlNCsMKGak71%2Fimg.jpg",
   "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2Fby4EjE%2Fbtr42y0bmOd%2FhG8E4Outweg3U9gHOqmoo1%2Fimg.jpg",
   "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Fblog.kakaocdn.net%2Fdn%2F6JBSA%2Fbtr42z5Q3u8%2FyFdqxX921yki2FFKQTDAt0%2Fimg.jpg",
+];
+
+final dummyCircles = <Circle>[
+  Circle(
+    clubId: 1,
+    clubName: "FLAG",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "김철수",
+    leaderHp: "010-1234-5678",
+    clubInsta: "@flag_club",
+    circleRoom: "학생회관 301호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 2,
+    clubName: "MUSE",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "이영희",
+    leaderHp: "010-2345-6789",
+    clubInsta: "@muse_official",
+    circleRoom: "학생회관 302호",
+    aplictStatus: "모집마감",
+  ),
+  Circle(
+    clubId: 3,
+    clubName: "FLOW",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "박민수",
+    leaderHp: "010-3456-7890",
+    clubInsta: "@flow_circle",
+    circleRoom: "체육관 102호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 4,
+    clubName: "IMPACT",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "정지원",
+    leaderHp: "010-4567-8901",
+    clubInsta: "@impact_usw",
+    circleRoom: "예술관 201호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 5,
+    clubName: "VISION",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "한소희",
+    leaderHp: "010-5678-9012",
+    clubInsta: "@vision_club",
+    circleRoom: "학생회관 401호",
+    aplictStatus: "모집마감",
+  ),
+  Circle(
+    clubId: 6,
+    clubName: "CORE",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "송민재",
+    leaderHp: "010-6789-0123",
+    clubInsta: "@core_official",
+    circleRoom: "공학관 501호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 7,
+    clubName: "PULSE",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "임서연",
+    leaderHp: "010-7890-1234",
+    clubInsta: "@pulse_dance",
+    circleRoom: "체육관 201호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 8,
+    clubName: "ECHO",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "강동훈",
+    leaderHp: "010-8901-2345",
+    clubInsta: "@echo_music",
+    circleRoom: "음악관 301호",
+    aplictStatus: "모집마감",
+  ),
+  Circle(
+    clubId: 9,
+    clubName: "SPARK",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "윤하은",
+    leaderHp: "010-9012-3456",
+    clubInsta: "@spark_art",
+    circleRoom: "예술관 401호",
+    aplictStatus: "모집중",
+  ),
+  Circle(
+    clubId: 10,
+    clubName: "UNITY",
+    mainPhotoPath:
+        "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
+    leaderName: "조현우",
+    leaderHp: "010-0123-4567",
+    clubInsta: "@unity_volunteer",
+    circleRoom: "학생회관 501호",
+    aplictStatus: "모집중",
+  ),
 ];

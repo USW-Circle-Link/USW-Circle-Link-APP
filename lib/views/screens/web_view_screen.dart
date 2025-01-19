@@ -29,7 +29,7 @@ class _WebViewScreenState extends State<WebViewScreen> {
     pullToRefreshController = (kIsWeb
         ? null
         : PullToRefreshController(
-            options: PullToRefreshOptions(
+            settings: PullToRefreshSettings(
               color: Colors.blue,
             ),
             onRefresh: () async {
@@ -98,32 +98,33 @@ class _WebViewScreenState extends State<WebViewScreen> {
                               key: webViewKey,
                               initialUrlRequest:
                                   URLRequest(url: WebUri.uri(uri)),
-                              initialOptions: InAppWebViewGroupOptions(
-                                crossPlatform: InAppWebViewOptions(
-                                    javaScriptCanOpenWindowsAutomatically: true,
-                                    javaScriptEnabled: true,
-                                    useOnDownloadStart: true,
-                                    useOnLoadResource: true,
-                                    useShouldOverrideUrlLoading: true,
-                                    mediaPlaybackRequiresUserGesture: true,
-                                    allowFileAccessFromFileURLs: true,
-                                    allowUniversalAccessFromFileURLs: true,
-                                    verticalScrollBarEnabled: true,
-                                    userAgent:
-                                        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36'),
-                                android: AndroidInAppWebViewOptions(
-                                    useHybridComposition: true,
-                                    allowContentAccess: true,
-                                    builtInZoomControls: true,
-                                    thirdPartyCookiesEnabled: true,
-                                    allowFileAccess: true,
-                                    supportMultipleWindows: true),
-                                ios: IOSInAppWebViewOptions(
-                                  allowsInlineMediaPlayback: true,
-                                  allowsBackForwardNavigationGestures: true,
-                                ),
+                              initialSettings: InAppWebViewSettings(
+                                isInspectable: kDebugMode,
+                                javaScriptCanOpenWindowsAutomatically: true,
+                                javaScriptEnabled: true,
+                                useOnDownloadStart: true,
+                                useOnLoadResource: true,
+                                mediaPlaybackRequiresUserGesture: true,
+                                allowFileAccessFromFileURLs: true,
+                                allowUniversalAccessFromFileURLs: true,
+                                verticalScrollBarEnabled: true,
+                                userAgent:
+                                    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36',
+                                useHybridComposition: true,
+                                allowContentAccess: true,
+                                builtInZoomControls: true,
+                                thirdPartyCookiesEnabled: true,
+                                allowFileAccess: true,
+                                supportMultipleWindows: true,
+                                allowsInlineMediaPlayback: true,
+                                allowsBackForwardNavigationGestures: true,
                               ),
                               pullToRefreshController: pullToRefreshController,
+                              shouldOverrideUrlLoading:
+                                  (controller, navigationAction) async {
+                                logger.d('shouldOverrideUrlLoading');
+                                return NavigationActionPolicy.ALLOW;
+                              },
                               onLoadStart:
                                   (InAppWebViewController controller, uri) {
                                 logger.d('onLoadStart - $uri');
@@ -131,14 +132,14 @@ class _WebViewScreenState extends State<WebViewScreen> {
                                   uri = uri!;
                                 });
                               },
-                              onLoadError: (controller, url, code, message) {
+                              onReceivedError: (controller, request, error) {
                                 logger.e(
-                                    "url - $url (code : $code) / message - $message");
+                                    "url - ${request.url} message - ${error.description}");
                               },
-                              onLoadHttpError:
-                                  (controller, url, statusCode, description) {
+                              onReceivedHttpError:
+                                  (controller, request, errorResponse) {
                                 logger.e(
-                                    "url - $url (code : $statusCode) / message - $description");
+                                    "url - ${request.url} ( code - ${errorResponse.statusCode} )");
                               },
                               onLoadStop:
                                   (InAppWebViewController controller, uri) {
@@ -155,12 +156,11 @@ class _WebViewScreenState extends State<WebViewScreen> {
                                   this.progress = progress / 100;
                                 });
                               },
-                              androidOnPermissionRequest:
-                                  (controller, origin, resources) async {
-                                return PermissionRequestResponse(
-                                    resources: resources,
-                                    action:
-                                        PermissionRequestResponseAction.GRANT);
+                              onPermissionRequest:
+                                  (controller, permissionRequest) async {
+                                return PermissionResponse(
+                                    resources: permissionRequest.resources,
+                                    action: PermissionResponseAction.GRANT);
                               },
                               onWebViewCreated:
                                   (InAppWebViewController controller) {

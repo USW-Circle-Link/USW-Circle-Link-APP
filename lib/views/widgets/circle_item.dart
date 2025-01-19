@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 
 class CircleItem extends StatelessWidget {
   final CircleListData circle;
@@ -27,22 +28,32 @@ class CircleItem extends StatelessWidget {
           children: [
             SizedBox(
               height: 106.h,
-              child: Image.network(
-                circle.mainPhoto ?? "",
-                fit: BoxFit.cover,
-                errorBuilder: (BuildContext context, Object exception,
-                    StackTrace? stackTrace) {
-                  return Container(
-                    alignment: Alignment.center,
-                    color: const Color.fromARGB(255, 164, 164, 164),
-                    child: Icon(
-                      Icons.person,
-                      color: const Color.fromARGB(255, 255, 255, 255),
-                      size: 60,
+              child: circle.mainPhoto?.isValidUrl ?? false
+                  ? Image.network(
+                      circle.mainPhoto!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (BuildContext context, Object exception,
+                          StackTrace? stackTrace) {
+                        return Container(
+                          alignment: Alignment.center,
+                          color: const Color.fromARGB(255, 164, 164, 164),
+                          child: Icon(
+                            Icons.person,
+                            color: const Color.fromARGB(255, 255, 255, 255),
+                            size: 60,
+                          ),
+                        );
+                      },
+                    )
+                  : Container(
+                      alignment: Alignment.center,
+                      color: const Color.fromARGB(255, 164, 164, 164),
+                      child: Icon(
+                        Icons.person,
+                        color: const Color.fromARGB(255, 255, 255, 255),
+                        size: 60,
+                      ),
                     ),
-                  );
-                },
-              ),
             ),
             SizedBox(height: 8.h),
             TextFontWidget.fontRegular(

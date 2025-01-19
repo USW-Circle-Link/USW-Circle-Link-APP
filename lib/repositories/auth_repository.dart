@@ -127,34 +127,7 @@ class AuthRepository {
     }
   }
 
-  Future<EmailVerificationModelResend> resendMail({
-    required String emailTokenId,
-  }) async {
-    final response = await dio.post(
-      '$baseUrl/email/resend-confirmation',
-      options: Options(
-        headers: {
-          "emailToken_uuid": emailTokenId,
-        },
-      ),
-    );
-
-    logger.d(response.data);
-
-    logger.d(
-        'resendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-    if (response.statusCode == 200) {
-      return EmailVerificationModelResend.fromJson(response.data)
-          .setType(EmailVerificationModelType.resendMail);
-    } else {
-      // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data)
-          .setType(EmailVerificationModelType.resendMail);
-    }
-  }
-
-  Future<EmailVerificationModelComplete> signUp({
+  Future<EmailVerificationModel> signUp({
     required String account,
   }) async {
     final body = {
@@ -175,7 +148,7 @@ class AuthRepository {
     logger.d('signUp - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModelComplete.fromJson(response.data)
+      return EmailVerificationModel.fromJson(response.data)
           .setType(EmailVerificationModelType.completeSignUp);
     } else {
       // Bad Request

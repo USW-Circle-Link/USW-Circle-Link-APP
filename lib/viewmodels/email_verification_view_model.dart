@@ -3,17 +3,18 @@ import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 
 final emailVerificationViewModelProvider = StateNotifierProvider.autoDispose<
-    EmailVerificationViewModel, EmailVerificationModelBase?>((ref) {
+    EmailVerificationViewModel, AsyncValue<EmailVerificationModel?>>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
   return EmailVerificationViewModel(authRepository: authRepository);
 });
 
 class EmailVerificationViewModel
-    extends StateNotifier<EmailVerificationModelBase?> {
+    extends StateNotifier<AsyncValue<EmailVerificationModel?>> {
   final AuthRepository authRepository;
-  EmailVerificationViewModel({required this.authRepository}) : super(null);
+  EmailVerificationViewModel({required this.authRepository})
+      : super(AsyncData(null));
 
-  Future<EmailVerificationModelBase?> sendMail({
+  Future<void> sendMail({
     required String account,
     required String password,
     required String userName,
@@ -23,13 +24,13 @@ class EmailVerificationViewModel
     required String email,
   }) async {
     try {
+      state = AsyncLoading();
       if (email.isEmpty) {
         throw EmailVerificationModelError(
             message: '이메일이 형식에 맞지 않습니다.',
             code: 'EML-F100',
             type: EmailVerificationModelType.sendMail);
       }
-      state = EmailVerificationModelLoading();
       final response = await authRepository.sendMail(
           account: account,
           password: password,
@@ -38,51 +39,34 @@ class EmailVerificationViewModel
           studentNumber: studentNumber,
           major: major,
           email: email);
-      state = response;
+      state = AsyncData(response);
     } on EmailVerificationModelError catch (e) {
-      state = e;
+      state = AsyncError(e, e.stackTrace);
     } catch (e) {
-      state = EmailVerificationModelError(
+      final error = EmailVerificationModelError(
           message: '예외발생 - $e', type: EmailVerificationModelType.sendMail);
+      state = AsyncError(error, error.stackTrace);
     }
-    return Future.value(state);
   }
 
-  Future<EmailVerificationModelBase?> resendMail({
-    required String emailToken_uuid,
-  }) async {
-    try {
-      state = EmailVerificationModelLoading();
-      final response =
-          await authRepository.resendMail(emailTokenId: emailToken_uuid);
-      state = response;
-    } on EmailVerificationModelError catch (e) {
-      state = e;
-    } catch (e) {
-      state = EmailVerificationModelError(
-          message: '예외발생 - $e', type: EmailVerificationModelType.resendMail);
-    }
-    return Future.value(state);
-  }
-
-  Future<EmailVerificationModelBase?> signUp({
+  Future<void> signUp({
     required String account,
   }) async {
     try {
-      state = EmailVerificationModelLoading();
+      state = AsyncLoading();
       final response = await authRepository.signUp(account: account);
-      state = response;
+      state = AsyncData(response);
     } on EmailVerificationModelError catch (e) {
-      state = e;
+      state = AsyncError(e, e.stackTrace);
     } catch (e) {
-      state = EmailVerificationModelError(
+      final error = EmailVerificationModelError(
           message: '예외발생 - $e',
           type: EmailVerificationModelType.completeSignUp);
+      state = AsyncError(error, error.stackTrace);
     }
-    return Future.value(state);
   }
 
   void initState() {
-    state = null;
+    state = AsyncData(null);
   }
 }

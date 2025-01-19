@@ -22,7 +22,7 @@ EmailVerificationModel _$EmailVerificationModelFromJson(
 /// @nodoc
 mixin _$EmailVerificationModel {
   String get message => throw _privateConstructorUsedError;
-  EmailVerificationData get data => throw _privateConstructorUsedError;
+  dynamic get data => throw _privateConstructorUsedError;
   EmailVerificationModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -37,12 +37,7 @@ abstract class $EmailVerificationModelCopyWith<$Res> {
           $Res Function(EmailVerificationModel) then) =
       _$EmailVerificationModelCopyWithImpl<$Res, EmailVerificationModel>;
   @useResult
-  $Res call(
-      {String message,
-      EmailVerificationData data,
-      EmailVerificationModelType? type});
-
-  $EmailVerificationDataCopyWith<$Res> get data;
+  $Res call({String message, dynamic data, EmailVerificationModelType? type});
 }
 
 /// @nodoc
@@ -60,7 +55,7 @@ class _$EmailVerificationModelCopyWithImpl<$Res,
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
@@ -68,23 +63,15 @@ class _$EmailVerificationModelCopyWithImpl<$Res,
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationData,
+              as dynamic,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
               as EmailVerificationModelType?,
     ) as $Val);
-  }
-
-  @override
-  @pragma('vm:prefer-inline')
-  $EmailVerificationDataCopyWith<$Res> get data {
-    return $EmailVerificationDataCopyWith<$Res>(_value.data, (value) {
-      return _then(_value.copyWith(data: value) as $Val);
-    });
   }
 }
 
@@ -97,13 +84,7 @@ abstract class _$$EmailVerificationModelImplCopyWith<$Res>
       __$$EmailVerificationModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call(
-      {String message,
-      EmailVerificationData data,
-      EmailVerificationModelType? type});
-
-  @override
-  $EmailVerificationDataCopyWith<$Res> get data;
+  $Res call({String message, dynamic data, EmailVerificationModelType? type});
 }
 
 /// @nodoc
@@ -120,7 +101,7 @@ class __$$EmailVerificationModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
+    Object? data = freezed,
     Object? type = freezed,
   }) {
     return _then(_$EmailVerificationModelImpl(
@@ -128,10 +109,10 @@ class __$$EmailVerificationModelImplCopyWithImpl<$Res>
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
               as String,
-      data: null == data
+      data: freezed == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationData,
+              as dynamic,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -154,7 +135,7 @@ class _$EmailVerificationModelImpl extends _EmailVerificationModel {
   @override
   final String message;
   @override
-  final EmailVerificationData data;
+  final dynamic data;
   @override
   final EmailVerificationModelType? type;
 
@@ -169,13 +150,14 @@ class _$EmailVerificationModelImpl extends _EmailVerificationModel {
         (other.runtimeType == runtimeType &&
             other is _$EmailVerificationModelImpl &&
             (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data) &&
+            const DeepCollectionEquality().equals(other.data, data) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, data, type);
+  int get hashCode => Object.hash(
+      runtimeType, message, const DeepCollectionEquality().hash(data), type);
 
   @JsonKey(ignore: true)
   @override
@@ -195,7 +177,7 @@ class _$EmailVerificationModelImpl extends _EmailVerificationModel {
 abstract class _EmailVerificationModel extends EmailVerificationModel {
   factory _EmailVerificationModel(
       {required final String message,
-      required final EmailVerificationData data,
+      required final dynamic data,
       final EmailVerificationModelType? type}) = _$EmailVerificationModelImpl;
   _EmailVerificationModel._() : super._();
 
@@ -205,7 +187,7 @@ abstract class _EmailVerificationModel extends EmailVerificationModel {
   @override
   String get message;
   @override
-  EmailVerificationData get data;
+  dynamic get data;
   @override
   EmailVerificationModelType? get type;
   @override
@@ -372,381 +354,6 @@ abstract class _EmailVerificationData implements EmailVerificationData {
   @override
   @JsonKey(ignore: true)
   _$$EmailVerificationDataImplCopyWith<_$EmailVerificationDataImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-EmailVerificationModelResend _$EmailVerificationModelResendFromJson(
-    Map<String, dynamic> json) {
-  return _EmailVerificationModelResend.fromJson(json);
-}
-
-/// @nodoc
-mixin _$EmailVerificationModelResend {
-  String get message => throw _privateConstructorUsedError;
-  String get data => throw _privateConstructorUsedError;
-  EmailVerificationModelType? get type => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $EmailVerificationModelResendCopyWith<EmailVerificationModelResend>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $EmailVerificationModelResendCopyWith<$Res> {
-  factory $EmailVerificationModelResendCopyWith(
-          EmailVerificationModelResend value,
-          $Res Function(EmailVerificationModelResend) then) =
-      _$EmailVerificationModelResendCopyWithImpl<$Res,
-          EmailVerificationModelResend>;
-  @useResult
-  $Res call({String message, String data, EmailVerificationModelType? type});
-}
-
-/// @nodoc
-class _$EmailVerificationModelResendCopyWithImpl<$Res,
-        $Val extends EmailVerificationModelResend>
-    implements $EmailVerificationModelResendCopyWith<$Res> {
-  _$EmailVerificationModelResendCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? data = null,
-    Object? type = freezed,
-  }) {
-    return _then(_value.copyWith(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationModelType?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$EmailVerificationModelResendImplCopyWith<$Res>
-    implements $EmailVerificationModelResendCopyWith<$Res> {
-  factory _$$EmailVerificationModelResendImplCopyWith(
-          _$EmailVerificationModelResendImpl value,
-          $Res Function(_$EmailVerificationModelResendImpl) then) =
-      __$$EmailVerificationModelResendImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, String data, EmailVerificationModelType? type});
-}
-
-/// @nodoc
-class __$$EmailVerificationModelResendImplCopyWithImpl<$Res>
-    extends _$EmailVerificationModelResendCopyWithImpl<$Res,
-        _$EmailVerificationModelResendImpl>
-    implements _$$EmailVerificationModelResendImplCopyWith<$Res> {
-  __$$EmailVerificationModelResendImplCopyWithImpl(
-      _$EmailVerificationModelResendImpl _value,
-      $Res Function(_$EmailVerificationModelResendImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? data = null,
-    Object? type = freezed,
-  }) {
-    return _then(_$EmailVerificationModelResendImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationModelType?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$EmailVerificationModelResendImpl extends _EmailVerificationModelResend {
-  _$EmailVerificationModelResendImpl(
-      {required this.message, required this.data, this.type})
-      : super._();
-
-  factory _$EmailVerificationModelResendImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$EmailVerificationModelResendImplFromJson(json);
-
-  @override
-  final String message;
-  @override
-  final String data;
-  @override
-  final EmailVerificationModelType? type;
-
-  @override
-  String toString() {
-    return 'EmailVerificationModelResend(message: $message, data: $data, type: $type)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EmailVerificationModelResendImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data) &&
-            (identical(other.type, type) || other.type == type));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, message, data, type);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EmailVerificationModelResendImplCopyWith<
-          _$EmailVerificationModelResendImpl>
-      get copyWith => __$$EmailVerificationModelResendImplCopyWithImpl<
-          _$EmailVerificationModelResendImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EmailVerificationModelResendImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _EmailVerificationModelResend
-    extends EmailVerificationModelResend {
-  factory _EmailVerificationModelResend(
-          {required final String message,
-          required final String data,
-          final EmailVerificationModelType? type}) =
-      _$EmailVerificationModelResendImpl;
-  _EmailVerificationModelResend._() : super._();
-
-  factory _EmailVerificationModelResend.fromJson(Map<String, dynamic> json) =
-      _$EmailVerificationModelResendImpl.fromJson;
-
-  @override
-  String get message;
-  @override
-  String get data;
-  @override
-  EmailVerificationModelType? get type;
-  @override
-  @JsonKey(ignore: true)
-  _$$EmailVerificationModelResendImplCopyWith<
-          _$EmailVerificationModelResendImpl>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-EmailVerificationModelComplete _$EmailVerificationModelCompleteFromJson(
-    Map<String, dynamic> json) {
-  return _EmailVerificationModelComplete.fromJson(json);
-}
-
-/// @nodoc
-mixin _$EmailVerificationModelComplete {
-  String get message => throw _privateConstructorUsedError;
-  String get data => throw _privateConstructorUsedError;
-  EmailVerificationModelType? get type => throw _privateConstructorUsedError;
-
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-  @JsonKey(ignore: true)
-  $EmailVerificationModelCompleteCopyWith<EmailVerificationModelComplete>
-      get copyWith => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class $EmailVerificationModelCompleteCopyWith<$Res> {
-  factory $EmailVerificationModelCompleteCopyWith(
-          EmailVerificationModelComplete value,
-          $Res Function(EmailVerificationModelComplete) then) =
-      _$EmailVerificationModelCompleteCopyWithImpl<$Res,
-          EmailVerificationModelComplete>;
-  @useResult
-  $Res call({String message, String data, EmailVerificationModelType? type});
-}
-
-/// @nodoc
-class _$EmailVerificationModelCompleteCopyWithImpl<$Res,
-        $Val extends EmailVerificationModelComplete>
-    implements $EmailVerificationModelCompleteCopyWith<$Res> {
-  _$EmailVerificationModelCompleteCopyWithImpl(this._value, this._then);
-
-  // ignore: unused_field
-  final $Val _value;
-  // ignore: unused_field
-  final $Res Function($Val) _then;
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? data = null,
-    Object? type = freezed,
-  }) {
-    return _then(_value.copyWith(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationModelType?,
-    ) as $Val);
-  }
-}
-
-/// @nodoc
-abstract class _$$EmailVerificationModelCompleteImplCopyWith<$Res>
-    implements $EmailVerificationModelCompleteCopyWith<$Res> {
-  factory _$$EmailVerificationModelCompleteImplCopyWith(
-          _$EmailVerificationModelCompleteImpl value,
-          $Res Function(_$EmailVerificationModelCompleteImpl) then) =
-      __$$EmailVerificationModelCompleteImplCopyWithImpl<$Res>;
-  @override
-  @useResult
-  $Res call({String message, String data, EmailVerificationModelType? type});
-}
-
-/// @nodoc
-class __$$EmailVerificationModelCompleteImplCopyWithImpl<$Res>
-    extends _$EmailVerificationModelCompleteCopyWithImpl<$Res,
-        _$EmailVerificationModelCompleteImpl>
-    implements _$$EmailVerificationModelCompleteImplCopyWith<$Res> {
-  __$$EmailVerificationModelCompleteImplCopyWithImpl(
-      _$EmailVerificationModelCompleteImpl _value,
-      $Res Function(_$EmailVerificationModelCompleteImpl) _then)
-      : super(_value, _then);
-
-  @pragma('vm:prefer-inline')
-  @override
-  $Res call({
-    Object? message = null,
-    Object? data = null,
-    Object? type = freezed,
-  }) {
-    return _then(_$EmailVerificationModelCompleteImpl(
-      message: null == message
-          ? _value.message
-          : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
-              as String,
-      type: freezed == type
-          ? _value.type
-          : type // ignore: cast_nullable_to_non_nullable
-              as EmailVerificationModelType?,
-    ));
-  }
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$EmailVerificationModelCompleteImpl
-    extends _EmailVerificationModelComplete {
-  _$EmailVerificationModelCompleteImpl(
-      {required this.message, required this.data, this.type})
-      : super._();
-
-  factory _$EmailVerificationModelCompleteImpl.fromJson(
-          Map<String, dynamic> json) =>
-      _$$EmailVerificationModelCompleteImplFromJson(json);
-
-  @override
-  final String message;
-  @override
-  final String data;
-  @override
-  final EmailVerificationModelType? type;
-
-  @override
-  String toString() {
-    return 'EmailVerificationModelComplete(message: $message, data: $data, type: $type)';
-  }
-
-  @override
-  bool operator ==(Object other) {
-    return identical(this, other) ||
-        (other.runtimeType == runtimeType &&
-            other is _$EmailVerificationModelCompleteImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data) &&
-            (identical(other.type, type) || other.type == type));
-  }
-
-  @JsonKey(ignore: true)
-  @override
-  int get hashCode => Object.hash(runtimeType, message, data, type);
-
-  @JsonKey(ignore: true)
-  @override
-  @pragma('vm:prefer-inline')
-  _$$EmailVerificationModelCompleteImplCopyWith<
-          _$EmailVerificationModelCompleteImpl>
-      get copyWith => __$$EmailVerificationModelCompleteImplCopyWithImpl<
-          _$EmailVerificationModelCompleteImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$EmailVerificationModelCompleteImplToJson(
-      this,
-    );
-  }
-}
-
-abstract class _EmailVerificationModelComplete
-    extends EmailVerificationModelComplete {
-  factory _EmailVerificationModelComplete(
-          {required final String message,
-          required final String data,
-          final EmailVerificationModelType? type}) =
-      _$EmailVerificationModelCompleteImpl;
-  _EmailVerificationModelComplete._() : super._();
-
-  factory _EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =
-      _$EmailVerificationModelCompleteImpl.fromJson;
-
-  @override
-  String get message;
-  @override
-  String get data;
-  @override
-  EmailVerificationModelType? get type;
-  @override
-  @JsonKey(ignore: true)
-  _$$EmailVerificationModelCompleteImplCopyWith<
-          _$EmailVerificationModelCompleteImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
