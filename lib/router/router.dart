@@ -13,9 +13,7 @@ import 'package:usw_circle_link/views/screens/find_pw_screen.dart';
 import 'package:usw_circle_link/views/screens/image_screen.dart';
 import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
-import 'package:usw_circle_link/views/screens/circle_list_screen.dart';
 import 'package:usw_circle_link/views/screens/new_circle_list_screen.dart';
-import 'package:usw_circle_link/views/screens/new_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
@@ -42,7 +40,7 @@ final routerProvider = Provider<GoRouter>((ref) {
         routes: [
           GoRoute(
               path: 'circle',
-              builder: (_, state) => newCircleScreen(
+              builder: (_, state) => CircleScreen(
                     clubId: int.parse(state.uri.queryParameters['clubId']!),
                   ),
               routes: [
@@ -133,7 +131,7 @@ final routerProvider = Provider<GoRouter>((ref) {
           webviewRouter,
           GoRoute(
             path: 'circle_list',
-            builder: (_, state) => newCircleListScreen(
+            builder: (_, state) => CircleListScreen(
               listType: state.extra as CircleListType,
             ),
           ),
