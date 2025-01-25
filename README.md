@@ -6,7 +6,7 @@
 
 **usw_circle_link**는 수원대학교 학생들을 위한 동아리 지원 플랫폼입니다. 이 애플리케이션은 Flutter로 개발되었으며, 사용자에게 직관적이고 다양한 기능을 제공합니다. 사용자는 동아리를 탐색하고, 지원서를 작성 및 제출하며, 지원 현황을 실시간으로 확인할 수 있습니다. 또한, 알림 서비스를 통해 동아리 합격 여부 및 중요한 정보를 받을 수 있습니다. 이 앱은 iOS와 Android 플랫폼 모두에서 사용할 수 있습니다.
 
-![그래픽 이미지](https://drive.google.com/file/d/1-iojj_uJPcmxzf8_Z4l79RbHfqV3rktl/view?usp=sharing)
+![그래픽 이미지](https://drive.usercontent.google.com/download?id=1-iojj_uJPcmxzf8_Z4l79RbHfqV3rktl&export=view&authuser=0)
 
 ## 다운로드
 
