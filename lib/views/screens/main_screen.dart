@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
@@ -162,9 +163,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               setState(() {
                                 isAllSelected = true;
                               });
-                              await ref
-                                  .read(mainViewModelProvider.notifier)
-                                  .fetchAllCircleList();
+                              await fetchCircleList();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: const Color(0xffffB052),
@@ -201,9 +200,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               setState(() {
                                 isAllSelected = false;
                               });
-                              await ref
-                                  .read(mainViewModelProvider.notifier)
-                                  .fetchOpenCircleList();
+                              await fetchCircleList();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: const Color(0xffffB052),
@@ -239,6 +236,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         setState(() {
                           selectedGroups = result;
                         });
+                        await fetchCircleList();
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: selectedGroups.isEmpty
@@ -313,33 +311,37 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ),
                   ],
             Expanded(
-              child: Center(
-                child: circleListState.when<Widget>(
-                    data: (circleList) {
-                      return circleList.data.isNotEmpty
-                          ? CircleList(
-                              state: circleListState.value as CircleListModel,
-                              onItemClicked: (clubId) {
-                                context.go('/circle?clubId=$clubId');
-                              },
-                            )
-                          : TextFontWidget.fontRegular(
+              child: circleListState.when<Widget>(
+                  data: (circleList) {
+                    return circleList.data.isNotEmpty
+                        ? CircleList(
+                            state: circleListState.value as CircleListModel,
+                            onItemClicked: (clubId) {
+                              context.go('/circle?clubId=$clubId');
+                            },
+                          )
+                        : Center(
+                            child: TextFontWidget.fontRegular(
                               '동아리가 없습니다',
                               fontSize: 14.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
-                            );
-                    },
-                    error: (error, stackTrace) {
-                      return TextFontWidget.fontRegular(
-                        '동아리를 불러오지 못했습니다...',
+                            ),
+                          );
+                  },
+                  error: (error, stackTrace) {
+                    final _error = error as CircleListModelError;
+                    return Center(
+                      child: TextFontWidget.fontRegular(
+                        ErrorUtil.instance.getErrorMessage(_error.code) ??
+                            '동아리를 불러오지 못했습니다...',
                         fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
-                      );
-                    },
-                    loading: () => CircularProgressIndicator()),
-              ),
+                      ),
+                    );
+                  },
+                  loading: () => CircularProgressIndicator()),
             ),
           ],
         ),
@@ -348,24 +350,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildChip(String label) {
-    final isSelected = false;
-    return FilterChip(
+    return Chip(
       labelPadding: EdgeInsets.only(left: 10.w),
       label: Text(label),
-      selected: isSelected,
-      onSelected: (value) {
-        setState(() {});
-      },
-      deleteIconColor: isSelected ? Colors.white : Color(0xFF434343),
-      onDeleted: () {
+      deleteIcon: Icon(Icons.close, size: 16.sp),
+      onDeleted: () async {
         setState(() {
           selectedGroups.remove(label);
         });
+        await fetchCircleList();
       },
-      showCheckmark: false,
-      selectedColor: Color(0xFFFFB052),
       labelStyle: TextFontWidget.fontRegularStyle(
-        color: isSelected ? Colors.white : Color(0xFF434343),
+        color: Color(0xFF434343),
         fontWeight: FontWeight.w300,
       ),
       backgroundColor: Colors.white,
@@ -376,5 +372,25 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ),
       padding: EdgeInsets.all(0),
     );
+  }
+
+  Future<void> fetchCircleList() async {
+    if (selectedGroups.isEmpty) {
+      if (isAllSelected) {
+        await ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
+      } else {
+        await ref.read(mainViewModelProvider.notifier).fetchOpenCircleList();
+      }
+    } else {
+      if (isAllSelected) {
+        await ref
+            .read(mainViewModelProvider.notifier)
+            .fetchAllFilteredCircleList(selectedGroups);
+      } else {
+        await ref
+            .read(mainViewModelProvider.notifier)
+            .fetchOpenFilteredCircleList(selectedGroups);
+      }
+    }
   }
 }

@@ -202,6 +202,203 @@ abstract class _CircleListModel extends CircleListModel {
       throw _privateConstructorUsedError;
 }
 
+CircleFilteredListModel _$CircleFilteredListModelFromJson(
+    Map<String, dynamic> json) {
+  return _CircleFilteredListModel.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CircleFilteredListModel {
+  String get message => throw _privateConstructorUsedError;
+  List<CircleFilteredListData> get data => throw _privateConstructorUsedError;
+  CircleListModelType? get type => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CircleFilteredListModelCopyWith<CircleFilteredListModel> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CircleFilteredListModelCopyWith<$Res> {
+  factory $CircleFilteredListModelCopyWith(CircleFilteredListModel value,
+          $Res Function(CircleFilteredListModel) then) =
+      _$CircleFilteredListModelCopyWithImpl<$Res, CircleFilteredListModel>;
+  @useResult
+  $Res call(
+      {String message,
+      List<CircleFilteredListData> data,
+      CircleListModelType? type});
+}
+
+/// @nodoc
+class _$CircleFilteredListModelCopyWithImpl<$Res,
+        $Val extends CircleFilteredListModel>
+    implements $CircleFilteredListModelCopyWith<$Res> {
+  _$CircleFilteredListModelCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? data = null,
+    Object? type = freezed,
+  }) {
+    return _then(_value.copyWith(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      data: null == data
+          ? _value.data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<CircleFilteredListData>,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CircleListModelType?,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CircleFilteredListModelImplCopyWith<$Res>
+    implements $CircleFilteredListModelCopyWith<$Res> {
+  factory _$$CircleFilteredListModelImplCopyWith(
+          _$CircleFilteredListModelImpl value,
+          $Res Function(_$CircleFilteredListModelImpl) then) =
+      __$$CircleFilteredListModelImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call(
+      {String message,
+      List<CircleFilteredListData> data,
+      CircleListModelType? type});
+}
+
+/// @nodoc
+class __$$CircleFilteredListModelImplCopyWithImpl<$Res>
+    extends _$CircleFilteredListModelCopyWithImpl<$Res,
+        _$CircleFilteredListModelImpl>
+    implements _$$CircleFilteredListModelImplCopyWith<$Res> {
+  __$$CircleFilteredListModelImplCopyWithImpl(
+      _$CircleFilteredListModelImpl _value,
+      $Res Function(_$CircleFilteredListModelImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? message = null,
+    Object? data = null,
+    Object? type = freezed,
+  }) {
+    return _then(_$CircleFilteredListModelImpl(
+      message: null == message
+          ? _value.message
+          : message // ignore: cast_nullable_to_non_nullable
+              as String,
+      data: null == data
+          ? _value._data
+          : data // ignore: cast_nullable_to_non_nullable
+              as List<CircleFilteredListData>,
+      type: freezed == type
+          ? _value.type
+          : type // ignore: cast_nullable_to_non_nullable
+              as CircleListModelType?,
+    ));
+  }
+}
+
+/// @nodoc
+
+@JsonSerializable(explicitToJson: true)
+class _$CircleFilteredListModelImpl extends _CircleFilteredListModel {
+  _$CircleFilteredListModelImpl(
+      {required this.message,
+      required final List<CircleFilteredListData> data,
+      this.type})
+      : _data = data,
+        super._();
+
+  factory _$CircleFilteredListModelImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CircleFilteredListModelImplFromJson(json);
+
+  @override
+  final String message;
+  final List<CircleFilteredListData> _data;
+  @override
+  List<CircleFilteredListData> get data {
+    if (_data is EqualUnmodifiableListView) return _data;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_data);
+  }
+
+  @override
+  final CircleListModelType? type;
+
+  @override
+  String toString() {
+    return 'CircleFilteredListModel(message: $message, data: $data, type: $type)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CircleFilteredListModelImpl &&
+            (identical(other.message, message) || other.message == message) &&
+            const DeepCollectionEquality().equals(other._data, _data) &&
+            (identical(other.type, type) || other.type == type));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(
+      runtimeType, message, const DeepCollectionEquality().hash(_data), type);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CircleFilteredListModelImplCopyWith<_$CircleFilteredListModelImpl>
+      get copyWith => __$$CircleFilteredListModelImplCopyWithImpl<
+          _$CircleFilteredListModelImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CircleFilteredListModelImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CircleFilteredListModel extends CircleFilteredListModel {
+  factory _CircleFilteredListModel(
+      {required final String message,
+      required final List<CircleFilteredListData> data,
+      final CircleListModelType? type}) = _$CircleFilteredListModelImpl;
+  _CircleFilteredListModel._() : super._();
+
+  factory _CircleFilteredListModel.fromJson(Map<String, dynamic> json) =
+      _$CircleFilteredListModelImpl.fromJson;
+
+  @override
+  String get message;
+  @override
+  List<CircleFilteredListData> get data;
+  @override
+  CircleListModelType? get type;
+  @override
+  @JsonKey(ignore: true)
+  _$$CircleFilteredListModelImplCopyWith<_$CircleFilteredListModelImpl>
+      get copyWith => throw _privateConstructorUsedError;
+}
+
 CircleListData _$CircleListDataFromJson(Map<String, dynamic> json) {
   return _CircleListData.fromJson(json);
 }
@@ -211,7 +408,8 @@ mixin _$CircleListData {
   int get clubId => throw _privateConstructorUsedError;
   String get clubName => throw _privateConstructorUsedError;
   String? get mainPhoto => throw _privateConstructorUsedError;
-  String get departmentName => throw _privateConstructorUsedError;
+  String? get departmentName => throw _privateConstructorUsedError;
+  List<String> get clubHashtags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -226,7 +424,11 @@ abstract class $CircleListDataCopyWith<$Res> {
       _$CircleListDataCopyWithImpl<$Res, CircleListData>;
   @useResult
   $Res call(
-      {int clubId, String clubName, String? mainPhoto, String departmentName});
+      {int clubId,
+      String clubName,
+      String? mainPhoto,
+      String? departmentName,
+      List<String> clubHashtags});
 }
 
 /// @nodoc
@@ -245,7 +447,8 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
     Object? clubId = null,
     Object? clubName = null,
     Object? mainPhoto = freezed,
-    Object? departmentName = null,
+    Object? departmentName = freezed,
+    Object? clubHashtags = null,
   }) {
     return _then(_value.copyWith(
       clubId: null == clubId
@@ -260,10 +463,14 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
           ? _value.mainPhoto
           : mainPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      departmentName: null == departmentName
+      departmentName: freezed == departmentName
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      clubHashtags: null == clubHashtags
+          ? _value.clubHashtags
+          : clubHashtags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ) as $Val);
   }
 }
@@ -277,7 +484,11 @@ abstract class _$$CircleListDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int clubId, String clubName, String? mainPhoto, String departmentName});
+      {int clubId,
+      String clubName,
+      String? mainPhoto,
+      String? departmentName,
+      List<String> clubHashtags});
 }
 
 /// @nodoc
@@ -294,7 +505,8 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
     Object? clubId = null,
     Object? clubName = null,
     Object? mainPhoto = freezed,
-    Object? departmentName = null,
+    Object? departmentName = freezed,
+    Object? clubHashtags = null,
   }) {
     return _then(_$CircleListDataImpl(
       clubId: null == clubId
@@ -309,10 +521,14 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
           ? _value.mainPhoto
           : mainPhoto // ignore: cast_nullable_to_non_nullable
               as String?,
-      departmentName: null == departmentName
+      departmentName: freezed == departmentName
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      clubHashtags: null == clubHashtags
+          ? _value._clubHashtags
+          : clubHashtags // ignore: cast_nullable_to_non_nullable
+              as List<String>,
     ));
   }
 }
@@ -324,8 +540,10 @@ class _$CircleListDataImpl extends _CircleListData {
       {required this.clubId,
       required this.clubName,
       this.mainPhoto,
-      required this.departmentName})
-      : super._();
+      this.departmentName,
+      required final List<String> clubHashtags})
+      : _clubHashtags = clubHashtags,
+        super._();
 
   factory _$CircleListDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$CircleListDataImplFromJson(json);
@@ -337,11 +555,18 @@ class _$CircleListDataImpl extends _CircleListData {
   @override
   final String? mainPhoto;
   @override
-  final String departmentName;
+  final String? departmentName;
+  final List<String> _clubHashtags;
+  @override
+  List<String> get clubHashtags {
+    if (_clubHashtags is EqualUnmodifiableListView) return _clubHashtags;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_clubHashtags);
+  }
 
   @override
   String toString() {
-    return 'CircleListData(clubId: $clubId, clubName: $clubName, mainPhoto: $mainPhoto, departmentName: $departmentName)';
+    return 'CircleListData(clubId: $clubId, clubName: $clubName, mainPhoto: $mainPhoto, departmentName: $departmentName, clubHashtags: $clubHashtags)';
   }
 
   @override
@@ -355,13 +580,15 @@ class _$CircleListDataImpl extends _CircleListData {
             (identical(other.mainPhoto, mainPhoto) ||
                 other.mainPhoto == mainPhoto) &&
             (identical(other.departmentName, departmentName) ||
-                other.departmentName == departmentName));
+                other.departmentName == departmentName) &&
+            const DeepCollectionEquality()
+                .equals(other._clubHashtags, _clubHashtags));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, clubId, clubName, mainPhoto, departmentName);
+  int get hashCode => Object.hash(runtimeType, clubId, clubName, mainPhoto,
+      departmentName, const DeepCollectionEquality().hash(_clubHashtags));
 
   @JsonKey(ignore: true)
   @override
@@ -383,7 +610,8 @@ abstract class _CircleListData extends CircleListData {
       {required final int clubId,
       required final String clubName,
       final String? mainPhoto,
-      required final String departmentName}) = _$CircleListDataImpl;
+      final String? departmentName,
+      required final List<String> clubHashtags}) = _$CircleListDataImpl;
   _CircleListData._() : super._();
 
   factory _CircleListData.fromJson(Map<String, dynamic> json) =
@@ -396,11 +624,203 @@ abstract class _CircleListData extends CircleListData {
   @override
   String? get mainPhoto;
   @override
-  String get departmentName;
+  String? get departmentName;
+  @override
+  List<String> get clubHashtags;
   @override
   @JsonKey(ignore: true)
   _$$CircleListDataImplCopyWith<_$CircleListDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+CircleFilteredListData _$CircleFilteredListDataFromJson(
+    Map<String, dynamic> json) {
+  return _CircleFilteredListData.fromJson(json);
+}
+
+/// @nodoc
+mixin _$CircleFilteredListData {
+  int get categoryId => throw _privateConstructorUsedError;
+  String get category => throw _privateConstructorUsedError;
+  List<CircleListData> get clubs => throw _privateConstructorUsedError;
+
+  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
+  @JsonKey(ignore: true)
+  $CircleFilteredListDataCopyWith<CircleFilteredListData> get copyWith =>
+      throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class $CircleFilteredListDataCopyWith<$Res> {
+  factory $CircleFilteredListDataCopyWith(CircleFilteredListData value,
+          $Res Function(CircleFilteredListData) then) =
+      _$CircleFilteredListDataCopyWithImpl<$Res, CircleFilteredListData>;
+  @useResult
+  $Res call({int categoryId, String category, List<CircleListData> clubs});
+}
+
+/// @nodoc
+class _$CircleFilteredListDataCopyWithImpl<$Res,
+        $Val extends CircleFilteredListData>
+    implements $CircleFilteredListDataCopyWith<$Res> {
+  _$CircleFilteredListDataCopyWithImpl(this._value, this._then);
+
+  // ignore: unused_field
+  final $Val _value;
+  // ignore: unused_field
+  final $Res Function($Val) _then;
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? categoryId = null,
+    Object? category = null,
+    Object? clubs = null,
+  }) {
+    return _then(_value.copyWith(
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      clubs: null == clubs
+          ? _value.clubs
+          : clubs // ignore: cast_nullable_to_non_nullable
+              as List<CircleListData>,
+    ) as $Val);
+  }
+}
+
+/// @nodoc
+abstract class _$$CircleFilteredListDataImplCopyWith<$Res>
+    implements $CircleFilteredListDataCopyWith<$Res> {
+  factory _$$CircleFilteredListDataImplCopyWith(
+          _$CircleFilteredListDataImpl value,
+          $Res Function(_$CircleFilteredListDataImpl) then) =
+      __$$CircleFilteredListDataImplCopyWithImpl<$Res>;
+  @override
+  @useResult
+  $Res call({int categoryId, String category, List<CircleListData> clubs});
+}
+
+/// @nodoc
+class __$$CircleFilteredListDataImplCopyWithImpl<$Res>
+    extends _$CircleFilteredListDataCopyWithImpl<$Res,
+        _$CircleFilteredListDataImpl>
+    implements _$$CircleFilteredListDataImplCopyWith<$Res> {
+  __$$CircleFilteredListDataImplCopyWithImpl(
+      _$CircleFilteredListDataImpl _value,
+      $Res Function(_$CircleFilteredListDataImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? categoryId = null,
+    Object? category = null,
+    Object? clubs = null,
+  }) {
+    return _then(_$CircleFilteredListDataImpl(
+      categoryId: null == categoryId
+          ? _value.categoryId
+          : categoryId // ignore: cast_nullable_to_non_nullable
+              as int,
+      category: null == category
+          ? _value.category
+          : category // ignore: cast_nullable_to_non_nullable
+              as String,
+      clubs: null == clubs
+          ? _value._clubs
+          : clubs // ignore: cast_nullable_to_non_nullable
+              as List<CircleListData>,
+    ));
+  }
+}
+
+/// @nodoc
+@JsonSerializable()
+class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
+  _$CircleFilteredListDataImpl(
+      {required this.categoryId,
+      required this.category,
+      required final List<CircleListData> clubs})
+      : _clubs = clubs;
+
+  factory _$CircleFilteredListDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$CircleFilteredListDataImplFromJson(json);
+
+  @override
+  final int categoryId;
+  @override
+  final String category;
+  final List<CircleListData> _clubs;
+  @override
+  List<CircleListData> get clubs {
+    if (_clubs is EqualUnmodifiableListView) return _clubs;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableListView(_clubs);
+  }
+
+  @override
+  String toString() {
+    return 'CircleFilteredListData(categoryId: $categoryId, category: $category, clubs: $clubs)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$CircleFilteredListDataImpl &&
+            (identical(other.categoryId, categoryId) ||
+                other.categoryId == categoryId) &&
+            (identical(other.category, category) ||
+                other.category == category) &&
+            const DeepCollectionEquality().equals(other._clubs, _clubs));
+  }
+
+  @JsonKey(ignore: true)
+  @override
+  int get hashCode => Object.hash(runtimeType, categoryId, category,
+      const DeepCollectionEquality().hash(_clubs));
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$CircleFilteredListDataImplCopyWith<_$CircleFilteredListDataImpl>
+      get copyWith => __$$CircleFilteredListDataImplCopyWithImpl<
+          _$CircleFilteredListDataImpl>(this, _$identity);
+
+  @override
+  Map<String, dynamic> toJson() {
+    return _$$CircleFilteredListDataImplToJson(
+      this,
+    );
+  }
+}
+
+abstract class _CircleFilteredListData implements CircleFilteredListData {
+  factory _CircleFilteredListData(
+          {required final int categoryId,
+          required final String category,
+          required final List<CircleListData> clubs}) =
+      _$CircleFilteredListDataImpl;
+
+  factory _CircleFilteredListData.fromJson(Map<String, dynamic> json) =
+      _$CircleFilteredListDataImpl.fromJson;
+
+  @override
+  int get categoryId;
+  @override
+  String get category;
+  @override
+  List<CircleListData> get clubs;
+  @override
+  @JsonKey(ignore: true)
+  _$$CircleFilteredListDataImplCopyWith<_$CircleFilteredListDataImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 CircleListModelError _$CircleListModelErrorFromJson(Map<String, dynamic> json) {
@@ -410,6 +830,7 @@ CircleListModelError _$CircleListModelErrorFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$CircleListModelError {
   String? get message => throw _privateConstructorUsedError;
+  String? get code => throw _privateConstructorUsedError;
   CircleListModelType? get type => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -424,7 +845,7 @@ abstract class $CircleListModelErrorCopyWith<$Res> {
           $Res Function(CircleListModelError) then) =
       _$CircleListModelErrorCopyWithImpl<$Res, CircleListModelError>;
   @useResult
-  $Res call({String? message, CircleListModelType? type});
+  $Res call({String? message, String? code, CircleListModelType? type});
 }
 
 /// @nodoc
@@ -442,12 +863,17 @@ class _$CircleListModelErrorCopyWithImpl<$Res,
   @override
   $Res call({
     Object? message = freezed,
+    Object? code = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
               as String?,
       type: freezed == type
           ? _value.type
@@ -465,7 +891,7 @@ abstract class _$$CircleListModelErrorImplCopyWith<$Res>
       __$$CircleListModelErrorImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String? message, CircleListModelType? type});
+  $Res call({String? message, String? code, CircleListModelType? type});
 }
 
 /// @nodoc
@@ -480,12 +906,17 @@ class __$$CircleListModelErrorImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = freezed,
+    Object? code = freezed,
     Object? type = freezed,
   }) {
     return _then(_$CircleListModelErrorImpl(
       message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
+              as String?,
+      code: freezed == code
+          ? _value.code
+          : code // ignore: cast_nullable_to_non_nullable
               as String?,
       type: freezed == type
           ? _value.type
@@ -498,7 +929,7 @@ class __$$CircleListModelErrorImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$CircleListModelErrorImpl extends _CircleListModelError {
-  _$CircleListModelErrorImpl({this.message, this.type}) : super._();
+  _$CircleListModelErrorImpl({this.message, this.code, this.type}) : super._();
 
   factory _$CircleListModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$CircleListModelErrorImplFromJson(json);
@@ -506,11 +937,13 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
   @override
   final String? message;
   @override
+  final String? code;
+  @override
   final CircleListModelType? type;
 
   @override
   String toString() {
-    return 'CircleListModelError(message: $message, type: $type)';
+    return 'CircleListModelError(message: $message, code: $code, type: $type)';
   }
 
   @override
@@ -519,12 +952,13 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
         (other.runtimeType == runtimeType &&
             other is _$CircleListModelErrorImpl &&
             (identical(other.message, message) || other.message == message) &&
+            (identical(other.code, code) || other.code == code) &&
             (identical(other.type, type) || other.type == type));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, type);
+  int get hashCode => Object.hash(runtimeType, message, code, type);
 
   @JsonKey(ignore: true)
   @override
@@ -545,6 +979,7 @@ class _$CircleListModelErrorImpl extends _CircleListModelError {
 abstract class _CircleListModelError extends CircleListModelError {
   factory _CircleListModelError(
       {final String? message,
+      final String? code,
       final CircleListModelType? type}) = _$CircleListModelErrorImpl;
   _CircleListModelError._() : super._();
 
@@ -553,6 +988,8 @@ abstract class _CircleListModelError extends CircleListModelError {
 
   @override
   String? get message;
+  @override
+  String? get code;
   @override
   CircleListModelType? get type;
   @override

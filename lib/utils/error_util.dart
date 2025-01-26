@@ -30,6 +30,8 @@ class ErrorUtil {
         return "인증코드가 일치하지 않습니다!";
       case "ATTEMPT-503": // 최대 시도 횟수 초과
         return "최대 시도 횟수를 초과했습니다! 잠시후 다시 시도해주세요!";
+      case "CG-201": // 해당 학과 동아리가 없음
+        return "동아리가 없습니다";
       default:
         return null;
     }

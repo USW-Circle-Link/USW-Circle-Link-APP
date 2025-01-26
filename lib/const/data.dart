@@ -16,7 +16,7 @@ const servers = {
     'port': '8080',
   },
 };
-const SERVER = 'prod_server';
+const SERVER = 'test_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
@@ -211,6 +211,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -218,6 +219,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -225,6 +227,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ACADEMIC",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -232,6 +235,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -239,6 +243,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -246,6 +251,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "ART",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -253,6 +259,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -260,6 +267,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -267,6 +275,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "SHOW",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -274,6 +283,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "RELIGION",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -281,6 +291,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "RELIGION",
+    clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
     clubId: 1,
@@ -288,6 +299,7 @@ var testCircleData = <CircleListData>[
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
     departmentName: "RELIGION",
+    clubHashtags: ["#학술", "#예술"],
   ),
 ];
 const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";

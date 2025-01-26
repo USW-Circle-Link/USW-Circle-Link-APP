@@ -125,6 +125,9 @@ class _GroupPickerState extends ConsumerState<GroupPicker> {
       label: Text(label),
       selected: isSelected,
       onSelected: (value) {
+        if (selectedGroups.length == 3) {
+          return;
+        }
         setState(() {
           value ? selectedGroups.add(label) : selectedGroups.remove(label);
         });
