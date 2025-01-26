@@ -16,55 +16,119 @@ class CircleItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        onItemClicked(circle.clubId);
-      },
-      child: Container(
-        width: 100.w,
-        margin: EdgeInsets.only(right: 3.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(
-              height: 106.h,
-              child: circle.mainPhoto?.isValidUrl ?? false
-                  ? Image.network(
-                      circle.mainPhoto!,
-                      fit: BoxFit.cover,
-                      errorBuilder: (BuildContext context, Object exception,
-                          StackTrace? stackTrace) {
-                        return Container(
-                          alignment: Alignment.center,
-                          color: const Color.fromARGB(255, 164, 164, 164),
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: () {
+          onItemClicked(circle.clubId);
+        },
+        child: Container(
+          width: 120.w,
+          margin: EdgeInsets.only(right: 3.w),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10.r),
+                  border: Border.all(color: Color(0xFFDEDEDE), width: 1.w),
+                ),
+                height: 143.h,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10.r),
+                  child: circle.mainPhoto?.isValidUrl ?? false
+                      ? Image.network(
+                          circle.mainPhoto!,
+                          fit: BoxFit.cover,
+                          errorBuilder: (BuildContext context, Object exception,
+                              StackTrace? stackTrace) {
+                            return Container(
+                              alignment: Alignment.center,
+                              color: const Color.fromARGB(255, 164, 164, 164),
+                              child: Icon(
+                                Icons.person,
+                                color: const Color.fromARGB(255, 255, 255, 255),
+                                size: 60,
+                              ),
+                            );
+                          },
+                        )
+                      : Center(
                           child: Icon(
                             Icons.person,
-                            color: const Color.fromARGB(255, 255, 255, 255),
-                            size: 60,
+                            color: const Color.fromARGB(255, 0, 0, 0),
+                            size: 80.w,
                           ),
-                        );
-                      },
-                    )
-                  : Container(
-                      alignment: Alignment.center,
-                      color: const Color.fromARGB(255, 164, 164, 164),
-                      child: Icon(
-                        Icons.person,
-                        color: const Color.fromARGB(255, 255, 255, 255),
-                        size: 60,
+                        ),
+                ),
+              ),
+              SizedBox(height: 8.h),
+              TextFontWidget.fontRegular(
+                overflow: TextOverflow.ellipsis,
+                circle.clubName,
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w600,
+              ),
+              SizedBox(height: 8.h),
+              Flexible(
+                child: LayoutBuilder(builder: (context, constraints) {
+                  final margin = 5.w;
+                  final width = (constraints.maxWidth - margin) / 2;
+                  return Row(
+                    children: List.generate(
+                      circle.clubHashtags.length,
+                      (index) => ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minWidth: 0,
+                          maxWidth: width,
+                          minHeight: constraints.maxHeight,
+                          maxHeight: constraints.maxHeight,
+                        ),
+                        child: Container(
+                          margin:
+                              EdgeInsets.only(right: index == 0 ? margin : 0),
+                          padding: EdgeInsets.symmetric(horizontal: 5.w),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10.r),
+                            border: Border.all(
+                                color: Color(0xFFDEDEDE), width: 1.w),
+                          ),
+                          child: TextFontWidget.fontRegular(
+                            '#${circle.clubHashtags[index]}',
+                            textAlign: TextAlign.center,
+                            overflow: TextOverflow.ellipsis,
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w300,
+                          ),
+                        ),
                       ),
-                    ),
-            ),
-            SizedBox(height: 8.h),
-            TextFontWidget.fontRegular(
-              overflow: TextOverflow.ellipsis,
-              circle.clubName,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.w600,
-            ),
-          ],
+                    ).toList(),
+                  );
+                }),
+              )
+            ],
+          ),
         ),
       ),
+    );
+  }
+
+  Widget _buildChip(String label) {
+    return Chip(
+      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      label: TextFontWidget.fontRegular(label, overflow: TextOverflow.ellipsis),
+      labelStyle: TextFontWidget.fontRegularStyle(
+        color: Color(0xFFFFFFFF),
+        fontWeight: FontWeight.w400,
+      ),
+      visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+      backgroundColor: Color(0xFFC0C0C0),
+      elevation: null,
+      shape: RoundedRectangleBorder(
+        side: BorderSide(color: Colors.transparent),
+        borderRadius: BorderRadius.all(Radius.circular(8.r)),
+      ),
+      padding: EdgeInsets.zero,
     );
   }
 }

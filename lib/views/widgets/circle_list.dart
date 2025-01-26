@@ -15,6 +15,7 @@ class CircleList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      shrinkWrap: true,
       children: state.data.getClassifiedList().entries.map((entry) {
         return CircleGroup(department: entry, onItemClicked: onItemClicked);
       }).toList(),
@@ -26,10 +27,12 @@ extension GetClassifiedList on List<CircleListData> {
   Map<String, List<CircleListData>> getClassifiedList() {
     final result = <String, List<CircleListData>>{};
     forEach((circle) {
-      if (result[circle.departmentName] == null) {
-        result[circle.departmentName] = <CircleListData>[];
+      if (circle.departmentName != null) {
+        if (result[circle.departmentName!] == null) {
+          result[circle.departmentName!] = <CircleListData>[];
+        }
+        result[circle.departmentName!]!.add(circle);
       }
-      result[circle.departmentName]!.add(circle);
     });
     return result;
   }
