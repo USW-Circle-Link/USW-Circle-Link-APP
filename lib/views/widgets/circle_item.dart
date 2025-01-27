@@ -89,7 +89,7 @@ class CircleItem extends StatelessWidget {
                               EdgeInsets.only(right: index == 0 ? margin : 0),
                           padding: EdgeInsets.symmetric(horizontal: 5.w),
                           decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(10.r),
+                            borderRadius: BorderRadius.circular(6.r),
                             border: Border.all(
                                 color: Color(0xFFDEDEDE), width: 1.w),
                           ),
