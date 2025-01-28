@@ -142,24 +142,24 @@ class CircleDetailItem extends StatelessWidget {
                         decoration: BoxDecoration(
                           border: Border.all(color: const Color(0xffc4c4c4)),
                           borderRadius: BorderRadius.circular(8.r),
-                          image: imageUrl != null && imageUrl!.isValidUrl
-                              ? DecorationImage(
-                                  image: NetworkImage(imageUrl!),
-                                  fit: BoxFit.cover,
-                                )
-                              : null,
-                          color: const Color.fromARGB(255, 164, 164, 164),
                         ),
-                        child: imageUrl == null
-                            ? Center(
-                                child: Icon(
-                                  Icons.person,
-                                  color:
-                                      const Color.fromARGB(255, 255, 255, 255),
-                                  size: 60,
-                                ),
-                              )
-                            : null,
+                        child: HeroMode(
+                          enabled: ModalRoute.of(context)?.animation?.status !=
+                              AnimationStatus.reverse,
+                          child: Hero(
+                            tag: 'circle_${clubId}',
+                            child: imageUrl != null && imageUrl!.isValidUrl
+                                ? Image.network(
+                                    imageUrl!,
+                                    fit: BoxFit.cover,
+                                  )
+                                : Icon(
+                                    Icons.person,
+                                    color: const Color.fromARGB(255, 0, 0, 0),
+                                    size: 60,
+                                  ),
+                          ),
+                        ),
                       ),
                       SizedBox(width: 16.w),
                       Expanded(
@@ -168,43 +168,40 @@ class CircleDetailItem extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             SizedBox(height: 8.h),
-                            Row(
-                              children: [
-                                SizedBox(
-                                  child: TextFontWidget.fontRegular(
-                                    name,
-                                    overflow: TextOverflow.ellipsis,
-                                    color: Colors.black,
-                                    fontSize: 18.sp,
-                                    fontWeight: FontWeight.w900,
-                                    height: 1.h,
-                                    letterSpacing: -0.45.sp,
-                                  ),
-                                ),
-                              ],
+                            TextFontWidget.fontRegular(
+                              name,
+                              overflow: TextOverflow.ellipsis,
+                              color: Colors.black,
+                              fontSize: 18.sp,
+                              fontWeight: FontWeight.w900,
+                              height: 1.h,
+                              letterSpacing: -0.45.sp,
                             ),
                             SizedBox(height: 5.h),
-                            Row(
-                              children: [
-                                TextFontWidget.fontRegular(
-                                  '동아리 회장',
+                            RichText(
+                              overflow: TextOverflow.ellipsis,
+                              text: TextSpan(
+                                text: '동아리 회장 ',
+                                style: TextFontWidget.fontRegularStyle(
                                   color: const Color(0xFF767676),
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w400,
                                   height: 1.h,
                                   letterSpacing: -0.35.sp,
                                 ),
-                                SizedBox(width: 4.w),
-                                TextFontWidget.fontRegular(
-                                  leader,
-                                  overflow: TextOverflow.ellipsis,
-                                  color: const Color(0xFF353549),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w800,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
-                                ),
-                              ],
+                                children: [
+                                  TextSpan(
+                                    text: leader,
+                                    style: TextStyle(
+                                      color: Color(0xFF353549),
+                                      fontWeight: FontWeight.w800,
+                                      fontSize: 14.sp,
+                                      height: 1.h,
+                                      letterSpacing: -0.35.sp,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),
