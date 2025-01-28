@@ -316,8 +316,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 children: [
                                   SizedBox(width: 24.w),
                                   Container(
-                                    height: 82.h,
                                     width: 82.w,
+                                    height: 82.h,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: const Color(0xffc4c4c4)),
@@ -335,13 +335,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                       .value!.mainPhotoPath!,
                                                   fit: BoxFit.cover,
                                                 )
-                                              : Center(
-                                                  child: Icon(
-                                                    Icons.person,
-                                                    color: const Color.fromARGB(
-                                                        255, 0, 0, 0),
-                                                    size: 60,
-                                                  ),
+                                              : Icon(
+                                                  Icons.person,
+                                                  color: const Color.fromARGB(
+                                                      255, 0, 0, 0),
+                                                  size: 60,
                                                 ),
                                     ),
                                   ),
@@ -354,47 +352,42 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                           CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(height: 8.h),
-                                        Row(
-                                          children: [
-                                            SizedBox(
-                                              child: TextFontWidget.fontRegular(
-                                                clubIntroState
-                                                    .value!.circleName,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: Colors.black,
-                                                fontSize: 18.sp,
-                                                fontWeight: FontWeight.w900,
-                                                height: 1.h,
-                                                letterSpacing: -0.45.sp,
-                                              ),
-                                            ),
-                                          ],
+                                        TextFontWidget.fontRegular(
+                                          clubIntroState.value!.circleName,
+                                          overflow: TextOverflow.ellipsis,
+                                          color: Colors.black,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w900,
+                                          height: 1.h,
+                                          letterSpacing: -0.45.sp,
                                         ),
                                         SizedBox(height: 5.h),
-                                        Row(
-                                          children: [
-                                            TextFontWidget.fontRegular(
-                                              '동아리 회장',
+                                        RichText(
+                                          overflow: TextOverflow.ellipsis,
+                                          text: TextSpan(
+                                            text: '동아리 회장 ',
+                                            style:
+                                                TextFontWidget.fontRegularStyle(
                                               color: const Color(0xFF767676),
                                               fontSize: 14.sp,
                                               fontWeight: FontWeight.w400,
                                               height: 1.h,
                                               letterSpacing: -0.35.sp,
                                             ),
-                                            SizedBox(width: 4.w),
-                                            SizedBox(
-                                              child: TextFontWidget.fontRegular(
-                                                clubIntroState
+                                            children: [
+                                              TextSpan(
+                                                text: clubIntroState
                                                     .value!.leaderName,
-                                                overflow: TextOverflow.ellipsis,
-                                                color: const Color(0xFF353549),
-                                                fontSize: 14.sp,
-                                                fontWeight: FontWeight.w800,
-                                                height: 1.h,
-                                                letterSpacing: -0.35.sp,
+                                                style: TextStyle(
+                                                  color: Color(0xFF353549),
+                                                  fontWeight: FontWeight.w800,
+                                                  fontSize: 14.sp,
+                                                  height: 1.h,
+                                                  letterSpacing: -0.35.sp,
+                                                ),
                                               ),
-                                            ),
-                                          ],
+                                            ],
+                                          ),
                                         ),
                                         SizedBox(height: 8.h),
                                         clubIntroState.whenOrNull(
@@ -416,22 +409,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       ],
                                     ),
                                   ),
-                                  IconButton(
-                                    padding: EdgeInsets.zero,
-                                    constraints: BoxConstraints(),
-                                    visualDensity: VisualDensity.compact,
-                                    key: _iconKey,
-                                    onPressed: () {
-                                      if (_overlayEntry == null) {
-                                        _showOverlay(
-                                            clubIntroState.value!.circleRoom,
-                                            clubIntroState.value!.leaderHp,
-                                            clubIntroState.value!.circleInsta);
-                                      } else {
-                                        _removeOverlay();
-                                      }
-                                    },
-                                    icon: Icon(Icons.more_vert),
+                                  Container(
+                                    alignment: Alignment.topCenter,
+                                    child: IconButton(
+                                      padding: EdgeInsets.zero,
+                                      constraints: BoxConstraints(),
+                                      visualDensity: VisualDensity.compact,
+                                      key: _iconKey,
+                                      onPressed: () {
+                                        if (_overlayEntry == null) {
+                                          _showOverlay(
+                                              clubIntroState.value!.circleRoom,
+                                              clubIntroState.value!.leaderHp,
+                                              clubIntroState
+                                                  .value!.circleInsta);
+                                        } else {
+                                          _removeOverlay();
+                                        }
+                                      },
+                                      icon: Icon(Icons.more_vert),
+                                    ),
                                   ),
                                   SizedBox(width: 12.w),
                                 ],
