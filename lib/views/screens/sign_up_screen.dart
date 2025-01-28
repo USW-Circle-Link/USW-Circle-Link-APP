@@ -115,7 +115,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     '중복확인 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!',
               );
               break;
-            case SignUpModelType.validatePasswordMatch:
+            case SignUpModelType.checkProfileIsExist:
+              // 회원가입 실패!
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                    '회원가입 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!',
+              );
+              break;
+            case SignUpModelType.signUpExistingMember:
               // 회원가입 실패!
               break;
             default: // 예외발생!
@@ -172,7 +180,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ? null
                   : () async {
                       if (idVerified &&
-                          major != null &&
                           termsOfServiceAgree &&
                           privacyPolicyAgree &&
                           personalInformationCollectionAndUsageAgreementAgree) {
@@ -184,7 +191,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         phoneNumber = phoneNumberController.text.trim();
                         studentNumber = studentNumberController.text.trim();
                         final email = emailController.text.trim();
-                        major = major!.trim();
+                        final _major =
+                            (major ?? "").trim(); // major 관련 에러 메시지 처리 때문에
                         if (_newMemberSignUp) {
                           await ref
                               .read(signUpViewModelProvider.notifier)
@@ -195,7 +203,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 username: name,
                                 telephone: phoneNumber,
                                 studentNumber: studentNumber,
-                                major: major!,
+                                major: _major,
                               );
                         } else {
                           await ref
@@ -207,7 +215,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                                 username: name,
                                 telephone: phoneNumber,
                                 studentNumber: studentNumber,
-                                major: major!,
+                                major: _major,
                                 email: email,
                                 clubs: _selectedCircles,
                               );
@@ -217,11 +225,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         DialogManager.instance.showAlertDialog(
                           context: context,
                           content: '아이디 중복확인이 필요합니다.',
-                        );
-                      } else if (major == null) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: '단과대학/학과를 선택해주세요.',
                         );
                       } else if (!termsOfServiceAgree) {
                         DialogManager.instance.showAlertDialog(
@@ -443,9 +446,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 8.h,
+                  height: 12.h,
                 ),
-                if (state.hasError)
+                if (state.hasError &&
+                    isAnyFieldError(
+                      (state.error as SignUpModelError),
+                      [
+                        FieldType.account,
+                        FieldType.password,
+                        FieldType.passwordConfirm,
+                      ],
+                    ))
                   TextFontWidget.fontRegular(
                     '* ${ErrorUtil.instance.getErrorMessage((state.error as SignUpModelError).code)}',
                     fontSize: 12.sp,
@@ -453,7 +464,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     fontWeight: FontWeight.w400,
                   ),
                 SizedBox(
-                  height: 50.h,
+                  height: 36.h,
                 ),
                 RoundedTextField(
                   height: 50.h,
@@ -578,6 +589,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       },
                     );
                   },
+                  borderColor: state.hasError &&
+                          !ErrorUtil.instance.isValid(
+                              (state.error as SignUpModelError).code,
+                              FieldType.major)
+                      ? const Color(0xFFFF3F3F)
+                      : null,
                   leftBottomCornerRadius: _newMemberSignUp ? 8.r : 0.r,
                   rightBottomCornerRadius: _newMemberSignUp ? 8.r : 0.r,
                   leftTopCornerRadius: 0.r,
@@ -617,19 +634,28 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     textInputAction: TextInputAction.done,
                     hintText: "포털 이메일 입력",
                     isAnimatedHint: false,
+                    borderColor: state.hasError &&
+                            !ErrorUtil.instance.isValid(
+                                (state.error as SignUpModelError).code,
+                                FieldType.email)
+                        ? const Color(0xFFFF3F3F)
+                        : null,
                     suffixIcon: Container(
                       padding: EdgeInsets.symmetric(horizontal: 10.w),
                       child: Column(
                         // 높이 에 대해서 Unbounded Contraints 를 만들어주기 위함
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextFontWidget.fontRegular('@suwon.ac.kr'),
+                          TextFontWidget.fontRegular('@suwon.ac.kr',
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              color: const Color(0xFF989898)),
                         ],
                       ),
                     ),
                     prefixIcon: SvgPicture.asset(
-                      'assets/images/ic_bookmark.svg',
-                      width: 13.w,
+                      'assets/images/ic_mail.svg',
+                      width: 16.w,
                       height: 16.h,
                       fit: BoxFit.scaleDown,
                     ),
@@ -639,7 +665,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     ),
                   ),
                 SizedBox(
-                  height: 20.h,
+                  height: 10.h,
+                ),
+                if (state.hasError &&
+                    isAnyFieldError(
+                      (state.error as SignUpModelError),
+                      [
+                        FieldType.username,
+                        FieldType.telephone,
+                        FieldType.studentNumber,
+                        FieldType.major,
+                        if (!_newMemberSignUp) FieldType.email,
+                      ],
+                    ))
+                  TextFontWidget.fontRegular(
+                    '* ${ErrorUtil.instance.getErrorMessage((state.error as SignUpModelError).code)}',
+                    fontSize: 12.sp,
+                    color: const Color(0xFFFF3F3F),
+                    fontWeight: FontWeight.w400,
+                  ),
+                SizedBox(
+                  height: 10.h,
                 ),
                 Row(
                   children: [
@@ -790,6 +836,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         ),
       ),
     );
+  }
+
+  bool isAnyFieldError(SignUpModelError error, List<FieldType> fieldTypes) {
+    return fieldTypes
+        .any((fieldType) => !ErrorUtil.instance.isValid(error.code, fieldType));
   }
 
   @override

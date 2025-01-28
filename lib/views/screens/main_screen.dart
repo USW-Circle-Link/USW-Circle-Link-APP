@@ -341,7 +341,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ),
                     );
                   },
-                  loading: () => CircularProgressIndicator()),
+                  loading: () => Center(child: CircularProgressIndicator())),
             ),
           ],
         ),

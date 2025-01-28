@@ -5,7 +5,9 @@ enum FieldType {
   studentNumber,
   major,
   passwordConfirm,
-  password
+  password,
+  email,
+  currentPassword
 }
 
 class ErrorUtil {
@@ -47,20 +49,26 @@ class ErrorUtil {
         return "비밀번호가 일치하지 않습니다!";
       case "USR-F100": // 아이디 규칙 X
         return "아이디는 5~20자 이내 영어, 숫자만 가능합니다!";
-      case "USR-214":
-      case "USR-203":
       case "USR-F200": // 비밀번호 규칙 X
-        return "비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
+      case "USR-203": // 비밀번호 규칙 X
+      case "USR-214": // 비밀번호 규칙 X
+        return "비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n5~20자 이내로 작성해주세요!";
       case "USR-F300": // 비밀번호 일치 X
         return "비밀번호가 일치하지 않습니다!";
-      case "USR-F400": // 이름 공백
-        return "이름이 형식에 맞지 않습니다!";
-      case "USR-F500": // 전화번호 형식에 맞지 않음
-        return "전화번호가 형식에 맞지 않습니다!";
-      case "USR-F600": // 학번이 공백 혹은 8자리가 아님
-        return "학번이 형식에 맞지 않습니다!";
-      case "USR-F700": // 학과가 선택되지 않음
-        return "단과대학/학과를 선택해주세요!";
+      case "PFL-207": // 이미 존재하는 프로필
+        return "이미 존재하는 프로필입니다!";
+      case "USR-F800": // 아이디 혹은 비밀번호 공백
+        return "아이디와 비밀번호를 입력해주세요!";
+      case "USR-216": // 비회원
+        return "비회원 사용자입니다. 인증을 완료해주세요";
+      case "USR-211": // 올바르지 않은 아이디 혹은 비밀번호
+        return "올바르지 않은 아이디 혹은 비밀번호입니다";
+      case "USR-F900": // 현재 비밀번호 공백
+        return "현재 비밀번호를 입력해주세요!";
+      case "USR-204": // 현재 비밀번호 불일치
+        return "현재 비밀번호가 일치하지 않습니다";
+      case "USR-210": // 해당 정보로 인증 중인 회원존재 X
+        return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
       default:
         return null;
     }
@@ -87,7 +95,11 @@ class ErrorUtil {
       case "USR-203":
       case "USR-F200":
         return fieldType != FieldType.password;
-
+      case "USR-204":
+      case "USR-F900":
+        return fieldType != FieldType.currentPassword;
+      case "EML-F100":
+        return fieldType != FieldType.email;
       default:
         return true;
     }

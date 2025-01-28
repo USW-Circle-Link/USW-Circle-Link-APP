@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/login_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -169,15 +170,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(
                   height: 8.h,
                 ),
-                Visibility(
-                  visible: state is UserModelError,
-                  child: TextFontWidget.fontRegular(
-                    getErrorMessage(state),
+                if (state is UserModelError)
+                  TextFontWidget.fontRegular(
+                    '* ${ErrorUtil.instance.getErrorMessage(state.code)}',
                     fontSize: 12.sp,
                     color: const Color(0xFFFF3F3F),
                     fontWeight: FontWeight.w400,
                   ),
-                ),
                 SizedBox(
                   height: 15.h,
                 ),
@@ -281,21 +280,5 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
       ),
     );
-  }
-
-  String getErrorMessage(UserModelBase? state) {
-    if (state is UserModelError) {
-      switch (state.code) {
-        case "USR-F800": // 아이디 혹은 비밀번호 공백
-          return "* 아이디와 비밀번호를 입력해주세요!";
-        case "USR-211":
-          return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
-        case "ATTEMPT-503":
-          return "* 1분 최대 시도 횟수를 초과했습니다!\n잠시후 다시 시도해주세요!";
-        default:
-          return "* 올바르지 않은 아이디 혹은 비밀번호입니다";
-      }
-    }
-    return "";
   }
 }

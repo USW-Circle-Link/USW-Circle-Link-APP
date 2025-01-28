@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 class DefaultInterceptor extends Interceptor {
-
   DefaultInterceptor();
 
   @override
@@ -18,6 +18,9 @@ class DefaultInterceptor extends Interceptor {
 
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
+    if (err.response?.statusCode == 500) {
+      logger.e(err.response?.data);
+    }
     return handler.next(err);
   }
 }
