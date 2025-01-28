@@ -143,41 +143,61 @@ Widget buildDrawerItem({
   required String svgPath,
   required VoidCallback onTap,
   required String trailingSvgPath,
-  bool isExpanded = false, // 확장 상태 전달받기
+  Widget? subtitle,
+  bool isExpanded = false,
 }) {
-  return Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.only(
-      left: 24.w,
-      right: 24.w,
-      bottom: isExpanded ? 0.h : 12.h,
-    ), // 확장 시 마진 제거
-    width: 242.w,
-    height: 56.h,
-    decoration: BoxDecoration(
-      borderRadius: isExpanded
-          ? BorderRadius.vertical(
-              top: Radius.circular(8.r),
-              bottom: Radius.circular(0),
-            )
-          : BorderRadius.circular(8.r), // 확장 시 위쪽 radius 제거
-      color: const Color(0xffFFFFFF),
-    ),
-    child: ListTile(
-      contentPadding: EdgeInsets.only(left: 16.w, right: 6), // 패딩 조정
-      leading: SvgPicture.asset(svgPath),
-      title: Padding(
-        padding: EdgeInsets.only(left: 10.w),
-        child: TextFontWidget.fontRegular(
-          title,
-          overflow: TextOverflow.ellipsis,
-          fontSize: 15.sp,
-          color: const Color(0xff353549),
-          fontWeight: FontWeight.w400,
+  return Padding(
+    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+    child: Material(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(8.r),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(8.r),
+        onTap: onTap,
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+          height: isExpanded ? 100.h : 56.h,
+          child: Column(
+            children: [
+              ListTile(
+                contentPadding: EdgeInsets.only(
+                  left: 16.w,
+                  right: isExpanded ? 15.w : 6.w,
+                ),
+                leading: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(svgPath),
+                  ],
+                ),
+                title: Padding(
+                  padding: EdgeInsets.only(left: 10.w),
+                  child: TextFontWidget.fontRegular(
+                    title,
+                    overflow: TextOverflow.ellipsis,
+                    fontSize: 15.sp,
+                    color: const Color(0xff353549),
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                trailing: AnimatedRotation(
+                  duration: const Duration(milliseconds: 300),
+                  turns: isExpanded ? 0.5 : 0,
+                  child: SvgPicture.asset(trailingSvgPath),
+                ),
+              ),
+              if (isExpanded && subtitle != null)
+                Expanded(
+                  child: Container(
+                    width: double.infinity,
+                    child: subtitle,
+                  ),
+                ),
+            ],
+          ),
         ),
       ),
-      trailing: SvgPicture.asset(trailingSvgPath),
-      onTap: onTap,
     ),
   );
 }

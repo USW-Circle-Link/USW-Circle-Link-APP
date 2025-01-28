@@ -89,59 +89,44 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     // 상태 갱신
                     (context as Element).markNeedsBuild();
                   },
-                  trailingSvgPath: isMyInfoExpanded
-                      ? 'assets/images/under<.svg'
-                      : 'assets/images/>.svg',
+                  trailingSvgPath: 'assets/images/>.svg',
                   isExpanded:
                       isMyInfoExpanded, // 내 정보가 확장되었을 때 마진과 border radius를 없애기 위해 전달
+                  subtitle: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      TextButton(
+                        onPressed: () => context.go('/update_profile'),
+                        child: TextFontWidget.fontRegular(
+                          '내 정보 수정',
+                          fontSize: 12.sp,
+                          color: const Color(0xff353549),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      SizedBox(
+                        height: 16.h,
+                        child: VerticalDivider(
+                          color: Color(0xffCECECE),
+                          thickness: 1,
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          context.go('/change_pw');
+                        },
+                        child: TextFontWidget.fontRegular(
+                          '비밀번호 변경',
+                          fontSize: 12.sp,
+                          color: const Color(0xff353549),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
                 // 내 정보 확장 시 나타나는 항목들
-                if (isMyInfoExpanded) ...[
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 24.w),
-                    child: Container(
-                      margin: EdgeInsets.only(bottom: 12.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.vertical(
-                          bottom: Radius.circular(8.r),
-                        ), // 확장된 경우 위쪽 radius는 제거, 아래쪽만 둥글게 유지
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          TextButton(
-                            onPressed: () => context.go('/update_profile'),
-                            child: TextFontWidget.fontRegular(
-                              '내 정보 수정',
-                              fontSize: 12.sp,
-                              color: const Color(0xff353549),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 16.h,
-                            child: VerticalDivider(
-                              color: Color(0xffCECECE),
-                              thickness: 1,
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () {
-                              context.go('/change_pw');
-                            },
-                            child: TextFontWidget.fontRegular(
-                              '비밀번호 변경',
-                              fontSize: 12.sp,
-                              color: const Color(0xff353549),
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ],
+
                 // 내 정보 부분 수정 끝
                 buildDrawerItem(
                   title: '나의 소속 동아리',
@@ -224,59 +209,78 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
       ),
     );
   }
-}
 
-void _launchURL() async {
-  const url = feedback;
-  final Uri uri = Uri.parse(url);
-  if (await canLaunchUrl(uri)) {
-    await launchUrl(uri);
-  } else {
-    throw 'URL을 열 수 없습니다: $url';
+  void _launchURL() async {
+    const url = feedback;
+    final Uri uri = Uri.parse(url);
+    if (await canLaunchUrl(uri)) {
+      await launchUrl(uri);
+    } else {
+      throw 'URL을 열 수 없습니다: $url';
+    }
   }
-}
 
-Widget buildDrawerItem({
-  required String title,
-  required String svgPath,
-  required VoidCallback onTap,
-  required String trailingSvgPath,
-  bool isExpanded = false, // 확장 상태 전달받기
-}) {
-  return Container(
-    alignment: Alignment.center,
-    margin: EdgeInsets.only(
-      left: 24.w,
-      right: 24.w,
-      bottom: isExpanded ? 0.h : 12.h,
-    ), // 확장 시 마진 제거
-    width: 242.w,
-    height: 56.h,
-    decoration: BoxDecoration(
-      borderRadius: isExpanded
-          ? BorderRadius.vertical(
-              top: Radius.circular(8.r),
-              bottom: Radius.circular(0),
-            )
-          : BorderRadius.circular(8.r), // 확장 시 위쪽 radius 제거
-      color: const Color(0xffFFFFFF),
-    ),
-    child: ListTile(
-      contentPadding:
-          EdgeInsets.only(left: 16.w, right: isExpanded ? 15.w : 6.w), // 패딩 조정
-      leading: SvgPicture.asset(svgPath),
-      title: Padding(
-        padding: EdgeInsets.only(left: 10.w),
-        child: TextFontWidget.fontRegular(
-          title,
-          overflow: TextOverflow.ellipsis,
-          fontSize: 15.sp,
-          color: const Color(0xff353549),
-          fontWeight: FontWeight.w400,
+  Widget buildDrawerItem({
+    required String title,
+    required String svgPath,
+    required VoidCallback onTap,
+    required String trailingSvgPath,
+    Widget? subtitle,
+    bool isExpanded = false,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.r),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(8.r),
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: isExpanded ? 100.h : 56.h,
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: 16.w,
+                    right: 6.w,
+                  ),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      SvgPicture.asset(svgPath),
+                    ],
+                  ),
+                  title: Padding(
+                    padding: EdgeInsets.only(left: 10.w),
+                    child: TextFontWidget.fontRegular(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 15.sp,
+                      color: const Color(0xff353549),
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  trailing: AnimatedRotation(
+                    duration: const Duration(milliseconds: 300),
+                    turns: isExpanded ? 0.25 : 0,
+                    child: SvgPicture.asset(trailingSvgPath),
+                  ),
+                ),
+                if (isExpanded && subtitle != null)
+                  Expanded(
+                    child: Container(
+                      width: double.infinity,
+                      child: subtitle,
+                    ),
+                  ),
+              ],
+            ),
+          ),
         ),
       ),
-      trailing: SvgPicture.asset(trailingSvgPath),
-      onTap: onTap,
-    ),
-  );
+    );
+  }
 }
