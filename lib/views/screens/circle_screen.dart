@@ -327,7 +327,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       tag: 'circle_${widget.clubId}',
                                       child:
                                           clubIntroState.value!.mainPhotoPath !=
-                                                  null
+                                                      null &&
+                                                  clubIntroState.value!
+                                                      .mainPhotoPath!.isValidUrl
                                               ? Image.network(
                                                   clubIntroState
                                                       .value!.mainPhotoPath!,
@@ -337,7 +339,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                   child: Icon(
                                                     Icons.person,
                                                     color: const Color.fromARGB(
-                                                        255, 255, 255, 255),
+                                                        255, 0, 0, 0),
                                                     size: 60,
                                                   ),
                                                 ),
