@@ -1,7 +1,6 @@
 // ignore_for_file: invalid_annotation_target
 
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:usw_circle_link/models/base_error.dart';
 
 part 'sign_up_model.freezed.dart';
 part 'sign_up_model.g.dart';

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
-import 'package:url_launcher/url_launcher.dart';
-
 
 class CircleDetailItem extends StatefulWidget {
   final int clubId;
@@ -38,7 +35,8 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
   OverlayEntry? _overlayEntry;
 
   void _showOverlay() {
-    final RenderBox renderBox = _iconKey.currentContext!.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
 
@@ -117,7 +115,8 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                     alignment: Alignment.center,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(10.sp),
-                      border: Border.all(color: const Color(0xFF767676), width: 1),
+                      border:
+                          Border.all(color: const Color(0xFF767676), width: 1),
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(10.r),
@@ -208,25 +207,25 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                           children: [
                             statusColor != null && statusText != null
                                 ? Container(
-                              alignment: Alignment.centerRight,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 5.h, horizontal: 10.w),
-                                decoration: BoxDecoration(
-                                  color: statusColor,
-                                  borderRadius:
-                                  BorderRadius.circular(16.sp),
-                                ),
-                                child: TextFontWidget.fontRegular(
-                                  statusText,
-                                  color: const Color(0xffFFFFFF),
-                                  fontSize: 12.sp,
-                                  fontWeight: FontWeight.w800,
-                                  height: 1.h,
-                                  letterSpacing: -0.6.sp,
-                                ),
-                              ),
-                            )
+                                    alignment: Alignment.centerRight,
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 5.h, horizontal: 10.w),
+                                      decoration: BoxDecoration(
+                                        color: statusColor,
+                                        borderRadius:
+                                            BorderRadius.circular(16.sp),
+                                      ),
+                                      child: TextFontWidget.fontRegular(
+                                        statusText,
+                                        color: const Color(0xffFFFFFF),
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w800,
+                                        height: 1.h,
+                                        letterSpacing: -0.6.sp,
+                                      ),
+                                    ),
+                                  )
                                 : Container(),
                             SizedBox(width: 18.w),
                           ],
