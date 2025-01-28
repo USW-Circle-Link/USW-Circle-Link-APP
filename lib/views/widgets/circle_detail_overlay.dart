@@ -2,21 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
-import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleDetailOverlay extends StatelessWidget {
-  final String circleRoom;
-  final String leaderHp;
-  final String clubInsta;
+  final String? circleRoom;
+  final String? leaderHp;
+  final String? clubInsta;
   final VoidCallback onClose;
 
   const CircleDetailOverlay({
     super.key,
-    required this.circleRoom,
-    required this.leaderHp,
-    required this.clubInsta,
+    this.circleRoom,
+    this.leaderHp,
+    this.clubInsta,
     required this.onClose,
   });
 
@@ -85,7 +85,7 @@ class CircleDetailOverlay extends StatelessWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
-                blurRadius: 6,
+                blurRadius: 6.r,
                 offset: const Offset(0, 2),
               ),
             ],
@@ -123,10 +123,12 @@ class CircleDetailOverlay extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: () {
-                  onClose();
-                  _showFullScreenMap(context);
-                },
+                onTap: circleRoom != null && circleRoom!.isNotEmpty
+                    ? () {
+                        onClose();
+                        _showFullScreenMap(context);
+                      }
+                    : null,
                 child: Container(
                   padding: EdgeInsets.all(10.sp),
                   height: 33.h,
@@ -146,30 +148,34 @@ class CircleDetailOverlay extends StatelessWidget {
                         width: 4.w,
                       ),
                       TextFontWidget.fontRegular(
-                        '동아리방 | 학생회관 $circleRoom호',
+                        '동아리방 | ${circleRoom != null && circleRoom!.isNotEmpty ? "학생회관 $circleRoom호" : "정보 없음"}',
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
-                        color: const Color(0xff9A9A9A),
+                        color: circleRoom != null && circleRoom!.isNotEmpty
+                            ? const Color(0xff6EA4EF)
+                            : const Color(0xff9A9A9A),
                       )
                     ],
                   ),
                 ),
               ),
               GestureDetector(
-                onTap: () async {
-                  final Uri launchUri = Uri(
-                    scheme: 'tel',
-                    path: leaderHp.startsWith('+')
-                        ? leaderHp
-                        : '+82${leaderHp.substring(1)}',
-                  );
-                  if (await canLaunchUrl(launchUri)) {
-                    await launchUrl(launchUri);
-                  } else {
-                    logger.d('Could not launch $launchUri');
-                  }
-                },
+                onTap: leaderHp != null && leaderHp!.isNotEmpty
+                    ? () async {
+                        final Uri launchUri = Uri(
+                          scheme: 'tel',
+                          path: leaderHp!.startsWith('+')
+                              ? leaderHp
+                              : '+82${leaderHp!.substring(1)}',
+                        );
+                        if (await canLaunchUrl(launchUri)) {
+                          await launchUrl(launchUri);
+                        } else {
+                          logger.d('Could not launch $launchUri');
+                        }
+                      }
+                    : null,
                 child: Container(
                   padding: EdgeInsets.all(10.sp),
                   height: 33.h,
@@ -190,28 +196,34 @@ class CircleDetailOverlay extends StatelessWidget {
                         width: 4.w,
                       ),
                       TextFontWidget.fontRegular(
-                        '${leaderHp.addDash()}',
+                        leaderHp != null && leaderHp!.isNotEmpty
+                            ? leaderHp!.addDashOrNull() ?? "정보 없음"
+                            : "정보 없음",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
-                        color: const Color(0xff6EA4EF),
+                        color: leaderHp != null && leaderHp!.isNotEmpty
+                            ? const Color(0xff6EA4EF)
+                            : const Color(0xff9A9A9A),
                       )
                     ],
                   ),
                 ),
               ),
               GestureDetector(
-                onTap: () async {
-                  final Uri launchUri =
-                      Uri.parse('https://www.instagram.com/$clubInsta');
-                  if (await canLaunchUrl(launchUri)) {
-                    await launchUrl(launchUri,
-                        mode: LaunchMode.externalApplication);
-                  } else {
-                    logger
-                        .d('Could not launch Instagram profile for $clubInsta');
-                  }
-                },
+                onTap: clubInsta != null && clubInsta!.isNotEmpty
+                    ? () async {
+                        final Uri launchUri =
+                            Uri.parse('https://www.instagram.com/$clubInsta');
+                        if (await canLaunchUrl(launchUri)) {
+                          await launchUrl(launchUri,
+                              mode: LaunchMode.externalApplication);
+                        } else {
+                          logger.d(
+                              'Could not launch Instagram profile for $clubInsta');
+                        }
+                      }
+                    : null,
                 child: Container(
                   padding: EdgeInsets.all(10.sp),
                   height: 33.h,
@@ -230,11 +242,15 @@ class CircleDetailOverlay extends StatelessWidget {
                         width: 4.w,
                       ),
                       TextFontWidget.fontRegular(
-                        '인스타그램',
+                        clubInsta != null && clubInsta!.isNotEmpty
+                            ? '인스타그램'
+                            : '정보 없음',
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
-                        color: const Color(0xff6EA4EF),
+                        color: clubInsta != null && clubInsta!.isNotEmpty
+                            ? const Color(0xff6EA4EF)
+                            : const Color(0xff9A9A9A),
                       )
                     ],
                   ),

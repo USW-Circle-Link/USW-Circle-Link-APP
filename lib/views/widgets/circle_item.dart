@@ -76,7 +76,7 @@ class CircleItem extends StatelessWidget {
                   final width = (constraints.maxWidth - margin) / 2;
                   return Row(
                     children: List.generate(
-                      circle.clubHashtags.length,
+                      circle.clubHashtags?.length ?? 0,
                       (index) => ConstrainedBox(
                         constraints: BoxConstraints(
                           minWidth: 0,
@@ -94,7 +94,7 @@ class CircleItem extends StatelessWidget {
                                 color: Color(0xFFDEDEDE), width: 1.w),
                           ),
                           child: TextFontWidget.fontRegular(
-                            '#${circle.clubHashtags[index]}',
+                            '#${circle.clubHashtags![index]}',
                             textAlign: TextAlign.center,
                             overflow: TextOverflow.ellipsis,
                             fontSize: 12.sp,
@@ -110,25 +110,6 @@ class CircleItem extends StatelessWidget {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildChip(String label) {
-    return Chip(
-      materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-      label: TextFontWidget.fontRegular(label, overflow: TextOverflow.ellipsis),
-      labelStyle: TextFontWidget.fontRegularStyle(
-        color: Color(0xFFFFFFFF),
-        fontWeight: FontWeight.w400,
-      ),
-      visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-      backgroundColor: Color(0xFFC0C0C0),
-      elevation: null,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.transparent),
-        borderRadius: BorderRadius.all(Radius.circular(8.r)),
-      ),
-      padding: EdgeInsets.zero,
     );
   }
 }

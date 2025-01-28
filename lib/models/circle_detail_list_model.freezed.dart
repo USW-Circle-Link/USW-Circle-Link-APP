@@ -194,7 +194,7 @@ mixin _$Circle {
   String get leaderName => throw _privateConstructorUsedError;
   String get leaderHp => throw _privateConstructorUsedError;
   String get clubInsta => throw _privateConstructorUsedError;
-  String get circleRoom => throw _privateConstructorUsedError;
+  String? get circleRoom => throw _privateConstructorUsedError;
   String? get aplictStatus => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -214,7 +214,7 @@ abstract class $CircleCopyWith<$Res> {
       String leaderName,
       String leaderHp,
       String clubInsta,
-      String circleRoom,
+      String? circleRoom,
       String? aplictStatus});
 }
 
@@ -237,7 +237,7 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
     Object? leaderName = null,
     Object? leaderHp = null,
     Object? clubInsta = null,
-    Object? circleRoom = null,
+    Object? circleRoom = freezed,
     Object? aplictStatus = freezed,
   }) {
     return _then(_value.copyWith(
@@ -265,10 +265,10 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
           ? _value.clubInsta
           : clubInsta // ignore: cast_nullable_to_non_nullable
               as String,
-      circleRoom: null == circleRoom
+      circleRoom: freezed == circleRoom
           ? _value.circleRoom
           : circleRoom // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       aplictStatus: freezed == aplictStatus
           ? _value.aplictStatus
           : aplictStatus // ignore: cast_nullable_to_non_nullable
@@ -291,7 +291,7 @@ abstract class _$$CircleImplCopyWith<$Res> implements $CircleCopyWith<$Res> {
       String leaderName,
       String leaderHp,
       String clubInsta,
-      String circleRoom,
+      String? circleRoom,
       String? aplictStatus});
 }
 
@@ -312,7 +312,7 @@ class __$$CircleImplCopyWithImpl<$Res>
     Object? leaderName = null,
     Object? leaderHp = null,
     Object? clubInsta = null,
-    Object? circleRoom = null,
+    Object? circleRoom = freezed,
     Object? aplictStatus = freezed,
   }) {
     return _then(_$CircleImpl(
@@ -340,10 +340,10 @@ class __$$CircleImplCopyWithImpl<$Res>
           ? _value.clubInsta
           : clubInsta // ignore: cast_nullable_to_non_nullable
               as String,
-      circleRoom: null == circleRoom
+      circleRoom: freezed == circleRoom
           ? _value.circleRoom
           : circleRoom // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       aplictStatus: freezed == aplictStatus
           ? _value.aplictStatus
           : aplictStatus // ignore: cast_nullable_to_non_nullable
@@ -362,7 +362,7 @@ class _$CircleImpl implements _Circle {
       required this.leaderName,
       required this.leaderHp,
       required this.clubInsta,
-      required this.circleRoom,
+      this.circleRoom,
       this.aplictStatus});
 
   factory _$CircleImpl.fromJson(Map<String, dynamic> json) =>
@@ -381,7 +381,7 @@ class _$CircleImpl implements _Circle {
   @override
   final String clubInsta;
   @override
-  final String circleRoom;
+  final String? circleRoom;
   @override
   final String? aplictStatus;
 
@@ -439,7 +439,7 @@ abstract class _Circle implements Circle {
       required final String leaderName,
       required final String leaderHp,
       required final String clubInsta,
-      required final String circleRoom,
+      final String? circleRoom,
       final String? aplictStatus}) = _$CircleImpl;
 
   factory _Circle.fromJson(Map<String, dynamic> json) = _$CircleImpl.fromJson;
@@ -457,7 +457,7 @@ abstract class _Circle implements Circle {
   @override
   String get clubInsta;
   @override
-  String get circleRoom;
+  String? get circleRoom;
   @override
   String? get aplictStatus;
   @override

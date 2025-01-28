@@ -4,7 +4,7 @@ import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
-import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';

@@ -29,7 +29,7 @@ _$CircleImpl _$$CircleImplFromJson(Map<String, dynamic> json) => _$CircleImpl(
       leaderName: json['leaderName'] as String,
       leaderHp: json['leaderHp'] as String,
       clubInsta: json['clubInsta'] as String,
-      circleRoom: json['circleRoom'] as String,
+      circleRoom: json['circleRoom'] as String?,
       aplictStatus: json['aplictStatus'] as String?,
     );
 

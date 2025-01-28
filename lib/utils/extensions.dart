@@ -34,3 +34,19 @@ extension ContextExt on BuildContext {
     go(newUrl.toString(), extra: extra);
   }
 }
+
+extension AddDashToPhoneNumber on String {
+  String addDash() {
+    if (length != 11) {
+      throw FormatException("전화번호가 11자리가 아닙니다.");
+    }
+    return '${substring(0, 3)}-${substring(3, 7)}-${substring(7)}';
+  }
+
+  String? addDashOrNull() {
+    if (length != 11) {
+      return null;
+    }
+    return '${substring(0, 3)}-${substring(3, 7)}-${substring(7)}';
+  }
+}

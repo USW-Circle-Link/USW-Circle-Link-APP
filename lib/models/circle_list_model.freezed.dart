@@ -409,7 +409,7 @@ mixin _$CircleListData {
   String get clubName => throw _privateConstructorUsedError;
   String? get mainPhoto => throw _privateConstructorUsedError;
   String? get departmentName => throw _privateConstructorUsedError;
-  List<String> get clubHashtags => throw _privateConstructorUsedError;
+  List<String>? get clubHashtags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -428,7 +428,7 @@ abstract class $CircleListDataCopyWith<$Res> {
       String clubName,
       String? mainPhoto,
       String? departmentName,
-      List<String> clubHashtags});
+      List<String>? clubHashtags});
 }
 
 /// @nodoc
@@ -448,7 +448,7 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
     Object? clubName = null,
     Object? mainPhoto = freezed,
     Object? departmentName = freezed,
-    Object? clubHashtags = null,
+    Object? clubHashtags = freezed,
   }) {
     return _then(_value.copyWith(
       clubId: null == clubId
@@ -467,10 +467,10 @@ class _$CircleListDataCopyWithImpl<$Res, $Val extends CircleListData>
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
               as String?,
-      clubHashtags: null == clubHashtags
+      clubHashtags: freezed == clubHashtags
           ? _value.clubHashtags
           : clubHashtags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ) as $Val);
   }
 }
@@ -488,7 +488,7 @@ abstract class _$$CircleListDataImplCopyWith<$Res>
       String clubName,
       String? mainPhoto,
       String? departmentName,
-      List<String> clubHashtags});
+      List<String>? clubHashtags});
 }
 
 /// @nodoc
@@ -506,7 +506,7 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
     Object? clubName = null,
     Object? mainPhoto = freezed,
     Object? departmentName = freezed,
-    Object? clubHashtags = null,
+    Object? clubHashtags = freezed,
   }) {
     return _then(_$CircleListDataImpl(
       clubId: null == clubId
@@ -525,10 +525,10 @@ class __$$CircleListDataImplCopyWithImpl<$Res>
           ? _value.departmentName
           : departmentName // ignore: cast_nullable_to_non_nullable
               as String?,
-      clubHashtags: null == clubHashtags
+      clubHashtags: freezed == clubHashtags
           ? _value._clubHashtags
           : clubHashtags // ignore: cast_nullable_to_non_nullable
-              as List<String>,
+              as List<String>?,
     ));
   }
 }
@@ -541,7 +541,7 @@ class _$CircleListDataImpl extends _CircleListData {
       required this.clubName,
       this.mainPhoto,
       this.departmentName,
-      required final List<String> clubHashtags})
+      final List<String>? clubHashtags})
       : _clubHashtags = clubHashtags,
         super._();
 
@@ -556,12 +556,14 @@ class _$CircleListDataImpl extends _CircleListData {
   final String? mainPhoto;
   @override
   final String? departmentName;
-  final List<String> _clubHashtags;
+  final List<String>? _clubHashtags;
   @override
-  List<String> get clubHashtags {
+  List<String>? get clubHashtags {
+    final value = _clubHashtags;
+    if (value == null) return null;
     if (_clubHashtags is EqualUnmodifiableListView) return _clubHashtags;
     // ignore: implicit_dynamic_type
-    return EqualUnmodifiableListView(_clubHashtags);
+    return EqualUnmodifiableListView(value);
   }
 
   @override
@@ -611,7 +613,7 @@ abstract class _CircleListData extends CircleListData {
       required final String clubName,
       final String? mainPhoto,
       final String? departmentName,
-      required final List<String> clubHashtags}) = _$CircleListDataImpl;
+      final List<String>? clubHashtags}) = _$CircleListDataImpl;
   _CircleListData._() : super._();
 
   factory _CircleListData.fromJson(Map<String, dynamic> json) =
@@ -626,7 +628,7 @@ abstract class _CircleListData extends CircleListData {
   @override
   String? get departmentName;
   @override
-  List<String> get clubHashtags;
+  List<String>? get clubHashtags;
   @override
   @JsonKey(ignore: true)
   _$$CircleListDataImplCopyWith<_$CircleListDataImpl> get copyWith =>

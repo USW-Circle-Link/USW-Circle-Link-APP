@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -16,44 +18,10 @@ class CircleListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // 가상의 데이터를 생성
-    final fakeData = CircleDetailListModel(
-      message: "Success",
-      data: [
-        Circle(
-          clubId: 1,
-          clubName: "FLAG",
-          leaderName: "정우창",
-          leaderHp: "010-0000-0000",
-          clubInsta: "FLAG",
-          mainPhotoPath: "",
-          aplictStatus: "WAIT",
-          circleRoom: "218",
-        ),
-        Circle(
-          clubId: 2,
-          clubName: "Coding Club",
-          leaderName: "김코딩",
-          leaderHp: "010-1111-2222",
-          clubInsta: "coding_club",
-          mainPhotoPath: "",
-          aplictStatus: "PASS",
-          circleRoom: "218",
-        ),
-        // status가 없는 동아리
-        Circle(
-          clubId: 3,
-          clubName: "Art Club",
-          leaderName: "이예술",
-          leaderHp: "010-2222-3333",
-          clubInsta: "art_club",
-          mainPhotoPath: "",
-          circleRoom: "218",
-        ),
-      ],
-    );
-
-    final state = AsyncValue.data(fakeData);
+    final state = ref.watch(circleListScreenViewModelProvider(listType));
+    ref.listen(circleListScreenViewModelProvider(listType), (previous, next) {
+      logger.d('next: $next');
+    });
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -116,7 +84,7 @@ class CircleListScreen extends ConsumerWidget {
                         instaId: circle.clubInsta,
                         circleRoom: circle.circleRoom, // 샘플 데이터
                         // 'status'가 없으면 null로 처리
-                        status: circle.aplictStatus,
+                        statusString: circle.aplictStatus,
                       );
                     },
                   ),

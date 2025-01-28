@@ -1,20 +1,44 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class CircleDetailItem extends StatefulWidget {
+enum CircleDetailItemStatus {
+  wait('WAIT', Color(0xffBFBFBF), '대기 중'),
+  pass('PASS', Color(0xff8282FF), '합격'),
+  fail('FAIL', Color(0xffFF8282), '불합격'),
+  undefined('UNDEFINED', Colors.transparent, '');
+
+  final String code;
+  final Color color;
+  final String text;
+
+  const CircleDetailItemStatus(this.code, this.color, this.text);
+
+  factory CircleDetailItemStatus.getByCode(String code) {
+    return CircleDetailItemStatus.values.firstWhere(
+        (value) => value.code == code,
+        orElse: () => CircleDetailItemStatus.undefined);
+  }
+}
+
+class CircleDetailItem extends StatelessWidget {
   final int clubId;
   final String name;
   final String? imageUrl;
   final String leader;
   final String instaId;
   final String leaderHp;
-  final String circleRoom;
-  final String? status;
+  final String? circleRoom;
+  final String? statusString;
 
-  const CircleDetailItem({
+  late CircleDetailItemStatus status;
+
+  CircleDetailItem({
     super.key,
     required this.clubId,
     required this.leader,
@@ -22,15 +46,12 @@ class CircleDetailItem extends StatefulWidget {
     this.imageUrl,
     required this.leaderHp,
     required this.instaId,
-    required this.circleRoom,
-    this.status,
-  });
+    this.circleRoom,
+    this.statusString,
+  }) {
+    status = CircleDetailItemStatus.getByCode(statusString ?? 'UNDEFINED');
+  }
 
-  @override
-  State<CircleDetailItem> createState() => _CircleDetailItemState();
-}
-
-class _CircleDetailItemState extends State<CircleDetailItem> {
   final GlobalKey _iconKey = GlobalKey();
   OverlayEntry? _overlayEntry;
 
@@ -55,9 +76,9 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
-                circleRoom: widget.circleRoom,
-                leaderHp: widget.leaderHp,
-                clubInsta: widget.instaId,
+                circleRoom: circleRoom,
+                leaderHp: leaderHp,
+                clubInsta: instaId,
                 onClose: _removeOverlay,
               ),
             ),
@@ -65,8 +86,6 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
         ],
       ),
     );
-
-    Overlay.of(context).insert(_overlayEntry!);
   }
 
   void _removeOverlay() {
@@ -76,163 +95,136 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
 
   @override
   Widget build(BuildContext context) {
-    Color? statusColor;
-    String? statusText;
-
-    switch (widget.status) {
-      case 'WAIT':
-        statusColor = const Color(0xffBFBFBF);
-        statusText = '대기 중';
-        break;
-      case 'PASS':
-        statusColor = const Color.fromARGB(255, 82, 128, 255);
-        statusText = '합격';
-        break;
-      case 'FAIL':
-        statusColor = const Color.fromARGB(255, 255, 82, 82);
-        statusText = '불합격';
-        break;
-    }
-
     return Center(
       child: Column(
         children: [
           GestureDetector(
-            onTap: () => context.push('/circle?clubId=${widget.clubId}'),
+            onTap: () => context.push('/circle?clubId=$clubId'),
             child: Container(
               width: 327.w,
-              height: 107.h,
+              padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.sp),
+                borderRadius: BorderRadius.circular(8.r),
                 color: const Color(0xffFFFFFF),
               ),
-              child: Row(
+              child: Stack(
                 children: [
-                  SizedBox(width: 19.w),
-                  Container(
-                    height: 72.h,
-                    width: 60.w,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.sp),
-                      border:
-                          Border.all(color: const Color(0xFF767676), width: 1),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10.r),
-                      child: Image.network(
-                        widget.imageUrl ?? "",
-                        fit: BoxFit.fill,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            alignment: Alignment.center,
-                            color: const Color.fromARGB(255, 164, 164, 164),
-                            child: Icon(
-                              Icons.person,
-                              color: const Color.fromARGB(255, 255, 255, 255),
-                              size: 60,
-                            ),
-                          );
-                        },
+                  if (status != CircleDetailItemStatus.undefined)
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            vertical: 5.h, horizontal: 10.w),
+                        decoration: BoxDecoration(
+                          color: status.color,
+                          borderRadius: BorderRadius.circular(16.sp),
+                        ),
+                        child: Container(
+                          child: TextFontWidget.fontRegular(
+                            status.text,
+                            color: const Color(0xffFFFFFF),
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w800,
+                            height: 1.h,
+                            letterSpacing: -0.6.sp,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(width: 20.w),
-                  Container(
-                    width: 126.w,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: 30.h),
-                        TextFontWidget.fontRegular(
-                          widget.name,
-                          color: Colors.black,
-                          fontSize: 20.sp,
-                          fontWeight: FontWeight.w600,
-                          height: 1.h,
-                          letterSpacing: -0.45.sp,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        height: 80.h,
+                        width: 67.w,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: const Color(0xffc4c4c4)),
+                          borderRadius: BorderRadius.circular(8.r),
+                          image: imageUrl != null && imageUrl!.isValidUrl
+                              ? DecorationImage(
+                                  image: NetworkImage(imageUrl!),
+                                  fit: BoxFit.cover,
+                                )
+                              : null,
+                          color: const Color.fromARGB(255, 164, 164, 164),
                         ),
-                        SizedBox(height: 8.h),
-                        Row(
+                        child: imageUrl == null
+                            ? Center(
+                                child: Icon(
+                                  Icons.person,
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  size: 60,
+                                ),
+                              )
+                            : null,
+                      ),
+                      SizedBox(width: 16.w),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextFontWidget.fontRegular(
-                              '동아리 회장',
-                              color: const Color(0xFF767676),
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w400,
-                              height: 1.h,
-                              letterSpacing: -0.35.sp,
+                            SizedBox(height: 8.h),
+                            Row(
+                              children: [
+                                SizedBox(
+                                  child: TextFontWidget.fontRegular(
+                                    name,
+                                    overflow: TextOverflow.ellipsis,
+                                    color: Colors.black,
+                                    fontSize: 18.sp,
+                                    fontWeight: FontWeight.w900,
+                                    height: 1.h,
+                                    letterSpacing: -0.45.sp,
+                                  ),
+                                ),
+                              ],
                             ),
-                            SizedBox(width: 3.h),
-                            TextFontWidget.fontRegular(
-                              widget.leader,
-                              color: const Color(0xFF353549),
-                              fontSize: 15.sp,
-                              fontWeight: FontWeight.w800,
-                              height: 1.h,
-                              letterSpacing: -0.35.sp,
-                              overflow: TextOverflow.ellipsis,
+                            SizedBox(height: 5.h),
+                            Row(
+                              children: [
+                                TextFontWidget.fontRegular(
+                                  '동아리 회장',
+                                  color: const Color(0xFF767676),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
+                                ),
+                                SizedBox(width: 4.w),
+                                TextFontWidget.fontRegular(
+                                  leader,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: const Color(0xFF353549),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w800,
+                                  height: 1.h,
+                                  letterSpacing: -0.35.sp,
+                                ),
+                              ],
                             ),
                           ],
-                        )
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 100.w,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              key: _iconKey,
-                              onPressed: () {
-                                if (_overlayEntry == null) {
-                                  _showOverlay();
-                                } else {
-                                  _removeOverlay();
-                                }
-                              },
-                              icon: Icon(Icons.more_vert),
-                            ),
-                          ],
                         ),
-                        SizedBox(height: 21.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            statusColor != null && statusText != null
-                                ? Container(
-                                    alignment: Alignment.centerRight,
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 5.h, horizontal: 10.w),
-                                      decoration: BoxDecoration(
-                                        color: statusColor,
-                                        borderRadius:
-                                            BorderRadius.circular(16.sp),
-                                      ),
-                                      child: TextFontWidget.fontRegular(
-                                        statusText,
-                                        color: const Color(0xffFFFFFF),
-                                        fontSize: 12.sp,
-                                        fontWeight: FontWeight.w800,
-                                        height: 1.h,
-                                        letterSpacing: -0.6.sp,
-                                      ),
-                                    ),
-                                  )
-                                : Container(),
-                            SizedBox(width: 18.w),
-                          ],
-                        ),
-                        SizedBox(height: 13.h),
-                      ],
-                    ),
+                      ),
+                      IconButton(
+                        padding: EdgeInsets.zero,
+                        constraints: BoxConstraints(),
+                        visualDensity: VisualDensity.compact,
+                        key: _iconKey,
+                        onPressed: () {
+                          if (_overlayEntry == null) {
+                            _showOverlay();
+                            Overlay.of(context).insert(_overlayEntry!);
+                          } else {
+                            _removeOverlay();
+                          }
+                        },
+                        icon: Icon(Icons.more_vert),
+                      ),
+                    ],
                   ),
                 ],
               ),

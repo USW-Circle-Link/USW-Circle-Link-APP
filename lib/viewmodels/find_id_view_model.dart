@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 
 final findIdViewModelProvider = StateNotifierProvider.autoDispose<

@@ -9,7 +9,7 @@ class CircleDetailModel {
   final String? leaderHp;
   final String? circleInsta;
   final String? circleRoom;
-  final List<String> circleHashtag;
+  final List<String>? circleHashtag;
 
   CircleDetailModel({
     this.circleId,
@@ -22,7 +22,7 @@ class CircleDetailModel {
     this.circleRoom,
     this.leaderHp,
     this.circleInsta,
-    required this.circleHashtag,
+    this.circleHashtag,
   });
 
   List<String>? getNotEmptyIntroPhotoPath() {
@@ -41,8 +41,13 @@ class CircleDetailModel {
       introContent: json['clubIntro'],
       recruitmentStatus: json['recruitmentStatus'],
       circleRoom: json['circleRoom'],
-      circleHashtag: List<String>.from(json['clubHashtag']),
+      circleHashtag: List<String>.from(json['clubHashtag'] ?? []),
     );
+  }
+
+  @override
+  String toString() {
+    return 'CircleDetailModel(circleId: $circleId, circleName: $circleName, leaderName: $leaderName, introContent: $introContent, recruitmentStatus: $recruitmentStatus, circleRoom: $circleRoom, circleHashtag: $circleHashtag)';
   }
 }
 
@@ -57,6 +62,11 @@ class CircleDetailModelError extends Error {
       message: json['message'],
       code: json['code'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'CircleDetailModelError: $message${code != null ? ' (code: $code)' : ''}';
   }
 
   @override

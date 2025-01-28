@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
@@ -52,15 +53,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
-                circleRoom: circleRoom != null && circleRoom.isNotEmpty
-                    ? circleRoom
-                    : "정보 없음",
-                leaderHp: leaderHp != null && leaderHp.isNotEmpty
-                    ? leaderHp
-                    : "정보 없음",
-                clubInsta: clubInsta != null && clubInsta.isNotEmpty
-                    ? clubInsta
-                    : "정보 없음",
+                circleRoom: circleRoom,
+                leaderHp: leaderHp,
+                clubInsta: clubInsta,
                 onClose: _removeOverlay,
               ),
             ),
@@ -98,6 +93,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   @override
   Widget build(BuildContext context) {
     final clubIntroState = ref.watch(clubIntroViewModelProvider(widget.clubId));
+    ref.listen(clubIntroViewModelProvider(widget.clubId), (previous, next) {
+      logger.d(next);
+    });
     final applicationState = ref.watch(applicationViewModelProvider);
     ref.listen(applicationViewModelProvider, (previous, next) {
       logger.d(next);
@@ -311,143 +309,136 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 }),
                               ),
                               SizedBox(height: 16.h),
-                              SizedBox(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(width: 24.w),
-                                    Container(
-                                      height: 82.h,
-                                      width: 82.w,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: const Color(0xffc4c4c4)),
-                                        borderRadius:
-                                            BorderRadius.circular(12.r),
-                                        image: clubIntroState
-                                                    .value!.mainPhotoPath !=
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 24.w),
+                                  Container(
+                                    height: 82.h,
+                                    width: 82.w,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: const Color(0xffc4c4c4)),
+                                      borderRadius: BorderRadius.circular(12.r),
+                                      image: clubIntroState
+                                                      .value!.mainPhotoPath !=
+                                                  null &&
+                                              clubIntroState.value!
+                                                  .mainPhotoPath!.isValidUrl
+                                          ? DecorationImage(
+                                              image: NetworkImage(clubIntroState
+                                                  .value!.mainPhotoPath!),
+                                              fit: BoxFit.cover,
+                                            )
+                                          : null,
+                                      color: const Color.fromARGB(
+                                          255, 164, 164, 164),
+                                    ),
+                                    child:
+                                        clubIntroState.value!.mainPhotoPath ==
                                                 null
-                                            ? DecorationImage(
-                                                image: NetworkImage(
-                                                    clubIntroState
-                                                        .value!.mainPhotoPath!),
-                                                fit: BoxFit.cover,
+                                            ? Center(
+                                                child: Icon(
+                                                  Icons.person,
+                                                  color: const Color.fromARGB(
+                                                      255, 255, 255, 255),
+                                                  size: 60,
+                                                ),
                                               )
                                             : null,
-                                        color: const Color.fromARGB(
-                                            255, 164, 164, 164),
-                                      ),
-                                      child:
-                                          clubIntroState.value!.mainPhotoPath ==
-                                                  null
-                                              ? Center(
-                                                  child: Icon(
-                                                    Icons.person,
-                                                    color: const Color.fromARGB(
-                                                        255, 255, 255, 255),
-                                                    size: 60,
-                                                  ),
-                                                )
-                                              : null,
-                                    ),
-                                    SizedBox(width: 16.w),
-                                    Expanded(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(height: 8.h),
-                                          Row(
-                                            children: [
-                                              SizedBox(
-                                                child:
-                                                    TextFontWidget.fontRegular(
-                                                  clubIntroState
-                                                      .value!.circleName,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color: Colors.black,
-                                                  fontSize: 18.sp,
-                                                  fontWeight: FontWeight.w900,
-                                                  height: 1.h,
-                                                  letterSpacing: -0.45.sp,
-                                                ),
+                                  ),
+                                  SizedBox(width: 16.w),
+                                  Expanded(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        SizedBox(height: 8.h),
+                                        Row(
+                                          children: [
+                                            SizedBox(
+                                              child: TextFontWidget.fontRegular(
+                                                clubIntroState
+                                                    .value!.circleName,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: Colors.black,
+                                                fontSize: 18.sp,
+                                                fontWeight: FontWeight.w900,
+                                                height: 1.h,
+                                                letterSpacing: -0.45.sp,
                                               ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 5.h),
-                                          Row(
-                                            children: [
-                                              TextFontWidget.fontRegular(
-                                                '동아리 회장',
-                                                color: const Color(0xFF767676),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 5.h),
+                                        Row(
+                                          children: [
+                                            TextFontWidget.fontRegular(
+                                              '동아리 회장',
+                                              color: const Color(0xFF767676),
+                                              fontSize: 14.sp,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.h,
+                                              letterSpacing: -0.35.sp,
+                                            ),
+                                            SizedBox(width: 4.w),
+                                            SizedBox(
+                                              child: TextFontWidget.fontRegular(
+                                                clubIntroState
+                                                    .value!.leaderName,
+                                                overflow: TextOverflow.ellipsis,
+                                                color: const Color(0xFF353549),
                                                 fontSize: 14.sp,
-                                                fontWeight: FontWeight.w400,
+                                                fontWeight: FontWeight.w800,
                                                 height: 1.h,
                                                 letterSpacing: -0.35.sp,
                                               ),
-                                              SizedBox(width: 4.w),
-                                              SizedBox(
-                                                child:
-                                                    TextFontWidget.fontRegular(
-                                                  clubIntroState
-                                                      .value!.leaderName,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  color:
-                                                      const Color(0xFF353549),
-                                                  fontSize: 14.sp,
-                                                  fontWeight: FontWeight.w800,
-                                                  height: 1.h,
-                                                  letterSpacing: -0.35.sp,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(height: 8.h),
-                                          clubIntroState.whenOrNull(
-                                                  data: (data) =>
-                                                      SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.horizontal,
-                                                        child: Row(
-                                                          children: data
-                                                              .circleHashtag
-                                                              .map((tag) =>
-                                                                  _buildChip(
-                                                                      '#$tag'))
-                                                              .toList(),
-                                                        ),
-                                                      )) ??
-                                              SizedBox.shrink(),
-                                        ],
-                                      ),
+                                            ),
+                                          ],
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        clubIntroState.whenOrNull(
+                                                data: (data) =>
+                                                    SingleChildScrollView(
+                                                      scrollDirection:
+                                                          Axis.horizontal,
+                                                      child: Row(
+                                                        children: data
+                                                                .circleHashtag
+                                                                ?.map((tag) =>
+                                                                    _buildChip(
+                                                                        '#$tag'))
+                                                                .toList() ??
+                                                            [],
+                                                      ),
+                                                    )) ??
+                                            SizedBox.shrink(),
+                                      ],
                                     ),
-                                    IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(),
-                                      visualDensity: VisualDensity.compact,
-                                      key: _iconKey,
-                                      onPressed: () {
-                                        if (_overlayEntry == null) {
-                                          _showOverlay(
-                                              clubIntroState.value!.circleRoom,
-                                              clubIntroState.value!.leaderHp,
-                                              clubIntroState
-                                                  .value!.circleInsta);
-                                        } else {
-                                          _removeOverlay();
-                                        }
-                                      },
-                                      icon: Icon(Icons.more_vert),
-                                    ),
-                                    SizedBox(width: 12.w),
-                                  ],
-                                ),
+                                  ),
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    visualDensity: VisualDensity.compact,
+                                    key: _iconKey,
+                                    onPressed: () {
+                                      if (_overlayEntry == null) {
+                                        _showOverlay(
+                                            clubIntroState.value!.circleRoom,
+                                            clubIntroState.value!.leaderHp,
+                                            clubIntroState.value!.circleInsta);
+                                      } else {
+                                        _removeOverlay();
+                                      }
+                                    },
+                                    icon: Icon(Icons.more_vert),
+                                  ),
+                                  SizedBox(width: 12.w),
+                                ],
                               ),
                               SizedBox(height: 16.h),
                             ],
@@ -504,7 +495,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                         Container(
                           alignment: Alignment.topLeft,
                           padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                          child: Html(data: "테스트"),
+                          child: Html(data: clubIntroState.value!.introContent),
                         ),
                       ],
                     ),

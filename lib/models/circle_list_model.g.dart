@@ -56,8 +56,8 @@ _$CircleListDataImpl _$$CircleListDataImplFromJson(Map<String, dynamic> json) =>
       clubName: json['clubName'] as String,
       mainPhoto: json['mainPhoto'] as String?,
       departmentName: json['departmentName'] as String?,
-      clubHashtags: (json['clubHashtags'] as List<dynamic>)
-          .map((e) => e as String)
+      clubHashtags: (json['clubHashtags'] as List<dynamic>?)
+          ?.map((e) => e as String)
           .toList(),
     );
 

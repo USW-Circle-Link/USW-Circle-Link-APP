@@ -1,7 +1,7 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'FindIdModel.freezed.dart';
-part 'FindIdModel.g.dart';
+part 'find_id_model.freezed.dart';
+part 'find_id_model.g.dart';
 
 @freezed
 class FindIdModel with _$FindIdModel {

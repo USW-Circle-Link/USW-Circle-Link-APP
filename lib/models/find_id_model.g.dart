@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'FindIdModel.dart';
+part of 'find_id_model.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator

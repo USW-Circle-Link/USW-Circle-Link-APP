@@ -59,7 +59,7 @@ class CircleListData with _$CircleListData {
     required String clubName,
     String? mainPhoto,
     String? departmentName,
-    required List<String> clubHashtags,
+    List<String>? clubHashtags,
   }) = _CircleListData;
 
   factory CircleListData.fromJson(Map<String, dynamic> json) =>
