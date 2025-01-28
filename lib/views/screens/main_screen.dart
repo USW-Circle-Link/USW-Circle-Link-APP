@@ -77,8 +77,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       logger.d(next);
     });
 
-    final circleListState = ref.watch(mainViewModelProvider);
-    ref.listen(mainViewModelProvider, (previous, next) {
+    final circleListState = ref.watch(circleViewModelProvider);
+    ref.listen(circleViewModelProvider, (previous, next) {
       logger.d(next);
     });
 
@@ -377,18 +377,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Future<void> fetchCircleList() async {
     if (selectedGroups.isEmpty) {
       if (isAllSelected) {
-        await ref.read(mainViewModelProvider.notifier).fetchAllCircleList();
+        await ref.read(circleViewModelProvider.notifier).fetchAllCircleList();
       } else {
-        await ref.read(mainViewModelProvider.notifier).fetchOpenCircleList();
+        await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
       }
     } else {
       if (isAllSelected) {
         await ref
-            .read(mainViewModelProvider.notifier)
+            .read(circleViewModelProvider.notifier)
             .fetchAllFilteredCircleList(selectedGroups);
       } else {
         await ref
-            .read(mainViewModelProvider.notifier)
+            .read(circleViewModelProvider.notifier)
             .fetchOpenFilteredCircleList(selectedGroups);
       }
     }

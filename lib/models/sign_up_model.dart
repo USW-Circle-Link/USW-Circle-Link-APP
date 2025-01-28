@@ -5,13 +5,15 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'sign_up_model.freezed.dart';
 part 'sign_up_model.g.dart';
 
-abstract class SignUpModelBase {}
-
-enum SignUpModelType {verify, validatePasswordMatch}
+enum SignUpModelType {
+  verify,
+  validatePasswordMatch,
+  signUpExistingMember,
+  checkProfileIsExist
+}
 
 @freezed
-class SignUpModel extends SignUpModelBase with _$SignUpModel {
-
+class SignUpModel with _$SignUpModel {
   SignUpModel._();
 
   @JsonSerializable(explicitToJson: true)
@@ -21,16 +23,15 @@ class SignUpModel extends SignUpModelBase with _$SignUpModel {
     String? data,
   }) = _SignUpModel;
 
-  factory SignUpModel.fromJson(Map<String, dynamic> json) => _$SignUpModelFromJson(json);
+  factory SignUpModel.fromJson(Map<String, dynamic> json) =>
+      _$SignUpModelFromJson(json);
 
-  SignUpModel setType(SignUpModelType type) => SignUpModel(message: message, data: data, type: type);
+  SignUpModel setType(SignUpModelType type) =>
+      SignUpModel(message: message, data: data, type: type);
 }
 
-class SignUpModelLoading extends SignUpModelBase {}
-
 @freezed
-class SignUpModelError extends SignUpModelBase with _$SignUpModelError implements Exception {
-
+class SignUpModelError with _$SignUpModelError implements Error {
   SignUpModelError._();
 
   factory SignUpModelError({
@@ -42,7 +43,17 @@ class SignUpModelError extends SignUpModelBase with _$SignUpModelError implement
     required String message,
   }) = _SignUpModelError;
 
-  factory SignUpModelError.fromJson(Map<String, dynamic> json) => _$SignUpModelErrorFromJson(json);
+  factory SignUpModelError.fromJson(Map<String, dynamic> json) =>
+      _$SignUpModelErrorFromJson(json);
 
-  SignUpModelError setType(SignUpModelType type) => SignUpModelError(exception: exception, code: code, error: error, status: status, message: message, type: type);
+  SignUpModelError setType(SignUpModelType type) => SignUpModelError(
+      exception: exception,
+      code: code,
+      error: error,
+      status: status,
+      message: message,
+      type: type);
+
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
 }

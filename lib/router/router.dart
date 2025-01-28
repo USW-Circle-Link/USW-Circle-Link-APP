@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
@@ -19,7 +20,7 @@ import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
 import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
-import 'package:usw_circle_link/views/screens/terms_of_service_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
@@ -36,7 +37,9 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, state) => MainScreen(),
+        builder: (_, state) {
+          return MainScreen();
+        },
         routes: [
           GoRoute(
               path: 'circle',
@@ -90,7 +93,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                         builder: (_, state) => SignUpScreen(
                           newMemberSignUp:
                               state.uri.queryParameters['newMember'] == 'true',
-                          selectedCircles: state.extra as List<Circle>,
+                          selectedCircles: state.extra as List<CircleListData>,
                         ),
                       ),
                     ],
@@ -161,7 +164,8 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'tems_of_serice',
-            builder: (_, __) => TermsOfServiceScreen(),
+            builder: (_, __) => PolicyScreen(
+                policyType: PolicyType.termsOfService, isDialog: false),
           ),
           GoRoute(
               path: 'image',

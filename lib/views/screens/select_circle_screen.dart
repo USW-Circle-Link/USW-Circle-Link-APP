@@ -3,9 +3,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/viewmodels/select_circle_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 
 class SelectCircleScreen extends ConsumerStatefulWidget {
   const SelectCircleScreen({Key? key}) : super(key: key);
@@ -15,12 +16,11 @@ class SelectCircleScreen extends ConsumerStatefulWidget {
 }
 
 class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
-  final List<Circle> selectedCircles = [];
+  final List<CircleListData> selectedCircles = [];
 
   @override
   Widget build(BuildContext context) {
-    // 동아리 목록 데이터 (실제로는 API나 provider에서 가져와야 함)
-    final List<Circle> circles = dummyCircles;
+    final state = ref.watch(selectCircleViewModelProvider);
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -59,132 +59,207 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
           ),
         ),
         body: SafeArea(
-          child: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 32.w, vertical: 10.h),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        TextFontWidget.fontRegular(
-                          textAlign: TextAlign.center,
-                          '현재 소속되어 있는 동아리를\n모두 선택해 주세요.',
-                          fontSize: 16.sp,
-                          color: Color(0xFFA1A1A1),
-                          fontWeight: FontWeight.w400,
-                        ),
-                        SizedBox(height: 20.h),
-                        GridView.builder(
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          gridDelegate:
-                              SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 2,
-                            crossAxisSpacing: 10.w,
-                            mainAxisSpacing: 10.h,
-                            childAspectRatio: 0.69,
-                          ),
-                          itemCount: circles.length,
-                          itemBuilder: (context, index) {
-                            final circle = circles[index];
-                            final isSelected = selectedCircles.contains(circle);
+          child: state.when(
+            data: (data) {
+              final circles = data?.data ?? [];
+              return Column(
+                children: [
+                  Expanded(
+                    child: SingleChildScrollView(
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 32.w, vertical: 10.h),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            TextFontWidget.fontRegular(
+                              textAlign: TextAlign.center,
+                              '현재 소속되어 있는 동아리를\n모두 선택해 주세요.',
+                              fontSize: 16.sp,
+                              color: Color(0xFFA1A1A1),
+                              fontWeight: FontWeight.w400,
+                            ),
+                            SizedBox(height: 20.h),
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 12.w),
+                              child: GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: 20.w,
+                                  mainAxisSpacing: 10.h,
+                                  childAspectRatio: 0.69,
+                                ),
+                                itemCount: circles.length,
+                                itemBuilder: (context, index) {
+                                  final circle = circles[index];
+                                  final isSelected =
+                                      selectedCircles.contains(circle);
 
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  if (isSelected) {
-                                    selectedCircles.remove(circle);
-                                  } else {
-                                    selectedCircles.add(circle);
-                                  }
-                                });
-                              },
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Expanded(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      padding: EdgeInsets.all(10.w),
-                                      decoration: BoxDecoration(
-                                        color: isSelected
-                                            ? const Color(0xffffB052)
-                                                .withOpacity(0.2)
-                                            : Colors.transparent,
-                                        border: Border.all(
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (isSelected) {
+                                          selectedCircles.remove(circle);
+                                        } else {
+                                          selectedCircles.add(circle);
+                                        }
+                                      });
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Expanded(
+                                          child: LayoutBuilder(
+                                              builder: (context, constraints) {
+                                            final borderRadius =
+                                                BorderRadius.circular(8.r);
+                                            return Stack(
+                                              children: [
+                                                Container(
+                                                  constraints: BoxConstraints(
+                                                    minHeight:
+                                                        constraints.maxHeight,
+                                                    maxHeight:
+                                                        constraints.maxHeight,
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius: borderRadius,
+                                                    child: circle.mainPhoto
+                                                                ?.isValidUrl ??
+                                                            false
+                                                        ? Image.network(
+                                                            circle.mainPhoto!,
+                                                            fit: BoxFit.cover,
+                                                            errorBuilder:
+                                                                (BuildContext
+                                                                        context,
+                                                                    Object
+                                                                        exception,
+                                                                    StackTrace?
+                                                                        stackTrace) {
+                                                              return Container(
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                color: const Color
+                                                                    .fromARGB(
+                                                                    255,
+                                                                    164,
+                                                                    164,
+                                                                    164),
+                                                                child: Icon(
+                                                                  Icons.person,
+                                                                  color: const Color
+                                                                      .fromARGB(
+                                                                      255,
+                                                                      255,
+                                                                      255,
+                                                                      255),
+                                                                  size: 60,
+                                                                ),
+                                                              );
+                                                            },
+                                                          )
+                                                        : Center(
+                                                            child: Icon(
+                                                              Icons.person,
+                                                              color: const Color
+                                                                  .fromARGB(
+                                                                  255, 0, 0, 0),
+                                                              size: 80.w,
+                                                            ),
+                                                          ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  constraints: BoxConstraints(
+                                                    minHeight:
+                                                        constraints.maxHeight,
+                                                    maxHeight:
+                                                        constraints.maxHeight,
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                    color: isSelected
+                                                        ? const Color(
+                                                                0xffffB052)
+                                                            .withOpacity(0.2)
+                                                        : Colors.transparent,
+                                                    border: Border.all(
+                                                      color: isSelected
+                                                          ? const Color(
+                                                              0xffffB052)
+                                                          : Color(0xFFB8B8B8),
+                                                    ),
+                                                    borderRadius: borderRadius,
+                                                  ),
+                                                ),
+                                              ],
+                                            );
+                                          }),
+                                        ),
+                                        SizedBox(height: 8.h),
+                                        TextFontWidget.fontRegular(
+                                          circle.clubName,
+                                          fontSize: 16.sp,
                                           color: isSelected
                                               ? const Color(0xffffB052)
-                                              : Color(0xFFB8B8B8),
+                                              : Colors.black,
+                                          fontWeight: FontWeight.w400,
                                         ),
-                                        borderRadius:
-                                            BorderRadius.circular(8.r),
-                                      ),
-                                      child: circle.mainPhotoPath != null
-                                          ? SvgPicture.network(
-                                              circle.mainPhotoPath!,
-                                              width: 60.w,
-                                              height: 60.h,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Container(),
+                                      ],
                                     ),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  TextFontWidget.fontRegular(
-                                    circle.clubName,
-                                    fontSize: 16.sp,
-                                    color: isSelected
-                                        ? const Color(0xffffB052)
-                                        : Colors.black,
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                ],
+                                  );
+                                },
                               ),
-                            );
-                          },
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.symmetric(horizontal: 20.w),
-                margin: EdgeInsets.only(bottom: 10.h),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: selectedCircles.isEmpty
-                        ? null
-                        : () {
-                            context.go(
-                              '/login/sign_up_option/select_circle/sign_up',
-                              extra: selectedCircles,
-                            );
-                          },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: selectedCircles.isEmpty
-                          ? Colors.grey
-                          : const Color(0xffffB052),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
                       ),
-                      side: BorderSide.none,
-                    ),
-                    child: TextFontWidget.fontRegular(
-                      '다음',
-                      fontSize: 18.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w600,
                     ),
                   ),
-                ),
-              ),
-            ],
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 32.w),
+                    margin: EdgeInsets.only(bottom: 10.h),
+                    child: SizedBox(
+                      width: double.infinity,
+                      height: 56.h,
+                      child: OutlinedButton(
+                        onPressed: selectedCircles.isEmpty
+                            ? null
+                            : () {
+                                context.go(
+                                  '/login/sign_up_option/select_circle/sign_up',
+                                  extra: selectedCircles,
+                                );
+                              },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: selectedCircles.isEmpty
+                              ? Colors.grey
+                              : const Color(0xffffB052),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                          side: BorderSide.none,
+                        ),
+                        child: TextFontWidget.fontRegular(
+                          '다음',
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              );
+            },
+            error: (error, stackTrace) =>
+                Center(child: Text('동아리 목록을 불러올 수 없습니다')),
+            loading: () => Center(child: CircularProgressIndicator()),
           ),
         ),
       ),

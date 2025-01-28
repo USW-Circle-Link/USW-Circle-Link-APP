@@ -187,7 +187,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.phoneNumber)
+                  borderColor: isValid(state, FieldType.telephone)
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,

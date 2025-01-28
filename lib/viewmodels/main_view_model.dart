@@ -3,16 +3,16 @@ import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
-final mainViewModelProvider = StateNotifierProvider.autoDispose<MainViewModel,
-    AsyncValue<CircleListModel>>((ref) {
+final circleViewModelProvider = StateNotifierProvider.autoDispose<
+    CircleViewModel, AsyncValue<CircleListModel>>((ref) {
   final circleListRepository = ref.read(circleListRepositoryProvider);
-  return MainViewModel(circleListRepository: circleListRepository);
+  return CircleViewModel(circleListRepository: circleListRepository);
 });
 
-class MainViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
+class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
   final CircleListRepository circleListRepository;
 
-  MainViewModel({
+  CircleViewModel({
     required this.circleListRepository,
   }) : super(AsyncLoading()) {
     Future.sync(() async {

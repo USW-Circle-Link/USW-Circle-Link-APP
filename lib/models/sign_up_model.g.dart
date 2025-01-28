@@ -23,6 +23,8 @@ Map<String, dynamic> _$$SignUpModelImplToJson(_$SignUpModelImpl instance) =>
 const _$SignUpModelTypeEnumMap = {
   SignUpModelType.verify: 'verify',
   SignUpModelType.validatePasswordMatch: 'validatePasswordMatch',
+  SignUpModelType.signUpExistingMember: 'signUpExistingMember',
+  SignUpModelType.checkProfileIsExist: 'checkProfileIsExist',
 };
 
 _$SignUpModelErrorImpl _$$SignUpModelErrorImplFromJson(

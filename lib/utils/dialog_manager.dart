@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/major_picker_dialog.dart';
 import 'package:usw_circle_link/views/widgets/policy_dialog.dart';
@@ -24,7 +25,7 @@ class DialogManager {
     String? rightButtonText,
     Function()? onLeftButtonPressed,
     Function()? onRightButtonPressed,
-    barrierDismissible=true,
+    barrierDismissible = true,
   }) async {
     await showDialog(
       barrierDismissible: barrierDismissible,
@@ -60,10 +61,11 @@ class DialogManager {
     );
   }
 
-  Future<bool> showPolicyDialog(BuildContext context) async {
+  Future<bool> showPolicyDialog(
+      BuildContext context, PolicyType policyType) async {
     return await showDialog(
-      context: context,
-      builder: (_) => PolicyDialog()
-    ) ?? true;
+            context: context,
+            builder: (_) => PolicyDialog(policyType: policyType)) ??
+        true;
   }
 }
