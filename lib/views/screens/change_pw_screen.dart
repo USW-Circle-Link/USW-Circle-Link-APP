@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/change_pw_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -126,7 +127,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               rightBottomCornerRadius: 0.r,
                               leftTopCornerRadius: 8.r,
                               rightTopCornerRadius: 8.r,
-                              borderColor: currentPWIsInvalid(state)
+                              borderColor: state is ChangePwModelError &&
+                                      !ErrorUtil.instance.isValid(
+                                          state.code, FieldType.currentPassword)
                                   ? const Color(0xFFFF3F3F)
                                   : null,
                               borderWidth: 1.w,
@@ -173,7 +176,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                             widget.checkCurrentPassword ? 0.r : 8.r,
                         rightTopCornerRadius:
                             widget.checkCurrentPassword ? 0.r : 8.r,
-                        borderColor: newPWIsInvalid(state)
+                        borderColor: state is ChangePwModelError &&
+                                !ErrorUtil.instance
+                                    .isValid(state.code, FieldType.password)
                             ? const Color(0xFFFF3F3F)
                             : null,
                         borderWidth: 1.w,
@@ -217,7 +222,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         rightBottomCornerRadius: 8.r,
                         leftTopCornerRadius: 0.r,
                         rightTopCornerRadius: 0.r,
-                        borderColor: newPWConfirmIsInvalid(state)
+                        borderColor: state is ChangePwModelError &&
+                                !ErrorUtil.instance.isValid(
+                                    state.code, FieldType.passwordConfirm)
                             ? const Color(0xFFFF3F3F)
                             : null,
                         borderWidth: 1.w,
@@ -266,15 +273,15 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                       SizedBox(
                         height: 10.h,
                       ),
-                      Visibility(
-                        visible: state is ChangePwModelError,
-                        child: TextFontWidget.fontRegular(
-                          getErrorMessage(state),
+                      if (state is ChangePwModelError &&
+                          ErrorUtil.instance
+                              .isValid(state.code, FieldType.password))
+                        TextFontWidget.fontRegular(
+                          '* ${ErrorUtil.instance.getErrorMessage(state.code)}',
                           fontSize: 12.sp,
                           color: const Color(0xFFFF3F3F),
                           fontWeight: FontWeight.w400,
                         ),
-                      ),
                       SizedBox(
                         height: 15.h,
                       ),
@@ -335,61 +342,5 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                 ),
               ),
             ));
-  }
-
-  String getErrorMessage(ChangePwModelBase? state) {
-    if (state is ChangePwModelError) {
-      switch (state.code) {
-        case "USR-F900": // 현재 비밀번호 공백
-          return "* 현재 비밀번호를 입력해주세요!";
-        case "USR-F300":
-          return "* 비밀번호가 일치하지 않습니다!";
-        case "USR-204": // 현재 비밀번호 불일치
-          return "* 현재 비밀번호가 일치하지 않습니다";
-        case "USR-202": // 새 비밀번호 확인 불일치
-        case "USR-212": // 새 비밀번호 확인 불일치
-          return "* 비밀번호가 일치하지 않습니다!";
-        case "USR-203": // 새 비밀번호 빈칸
-        case "USR-214": // 새 비밀번호 형식 안 맞음
-        case "USR-F200":
-          // return "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여 5~20자 이내로 작성해주세요!";
-          return "";
-        case "USR-210": // 해당 정보로 인증 중인 회원존재 X
-        default:
-          return "* 비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
-      }
-    }
-    return "";
-  }
-
-  bool currentPWIsInvalid(ChangePwModelBase? state) {
-    if (state is ChangePwModelError) {
-      switch (state.code) {
-        case "USR-204":
-        case "USR-F900":
-          return true;
-      }
-    }
-    return false;
-  }
-
-  bool newPWIsInvalid(ChangePwModelBase? state) {
-    if (state is ChangePwModelError) {
-      switch (state.code) {
-        case "USR-F200":
-          return true;
-      }
-    }
-    return false;
-  }
-
-  bool newPWConfirmIsInvalid(ChangePwModelBase? state) {
-    if (state is ChangePwModelError) {
-      switch (state.code) {
-        case "USR-F300":
-          return true;
-      }
-    }
-    return false;
   }
 }

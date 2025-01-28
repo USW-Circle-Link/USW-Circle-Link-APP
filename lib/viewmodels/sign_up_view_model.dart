@@ -58,44 +58,47 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
         throw SignUpModelError(
             message: '비밀번호가 형식에 맞지 않습니다!',
             code: "USR-F200",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.signUpExistingMember);
       }
       if (password != passwordConfirm) {
         throw SignUpModelError(
             message: '비밀번호가 일치하지 않습니다!',
             code: "USR-F300",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.signUpExistingMember);
       }
-      if (username.isEmpty) {
+      if (username.isEmpty || !nameRegExp.hasMatch(username)) {
         throw SignUpModelError(
             message: '이름이 형식에 맞지 않습니다!',
             code: "USR-F400",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.signUpExistingMember);
       }
 
-      if (telephone.isNotEmpty) {
-        if (!telephoneRegExp.hasMatch(telephone)) {
-          throw SignUpModelError(
-              code: "USR-F500",
-              message: '전화번호 형식에 맞지 않습니다!',
-              type: SignUpModelType.validatePasswordMatch);
-        }
-      } else {
-        logger.d('전화번호 입력되지 않음');
+      if (telephone.isEmpty || !telephoneRegExp.hasMatch(telephone)) {
+        throw SignUpModelError(
+            code: "USR-F500",
+            message: '전화번호 형식에 맞지 않습니다!',
+            type: SignUpModelType.signUpExistingMember);
       }
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
         throw SignUpModelError(
             message: '학번이 형식에 맞지 않습니다!',
             code: "USR-F600",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.signUpExistingMember);
       }
 
       if (major.isEmpty) {
         throw SignUpModelError(
             message: '학과가 형식에 맞지 않습니다!',
             code: "USR-F700",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.signUpExistingMember);
+      }
+
+      if (email.isEmpty) {
+        throw SignUpModelError(
+            message: '이메일이 형식에 맞지 않습니다!',
+            code: "EML-F100",
+            type: SignUpModelType.signUpExistingMember);
       }
 
       final response = await authRepository.signUpExistingMember(
@@ -134,44 +137,40 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
         throw SignUpModelError(
             message: '비밀번호가 형식에 맞지 않습니다!',
             code: "USR-F200",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.checkProfileIsExist);
       }
       if (password != passwordConfirm) {
         throw SignUpModelError(
             message: '비밀번호가 일치하지 않습니다!',
             code: "USR-F300",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.checkProfileIsExist);
       }
-      if (username.isEmpty) {
+      if (username.isEmpty || !nameRegExp.hasMatch(username)) {
         throw SignUpModelError(
             message: '이름이 형식에 맞지 않습니다!',
             code: "USR-F400",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.checkProfileIsExist);
       }
 
-      if (telephone.isNotEmpty) {
-        if (!telephoneRegExp.hasMatch(telephone)) {
-          throw SignUpModelError(
-              code: "USR-F500",
-              message: '전화번호 형식에 맞지 않습니다!',
-              type: SignUpModelType.validatePasswordMatch);
-        }
-      } else {
-        logger.d('전화번호 입력되지 않음');
+      if (telephone.isEmpty || !telephoneRegExp.hasMatch(telephone)) {
+        throw SignUpModelError(
+            code: "USR-F500",
+            message: '전화번호 형식에 맞지 않습니다!',
+            type: SignUpModelType.checkProfileIsExist);
       }
 
       if (!studentNumberRegExp.hasMatch(studentNumber)) {
         throw SignUpModelError(
             message: '학번이 형식에 맞지 않습니다!',
             code: "USR-F600",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.checkProfileIsExist);
       }
 
       if (major.isEmpty) {
         throw SignUpModelError(
             message: '학과가 형식에 맞지 않습니다!',
             code: "USR-F700",
-            type: SignUpModelType.validatePasswordMatch);
+            type: SignUpModelType.checkProfileIsExist);
       }
 
       final response = await authRepository.checkProfileIsExist(
