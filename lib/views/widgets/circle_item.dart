@@ -36,30 +36,34 @@ class CircleItem extends StatelessWidget {
                 height: 143.h,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
-                  child: circle.mainPhoto?.isValidUrl ?? false
-                      ? Image.network(
-                          circle.mainPhoto!,
-                          fit: BoxFit.cover,
-                          errorBuilder: (BuildContext context, Object exception,
-                              StackTrace? stackTrace) {
-                            return Container(
-                              alignment: Alignment.center,
-                              color: const Color.fromARGB(255, 164, 164, 164),
-                              child: Icon(
-                                Icons.person,
-                                color: const Color.fromARGB(255, 255, 255, 255),
-                                size: 60,
-                              ),
-                            );
-                          },
-                        )
-                      : Center(
-                          child: Icon(
-                            Icons.person,
-                            color: const Color.fromARGB(255, 0, 0, 0),
-                            size: 80.w,
+                  child: Hero(
+                    tag: 'circle_${circle.clubId}',
+                    child: circle.mainPhoto?.isValidUrl ?? false
+                        ? Image.network(
+                            circle.mainPhoto!,
+                            fit: BoxFit.cover,
+                            errorBuilder: (BuildContext context,
+                                Object exception, StackTrace? stackTrace) {
+                              return Container(
+                                alignment: Alignment.center,
+                                color: const Color.fromARGB(255, 164, 164, 164),
+                                child: Icon(
+                                  Icons.person,
+                                  color:
+                                      const Color.fromARGB(255, 255, 255, 255),
+                                  size: 60,
+                                ),
+                              );
+                            },
+                          )
+                        : Center(
+                            child: Icon(
+                              Icons.person,
+                              color: const Color.fromARGB(255, 0, 0, 0),
+                              size: 80.w,
+                            ),
                           ),
-                        ),
+                  ),
                 ),
               ),
               SizedBox(height: 8.h),
