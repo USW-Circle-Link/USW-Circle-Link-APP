@@ -325,22 +325,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                     ),
                                     child: Hero(
                                       tag: 'circle_${widget.clubId}',
-                                      child:
-                                          clubIntroState.value!.mainPhotoPath !=
-                                                      null &&
-                                                  clubIntroState.value!
-                                                      .mainPhotoPath!.isValidUrl
-                                              ? Image.network(
-                                                  clubIntroState
-                                                      .value!.mainPhotoPath!,
-                                                  fit: BoxFit.cover,
-                                                )
-                                              : Icon(
-                                                  Icons.person,
-                                                  color: const Color.fromARGB(
-                                                      255, 0, 0, 0),
-                                                  size: 60,
-                                                ),
+                                      child: ClipRRect(
+                                        borderRadius:
+                                            BorderRadius.circular(12.r),
+                                        child: clubIntroState
+                                                        .value!.mainPhotoPath !=
+                                                    null &&
+                                                clubIntroState.value!
+                                                    .mainPhotoPath!.isValidUrl
+                                            ? Image.network(
+                                                clubIntroState
+                                                    .value!.mainPhotoPath!,
+                                                fit: BoxFit.cover,
+                                              )
+                                            : Icon(
+                                                Icons.person,
+                                                color: const Color.fromARGB(
+                                                    255, 0, 0, 0),
+                                                size: 60,
+                                              ),
+                                      ),
                                     ),
                                   ),
                                   SizedBox(width: 16.w),

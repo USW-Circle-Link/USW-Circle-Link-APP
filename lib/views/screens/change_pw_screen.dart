@@ -112,6 +112,56 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                   ),
                 ),
               ),
+              bottomNavigationBar: Container(
+                margin: EdgeInsets.only(bottom: 20.h, left: 32.w, right: 32.w),
+                width: double.infinity,
+                height: 56.h,
+                child: OutlinedButton(
+                  onPressed: state is ChangePwModelLoading
+                      ? null
+                      : () async {
+                          // 공백이 아닌지 확인
+                          // 비밀번호 규칙 체크
+                          final currentPW = currentPWController.text.trim();
+                          final newPW = newPWController.text.trim();
+                          final newPWConfirm =
+                              newPWConfirmController.text.trim();
+                          if (widget.checkCurrentPassword) {
+                            await ref
+                                .read(changePwViewModelProvider.notifier)
+                                .changePW(
+                                    userPw: currentPW,
+                                    newPw: newPW,
+                                    confirmNewPw: newPWConfirm);
+                          } else {
+                            ref
+                                .read(changePwViewModelProvider.notifier)
+                                .resetPW(
+                                  newPw: newPW,
+                                  confirmNewPw: newPWConfirm,
+                                  uuid: widget.uuid,
+                                );
+                          }
+                        },
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: const Color(0xFF000000),
+                    foregroundColor: const Color(0xFFFFFFFF),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 0.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                    ),
+                  ),
+                  child: TextFontWidget.fontRegular(
+                    '비밀번호 변경 완료',
+                    fontSize: 18.sp,
+                    color: const Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
               body: SingleChildScrollView(
                 child: Container(
                   margin: EdgeInsets.only(top: 60.h),
@@ -282,61 +332,6 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                           color: const Color(0xFFFF3F3F),
                           fontWeight: FontWeight.w400,
                         ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56.h,
-                        child: OutlinedButton(
-                          onPressed: state is ChangePwModelLoading
-                              ? null
-                              : () async {
-                                  // 공백이 아닌지 확인
-                                  // 비밀번호 규칙 체크
-                                  final currentPW =
-                                      currentPWController.text.trim();
-                                  final newPW = newPWController.text.trim();
-                                  final newPWConfirm =
-                                      newPWConfirmController.text.trim();
-                                  if (widget.checkCurrentPassword) {
-                                    await ref
-                                        .read(
-                                            changePwViewModelProvider.notifier)
-                                        .changePW(
-                                            userPw: currentPW,
-                                            newPw: newPW,
-                                            confirmNewPw: newPWConfirm);
-                                  } else {
-                                    ref
-                                        .read(
-                                            changePwViewModelProvider.notifier)
-                                        .resetPW(
-                                          newPw: newPW,
-                                          confirmNewPw: newPWConfirm,
-                                          uuid: widget.uuid,
-                                        );
-                                  }
-                                },
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: const Color(0xFF000000),
-                            foregroundColor: const Color(0xFFFFFFFF),
-                            side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
-                            ),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                            '비밀번호 변경 완료',
-                            fontSize: 18.sp,
-                            color: const Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.w800,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
                 ),

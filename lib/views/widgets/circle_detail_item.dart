@@ -148,16 +148,19 @@ class CircleDetailItem extends StatelessWidget {
                               AnimationStatus.reverse,
                           child: Hero(
                             tag: 'circle_${clubId}',
-                            child: imageUrl != null && imageUrl!.isValidUrl
-                                ? Image.network(
-                                    imageUrl!,
-                                    fit: BoxFit.cover,
-                                  )
-                                : Icon(
-                                    Icons.person,
-                                    color: const Color.fromARGB(255, 0, 0, 0),
-                                    size: 60,
-                                  ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.r),
+                              child: imageUrl != null && imageUrl!.isValidUrl
+                                  ? Image.network(
+                                      imageUrl!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Icon(
+                                      Icons.person,
+                                      color: const Color.fromARGB(255, 0, 0, 0),
+                                      size: 60,
+                                    ),
+                            ),
                           ),
                         ),
                       ),
@@ -206,20 +209,23 @@ class CircleDetailItem extends StatelessWidget {
                           ],
                         ),
                       ),
-                      IconButton(
-                        padding: EdgeInsets.zero,
-                        constraints: BoxConstraints(),
-                        visualDensity: VisualDensity.compact,
-                        key: _iconKey,
-                        onPressed: () {
-                          if (_overlayEntry == null) {
-                            _showOverlay();
-                            Overlay.of(context).insert(_overlayEntry!);
-                          } else {
-                            _removeOverlay();
-                          }
-                        },
-                        icon: Icon(Icons.more_vert),
+                      Container(
+                        alignment: Alignment.topCenter,
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          visualDensity: VisualDensity.compact,
+                          key: _iconKey,
+                          onPressed: () {
+                            if (_overlayEntry == null) {
+                              _showOverlay();
+                              Overlay.of(context).insert(_overlayEntry!);
+                            } else {
+                              _removeOverlay();
+                            }
+                          },
+                          icon: Icon(Icons.more_vert),
+                        ),
                       ),
                     ],
                   ),
