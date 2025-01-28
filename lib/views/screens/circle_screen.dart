@@ -10,7 +10,7 @@ import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
-import 'package:usw_circle_link/viewmodels/circle_screen_view_model.dart';
+import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -31,7 +31,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   late TabController tabController;
   int selectedIndex = 0;
 
-  void _showOverlay(String circleRoom, String leaderHp, String clubInsta) {
+  void _showOverlay(String? circleRoom, String? leaderHp, String? clubInsta) {
     final RenderBox renderBox =
         _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
@@ -52,9 +52,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
-                circleRoom: circleRoom.isNotEmpty ? circleRoom : "정보 없음",
-                leaderHp: leaderHp.isNotEmpty ? leaderHp : "정보 없음",
-                clubInsta: clubInsta.isNotEmpty ? clubInsta : "정보 없음",
+                circleRoom: circleRoom != null && circleRoom.isNotEmpty
+                    ? circleRoom
+                    : "정보 없음",
+                leaderHp: leaderHp != null && leaderHp.isNotEmpty
+                    ? leaderHp
+                    : "정보 없음",
+                clubInsta: clubInsta != null && clubInsta.isNotEmpty
+                    ? clubInsta
+                    : "정보 없음",
                 onClose: _removeOverlay,
               ),
             ),
@@ -85,12 +91,13 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   @override
   void dispose() {
     tabController.dispose();
+    _removeOverlay();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final clubIntroState = ref.watch(clubIntroProvider(widget.clubId));
+    final clubIntroState = ref.watch(clubIntroViewModelProvider(widget.clubId));
     final applicationState = ref.watch(applicationViewModelProvider);
     ref.listen(applicationViewModelProvider, (previous, next) {
       logger.d(next);
@@ -360,7 +367,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                 child:
                                                     TextFontWidget.fontRegular(
                                                   clubIntroState
-                                                      .value!.clubName,
+                                                      .value!.circleName,
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   color: Colors.black,
@@ -402,20 +409,21 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                             ],
                                           ),
                                           SizedBox(height: 8.h),
-                                          SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: [
-                                                _buildChip('#label'),
-                                                SizedBox(width: 4.w),
-                                                _buildChip('#label'),
-                                                SizedBox(width: 4.w),
-                                                _buildChip('#label'),
-                                                SizedBox(width: 4.w),
-                                                _buildChip('#label'),
-                                              ],
-                                            ),
-                                          )
+                                          clubIntroState.whenOrNull(
+                                                  data: (data) =>
+                                                      SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.horizontal,
+                                                        child: Row(
+                                                          children: data
+                                                              .circleHashtag
+                                                              .map((tag) =>
+                                                                  _buildChip(
+                                                                      '#$tag'))
+                                                              .toList(),
+                                                        ),
+                                                      )) ??
+                                              SizedBox.shrink(),
                                         ],
                                       ),
                                     ),
@@ -427,9 +435,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       onPressed: () {
                                         if (_overlayEntry == null) {
                                           _showOverlay(
-                                              "임시",
+                                              clubIntroState.value!.circleRoom,
                                               clubIntroState.value!.leaderHp,
-                                              clubIntroState.value!.clubInsta);
+                                              clubIntroState
+                                                  .value!.circleInsta);
                                         } else {
                                           _removeOverlay();
                                         }

@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleDetailOverlay extends StatelessWidget {
@@ -72,167 +74,174 @@ class CircleDetailOverlay extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 195.w,
-        height: 142.h,
-        constraints: const BoxConstraints(
-          maxWidth: 300,
-          minHeight: 100,
-        ),
-        decoration: BoxDecoration(
-          color: Colors.white,
-
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black26,
-              blurRadius: 6,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            Container(
-              height: 43.h,
-              decoration: BoxDecoration(
-                border: Border(
-                  bottom: BorderSide(
-                    color: const Color(0xFF767676),
-                    width: 1.w,
-                  )
-                )
-              ),
-              child: Row(
-                children: [
-                  SizedBox(width: 10.w,),
-                  TextFontWidget.fontRegular(
-                    '동아리 정보',
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.black,
-                  ),
-                  SizedBox(width: 90.w,),
-                  GestureDetector(
-                    onTap: onClose,
-                    child: const Icon(Icons.close, size: 20, color: Colors.grey),
-                  ),
-                ],),
-            ),
-            GestureDetector(
-              onTap: (){
-                onClose();
-                _showFullScreenMap(context);
-              },
-              child: Container(
-                padding: EdgeInsets.all(10.sp),
-                height: 33.h,
-                decoration: BoxDecoration(
-                    border: Border(
-                        bottom: BorderSide(
-                          color: const Color(0xFF767676),
-                          width: 0.5.w,
-                        )
-                    )
-                ),
-                child: Row(
-                  children: [
-                    Image.asset(
-                      'assets/images/map_marker.png',
-                      scale: 1,
-                    ),
-                    SizedBox(width: 4.w,),
-                    TextFontWidget.fontRegular(
-                      '동아리방 | 학생회관 $circleRoom호',
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: -0.1,
-                      color: const Color(0xff9A9A9A),
-                    )
-                  ],
-                ),
-              ),
-            ),
-          GestureDetector(
-            onTap: () async {
-              final Uri launchUri = Uri(
-                scheme: 'tel',
-                path: leaderHp.startsWith('+') ? leaderHp : '+82${leaderHp.substring(1)}',
-              );
-              if (await canLaunchUrl(launchUri)) {
-                await launchUrl(launchUri);
-              } else {
-                debugPrint('Could not launch $leaderHp');
-              }
-            },
-            child: Container(
-              padding: EdgeInsets.all(10.sp),
-              height: 33.h,
-              decoration: BoxDecoration(
-                  border: Border(
-                      bottom: BorderSide(
-                        color: const Color(0xFF767676),
-                        width: 0.5.w,
-                      )
-                  )
-              ),
-              child: Row(
-                children: [
-                  SvgPicture.asset(
-                    'assets/images/phonelogo.svg',
-                    height: 12.h,
-                    width: 12.w,
-                  ),
-                  SizedBox(width: 4.w,),
-                  TextFontWidget.fontRegular(
-                    '$leaderHp',
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    height: -0.1,
-                    color: const Color(0xff6EA4EF),
-                  )
-                ],
-              ),
-            ),
+          width: 195.w,
+          height: 142.h,
+          constraints: const BoxConstraints(
+            maxWidth: 300,
+            minHeight: 100,
           ),
-            GestureDetector(
-              onTap: () async {
-                final Uri launchUri = Uri.parse('https://www.instagram.com/$clubInsta');
-                if (await canLaunchUrl(launchUri)) {
-                  await launchUrl(launchUri, mode: LaunchMode.externalApplication);
-                } else {
-                  debugPrint('Could not launch Instagram profile for $clubInsta');
-                }
-              },
-              child: Container(
-                padding: EdgeInsets.all(10.sp),
-                height: 33.h,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Column(
+            children: [
+              Container(
+                height: 43.h,
                 decoration: BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
-                          color: const Color(0xFF767676),
-                          width: 0.5.w,
-                        )
-                    )
-                ),
+                  color: const Color(0xFF767676),
+                  width: 1.w,
+                ))),
                 child: Row(
                   children: [
-                    Image.asset(
-                      'assets/images/Instagram_logo.png',
+                    SizedBox(
+                      width: 10.w,
                     ),
-                    SizedBox(width: 4.w,),
                     TextFontWidget.fontRegular(
-                      '인스타그램',
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      height: -0.1,
-                      color: const Color(0xff6EA4EF),
-                    )
+                      '동아리 정보',
+                      fontSize: 13.sp,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                    SizedBox(
+                      width: 90.w,
+                    ),
+                    GestureDetector(
+                      onTap: onClose,
+                      child:
+                          const Icon(Icons.close, size: 20, color: Colors.grey),
+                    ),
                   ],
                 ),
               ),
-            ),
-          ],
-        )
-      ),
+              GestureDetector(
+                onTap: () {
+                  onClose();
+                  _showFullScreenMap(context);
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10.sp),
+                  height: 33.h,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: const Color(0xFF767676),
+                    width: 0.5.w,
+                  ))),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/map_marker.png',
+                        scale: 1,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      TextFontWidget.fontRegular(
+                        '동아리방 | 학생회관 $circleRoom호',
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        height: -0.1,
+                        color: const Color(0xff9A9A9A),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final Uri launchUri = Uri(
+                    scheme: 'tel',
+                    path: leaderHp.startsWith('+')
+                        ? leaderHp
+                        : '+82${leaderHp.substring(1)}',
+                  );
+                  if (await canLaunchUrl(launchUri)) {
+                    await launchUrl(launchUri);
+                  } else {
+                    logger.d('Could not launch $launchUri');
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10.sp),
+                  height: 33.h,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: const Color(0xFF767676),
+                    width: 0.5.w,
+                  ))),
+                  child: Row(
+                    children: [
+                      SvgPicture.asset(
+                        'assets/images/phonelogo.svg',
+                        height: 12.h,
+                        width: 12.w,
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      TextFontWidget.fontRegular(
+                        '${leaderHp.addDash()}',
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        height: -0.1,
+                        color: const Color(0xff6EA4EF),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              GestureDetector(
+                onTap: () async {
+                  final Uri launchUri =
+                      Uri.parse('https://www.instagram.com/$clubInsta');
+                  if (await canLaunchUrl(launchUri)) {
+                    await launchUrl(launchUri,
+                        mode: LaunchMode.externalApplication);
+                  } else {
+                    logger
+                        .d('Could not launch Instagram profile for $clubInsta');
+                  }
+                },
+                child: Container(
+                  padding: EdgeInsets.all(10.sp),
+                  height: 33.h,
+                  decoration: BoxDecoration(
+                      border: Border(
+                          bottom: BorderSide(
+                    color: const Color(0xFF767676),
+                    width: 0.5.w,
+                  ))),
+                  child: Row(
+                    children: [
+                      Image.asset(
+                        'assets/images/Instagram_logo.png',
+                      ),
+                      SizedBox(
+                        width: 4.w,
+                      ),
+                      TextFontWidget.fontRegular(
+                        '인스타그램',
+                        fontSize: 12.sp,
+                        fontWeight: FontWeight.w400,
+                        height: -0.1,
+                        color: const Color(0xff6EA4EF),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          )),
     );
   }
 }
