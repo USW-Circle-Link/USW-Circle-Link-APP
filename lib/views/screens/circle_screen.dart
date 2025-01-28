@@ -322,32 +322,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       border: Border.all(
                                           color: const Color(0xffc4c4c4)),
                                       borderRadius: BorderRadius.circular(12.r),
-                                      image: clubIntroState
-                                                      .value!.mainPhotoPath !=
-                                                  null &&
-                                              clubIntroState.value!
-                                                  .mainPhotoPath!.isValidUrl
-                                          ? DecorationImage(
-                                              image: NetworkImage(clubIntroState
-                                                  .value!.mainPhotoPath!),
-                                              fit: BoxFit.cover,
-                                            )
-                                          : null,
-                                      color: const Color.fromARGB(
-                                          255, 164, 164, 164),
                                     ),
-                                    child:
-                                        clubIntroState.value!.mainPhotoPath ==
-                                                null
-                                            ? Center(
-                                                child: Icon(
-                                                  Icons.person,
-                                                  color: const Color.fromARGB(
-                                                      255, 255, 255, 255),
-                                                  size: 60,
+                                    child: Hero(
+                                      tag: 'circle_${widget.clubId}',
+                                      child:
+                                          clubIntroState.value!.mainPhotoPath !=
+                                                  null
+                                              ? Image.network(
+                                                  clubIntroState
+                                                      .value!.mainPhotoPath!,
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Center(
+                                                  child: Icon(
+                                                    Icons.person,
+                                                    color: const Color.fromARGB(
+                                                        255, 255, 255, 255),
+                                                    size: 60,
+                                                  ),
                                                 ),
-                                              )
-                                            : null,
+                                    ),
                                   ),
                                   SizedBox(width: 16.w),
                                   Expanded(
