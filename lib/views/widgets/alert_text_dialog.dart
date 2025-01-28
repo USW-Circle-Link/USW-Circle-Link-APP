@@ -90,8 +90,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                 },
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.fromHeight(56.h),
-                                  //primary: Colors.white,
-                                  //onPrimary: Colors.blue,
+                                  foregroundColor: Color(0xFF0085FF),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         bottomLeft: Radius.circular(15.r)),
@@ -121,8 +120,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                 },
                                 style: TextButton.styleFrom(
                                   minimumSize: Size.fromHeight(56.h),
-                                  //primary: Colors.white,
-                                  //onPrimary: Colors.blue,
+                                  foregroundColor: Color(0xFF0085FF),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.only(
                                         bottomRight: Radius.circular(15.r)),
@@ -147,8 +145,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                         },
                         style: TextButton.styleFrom(
                           minimumSize: Size.fromHeight(50.h),
-                          //primary: Colors.white,
-                          //onPrimary: Colors.blue,
+                          foregroundColor: Color(0xFF0085FF),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.vertical(
                                 top: Radius.zero,

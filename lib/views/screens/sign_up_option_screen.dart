@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class SignUpOptionScreen extends ConsumerStatefulWidget {
@@ -153,7 +154,15 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                         height: 40.h,
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go('/login/sign_up_option/select_circle');
+                            DialogManager.instance.showAlertDialog(
+                              context: context,
+                              content:
+                                  '기존 동아리 회원 가입의 경우\n해당 동아리 회장의 가입 요청 수락 후\n로그인이 가능합니다.',
+                              onLeftButtonPressed: () {
+                                context
+                                    .go('/login/sign_up_option/select_circle');
+                              },
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xff404040),

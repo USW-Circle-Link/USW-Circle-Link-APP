@@ -105,7 +105,7 @@ class AuthRepository {
     logger.d('sendMail - body {$body}');
 
     final response = await dio.post(
-      '$baseUrl/temporary',
+      '$baseUrl/temporary/register',
       data: body,
       options: Options(headers: {
         'Content-Type': 'application/json',
@@ -154,6 +154,72 @@ class AuthRepository {
       // Bad Request
       throw EmailVerificationModelError.fromJson(response.data)
           .setType(EmailVerificationModelType.completeSignUp);
+    }
+  }
+
+  Future<SignUpModel> signUpExistingMember({
+    required String account,
+    required String password,
+    required String username,
+    required String telephone,
+    required String studentNumber,
+    required String major,
+    required String email,
+    required List<Map<String, int>> clubs,
+  }) async {
+    final body = {
+      'account': account,
+      'password': password,
+      'userName': username,
+      'telephone': telephone,
+      'studentNumber': studentNumber,
+      'major': major,
+      'email': email,
+      'clubs': clubs,
+    };
+    final response = await dio.post('$baseUrl/existing/register', data: body);
+
+    logger.d(body);
+
+    logger.d(response.data);
+
+    logger.d(
+        'signUpExistingMember - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return SignUpModel.fromJson(response.data)
+          .setType(SignUpModelType.signUpExistingMember);
+    } else {
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.signUpExistingMember);
+    }
+  }
+
+  Future<SignUpModel> checkProfileIsExist({
+    required String username,
+    required String studentNumber,
+    required String userHp,
+  }) async {
+    final response = await dio.get(
+      '$protocol://$host:$port/profiles/duplication-check',
+      data: {
+        "userName": username,
+        "studentNumber": studentNumber,
+        "userHp": userHp,
+      },
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'checkProfileIsExist - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return SignUpModel.fromJson(response.data)
+          .setType(SignUpModelType.checkProfileIsExist);
+    } else {
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.checkProfileIsExist);
     }
   }
   ////////////////////////////////////
