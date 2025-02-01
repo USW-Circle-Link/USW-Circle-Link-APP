@@ -50,25 +50,76 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       logger.d('Error type: ${state.error.runtimeType}');
       logger.d('Error details: $error');
 
-      nameError = ErrorUtil.instance.isValid(error?.code, FieldType.username)
-          ? null
-          : ErrorUtil.instance.getErrorMessage("USR-F400");
-      phoneError = ErrorUtil.instance.isValid(error?.code, FieldType.phoneNumber)
-          ? null
-          : ErrorUtil.instance.getErrorMessage("USR-F500");
-      studentNumberError = ErrorUtil.instance.isValid(error?.code, FieldType.studentNumber)
-          ? null
-          : ErrorUtil.instance.getErrorMessage("USR-F600");
-      majorError = (college == null || major == null)
-          ? '단과대학/학과를 선택해주세요!'
+      // 올바른 값이 입력되었을 때 에러 메시지를 null로 설정
+      nameError = (nameController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.username)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F400")
           : null;
+
+      phoneError = (phonenumberController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.phoneNumber)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F500")
+          : null;
+
+      studentNumberError = (studentnumberController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.studentNumber)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F600")
+          : null;
+
+      majorError = (college == null || major == null)
+          ? ErrorUtil.instance.getErrorMessage("USR-F700")
+          : null;
+
+      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, studentNumberError=$studentNumberError, majorError=$majorError");
     });
   }
+
+
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
-
+    ref.listen(updateProfileViewModelProvider, (previous, next) {
+      logger.d(next);
+      next.when(data: (profile) {
+        logger.d('data - $profile');
+        switch (next.value?.type) {
+          case ProfileModelType.getProfile:
+            bind(profile);
+            break;
+          case ProfileModelType.updateProfile:
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: '프로필이 수정되었습니다!',
+              onLeftButtonPressed: () => context.go('/'),
+            );
+            break;
+          default:
+        }
+      }, error: (error, stackTrace) {
+        error = (error as ProfileModelError);
+        logger.d('error - $stackTrace');
+        switch (error.type) {
+          case ProfileModelType.getProfile:
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  "프로필을 불러오는 데 문제가 발생했습니다!",
+            );
+            break;
+          case ProfileModelType.updateProfile:
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  "프로필을 설정하는 데 문제가 발생했습니다!",
+            );
+            break;
+          default:
+        }
+      }, loading: () {
+        logger.d('loading');
+      });
+    });
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -341,6 +392,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   child: OutlinedButton(
                     onPressed: () {
                       validateFields(state);
+                      setState(() {});
                       if (nameError == null &&
                           phoneError == null &&
                           studentNumberError == null &&
@@ -402,6 +454,21 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
         ),
       ),
     );
+  }
+  bool isValid(AsyncValue<ProfileModel> state, FieldType fieldType) {
+    final error = state.error as ProfileModelError?;
+    return ErrorUtil.instance.isValid(error?.code, fieldType);
+  }
+
+  void bind(ProfileModel profile) {
+    nameController.text = profile.data.userName;
+    phonenumberController.text = profile.data.userHp;
+    studentnumberController.text = profile.data.studentNumber;
+
+    setState(() {
+      major = profile.data.major;
+      college = majors.findCollegeByMajor(major);
+    });
   }
 }
 
