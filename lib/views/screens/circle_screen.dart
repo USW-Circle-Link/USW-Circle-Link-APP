@@ -324,6 +324,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       borderRadius: BorderRadius.circular(12.r),
                                     ),
                                     child: Hero(
+                                      transitionOnUserGestures: true,
                                       tag: 'circle_${widget.clubId}',
                                       child: ClipRRect(
                                         borderRadius:
@@ -462,18 +463,20 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                     ),
                                   ),
                                 ),
-                                Tab(
-                                  child: SizedBox.expand(
-                                    child: Container(
-                                      alignment: Alignment.center,
-                                      color: selectedIndex == 1
-                                          ? Color(0xFFFFB052)
-                                          : Color(0xFFEBEBEB),
-                                      child: TextFontWidget.fontRegular(
-                                          '동아리 모집 글'),
+                                if (clubIntroState.value!.recruitmentStatus ==
+                                    "OPEN")
+                                  Tab(
+                                    child: SizedBox.expand(
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        color: selectedIndex == 1
+                                            ? Color(0xFFFFB052)
+                                            : Color(0xFFEBEBEB),
+                                        child: TextFontWidget.fontRegular(
+                                            '동아리 모집 글'),
+                                      ),
                                     ),
                                   ),
-                                ),
                               ],
                             ),
                           ),
@@ -489,11 +492,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                           padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
                           child: Html(data: clubIntroState.value!.introContent),
                         ),
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                          child: Html(data: clubIntroState.value!.introContent),
-                        ),
+                        if (clubIntroState.value!.recruitmentStatus == "OPEN")
+                          Container(
+                            alignment: Alignment.topLeft,
+                            padding:
+                                EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
+                            child: Html(
+                              data: clubIntroState.value!.clubRecruitment,
+                            ),
+                          ),
                       ],
                     ),
                   ),
@@ -502,20 +509,23 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   }
 
   Widget _buildChip(String label) {
-    return Chip(
-      label: Text(label),
-      labelStyle: TextFontWidget.fontRegularStyle(
-        color: Color(0xFFFFFFFF),
-        fontWeight: FontWeight.w400,
+    return Container(
+      margin: EdgeInsets.only(right: 8.w),
+      child: Chip(
+        label: Text(label),
+        labelStyle: TextFontWidget.fontRegularStyle(
+          color: Color(0xFFFFFFFF),
+          fontWeight: FontWeight.w400,
+        ),
+        visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
+        backgroundColor: Color(0xFFC0C0C0),
+        elevation: null,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(color: Colors.transparent),
+          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+        ),
+        padding: EdgeInsets.zero,
       ),
-      visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-      backgroundColor: Color(0xFFC0C0C0),
-      elevation: null,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Colors.transparent),
-        borderRadius: BorderRadius.all(Radius.circular(8.r)),
-      ),
-      padding: EdgeInsets.zero,
     );
   }
 
