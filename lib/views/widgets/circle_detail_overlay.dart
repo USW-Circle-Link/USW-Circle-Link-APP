@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/floor_photo_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class CircleDetailOverlay extends StatelessWidget {
+class CircleDetailOverlay extends ConsumerWidget {
   final String? circleRoom;
   final String? leaderHp;
   final String? clubInsta;
@@ -20,7 +22,7 @@ class CircleDetailOverlay extends StatelessWidget {
     required this.onClose,
   });
 
-  void _showFullScreenMap(BuildContext context) {
+  void _showFullScreenMap(BuildContext context, String floorPhotoPath) {
     // 기존 팝업 닫기 후 지도 오버레이 표시// 기존 팝업 닫기
 
     showDialog(
@@ -38,16 +40,26 @@ class CircleDetailOverlay extends StatelessWidget {
               ),
             ),
             Center(
-              child: InteractiveViewer(
-                panEnabled: true, // 스와이프 가능
-                scaleEnabled: true, // 확대/축소 가능
-                minScale: 1.0, // 최소 축소 크기
-                maxScale: 5.0, // 최대 확대 크기
-                child: Image.asset(
-                  'assets/images/map.jpeg',
-                  fit: BoxFit.contain,
-                ),
-              ),
+              child: floorPhotoPath.isValidUrl
+                  ? InteractiveViewer(
+                      panEnabled: true, // 스와이프 가능
+                      scaleEnabled: true, // 확대/축소 가능
+                      minScale: 1.0, // 최소 축소 크기
+                      maxScale: 5.0, // 최대 확대 크기
+                      child: Image.network(
+                        floorPhotoPath,
+                        fit: BoxFit.contain,
+                      ),
+                    )
+                  : const Center(
+                      child: Text(
+                        '이미지를 불러올 수 없습니다.',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
             ),
             Positioned(
               top: 40.0,
@@ -70,7 +82,10 @@ class CircleDetailOverlay extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final state = circleRoom != null
+        ? ref.watch(floorPhotoViewModelProvider(circleRoom!))
+        : AsyncData(null);
     return Material(
       color: Colors.transparent,
       child: Container(
@@ -123,10 +138,16 @@ class CircleDetailOverlay extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: circleRoom != null && circleRoom!.isNotEmpty
+                onTap: circleRoom != null &&
+                        circleRoom!.isValidRoomFloor &&
+                        state.hasValue &&
+                        state.value != null
                     ? () {
                         onClose();
-                        _showFullScreenMap(context);
+                        _showFullScreenMap(
+                          context,
+                          state.value!.data.floorPhotoPath,
+                        );
                       }
                     : null,
                 child: Container(
@@ -147,15 +168,13 @@ class CircleDetailOverlay extends StatelessWidget {
                       SizedBox(
                         width: 4.w,
                       ),
-                      TextFontWidget.fontRegular(
-                        '동아리방 | ${circleRoom != null && circleRoom!.isNotEmpty ? "학생회관 $circleRoom호" : "정보 없음"}',
-                        fontSize: 12.sp,
-                        fontWeight: FontWeight.w400,
-                        height: -0.1,
-                        color: circleRoom != null && circleRoom!.isNotEmpty
-                            ? const Color(0xff6EA4EF)
-                            : const Color(0xff9A9A9A),
-                      )
+                      state.when(
+                        data: (data) => _circleRoomText(
+                            circleRoom, data?.data.floorPhotoPath),
+                        error: (error, stackTrace) =>
+                            _circleRoomText(circleRoom, null),
+                        loading: () => const CircularProgressIndicator(),
+                      ),
                     ],
                   ),
                 ),
@@ -258,6 +277,18 @@ class CircleDetailOverlay extends StatelessWidget {
               ),
             ],
           )),
+    );
+  }
+
+  Widget _circleRoomText(String? circleRoom, String? floorPhotoPath) {
+    return TextFontWidget.fontRegular(
+      '동아리방 | ${circleRoom != null && circleRoom.isNotEmpty ? "학생회관 $circleRoom호" : "정보 없음"}',
+      fontSize: 12.sp,
+      fontWeight: FontWeight.w400,
+      height: -0.1,
+      color: floorPhotoPath != null && floorPhotoPath.isValidUrl
+          ? const Color(0xff6EA4EF)
+          : const Color(0xff9A9A9A),
     );
   }
 }
