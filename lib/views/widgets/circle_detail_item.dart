@@ -60,7 +60,7 @@ class CircleDetailItem extends StatelessWidget {
         _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
-
+    final double width = 195.w;
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
@@ -72,10 +72,11 @@ class CircleDetailItem extends StatelessWidget {
           ),
           Positioned(
             top: offset.dy + size.height,
-            left: offset.dx - 150,
+            left: offset.dx + size.width / 2 - width,
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
+                width: width,
                 circleRoom: circleRoom,
                 leaderHp: leaderHp,
                 clubInsta: instaId,
@@ -98,138 +99,149 @@ class CircleDetailItem extends StatelessWidget {
     return Center(
       child: Column(
         children: [
-          GestureDetector(
-            onTap: () => context.push('/circle?clubId=$clubId'),
-            child: Container(
-              width: 327.w,
-              padding: EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
-              decoration: BoxDecoration(
+          Container(
+            width: 327.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(8.r),
+              color: const Color(0xffFFFFFF),
+            ),
+            child: Material(
+              color: Colors.transparent,
+              child: InkWell(
                 borderRadius: BorderRadius.circular(8.r),
-                color: const Color(0xffFFFFFF),
-              ),
-              child: Stack(
-                children: [
-                  if (status != CircleDetailItemStatus.undefined)
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            vertical: 5.h, horizontal: 10.w),
-                        decoration: BoxDecoration(
-                          color: status.color,
-                          borderRadius: BorderRadius.circular(16.sp),
-                        ),
-                        child: Container(
-                          child: TextFontWidget.fontRegular(
-                            status.text,
-                            color: const Color(0xffFFFFFF),
-                            fontSize: 10.sp,
-                            fontWeight: FontWeight.w800,
-                            height: 1.h,
-                            letterSpacing: -0.6.sp,
-                          ),
-                        ),
-                      ),
-                    ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                onTap: () => context.push('/circle?clubId=$clubId'),
+                child: Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
+                  child: Stack(
                     children: [
-                      Container(
-                        height: 80.h,
-                        width: 67.w,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: const Color(0xffc4c4c4)),
-                          borderRadius: BorderRadius.circular(8.r),
-                        ),
-                        child: HeroMode(
-                          enabled: ModalRoute.of(context)?.animation?.status !=
-                              AnimationStatus.reverse,
-                          child: Hero(
-                            tag: 'circle_${clubId}',
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.r),
-                              child: imageUrl != null && imageUrl!.isValidUrl
-                                  ? Image.network(
-                                      imageUrl!,
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Icon(
-                                      Icons.person,
-                                      color: const Color.fromARGB(255, 0, 0, 0),
-                                      size: 60,
-                                    ),
+                      if (status != CircleDetailItemStatus.undefined)
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                                vertical: 5.h, horizontal: 10.w),
+                            decoration: BoxDecoration(
+                              color: status.color,
+                              borderRadius: BorderRadius.circular(16.sp),
+                            ),
+                            child: Container(
+                              child: TextFontWidget.fontRegular(
+                                status.text,
+                                color: const Color(0xffFFFFFF),
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w800,
+                                height: 1.h,
+                                letterSpacing: -0.6.sp,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                      SizedBox(width: 16.w),
-                      Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(height: 8.h),
-                            TextFontWidget.fontRegular(
-                              name,
-                              overflow: TextOverflow.ellipsis,
-                              color: Colors.black,
-                              fontSize: 18.sp,
-                              fontWeight: FontWeight.w900,
-                              height: 1.h,
-                              letterSpacing: -0.45.sp,
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 80.h,
+                            width: 67.w,
+                            decoration: BoxDecoration(
+                              border:
+                                  Border.all(color: const Color(0xffc4c4c4)),
+                              borderRadius: BorderRadius.circular(8.r),
                             ),
-                            SizedBox(height: 5.h),
-                            RichText(
-                              overflow: TextOverflow.ellipsis,
-                              text: TextSpan(
-                                text: '동아리 회장 ',
-                                style: TextFontWidget.fontRegularStyle(
-                                  color: const Color(0xFF767676),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.h,
-                                  letterSpacing: -0.35.sp,
+                            child: HeroMode(
+                              enabled:
+                                  ModalRoute.of(context)?.animation?.status !=
+                                      AnimationStatus.reverse,
+                              child: Hero(
+                                tag: 'circle_${clubId}',
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.r),
+                                  child:
+                                      imageUrl != null && imageUrl!.isValidUrl
+                                          ? Image.network(
+                                              imageUrl!,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Icon(
+                                              Icons.person,
+                                              color: const Color.fromARGB(
+                                                  255, 0, 0, 0),
+                                              size: 60,
+                                            ),
                                 ),
-                                children: [
-                                  TextSpan(
-                                    text: leader,
-                                    style: TextStyle(
-                                      color: Color(0xFF353549),
-                                      fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
+                          SizedBox(width: 16.w),
+                          Expanded(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: 8.h),
+                                TextFontWidget.fontRegular(
+                                  name,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Colors.black,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w900,
+                                  height: 1.h,
+                                  letterSpacing: -0.45.sp,
+                                ),
+                                SizedBox(height: 5.h),
+                                RichText(
+                                  overflow: TextOverflow.ellipsis,
+                                  text: TextSpan(
+                                    text: '동아리 회장 ',
+                                    style: TextFontWidget.fontRegularStyle(
+                                      color: const Color(0xFF767676),
                                       fontSize: 14.sp,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.h,
                                       letterSpacing: -0.35.sp,
                                     ),
+                                    children: [
+                                      TextSpan(
+                                        text: leader,
+                                        style: TextStyle(
+                                          color: Color(0xFF353549),
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: 14.sp,
+                                          height: 1.h,
+                                          letterSpacing: -0.35.sp,
+                                        ),
+                                      ),
+                                    ],
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.topCenter,
-                        child: IconButton(
-                          padding: EdgeInsets.zero,
-                          constraints: BoxConstraints(),
-                          visualDensity: VisualDensity.compact,
-                          key: _iconKey,
-                          onPressed: () {
-                            if (_overlayEntry == null) {
-                              _showOverlay();
-                              Overlay.of(context).insert(_overlayEntry!);
-                            } else {
-                              _removeOverlay();
-                            }
-                          },
-                          icon: Icon(Icons.more_vert),
-                        ),
+                          ),
+                          Container(
+                            alignment: Alignment.topCenter,
+                            child: IconButton(
+                              padding: EdgeInsets.zero,
+                              constraints: BoxConstraints(),
+                              visualDensity: VisualDensity.compact,
+                              key: _iconKey,
+                              onPressed: () {
+                                if (_overlayEntry == null) {
+                                  _showOverlay();
+                                  Overlay.of(context).insert(_overlayEntry!);
+                                } else {
+                                  _removeOverlay();
+                                }
+                              },
+                              icon: Icon(Icons.more_vert),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
           ),

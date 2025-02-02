@@ -37,6 +37,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
         _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
+    final double width = 195.w;
 
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
@@ -49,10 +50,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
           ),
           Positioned(
             top: offset.dy + size.height,
-            left: offset.dx - 170.w,
+            left: offset.dx + size.width / 2 - width,
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
+                width: width,
                 circleRoom: circleRoom,
                 leaderHp: leaderHp,
                 clubInsta: clubInsta,

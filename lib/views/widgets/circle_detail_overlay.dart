@@ -13,13 +13,14 @@ class CircleDetailOverlay extends ConsumerWidget {
   final String? leaderHp;
   final String? clubInsta;
   final VoidCallback onClose;
-
+  final double? width;
   const CircleDetailOverlay({
     super.key,
     this.circleRoom,
     this.leaderHp,
     this.clubInsta,
     required this.onClose,
+    this.width,
   });
 
   void _showFullScreenMap(BuildContext context, String floorPhotoPath) {
@@ -89,7 +90,7 @@ class CircleDetailOverlay extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-          width: 195.w,
+          width: width ?? 195.w,
           height: 142.h,
           constraints: const BoxConstraints(
             maxWidth: 300,
@@ -129,7 +130,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                     SizedBox(
                       width: 90.w,
                     ),
-                    GestureDetector(
+                    InkWell(
                       onTap: onClose,
                       child:
                           const Icon(Icons.close, size: 20, color: Colors.grey),

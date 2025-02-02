@@ -79,10 +79,11 @@ class CircleListScreen extends ConsumerWidget {
                         clubId: circle.clubId,
                         leader: circle.leaderName,
                         name: circle.clubName,
-                        imageUrl: circle.mainPhotoPath,
+                        imageUrl: circle.mainPhotoPath ?? '',
                         leaderHp: circle.leaderHp,
                         instaId: circle.clubInsta,
-                        circleRoom: '',
+                        circleRoom: circle.clubRoomNumber,
+                        // 'status'가 없으면 null로 처리
                         statusString: circle.aplictStatus,
                       );
                     },
@@ -93,11 +94,14 @@ class CircleListScreen extends ConsumerWidget {
                     '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
                   ),
                 ),
-          loading: () => Center(child: CircularProgressIndicator()),
+          loading: () => Center(
+            child: CircularProgressIndicator(),
+          ),
           error: (error, stack) => Center(
-              child: TextFontWidget.fontRegular(
-            '동아리 목록 조회에 실패하였습니다.',
-          )),
+            child: TextFontWidget.fontRegular(
+              '동아리 목록 조회에 실패하였습니다.',
+            ),
+          ),
         ),
       ),
     );
