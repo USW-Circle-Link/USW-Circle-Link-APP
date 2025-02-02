@@ -169,7 +169,7 @@ final fakeData = CircleDetailListModel(
       clubInsta: "FLAG",
       mainPhotoPath: "",
       aplictStatus: "WAIT",
-      circleRoom: "218",
+      clubRoomNumber: "218",
     ),
     Circle(
       clubId: 2,
@@ -179,7 +179,7 @@ final fakeData = CircleDetailListModel(
       clubInsta: "coding_club",
       mainPhotoPath: "",
       aplictStatus: "PASS",
-      circleRoom: "218",
+      clubRoomNumber: "218",
     ),
     // status가 없는 동아리
     Circle(
@@ -189,7 +189,7 @@ final fakeData = CircleDetailListModel(
       leaderHp: "010-2222-3333",
       clubInsta: "art_club",
       mainPhotoPath: "",
-      circleRoom: "218",
+      clubRoomNumber: "218",
     ),
   ],
 );
@@ -384,7 +384,7 @@ final dummyCircles = <Circle>[
     leaderName: "김철수",
     leaderHp: "010-1234-5678",
     clubInsta: "@flag_club",
-    circleRoom: "학생회관 301호",
+    clubRoomNumber: "학생회관 301호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -395,7 +395,7 @@ final dummyCircles = <Circle>[
     leaderName: "이영희",
     leaderHp: "010-2345-6789",
     clubInsta: "@muse_official",
-    circleRoom: "학생회관 302호",
+    clubRoomNumber: "학생회관 302호",
     aplictStatus: "모집마감",
   ),
   Circle(
@@ -406,7 +406,7 @@ final dummyCircles = <Circle>[
     leaderName: "박민수",
     leaderHp: "010-3456-7890",
     clubInsta: "@flow_circle",
-    circleRoom: "체육관 102호",
+    clubRoomNumber: "체육관 102호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -417,7 +417,7 @@ final dummyCircles = <Circle>[
     leaderName: "정지원",
     leaderHp: "010-4567-8901",
     clubInsta: "@impact_usw",
-    circleRoom: "예술관 201호",
+    clubRoomNumber: "예술관 201호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -428,7 +428,7 @@ final dummyCircles = <Circle>[
     leaderName: "한소희",
     leaderHp: "010-5678-9012",
     clubInsta: "@vision_club",
-    circleRoom: "학생회관 401호",
+    clubRoomNumber: "학생회관 401호",
     aplictStatus: "모집마감",
   ),
   Circle(
@@ -439,7 +439,7 @@ final dummyCircles = <Circle>[
     leaderName: "송민재",
     leaderHp: "010-6789-0123",
     clubInsta: "@core_official",
-    circleRoom: "공학관 501호",
+    clubRoomNumber: "공학관 501호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -450,7 +450,7 @@ final dummyCircles = <Circle>[
     leaderName: "임서연",
     leaderHp: "010-7890-1234",
     clubInsta: "@pulse_dance",
-    circleRoom: "체육관 201호",
+    clubRoomNumber: "체육관 201호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -461,7 +461,7 @@ final dummyCircles = <Circle>[
     leaderName: "강동훈",
     leaderHp: "010-8901-2345",
     clubInsta: "@echo_music",
-    circleRoom: "음악관 301호",
+    clubRoomNumber: "음악관 301호",
     aplictStatus: "모집마감",
   ),
   Circle(
@@ -472,7 +472,7 @@ final dummyCircles = <Circle>[
     leaderName: "윤하은",
     leaderHp: "010-9012-3456",
     clubInsta: "@spark_art",
-    circleRoom: "예술관 401호",
+    clubRoomNumber: "예술관 401호",
     aplictStatus: "모집중",
   ),
   Circle(
@@ -483,7 +483,7 @@ final dummyCircles = <Circle>[
     leaderName: "조현우",
     leaderHp: "010-0123-4567",
     clubInsta: "@unity_volunteer",
-    circleRoom: "학생회관 501호",
+    clubRoomNumber: "학생회관 501호",
     aplictStatus: "모집중",
   ),
 ];

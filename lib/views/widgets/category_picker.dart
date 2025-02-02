@@ -15,10 +15,10 @@ class CategoryPicker extends ConsumerStatefulWidget {
   final List<String> initialGroups;
 
   @override
-  _GroupPickerState createState() => _GroupPickerState();
+  _CategoryPickerState createState() => _CategoryPickerState();
 }
 
-class _GroupPickerState extends ConsumerState<CategoryPicker> {
+class _CategoryPickerState extends ConsumerState<CategoryPicker> {
   late Set<String> selectedGroups;
 
   @override

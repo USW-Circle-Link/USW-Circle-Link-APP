@@ -8,6 +8,12 @@ extension URLExt on String {
   }
 }
 
+extension RoomFloorExt on String {
+  bool get isValidRoomFloor {
+    return startsWith('B1') || startsWith('1') || startsWith('2');
+  }
+}
+
 extension ContextExt on BuildContext {
   void goRelative(
     String location, {

@@ -82,7 +82,7 @@ class CircleListScreen extends ConsumerWidget {
                         imageUrl: circle.mainPhotoPath ?? '',
                         leaderHp: circle.leaderHp,
                         instaId: circle.clubInsta,
-                        circleRoom: circle.circleRoom, // 샘플 데이터
+                        circleRoom: circle.clubRoomNumber,
                         // 'status'가 없으면 null로 처리
                         statusString: circle.aplictStatus,
                       );

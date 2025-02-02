@@ -12,7 +12,7 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
-import 'package:usw_circle_link/views/widgets/group_picker.dart';
+import 'package:usw_circle_link/views/widgets/category_picker.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
 import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
 import 'package:usw_circle_link/views/widgets/notification_overlay.dart';

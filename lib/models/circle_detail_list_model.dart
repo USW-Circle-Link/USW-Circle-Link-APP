@@ -36,7 +36,7 @@ class Circle with _$Circle {
     required String leaderName,
     required String leaderHp,
     required String clubInsta,
-    String? circleRoom,
+    String? clubRoomNumber,
     String? aplictStatus,
   }) = _Circle;
 
