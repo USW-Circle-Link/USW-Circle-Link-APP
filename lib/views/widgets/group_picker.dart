@@ -3,11 +3,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/viewmodels/category_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class GroupPicker extends ConsumerStatefulWidget {
-  const GroupPicker({
+class CategoryPicker extends ConsumerStatefulWidget {
+  const CategoryPicker({
     super.key,
     this.initialGroups = const [],
   });
@@ -18,7 +18,7 @@ class GroupPicker extends ConsumerStatefulWidget {
   _GroupPickerState createState() => _GroupPickerState();
 }
 
-class _GroupPickerState extends ConsumerState<GroupPicker> {
+class _GroupPickerState extends ConsumerState<CategoryPicker> {
   late Set<String> selectedGroups;
 
   @override
@@ -29,6 +29,7 @@ class _GroupPickerState extends ConsumerState<GroupPicker> {
 
   @override
   Widget build(BuildContext context) {
+    final state = ref.watch(categoryViewModelProvider);
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
@@ -106,11 +107,16 @@ class _GroupPickerState extends ConsumerState<GroupPicker> {
               SizedBox(
                 height: 20.h,
               ),
-              Wrap(
-                spacing: 5.w,
-                children: departments.values.map((department) {
-                  return _buildChip(department);
-                }).toList(),
+              state.when(
+                data: (data) => Wrap(
+                  spacing: 5.w,
+                  children: data?.data.map((category) {
+                        return _buildChip(category.clubCategory);
+                      }).toList() ??
+                      [],
+                ),
+                error: (error, stackTrace) => Text(error.toString()),
+                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ],
           ),
