@@ -10,6 +10,7 @@ class CircleDetailModel {
   final String? circleInsta;
   final String? circleRoom;
   final List<String>? circleHashtag;
+  final String? clubRecruitment;
 
   CircleDetailModel({
     this.circleId,
@@ -19,6 +20,7 @@ class CircleDetailModel {
     required this.leaderName,
     required this.introContent,
     required this.recruitmentStatus,
+    this.clubRecruitment,
     this.circleRoom,
     this.leaderHp,
     this.circleInsta,
@@ -40,6 +42,7 @@ class CircleDetailModel {
       circleInsta: json['clubInsta'],
       introContent: json['clubIntro'],
       recruitmentStatus: json['recruitmentStatus'],
+      clubRecruitment: json['clubRecruitment'],
       circleRoom: json['circleRoom'],
       circleHashtag: List<String>.from(json['clubHashtag'] ?? []),
     );
@@ -47,7 +50,7 @@ class CircleDetailModel {
 
   @override
   String toString() {
-    return 'CircleDetailModel(circleId: $circleId, circleName: $circleName, leaderName: $leaderName, introContent: $introContent, recruitmentStatus: $recruitmentStatus, circleRoom: $circleRoom, circleHashtag: $circleHashtag)';
+    return 'CircleDetailModel(circleId: $circleId, circleName: $circleName, leaderName: $leaderName, introContent: $introContent, recruitmentStatus: $recruitmentStatus, circleRoom: $circleRoom, circleHashtag: $circleHashtag, clubRecruitment: $clubRecruitment)';
   }
 }
 
