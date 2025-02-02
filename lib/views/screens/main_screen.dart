@@ -230,7 +230,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           context: context,
                           isScrollControlled: true,
                           builder: (context) {
-                            return GroupPicker(initialGroups: selectedGroups);
+                            return CategoryPicker(
+                                initialGroups: selectedGroups);
                           },
                         );
                         setState(() {
