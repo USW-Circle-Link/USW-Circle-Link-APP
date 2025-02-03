@@ -65,7 +65,7 @@ class LoggedOutMenu extends ConsumerWidget {
                   title: '내 정보',
                   svgPath: 'assets/images/menubar1.svg',
                   //onTap: () => context.go('/login'),
-                  onTap: () => context.go('/update_profile'),
+                  onTap: () => context.go('/login'),
                   trailingSvgPath: 'assets/images/>.svg',
                 ),
                 // 내 정보 부분 수정 끝
