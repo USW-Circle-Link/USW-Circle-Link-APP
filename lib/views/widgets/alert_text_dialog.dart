@@ -48,25 +48,25 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                             widget.title == null
                                 ? Container()
                                 : Container(
-                                    margin: EdgeInsets.only(bottom: 8.h),
-                                    child: TextFontWidget.fontRegular(
-                                      widget.title!,
-                                      color: Color(0xFF000000),
-                                      fontSize: 18.sp,
-                                      fontWeight: FontWeight.w800,
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ),
+                              margin: EdgeInsets.only(bottom: 8.h),
+                              child: TextFontWidget.fontRegular(
+                                widget.title!,
+                                color: Color(0xFF000000),
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w800,
+                                textAlign: TextAlign.center,
+                              ),
+                            ),
                           ],
                           widget.content == null
                               ? Container()
                               : TextFontWidget.fontRegular(
-                                  widget.content!,
-                                  color: Color(0xFF767676),
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w400,
-                                  textAlign: TextAlign.center,
-                                ),
+                            widget.content!,
+                            color: Color(0xFF767676),
+                            fontSize: 14.sp,
+                            fontWeight: FontWeight.w400,
+                            textAlign: TextAlign.center,
+                          ),
                         ],
                       ),
                     ),
@@ -109,7 +109,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                               height: double.infinity,
                               child: DecoratedBox(
                                 decoration:
-                                    BoxDecoration(color: Color(0xFFCECECE)),
+                                BoxDecoration(color: Color(0xFFCECECE)),
                               ),
                             ),
                             Expanded(

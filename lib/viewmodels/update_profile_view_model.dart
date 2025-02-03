@@ -5,12 +5,14 @@ import 'package:usw_circle_link/utils/regex/regex.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
     UpdateProfileViewModel, AsyncValue<ProfileModel>>((ref) {
+  ref.keepAlive();
   final profileRepository = ref.read(profileRepositoryProvider);
 
   return UpdateProfileViewModel(
     profileRepository: profileRepository,
   );
 });
+
 
 class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
   final ProfileRepository profileRepository;
@@ -35,6 +37,7 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
     required String studentNumber,
     required String userHp,
     required String major,
+    required String password,
   }) async {
     try {
       state = AsyncLoading();
@@ -71,6 +74,7 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
           studentNumber: studentNumber,
           userHp: userHp,
           major: major,
+          password: password,
         ),
       );
     } on ProfileModelError catch (e) {

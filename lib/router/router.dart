@@ -22,7 +22,9 @@ import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
 import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
+import 'package:usw_circle_link/views/screens/verify_password_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
+
 
 final webviewRouter = GoRoute(
   path: 'webview/:url',
@@ -50,8 +52,7 @@ final routerProvider = Provider<GoRouter>((ref) {
                 GoRoute(
                     path: 'application_writing',
                     builder: (_, state) => ApplicationWritingScreen(
-                          clubId:
-                              int.parse(state.uri.queryParameters['clubId']!),
+                          clubId: int.parse(state.uri.queryParameters['clubId']!),
                         ),
                     routes: [webviewRouter]),
               ]),
@@ -142,6 +143,13 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'update_profile',
             builder: (_, __) => UpdateProfileScreen(),
             routes: [
+              GoRoute(
+                path: 'verify_password',
+                builder: (context, state) {
+                  final profileData = state.extra as Map<String, String>?;
+                  return VerifyPasswordScreen(profileData: profileData);
+                },
+              ),
               GoRoute(
                 path: 'delete_user',
                 builder: (_, __) => DeleteUserScreen(),

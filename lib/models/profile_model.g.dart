@@ -31,6 +31,7 @@ _$ProfileDataImpl _$$ProfileDataImplFromJson(Map<String, dynamic> json) =>
       studentNumber: json['studentNumber'] as String,
       userHp: json['userHp'] as String,
       major: json['major'] as String,
+      password: json['password'] as String?,
     );
 
 Map<String, dynamic> _$$ProfileDataImplToJson(_$ProfileDataImpl instance) =>
@@ -39,6 +40,7 @@ Map<String, dynamic> _$$ProfileDataImplToJson(_$ProfileDataImpl instance) =>
       'studentNumber': instance.studentNumber,
       'userHp': instance.userHp,
       'major': instance.major,
+      'password': instance.password,
     };
 
 _$ProfileModelErrorImpl _$$ProfileModelErrorImplFromJson(

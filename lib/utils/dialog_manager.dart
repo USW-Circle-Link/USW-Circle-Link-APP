@@ -64,8 +64,8 @@ class DialogManager {
   Future<bool> showPolicyDialog(
       BuildContext context, PolicyType policyType) async {
     return await showDialog(
-            context: context,
-            builder: (_) => PolicyDialog(policyType: policyType)) ??
+        context: context,
+        builder: (_) => PolicyDialog(policyType: policyType)) ??
         true;
   }
 }

@@ -26,6 +26,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   String? college;
   String? major;
 
+  String? nameError;
+  String? phoneError;
+  String? studentNumberError;
+  String? majorError;
+
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,38 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
     studentnumberController.dispose();
     super.dispose();
   }
+
+  void validateFields(AsyncValue<ProfileModel> state) {
+    setState(() {
+      final error = state.error as ProfileModelError?;
+      logger.d('Error type: ${state.error.runtimeType}');
+      logger.d('Error details: $error');
+
+      // 올바른 값이 입력되었을 때 에러 메시지를 null로 설정
+      nameError = (nameController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.username)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F400")
+          : null;
+
+      phoneError = (phonenumberController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.telephone)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F500")
+          : null;
+
+      studentNumberError = (studentnumberController.text.trim().isEmpty ||
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.studentNumber)))
+          ? ErrorUtil.instance.getErrorMessage("USR-F600")
+          : null;
+
+      majorError = (college == null || major == null)
+          ? ErrorUtil.instance.getErrorMessage("USR-F700")
+          : null;
+
+      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, studentNumberError=$studentNumberError, majorError=$majorError");
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -83,48 +120,44 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
         logger.d('loading');
       });
     });
-
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
         backgroundColor: const Color(0xffFFFFFF),
         resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(62.h),
-          child: AppBar(
-            scrolledUnderElevation: 0,
-            toolbarHeight: 62.h,
-            centerTitle: true,
-            elevation: 0.0,
-            backgroundColor: const Color(0xffFFFFFF),
-            automaticallyImplyLeading: false,
-            title: SizedBox(
-              width: 375.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/back.svg',
-                      height: 36.h,
-                      width: 36.w,
-                    ),
+        appBar: AppBar(
+          scrolledUnderElevation: 0,
+          toolbarHeight: 62.h,
+          centerTitle: true,
+          elevation: 0.0,
+          backgroundColor: const Color(0xffFFFFFF),
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            width: 375.w,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/back.svg',
+                    height: 36.h,
+                    width: 36.w,
                   ),
-                  SizedBox(width: 69.8.w),
-                  TextFontWidget.fontRegular(
-                    '내 정보 수정',
-                    color: Colors.black,
-                    fontSize: 18.sp,
-                    fontWeight: FontWeight.w800,
-                    height: 1.111.h,
-                    letterSpacing: -0.45.sp,
-                  ),
-                  Expanded(child: Container()),
-                ],
-              ),
+                ),
+                SizedBox(width: 69.8.w),
+                TextFontWidget.fontRegular(
+                  '내 정보 수정',
+                  color: Colors.black,
+                  fontSize: 20.sp,
+                  fontWeight: FontWeight.w700,
+                  height: 1.111.h,
+                  letterSpacing: -0.45.sp,
+                ),
+                Expanded(child: Container()),
+              ],
             ),
           ),
         ),
@@ -134,7 +167,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                SizedBox(height: 30.h),
+                SizedBox(height: 18.h),
                 // 이름 필드
                 TextFontWidget.fontRegular(
                   '이름',
@@ -143,7 +176,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   fontWeight: FontWeight.w400,
                   height: 1.12.sp,
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 12.h),
                 RoundedTextField(
                   height: 50.h,
                   textEditController: nameController,
@@ -151,7 +184,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.username)
+                  borderColor: nameError == null
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,
@@ -170,7 +203,20 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(
+                  height: 20.h, // 고정 높이
+                  child: nameError != null
+                      ? Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* '+nameError!,
+                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
+                    ),
+                  )
+                      : null,
+                ),
+                SizedBox(height: 12.h),
+
                 // 전화번호 필드
                 TextFontWidget.fontRegular(
                   '전화번호',
@@ -179,7 +225,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   fontWeight: FontWeight.w400,
                   height: 1.12.sp,
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 12.h),
                 RoundedTextField(
                   height: 50.h,
                   textEditController: phonenumberController,
@@ -187,7 +233,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.telephone)
+                  borderColor: phoneError == null
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,
@@ -203,10 +249,24 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   hintText: "전화번호 (- 제외입력)",
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
-                    fontFamily: ',SUIT',
+                    fontFamily: 'SUIT',
                   ),
                 ),
-                SizedBox(height: 16.h),
+
+                SizedBox(
+                  height: 20.h, // 고정 높이
+                  child: phoneError != null
+                      ? Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* '+phoneError!,
+                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
+                    ),
+                  )
+                      : null,
+                ),
+                SizedBox(height: 12.h),
+
                 // 학번 필드
                 TextFontWidget.fontRegular(
                   '학번',
@@ -215,7 +275,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   fontWeight: FontWeight.w400,
                   height: 1.12.sp,
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 12.h),
                 RoundedTextField(
                   height: 50.h,
                   textEditController: studentnumberController,
@@ -223,7 +283,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: isValid(state, FieldType.studentNumber)
+                  borderColor: studentNumberError == null
                       ? const Color(0xffDBDBDB)
                       : Colors.red,
                   borderWidth: 1.w,
@@ -242,16 +302,29 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
-                SizedBox(height: 16.h),
+                SizedBox(
+                  height: 20.h, // 고정 높이
+                  child: studentNumberError != null
+                      ? Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* '+studentNumberError!,
+                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
+                    ),
+                  )
+                      : null,
+                ),
+                SizedBox(height: 12.h),
+
                 // 학과 필드
                 TextFontWidget.fontRegular(
-                  '학과',
+                  '학부(학과)',
                   color: const Color(0xff000000),
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                   height: 1.12.sp,
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 12.h),
                 RoundedTextField(
                   height: 50.h,
                   readOnly: true,
@@ -276,6 +349,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
+                  borderColor: majorError == null
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.none,
@@ -296,29 +372,44 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
-                SizedBox(height: 48.h),
+                SizedBox(
+                  height: 20.h, // 고정 높이
+                  child: majorError != null
+                      ? Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* '+majorError!,
+                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
+                    ),
+                  )
+                      : null,
+                ),
+                SizedBox(height: 88.h),
+
+                // 수정 완료 버튼
                 SizedBox(
                   width: double.infinity,
                   height: 56.h,
                   child: OutlinedButton(
-                    onPressed: () async {
-                      final name = nameController.text.trim();
-                      final studentNumber = studentnumberController.text.trim();
-                      final userHp = phonenumberController.text.trim();
-
-                      logger.d(major);
-
-                      await ref
-                          .read(updateProfileViewModelProvider.notifier)
-                          .updateProfile(
-                            userName: name,
-                            studentNumber: studentNumber,
-                            userHp: userHp,
-                            major: major ?? "",
-                          );
+                    onPressed: () {
+                      validateFields(state);
+                      if (nameError == null &&
+                          phoneError == null &&
+                          studentNumberError == null &&
+                          majorError == null) {
+                        // 입력값에 문제가 없으면 입력 데이터를 Map에 담아 비밀번호 인증 스크린으로 전달
+                        final profileData = {
+                          'name': nameController.text.trim(),
+                          'userHp': phonenumberController.text.trim(),
+                          'studentNumber': studentnumberController.text.trim(),
+                          'major': major ?? '',
+                        };
+                        logger.d('ProfileData: $profileData');
+                        context.go('/update_profile/verify_password', extra: profileData);
+                      }
                     },
                     style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFF000000),
+                      backgroundColor: const Color(0xFFFFB052),
                       foregroundColor: const Color(0xFFFFFFFF),
                       side: const BorderSide(
                         color: Colors.transparent,
@@ -331,36 +422,27 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     child: TextFontWidget.fontRegular(
                       '수정 완료',
                       fontSize: 18.sp,
-                      color: const Color(0xFFFFFFFF),
+                      color: Colors.white,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
                 ),
-                SizedBox(height: 10.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      context.go('/update_profile/delete_user');
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color.fromARGB(255, 255, 69, 69),
-                      foregroundColor: const Color(0xFFFFFFFF),
-                      side: const BorderSide(
-                        color: Colors.transparent,
-                        width: 0.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: TextFontWidget.fontRegular(
-                      '회원탈퇴',
-                      fontSize: 18.sp,
-                      color: const Color(0xFFFFFFFF),
-                      fontWeight: FontWeight.w800,
-                    ),
+                Container(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            context.go('/update_profile/delete_user');
+                          },
+                          child: TextFontWidget.fontRegular(
+                            '회원 탈퇴',
+                            color: const Color(0xffABABAB),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                          )
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -370,7 +452,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       ),
     );
   }
-
   bool isValid(AsyncValue<ProfileModel> state, FieldType fieldType) {
     final error = state.error as ProfileModelError?;
     return ErrorUtil.instance.isValid(error?.code, fieldType);

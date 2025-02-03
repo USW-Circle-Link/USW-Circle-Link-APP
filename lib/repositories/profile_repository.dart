@@ -51,12 +51,14 @@ class ProfileRepository {
     required String studentNumber,
     required String userHp,
     required String major,
+    required String password,
   }) async {
     final body = {
       'userName': userName,
       'studentNumber': studentNumber,
       'userHp': userHp,
       'major': major,
+      'userPw' : password,
     };
 
     final response = await dio.patch(
