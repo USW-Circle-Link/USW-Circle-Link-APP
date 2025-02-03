@@ -4,18 +4,18 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
-import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
-import 'package:usw_circle_link/views/widgets/cloud_messaging.dart';
+import 'package:usw_circle_link/views/widgets/category_picker.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
 import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
+import 'package:usw_circle_link/views/widgets/notification_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/views/widgets/circle_list.dart';
 import 'package:usw_circle_link/views/widgets/app_bar.dart';
@@ -55,13 +55,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       _overlayEntry = _createOverlayEntry(context);
       Overlay.of(context).insert(_overlayEntry!);
     } else {
-      (_overlayEntry!.builder as _NotificationOverlayState).updateList();
+      (_overlayEntry!.builder as NotificationOverlayState).updateList();
     }
   }
 
   OverlayEntry _createOverlayEntry(BuildContext context) {
     return OverlayEntry(
-      builder: (context) => _NotificationOverlay(
+      builder: (context) => NotificationOverlay(
         onDismiss: () {
           _overlayEntry?.remove();
           _overlayEntry = null;
@@ -77,8 +77,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       logger.d(next);
     });
 
-    final circleListState = ref.watch(mainViewModelProvider);
-    ref.listen(mainViewModelProvider, (previous, next) {
+    final circleListState = ref.watch(circleViewModelProvider);
+    ref.listen(circleViewModelProvider, (previous, next) {
       logger.d(next);
     });
 
@@ -163,9 +163,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               setState(() {
                                 isAllSelected = true;
                               });
-                              await ref
-                                  .read(mainViewModelProvider.notifier)
-                                  .fetchAllCircleList();
+                              await fetchCircleList();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: const Color(0xffffB052),
@@ -202,9 +200,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                               setState(() {
                                 isAllSelected = false;
                               });
-                              await ref
-                                  .read(mainViewModelProvider.notifier)
-                                  .fetchOpenCircleList();
+                              await fetchCircleList();
                             },
                             style: TextButton.styleFrom(
                               foregroundColor: const Color(0xffffB052),
@@ -229,16 +225,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ],
                     ),
                     OutlinedButton(
-                      onPressed: () {
-                        setState(() async {
-                          selectedGroups = await showModalBottomSheet(
-                            context: context,
-                            isScrollControlled: true,
-                            builder: (context) {
-                              return GroupPicker(initialGroups: selectedGroups);
-                            },
-                          );
+                      onPressed: () async {
+                        final result = await showModalBottomSheet(
+                          context: context,
+                          isScrollControlled: true,
+                          builder: (context) {
+                            return CategoryPicker(
+                                initialGroups: selectedGroups);
+                          },
+                        );
+                        setState(() {
+                          selectedGroups = result;
                         });
+                        await fetchCircleList();
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: selectedGroups.isEmpty
@@ -313,33 +312,37 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ),
                   ],
             Expanded(
-              child: Center(
-                child: circleListState.when<Widget>(
-                    data: (circleList) {
-                      return circleList.data.isNotEmpty
-                          ? CircleList(
-                              state: circleListState.value as CircleListModel,
-                              onItemClicked: (clubId) {
-                                context.go('/circle?clubId=$clubId');
-                              },
-                            )
-                          : TextFontWidget.fontRegular(
+              child: circleListState.when<Widget>(
+                  data: (circleList) {
+                    return circleList.data.isNotEmpty
+                        ? CircleList(
+                            state: circleListState.value as CircleListModel,
+                            onItemClicked: (clubId) {
+                              context.go('/circle?clubId=$clubId');
+                            },
+                          )
+                        : Center(
+                            child: TextFontWidget.fontRegular(
                               '동아리가 없습니다',
                               fontSize: 14.sp,
                               color: Colors.black,
                               fontWeight: FontWeight.w400,
-                            );
-                    },
-                    error: (error, stackTrace) {
-                      return TextFontWidget.fontRegular(
-                        '동아리를 불러오지 못했습니다...',
+                            ),
+                          );
+                  },
+                  error: (error, stackTrace) {
+                    final _error = error as CircleListModelError;
+                    return Center(
+                      child: TextFontWidget.fontRegular(
+                        ErrorUtil.instance.getErrorMessage(_error.code) ??
+                            '동아리를 불러오지 못했습니다...',
                         fontSize: 14.sp,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
-                      );
-                    },
-                    loading: () => CircularProgressIndicator()),
-              ),
+                      ),
+                    );
+                  },
+                  loading: () => Center(child: CircularProgressIndicator())),
             ),
           ],
         ),
@@ -348,24 +351,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Widget _buildChip(String label) {
-    final isSelected = false;
-    return FilterChip(
+    return Chip(
       labelPadding: EdgeInsets.only(left: 10.w),
       label: Text(label),
-      selected: isSelected,
-      onSelected: (value) {
-        setState(() {});
-      },
-      deleteIconColor: isSelected ? Colors.white : Color(0xFF434343),
-      onDeleted: () {
+      deleteIcon: Icon(Icons.close, size: 16.sp),
+      onDeleted: () async {
         setState(() {
           selectedGroups.remove(label);
         });
+        await fetchCircleList();
       },
-      showCheckmark: false,
-      selectedColor: Color(0xFFFFB052),
       labelStyle: TextFontWidget.fontRegularStyle(
-        color: isSelected ? Colors.white : Color(0xFF434343),
+        color: Color(0xFF434343),
         fontWeight: FontWeight.w300,
       ),
       backgroundColor: Colors.white,
@@ -377,225 +374,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       padding: EdgeInsets.all(0),
     );
   }
-}
 
-class GroupPicker extends ConsumerStatefulWidget {
-  const GroupPicker({
-    Key? key,
-    this.initialGroups = const [],
-  }) : super(key: key);
-
-  final List<String> initialGroups;
-
-  @override
-  _GroupPickerState createState() => _GroupPickerState();
-}
-
-class _GroupPickerState extends ConsumerState<GroupPicker> {
-  late Set<String> selectedGroups;
-
-  @override
-  void initState() {
-    selectedGroups = widget.initialGroups.toSet();
-    super.initState();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) {
-        if (!didPop) {
-          // dissmiss 나 뒤로가기
-          context.pop(selectedGroups.toList());
-        }
-      },
-      child: Container(
-        height: MediaQuery.of(context).size.height - kToolbarHeight - 50.h,
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.vertical(
-            top: Radius.circular(17.r),
-          ),
-        ),
-        child: Padding(
-          padding: EdgeInsets.only(
-            right: 48.w,
-            left: 48.w,
-            top: 48.h,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  SizedBox(width: 20.w),
-                  TextFontWidget.fontRegular(
-                    '나에게 맞는 동아리 추천 받기',
-                    color: Color(0xFF989898),
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                  ),
-                  IconButton(
-                    onPressed: () {
-                      context.pop(selectedGroups.toList());
-                    },
-                    style: IconButton.styleFrom(
-                      minimumSize: Size.zero,
-                      padding: EdgeInsets.zero,
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                    ),
-                    icon: SvgPicture.asset(
-                      'assets/images/ic_close.svg',
-                    ),
-                  ),
-                ],
-              ),
-              Divider(
-                height: 70.h,
-                indent: 70.w,
-                endIndent: 70.w,
-              ),
-              Row(
-                children: <Widget>[
-                  SvgPicture.asset('assets/images/ic_category.svg'),
-                  SizedBox(
-                    width: 10.w,
-                  ),
-                  TextFontWidget.fontRegular(
-                    '관심 카테고리',
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w700,
-                  )
-                ],
-              ),
-              TextFontWidget.fontRegular(
-                '* 최대 3개까지 선택해주세요.',
-                color: Color(0xff909090),
-                fontSize: 12.sp,
-                fontWeight: FontWeight.w300,
-              ),
-              SizedBox(
-                height: 20.h,
-              ),
-              Wrap(
-                spacing: 5.w,
-                children: departments.values.map((department) {
-                  return _buildChip(department);
-                }).toList(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildChip(String label) {
-    final isSelected = selectedGroups.contains(label);
-    return FilterChip(
-      label: Text(label),
-      selected: isSelected,
-      onSelected: (value) {
-        setState(() {
-          value ? selectedGroups.add(label) : selectedGroups.remove(label);
-        });
-      },
-      showCheckmark: false,
-      selectedColor: Color(0xFFFFB052),
-      labelStyle: TextFontWidget.fontRegularStyle(
-        color: isSelected ? Colors.white : Color(0xFF434343),
-        fontWeight: FontWeight.w300,
-      ),
-      backgroundColor: Colors.white,
-      elevation: null,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(
-            color: isSelected ? Color(0xFFFF9A21) : Color(0xFFE5E5E5)),
-        borderRadius: BorderRadius.all(Radius.circular(15.r)),
-      ),
-      padding: EdgeInsets.all(0),
-    );
-  }
-}
-
-class _NotificationOverlay extends ConsumerStatefulWidget {
-  final VoidCallback onDismiss;
-
-  const _NotificationOverlay({required this.onDismiss});
-
-  @override
-  _NotificationOverlayState createState() => _NotificationOverlayState();
-}
-
-class _NotificationOverlayState extends ConsumerState<_NotificationOverlay> {
-  @override
-  Widget build(BuildContext context) {
-    final notifications = ref.watch(firebaseCloudMessagingViewModelProvider);
-    return Stack(
-      children: [
-        Positioned.fill(
-          child: GestureDetector(
-            onTap: widget.onDismiss,
-            child: Container(
-              color: Colors.black.withOpacity(0.5),
-            ),
-          ),
-        ),
-        Positioned(
-          top: kToolbarHeight + 45.h,
-          right: 24.w,
-          child: Material(
-            color: Colors.transparent,
-            child: Container(
-              width: 208.w,
-              height: 220.h,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(top: 16.h),
-                    child: TextFontWidget.fontRegular(
-                      "알림",
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                  Expanded(
-                    child: MediaQuery.removePadding(
-                      context: context,
-                      removeTop: true,
-                      child: ListView.builder(
-                        itemCount: notifications.length,
-                        itemBuilder: (context, index) {
-                          return CloudMessaging(
-                            text: notifications[index],
-                            index: index,
-                          );
-                        },
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  void updateList() {
-    setState(() {});
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
+  Future<void> fetchCircleList() async {
+    if (selectedGroups.isEmpty) {
+      if (isAllSelected) {
+        await ref.read(circleViewModelProvider.notifier).fetchAllCircleList();
+      } else {
+        await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
+      }
+    } else {
+      if (isAllSelected) {
+        await ref
+            .read(circleViewModelProvider.notifier)
+            .fetchAllFilteredCircleList(selectedGroups);
+      } else {
+        await ref
+            .read(circleViewModelProvider.notifier)
+            .fetchOpenFilteredCircleList(selectedGroups);
+      }
+    }
   }
 }

@@ -4,7 +4,7 @@ import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
-import 'package:usw_circle_link/models/FindIdModel.dart';
+import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -105,7 +105,7 @@ class AuthRepository {
     logger.d('sendMail - body {$body}');
 
     final response = await dio.post(
-      '$baseUrl/temporary',
+      '$baseUrl/temporary/register',
       data: body,
       options: Options(headers: {
         'Content-Type': 'application/json',
@@ -127,34 +127,7 @@ class AuthRepository {
     }
   }
 
-  Future<EmailVerificationModelResend> resendMail({
-    required String emailTokenId,
-  }) async {
-    final response = await dio.post(
-      '$baseUrl/email/resend-confirmation',
-      options: Options(
-        headers: {
-          "emailToken_uuid": emailTokenId,
-        },
-      ),
-    );
-
-    logger.d(response.data);
-
-    logger.d(
-        'resendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-    if (response.statusCode == 200) {
-      return EmailVerificationModelResend.fromJson(response.data)
-          .setType(EmailVerificationModelType.resendMail);
-    } else {
-      // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data)
-          .setType(EmailVerificationModelType.resendMail);
-    }
-  }
-
-  Future<EmailVerificationModelComplete> signUp({
+  Future<EmailVerificationModel> signUp({
     required String account,
   }) async {
     final body = {
@@ -175,12 +148,78 @@ class AuthRepository {
     logger.d('signUp - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModelComplete.fromJson(response.data)
+      return EmailVerificationModel.fromJson(response.data)
           .setType(EmailVerificationModelType.completeSignUp);
     } else {
       // Bad Request
       throw EmailVerificationModelError.fromJson(response.data)
           .setType(EmailVerificationModelType.completeSignUp);
+    }
+  }
+
+  Future<SignUpModel> signUpExistingMember({
+    required String account,
+    required String password,
+    required String username,
+    required String telephone,
+    required String studentNumber,
+    required String major,
+    required String email,
+    required List<Map<String, int>> clubs,
+  }) async {
+    final body = {
+      'account': account,
+      'password': password,
+      'userName': username,
+      'telephone': telephone,
+      'studentNumber': studentNumber,
+      'major': major,
+      'email': email,
+      'clubs': clubs,
+    };
+    final response = await dio.post('$baseUrl/existing/register', data: body);
+
+    logger.d(body);
+
+    logger.d(response.data);
+
+    logger.d(
+        'signUpExistingMember - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return SignUpModel.fromJson(response.data)
+          .setType(SignUpModelType.signUpExistingMember);
+    } else {
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.signUpExistingMember);
+    }
+  }
+
+  Future<SignUpModel> checkProfileIsExist({
+    required String username,
+    required String studentNumber,
+    required String userHp,
+  }) async {
+    final response = await dio.get(
+      '$protocol://$host:$port/profiles/duplication-check',
+      data: {
+        "userName": username,
+        "studentNumber": studentNumber,
+        "userHp": userHp,
+      },
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'checkProfileIsExist - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return SignUpModel.fromJson(response.data)
+          .setType(SignUpModelType.checkProfileIsExist);
+    } else {
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.checkProfileIsExist);
     }
   }
   ////////////////////////////////////

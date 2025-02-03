@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -18,6 +19,9 @@ class CircleListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final state = ref.watch(circleListScreenViewModelProvider(listType));
+    ref.listen(circleListScreenViewModelProvider(listType), (previous, next) {
+      logger.d('next: $next');
+    });
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -75,11 +79,12 @@ class CircleListScreen extends ConsumerWidget {
                         clubId: circle.clubId,
                         leader: circle.leaderName,
                         name: circle.clubName,
-                        imageUrl: circle.mainPhotoPath,
+                        imageUrl: circle.mainPhotoPath ?? '',
                         leaderHp: circle.leaderHp,
                         instaId: circle.clubInsta,
-                        circleRoom: '',
-                        status: circle.aplictStatus,
+                        circleRoom: circle.clubRoomNumber,
+                        // 'status'가 없으면 null로 처리
+                        statusString: circle.aplictStatus,
                       );
                     },
                   ),
@@ -89,11 +94,14 @@ class CircleListScreen extends ConsumerWidget {
                     '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
                   ),
                 ),
-          loading: () => Center(child: CircularProgressIndicator()),
+          loading: () => Center(
+            child: CircularProgressIndicator(),
+          ),
           error: (error, stack) => Center(
-              child: TextFontWidget.fontRegular(
-            '동아리 목록 조회에 실패하였습니다.',
-          )),
+            child: TextFontWidget.fontRegular(
+              '동아리 목록 조회에 실패하였습니다.',
+            ),
+          ),
         ),
       ),
     );

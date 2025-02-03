@@ -8,7 +8,7 @@ final RegExp nonWordRegExp =
 final RegExp invalidWordRegExp =
     RegExp(r'''[^a-zA-Z\d`~!@#$%^&*()\-_=+\[\]{};:'",<.>/?\|]''');
 final RegExp emailVerificationUrlRegExp = RegExp(r'');
-final RegExp nameRegExp = RegExp(r'^[A-Z|a-z|0-9]$');
+final RegExp nameRegExp = RegExp(r'^[A-Za-zㄱ-ㅎㅏ-ㅣ가-핳]+$');
 final RegExp telephoneRegExp = RegExp(r'^[0-9]{11}$');
 final RegExp studentNumberRegExp = RegExp(r'^[0-9]{8}$');
 
@@ -17,8 +17,7 @@ extension PasswordValidation on String {
     logger.d(this);
     logger.d(nonWordRegExp);
     for (var element in nonWordRegExp.allMatches(this)) {
-      
-    logger.d(element.input);
+      logger.d(element.input);
     }
     return wordRegExp.hasMatch(this) &&
         numberRegExp.hasMatch(this) &&

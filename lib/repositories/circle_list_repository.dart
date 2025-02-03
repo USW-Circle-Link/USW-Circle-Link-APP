@@ -8,7 +8,7 @@ import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   final dio = ref.watch(dioProvider);
-  
+
   return CircleListRepository(
     dio: dio,
     baseUrl: '$protocol://$host:$port',
@@ -97,6 +97,44 @@ class CircleListRepository {
     } else {
       // Bad Request
       throw CircleDetailListModelError.fromJson(response.data);
+    }
+  }
+
+  Future<CircleFilteredListModel> fetchAllFilteredCircleList(
+      List<String> department) async {
+    final response = await dio.get(
+      '$baseUrl/clubs/filter/${department.join(',')}',
+    );
+
+    logger.d('${response.data}');
+
+    logger.d(
+        'fetchAllFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return CircleFilteredListModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw CircleListModelError.fromJson(response.data);
+    }
+  }
+
+  Future<CircleFilteredListModel> fetchOpenFilteredCircleList(
+      List<String> department) async {
+    final response = await dio.get(
+      '$baseUrl/clubs/filter/${department.join(',')}/open',
+    );
+
+    logger.d('${response.data}');
+
+    logger.d(
+        'fetchOpenFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return CircleFilteredListModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw CircleListModelError.fromJson(response.data);
     }
   }
 }

@@ -57,7 +57,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           : null;
 
       phoneError = (phonenumberController.text.trim().isEmpty ||
-          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.phoneNumber)))
+          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.telephone)))
           ? ErrorUtil.instance.getErrorMessage("USR-F500")
           : null;
 
@@ -252,6 +252,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
+
                 SizedBox(
                   height: 20.h, // 고정 높이
                   child: phoneError != null
@@ -392,23 +393,19 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   child: OutlinedButton(
                     onPressed: () {
                       validateFields(state);
-                      setState(() {});
                       if (nameError == null &&
                           phoneError == null &&
                           studentNumberError == null &&
                           majorError == null) {
-                        final name = nameController.text.trim();
-                        final studentNumber = studentnumberController.text.trim();
-                        final userHp = phonenumberController.text.trim();
-
-                        ref
-                            .read(updateProfileViewModelProvider.notifier)
-                            .updateProfile(
-                          userName: name,
-                          studentNumber: studentNumber,
-                          userHp: userHp,
-                          major: major ?? "",
-                        );
+                        // 입력값에 문제가 없으면 입력 데이터를 Map에 담아 비밀번호 인증 스크린으로 전달
+                        final profileData = {
+                          'name': nameController.text.trim(),
+                          'userHp': phonenumberController.text.trim(),
+                          'studentNumber': studentnumberController.text.trim(),
+                          'major': major ?? '',
+                        };
+                        logger.d('ProfileData: $profileData');
+                        context.go('/update_profile/verify_password', extra: profileData);
                       }
                     },
                     style: OutlinedButton.styleFrom(
@@ -425,7 +422,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     child: TextFontWidget.fontRegular(
                       '수정 완료',
                       fontSize: 18.sp,
-                      color: const Color(0xFFFFFFFF),
+                      color: Colors.white,
                       fontWeight: FontWeight.w800,
                     ),
                   ),
@@ -436,7 +433,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     children: [
                       TextButton(
                           onPressed: () {
-                            context.go('/verify_password/update_profile/delete_user');
+                            context.go('/update_profile/delete_user');
                           },
                           child: TextFontWidget.fontRegular(
                             '회원 탈퇴',

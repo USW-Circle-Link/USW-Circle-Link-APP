@@ -211,6 +211,7 @@ mixin _$ProfileData {
   String get studentNumber => throw _privateConstructorUsedError;
   String get userHp => throw _privateConstructorUsedError;
   String get major => throw _privateConstructorUsedError;
+  String? get password => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -225,7 +226,11 @@ abstract class $ProfileDataCopyWith<$Res> {
       _$ProfileDataCopyWithImpl<$Res, ProfileData>;
   @useResult
   $Res call(
-      {String userName, String studentNumber, String userHp, String major});
+      {String userName,
+      String studentNumber,
+      String userHp,
+      String major,
+      String? password});
 }
 
 /// @nodoc
@@ -245,6 +250,7 @@ class _$ProfileDataCopyWithImpl<$Res, $Val extends ProfileData>
     Object? studentNumber = null,
     Object? userHp = null,
     Object? major = null,
+    Object? password = freezed,
   }) {
     return _then(_value.copyWith(
       userName: null == userName
@@ -263,6 +269,10 @@ class _$ProfileDataCopyWithImpl<$Res, $Val extends ProfileData>
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as String,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -276,7 +286,11 @@ abstract class _$$ProfileDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String userName, String studentNumber, String userHp, String major});
+      {String userName,
+      String studentNumber,
+      String userHp,
+      String major,
+      String? password});
 }
 
 /// @nodoc
@@ -294,6 +308,7 @@ class __$$ProfileDataImplCopyWithImpl<$Res>
     Object? studentNumber = null,
     Object? userHp = null,
     Object? major = null,
+    Object? password = freezed,
   }) {
     return _then(_$ProfileDataImpl(
       userName: null == userName
@@ -312,6 +327,10 @@ class __$$ProfileDataImplCopyWithImpl<$Res>
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as String,
+      password: freezed == password
+          ? _value.password
+          : password // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -323,7 +342,8 @@ class _$ProfileDataImpl implements _ProfileData {
       {required this.userName,
       required this.studentNumber,
       required this.userHp,
-      required this.major});
+      required this.major,
+      required this.password});
 
   factory _$ProfileDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$ProfileDataImplFromJson(json);
@@ -336,10 +356,12 @@ class _$ProfileDataImpl implements _ProfileData {
   final String userHp;
   @override
   final String major;
+  @override
+  final String? password;
 
   @override
   String toString() {
-    return 'ProfileData(userName: $userName, studentNumber: $studentNumber, userHp: $userHp, major: $major)';
+    return 'ProfileData(userName: $userName, studentNumber: $studentNumber, userHp: $userHp, major: $major, password: $password)';
   }
 
   @override
@@ -352,13 +374,15 @@ class _$ProfileDataImpl implements _ProfileData {
             (identical(other.studentNumber, studentNumber) ||
                 other.studentNumber == studentNumber) &&
             (identical(other.userHp, userHp) || other.userHp == userHp) &&
-            (identical(other.major, major) || other.major == major));
+            (identical(other.major, major) || other.major == major) &&
+            (identical(other.password, password) ||
+                other.password == password));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, userName, studentNumber, userHp, major);
+  int get hashCode => Object.hash(
+      runtimeType, userName, studentNumber, userHp, major, password);
 
   @JsonKey(ignore: true)
   @override
@@ -379,7 +403,8 @@ abstract class _ProfileData implements ProfileData {
       {required final String userName,
       required final String studentNumber,
       required final String userHp,
-      required final String major}) = _$ProfileDataImpl;
+      required final String major,
+      required final String? password}) = _$ProfileDataImpl;
 
   factory _ProfileData.fromJson(Map<String, dynamic> json) =
       _$ProfileDataImpl.fromJson;
@@ -392,6 +417,8 @@ abstract class _ProfileData implements ProfileData {
   String get userHp;
   @override
   String get major;
+  @override
+  String? get password;
   @override
   @JsonKey(ignore: true)
   _$$ProfileDataImplCopyWith<_$ProfileDataImpl> get copyWith =>

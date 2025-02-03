@@ -5,8 +5,8 @@ import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 
-final findPwViewModelProvider =
-    StateNotifierProvider.autoDispose<FindPwViewModel, FindPwModelBase?>((ref) {
+final findPwViewModelProvider = StateNotifierProvider.autoDispose<
+    FindPwViewModel, AsyncValue<FindPwModel?>>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
   final FlutterSecureStorage storage = ref.read(secureStorageProvider);
   return FindPwViewModel(
@@ -15,19 +15,20 @@ final findPwViewModelProvider =
   );
 });
 
-class FindPwViewModel extends StateNotifier<FindPwModelBase?> {
+class FindPwViewModel extends StateNotifier<AsyncValue<FindPwModel?>> {
   final AuthRepository authRepository;
   final FlutterSecureStorage storage;
   FindPwViewModel({
     required this.authRepository,
     required this.storage,
-  }) : super(null);
+  }) : super(AsyncData(null));
 
-  Future<FindPwModelBase> sendCode({
+  Future<void> sendCode({
     required String account,
     required String email,
   }) async {
     try {
+      state = AsyncLoading();
       if (account.isEmpty) {
         throw FindPwModelError(
           message: '아이디가 형식에 맞지 않습니다.',
@@ -42,7 +43,6 @@ class FindPwViewModel extends StateNotifier<FindPwModelBase?> {
           type: FindPwModelType.sendCode,
         );
       }
-      state = FindPwModelLoading();
       final response =
           await authRepository.sendCode(account: account, email: email);
       final accessToken = response.data;
@@ -57,26 +57,28 @@ class FindPwViewModel extends StateNotifier<FindPwModelBase?> {
 
       await storage.write(key: accessTokenKey, value: accessToken);
 
-      state = response;
-    } on FindPwModelError catch (e) {
-      state = e;
+      state = AsyncData(response);
+    } on FindPwModelError catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
     } catch (e) {
-      state = FindPwModelError(
-          message: '예외발생 - $e', type: FindPwModelType.sendCode);
+      final error = FindPwModelError(
+        message: '예외발생 - $e',
+        type: FindPwModelType.sendCode,
+      );
+      state = AsyncError(error, error.stackTrace);
     }
-
-    return Future.value(state);
   }
 
   void initState() {
-    state = null;
+    state = AsyncData(null);
   }
 
-  Future<FindPwModelBase> verifyCode({
+  Future<void> verifyCode({
     required String code,
     required String? uuid,
   }) async {
     try {
+      state = AsyncLoading();
       if (code.isEmpty) {
         throw FindPwModelError(
           message: '인증코드가 형식에 맞지 않습니다.',
@@ -91,21 +93,19 @@ class FindPwViewModel extends StateNotifier<FindPwModelBase?> {
           type: FindPwModelType.verifyCode,
         );
       }
-      state = FindPwModelLoading();
       final response = await authRepository.verifyCode(
         code: code,
         uuid: uuid,
       );
-      state = response;
-    } on FindPwModelError catch (e) {
-      state = e;
+      state = AsyncData(response);
+    } on FindPwModelError catch (e, stackTrace) {
+      state = AsyncError(e, stackTrace);
     } catch (e) {
-      state = FindPwModelError(
+      final error = FindPwModelError(
         message: '예외발생 - $e',
         type: FindPwModelType.verifyCode,
       );
+      state = AsyncError(error, error.stackTrace);
     }
-
-    return Future.value(state);
   }
 }

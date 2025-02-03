@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
@@ -14,12 +15,12 @@ import 'package:usw_circle_link/views/screens/image_screen.dart';
 import 'package:usw_circle_link/views/screens/login_screen.dart';
 import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/circle_list_screen.dart';
-import 'package:usw_circle_link/views/screens/new_circle_list_screen.dart';
-import 'package:usw_circle_link/views/screens/new_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
+import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
+import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
-import 'package:usw_circle_link/views/screens/terms_of_service_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/verify_password_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
@@ -38,11 +39,13 @@ final routerProvider = Provider<GoRouter>((ref) {
     routes: [
       GoRoute(
         path: '/',
-        builder: (_, state) => MainScreen(),
+        builder: (_, state) {
+          return MainScreen();
+        },
         routes: [
           GoRoute(
               path: 'circle',
-              builder: (_, state) => newCircleScreen(
+              builder: (_, state) => CircleScreen(
                     clubId: int.parse(state.uri.queryParameters['clubId']!),
                   ),
               routes: [
@@ -79,23 +82,46 @@ final routerProvider = Provider<GoRouter>((ref) {
                 ],
               ),
               GoRoute(
-                path: 'sign_up',
-                builder: (_, __) => SignUpScreen(),
+                path: 'sign_up_option',
+                builder: (_, __) => SignUpOptionScreen(),
                 routes: [
                   GoRoute(
-                    path: 'email_verification',
-                    builder: (_, state) => EmailVerificationScreen(
-                      account: state.uri.queryParameters['account']!,
-                      password: Uri.decodeComponent(
-                          state.uri.queryParameters['password']!),
-                      userName: state.uri.queryParameters['userName']!,
-                      telephone: state.uri.queryParameters['telephone']!,
-                      studentNumber:
-                          state.uri.queryParameters['studentNumber']!,
-                      major: state.uri.queryParameters['major']!,
+                    path: 'select_circle',
+                    builder: (_, __) => SelectCircleScreen(),
+                    routes: [
+                      GoRoute(
+                        path: 'sign_up',
+                        builder: (_, state) => SignUpScreen(
+                          newMemberSignUp:
+                              state.uri.queryParameters['newMember'] == 'true',
+                          selectedCircles: state.extra as List<CircleListData>,
+                        ),
+                      ),
+                    ],
+                  ),
+                  GoRoute(
+                    path: 'sign_up',
+                    builder: (_, state) => SignUpScreen(
+                      newMemberSignUp:
+                          state.uri.queryParameters['newMember'] == 'true',
                     ),
                     routes: [
-                      webviewRouter,
+                      GoRoute(
+                        path: 'email_verification',
+                        builder: (_, state) => EmailVerificationScreen(
+                          account: state.uri.queryParameters['account']!,
+                          password: Uri.decodeComponent(
+                              state.uri.queryParameters['password']!),
+                          userName: state.uri.queryParameters['userName']!,
+                          telephone: state.uri.queryParameters['telephone']!,
+                          studentNumber:
+                              state.uri.queryParameters['studentNumber']!,
+                          major: state.uri.queryParameters['major']!,
+                        ),
+                        routes: [
+                          webviewRouter,
+                        ],
+                      ),
                     ],
                   ),
                 ],
@@ -109,25 +135,26 @@ final routerProvider = Provider<GoRouter>((ref) {
           webviewRouter,
           GoRoute(
             path: 'circle_list',
-            builder: (_, state) => newCircleListScreen(
+            builder: (_, state) => CircleListScreen(
               listType: state.extra as CircleListType,
             ),
           ),
           GoRoute(
-            path: 'verify_password',
-            builder: (_, __) => VerifyPasswordScreen(),
+            path: 'update_profile',
+            builder: (_, __) => UpdateProfileScreen(),
             routes: [
               GoRoute(
-                path: 'update_profile',
-                builder: (_, __) => UpdateProfileScreen(),
-                routes: [
-                  GoRoute(
-                    path: 'delete_user',
-                    builder: (_, __) => DeleteUserScreen(),
-                  ),
-                ],
+                path: 'verify_password',
+                builder: (context, state) {
+                  final profileData = state.extra as Map<String, String>?;
+                  return VerifyPasswordScreen(profileData: profileData);
+                },
               ),
-            ]
+              GoRoute(
+                path: 'delete_user',
+                builder: (_, __) => DeleteUserScreen(),
+              ),
+            ],
           ),
           GoRoute(
             path: 'notices',
@@ -145,17 +172,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'tems_of_serice',
-            builder: (_, __) => TermsOfServiceScreen(),
+            builder: (_, __) => PolicyScreen(
+                policyType: PolicyType.termsOfService, isDialog: false),
           ),
           GoRoute(
               path: 'image',
               name: 'image',
               builder: (_, state) {
-                final Map<String, dynamic> extra = (state.extra as Map<String, dynamic>);
+                final Map<String, dynamic> extra =
+                    (state.extra as Map<String, dynamic>);
                 return ImageScreen(
                   galleryItems: extra['galleryItems'],
                   backgroundDecoration: extra['backgroundDecoration'],
-                  initialIndex: extra['index'],                  
+                  initialIndex: extra['index'],
                 );
               }),
         ],

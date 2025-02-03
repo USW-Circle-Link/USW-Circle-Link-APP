@@ -53,6 +53,7 @@ class UpdateProfileRepository {
       'studentNumber': updatedProfile.studentNumber,
       'userHp': updatedProfile.userHp,
       'major': updatedProfile.major,
+      'userPw': updatedProfile.password,
     };
 
     final response = await dio.patch(

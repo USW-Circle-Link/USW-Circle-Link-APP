@@ -39,6 +39,7 @@ class ProfileViewModel extends StateNotifier<AsyncValue<ProfileModelBase?>> {
     required String studentNumber,
     required String userHp,
     required String major,
+    required String password,
   }) async {
     try {
       final response = await profileRepository.updateProfile(
@@ -46,6 +47,7 @@ class ProfileViewModel extends StateNotifier<AsyncValue<ProfileModelBase?>> {
         studentNumber: studentNumber,
         userHp: userHp,
         major: major,
+        password: password,
       );
       state = AsyncValue.data(response);
       return response;

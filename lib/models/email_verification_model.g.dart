@@ -10,8 +10,7 @@ _$EmailVerificationModelImpl _$$EmailVerificationModelImplFromJson(
         Map<String, dynamic> json) =>
     _$EmailVerificationModelImpl(
       message: json['message'] as String,
-      data:
-          EmailVerificationData.fromJson(json['data'] as Map<String, dynamic>),
+      data: json['data'],
       type: $enumDecodeNullable(
           _$EmailVerificationModelTypeEnumMap, json['type']),
     );
@@ -20,13 +19,12 @@ Map<String, dynamic> _$$EmailVerificationModelImplToJson(
         _$EmailVerificationModelImpl instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'data': instance.data.toJson(),
+      'data': instance.data,
       'type': _$EmailVerificationModelTypeEnumMap[instance.type],
     };
 
 const _$EmailVerificationModelTypeEnumMap = {
   EmailVerificationModelType.sendMail: 'sendMail',
-  EmailVerificationModelType.resendMail: 'resendMail',
   EmailVerificationModelType.completeSignUp: 'completeSignUp',
 };
 
@@ -42,40 +40,6 @@ Map<String, dynamic> _$$EmailVerificationDataImplToJson(
     <String, dynamic>{
       'account': instance.account,
       'emailToken_uuid': instance.emailToken_uuid,
-    };
-
-_$EmailVerificationModelResendImpl _$$EmailVerificationModelResendImplFromJson(
-        Map<String, dynamic> json) =>
-    _$EmailVerificationModelResendImpl(
-      message: json['message'] as String,
-      data: json['data'] as String,
-      type: $enumDecodeNullable(
-          _$EmailVerificationModelTypeEnumMap, json['type']),
-    );
-
-Map<String, dynamic> _$$EmailVerificationModelResendImplToJson(
-        _$EmailVerificationModelResendImpl instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'data': instance.data,
-      'type': _$EmailVerificationModelTypeEnumMap[instance.type],
-    };
-
-_$EmailVerificationModelCompleteImpl
-    _$$EmailVerificationModelCompleteImplFromJson(Map<String, dynamic> json) =>
-        _$EmailVerificationModelCompleteImpl(
-          message: json['message'] as String,
-          data: json['data'] as String,
-          type: $enumDecodeNullable(
-              _$EmailVerificationModelTypeEnumMap, json['type']),
-        );
-
-Map<String, dynamic> _$$EmailVerificationModelCompleteImplToJson(
-        _$EmailVerificationModelCompleteImpl instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'data': instance.data,
-      'type': _$EmailVerificationModelTypeEnumMap[instance.type],
     };
 
 _$EmailVerificationModelErrorImpl _$$EmailVerificationModelErrorImplFromJson(

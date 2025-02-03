@@ -37,6 +37,7 @@ class ProfileData with _$ProfileData {
     required String studentNumber,
     required String userHp,
     required String major,
+    required String? password,
   }) = _ProfileData;
 
   factory ProfileData.fromJson(Map<String, dynamic> json) =>

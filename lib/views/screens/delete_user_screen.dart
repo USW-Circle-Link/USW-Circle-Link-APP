@@ -212,7 +212,12 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         TextButton(
-                          onPressed: () {},
+                          onPressed: state is DeleteUserModelLoading
+                              ? null
+                              : () async {
+                            // 재전송 버튼을 눌렀을 때 sendCode()를 호출하여 백엔드로 재요청
+                            await ref.read(deleteUserViewModelProvider.notifier).sendCode();
+                          },
                           style: TextButton.styleFrom(
                             splashFactory: NoSplash.splashFactory, // 리플 효과 제거
                           ),
@@ -275,7 +280,6 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                 content: '회원 탈퇴를 하시겠습니까?\n탈퇴 후 복구할 수 없습니다.',
                                 leftButtonText: '취소',
                                 rightButtonText: '탈퇴',
-                                rightButtonColor: const Color(0xFFFF3B30),
                                 onRightButtonPressed: () {
                                   cancel = false;
                                 });

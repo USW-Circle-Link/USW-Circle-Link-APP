@@ -5,19 +5,16 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'email_verification_model.freezed.dart';
 part 'email_verification_model.g.dart';
 
-enum EmailVerificationModelType { sendMail, resendMail, completeSignUp }
-
-abstract class EmailVerificationModelBase {}
+enum EmailVerificationModelType { sendMail, completeSignUp }
 
 @freezed
-class EmailVerificationModel extends EmailVerificationModelBase
-    with _$EmailVerificationModel {
+class EmailVerificationModel with _$EmailVerificationModel {
   EmailVerificationModel._();
 
   @JsonSerializable(explicitToJson: true)
   factory EmailVerificationModel({
     required String message,
-    required EmailVerificationData data,
+    required dynamic data,
     EmailVerificationModelType? type,
   }) = _EmailVerificationModel;
 
@@ -44,49 +41,9 @@ class EmailVerificationData with _$EmailVerificationData {
 }
 
 @freezed
-class EmailVerificationModelResend extends EmailVerificationModelBase
-    with _$EmailVerificationModelResend {
-  EmailVerificationModelResend._();
-  factory EmailVerificationModelResend({
-    required String message,
-    required String data,
-    EmailVerificationModelType? type,
-  }) = _EmailVerificationModelResend;
-
-  factory EmailVerificationModelResend.fromJson(Map<String, dynamic> json) =>
-      _$EmailVerificationModelResendFromJson(json);
-  EmailVerificationModelResend setType(EmailVerificationModelType type) =>
-      EmailVerificationModelResend(
-        message: message,
-        data: data,
-        type: type,
-      );
-}
-
-@freezed
-class EmailVerificationModelComplete extends EmailVerificationModelBase
-    with _$EmailVerificationModelComplete {
-  EmailVerificationModelComplete._();
-  factory EmailVerificationModelComplete({
-    required String message,
-    required String data,
-    EmailVerificationModelType? type,
-  }) = _EmailVerificationModelComplete;
-
-  factory EmailVerificationModelComplete.fromJson(Map<String, dynamic> json) =>
-      _$EmailVerificationModelCompleteFromJson(json);
-  EmailVerificationModelComplete setType(EmailVerificationModelType type) =>
-      EmailVerificationModelComplete(
-        message: message,
-        data: data,
-        type: type,
-      );
-}
-
-@freezed
-class EmailVerificationModelError extends EmailVerificationModelBase
+class EmailVerificationModelError
     with _$EmailVerificationModelError
-    implements Exception {
+    implements Error {
   EmailVerificationModelError._();
   factory EmailVerificationModelError({
     String? exception,
@@ -109,6 +66,7 @@ class EmailVerificationModelError extends EmailVerificationModelBase
         status: status,
         type: type,
       );
-}
 
-class EmailVerificationModelLoading extends EmailVerificationModelBase {}
+  @override
+  StackTrace get stackTrace => StackTrace.fromString(toString());
+}
