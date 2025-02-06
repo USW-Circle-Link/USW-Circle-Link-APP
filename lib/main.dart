@@ -121,7 +121,7 @@ final upgrader = Upgrader(
     oniOS: () => UpgraderAppcastStore(appcastURL: appcastURL),
   ),
 );
-
+final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 class CircleLink extends ConsumerWidget {
   const CircleLink({super.key});
 

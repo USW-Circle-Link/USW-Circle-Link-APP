@@ -139,7 +139,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                 ),
                 // 비밀번호 불일치 에러 메시지 영역 (빨간 텍스트)
                 SizedBox(
-                  height: 20.h,
+                  height: 25.h,
                   child: _passwordError != null
                       ? Padding(
                           padding: EdgeInsets.only(top: 8.h),
@@ -148,12 +148,12 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                             style: TextStyle(
                                 color: Colors.red,
                                 fontSize: 12.sp,
-                                height: -0.1.sp),
+                                height: 1.sp),
                           ),
                         )
                       : const SizedBox.shrink(),
                 ),
-                SizedBox(height: 441.h),
+                SizedBox(height: 436.h),
                 SizedBox(
                   width: double.infinity,
                   height: 56.h,

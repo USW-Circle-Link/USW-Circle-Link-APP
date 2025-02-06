@@ -4,10 +4,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -19,7 +21,8 @@ class UpdateProfileScreen extends ConsumerStatefulWidget {
   _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
 }
 
-class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
+class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
+    with RouteAware {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController phonenumberController = TextEditingController();
   final TextEditingController studentnumberController = TextEditingController();
@@ -31,110 +34,161 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   String? studentNumberError;
   String? majorError;
 
+  //데이터가 다시 채워지는 걸 막기 위한 플래그
+  bool _isInitialBindDone = false;
+  bool _hasUserEdited = false;
+  bool _isBinding = false;
+
   @override
   void initState() {
     super.initState();
+    nameController.addListener(() {
+      if (!_isBinding) _hasUserEdited = true;
+    });
+    phonenumberController.addListener(() {
+      if (!_isBinding) _hasUserEdited = true;
+    });
+    studentnumberController.addListener(() {
+      if (!_isBinding) _hasUserEdited = true;
+    });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final ModalRoute<dynamic>? route = ModalRoute.of(context);
+    if (route is PageRoute) {
+      routeObserver.subscribe(this, route);
+    }
+    ref.refresh(updateProfileViewModelProvider);
+    _isInitialBindDone = false;
+  }
+
+  @override
+  void didPopNext() {
+    setState(() {
+      _isInitialBindDone = false;
+    });
   }
 
   @override
   void dispose() {
+    routeObserver.unsubscribe(this);
     nameController.dispose();
     phonenumberController.dispose();
     studentnumberController.dispose();
     super.dispose();
   }
 
-  void validateFields(AsyncValue<ProfileModel> state) {
+  void validateFields() {
     setState(() {
-      final error = state.error as ProfileModelError?;
-      logger.d('Error type: ${state.error.runtimeType}');
-      logger.d('Error details: $error');
+      // 이름 검증 (영어 또는 한글만 허용)
+      final name = nameController.text.trim();
+      if (name.isEmpty) {
+        nameError = "이름을 입력해주세요.";
+      } else if (!nameRegExp.hasMatch(name)) {
+        nameError = "올바른 이름을 입력해주세요. (영어 또는 한글만 사용)";
+      } else {
+        nameError = null;
+      }
 
-      // 올바른 값이 입력되었을 때 에러 메시지를 null로 설정
-      nameError = (nameController.text.trim().isEmpty ||
-              (error?.code != null &&
-                  !ErrorUtil.instance.isValid(error?.code, FieldType.username)))
-          ? ErrorUtil.instance.getErrorMessage("USR-F400")
-          : null;
+      // 전화번호 검증 (11자리 숫자)
+      final telephone = phonenumberController.text.trim();
+      if (telephone.isEmpty) {
+        phoneError = "전화번호를 입력해주세요.";
+      } else if (!telephoneRegExp.hasMatch(telephone)) {
+        phoneError = "전화번호는 11자리 숫자여야 합니다.";
+      } else {
+        phoneError = null;
+      }
 
-      phoneError = (phonenumberController.text.trim().isEmpty ||
-              (error?.code != null &&
-                  !ErrorUtil.instance
-                      .isValid(error?.code, FieldType.telephone)))
-          ? ErrorUtil.instance.getErrorMessage("USR-F500")
-          : null;
+      // 학번 검증 (8자리 숫자)
+      final studentNum = studentnumberController.text.trim();
+      if (studentNum.isEmpty) {
+        studentNumberError = "학번을 입력해주세요.";
+      } else if (!studentNumberRegExp.hasMatch(studentNum)) {
+        studentNumberError = "학번은 8자리 숫자여야 합니다.";
+      } else {
+        studentNumberError = null;
+      }
 
-      studentNumberError = (studentnumberController.text.trim().isEmpty ||
-              (error?.code != null &&
-                  !ErrorUtil.instance
-                      .isValid(error?.code, FieldType.studentNumber)))
-          ? ErrorUtil.instance.getErrorMessage("USR-F600")
-          : null;
+      // 학과 검증
+      if (college == null || major == null) {
+        majorError = "학과를 선택해주세요.";
+      } else {
+        majorError = null;
+      }
 
-      majorError = (college == null || major == null)
-          ? ErrorUtil.instance.getErrorMessage("USR-F700")
-          : null;
-
-      logger.d(
-          "Validation Results: nameError=$nameError, phoneError=$phoneError, studentNumberError=$studentNumberError, majorError=$majorError");
+      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, "
+          "studentNumberError=$studentNumberError, majorError=$majorError");
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
-    state.whenData((profile) {
-      if (nameController.text.isEmpty &&
-          phonenumberController.text.isEmpty &&
-          studentnumberController.text.isEmpty) {
-        bind(profile);
-      }
-    });
+
+
+    if (!_isInitialBindDone && !_hasUserEdited) {
+      state.whenData((profile) {
+        if (nameController.text.isEmpty &&
+            phonenumberController.text.isEmpty &&
+            studentnumberController.text.isEmpty) {
+          bind(profile);
+          _isInitialBindDone = true;
+        }
+      });
+    }
+
     ref.listen(updateProfileViewModelProvider, (previous, next) {
       logger.d(next);
-      next.when(data: (profile) {
-        logger.d('data - $profile');
-        switch (next.value?.type) {
-          case ProfileModelType.getProfile:
-            bind(profile);
-            break;
-          case ProfileModelType.updateProfile:
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: '프로필이 수정되었습니다!',
-              onLeftButtonPressed: () => context.go('/'),
-            );
-            break;
-          default:
-        }
-      }, error: (error, stackTrace) {
-        error = (error as ProfileModelError);
-        logger.d('error - $stackTrace');
-        switch (error.type) {
-          case ProfileModelType.getProfile:
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                  "프로필을 불러오는 데 문제가 발생했습니다!",
-            );
-            break;
-          case ProfileModelType.updateProfile:
-            if (error.code == "USR-204") {
-              // USR-204 에러는 VerifyPasswordScreen에서만 처리하므로 여기서는 아무 작업도 하지 않습니다.
-            } else {
+      next.when(
+        data: (profile) {
+          logger.d('data - $profile');
+          switch (next.value?.type) {
+            case ProfileModelType.getProfile:
+              break;
+            case ProfileModelType.updateProfile:
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: '프로필이 수정되었습니다!',
+                onLeftButtonPressed: () => context.go('/'),
+              );
+              break;
+            default:
+          }
+        },
+        error: (error, stackTrace) {
+          error = (error as ProfileModelError);
+          logger.d('error - $stackTrace');
+          switch (error.type) {
+            case ProfileModelType.getProfile:
               DialogManager.instance.showAlertDialog(
                 context: context,
                 content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                    "프로필을 설정하는 데 문제가 발생했습니다!",
+                    "프로필을 불러오는 데 문제가 발생했습니다!",
               );
-            }
-            break;
-          default:
-        }
-      }, loading: () {
-        logger.d('loading');
-      });
+              break;
+            case ProfileModelType.updateProfile:
+              if (error.code == "USR-204") {
+                // USR-204는 다른 화면에서 처리
+              } else {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      "프로필을 설정하는 데 문제가 발생했습니다!",
+                );
+              }
+              break;
+            default:
+          }
+        },
+        loading: () {
+          logger.d('loading');
+        },
+      );
     });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -199,8 +253,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor:
-                      nameError == null ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor: nameError == null
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -218,18 +273,19 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h, // 고정 높이
+                  height: 25.h,
                   child: nameError != null
                       ? Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Text(
-                            '* ' + nameError!,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12.sp,
-                                height: 1.sp),
-                          ),
-                        )
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* ' + nameError!,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                        height: 1.sp,
+                      ),
+                    ),
+                  )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -250,8 +306,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor:
-                      phoneError == null ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor: phoneError == null
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -268,20 +325,20 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
-
                 SizedBox(
-                  height: 20.h, // 고정 높이
+                  height: 25.h,
                   child: phoneError != null
                       ? Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Text(
-                            '* ' + phoneError!,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12.sp,
-                                height: 1.sp),
-                          ),
-                        )
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* ' + phoneError!,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                        height: 1.sp,
+                      ),
+                    ),
+                  )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -322,18 +379,19 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h, // 고정 높이
+                  height: 25.h,
                   child: studentNumberError != null
                       ? Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Text(
-                            '* ' + studentNumberError!,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12.sp,
-                                height: 1.sp),
-                          ),
-                        )
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* ' + studentNumberError!,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                        height: 1.sp,
+                      ),
+                    ),
+                  )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -351,6 +409,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 50.h,
                   readOnly: true,
                   onTab: () async {
+                    // 드롭다운을 여는 순간 true
+                    setState(() {
+                      _hasUserEdited = true;
+                    });
                     await DialogManager.instance.showMajorPickerDialog(
                       context: context,
                       defaultCollege: college,
@@ -371,8 +433,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor:
-                      majorError == null ? const Color(0xffDBDBDB) : Colors.red,
+                  borderColor: majorError == null
+                      ? const Color(0xffDBDBDB)
+                      : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.none,
@@ -394,21 +457,22 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   ),
                 ),
                 SizedBox(
-                  height: 20.h, // 고정 높이
+                  height: 25.h,
                   child: majorError != null
                       ? Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Text(
-                            '* ' + majorError!,
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12.sp,
-                                height: 1.sp),
-                          ),
-                        )
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      '* ' + majorError!,
+                      style: TextStyle(
+                        color: Colors.red,
+                        fontSize: 12.sp,
+                        height: 1.sp,
+                      ),
+                    ),
+                  )
                       : null,
                 ),
-                SizedBox(height: 88.h),
+                SizedBox(height: 68.h),
 
                 // 수정 완료 버튼
                 SizedBox(
@@ -416,12 +480,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 56.h,
                   child: OutlinedButton(
                     onPressed: () {
-                      validateFields(state);
+                      validateFields();
                       if (nameError == null &&
                           phoneError == null &&
                           studentNumberError == null &&
                           majorError == null) {
-                        // 입력값에 문제가 없으면 입력 데이터를 Map에 담아 비밀번호 인증 스크린으로 전달
                         final profileData = {
                           'name': nameController.text.trim(),
                           'userHp': phonenumberController.text.trim(),
@@ -456,15 +519,16 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     TextButton(
-                        onPressed: () {
-                          context.go('/update_profile/delete_user');
-                        },
-                        child: TextFontWidget.fontRegular(
-                          '회원 탈퇴',
-                          color: const Color(0xffABABAB),
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w400,
-                        ))
+                      onPressed: () {
+                        context.go('/update_profile/delete_user');
+                      },
+                      child: TextFontWidget.fontRegular(
+                        '회원 탈퇴',
+                        color: const Color(0xffABABAB),
+                        fontSize: 16.sp,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -481,14 +545,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   }
 
   void bind(ProfileModel profile) {
+    _isBinding = true;
     nameController.text = profile.data.userName;
     phonenumberController.text = profile.data.userHp;
     studentnumberController.text = profile.data.studentNumber;
-
     setState(() {
       major = profile.data.major;
       college = majors.findCollegeByMajor(major);
     });
+    _isBinding = false;
   }
 }
 
@@ -497,9 +562,7 @@ extension FindCollegeByMajor on Map<String, List> {
     if (target == null) return null;
     for (var entry in entries) {
       for (var major in entry.value) {
-        if (major == target) {
-          return entry.key;
-        }
+        if (major == target) return entry.key;
       }
     }
     return null;
