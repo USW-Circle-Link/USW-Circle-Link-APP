@@ -79,6 +79,13 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
+    state.whenData((profile) {
+      if (nameController.text.isEmpty &&
+          phonenumberController.text.isEmpty &&
+          studentnumberController.text.isEmpty) {
+        bind(profile);
+      }
+    });
     ref.listen(updateProfileViewModelProvider, (previous, next) {
       logger.d(next);
       next.when(data: (profile) {
@@ -108,11 +115,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
             );
             break;
           case ProfileModelType.updateProfile:
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                  "프로필을 설정하는 데 문제가 발생했습니다!",
-            );
+            if (error.code == "USR-204") {
+              // USR-204 에러는 VerifyPasswordScreen에서만 처리하므로 여기서는 아무 작업도 하지 않습니다.
+            } else {
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                    "프로필을 설정하는 데 문제가 발생했습니다!",
+              );
+            }
             break;
           default:
         }

@@ -3,10 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -26,6 +24,12 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
   String? _passwordError; // 비밀번호 에러 메시지
 
   @override
+  void initState() {
+    super.initState();
+
+  }
+
+  @override
   void dispose() {
     passwordController.dispose();
     super.dispose();
@@ -33,40 +37,25 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // 생성자에서 전달받은 데이터를 사용합니다.
+    ref.listen<AsyncValue<ProfileModel>>(updateProfileViewModelProvider, (previous, next) {
+      next.when(
+        data: (profile) {
+          if (profile.type == ProfileModelType.updateProfile) {
+            Navigator.pop(context);
+          }
+        },
+        error: (error, stackTrace) {
+          if (error is ProfileModelError && error.code == "USR-204") {
+            setState(() {
+              _passwordError = "비밀번호가 일치하지 않습니다.";
+            });
+          }
+        },
+        loading: () {},
+      );
+    });
     final profileData = widget.profileData;
     logger.d('ProfileData: $profileData');
-
-    // build 내에서 provider 상태 변화를 listen합니다.
-    ref.listen<AsyncValue<ProfileModel>>(updateProfileViewModelProvider,
-            (previous, next) {
-          next.when(
-            data: (profile) {
-              // 프로필 수정이 성공해서 type이 updateProfile인 경우
-              if (profile.type == ProfileModelType.updateProfile) {
-                // VerifyPasswordScreen에서는 성공 팝업을 띄우지 않고 update_profile_screen으로 이동합니다.
-                context.go('/update_profile');
-              }
-            },
-            error: (error, stackTrace) {
-              if (error is ProfileModelError) {
-                // 비밀번호 인증 실패(USR-204)인 경우, 에러 메시지를 화면에 표시합니다.
-                if (error.code == "USR-204") {
-                  setState(() {
-                    _passwordError = "비밀번호가 일치하지 않습니다.";
-                  });
-                } else {
-                  // 다른 에러는 팝업으로 처리합니다.
-                  DialogManager.instance.showAlertDialog(
-                    context: context,
-                    content: error.message,
-                  );
-                }
-              }
-            },
-            loading: () {},
-          );
-        });
 
     return ScreenUtilInit(
       designSize: const Size(375, 812),
@@ -149,14 +138,19 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                     fontFamily: 'SUIT',
                   ),
                 ),
-                // 비밀번호 불일치 에러 메시지 영역
-                SizedBox(height: 8.h),
-                _passwordError != null
-                    ? Text(
-                  "* $_passwordError",
-                  style: TextStyle(color: Colors.red, fontSize: 12.sp),
-                )
-                    : SizedBox.shrink(),
+                // 비밀번호 불일치 에러 메시지 영역 (빨간 텍스트)
+                SizedBox(
+                  height: 20.h,
+                  child: _passwordError != null
+                      ? Padding(
+                    padding: EdgeInsets.only(top: 8.h),
+                    child: Text(
+                      "* $_passwordError",
+                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: -0.1.sp),
+                    ),
+                  )
+                      : const SizedBox.shrink(),
+                ),
                 SizedBox(height: 441.h),
                 SizedBox(
                   width: double.infinity,
@@ -182,7 +176,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                         );
                         return;
                       }
-                      // 모든 데이터를 백엔드로 전송 (updateProfileViewModel에서 password 매개변수를 처리)
+                      // updateProfile 호출 (password 매개변수를 포함)
                       await ref
                           .read(updateProfileViewModelProvider.notifier)
                           .updateProfile(
