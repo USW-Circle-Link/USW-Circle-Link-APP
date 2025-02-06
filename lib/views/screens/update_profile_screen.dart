@@ -85,9 +85,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       // 이름 검증 (영어 또는 한글만 허용)
       final name = nameController.text.trim();
       if (name.isEmpty) {
-        nameError = "이름을 입력해주세요.";
+        nameError = "이름을 입력해주세요. (특수문자 제외)";
       } else if (!nameRegExp.hasMatch(name)) {
-        nameError = "올바른 이름을 입력해주세요. (영어 또는 한글만 사용)";
+        nameError = "올바른 이름을 입력해주세요. (특수문자 제외)";
       } else {
         nameError = null;
       }
@@ -95,9 +95,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       // 전화번호 검증 (11자리 숫자)
       final telephone = phonenumberController.text.trim();
       if (telephone.isEmpty) {
-        phoneError = "전화번호를 입력해주세요.";
+        phoneError = "전화번호를 입력해주세요. (- 제외 11자)";
       } else if (!telephoneRegExp.hasMatch(telephone)) {
-        phoneError = "전화번호는 11자리 숫자여야 합니다.";
+        phoneError = "전화번호는 11자리 숫자여야 합니다. (- 제외)";
       } else {
         phoneError = null;
       }
@@ -105,7 +105,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       // 학번 검증 (8자리 숫자)
       final studentNum = studentnumberController.text.trim();
       if (studentNum.isEmpty) {
-        studentNumberError = "학번을 입력해주세요.";
+        studentNumberError = "학번을 입력해주세요. (숫자 8자)";
       } else if (!studentNumberRegExp.hasMatch(studentNum)) {
         studentNumberError = "학번은 8자리 숫자여야 합니다.";
       } else {
@@ -114,7 +114,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
 
       // 학과 검증
       if (college == null || major == null) {
-        majorError = "학과를 선택해주세요.";
+        majorError = "단과대/학부(학과)를 선택해주세요.";
       } else {
         majorError = null;
       }
