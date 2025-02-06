@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -26,7 +25,6 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
   @override
   void initState() {
     super.initState();
-
   }
 
   @override
@@ -37,7 +35,8 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
 
   @override
   Widget build(BuildContext context) {
-    ref.listen<AsyncValue<ProfileModel>>(updateProfileViewModelProvider, (previous, next) {
+    ref.listen<AsyncValue<ProfileModel>>(updateProfileViewModelProvider,
+        (previous, next) {
       next.when(
         data: (profile) {
           if (profile.type == ProfileModelType.updateProfile) {
@@ -143,12 +142,15 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                   height: 20.h,
                   child: _passwordError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      "* $_passwordError",
-                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: -0.1.sp),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            "* $_passwordError",
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                                height: -0.1.sp),
+                          ),
+                        )
                       : const SizedBox.shrink(),
                 ),
                 SizedBox(height: 441.h),
@@ -180,12 +182,12 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                       await ref
                           .read(updateProfileViewModelProvider.notifier)
                           .updateProfile(
-                        userName: profileData['name']!,
-                        studentNumber: profileData['studentNumber']!,
-                        userHp: profileData['userHp']!,
-                        major: profileData['major']!,
-                        password: password,
-                      );
+                            userName: profileData['name']!,
+                            studentNumber: profileData['studentNumber']!,
+                            userHp: profileData['userHp']!,
+                            major: profileData['major']!,
+                            password: password,
+                          );
                     },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: const Color(0xFFFFB052),

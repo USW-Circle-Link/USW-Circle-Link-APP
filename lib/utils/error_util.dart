@@ -18,13 +18,13 @@ class ErrorUtil {
   String? getErrorMessage(String? code) {
     switch (code) {
       case "USR-F400": // 이름 공백
-        return '이름이 형식에 맞지 않습니다!';
+        return '이름을 입력해주세요. (특수문자 제외)';
       case "USR-F500": // 전화번호 형식에 맞지 않음
-        return '전화번호가 형식에 맞지 않습니다!';
+        return '전화번호를 입력해주세요. (- 제외 11자)';
       case "USR-F600": // 학번이 공백 혹은 8자리가 아님
-        return '학번이 형식에 맞지 않습니다!';
+        return '학번을 입력해주세요. (숫자8자)';
       case "USR-F700": // 학과가 선택되지 않음
-        return '단과대학/학과를 선택해주세요!';
+        return '단과대학/학과를 선택해주세요.';
       case "EML-F100": // 이메일 형식에 맞지 않음
         return "이메일을 입력해주세요.";
       case "USR-206": // 이미 가입된 포털 이메일

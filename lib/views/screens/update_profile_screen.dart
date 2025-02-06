@@ -52,17 +52,22 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
 
       // 올바른 값이 입력되었을 때 에러 메시지를 null로 설정
       nameError = (nameController.text.trim().isEmpty ||
-          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.username)))
+              (error?.code != null &&
+                  !ErrorUtil.instance.isValid(error?.code, FieldType.username)))
           ? ErrorUtil.instance.getErrorMessage("USR-F400")
           : null;
 
       phoneError = (phonenumberController.text.trim().isEmpty ||
-          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.telephone)))
+              (error?.code != null &&
+                  !ErrorUtil.instance
+                      .isValid(error?.code, FieldType.telephone)))
           ? ErrorUtil.instance.getErrorMessage("USR-F500")
           : null;
 
       studentNumberError = (studentnumberController.text.trim().isEmpty ||
-          (error?.code != null && !ErrorUtil.instance.isValid(error?.code, FieldType.studentNumber)))
+              (error?.code != null &&
+                  !ErrorUtil.instance
+                      .isValid(error?.code, FieldType.studentNumber)))
           ? ErrorUtil.instance.getErrorMessage("USR-F600")
           : null;
 
@@ -70,11 +75,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
           ? ErrorUtil.instance.getErrorMessage("USR-F700")
           : null;
 
-      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, studentNumberError=$studentNumberError, majorError=$majorError");
+      logger.d(
+          "Validation Results: nameError=$nameError, phoneError=$phoneError, studentNumberError=$studentNumberError, majorError=$majorError");
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -195,9 +199,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: nameError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      nameError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -218,12 +221,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 20.h, // 고정 높이
                   child: nameError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* '+nameError!,
-                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + nameError!,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                                height: 1.sp),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -244,9 +250,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: phoneError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      phoneError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -268,12 +273,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 20.h, // 고정 높이
                   child: phoneError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* '+phoneError!,
-                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + phoneError!,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                                height: 1.sp),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -317,12 +325,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 20.h, // 고정 높이
                   child: studentNumberError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* '+studentNumberError!,
-                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + studentNumberError!,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                                height: 1.sp),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -360,9 +371,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: majorError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      majorError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.none,
@@ -387,12 +397,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                   height: 20.h, // 고정 높이
                   child: majorError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* '+majorError!,
-                      style: TextStyle(color: Colors.red, fontSize: 12.sp, height: 1.sp),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + majorError!,
+                            style: TextStyle(
+                                color: Colors.red,
+                                fontSize: 12.sp,
+                                height: 1.sp),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 88.h),
@@ -416,7 +429,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                           'major': major ?? '',
                         };
                         logger.d('ProfileData: $profileData');
-                        context.go('/update_profile/verify_password', extra: profileData);
+                        context.go('/update_profile/verify_password',
+                            extra: profileData);
                       }
                     },
                     style: OutlinedButton.styleFrom(
@@ -438,23 +452,20 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
                     ),
                   ),
                 ),
-                Container(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                          onPressed: () {
-                            context.go('/update_profile/delete_user');
-                          },
-                          child: TextFontWidget.fontRegular(
-                            '회원 탈퇴',
-                            color: const Color(0xffABABAB),
-                            fontSize: 16.sp,
-                            fontWeight: FontWeight.w400,
-                          )
-                      )
-                    ],
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                        onPressed: () {
+                          context.go('/update_profile/delete_user');
+                        },
+                        child: TextFontWidget.fontRegular(
+                          '회원 탈퇴',
+                          color: const Color(0xffABABAB),
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w400,
+                        ))
+                  ],
                 ),
               ],
             ),
@@ -463,6 +474,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
       ),
     );
   }
+
   bool isValid(AsyncValue<ProfileModel> state, FieldType fieldType) {
     final error = state.error as ProfileModelError?;
     return ErrorUtil.instance.isValid(error?.code, fieldType);
