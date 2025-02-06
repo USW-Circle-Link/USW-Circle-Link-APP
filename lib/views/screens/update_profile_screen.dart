@@ -79,6 +79,13 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
+    state.whenData((profile) {
+      if (nameController.text.isEmpty &&
+          phonenumberController.text.isEmpty &&
+          studentnumberController.text.isEmpty) {
+        bind(profile);
+      }
+    });
     ref.listen(updateProfileViewModelProvider, (previous, next) {
       logger.d(next);
       next.when(data: (profile) {
