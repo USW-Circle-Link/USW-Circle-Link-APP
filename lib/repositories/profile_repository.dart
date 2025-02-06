@@ -76,9 +76,12 @@ class ProfileRepository {
         'updateProfile - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(response.data).setType(ProfileModelType.updateProfile);
+      return ProfileModel.fromJson(response.data)
+          .setType(ProfileModelType.updateProfile);
     } else {
-      throw ProfileModelError(message: '정보 수정에 실패하였습니다', type: ProfileModelType.updateProfile);
+      // 기존에는 단순히 메시지만 던졌지만, 이제는 JSON을 파싱해서 오류 코드 등도 포함시킵니다.
+      throw ProfileModelError.fromJson(response.data)
+          .setType(ProfileModelType.updateProfile);
     }
   }
 }
