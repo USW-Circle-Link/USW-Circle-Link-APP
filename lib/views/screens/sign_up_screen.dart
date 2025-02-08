@@ -116,15 +116,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               );
               break;
             case SignUpModelType.checkProfileIsExist:
-              // 회원가입 실패!
-              DialogManager.instance.showAlertDialog(
-                context: context,
-                content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                    '회원가입 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!',
-              );
-              break;
             case SignUpModelType.signUpExistingMember:
               // 회원가입 실패!
+              if (ErrorUtil.instance
+                      .isValidOrNull(error.code, FieldType.account) ==
+                  null) {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      '회원가입 중에 문제가 발생했습니다\n잠시후 다시 시도해주세요!',
+                );
+              }
               break;
             default: // 예외발생!
               logger.e('예외발생! - $error');

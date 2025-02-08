@@ -75,6 +75,10 @@ class ErrorUtil {
   }
 
   bool isValid(String? code, FieldType fieldType) {
+    return isValidOrNull(code, fieldType) ?? true;
+  }
+
+  bool? isValidOrNull(String? code, FieldType fieldType) {
     switch (code) {
       case "USR-207":
       case "USR-F100":
@@ -101,7 +105,7 @@ class ErrorUtil {
       case "EML-F100":
         return fieldType != FieldType.email;
       default:
-        return true;
+        return null;
     }
   }
 }
