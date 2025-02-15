@@ -26,7 +26,6 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
             message: '아이디가 형식에 맞지 않습니다.',
             code: 'USR-F100',
             type: SignUpModelType.verify);
-        state = AsyncError(error, error.stackTrace);
         throw error;
       }
       final response = await authRepository.verifyId(id: id);
