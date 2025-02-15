@@ -500,7 +500,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                             padding:
                                 EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
                             child: Html(
-                              data: clubIntroState.value!.clubRecruitment,
+                              data: clubIntroState.value!.clubRecruitment ?? '',
                             ),
                           ),
                       ],

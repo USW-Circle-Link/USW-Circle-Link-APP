@@ -23,7 +23,7 @@ class CategoryModel with _$CategoryModel {
 class CategoryData with _$CategoryData {
   factory CategoryData({
     required int clubCategoryId,
-    required String clubCategory,
+    required String clubCategoryName,
   }) = _CategoryData;
 
   factory CategoryData.fromJson(Map<String, dynamic> json) =>

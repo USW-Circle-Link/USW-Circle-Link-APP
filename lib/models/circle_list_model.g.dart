@@ -75,7 +75,8 @@ _$CircleFilteredListDataImpl _$$CircleFilteredListDataImplFromJson(
         Map<String, dynamic> json) =>
     _$CircleFilteredListDataImpl(
       categoryId: (json['categoryId'] as num).toInt(),
-      category: json['category'] as String,
+      clubCategoryName: json['clubCategoryName'] as String?,
+      categoryName: json['categoryName'] as String?,
       clubs: (json['clubs'] as List<dynamic>)
           .map((e) => CircleListData.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -85,7 +86,8 @@ Map<String, dynamic> _$$CircleFilteredListDataImplToJson(
         _$CircleFilteredListDataImpl instance) =>
     <String, dynamic>{
       'categoryId': instance.categoryId,
-      'category': instance.category,
+      'clubCategoryName': instance.clubCategoryName,
+      'categoryName': instance.categoryName,
       'clubs': instance.clubs,
     };
 
