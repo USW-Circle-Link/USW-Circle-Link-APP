@@ -55,7 +55,7 @@ class CircleListData with _$CircleListData {
   CircleListData._();
 
   factory CircleListData({
-    required int clubId,
+    required String clubUUID,
     required String clubName,
     String? mainPhoto,
     String? departmentName,
@@ -66,7 +66,7 @@ class CircleListData with _$CircleListData {
       _$CircleListDataFromJson(json);
 
   CircleListData setDepartmentName(String departmentName) => CircleListData(
-        clubId: clubId,
+        clubUUID: clubUUID,
         clubName: clubName,
         mainPhoto: mainPhoto,
         departmentName: departmentName,
@@ -77,7 +77,7 @@ class CircleListData with _$CircleListData {
 @freezed
 class CircleFilteredListData with _$CircleFilteredListData {
   factory CircleFilteredListData({
-    required int categoryId,
+    required String categoryUUID,
     String? clubCategoryName,
     String? categoryName,
     required List<CircleListData> clubs,

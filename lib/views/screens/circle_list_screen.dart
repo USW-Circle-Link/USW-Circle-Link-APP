@@ -76,7 +76,7 @@ class CircleListScreen extends ConsumerWidget {
                     itemBuilder: (context, index) {
                       final circle = data.data[index];
                       return CircleDetailItem(
-                        clubId: circle.clubId,
+                        clubUUID: circle.clubUUID,
                         leader: circle.leaderName,
                         name: circle.clubName,
                         imageUrl: circle.mainPhotoPath ?? '',

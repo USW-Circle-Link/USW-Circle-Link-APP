@@ -317,8 +317,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     return circleList.data.isNotEmpty
                         ? CircleList(
                             state: circleListState.value as CircleListModel,
-                            onItemClicked: (clubId) {
-                              context.go('/circle?clubId=$clubId');
+                            onItemClicked: (clubUUID) {
+                              context.go('/circle?clubUUID=$clubUUID');
                             },
                           )
                         : Center(

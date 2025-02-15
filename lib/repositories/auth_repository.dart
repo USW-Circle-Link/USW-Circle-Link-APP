@@ -165,7 +165,7 @@ class AuthRepository {
     required String studentNumber,
     required String major,
     required String email,
-    required List<Map<String, int>> clubs,
+    required List<Map<String, String>> clubs,
   }) async {
     final body = {
       'account': account,

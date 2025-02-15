@@ -30,7 +30,7 @@ class CircleDetailListModel with _$CircleDetailListModel {
 @freezed
 class Circle with _$Circle {
   factory Circle({
-    required int clubId,
+    required String clubUUID,
     String? mainPhotoPath,
     required String clubName,
     required String leaderName,

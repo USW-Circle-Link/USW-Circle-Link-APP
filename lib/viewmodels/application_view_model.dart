@@ -16,13 +16,13 @@ class ApplicationViewModel
   ApplicationViewModel({required this.applicationRepository})
       : super(AsyncData(null));
 
-  Future<void> getApplication(int clubId) async {
+  Future<void> getApplication(String clubUUID) async {
     try {
       // 첫 state는 Loading 상태
       state = AsyncLoading();
 
       final applicationResponse =
-          await applicationRepository.getApplication(clubId: clubId);
+          await applicationRepository.getApplication(clubUUID: clubUUID);
 
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {
@@ -35,7 +35,7 @@ class ApplicationViewModel
   }
 
   Future<void> apply({
-    required int clubId,
+    required String clubUUID,
     required String aplictGoogleFormUrl,
   }) async {
     try {
@@ -43,7 +43,7 @@ class ApplicationViewModel
       state = AsyncLoading();
 
       final applicationResponse = await applicationRepository.apply(
-          clubId: clubId, aplictGoogleFormUrl: aplictGoogleFormUrl);
+          clubUUID: clubUUID, aplictGoogleFormUrl: aplictGoogleFormUrl);
 
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {
@@ -56,7 +56,7 @@ class ApplicationViewModel
   }
 
   Future<void> checkAvailableForApplication({
-    required int clubId,
+    required String clubUUID,
   }) async {
     try {
       // 첫 state는 Loading 상태
@@ -64,7 +64,7 @@ class ApplicationViewModel
 
       final applicationResponse =
           await applicationRepository.checkAvailableForApplication(
-        clubId: clubId,
+        clubUUID: clubUUID,
       );
 
       state = AsyncData(applicationResponse);

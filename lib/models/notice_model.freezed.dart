@@ -203,7 +203,7 @@ NoticeData _$NoticeDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$NoticeData {
-  int get noticeId => throw _privateConstructorUsedError;
+  String get noticeUUID => throw _privateConstructorUsedError;
   String get noticeTitle => throw _privateConstructorUsedError;
   String get adminName => throw _privateConstructorUsedError;
   String get noticeCreatedAt => throw _privateConstructorUsedError;
@@ -221,7 +221,7 @@ abstract class $NoticeDataCopyWith<$Res> {
       _$NoticeDataCopyWithImpl<$Res, NoticeData>;
   @useResult
   $Res call(
-      {int noticeId,
+      {String noticeUUID,
       String noticeTitle,
       String adminName,
       String noticeCreatedAt});
@@ -240,16 +240,16 @@ class _$NoticeDataCopyWithImpl<$Res, $Val extends NoticeData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noticeId = null,
+    Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? adminName = null,
     Object? noticeCreatedAt = null,
   }) {
     return _then(_value.copyWith(
-      noticeId: null == noticeId
-          ? _value.noticeId
-          : noticeId // ignore: cast_nullable_to_non_nullable
-              as int,
+      noticeUUID: null == noticeUUID
+          ? _value.noticeUUID
+          : noticeUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       noticeTitle: null == noticeTitle
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
@@ -275,7 +275,7 @@ abstract class _$$NoticeDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int noticeId,
+      {String noticeUUID,
       String noticeTitle,
       String adminName,
       String noticeCreatedAt});
@@ -292,16 +292,16 @@ class __$$NoticeDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noticeId = null,
+    Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? adminName = null,
     Object? noticeCreatedAt = null,
   }) {
     return _then(_$NoticeDataImpl(
-      noticeId: null == noticeId
-          ? _value.noticeId
-          : noticeId // ignore: cast_nullable_to_non_nullable
-              as int,
+      noticeUUID: null == noticeUUID
+          ? _value.noticeUUID
+          : noticeUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       noticeTitle: null == noticeTitle
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
@@ -322,7 +322,7 @@ class __$$NoticeDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$NoticeDataImpl implements _NoticeData {
   _$NoticeDataImpl(
-      {required this.noticeId,
+      {required this.noticeUUID,
       required this.noticeTitle,
       required this.adminName,
       required this.noticeCreatedAt});
@@ -331,7 +331,7 @@ class _$NoticeDataImpl implements _NoticeData {
       _$$NoticeDataImplFromJson(json);
 
   @override
-  final int noticeId;
+  final String noticeUUID;
   @override
   final String noticeTitle;
   @override
@@ -341,7 +341,7 @@ class _$NoticeDataImpl implements _NoticeData {
 
   @override
   String toString() {
-    return 'NoticeData(noticeId: $noticeId, noticeTitle: $noticeTitle, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt)';
+    return 'NoticeData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt)';
   }
 
   @override
@@ -349,8 +349,8 @@ class _$NoticeDataImpl implements _NoticeData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoticeDataImpl &&
-            (identical(other.noticeId, noticeId) ||
-                other.noticeId == noticeId) &&
+            (identical(other.noticeUUID, noticeUUID) ||
+                other.noticeUUID == noticeUUID) &&
             (identical(other.noticeTitle, noticeTitle) ||
                 other.noticeTitle == noticeTitle) &&
             (identical(other.adminName, adminName) ||
@@ -362,7 +362,7 @@ class _$NoticeDataImpl implements _NoticeData {
   @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, noticeId, noticeTitle, adminName, noticeCreatedAt);
+      runtimeType, noticeUUID, noticeTitle, adminName, noticeCreatedAt);
 
   @JsonKey(ignore: true)
   @override
@@ -380,7 +380,7 @@ class _$NoticeDataImpl implements _NoticeData {
 
 abstract class _NoticeData implements NoticeData {
   factory _NoticeData(
-      {required final int noticeId,
+      {required final String noticeUUID,
       required final String noticeTitle,
       required final String adminName,
       required final String noticeCreatedAt}) = _$NoticeDataImpl;
@@ -389,7 +389,7 @@ abstract class _NoticeData implements NoticeData {
       _$NoticeDataImpl.fromJson;
 
   @override
-  int get noticeId;
+  String get noticeUUID;
   @override
   String get noticeTitle;
   @override

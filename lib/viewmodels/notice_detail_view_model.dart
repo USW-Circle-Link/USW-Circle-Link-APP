@@ -4,8 +4,8 @@ import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/repositories/notice_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
-final noticeDetailViewModelProvider =
-    StateNotifierProvider.autoDispose<NoticeDetailViewModel, NoticeDetailModelBase?>((ref) {
+final noticeDetailViewModelProvider = StateNotifierProvider.autoDispose<
+    NoticeDetailViewModel, NoticeDetailModelBase?>((ref) {
   final noticeRepository = ref.watch(noticeRepositoryProvider);
 
   return NoticeDetailViewModel(
@@ -21,11 +21,11 @@ class NoticeDetailViewModel extends StateNotifier<NoticeDetailModelBase?> {
   }) : super(null);
 
   Future<void> getDetail({
-    required int noticeId,
+    required String noticeUUID,
   }) async {
     try {
       final response = await noticeRepository.getDetail(
-        noticeId: noticeId,
+        noticeUUID: noticeUUID,
       );
       state = response;
     } on NoticeModelError catch (e) {

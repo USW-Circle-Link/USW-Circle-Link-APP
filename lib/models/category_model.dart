@@ -22,7 +22,7 @@ class CategoryModel with _$CategoryModel {
 @freezed
 class CategoryData with _$CategoryData {
   factory CategoryData({
-    required int clubCategoryId,
+    required String clubCategoryUUID,
     required String clubCategoryName,
   }) = _CategoryData;
 

@@ -45,10 +45,10 @@ class NoticeRepository {
   }
 
   Future<NoticeDetailModel> getDetail({
-    required int noticeId,
+    required String noticeUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/$noticeId/details',
+      '$baseUrl/$noticeUUID/details',
     );
 
     logger.d(response.data);

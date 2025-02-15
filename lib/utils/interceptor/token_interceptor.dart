@@ -122,15 +122,15 @@ class TokenInterceptor extends Interceptor {
         await storage.write(key: accessTokenKey, value: accessToken);
         await storage.write(key: refreshTokenKey, value: newRefreshToken);
         await storage.write(
-            key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
+            key: clubUUIDsKey, value: jsonEncode(payload['clubUUIDs'] ?? []));
 
         // 디버깅용 확인 코드
         final accessToken0 = await storage.read(key: accessTokenKey);
         final refreshToken0 = await storage.read(key: refreshTokenKey);
-        final clubIdsJsonString = await storage.read(key: clubIdsKey);
-        final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+        final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
+        final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
         logger.d(
-            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
 
         final options = err.requestOptions;
 

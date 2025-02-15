@@ -27,7 +27,7 @@ enum CircleDetailItemStatus {
 }
 
 class CircleDetailItem extends StatelessWidget {
-  final int clubId;
+  final String clubUUID;
   final String name;
   final String? imageUrl;
   final String leader;
@@ -40,7 +40,7 @@ class CircleDetailItem extends StatelessWidget {
 
   CircleDetailItem({
     super.key,
-    required this.clubId,
+    required this.clubUUID,
     required this.leader,
     required this.name,
     this.imageUrl,
@@ -109,7 +109,7 @@ class CircleDetailItem extends StatelessWidget {
               color: Colors.transparent,
               child: InkWell(
                 borderRadius: BorderRadius.circular(8.r),
-                onTap: () => context.push('/circle?clubId=$clubId'),
+                onTap: () => context.push('/circle?clubUUID=$clubUUID'),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
@@ -155,7 +155,7 @@ class CircleDetailItem extends StatelessWidget {
                                   ModalRoute.of(context)?.animation?.status !=
                                       AnimationStatus.reverse,
                               child: Hero(
-                                tag: 'circle_${clubId}',
+                                tag: 'circle_${clubUUID}',
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.r),
                                   child:

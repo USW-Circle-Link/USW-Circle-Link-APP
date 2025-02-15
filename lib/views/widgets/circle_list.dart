@@ -10,7 +10,7 @@ class CircleList extends StatelessWidget {
   }) : super(key: key);
 
   final CircleListModel state;
-  final Function(int clubId) onItemClicked;
+  final Function(String clubUUID) onItemClicked;
 
   @override
   Widget build(BuildContext context) {

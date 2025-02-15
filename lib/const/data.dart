@@ -16,7 +16,7 @@ const servers = {
     'port': '8080',
   },
 };
-const SERVER = 'prod_server';
+const SERVER = 'test_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
@@ -26,7 +26,7 @@ const accessTokenKey = 'access_token';
 const refreshTokenKey = 'refresh_token';
 const subKey = 'sub';
 const roleKey = 'role';
-const clubIdsKey = 'club_ids';
+const clubUUIDsKey = 'club_uuids';
 const iatKey = 'iat';
 const expKey = 'exp';
 // URL
@@ -162,7 +162,7 @@ final fakeData = CircleDetailListModel(
   message: "Success",
   data: [
     Circle(
-      clubId: 1,
+      clubUUID: "1",
       clubName: "FLAG",
       leaderName: "정우창",
       leaderHp: "010-0000-0000",
@@ -172,7 +172,7 @@ final fakeData = CircleDetailListModel(
       clubRoomNumber: "218",
     ),
     Circle(
-      clubId: 2,
+      clubUUID: "2",
       clubName: "Coding Club",
       leaderName: "김코딩",
       leaderHp: "010-1111-2222",
@@ -183,7 +183,7 @@ final fakeData = CircleDetailListModel(
     ),
     // status가 없는 동아리
     Circle(
-      clubId: 3,
+      clubUUID: "3",
       clubName: "Art Club",
       leaderName: "이예술",
       leaderHp: "010-2222-3333",
@@ -195,7 +195,7 @@ final fakeData = CircleDetailListModel(
 );
 var testCircleData = <CircleListData>[
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -203,7 +203,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -211,7 +211,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -219,7 +219,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -227,7 +227,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -235,7 +235,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -243,7 +243,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -251,7 +251,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -259,7 +259,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -267,7 +267,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -275,7 +275,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -283,7 +283,7 @@ var testCircleData = <CircleListData>[
     clubHashtags: ["#학술", "#예술"],
   ),
   CircleListData(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhoto:
         "https://i.namu.wiki/i/Yjlkn1UU25TOdAKXwjN5yhKIl3TgXFAQt8dWkkehbYW12fq5OMYyWQMoPwU1GZ9X7-oQl3JV677HIIMjTAXL4A.webp",
@@ -294,67 +294,67 @@ var testCircleData = <CircleListData>[
 const testFormUrl = "https://forms.gle/aVU2MkLqsGRhvnQq5";
 var testNotices = <NoticeData>[
   NoticeData(
-      noticeId: 1,
+      noticeUUID: "1",
       noticeTitle: 'test1',
       adminName: 'admin1',
       noticeCreatedAt: '2024-10-11'),
   NoticeData(
-      noticeId: 2,
+      noticeUUID: "2",
       noticeTitle: 'test2',
       adminName: 'admin2',
       noticeCreatedAt: '2024-10-12'),
   NoticeData(
-      noticeId: 3,
+      noticeUUID: "3",
       noticeTitle: 'test3',
       adminName: 'admin3',
       noticeCreatedAt: '2024-10-13'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
   NoticeData(
-      noticeId: 4,
+      noticeUUID: "4",
       noticeTitle: 'test4',
       adminName: 'admin4',
       noticeCreatedAt: '2024-10-14'),
@@ -377,7 +377,7 @@ const testContentPhotos = [
 
 final dummyCircles = <Circle>[
   Circle(
-    clubId: 1,
+    clubUUID: "1",
     clubName: "FLAG",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -388,7 +388,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 2,
+    clubUUID: "2",
     clubName: "MUSE",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -399,7 +399,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집마감",
   ),
   Circle(
-    clubId: 3,
+    clubUUID: "3",
     clubName: "FLOW",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -410,7 +410,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 4,
+    clubUUID: "4",
     clubName: "IMPACT",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -421,7 +421,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 5,
+    clubUUID: "5",
     clubName: "VISION",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -432,7 +432,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집마감",
   ),
   Circle(
-    clubId: 6,
+    clubUUID: "6",
     clubName: "CORE",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -443,7 +443,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 7,
+    clubUUID: "7",
     clubName: "PULSE",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -454,7 +454,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 8,
+    clubUUID: "8",
     clubName: "ECHO",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -465,7 +465,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집마감",
   ),
   Circle(
-    clubId: 9,
+    clubUUID: "9",
     clubName: "SPARK",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",
@@ -476,7 +476,7 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
   Circle(
-    clubId: 10,
+    clubUUID: "10",
     clubName: "UNITY",
     mainPhotoPath:
         "https://i.namu.wiki/i/xbE8Kj42coaLvovOcQ9d2-6Q1CZQV4HGJ8BEpgWX-_-tH6MfuBnhO9lRyl5IbAxm3NlEmduLgSHi1gJltSQNSNKQGxmyoXTMeAMyF6hb6xOawmXQoN6kV--NJ8DcKS1MQGgcXH5_ZRT867NqyZLN1g.svg",

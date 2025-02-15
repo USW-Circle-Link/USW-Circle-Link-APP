@@ -39,10 +39,10 @@ class CircleRepository {
 
   CircleRepository({required this.dio, required this.baseUrl});
 
-  Future<CircleDetailModel> fetchClubIntro(int clubId) async {
+  Future<CircleDetailModel> fetchClubIntro(String clubUUID) async {
     try {
       final response = await dio.get(
-        '$baseUrl/intro/$clubId',
+        '$baseUrl/intro/$clubUUID',
       );
 
       logger.d(response.data['data']);

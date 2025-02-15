@@ -6,7 +6,7 @@ import 'package:usw_circle_link/utils/extensions.dart';
 
 class CircleItem extends StatelessWidget {
   final CircleListData circle;
-  final Function(int clubId) onItemClicked;
+  final Function(String clubUUID) onItemClicked;
 
   const CircleItem({
     Key? key,
@@ -20,7 +20,7 @@ class CircleItem extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          onItemClicked(circle.clubId);
+          onItemClicked(circle.clubUUID);
         },
         child: Container(
           width: 120.w,
@@ -37,7 +37,7 @@ class CircleItem extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
                   child: Hero(
-                    tag: 'circle_${circle.clubId}',
+                    tag: 'circle_${circle.clubUUID}',
                     child: circle.mainPhoto?.isValidUrl ?? false
                         ? Image.network(
                             circle.mainPhoto!,

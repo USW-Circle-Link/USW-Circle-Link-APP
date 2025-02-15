@@ -188,7 +188,7 @@ Circle _$CircleFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$Circle {
-  int get clubId => throw _privateConstructorUsedError;
+  String get clubUUID => throw _privateConstructorUsedError;
   String? get mainPhotoPath => throw _privateConstructorUsedError;
   String get clubName => throw _privateConstructorUsedError;
   String get leaderName => throw _privateConstructorUsedError;
@@ -208,7 +208,7 @@ abstract class $CircleCopyWith<$Res> {
       _$CircleCopyWithImpl<$Res, Circle>;
   @useResult
   $Res call(
-      {int clubId,
+      {String clubUUID,
       String? mainPhotoPath,
       String clubName,
       String leaderName,
@@ -231,7 +231,7 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? clubId = null,
+    Object? clubUUID = null,
     Object? mainPhotoPath = freezed,
     Object? clubName = null,
     Object? leaderName = null,
@@ -241,10 +241,10 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
     Object? aplictStatus = freezed,
   }) {
     return _then(_value.copyWith(
-      clubId: null == clubId
-          ? _value.clubId
-          : clubId // ignore: cast_nullable_to_non_nullable
-              as int,
+      clubUUID: null == clubUUID
+          ? _value.clubUUID
+          : clubUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       mainPhotoPath: freezed == mainPhotoPath
           ? _value.mainPhotoPath
           : mainPhotoPath // ignore: cast_nullable_to_non_nullable
@@ -285,7 +285,7 @@ abstract class _$$CircleImplCopyWith<$Res> implements $CircleCopyWith<$Res> {
   @override
   @useResult
   $Res call(
-      {int clubId,
+      {String clubUUID,
       String? mainPhotoPath,
       String clubName,
       String leaderName,
@@ -306,7 +306,7 @@ class __$$CircleImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? clubId = null,
+    Object? clubUUID = null,
     Object? mainPhotoPath = freezed,
     Object? clubName = null,
     Object? leaderName = null,
@@ -316,10 +316,10 @@ class __$$CircleImplCopyWithImpl<$Res>
     Object? aplictStatus = freezed,
   }) {
     return _then(_$CircleImpl(
-      clubId: null == clubId
-          ? _value.clubId
-          : clubId // ignore: cast_nullable_to_non_nullable
-              as int,
+      clubUUID: null == clubUUID
+          ? _value.clubUUID
+          : clubUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       mainPhotoPath: freezed == mainPhotoPath
           ? _value.mainPhotoPath
           : mainPhotoPath // ignore: cast_nullable_to_non_nullable
@@ -356,7 +356,7 @@ class __$$CircleImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CircleImpl implements _Circle {
   _$CircleImpl(
-      {required this.clubId,
+      {required this.clubUUID,
       this.mainPhotoPath,
       required this.clubName,
       required this.leaderName,
@@ -369,7 +369,7 @@ class _$CircleImpl implements _Circle {
       _$$CircleImplFromJson(json);
 
   @override
-  final int clubId;
+  final String clubUUID;
   @override
   final String? mainPhotoPath;
   @override
@@ -387,7 +387,7 @@ class _$CircleImpl implements _Circle {
 
   @override
   String toString() {
-    return 'Circle(clubId: $clubId, mainPhotoPath: $mainPhotoPath, clubName: $clubName, leaderName: $leaderName, leaderHp: $leaderHp, clubInsta: $clubInsta, clubRoomNumber: $clubRoomNumber, aplictStatus: $aplictStatus)';
+    return 'Circle(clubUUID: $clubUUID, mainPhotoPath: $mainPhotoPath, clubName: $clubName, leaderName: $leaderName, leaderHp: $leaderHp, clubInsta: $clubInsta, clubRoomNumber: $clubRoomNumber, aplictStatus: $aplictStatus)';
   }
 
   @override
@@ -395,7 +395,8 @@ class _$CircleImpl implements _Circle {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CircleImpl &&
-            (identical(other.clubId, clubId) || other.clubId == clubId) &&
+            (identical(other.clubUUID, clubUUID) ||
+                other.clubUUID == clubUUID) &&
             (identical(other.mainPhotoPath, mainPhotoPath) ||
                 other.mainPhotoPath == mainPhotoPath) &&
             (identical(other.clubName, clubName) ||
@@ -414,8 +415,8 @@ class _$CircleImpl implements _Circle {
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, clubId, mainPhotoPath, clubName,
-      leaderName, leaderHp, clubInsta, clubRoomNumber, aplictStatus);
+  int get hashCode => Object.hash(runtimeType, clubUUID, mainPhotoPath,
+      clubName, leaderName, leaderHp, clubInsta, clubRoomNumber, aplictStatus);
 
   @JsonKey(ignore: true)
   @override
@@ -433,7 +434,7 @@ class _$CircleImpl implements _Circle {
 
 abstract class _Circle implements Circle {
   factory _Circle(
-      {required final int clubId,
+      {required final String clubUUID,
       final String? mainPhotoPath,
       required final String clubName,
       required final String leaderName,
@@ -445,7 +446,7 @@ abstract class _Circle implements Circle {
   factory _Circle.fromJson(Map<String, dynamic> json) = _$CircleImpl.fromJson;
 
   @override
-  int get clubId;
+  String get clubUUID;
   @override
   String? get mainPhotoPath;
   @override

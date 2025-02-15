@@ -108,7 +108,7 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
         studentNumber: studentNumber,
         email: email,
         major: major,
-        clubs: clubs.map((e) => {"clubId": e.clubId}).toList(),
+        clubs: clubs.map((e) => {"clubUUID": e.clubUUID}).toList(),
       );
       state = AsyncData(response);
     } on SignUpModelError catch (e) {
