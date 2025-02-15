@@ -106,7 +106,7 @@ class CircleListRepository {
       '$baseUrl/clubs/filter/${department.join(',')}',
     );
 
-    logger.d('${response.data}');
+    logger.d(response.data);
 
     logger.d(
         'fetchAllFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
@@ -125,7 +125,7 @@ class CircleListRepository {
       '$baseUrl/clubs/filter/${department.join(',')}/open',
     );
 
-    logger.d('${response.data}');
+    logger.d(response.data);
 
     logger.d(
         'fetchOpenFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');

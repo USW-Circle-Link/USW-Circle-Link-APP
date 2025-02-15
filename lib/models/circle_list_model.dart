@@ -78,7 +78,8 @@ class CircleListData with _$CircleListData {
 class CircleFilteredListData with _$CircleFilteredListData {
   factory CircleFilteredListData({
     required int categoryId,
-    required String category,
+    String? clubCategoryName,
+    String? categoryName,
     required List<CircleListData> clubs,
   }) = _CircleFilteredListData;
 

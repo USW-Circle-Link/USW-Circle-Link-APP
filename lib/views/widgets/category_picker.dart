@@ -111,7 +111,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                 data: (data) => Wrap(
                   spacing: 5.w,
                   children: data?.data.map((category) {
-                        return _buildChip(category.clubCategory);
+                        return _buildChip(category.clubCategoryName);
                       }).toList() ??
                       [],
                 ),

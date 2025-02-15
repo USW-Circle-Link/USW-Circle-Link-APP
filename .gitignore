@@ -86,3 +86,5 @@ Gemfile.lock
 **/android/fastlane/Fastfile
 
 .DS_Store
+
+.vscode/

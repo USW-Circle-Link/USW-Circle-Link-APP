@@ -94,7 +94,8 @@ extension on CircleFilteredListModel {
     final newList = <CircleListData>[];
     for (var category in data) {
       final clubs = category.clubs;
-      newList.addAll(clubs.map((e) => e.setDepartmentName(category.category)));
+      newList.addAll(clubs.map((e) => e.setDepartmentName(
+          category.clubCategoryName ?? category.categoryName ?? '')));
     }
     return CircleListModel(message: message, data: newList);
   }
