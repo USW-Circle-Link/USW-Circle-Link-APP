@@ -8,7 +8,6 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
-import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -312,7 +311,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     width: 83.w,
                     //height: 38.h, //not working -> margin으로 높이 조절
                     child: OutlinedButton(
-                      onPressed: state is UserModelLoading
+                      onPressed: state.isLoading
                           ? null
                           : () async {
                               final id = idController.text.trim();
