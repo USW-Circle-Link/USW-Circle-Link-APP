@@ -172,7 +172,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 if (state is UserModelError)
                   TextFontWidget.fontRegular(
-                    '* ${(ErrorUtil.instance.isValidOrNull(state.code, FieldType.account) ?? '아이디 또는 비밀번호가 일치하지 않습니다.')}',
+                    '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했습니다.')}',
                     fontSize: 12.sp,
                     color: const Color(0xFFFF3F3F),
                     fontWeight: FontWeight.w400,

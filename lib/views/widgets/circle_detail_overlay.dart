@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -33,24 +34,19 @@ class CircleDetailOverlay extends ConsumerWidget {
       builder: (BuildContext context) {
         return Stack(
           children: [
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop(); // 지도 팝업 닫기
-              },
-              child: Container(
-                color: Colors.black54, // 반투명 배경
-              ),
-            ),
             Center(
               child: floorPhotoPath.isValidUrl
-                  ? InteractiveViewer(
-                      panEnabled: true, // 스와이프 가능
-                      scaleEnabled: true, // 확대/축소 가능
-                      minScale: 1.0, // 최소 축소 크기
-                      maxScale: 5.0, // 최대 확대 크기
-                      child: Image.network(
-                        floorPhotoPath,
-                        fit: BoxFit.contain,
+                  ? GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop(); // 지도 팝업 닫기
+                      },
+                      child: PhotoView(
+                        imageProvider: NetworkImage(floorPhotoPath),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2.0,
+                        backgroundDecoration: BoxDecoration(
+                          color: Colors.black54,
+                        ),
                       ),
                     )
                   : const Center(

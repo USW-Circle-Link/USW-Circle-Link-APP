@@ -32,7 +32,7 @@ Map<String, dynamic> _$$LoginDataImplToJson(_$LoginDataImpl instance) =>
 
 _$UserModelErrorImpl _$$UserModelErrorImplFromJson(Map<String, dynamic> json) =>
     _$UserModelErrorImpl(
-      message: json['message'] as String,
+      message: json['message'] as String?,
       code: json['code'] as String?,
       exception: json['exception'] as String?,
       error: json['error'] as String?,
