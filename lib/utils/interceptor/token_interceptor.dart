@@ -71,10 +71,12 @@ class TokenInterceptor extends Interceptor {
 
     // **** 토큰 만료 코드의 경우 response 예외에서 제외 필요 [DefaultInterceptor] ****
     final isStatus401 = err.response?.statusCode == 401;
-    final isPathRefresh = err.requestOptions.path == '/auth/refresh-token';
+    final isPathRefresh =
+        err.requestOptions.path.contains('/auth/refresh-token');
+    final isPathLogin = err.requestOptions.path.contains('/users/login');
 
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
-    if (isStatus401 && !isPathRefresh) {
+    if (isStatus401 && !isPathRefresh && !isPathLogin) {
       logger.d('액세스 토큰 재발급 중 ... ');
 
       final refreshToken = await storage.read(key: refreshTokenKey);
@@ -154,6 +156,10 @@ class TokenInterceptor extends Interceptor {
       } catch (e) {
         logger.e(e);
         await ref.read(userViewModelProvider.notifier).logout();
+      }
+    } else if (isStatus401 && isPathLogin) {
+      if (err.response != null) {
+        return handler.resolve(err.response!);
       }
     }
 

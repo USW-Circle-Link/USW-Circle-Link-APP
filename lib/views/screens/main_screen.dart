@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
@@ -32,7 +33,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
 
-  List<String> selectedGroups = [];
+  List<CategoryData> selectedCategories = [];
 
   @override
   void initState() {
@@ -231,19 +232,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           isScrollControlled: true,
                           builder: (context) {
                             return CategoryPicker(
-                                initialGroups: selectedGroups);
+                                initialCategories: selectedCategories);
                           },
                         );
                         setState(() {
-                          selectedGroups = result;
+                          selectedCategories = result;
                         });
                         await fetchCircleList();
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: selectedGroups.isEmpty
+                        backgroundColor: selectedCategories.isEmpty
                             ? Colors.white
                             : Color(0xFFFFB052),
-                        foregroundColor: selectedGroups.isEmpty
+                        foregroundColor: selectedCategories.isEmpty
                             ? Color(0xFFFFB052)
                             : Colors.white,
                         minimumSize: Size.zero,
@@ -253,7 +254,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         ),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         side: BorderSide(
-                          color: selectedGroups.isEmpty
+                          color: selectedCategories.isEmpty
                               ? Color(0xFF959595)
                               : Color(0xFFFF9A21),
                         ),
@@ -265,7 +266,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         children: [
                           SvgPicture.asset(
                             'assets/images/ic_filter.svg',
-                            colorFilter: selectedGroups.isEmpty
+                            colorFilter: selectedCategories.isEmpty
                                 ? null
                                 : ColorFilter.mode(
                                     Colors.white,
@@ -275,7 +276,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           TextFontWidget.fontRegular(
                             '필터',
                             fontWeight: FontWeight.w500,
-                            color: selectedGroups.isEmpty
+                            color: selectedCategories.isEmpty
                                 ? Color(0xffa8a8a8)
                                 : Colors.white,
                           )
@@ -289,7 +290,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             SizedBox(
               height: 1.h,
             ),
-            ...selectedGroups.isEmpty
+            ...selectedCategories.isEmpty
                 ? []
                 : [
                     Container(
@@ -301,8 +302,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         scrollDirection: Axis.horizontal,
                         child: Wrap(
                           spacing: 10.w,
-                          children: selectedGroups.map((label) {
-                            return _buildChip(label);
+                          children: selectedCategories.map((category) {
+                            return _buildChip(category);
                           }).toList(),
                         ),
                       ),
@@ -350,14 +351,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildChip(String label) {
+  Widget _buildChip(CategoryData category) {
     return Chip(
       labelPadding: EdgeInsets.only(left: 10.w),
-      label: Text(label),
+      label: Text(category.clubCategoryName),
       deleteIcon: Icon(Icons.close, size: 16.sp),
       onDeleted: () async {
         setState(() {
-          selectedGroups.remove(label);
+          selectedCategories.remove(category);
         });
         await fetchCircleList();
       },
@@ -376,21 +377,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Future<void> fetchCircleList() async {
-    if (selectedGroups.isEmpty) {
+    if (selectedCategories.isEmpty) {
       if (isAllSelected) {
         await ref.read(circleViewModelProvider.notifier).fetchAllCircleList();
       } else {
         await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
       }
     } else {
+      final selectedCategoryUUIDs = selectedCategories
+          .map((category) => category.clubCategoryUUID)
+          .toList();
       if (isAllSelected) {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchAllFilteredCircleList(selectedGroups);
+            .fetchAllFilteredCircleList(selectedCategoryUUIDs);
       } else {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchOpenFilteredCircleList(selectedGroups);
+            .fetchOpenFilteredCircleList(selectedCategoryUUIDs);
       }
     }
   }

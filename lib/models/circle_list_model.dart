@@ -58,14 +58,14 @@ class CircleListData with _$CircleListData {
     required String clubUUID,
     required String clubName,
     String? mainPhoto,
-    String? departmentName,
+    String? departmentName, // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
     List<String>? clubHashtags,
   }) = _CircleListData;
 
   factory CircleListData.fromJson(Map<String, dynamic> json) =>
       _$CircleListDataFromJson(json);
 
-  CircleListData setDepartmentName(String departmentName) => CircleListData(
+  CircleListData setDepartmentName(String? departmentName) => CircleListData(
         clubUUID: clubUUID,
         clubName: clubName,
         mainPhoto: mainPhoto,
@@ -77,9 +77,8 @@ class CircleListData with _$CircleListData {
 @freezed
 class CircleFilteredListData with _$CircleFilteredListData {
   factory CircleFilteredListData({
-    required String categoryUUID,
-    String? clubCategoryName,
-    String? categoryName,
+    required String clubCategoryUUID,
+    required String clubCategoryName,
     required List<CircleListData> clubs,
   }) = _CircleFilteredListData;
 

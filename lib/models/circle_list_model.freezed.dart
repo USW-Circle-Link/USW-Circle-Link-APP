@@ -408,7 +408,8 @@ mixin _$CircleListData {
   String get clubUUID => throw _privateConstructorUsedError;
   String get clubName => throw _privateConstructorUsedError;
   String? get mainPhoto => throw _privateConstructorUsedError;
-  String? get departmentName => throw _privateConstructorUsedError;
+  String? get departmentName =>
+      throw _privateConstructorUsedError; // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   List<String>? get clubHashtags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -556,7 +557,9 @@ class _$CircleListDataImpl extends _CircleListData {
   final String? mainPhoto;
   @override
   final String? departmentName;
+// Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   final List<String>? _clubHashtags;
+// Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   @override
   List<String>? get clubHashtags {
     final value = _clubHashtags;
@@ -628,7 +631,7 @@ abstract class _CircleListData extends CircleListData {
   String? get mainPhoto;
   @override
   String? get departmentName;
-  @override
+  @override // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   List<String>? get clubHashtags;
   @override
   @JsonKey(ignore: true)
@@ -643,9 +646,8 @@ CircleFilteredListData _$CircleFilteredListDataFromJson(
 
 /// @nodoc
 mixin _$CircleFilteredListData {
-  String get categoryUUID => throw _privateConstructorUsedError;
-  String? get clubCategoryName => throw _privateConstructorUsedError;
-  String? get categoryName => throw _privateConstructorUsedError;
+  String get clubCategoryUUID => throw _privateConstructorUsedError;
+  String get clubCategoryName => throw _privateConstructorUsedError;
   List<CircleListData> get clubs => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -661,9 +663,8 @@ abstract class $CircleFilteredListDataCopyWith<$Res> {
       _$CircleFilteredListDataCopyWithImpl<$Res, CircleFilteredListData>;
   @useResult
   $Res call(
-      {String categoryUUID,
-      String? clubCategoryName,
-      String? categoryName,
+      {String clubCategoryUUID,
+      String clubCategoryName,
       List<CircleListData> clubs});
 }
 
@@ -681,24 +682,19 @@ class _$CircleFilteredListDataCopyWithImpl<$Res,
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? categoryUUID = null,
-    Object? clubCategoryName = freezed,
-    Object? categoryName = freezed,
+    Object? clubCategoryUUID = null,
+    Object? clubCategoryName = null,
     Object? clubs = null,
   }) {
     return _then(_value.copyWith(
-      categoryUUID: null == categoryUUID
-          ? _value.categoryUUID
-          : categoryUUID // ignore: cast_nullable_to_non_nullable
+      clubCategoryUUID: null == clubCategoryUUID
+          ? _value.clubCategoryUUID
+          : clubCategoryUUID // ignore: cast_nullable_to_non_nullable
               as String,
-      clubCategoryName: freezed == clubCategoryName
+      clubCategoryName: null == clubCategoryName
           ? _value.clubCategoryName
           : clubCategoryName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      categoryName: freezed == categoryName
-          ? _value.categoryName
-          : categoryName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       clubs: null == clubs
           ? _value.clubs
           : clubs // ignore: cast_nullable_to_non_nullable
@@ -717,9 +713,8 @@ abstract class _$$CircleFilteredListDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String categoryUUID,
-      String? clubCategoryName,
-      String? categoryName,
+      {String clubCategoryUUID,
+      String clubCategoryName,
       List<CircleListData> clubs});
 }
 
@@ -736,24 +731,19 @@ class __$$CircleFilteredListDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? categoryUUID = null,
-    Object? clubCategoryName = freezed,
-    Object? categoryName = freezed,
+    Object? clubCategoryUUID = null,
+    Object? clubCategoryName = null,
     Object? clubs = null,
   }) {
     return _then(_$CircleFilteredListDataImpl(
-      categoryUUID: null == categoryUUID
-          ? _value.categoryUUID
-          : categoryUUID // ignore: cast_nullable_to_non_nullable
+      clubCategoryUUID: null == clubCategoryUUID
+          ? _value.clubCategoryUUID
+          : clubCategoryUUID // ignore: cast_nullable_to_non_nullable
               as String,
-      clubCategoryName: freezed == clubCategoryName
+      clubCategoryName: null == clubCategoryName
           ? _value.clubCategoryName
           : clubCategoryName // ignore: cast_nullable_to_non_nullable
-              as String?,
-      categoryName: freezed == categoryName
-          ? _value.categoryName
-          : categoryName // ignore: cast_nullable_to_non_nullable
-              as String?,
+              as String,
       clubs: null == clubs
           ? _value._clubs
           : clubs // ignore: cast_nullable_to_non_nullable
@@ -766,9 +756,8 @@ class __$$CircleFilteredListDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
   _$CircleFilteredListDataImpl(
-      {required this.categoryUUID,
-      this.clubCategoryName,
-      this.categoryName,
+      {required this.clubCategoryUUID,
+      required this.clubCategoryName,
       required final List<CircleListData> clubs})
       : _clubs = clubs;
 
@@ -776,11 +765,9 @@ class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
       _$$CircleFilteredListDataImplFromJson(json);
 
   @override
-  final String categoryUUID;
+  final String clubCategoryUUID;
   @override
-  final String? clubCategoryName;
-  @override
-  final String? categoryName;
+  final String clubCategoryName;
   final List<CircleListData> _clubs;
   @override
   List<CircleListData> get clubs {
@@ -791,7 +778,7 @@ class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
 
   @override
   String toString() {
-    return 'CircleFilteredListData(categoryUUID: $categoryUUID, clubCategoryName: $clubCategoryName, categoryName: $categoryName, clubs: $clubs)';
+    return 'CircleFilteredListData(clubCategoryUUID: $clubCategoryUUID, clubCategoryName: $clubCategoryName, clubs: $clubs)';
   }
 
   @override
@@ -799,19 +786,17 @@ class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CircleFilteredListDataImpl &&
-            (identical(other.categoryUUID, categoryUUID) ||
-                other.categoryUUID == categoryUUID) &&
+            (identical(other.clubCategoryUUID, clubCategoryUUID) ||
+                other.clubCategoryUUID == clubCategoryUUID) &&
             (identical(other.clubCategoryName, clubCategoryName) ||
                 other.clubCategoryName == clubCategoryName) &&
-            (identical(other.categoryName, categoryName) ||
-                other.categoryName == categoryName) &&
             const DeepCollectionEquality().equals(other._clubs, _clubs));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, categoryUUID, clubCategoryName,
-      categoryName, const DeepCollectionEquality().hash(_clubs));
+  int get hashCode => Object.hash(runtimeType, clubCategoryUUID,
+      clubCategoryName, const DeepCollectionEquality().hash(_clubs));
 
   @JsonKey(ignore: true)
   @override
@@ -830,9 +815,8 @@ class _$CircleFilteredListDataImpl implements _CircleFilteredListData {
 
 abstract class _CircleFilteredListData implements CircleFilteredListData {
   factory _CircleFilteredListData(
-          {required final String categoryUUID,
-          final String? clubCategoryName,
-          final String? categoryName,
+          {required final String clubCategoryUUID,
+          required final String clubCategoryName,
           required final List<CircleListData> clubs}) =
       _$CircleFilteredListDataImpl;
 
@@ -840,11 +824,9 @@ abstract class _CircleFilteredListData implements CircleFilteredListData {
       _$CircleFilteredListDataImpl.fromJson;
 
   @override
-  String get categoryUUID;
+  String get clubCategoryUUID;
   @override
-  String? get clubCategoryName;
-  @override
-  String? get categoryName;
+  String get clubCategoryName;
   @override
   List<CircleListData> get clubs;
   @override

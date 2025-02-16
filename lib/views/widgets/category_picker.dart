@@ -3,27 +3,28 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/viewmodels/category_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CategoryPicker extends ConsumerStatefulWidget {
   const CategoryPicker({
     super.key,
-    this.initialGroups = const [],
+    this.initialCategories = const [],
   });
 
-  final List<String> initialGroups;
+  final List<CategoryData> initialCategories;
 
   @override
   _CategoryPickerState createState() => _CategoryPickerState();
 }
 
 class _CategoryPickerState extends ConsumerState<CategoryPicker> {
-  late Set<String> selectedGroups;
+  late Set<CategoryData> selectedCategories;
 
   @override
   void initState() {
-    selectedGroups = widget.initialGroups.toSet();
+    selectedCategories = widget.initialCategories.toSet();
     super.initState();
   }
 
@@ -35,7 +36,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           // dissmiss 나 뒤로가기
-          context.pop(selectedGroups.toList());
+          context.pop(selectedCategories.toList());
         }
       },
       child: Container(
@@ -67,7 +68,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                   ),
                   IconButton(
                     onPressed: () {
-                      context.pop(selectedGroups.toList());
+                      context.pop(selectedCategories.toList());
                     },
                     style: IconButton.styleFrom(
                       minimumSize: Size.zero,
@@ -111,7 +112,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                 data: (data) => Wrap(
                   spacing: 5.w,
                   children: data?.data.map((category) {
-                        return _buildChip(category.clubCategoryName);
+                        return _buildChip(category);
                       }).toList() ??
                       [],
                 ),
@@ -125,17 +126,19 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
     );
   }
 
-  Widget _buildChip(String label) {
-    final isSelected = selectedGroups.contains(label);
+  Widget _buildChip(CategoryData category) {
+    final isSelected = selectedCategories.contains(category);
     return FilterChip(
-      label: Text(label),
+      label: Text(category.clubCategoryName),
       selected: isSelected,
       onSelected: (value) {
-        if (selectedGroups.length == 3) {
+        if (selectedCategories.length == 3) {
           return;
         }
         setState(() {
-          value ? selectedGroups.add(label) : selectedGroups.remove(label);
+          value
+              ? selectedCategories.add(category)
+              : selectedCategories.remove(category);
         });
       },
       showCheckmark: false,
