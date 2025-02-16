@@ -13,7 +13,7 @@ class CircleGroup extends StatelessWidget {
   }) : super(key: key);
 
   final MapEntry<String, List<CircleListData>> department;
-  final Function(int clubId) onItemClicked;
+  final Function(String clubUUID) onItemClicked;
 
   @override
   Widget build(BuildContext context) {

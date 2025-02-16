@@ -165,7 +165,7 @@ class AuthRepository {
     required String studentNumber,
     required String major,
     required String email,
-    required List<Map<String, int>> clubs,
+    required List<Map<String, String>> clubs,
   }) async {
     final body = {
       'account': account,
@@ -254,7 +254,17 @@ class AuthRepository {
       return UserModel.fromJson(response.data);
     } else {
       // Bad Request
-      throw UserModelError.fromJson(response.data);
+      var error = UserModelError.fromJson(response.data);
+      if (error.message == null) {
+        error = error.setCode(
+          '필드값 에러',
+          'USR-F211',
+          error.exception,
+          error.error,
+          error.status,
+        );
+      }
+      throw error;
     }
   }
 

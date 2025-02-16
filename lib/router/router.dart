@@ -45,14 +45,13 @@ final routerProvider = Provider<GoRouter>((ref) {
           GoRoute(
               path: 'circle',
               builder: (_, state) => CircleScreen(
-                    clubId: int.parse(state.uri.queryParameters['clubId']!),
+                    clubUUID: state.uri.queryParameters['clubUUID']!,
                   ),
               routes: [
                 GoRoute(
                     path: 'application_writing',
                     builder: (_, state) => ApplicationWritingScreen(
-                          clubId:
-                              int.parse(state.uri.queryParameters['clubId']!),
+                          clubUUID: state.uri.queryParameters['clubUUID']!,
                         ),
                     routes: [webviewRouter]),
               ]),
@@ -161,11 +160,9 @@ final routerProvider = Provider<GoRouter>((ref) {
             builder: (_, __) => NoticeListScreen(),
             routes: [
               GoRoute(
-                path: ':noticeId/detail',
+                path: ':noticeUUID/detail',
                 builder: (_, state) => NoticeDetailScreen(
-                  noticeId: int.parse(
-                    state.pathParameters['noticeId']!,
-                  ),
+                  noticeUUID: state.pathParameters['noticeUUID']!,
                 ),
               ),
             ],

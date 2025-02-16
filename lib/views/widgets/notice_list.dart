@@ -12,7 +12,7 @@ class NoticeList extends StatelessWidget {
   }) : super(key: key);
 
   final NoticeModel noticeModel;
-  final Function(int noticeId) onItemClicked;
+  final Function(String noticeUUID) onItemClicked;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class NoticeList extends StatelessWidget {
                 margin: EdgeInsets.only(top: index == 0 ? 16.h : 0.h),
                 child: InkWell(
                   onTap: () {
-                    onItemClicked(noticeModel.data[index].noticeId);
+                    onItemClicked(noticeModel.data[index].noticeUUID);
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),

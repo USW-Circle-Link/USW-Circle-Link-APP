@@ -24,10 +24,10 @@ class ApplicationRepository {
   });
 
   Future<ApplicationModel> checkAvailableForApplication({
-    required int clubId,
+    required String clubUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/can-apply/$clubId',
+      '$baseUrl/can-apply/$clubUUID',
       options: Options(headers: {'accessToken': 'true'}),
     );
 
@@ -47,10 +47,10 @@ class ApplicationRepository {
   }
 
   Future<ApplicationModel> getApplication({
-    required int clubId,
+    required String clubUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/$clubId',
+      '$baseUrl/$clubUUID',
     );
 
     logger.d('${response.data}');
@@ -69,11 +69,11 @@ class ApplicationRepository {
   }
 
   Future<ApplicationModel> apply({
-    required int clubId,
+    required String clubUUID,
     required String aplictGoogleFormUrl,
   }) async {
     final response = await dio.post(
-      '$baseUrl/$clubId',
+      '$baseUrl/$clubUUID',
       data: {
         'aplictGoogleFormUrl': aplictGoogleFormUrl,
       },

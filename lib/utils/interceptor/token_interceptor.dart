@@ -71,10 +71,12 @@ class TokenInterceptor extends Interceptor {
 
     // **** 토큰 만료 코드의 경우 response 예외에서 제외 필요 [DefaultInterceptor] ****
     final isStatus401 = err.response?.statusCode == 401;
-    final isPathRefresh = err.requestOptions.path == '/auth/refresh-token';
+    final isPathRefresh =
+        err.requestOptions.path.contains('/auth/refresh-token');
+    final isPathLogin = err.requestOptions.path.contains('/users/login');
 
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
-    if (isStatus401 && !isPathRefresh) {
+    if (isStatus401 && !isPathRefresh && !isPathLogin) {
       logger.d('액세스 토큰 재발급 중 ... ');
 
       final refreshToken = await storage.read(key: refreshTokenKey);
@@ -122,15 +124,15 @@ class TokenInterceptor extends Interceptor {
         await storage.write(key: accessTokenKey, value: accessToken);
         await storage.write(key: refreshTokenKey, value: newRefreshToken);
         await storage.write(
-            key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
+            key: clubUUIDsKey, value: jsonEncode(payload['clubUUIDs'] ?? []));
 
         // 디버깅용 확인 코드
         final accessToken0 = await storage.read(key: accessTokenKey);
         final refreshToken0 = await storage.read(key: refreshTokenKey);
-        final clubIdsJsonString = await storage.read(key: clubIdsKey);
-        final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+        final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
+        final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
         logger.d(
-            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
 
         final options = err.requestOptions;
 
@@ -154,6 +156,10 @@ class TokenInterceptor extends Interceptor {
       } catch (e) {
         logger.e(e);
         await ref.read(userViewModelProvider.notifier).logout();
+      }
+    } else if (isStatus401 && isPathLogin) {
+      if (err.response != null) {
+        return handler.resolve(err.response!);
       }
     }
 

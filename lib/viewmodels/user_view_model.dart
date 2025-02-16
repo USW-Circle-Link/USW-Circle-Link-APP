@@ -111,30 +111,30 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       await storage.write(
           key: refreshTokenKey, value: response.data.refreshToken);
       await storage.write(
-          key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
+          key: clubUUIDsKey, value: jsonEncode(payload['clubUUIDs'] ?? []));
 
       // 디버깅용 확인 코드
       final accessToken = await storage.read(key: accessTokenKey);
       final refreshToken = await storage.read(key: refreshTokenKey);
-      final clubIdsJsonString = await storage.read(key: clubIdsKey);
-      final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+      final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
+      final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
       logger.d(
-          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
 
       state = AsyncValue.data(response); // UserModel
       return response;
     } on UserModelError catch (e) {
       // 단순로그인 실패 및 예상 범위 밖 에러(네트워크 에러 ...)
       logger.d(e);
-      
+
       rethrow;
     } on FCMTokenNotFoundException catch (e) {
       logger.d(e);
-      
+
       rethrow;
     } catch (e) {
       logger.e('예외발생 - $e');
-      
+
       rethrow;
     }
   }
@@ -146,19 +146,19 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
 
       String? accessToken0 = await storage.read(key: accessTokenKey);
       String? refreshToken0 = await storage.read(key: refreshTokenKey);
-      // Secure Storage에서 Access Token과 Refresh Token, clubIds 삭제
+      // Secure Storage에서 Access Token과 Refresh Token, clubUUIDs 삭제
       await Future.wait([
         storage.delete(key: accessTokenKey),
         storage.delete(key: refreshTokenKey),
-        storage.delete(key: clubIdsKey),
+        storage.delete(key: clubUUIDsKey),
       ]);
 
       final accessToken = await storage.read(key: accessTokenKey);
       final refreshToken = await storage.read(key: refreshTokenKey);
-      final clubIdsJsonString = await storage.read(key: clubIdsKey);
-      final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+      final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
+      final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
       logger.d(
-          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 삭제 성공!');
+          'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 삭제 성공!');
 
       await authRepository.logout(
           accessToken: accessToken0 ?? "", refreshToken: refreshToken0 ?? "");

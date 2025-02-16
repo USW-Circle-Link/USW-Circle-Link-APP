@@ -16,9 +16,9 @@ import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
-  final int clubId;
+  final String clubUUID;
 
-  const CircleScreen({required this.clubId, super.key});
+  const CircleScreen({required this.clubUUID, super.key});
 
   @override
   ConsumerState<CircleScreen> createState() => _CircleScreenState();
@@ -94,8 +94,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
 
   @override
   Widget build(BuildContext context) {
-    final clubIntroState = ref.watch(clubIntroViewModelProvider(widget.clubId));
-    ref.listen(clubIntroViewModelProvider(widget.clubId), (previous, next) {
+    final clubIntroState =
+        ref.watch(clubIntroViewModelProvider(widget.clubUUID));
+    ref.listen(clubIntroViewModelProvider(widget.clubUUID), (previous, next) {
       logger.d(next);
     });
     final applicationState = ref.watch(applicationViewModelProvider);
@@ -109,7 +110,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             case ApplicationModelType.apply:
               break;
             case ApplicationModelType.checkAvailableForApplication:
-              context.go('/circle/application_writing?clubId=${widget.clubId}');
+              context.go(
+                  '/circle/application_writing?clubUUID=${widget.clubUUID}');
               break;
             default:
           }
@@ -209,7 +211,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                               await ref
                                   .read(applicationViewModelProvider.notifier)
                                   .checkAvailableForApplication(
-                                      clubId: widget.clubId);
+                                      clubUUID: widget.clubUUID);
                             },
                       style: OutlinedButton.styleFrom(
                         backgroundColor:
@@ -327,7 +329,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                     ),
                                     child: Hero(
                                       transitionOnUserGestures: true,
-                                      tag: 'circle_${widget.clubId}',
+                                      tag: 'circle_${widget.clubUUID}',
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(12.r),

@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -11,7 +12,7 @@ final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
 
   return CircleListRepository(
     dio: dio,
-    baseUrl: '$protocol://$host:$port',
+    baseUrl: '$protocol://$host:$port/clubs',
   );
 });
 
@@ -24,9 +25,17 @@ class CircleListRepository {
     required this.baseUrl,
   });
 
+  /// 모든 분과 동아리 목록 조회
+  ///
+  /// 이 함수는 모든 분과 동아리의 목록을 조회합니다.
+  ///
+  /// return: CircleListModel - 조회된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleListModelError: 조회 중 오류가 발생한 경우
   Future<CircleListModel> fetchAllCircleList() async {
     final response = await dio.get(
-      '$baseUrl/clubs',
+      '$baseUrl',
     );
 
     logger.d('${response.data}');
@@ -44,9 +53,17 @@ class CircleListRepository {
     }
   }
 
+  /// 모집중인 분과 동아리 목록 조회
+  ///
+  /// 이 함수는 모집중인 분과 동아리의 목록을 조회합니다.
+  ///
+  /// return: CircleListModel - 조회된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleListModelError: 조회 중 오류가 발생한 경우
   Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
-      '$baseUrl/clubs/OPEN',
+      '$baseUrl/open',
     );
 
     logger.d('${response.data}');
@@ -64,9 +81,17 @@ class CircleListRepository {
     }
   }
 
+  /// 소속 동아리 목록 조회
+  ///
+  /// 이 함수는 소속 동아리 목록을 조회합니다.
+  ///
+  /// return: CircleDetailListModel - 조회된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyCircleList() async {
     final response = await dio.get(
-      '$baseUrl/mypages/my-clubs',
+      '$protocol://$host:$port/mypages/my-clubs',
     );
 
     logger.d('${response.data}');
@@ -82,9 +107,17 @@ class CircleListRepository {
     }
   }
 
+  /// 내 신청 동아리 목록 조회
+  ///
+  /// 이 함수는 내 신청 동아리 목록을 조회합니다.
+  ///
+  /// return: CircleDetailListModel - 조회된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyApplicationList() async {
     final response = await dio.get(
-      '$baseUrl/mypages/aplict-clubs',
+      '$protocol://$host:$port/mypages/aplict-clubs',
     );
 
     logger.d('${response.data}');
@@ -100,10 +133,48 @@ class CircleListRepository {
     }
   }
 
+  /// 분과 목록 조회
+  ///
+  /// 이 함수는 분과 목록을 조회합니다.
+  ///
+  /// return: CategoryModel - 조회된 분과 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CategoryModelError: 조회 중 오류가 발생한 경우
+  Future<CategoryModel> fetchCategory() async {
+    try {
+      final response = await dio.get('$baseUrl/categories');
+
+      logger.d(response.data);
+
+      logger.d(
+          'fetchCategory - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      return CategoryModel.fromJson(response.data);
+    } catch (e) {
+      throw CategoryModelError(message: "에외발생 - $e");
+    }
+  }
+
+  /// 필터링된 모든 분과 동아리 목록 조회
+  ///
+  /// 이 함수는 필터링된 모든 분과 동아리 목록을 조회합니다.
+  ///
+  /// params:
+  /// - department: 분과 목록
+  ///
+  /// return: CircleFilteredListModel - 필터링된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleFilteredListModelError: 조회 중 오류가 발생한 경우
   Future<CircleFilteredListModel> fetchAllFilteredCircleList(
-      List<String> department) async {
+    List<String> clubCategoryUUIDs,
+  ) async {
     final response = await dio.get(
-      '$baseUrl/clubs/filter/${department.join(',')}',
+      '$baseUrl/filter',
+      queryParameters: {
+        'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
+      },
     );
 
     logger.d(response.data);
@@ -119,10 +190,25 @@ class CircleListRepository {
     }
   }
 
+  /// 필터링된 모집중인 분과 동아리 목록 조회
+  ///
+  /// 이 함수는 필터링된 모집중인 분과 동아리 목록을 조회합니다.
+  ///
+  /// params:
+  /// - department: 분과 목록
+  ///
+  /// return: CircleFilteredListModel - 필터링된 동아리 목록을 포함하는 모델
+  ///
+  /// 예외:
+  /// - CircleFilteredListModelError: 조회 중 오류가 발생한 경우
   Future<CircleFilteredListModel> fetchOpenFilteredCircleList(
-      List<String> department) async {
+    List<String> clubCategoryUUIDs,
+  ) async {
     final response = await dio.get(
-      '$baseUrl/clubs/filter/${department.join(',')}/open',
+      '$baseUrl/open/filter',
+      queryParameters: {
+        'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
+      },
     );
 
     logger.d(response.data);

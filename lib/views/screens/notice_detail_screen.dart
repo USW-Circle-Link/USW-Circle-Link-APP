@@ -12,10 +12,10 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 class NoticeDetailScreen extends ConsumerWidget {
   const NoticeDetailScreen({
     super.key,
-    required this.noticeId,
+    required this.noticeUUID,
   });
 
-  final int noticeId;
+  final String noticeUUID;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -33,7 +33,7 @@ class NoticeDetailScreen extends ConsumerWidget {
       if (state == null) {
         await ref
             .read(noticeDetailViewModelProvider.notifier)
-            .getDetail(noticeId: noticeId);
+            .getDetail(noticeUUID: noticeUUID);
       }
     });
     return ScreenUtilInit(

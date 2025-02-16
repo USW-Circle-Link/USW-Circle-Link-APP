@@ -30,7 +30,7 @@ class NoticeModel with _$NoticeModel {
 @freezed
 class NoticeData with _$NoticeData {
   factory NoticeData({
-    required int noticeId,
+    required String noticeUUID,
     required String noticeTitle,
     required String adminName,
     required String noticeCreatedAt,

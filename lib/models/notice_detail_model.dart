@@ -32,7 +32,7 @@ class NoticeDetailModel extends NoticeDetailModelBase with _$NoticeDetailModel {
 class NoticeDetailData with _$NoticeDetailData {
   @JsonSerializable(explicitToJson: true)
   factory NoticeDetailData({
-    required int noticeId,
+    required String noticeUUID,
     required String noticeTitle,
     required String noticeContent,
     String? adminName,
