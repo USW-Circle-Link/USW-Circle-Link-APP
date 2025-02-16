@@ -45,7 +45,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   void _firebaseMessagingHandler(RemoteMessage message) {
     logger.d('포그라운드 알림 수신 완료!');
     logger.d('- contentAvailable : ${message.contentAvailable}');
-    logger.d('- contentAvailable : ${message.mutableContent}');
+    logger.d('- mutableAvailable : ${message.mutableContent}');
     logger.d('- notification : ${message.notification?.body}');
     logger.d('- data : ${message.data}');
     RemoteNotification? notification = message.notification;
@@ -87,6 +87,9 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   // 알림을 추가하고 SharedPreferences에 저장하는 메서드
   Future<void> addNotification(String notification) async {
+    if (state.contains(notification)) {
+      return;
+    }
     final updatedState = [...state, notification];
     state = updatedState;
     await _saveNotifications(updatedState);

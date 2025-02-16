@@ -10,6 +10,7 @@ import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -45,10 +46,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void _handleMessage(RemoteMessage message) {
     // 내가 지정한 그 알람이면 지정한 화면으로 이동
     logger.d('_handleMessage');
-    if (message.data['data1'] == 'value1') {
-      // something to do ...
-      // e.g) context.go(...)
-    }
+    logger.d(message.notification?.title);
+    logger.d(message.notification?.body);
+
+    ref
+        .read(firebaseCloudMessagingViewModelProvider.notifier)
+        .addNotification(message.notification?.body ?? '');
   }
 
   void _showOverlay(BuildContext context) {
