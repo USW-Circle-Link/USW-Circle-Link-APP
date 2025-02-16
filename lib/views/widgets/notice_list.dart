@@ -5,13 +5,16 @@ import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class NoticeList extends StatelessWidget {
-  const NoticeList({
+  NoticeList({
     Key? key,
     required this.noticeModel,
     required this.onItemClicked,
-  }) : super(key: key);
+  }) : super(key: key) {
+    noticeModel = NoticeModel(
+        message: noticeModel.message, data: noticeModel.data.reversed.toList());
+  }
 
-  final NoticeModel noticeModel;
+  NoticeModel noticeModel;
   final Function(int noticeId) onItemClicked;
 
   @override

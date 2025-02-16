@@ -630,7 +630,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     rightTopCornerRadius: 0.r,
                     borderWidth: 1.w,
                     maxLines: 1,
-                    textInputType: TextInputType.none,
                     textAlign: TextAlign.left,
                     textInputAction: TextInputAction.done,
                     hintText: "포털 이메일 입력",
