@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -183,17 +184,25 @@ class CircleDetailOverlay extends ConsumerWidget {
               GestureDetector(
                 onTap: leaderHp != null && leaderHp!.isNotEmpty
                     ? () async {
-                        final Uri launchUri = Uri(
-                          scheme: 'tel',
-                          path: leaderHp!.startsWith('+')
-                              ? leaderHp
-                              : '+82${leaderHp!.substring(1)}',
-                        );
-                        if (await canLaunchUrl(launchUri)) {
-                          await launchUrl(launchUri);
-                        } else {
-                          logger.d('Could not launch $launchUri');
+                        await Clipboard.setData(ClipboardData(text: leaderHp!));
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('전화번호가 복사되었습니다.'),
+                            ),
+                          );
                         }
+                        // final Uri launchUri = Uri(
+                        //   scheme: 'tel',
+                        //   path: leaderHp!.startsWith('+')
+                        //       ? leaderHp
+                        //       : '+82${leaderHp!.substring(1)}',
+                        // );
+                        // if (await canLaunchUrl(launchUri)) {
+                        //   await launchUrl(launchUri);
+                        // } else {
+                        //   logger.d('Could not launch $launchUri');
+                        // }
                       }
                     : null,
                 child: Container(
