@@ -25,7 +25,6 @@ import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/verify_password_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
 
-
 final webviewRouter = GoRoute(
   path: 'webview/:url',
   builder: (context, state) => WebViewScreen(
@@ -52,7 +51,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                 GoRoute(
                     path: 'application_writing',
                     builder: (_, state) => ApplicationWritingScreen(
-                          clubId: int.parse(state.uri.queryParameters['clubId']!),
+                          clubId:
+                              int.parse(state.uri.queryParameters['clubId']!),
                         ),
                     routes: [webviewRouter]),
               ]),
@@ -174,6 +174,18 @@ final routerProvider = Provider<GoRouter>((ref) {
             path: 'tems_of_serice',
             builder: (_, __) => PolicyScreen(
                 policyType: PolicyType.termsOfService, isDialog: false),
+          ),
+          GoRoute(
+            path: 'privacy_policy',
+            builder: (_, __) => PolicyScreen(
+                policyType: PolicyType.privacyPolicy, isDialog: false),
+          ),
+          GoRoute(
+            path: 'personal_information_collection_and_usage_agreement',
+            builder: (_, __) => PolicyScreen(
+                policyType:
+                    PolicyType.personalInformationCollectionAndUsageAgreement,
+                isDialog: false),
           ),
           GoRoute(
               path: 'image',

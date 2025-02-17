@@ -7,7 +7,8 @@ enum FieldType {
   passwordConfirm,
   password,
   email,
-  currentPassword
+  currentPassword,
+  verificationCode
 }
 
 class ErrorUtil {
@@ -61,7 +62,9 @@ class ErrorUtil {
         return "아이디와 비밀번호를 입력해주세요!";
       case "USR-216": // 비회원
         return "비회원 사용자입니다. 인증을 완료해주세요";
+      case "USR-F211": // 필드값 에러 ex) 아이디 혹은 비밀번호 길이
       case "USR-211": // 올바르지 않은 아이디 혹은 비밀번호
+      case "USR-208": // 존재하지 않는 계정
         return "올바르지 않은 아이디 혹은 비밀번호입니다";
       case "USR-F900": // 현재 비밀번호 공백
         return "현재 비밀번호를 입력해주세요!";
@@ -69,6 +72,10 @@ class ErrorUtil {
         return "현재 비밀번호가 일치하지 않습니다";
       case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
+      case "WT-F100": // 인증코드 존재 X
+        return "인증코드를 입력해주세요!";
+      case "WT-101": // 인증번호가 일치하지 않음
+        return "인증번호가 일치하지 않습니다!";
       default:
         return null;
     }
@@ -104,6 +111,8 @@ class ErrorUtil {
         return fieldType != FieldType.currentPassword;
       case "EML-F100":
         return fieldType != FieldType.email;
+      case "WT-F100":
+        return fieldType != FieldType.verificationCode;
       default:
         return null;
     }

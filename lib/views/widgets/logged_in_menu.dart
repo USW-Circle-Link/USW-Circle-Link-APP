@@ -46,36 +46,36 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     onTap: null,
                     child: Center(
                         child: Row(
+                      children: [
+                        SizedBox(width: 3.w),
+                        Stack(
+                          alignment: Alignment.center,
                           children: [
-                            SizedBox(width: 3.w),
-                            Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                SvgPicture.asset(
-                                  'assets/images/profile.svg',
-                                ),
-                                Icon(
-                                  Icons.person,
-                                  color: const Color.fromARGB(255, 255, 255, 255),
-                                  size: 30,
-                                ),
-                              ],
+                            SvgPicture.asset(
+                              'assets/images/profile.svg',
                             ),
-                            SizedBox(width: 16.w),
-                            TextFontWidget.fontRegular(
-                              widget.state.data.userName,
-                              fontSize: 18.sp,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w800,
-                            ),
-                            TextFontWidget.fontRegular(
-                              ' 님',
-                              fontSize: 14.sp,
-                              color: const Color(0xFF767676),
-                              fontWeight: FontWeight.w600,
+                            Icon(
+                              Icons.person,
+                              color: const Color.fromARGB(255, 255, 255, 255),
+                              size: 30,
                             ),
                           ],
-                        )),
+                        ),
+                        SizedBox(width: 16.w),
+                        TextFontWidget.fontRegular(
+                          widget.state.data.userName,
+                          fontSize: 18.sp,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w800,
+                        ),
+                        TextFontWidget.fontRegular(
+                          ' 님',
+                          fontSize: 14.sp,
+                          color: const Color(0xFF767676),
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ],
+                    )),
                   ),
                 ),
                 // 내 정보 부분 수정 시작
@@ -91,7 +91,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   },
                   trailingSvgPath: 'assets/images/>.svg',
                   isExpanded:
-                  isMyInfoExpanded, // 내 정보가 확장되었을 때 마진과 border radius를 없애기 위해 전달
+                      isMyInfoExpanded, // 내 정보가 확장되었을 때 마진과 border radius를 없애기 위해 전달
                   subtitle: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
@@ -156,22 +156,12 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
           Column(
             children: [
               Container(
-                height: 150.h,
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () => context.go('/tems_of_serice'),
-                      child: TextFontWidget.fontRegular(
-                        '이용약관',
-                        fontSize: 12.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _launchURL,
+                    InkWell(
+                      onTap: _launchURL,
                       child: TextFontWidget.fontRegular(
                         '피드백',
                         fontSize: 12.sp,
@@ -179,8 +169,9 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    TextButton(
-                      onPressed: () async {
+                    SizedBox(width: 16.w),
+                    InkWell(
+                      onTap: () async {
                         await DialogManager.instance.showAlertDialog(
                           context: context,
                           title: '로그아웃 하시겠습니까?',
@@ -203,6 +194,35 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   ],
                 ),
               ),
+              SizedBox(height: 10.h),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () => context.go('/tems_of_serice'),
+                      child: TextFontWidget.fontRegular(
+                        '이용약관',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 16.w),
+                    InkWell(
+                      onTap: () => context.go('/privacy_policy'),
+                      child: TextFontWidget.fontRegular(
+                        '개인정보 처리 방침',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 40.h),
             ],
           ),
         ],

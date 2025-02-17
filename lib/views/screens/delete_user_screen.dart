@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -274,7 +275,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           textInputType: TextInputType.text,
                           textAlign: TextAlign.left,
                           hintText: '인증코드 4자리 입력',
-                          borderColor: codeIsInvalid(state)
+                          borderColor: state is DeleteUserModelError &&
+                                  ErrorUtil.instance.isValid(
+                                      state.code, FieldType.verificationCode)
                               ? const Color(0xFFFF3F3F)
                               : null,
                           isAnimatedHint: false,
@@ -330,6 +333,15 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                             fontFamily: 'SUIT',
                           ),
                         ),
+                        SizedBox(
+                          height: 12.h,
+                        ),
+                        if (state is DeleteUserModelError)
+                          TextFontWidget.fontRegular(
+                            '* ${ErrorUtil.instance.getErrorMessage(state.code) ?? '인증코드 검증에 실패했습니다. 잠시 후 다시 시도해주세요!'}',
+                            fontSize: 12.sp,
+                            color: const Color(0xFFFF3F3F),
+                          ),
                       ]
                     ],
                   ),

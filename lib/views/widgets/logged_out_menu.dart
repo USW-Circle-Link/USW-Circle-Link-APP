@@ -95,22 +95,12 @@ class LoggedOutMenu extends ConsumerWidget {
           Column(
             children: [
               Container(
-                height: 150.h,
                 padding: EdgeInsets.symmetric(horizontal: 24.w),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () => context.go('/tems_of_serice'),
-                      child: TextFontWidget.fontRegular(
-                        '이용약관',
-                        fontSize: 12.sp,
-                        color: Colors.black,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: _launchURL,
+                    InkWell(
+                      onTap: _launchURL,
                       child: TextFontWidget.fontRegular(
                         '피드백',
                         fontSize: 12.sp,
@@ -121,6 +111,35 @@ class LoggedOutMenu extends ConsumerWidget {
                   ],
                 ),
               ),
+              SizedBox(height: 10.h),
+              Container(
+                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    InkWell(
+                      onTap: () => context.go('/tems_of_serice'),
+                      child: TextFontWidget.fontRegular(
+                        '이용약관',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(width: 16.w),
+                    InkWell(
+                      onTap: () => context.go('/privacy_policy'),
+                      child: TextFontWidget.fontRegular(
+                        '개인정보 처리 방침',
+                        fontSize: 12.sp,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: 40.h),
             ],
           ),
         ],

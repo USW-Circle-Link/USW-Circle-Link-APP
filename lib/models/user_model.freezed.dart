@@ -342,7 +342,7 @@ UserModelError _$UserModelErrorFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$UserModelError {
-  String get message => throw _privateConstructorUsedError;
+  String? get message => throw _privateConstructorUsedError;
   String? get code => throw _privateConstructorUsedError;
   String? get exception => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
@@ -361,7 +361,7 @@ abstract class $UserModelErrorCopyWith<$Res> {
       _$UserModelErrorCopyWithImpl<$Res, UserModelError>;
   @useResult
   $Res call(
-      {String message,
+      {String? message,
       String? code,
       String? exception,
       String? error,
@@ -381,17 +381,17 @@ class _$UserModelErrorCopyWithImpl<$Res, $Val extends UserModelError>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = null,
+    Object? message = freezed,
     Object? code = freezed,
     Object? exception = freezed,
     Object? error = freezed,
     Object? status = freezed,
   }) {
     return _then(_value.copyWith(
-      message: null == message
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -421,7 +421,7 @@ abstract class _$$UserModelErrorImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {String message,
+      {String? message,
       String? code,
       String? exception,
       String? error,
@@ -439,17 +439,17 @@ class __$$UserModelErrorImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = null,
+    Object? message = freezed,
     Object? code = freezed,
     Object? exception = freezed,
     Object? error = freezed,
     Object? status = freezed,
   }) {
     return _then(_$UserModelErrorImpl(
-      message: null == message
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       code: freezed == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
@@ -472,19 +472,16 @@ class __$$UserModelErrorImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$UserModelErrorImpl implements _UserModelError {
+class _$UserModelErrorImpl extends _UserModelError {
   _$UserModelErrorImpl(
-      {required this.message,
-      this.code,
-      this.exception,
-      this.error,
-      this.status});
+      {this.message, this.code, this.exception, this.error, this.status})
+      : super._();
 
   factory _$UserModelErrorImpl.fromJson(Map<String, dynamic> json) =>
       _$$UserModelErrorImplFromJson(json);
 
   @override
-  final String message;
+  final String? message;
   @override
   final String? code;
   @override
@@ -532,19 +529,20 @@ class _$UserModelErrorImpl implements _UserModelError {
   }
 }
 
-abstract class _UserModelError implements UserModelError {
+abstract class _UserModelError extends UserModelError {
   factory _UserModelError(
-      {required final String message,
+      {final String? message,
       final String? code,
       final String? exception,
       final String? error,
       final int? status}) = _$UserModelErrorImpl;
+  _UserModelError._() : super._();
 
   factory _UserModelError.fromJson(Map<String, dynamic> json) =
       _$UserModelErrorImpl.fromJson;
 
   @override
-  String get message;
+  String? get message;
   @override
   String? get code;
   @override
