@@ -264,11 +264,33 @@ class _ApplicationWritingScreenState
                                 SizedBox(
                                   width: 10.w,
                                 ),
-                                TextFontWidget.fontRegular(
-                                  '유의사항을 확인했습니다',
-                                  fontSize: 14.sp,
-                                  color: const Color(0xFF353549),
-                                  fontWeight: FontWeight.w600,
+                                GestureDetector(
+                                  onTap: () {
+                                    if (state.hasValue &&
+                                        state.value?.type ==
+                                            ApplicationModelType
+                                                .getApplication) {
+                                      setState(() {
+                                        isDone = !isDone;
+                                      });
+                                    } else {
+                                      // 지원서작성을 누르지 않음 -> 지원서 작성이 되지 않음
+                                      setState(() {
+                                        isDone = false;
+                                        DialogManager.instance.showAlertDialog(
+                                          context: context,
+                                          content: '지원서 작성을 먼저 눌러주세요!',
+                                        );
+                                      });
+                                    }
+                                    logger.d('지원서 작성 완료에 동의함 : $isDone');
+                                  },
+                                  child: TextFontWidget.fontRegular(
+                                    '유의사항을 확인했습니다',
+                                    fontSize: 14.sp,
+                                    color: const Color(0xFF353549),
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                               ],
                             ),

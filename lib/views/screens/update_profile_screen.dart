@@ -119,7 +119,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
         majorError = null;
       }
 
-      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, "
+      logger.d(
+          "Validation Results: nameError=$nameError, phoneError=$phoneError, "
           "studentNumberError=$studentNumberError, majorError=$majorError");
     });
   }
@@ -127,7 +128,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
-
 
     if (!_isInitialBindDone && !_hasUserEdited) {
       state.whenData((profile) {
@@ -211,7 +211,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset(
-                    'assets/images/back.svg',
+                    'assets/images/ic_back_arrow.svg',
                     height: 36.h,
                     width: 36.w,
                   ),
@@ -253,9 +253,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: nameError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      nameError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -276,16 +275,16 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   height: 25.h,
                   child: nameError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + nameError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + nameError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                              height: 1.sp,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -306,9 +305,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: phoneError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      phoneError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -329,16 +327,16 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   height: 25.h,
                   child: phoneError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + phoneError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + phoneError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                              height: 1.sp,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -382,16 +380,16 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   height: 25.h,
                   child: studentNumberError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + studentNumberError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + studentNumberError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                              height: 1.sp,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 12.h),
@@ -433,9 +431,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   rightBottomCornerRadius: 8.r,
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
-                  borderColor: majorError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
+                  borderColor:
+                      majorError == null ? const Color(0xffDBDBDB) : Colors.red,
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.none,
@@ -460,16 +457,16 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   height: 25.h,
                   child: majorError != null
                       ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + majorError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
+                          padding: EdgeInsets.only(top: 8.h),
+                          child: Text(
+                            '* ' + majorError!,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 12.sp,
+                              height: 1.sp,
+                            ),
+                          ),
+                        )
                       : null,
                 ),
                 SizedBox(height: 68.h),
