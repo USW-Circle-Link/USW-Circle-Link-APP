@@ -2,13 +2,13 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
@@ -103,8 +103,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               _scaffoldKey.currentState?.openDrawer();
             },
             icon: Icon(
-              Icons.menu_outlined,
-              color: Colors.grey,
+              Icons.menu,
+              color: Color(0xff717171),
+              size: 24.sp,
             ),
           ),
           title: Row(
@@ -129,7 +130,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               onPressed: () {
                 _showOverlay(context);
               },
-              icon: SvgPicture.asset('assets/images/bell.svg'),
+              icon: Icon(
+                MainIcons.ic_bell,
+                size: 18.sp,
+                color: Color(0xFF717171),
+              ),
             ),
           ],
         ),
@@ -267,15 +272,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ),
                       child: Row(
                         children: [
-                          SvgPicture.asset(
-                            'assets/images/ic_filter.svg',
-                            colorFilter: selectedCategories.isEmpty
-                                ? null
-                                : ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.srcIn,
-                                  ),
+                          Icon(
+                            MainIcons.ic_filter,
+                            size: 18.sp,
+                            color: selectedCategories.isEmpty
+                                ? Color(0xffa8a8a8)
+                                : Colors.white,
                           ),
+                          SizedBox(width: 4.w),
                           TextFontWidget.fontRegular(
                             '필터',
                             fontWeight: FontWeight.w500,

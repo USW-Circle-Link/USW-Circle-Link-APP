@@ -199,6 +199,8 @@ class AuthRepository {
     required String username,
     required String studentNumber,
     required String userHp,
+    required String password,
+    required String passwordConfirm,
   }) async {
     final response = await dio.get(
       '$protocol://$host:$port/profiles/duplication-check',
@@ -206,6 +208,8 @@ class AuthRepository {
         "userName": username,
         "studentNumber": studentNumber,
         "userHp": userHp,
+        "password": password,
+        "confirmPassword": passwordConfirm,
       },
     );
 

@@ -491,18 +491,25 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                     body: TabBarView(
                       controller: tabController,
                       children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                          child: Html(data: clubIntroState.value!.introContent),
+                        SingleChildScrollView(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                            child: Html(
+                              data: clubIntroState.value!.introContent,
+                            ),
+                          ),
                         ),
                         if (clubIntroState.value!.recruitmentStatus == "OPEN")
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding:
-                                EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                            child: Html(
-                              data: clubIntroState.value!.clubRecruitment ?? '',
+                          SingleChildScrollView(
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              padding:
+                                  EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                              child: Html(
+                                data:
+                                    clubIntroState.value!.clubRecruitment ?? '',
+                              ),
                             ),
                           ),
                       ],

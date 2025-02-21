@@ -23,7 +23,7 @@ extension PasswordValidation on String {
         numberRegExp.hasMatch(this) &&
         nonWordRegExp.hasMatch(this) &&
         !invalidWordRegExp.hasMatch(this) &&
-        length >= 5 &&
+        length >= 8 &&
         length <= 20;
   }
 }

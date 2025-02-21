@@ -176,6 +176,8 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
         username: username,
         studentNumber: studentNumber,
         userHp: telephone,
+        password: password,
+        passwordConfirm: passwordConfirm,
       );
       state = AsyncData(response);
     } on SignUpModelError catch (e) {

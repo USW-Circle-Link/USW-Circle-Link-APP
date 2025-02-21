@@ -9,13 +9,11 @@ part of 'find_id_model.dart';
 _$FindIdModelImpl _$$FindIdModelImplFromJson(Map<String, dynamic> json) =>
     _$FindIdModelImpl(
       message: json['message'] as String,
-      data: json['data'] as String,
     );
 
 Map<String, dynamic> _$$FindIdModelImplToJson(_$FindIdModelImpl instance) =>
     <String, dynamic>{
       'message': instance.message,
-      'data': instance.data,
     };
 
 _$FindIdModelErrorImpl _$$FindIdModelErrorImplFromJson(

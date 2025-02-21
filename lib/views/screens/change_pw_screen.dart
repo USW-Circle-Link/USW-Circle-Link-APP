@@ -237,7 +237,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         obscureText: !newPWVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 5~20자)',
+                        hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 8~20자)',
                         isAnimatedHint: false,
                         prefixIcon: SvgPicture.asset(
                           'assets/images/ic_password.svg',
@@ -315,7 +315,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         height: 10.h,
                       ),
                       TextFontWidget.fontRegular(
-                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 5~20자 이내로 작성해주세요!",
+                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 8~20자 이내로 작성해주세요!",
                         fontSize: 12.sp,
                         color: const Color(0xFF707070),
                         fontWeight: FontWeight.w400,

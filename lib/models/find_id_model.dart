@@ -9,7 +9,6 @@ class FindIdModel with _$FindIdModel {
 
   factory FindIdModel({
     required String message,
-    required String data,
   }) = _FindIdModel;
 
   factory FindIdModel.fromJson(Map<String, dynamic> json) =>
