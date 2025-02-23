@@ -47,7 +47,7 @@ class CircleListScreen extends ConsumerWidget {
                       Navigator.pop(context);
                     },
                     icon: SvgPicture.asset(
-                      'assets/images/back.svg',
+                      'assets/images/ic_back_arrow.svg',
                       height: 36.h,
                       width: 36.w,
                     ),

@@ -21,7 +21,6 @@ FindIdModel _$FindIdModelFromJson(Map<String, dynamic> json) {
 /// @nodoc
 mixin _$FindIdModel {
   String get message => throw _privateConstructorUsedError;
-  String get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -35,7 +34,7 @@ abstract class $FindIdModelCopyWith<$Res> {
           FindIdModel value, $Res Function(FindIdModel) then) =
       _$FindIdModelCopyWithImpl<$Res, FindIdModel>;
   @useResult
-  $Res call({String message, String data});
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -52,16 +51,11 @@ class _$FindIdModelCopyWithImpl<$Res, $Val extends FindIdModel>
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
   }) {
     return _then(_value.copyWith(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
@@ -75,7 +69,7 @@ abstract class _$$FindIdModelImplCopyWith<$Res>
       __$$FindIdModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, String data});
+  $Res call({String message});
 }
 
 /// @nodoc
@@ -90,16 +84,11 @@ class __$$FindIdModelImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? message = null,
-    Object? data = null,
   }) {
     return _then(_$FindIdModelImpl(
       message: null == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
-      data: null == data
-          ? _value.data
-          : data // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -108,19 +97,17 @@ class __$$FindIdModelImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$FindIdModelImpl extends _FindIdModel {
-  _$FindIdModelImpl({required this.message, required this.data}) : super._();
+  _$FindIdModelImpl({required this.message}) : super._();
 
   factory _$FindIdModelImpl.fromJson(Map<String, dynamic> json) =>
       _$$FindIdModelImplFromJson(json);
 
   @override
   final String message;
-  @override
-  final String data;
 
   @override
   String toString() {
-    return 'FindIdModel(message: $message, data: $data)';
+    return 'FindIdModel(message: $message)';
   }
 
   @override
@@ -128,13 +115,12 @@ class _$FindIdModelImpl extends _FindIdModel {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$FindIdModelImpl &&
-            (identical(other.message, message) || other.message == message) &&
-            (identical(other.data, data) || other.data == data));
+            (identical(other.message, message) || other.message == message));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, message, data);
+  int get hashCode => Object.hash(runtimeType, message);
 
   @JsonKey(ignore: true)
   @override
@@ -151,9 +137,7 @@ class _$FindIdModelImpl extends _FindIdModel {
 }
 
 abstract class _FindIdModel extends FindIdModel {
-  factory _FindIdModel(
-      {required final String message,
-      required final String data}) = _$FindIdModelImpl;
+  factory _FindIdModel({required final String message}) = _$FindIdModelImpl;
   _FindIdModel._() : super._();
 
   factory _FindIdModel.fromJson(Map<String, dynamic> json) =
@@ -161,8 +145,6 @@ abstract class _FindIdModel extends FindIdModel {
 
   @override
   String get message;
-  @override
-  String get data;
   @override
   @JsonKey(ignore: true)
   _$$FindIdModelImplCopyWith<_$FindIdModelImpl> get copyWith =>

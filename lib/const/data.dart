@@ -16,7 +16,7 @@ const servers = {
     'port': '8080',
   },
 };
-const SERVER = 'test_server';
+const SERVER = 'prod_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];

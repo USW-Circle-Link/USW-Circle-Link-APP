@@ -281,7 +281,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  hintText: '아이디 (5~20자)',
+                  hintText: '아이디 (8~20자)',
                   borderColor: state.hasError &&
                           !ErrorUtil.instance.isValid(
                               (state.error as SignUpModelError).code,
@@ -365,7 +365,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   obscureText: !passwordVisible,
                   textInputAction: TextInputAction.next,
                   textAlign: TextAlign.left,
-                  hintText: '영어,숫자,특수문자 포함 5~20자',
+                  hintText: '영어,숫자,특수문자 포함 8~20자',
                   isAnimatedHint: false,
                   onChanged: (value) {
                     ref.read(signUpViewModelProvider.notifier).initState();
@@ -714,16 +714,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     SizedBox(
                       width: 10.w,
                     ),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: "서비스 이용약관을 확인했습니다.",
-                        style: TextFontWidget.fontRegularStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF989898),
+                    GestureDetector(
+                      onTap: () async {
+                        final agree = await DialogManager.instance
+                            .showPolicyDialog(
+                                context, PolicyType.termsOfService);
+                        setState(() {
+                          termsOfServiceAgree = agree;
+                        });
+                        logger.d('이용약관 동의함 : $termsOfServiceAgree');
+                      },
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: "서비스 이용약관을 확인했습니다.",
+                          style: TextFontWidget.fontRegularStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF989898),
+                          ),
+                          children: [],
                         ),
-                        children: [],
                       ),
                     ),
                   ],
@@ -767,16 +778,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     SizedBox(
                       width: 10.w,
                     ),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: "개인 정보 처리 방침을 확인했습니다.",
-                        style: TextFontWidget.fontRegularStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF989898),
+                    GestureDetector(
+                      onTap: () async {
+                        final agree = await DialogManager.instance
+                            .showPolicyDialog(
+                                context, PolicyType.privacyPolicy);
+                        setState(() {
+                          privacyPolicyAgree = agree;
+                        });
+                        logger.d('개인정보 처리 방침 동의함 : $privacyPolicyAgree');
+                      },
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: "개인 정보 처리 방침을 확인했습니다.",
+                          style: TextFontWidget.fontRegularStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF989898),
+                          ),
+                          children: [],
                         ),
-                        children: [],
                       ),
                     ),
                   ],
@@ -814,16 +836,28 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     SizedBox(
                       width: 10.w,
                     ),
-                    RichText(
-                      textAlign: TextAlign.center,
-                      text: TextSpan(
-                        text: "개인 정보 수집에 동의합니다.",
-                        style: TextFontWidget.fontRegularStyle(
-                          fontSize: 12.sp,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFF989898),
+                    GestureDetector(
+                      onTap: () async {
+                        final agree = await DialogManager.instance.showPolicyDialog(
+                            context,
+                            PolicyType
+                                .personalInformationCollectionAndUsageAgreement);
+                        setState(() {
+                          personalInformationCollectionAndUsageAgreementAgree =
+                              agree;
+                        });
+                      },
+                      child: RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: "개인 정보 수집에 동의합니다.",
+                          style: TextFontWidget.fontRegularStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            color: const Color(0xFF989898),
+                          ),
+                          children: [],
                         ),
-                        children: [],
                       ),
                     ),
                   ],

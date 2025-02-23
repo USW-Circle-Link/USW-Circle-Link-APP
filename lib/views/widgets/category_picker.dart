@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/viewmodels/category_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -116,8 +117,15 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                       }).toList() ??
                       [],
                 ),
-                error: (error, stackTrace) => Text(error.toString()),
-                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (error, stackTrace) => TextFontWidget.fontRegular(
+                  '카테고리를 불러오는 데 실패했습니다.\n다시 시도해주세요.',
+                  fontSize: 14.sp,
+                  fontWeight: FontWeight.w300,
+                ),
+                loading: () => const Center(
+                    child: CircularProgressIndicator(
+                  color: accentColor,
+                )),
               ),
             ],
           ),

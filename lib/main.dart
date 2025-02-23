@@ -115,8 +115,9 @@ Future<void> setupFlutterNotifications() async {
 }
 
 const appcastURL =
-    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/develop/appcast.xml';
+    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/main/appcast.xml';
 final upgrader = Upgrader(
+  messages: UpgraderMessages(code: 'ko'),
   debugLogging: true,
   storeController: UpgraderStoreController(
     onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
@@ -138,8 +139,6 @@ class CircleLink extends ConsumerWidget {
       logger.d('call.arguments: ${call.arguments}');
       logger.d('call.arguments type: ${call.arguments.runtimeType}');
       if (call.method == 'storeNotification') {
-        logger.d(call.arguments['aps']['alert']['title']);
-        logger.d(call.arguments['aps']['alert']['body']);
         final message = APNSPayload.fromMap(call.arguments);
         logger.d('message: $message');
         ref
