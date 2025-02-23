@@ -8,7 +8,7 @@ final RegExp nonWordRegExp =
 final RegExp invalidWordRegExp =
     RegExp(r'''[^a-zA-Z\d`~!@#$%^&*()\-_=+\[\]{};:'",<.>/?\|]''');
 final RegExp emailVerificationUrlRegExp = RegExp(r'');
-final RegExp nameRegExp = RegExp(r'^[A-Za-zㄱ-ㅎㅏ-ㅣ가-핳]+$');
+final RegExp nameRegExp = RegExp(r'^[A-Za-z가-힣]+$');
 final RegExp telephoneRegExp = RegExp(r'^[0-9]{11}$');
 final RegExp studentNumberRegExp = RegExp(r'^[0-9]{8}$');
 
