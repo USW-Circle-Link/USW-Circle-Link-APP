@@ -51,6 +51,7 @@ class ApplicationRepository {
   }) async {
     final response = await dio.get(
       '$baseUrl/$clubUUID',
+      options: Options(headers: {'accessToken': 'true'}),
     );
 
     logger.d('${response.data}');
