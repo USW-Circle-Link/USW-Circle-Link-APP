@@ -7,7 +7,8 @@ enum FieldType {
   passwordConfirm,
   password,
   email,
-  currentPassword
+  currentPassword,
+  code
 }
 
 class ErrorUtil {
@@ -72,6 +73,8 @@ class ErrorUtil {
         return "현재 비밀번호가 일치하지 않습니다";
       case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
+      case "USR-217": // 현재 비밀번호와 새 비밀번호가 같음
+        return "현재 비밀번호와 새 비밀번호가 같습니다!";
       default:
         return null;
     }
@@ -107,6 +110,8 @@ class ErrorUtil {
         return fieldType != FieldType.currentPassword;
       case "EML-F100":
         return fieldType != FieldType.email;
+      case "VC-F100":
+        return fieldType != FieldType.code;
       default:
         return null;
     }

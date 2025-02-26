@@ -31,7 +31,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
               logger.d('이메일 보내기 성공!');
               DialogManager.instance.showAlertDialog(
                 context: context,
-                content: "인증 메일이 전송되었습니다!",
+                content: "인증 메일이 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
               );
             }
           },
@@ -44,12 +44,6 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
             }
           },
           loading: () {});
-      if (next is FindIdModel) {
-        DialogManager.instance.showAlertDialog(
-          context: context,
-          content: '확인메일이 전송되었습니다!',
-        );
-      }
     });
 
     emailEditController.addListener(

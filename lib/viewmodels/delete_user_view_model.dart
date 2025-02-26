@@ -1,14 +1,12 @@
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
-final deleteUserViewModelProvider =
-    StateNotifierProvider.autoDispose<DeleteUserViewModel, DeleteUserModelBase?>((ref) {
-  final UserViewModel userViewModel  = ref.read(userViewModelProvider.notifier);
+final deleteUserViewModelProvider = StateNotifierProvider.autoDispose<
+    DeleteUserViewModel, AsyncValue<DeleteUserModel?>>((ref) {
+  final UserViewModel userViewModel = ref.read(userViewModelProvider.notifier);
   final FlutterSecureStorage storage = ref.read(secureStorageProvider);
   return DeleteUserViewModel(
     userViewModel: userViewModel,
@@ -16,39 +14,38 @@ final deleteUserViewModelProvider =
   );
 });
 
-class DeleteUserViewModel extends StateNotifier<DeleteUserModelBase?> {
+class DeleteUserViewModel extends StateNotifier<AsyncValue<DeleteUserModel?>> {
   final UserViewModel userViewModel;
   final FlutterSecureStorage storage;
   DeleteUserViewModel({
     required this.userViewModel,
     required this.storage,
-  }) : super(null);
+  }) : super(const AsyncData(null));
 
-  Future<DeleteUserModelBase> sendCode() async {
+  Future<void> sendCode() async {
     try {
-      state = DeleteUserModelLoading();
-      final response =
-          await userViewModel.sendCode();
+      state = const AsyncLoading();
+      final response = await userViewModel.sendCode();
 
-      state = response;
+      state = AsyncData(response);
     } on DeleteUserModelError catch (e) {
-      state = e;
+      state = AsyncError(e, StackTrace.current);
     } catch (e) {
-      state = DeleteUserModelError(
+      final error = DeleteUserModelError(
           message: '예외발생 - $e', type: DeleteUserModelType.sendCode);
+      state = AsyncError(error, StackTrace.current);
     }
-
-    return Future.value(state);
   }
 
   void initState() {
-    state = null;
+    state = const AsyncData(null);
   }
 
   Future<void> verifyCode({
     required String code,
   }) async {
     try {
+      state = const AsyncLoading();
       if (code.isEmpty) {
         throw DeleteUserModelError(
           message: '인증코드가 형식에 맞지 않습니다.',
@@ -56,20 +53,20 @@ class DeleteUserViewModel extends StateNotifier<DeleteUserModelBase?> {
           type: DeleteUserModelType.verifyCode,
         );
       }
-      state = DeleteUserModelLoading();
       final response = await userViewModel.verifyCode(
         code: code,
       );
-      state = response;
+      state = AsyncData(response);
 
       await userViewModel.logout();
     } on DeleteUserModelError catch (e) {
-      state = e;
+      state = AsyncError(e, StackTrace.current);
     } catch (e) {
-      state = DeleteUserModelError(
+      final error = DeleteUserModelError(
         message: '예외발생 - $e',
         type: DeleteUserModelType.verifyCode,
       );
+      state = AsyncError(error, StackTrace.current);
     }
   }
 }

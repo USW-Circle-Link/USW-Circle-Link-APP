@@ -29,6 +29,7 @@ class DeleteUserRepository {
       options: Options(
         headers: {
           'Content-Type': 'application/json',
+          'accessToken': 'true',
         },
       ),
     );

@@ -160,8 +160,10 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       logger.d(
           'UserViewModel - AccessToken : $accessToken / RefreshToken : $refreshToken / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 삭제 성공!');
 
-      await authRepository.logout(
-          accessToken: accessToken0 ?? "", refreshToken: refreshToken0 ?? "");
+      if (accessToken0 != null && refreshToken0 != null) {
+        await authRepository.logout(
+            accessToken: accessToken0, refreshToken: refreshToken0);
+      }
     } on UserModelError catch (e) {
       logger.d(e);
       rethrow;

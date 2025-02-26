@@ -9,7 +9,6 @@ enum DeleteUserModelType { sendCode, verifyCode }
 
 @freezed
 class DeleteUserModel extends DeleteUserModelBase with _$DeleteUserModel {
-
   DeleteUserModel._();
 
   factory DeleteUserModel({
@@ -20,12 +19,14 @@ class DeleteUserModel extends DeleteUserModelBase with _$DeleteUserModel {
   factory DeleteUserModel.fromJson(Map<String, dynamic> json) =>
       _$DeleteUserModelFromJson(json);
 
-  DeleteUserModel setType(DeleteUserModelType type) => DeleteUserModel(message: message, type: type);
+  DeleteUserModel setType(DeleteUserModelType type) =>
+      DeleteUserModel(message: message, type: type);
 }
 
 @freezed
-class DeleteUserModelError extends DeleteUserModelBase with _$DeleteUserModelError implements Exception {
-
+class DeleteUserModelError extends DeleteUserModelBase
+    with _$DeleteUserModelError
+    implements Error {
   DeleteUserModelError._();
 
   factory DeleteUserModelError({
@@ -37,9 +38,11 @@ class DeleteUserModelError extends DeleteUserModelBase with _$DeleteUserModelErr
     DeleteUserModelType? type,
   }) = _DeleteUserModelError;
 
-  factory DeleteUserModelError.fromJson(Map<String, dynamic> json) => _$DeleteUserModelErrorFromJson(json);
+  factory DeleteUserModelError.fromJson(Map<String, dynamic> json) =>
+      _$DeleteUserModelErrorFromJson(json);
 
-  DeleteUserModelError setType(DeleteUserModelType type) => DeleteUserModelError(
+  DeleteUserModelError setType(DeleteUserModelType type) =>
+      DeleteUserModelError(
         message: message,
         exception: exception,
         code: code,
@@ -47,6 +50,7 @@ class DeleteUserModelError extends DeleteUserModelBase with _$DeleteUserModelErr
         error: error,
         type: type,
       );
-}
 
-class DeleteUserModelLoading extends DeleteUserModelBase {}
+  @override
+  StackTrace? get stackTrace => StackTrace.fromString(toString());
+}

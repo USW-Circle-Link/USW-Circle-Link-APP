@@ -60,7 +60,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     if (route is PageRoute) {
       routeObserver.subscribe(this, route);
     }
-    ref.refresh(updateProfileViewModelProvider);
+    ref.invalidate(updateProfileViewModelProvider);
     _isInitialBindDone = false;
   }
 
@@ -167,6 +167,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                 context: context,
                 content: ErrorUtil.instance.getErrorMessage(error.code) ??
                     "프로필을 불러오는 데 문제가 발생했습니다!",
+                onLeftButtonPressed: () => context.go('/'),
               );
               break;
             case ProfileModelType.updateProfile:

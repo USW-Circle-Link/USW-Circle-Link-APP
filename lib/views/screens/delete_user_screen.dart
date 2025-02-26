@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -20,36 +21,51 @@ class DeleteUserScreen extends ConsumerStatefulWidget {
 class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   final TextEditingController codeEditController = TextEditingController();
 
-  bool isEmailSent = false; // 상태를 관리하기 위한 변수 추가
-
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(deleteUserViewModelProvider);
     ref.listen(deleteUserViewModelProvider, (previous, next) {
       logger.d(next);
-      if (next is DeleteUserModel) {
-        switch (next.type) {
-          case DeleteUserModelType.sendCode:
-            setState(() {
-              isEmailSent = true; // 이메일 전송 후 상태 변경
-            });
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: "인증 메일이 전송되었습니다!",
-            );
-            break;
-          case DeleteUserModelType.verifyCode:
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: "회원 탈퇴가 완료되었습니다!",
-              onLeftButtonPressed: () => context.go('/'),
-            );
-            break;
-          default:
-        }
-      } else if (next is DeleteUserModelError) {
-        // 오류 처리 코드 (생략)
-      }
+      next.when(
+          data: (data) {
+            switch (data?.type) {
+              case DeleteUserModelType.sendCode:
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "인증 코드가 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+                );
+                break;
+              case DeleteUserModelType.verifyCode:
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "회원 탈퇴가 완료되었습니다!",
+                  onLeftButtonPressed: () => context.go('/'),
+                );
+                break;
+              default:
+            }
+          },
+          error: (e, stackTrace) {
+            final error = e as DeleteUserModelError;
+            switch (error.type) {
+              case DeleteUserModelType.sendCode:
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      "인증 메일을 전송하는 데 문제가 발생했습니다!",
+                );
+                break;
+              case DeleteUserModelType.verifyCode:
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      "인증 코드를 확인하는 데 문제가 발생했습니다!",
+                );
+                break;
+              default:
+            }
+          },
+          loading: () {});
     });
 
     return ScreenUtilInit(
@@ -93,171 +109,93 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      if (!isEmailSent) ...[
-                        // 이메일 전송 전에는 이메일 전송 버튼만 표시
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56.h,
-                          child: OutlinedButton(
-                            onPressed: state is DeleteUserModelLoading
-                                ? null
-                                : () async {
-                                    setState(() {
-                                      isEmailSent = true; // 이메일 전송 후 상태 변경
-                                    });
-                                    ref
-                                        .read(deleteUserViewModelProvider
-                                            .notifier)
-                                        .sendCode();
+                      SizedBox(
+                        width: double.infinity,
+                        height: 56.h,
+                        child: OutlinedButton(
+                          onPressed: state.when<VoidCallback?>(
+                              data: (data) => () {
+                                    switch (data?.type) {
+                                      case DeleteUserModelType.sendCode:
+                                        final encodedUrl = Uri.encodeComponent(
+                                            'https://mail.suwon.ac.kr:10443/m/index.jsp');
+
+                                        context.push(
+                                            '/login/sign_up_option/sign_up/email_verification/webview/$encodedUrl');
+                                        break;
+                                      case DeleteUserModelType.verifyCode:
+                                        break;
+                                      default: // null
+                                        sendMail();
+                                    }
                                   },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
+                              error: (_, __) => sendMail,
+                              loading: () => null),
+                          style: OutlinedButton.styleFrom(
+                            backgroundColor: const Color(0xffffB052),
+                            foregroundColor: const Color(0xFFFFFFFF),
+                            side: const BorderSide(
+                              color: Colors.transparent,
+                              width: 0.0,
                             ),
-                            child: TextFontWidget.fontRegular(
-                              '이메일 전송',
-                              fontSize: 18.sp,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w800,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.r),
                             ),
                           ),
-                        ), // 이메일 전송 전 RichText 표시
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "* 가입하신 포털 메일로 ",
-                            style: TextStyle(
-                                fontFamily: 'SUIT',
-                                fontSize: 12.sp,
-                                color: const Color(0xFF6F6F6F),
-                                fontWeight: FontWeight.w400),
-                            children: const [
-                              TextSpan(
-                                text: "인증코드",
-                                style: TextStyle(
-                                  color: Color(0xffffB052),
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '를 전송합니다',
-                              ),
-                            ],
+                          child: TextFontWidget.fontRegular(
+                            state.when<String>(
+                                data: (data) {
+                                  switch (data?.type) {
+                                    case DeleteUserModelType.sendCode:
+                                      return '포털로 이동하기';
+                                    case DeleteUserModelType.verifyCode:
+                                      return '회원가입 완료';
+                                    default:
+                                      return '이메일 전송';
+                                  }
+                                },
+                                error: (_, __) => '이메일 전송',
+                                loading: () => '로딩 중 ...'),
+                            fontSize: 18.sp,
+                            color: const Color(0xFFFFFFFF),
+                            fontWeight: FontWeight.w800,
                           ),
                         ),
-                      ],
-                      if (isEmailSent) ...[
-                        // 이메일 전송 후 표시될 위젯들
-                        SizedBox(
-                          width: double.infinity,
-                          height: 56.h,
-                          child: OutlinedButton(
-                            onPressed: () {
-                              final encodedUrl = Uri.encodeComponent(
-                                  'https://mail.suwon.ac.kr:10443/m/index.jsp');
-                              context
-                                  .push('/login/find_pw/webview/$encodedUrl');
-                            },
-                            style: OutlinedButton.styleFrom(
-                              backgroundColor: const Color(0xffffB052),
-                              foregroundColor: const Color(0xFFFFFFFF),
-                              side: const BorderSide(
-                                color: Colors.transparent,
-                                width: 0.0,
-                              ),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                              ),
-                            ),
-                            child: TextFontWidget.fontRegular(
-                              '포털로 이동하기',
-                              fontSize: 18.sp,
-                              color: const Color(0xFFFFFFFF),
-                              fontWeight: FontWeight.w800,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 16.h,
-                        ),
-                        RichText(
-                          textAlign: TextAlign.center,
-                          text: TextSpan(
-                            text: "* 가입하신 포털 메일로 ",
-                            style: TextStyle(
-                                fontFamily: 'SUIT',
-                                fontSize: 12.sp,
-                                color: const Color(0xFF6F6F6F),
-                                fontWeight: FontWeight.w400),
-                            children: const [
-                              TextSpan(
-                                text: "인증코드",
-                                style: TextStyle(
-                                  color: Color(0xffffB052),
-                                  fontWeight: FontWeight.w800,
-                                ),
-                              ),
-                              TextSpan(
-                                text: '를 전송합니다',
-                              ),
-                            ],
-                          ),
-                        ),
-                        SizedBox(
-                          height: 12.h,
-                        ),
+                      ),
+                      SizedBox(
+                        height: 20.h,
+                      ),
+                      if (state.hasValue && state.value != null)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
+                            TextFontWidget.fontRegular(
+                              '메일을 받지 못하셨나요?',
+                              fontSize: 12.sp,
+                              color: const Color(0xFF989898),
+                              fontWeight: FontWeight.w400,
+                              textDecoration: TextDecoration.underline,
+                              decorationColor: Color(0xFF989898),
+                            ),
                             TextButton(
-                              onPressed: state is DeleteUserModelLoading
-                                  ? null
-                                  : () async {
-                                      // 재전송 버튼을 눌렀을 때 sendCode()를 호출하여 백엔드로 재요청
-                                      await ref
-                                          .read(deleteUserViewModelProvider
-                                              .notifier)
-                                          .sendCode();
-                                    },
                               style: TextButton.styleFrom(
-                                splashFactory:
-                                    NoSplash.splashFactory, // 리플 효과 제거
+                                minimumSize: Size.zero,
+                                padding: EdgeInsets.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
-                              child: RichText(
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  text: "메일을 받지 못하셨나요? ",
-                                  style: TextStyle(
-                                    fontFamily: 'SUIT',
-                                    fontSize: 12.sp,
-                                    decoration: TextDecoration.underline,
-                                    color: const Color(0xFF434343),
-                                    fontWeight: FontWeight.w400,
-                                  ),
-                                  children: const [
-                                    TextSpan(
-                                      text: "재전송",
-                                      style: TextStyle(
-                                        color: Color(0xff2F8ADF),
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                              onPressed: sendMail,
+                              child: TextFontWidget.fontRegular(
+                                '재전송',
+                                fontSize: 12.sp,
+                                color: const Color(0xFF2F8ADF),
+                                fontWeight: FontWeight.w400,
+                                textDecoration: TextDecoration.underline,
+                                decorationColor: Color(0xFF2F8ADF),
                               ),
-                            )
+                            ),
                           ],
                         ),
+                      ...[
                         SizedBox(
                           height: 12.h,
                         ),
@@ -274,7 +212,11 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           textInputType: TextInputType.text,
                           textAlign: TextAlign.left,
                           hintText: '인증코드 4자리 입력',
-                          borderColor: codeIsInvalid(state)
+                          borderColor: state.hasError &&
+                                  !ErrorUtil.instance.isValid(
+                                      (state.error as DeleteUserModelError)
+                                          .code,
+                                      FieldType.code)
                               ? const Color(0xFFFF3F3F)
                               : null,
                           isAnimatedHint: false,
@@ -338,7 +280,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
             ));
   }
 
-  bool codeIsInvalid(DeleteUserModelBase? state) {
-    return false;
+  void sendMail() {
+    ref.read(deleteUserViewModelProvider.notifier).sendCode();
   }
 }
