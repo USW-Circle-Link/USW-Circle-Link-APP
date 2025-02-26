@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/views/widgets/email_input_widget.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class SignUpOptionScreen extends ConsumerStatefulWidget {
@@ -182,6 +183,8 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                     ],
                   ),
                 ),
+                SizedBox(height: 20.h),
+                DynamicWidthTextField(),
               ],
             ),
           ),

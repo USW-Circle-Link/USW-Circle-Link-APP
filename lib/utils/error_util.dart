@@ -75,6 +75,8 @@ class ErrorUtil {
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
       case "USR-217": // 현재 비밀번호와 새 비밀번호가 같음
         return "현재 비밀번호와 새 비밀번호가 같습니다!";
+      case "USR-216":
+        return "비회원 사용자입니다. 인증을 완료해주세요";
       default:
         return null;
     }

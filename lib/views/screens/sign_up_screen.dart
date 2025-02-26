@@ -281,7 +281,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  hintText: '아이디 (8~20자)',
+                  hintText: '아이디 (5~20자)',
                   borderColor: state.hasError &&
                           !ErrorUtil.instance.isValid(
                               (state.error as SignUpModelError).code,
