@@ -5,7 +5,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -92,7 +91,11 @@ class TokenInterceptor extends Interceptor {
       }
       // 기존의 refresh token으로 새로운 accessToken 발급 시도
       // 반드시 새로운 Dio 객체를 생성해야 함
-      final dio = ref.read(dioProvider);
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: err.requestOptions.baseUrl,
+        ),
+      );
 
       try {
         final response = await dio.post(

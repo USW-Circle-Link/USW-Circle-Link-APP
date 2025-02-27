@@ -91,6 +91,11 @@ class CircleListRepository {
   Future<CircleDetailListModel> fetchMyCircleList() async {
     final response = await dio.get(
       '/mypages/my-clubs',
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+        },
+      ),
     );
 
     logger.d('${response.data}');
@@ -117,6 +122,11 @@ class CircleListRepository {
   Future<CircleDetailListModel> fetchMyApplicationList() async {
     final response = await dio.get(
       '/mypages/aplict-clubs',
+      options: Options(
+        headers: {
+          'accessToken': 'true',
+        },
+      ),
     );
 
     logger.d('${response.data}');
