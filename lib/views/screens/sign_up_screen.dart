@@ -9,6 +9,7 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
 import 'package:usw_circle_link/views/screens/policy_scren.dart';
@@ -203,11 +204,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         .read(signUpViewModelProvider.notifier)
                         .setIdVerified(false);
                   },
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   suffixIcon: Container(
                     margin: EdgeInsets.only(
@@ -280,11 +280,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintText: '영어,숫자,특수문자 포함 8~20자',
                   isAnimatedHint: false,
                   onChanged: (value) {},
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -292,13 +291,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         passwordVisible = !passwordVisible;
                       });
                     },
-                    icon: SvgPicture.asset(
+                    icon: Icon(
                       passwordVisible
-                          ? 'assets/images/ic_eye_open.svg'
-                          : 'assets/images/ic_eye_slash.svg',
-                      width: 25.w,
-                      height: 25.h,
-                      fit: BoxFit.scaleDown,
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
                     ),
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
@@ -325,11 +323,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintText: '비밀번호 확인',
                   isAnimatedHint: false,
                   onChanged: (value) {},
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -337,13 +334,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         passwordConfirmVisible = !passwordConfirmVisible;
                       });
                     },
-                    icon: SvgPicture.asset(
+                    icon: Icon(
                       passwordConfirmVisible
-                          ? 'assets/images/ic_eye_open.svg'
-                          : 'assets/images/ic_eye_slash.svg',
-                      width: 25.w,
-                      height: 25.h,
-                      fit: BoxFit.scaleDown,
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
                     ),
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
@@ -382,11 +378,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintText: '이름',
                   isAnimatedHint: false,
                   onChanged: (value) {},
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -411,11 +406,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintText: '전화번호 (- 제외입력)',
                   isAnimatedHint: false,
                   onChanged: (value) {},
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_phone.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_phone,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -440,11 +434,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintText: '학번',
                   isAnimatedHint: false,
                   onChanged: (value) {},
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_tag.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_tag,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -484,14 +477,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textAlign: TextAlign.left,
                   textInputAction: TextInputAction.done,
                   hintText: (college == null && major == null)
-                      ? '학과'
+                      ? '단과대/학부(학과)'
                       : '${college ?? ""} / ${major ?? ""}',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_bookmark.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  suffixIcon: Icon(
+                    SignUpIcons.ic_down_arrow,
+                    color: Color(0xFF989898),
+                    size: 7.sp,
+                  ),
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_bookmark,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -528,11 +525,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         ],
                       ),
                     ),
-                    prefixIcon: SvgPicture.asset(
-                      'assets/images/ic_mail.svg',
-                      width: 16.w,
-                      height: 16.h,
-                      fit: BoxFit.scaleDown,
+                    prefixIcon: Icon(
+                      SignUpIcons.ic_mail,
+                      color: Color(0xFF989898),
+                      size: 15.sp,
                     ),
                     hintStyle: TextFontWidget.fontRegularStyle(
                       fontSize: 14.sp,
@@ -814,7 +810,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     });
 
     if (_newMemberSignUp) {
-      // await ref.read(signUpViewModelProvider.notifier).signUpTemporary();
+      await ref.read(signUpViewModelProvider.notifier).signUpNewMember();
     } else {
       await ref.read(signUpViewModelProvider.notifier).signUpExistingMember();
     }

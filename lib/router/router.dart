@@ -22,6 +22,7 @@ import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
 import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/screens/sign_up_success_screen.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/verify_password_screen.dart';
 import 'package:usw_circle_link/views/screens/web_view_screen.dart';
@@ -37,8 +38,16 @@ final signUpRouter = GoRoute(
   path: 'sign_up',
   builder: (_, state) => SignUpScreen(
     newMemberSignUp: state.uri.queryParameters['newMember'] == 'true',
+    uuid: state.uri.queryParameters['uuid'],
+    email: state.uri.queryParameters['email'],
     selectedCircles: state.extra as List<CircleListData>?,
   ),
+  routes: [
+    GoRoute(
+      path: 'success',
+      builder: (_, __) => SignUpSuccessScreen(),
+    ),
+  ],
 );
 final routerProvider = Provider<GoRouter>((ref) {
   final provider = ref.read(authProvider);
@@ -142,6 +151,9 @@ final routerProvider = Provider<GoRouter>((ref) {
               GoRoute(
                 path: 'delete_user',
                 builder: (_, __) => DeleteUserScreen(),
+                routes: [
+                  webviewRouter,
+                ],
               ),
             ],
           ),

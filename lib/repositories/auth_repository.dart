@@ -65,12 +65,15 @@ class AuthRepository {
   }) async {
     final response = await dio.get(
       '$basePath/email/verification',
-      options: Options(headers: {
+      data: {
         'email': email,
-      }),
+      },
     );
 
     logger.d(response.data);
+
+    logger.d(
+        'verifyEmailVerification - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200 && response.data != null) {
       return response.data!;
@@ -104,18 +107,20 @@ class AuthRepository {
     final body = request.toJson();
     final email = request.email;
     final uuid = request.uuid;
+
+    final headers = {
+      'user_email': email,
+      'emailToken_uuid': uuid,
+    };
+    logger.d(body);
+    logger.d(headers);
     final response = await dio.post(
       '$basePath/signup',
       data: body,
       options: Options(
-        headers: {
-          'user_email': email,
-          'emailToken_uuid': uuid,
-        },
+        headers: headers,
       ),
     );
-
-    logger.d(body);
 
     logger.d(
         'signUpNewMember - ${response.data} 로 요청 성공! (${response.statusCode})');

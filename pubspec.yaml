@@ -169,6 +169,10 @@ flutter:
       fonts:
         - asset: assets/fonts/MainIcons.ttf
 
+    - family: SignUpIcons
+      fonts:
+        - asset: assets/fonts/SignUpIcons.ttf
+
   
   #
   # For details regarding fonts from package dependencies,

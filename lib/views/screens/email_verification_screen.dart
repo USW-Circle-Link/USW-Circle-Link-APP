@@ -92,6 +92,13 @@ class _EmailVerificationScreenState
                         ),
                         EmailTextFieldWithButton(
                           controller: emailEditController,
+                          enabled: !isVerifySuccess,
+                          onChanged: (value) {
+                            ref
+                                .read(
+                                    emailVerificationViewModelProvider.notifier)
+                                .setEmail(value.trim());
+                          },
                           onPressed: isSendMailSuccess
                               ? () {
                                   ref
@@ -109,6 +116,13 @@ class _EmailVerificationScreenState
                             '* $error',
                             fontSize: 12.sp,
                             color: const Color(0xFFFF5353),
+                            fontWeight: FontWeight.w400,
+                          ),
+                        if (isVerifySuccess)
+                          TextFontWidget.fontRegular(
+                            '이메일 인증이 완료되었습니다.\n다음을 눌러 회원가입을 진행해주세요.',
+                            fontSize: 12.sp,
+                            color: const Color(0xFF989898),
                             fontWeight: FontWeight.w400,
                           ),
                         SizedBox(
@@ -149,7 +163,7 @@ class _EmailVerificationScreenState
                                 : isVerifySuccess
                                     ? () {
                                         context.go(
-                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&emailToken_uuid=$uuid&email=$email');
+                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&uuid=$uuid&email=$email');
                                       }
                                     : isSendMailSuccess
                                         ? () {
@@ -232,9 +246,6 @@ class _EmailVerificationScreenState
   }
 
   void sendMail() {
-    ref
-        .read(emailVerificationViewModelProvider.notifier)
-        .setEmail(emailEditController.text.trim());
     ref.read(emailVerificationViewModelProvider.notifier).sendMail();
   }
 
@@ -248,19 +259,23 @@ class _EmailVerificationScreenState
     ref.listen(
         emailVerificationViewModelProvider
             .select((value) => value.isSendMailSuccess), (_, next) {
-      logger.d('이메일 보내기 성공!');
-      DialogManager.instance.showAlertDialog(
-        context: context,
-        content: "인증 메일이 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
-      );
+      if (next) {
+        logger.d('이메일 보내기 성공!');
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: "인증 메일이 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+        );
+      }
     });
 
     ref.listen(
         emailVerificationViewModelProvider
             .select((value) => value.isVerifySuccess), (_, next) {
-      final uuid = ref.read(
-          emailVerificationViewModelProvider.select((value) => value.uuid));
-      logger.d('이메일 보내기 성공! - $uuid');
+      if (next) {
+        final uuid = ref.read(
+            emailVerificationViewModelProvider.select((value) => value.uuid));
+        logger.d('이메일 인증 성공! - $uuid');
+      }
     });
   }
 }

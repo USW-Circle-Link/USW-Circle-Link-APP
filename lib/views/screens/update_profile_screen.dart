@@ -8,6 +8,7 @@ import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
@@ -158,17 +159,19 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
             default:
           }
         },
-        error: (error, stackTrace) {
+        error: (error, stackTrace) async {
           error = (error as ProfileModelError);
           logger.d('error - $stackTrace');
           switch (error.type) {
             case ProfileModelType.getProfile:
-              DialogManager.instance.showAlertDialog(
+              await DialogManager.instance.showAlertDialog(
                 context: context,
                 content: ErrorUtil.instance.getErrorMessage(error.code) ??
                     "프로필을 불러오는 데 문제가 발생했습니다!",
-                onLeftButtonPressed: () => context.go('/'),
               );
+              if (mounted) {
+                context.go('/');
+              }
               break;
             case ProfileModelType.updateProfile:
               if (error.code == "USR-204") {
@@ -261,11 +264,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
                   hintText: "이름",
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
@@ -312,11 +314,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_phone.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_phone,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintText: "전화번호 (- 제외입력)",
                   hintStyle: TextStyle(
@@ -365,11 +366,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_tag.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_tag,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintText: "학번",
                   hintStyle: TextStyle(
@@ -440,14 +440,13 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   textAlign: TextAlign.left,
                   textInputAction: TextInputAction.done,
                   hintText: (college == null && major == null)
-                      ? '학과'
+                      ? '단과대/학부(학과)'
                       : '${college ?? ""} / ${major ?? ""}',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_bookmark.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_bookmark,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,

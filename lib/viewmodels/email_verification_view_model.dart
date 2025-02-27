@@ -66,15 +66,23 @@ class EmailVerificationViewModel
 
       final email = state.email;
 
-      final response = await ref
+      final result = await ref
           .read(authRepositoryProvider)
           .verifyEmailVerification(email: email);
 
-      state = state.copyWith(
-        isLoading: false,
-        error: null,
-        isVerifySuccess: response,
-      );
+      if (result) {
+        state = state.copyWith(
+          isLoading: false,
+          error: null,
+          isVerifySuccess: true,
+        );
+      } else {
+        state = state.copyWith(
+          isLoading: false,
+          error: "인증에 실패하였습니다. 다시 시도해주세요.",
+          isVerifySuccess: false,
+        );
+      }
     } on EmailVerificationModelError catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -103,6 +111,9 @@ class EmailVerificationViewModel
   void setEmail(String email) {
     state = state.copyWith(
       email: email,
+      error: null,
+      isSendMailSuccess: false,
+      isVerifySuccess: false,
     );
   }
 }

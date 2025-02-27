@@ -7,10 +7,14 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 class EmailTextFieldWithButton extends StatefulWidget {
   final VoidCallback? onPressed;
   final TextEditingController? controller;
+  final Function(String)? onChanged;
+  final bool enabled;
   const EmailTextFieldWithButton({
     super.key,
     this.onPressed,
     this.controller,
+    this.onChanged,
+    this.enabled = true,
   });
   @override
   _EmailTextFieldWithButtonState createState() =>
@@ -34,14 +38,17 @@ class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
           Expanded(
             child: EmailTextField(
               controller: widget.controller,
+              onChanged: widget.onChanged,
+              enabled: widget.enabled,
             ),
           ),
           SizedBox(width: 10.w), // 버튼과 텍스트 필드 사이의 간격
           TextButton(
-            onPressed: widget.onPressed,
+            onPressed: widget.enabled ? widget.onPressed : null,
             style: TextButton.styleFrom(
-              backgroundColor:
-                  widget.onPressed == null ? Colors.transparent : accentColor,
+              backgroundColor: widget.onPressed == null || !widget.enabled
+                  ? Colors.transparent
+                  : accentColor,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(4.r),
               ),
@@ -51,8 +58,9 @@ class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
             child: TextFontWidget.fontRegular(
               '인증 확인',
               fontSize: 12.sp,
-              color:
-                  widget.onPressed == null ? Color(0xFFB8B8B8) : Colors.white,
+              color: widget.onPressed == null || !widget.enabled
+                  ? Color(0xFFB8B8B8)
+                  : Colors.white,
               fontWeight: FontWeight.w400,
             ),
           ),

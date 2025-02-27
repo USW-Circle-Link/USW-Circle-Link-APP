@@ -68,6 +68,8 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         signUpSuccess: false,
       );
 
+      logger.d(state.signUpForm);
+
       final response = await ref.read(authRepositoryProvider).signUpNewMember(
             request: SignUpRequest.fromJson(state.signUpForm),
           );

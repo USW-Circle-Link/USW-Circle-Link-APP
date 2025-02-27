@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
@@ -88,11 +89,11 @@ class TokenInterceptor extends Interceptor {
       }
       // 기존의 refresh token으로 새로운 accessToken 발급 시도
       // 반드시 새로운 Dio 객체를 생성해야 함
-      final dio = Dio();
+      final dio = ref.read(dioProvider);
 
       try {
         final response = await dio.post(
-          '/auth/refresh-token',
+          '/integration/refresh-token',
           options: Options(
             headers: {
               'Cookie': 'refreshToken=$refreshToken',
@@ -143,8 +144,6 @@ class TokenInterceptor extends Interceptor {
         options.headers.addAll({
           'Authorization': 'Bearer $accessToken',
         });
-        options.baseUrl = dio.options.baseUrl;
-        logger.d('options.baseUrl: ${options.baseUrl}');
 
         final newResponse = await dio.fetch(options);
 

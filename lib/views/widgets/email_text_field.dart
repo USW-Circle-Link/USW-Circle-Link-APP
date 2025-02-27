@@ -5,7 +5,9 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class EmailTextField extends StatefulWidget {
   final TextEditingController? controller;
-  EmailTextField({this.controller});
+  final Function(String)? onChanged;
+  final bool enabled;
+  EmailTextField({this.controller, this.onChanged, this.enabled = true});
   @override
   _EmailTextFieldState createState() => _EmailTextFieldState();
 }
@@ -91,6 +93,10 @@ class _EmailTextFieldState extends State<EmailTextField> {
                       ? maxWidth
                       : _textWidth.w,
               child: TextField(
+                enabled: widget.enabled,
+                onChanged: (value) {
+                  widget.onChanged?.call(value);
+                },
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: _hintText,

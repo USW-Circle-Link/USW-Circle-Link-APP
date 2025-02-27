@@ -121,7 +121,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                             'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
                                         context.push(
-                                            '/login/sign_up_option/sign_up/email_verification/webview/$encodedUrl');
+                                            '/update_profile/delete_user/webview/$encodedUrl');
                                         break;
                                       case DeleteUserModelType.verifyCode:
                                         break;
@@ -163,6 +163,32 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                       ),
                       SizedBox(
+                        height: 16.h,
+                      ),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: TextSpan(
+                          text: "* 가입하신 포털 메일로 ",
+                          style: TextStyle(
+                              fontFamily: 'SUIT',
+                              fontSize: 12.sp,
+                              color: const Color(0xFF6F6F6F),
+                              fontWeight: FontWeight.w400),
+                          children: const [
+                            TextSpan(
+                              text: "인증코드",
+                              style: TextStyle(
+                                color: Color(0xffffB052),
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                            TextSpan(
+                              text: '를 전송합니다',
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(
                         height: 20.h,
                       ),
                       if (state.hasValue && state.value != null)
@@ -195,9 +221,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                             ),
                           ],
                         ),
-                      ...[
+                      if (state.hasValue && state.value != null) ...[
                         SizedBox(
-                          height: 12.h,
+                          height: 20.h,
                         ),
                         RoundedTextField(
                           height: 50.h,
