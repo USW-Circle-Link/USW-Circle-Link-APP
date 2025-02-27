@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class EmailTextField extends StatefulWidget {

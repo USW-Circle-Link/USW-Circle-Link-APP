@@ -9,7 +9,7 @@ import 'package:usw_circle_link/models/request/sign_up_request.dart';
 import 'package:usw_circle_link/models/response/email_verification_response.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);

@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final deleteUserRepositoryProvider = Provider<DeleteUserRepository>((ref) {
   final dio = ref.watch(dioProvider);

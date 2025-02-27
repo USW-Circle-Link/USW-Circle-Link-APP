@@ -4,7 +4,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
   final dio = ref.watch(dioProvider);

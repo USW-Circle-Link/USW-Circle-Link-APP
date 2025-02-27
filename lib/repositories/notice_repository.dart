@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
   final dio = ref.watch(dioProvider);

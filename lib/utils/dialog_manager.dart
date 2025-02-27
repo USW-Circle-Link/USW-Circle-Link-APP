@@ -25,6 +25,8 @@ class DialogManager {
     String? rightButtonText,
     Function()? onLeftButtonPressed,
     Function()? onRightButtonPressed,
+    TextStyle? rightButtonTextStyle,
+    TextStyle? leftButtonTextStyle,
     barrierDismissible = true,
   }) async {
     await showDialog(
@@ -37,6 +39,8 @@ class DialogManager {
         rightButtonText: rightButtonText,
         onLeftButtonPressed: onLeftButtonPressed,
         onRightButtonPressed: onRightButtonPressed,
+        rightButtonTextStyle: rightButtonTextStyle,
+        leftButtonTextStyle: leftButtonTextStyle,
       ),
     );
   }
@@ -64,8 +68,8 @@ class DialogManager {
   Future<bool> showPolicyDialog(
       BuildContext context, PolicyType policyType) async {
     return await showDialog(
-        context: context,
-        builder: (_) => PolicyDialog(policyType: policyType)) ??
+            context: context,
+            builder: (_) => PolicyDialog(policyType: policyType)) ??
         true;
   }
 }

@@ -7,7 +7,7 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 

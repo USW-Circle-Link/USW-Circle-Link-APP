@@ -261,7 +261,14 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                     rightButtonText: '탈퇴',
                                     onRightButtonPressed: () {
                                       cancel = false;
-                                    });
+                                    },
+                                    rightButtonTextStyle:
+                                        TextFontWidget.fontRegularStyle(
+                                      fontSize: 18.sp,
+                                      color: const Color(0xFFFF3B30),
+                                      fontWeight: FontWeight.w800,
+                                    ));
+
                                 if (!cancel) {
                                   final code = codeEditController.text.trim();
                                   await ref

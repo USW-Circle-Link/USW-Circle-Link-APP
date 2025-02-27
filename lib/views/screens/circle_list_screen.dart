@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';

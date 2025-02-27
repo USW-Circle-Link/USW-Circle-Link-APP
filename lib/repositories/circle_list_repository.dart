@@ -4,7 +4,7 @@ import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   final dio = ref.watch(dioProvider);

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class SignUpSuccessScreen extends StatelessWidget {
@@ -37,8 +38,19 @@ class SignUpSuccessScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Center(
-          child: Text('회원 가입이 성공적으로 완료되었습니다.'),
+        body: Column(
+          children: <Widget>[
+            Icon(
+              SignUpIcons.ic_fireworks,
+              size: 100.sp,
+            ),
+            TextFontWidget.fontRegular(
+              '회원 가입이 성공적으로 완료되었습니다.',
+              fontSize: 18.sp,
+              color: const Color(0xFF989898),
+              fontWeight: FontWeight.w400,
+            ),
+          ],
         ),
         bottomNavigationBar: SafeArea(
           child: Container(

@@ -9,7 +9,7 @@ import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';

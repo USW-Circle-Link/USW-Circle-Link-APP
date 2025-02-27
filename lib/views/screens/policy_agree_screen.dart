@@ -4,7 +4,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 

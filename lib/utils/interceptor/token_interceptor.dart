@@ -5,10 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart'
     hide Options;
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/dio/Dio.dart';
+import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 class TokenInterceptor extends Interceptor {
