@@ -153,7 +153,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
               DialogManager.instance.showAlertDialog(
                 context: context,
                 content: '프로필이 수정되었습니다!',
-                onLeftButtonPressed: () => context.go('/'),
+                onLeftButtonPressed: () => context.pop(),
               );
               break;
             default:
@@ -170,7 +170,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     "프로필을 불러오는 데 문제가 발생했습니다!",
               );
               if (mounted) {
-                context.go('/');
+                context.pop();
               }
               break;
             case ProfileModelType.updateProfile:
@@ -273,6 +273,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
                   ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
+                  ),
                 ),
                 SizedBox(
                   height: 25.h,
@@ -323,6 +328,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -375,6 +385,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -452,6 +467,11 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
                   ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
+                  ),
                 ),
                 SizedBox(
                   height: 25.h,
@@ -470,6 +490,17 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                       : null,
                 ),
                 SizedBox(height: 68.h),
+
+                Container(
+                  alignment: Alignment.center,
+                  child: TextFontWidget.fontRegular(
+                    '허위 정보 기재 시 서비스 이용에 제한이 있을 수 있습니다.',
+                    color: const Color(0xFF868686),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 12.h),
 
                 // 수정 완료 버튼
                 SizedBox(
@@ -512,6 +543,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     ),
                   ),
                 ),
+                SizedBox(height: 12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

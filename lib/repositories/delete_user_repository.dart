@@ -22,7 +22,7 @@ class DeleteUserRepository {
     required this.dio,
   });
 
-  Future<DeleteUserModel> sendCode() async {
+  Future<bool> sendCode() async {
     final response = await dio.post(
       '$basePath/exit/send-code',
       options: Options(
@@ -39,15 +39,13 @@ class DeleteUserRepository {
         .d('sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return DeleteUserModel.fromJson(response.data)
-          .setType(DeleteUserModelType.sendCode);
+      return true;
     } else {
-      throw DeleteUserModelError.fromJson(response.data)
-          .setType(DeleteUserModelType.sendCode);
+      throw DeleteUserModelError.fromJson(response.data);
     }
   }
 
-  Future<DeleteUserModel> verifyCode({
+  Future<bool> verifyCode({
     required String code,
   }) async {
     final body = {
@@ -60,6 +58,7 @@ class DeleteUserRepository {
         headers: {
           'Content-Type': 'application/json',
           'accessToken': 'true',
+          'refreshToken': 'true'
         },
       ),
     );
@@ -70,11 +69,9 @@ class DeleteUserRepository {
         'verifyCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return DeleteUserModel.fromJson(response.data)
-          .setType(DeleteUserModelType.verifyCode);
+      return true;
     } else {
-      throw DeleteUserModelError.fromJson(response.data)
-          .setType(DeleteUserModelType.verifyCode);
+      throw DeleteUserModelError.fromJson(response.data);
     }
   }
 }

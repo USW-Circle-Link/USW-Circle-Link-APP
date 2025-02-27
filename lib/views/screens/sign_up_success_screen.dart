@@ -38,19 +38,34 @@ class SignUpSuccessScreen extends StatelessWidget {
             ),
           ),
         ),
-        body: Column(
-          children: <Widget>[
-            Icon(
-              SignUpIcons.ic_fireworks,
-              size: 100.sp,
-            ),
-            TextFontWidget.fontRegular(
-              '회원 가입이 성공적으로 완료되었습니다.',
-              fontSize: 18.sp,
-              color: const Color(0xFF989898),
-              fontWeight: FontWeight.w400,
-            ),
-          ],
+        body: Container(
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Icon(
+                SignUpIcons.ic_fireworks,
+                size: 80.sp,
+                color: accentColor,
+              ),
+              SizedBox(height: 12.h),
+              TextFontWidget.fontRegular(
+                '회원가입이\n완료되었습니다.',
+                fontSize: 24.sp,
+                color: const Color(0xFF111111),
+                fontWeight: FontWeight.w500,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 12.h),
+              TextFontWidget.fontRegular(
+                '동아리 구하는 사람 모여라!\n미루지 말고 지금, 동구라미!',
+                fontSize: 15.sp,
+                color: const Color(0xFF111111),
+                fontWeight: FontWeight.w400,
+                textAlign: TextAlign.center,
+              ),
+            ],
+          ),
         ),
         bottomNavigationBar: SafeArea(
           child: Container(

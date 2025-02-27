@@ -35,7 +35,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
       if (next is UserModel) {
         // 로그인 성공
-        context.go('/');
+        context.pop();
       }
     });
 

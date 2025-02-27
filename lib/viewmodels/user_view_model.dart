@@ -4,7 +4,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
-import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
@@ -208,38 +207,6 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       );
       return response;
     } on ChangePwModelError catch (e) {
-      // 예외처리 안 실패
-      logger.d(e);
-      rethrow;
-    } catch (e) {
-      // 예외처리 밖 에러(네트워크 에러 ...)
-      logger.e('예외발생 - $e');
-      rethrow;
-    }
-  }
-
-  Future<DeleteUserModel> verifyCode({
-    required String code,
-  }) async {
-    try {
-      final response = await deleteUserRepository.verifyCode(code: code);
-      return response;
-    } on DeleteUserModelError catch (e) {
-      // 예외처리 안 실패
-      logger.d(e);
-      rethrow;
-    } catch (e) {
-      // 예외처리 밖 에러(네트워크 에러 ...)
-      logger.e('예외발생 - $e');
-      rethrow;
-    }
-  }
-
-  Future<DeleteUserModel> sendCode() async {
-    try {
-      final response = await deleteUserRepository.sendCode();
-      return response;
-    } on DeleteUserModelError catch (e) {
       // 예외처리 안 실패
       logger.d(e);
       rethrow;

@@ -46,7 +46,8 @@ class TokenInterceptor extends Interceptor {
       options.headers.addAll({
         'Authorization': 'Bearer $accessToken',
       });
-    } else if (options.headers['refreshToken'] == 'true') {
+    }
+    if (options.headers['refreshToken'] == 'true') {
       // 헤더 삭제
       options.headers.remove('refreshToken');
 
@@ -55,9 +56,11 @@ class TokenInterceptor extends Interceptor {
 
       // 실제 토큰으로 대체
       options.headers.addAll({
-        'Authorization': 'Bearer $refreshToken',
+        'Cookie': 'refreshToken=$refreshToken',
       });
     }
+
+    logger.d('onRequest - options.headers - ${options.headers}');
 
     super.onRequest(options, handler);
   }
@@ -73,7 +76,7 @@ class TokenInterceptor extends Interceptor {
     // **** 토큰 만료 코드의 경우 response 예외에서 제외 필요 [DefaultInterceptor] ****
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh =
-        err.requestOptions.path.contains('/auth/refresh-token');
+        err.requestOptions.path.contains('/integration/refresh-token');
     final isPathLogin = err.requestOptions.path.contains('/users/login');
 
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때

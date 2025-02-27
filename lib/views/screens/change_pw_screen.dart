@@ -191,11 +191,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               textAlign: TextAlign.left,
                               hintText: '현재 비밀번호',
                               isAnimatedHint: false,
-                              prefixIcon: SvgPicture.asset(
-                                'assets/images/ic_password.svg',
-                                width: 13.w,
-                                height: 16.h,
-                                fit: BoxFit.scaleDown,
+                              prefixIcon: Icon(
+                                SignUpIcons.ic_password,
+                                color: Color(0xFF989898),
+                                size: 15.sp,
                               ),
                               suffixIcon: IconButton(
                                 onPressed: () {
@@ -239,11 +238,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         textAlign: TextAlign.left,
                         hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 8~20자)',
                         isAnimatedHint: false,
-                        prefixIcon: SvgPicture.asset(
-                          'assets/images/ic_password.svg',
-                          width: 13.w,
-                          height: 16.h,
-                          fit: BoxFit.scaleDown,
+                        prefixIcon: Icon(
+                          SignUpIcons.ic_password,
+                          color: Color(0xFF989898),
+                          size: 15.sp,
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {

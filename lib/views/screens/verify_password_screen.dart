@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -21,7 +22,7 @@ class VerifyPasswordScreen extends ConsumerStatefulWidget {
 class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
   final TextEditingController passwordController = TextEditingController();
   String? _passwordError; // 비밀번호 에러 메시지
-
+  bool passwordVisible = false;
   @override
   void initState() {
     super.initState();
@@ -115,6 +116,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                 SizedBox(height: 8.h),
                 RoundedTextField(
                   height: 50.h,
+                  obscureText: !passwordVisible,
                   textEditController: passwordController,
                   leftBottomCornerRadius: 8.r,
                   rightBottomCornerRadius: 8.r,
@@ -126,11 +128,24 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
                   hintText: "비밀번호를 입력해주세요.",
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
+                  ),
+                  suffixIcon: IconButton(
+                    onPressed: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      passwordVisible
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
+                    ),
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
