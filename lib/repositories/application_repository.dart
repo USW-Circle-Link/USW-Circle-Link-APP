@@ -2,32 +2,31 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/application_model.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
 final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ApplicationRepository(
-    baseUrl: '$protocol://$host:$port/apply',
+    basePath: '/apply',
     dio: dio,
   );
 });
 
 class ApplicationRepository {
   final Dio dio;
-  final String baseUrl;
+  final String basePath;
 
   ApplicationRepository({
     required this.dio,
-    required this.baseUrl,
+    required this.basePath,
   });
 
   Future<ApplicationModel> checkAvailableForApplication({
     required String clubUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/can-apply/$clubUUID',
+      '$basePath/can-apply/$clubUUID',
       options: Options(headers: {'accessToken': 'true'}),
     );
 
@@ -50,7 +49,7 @@ class ApplicationRepository {
     required String clubUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/$clubUUID',
+      '$basePath/$clubUUID',
       options: Options(headers: {'accessToken': 'true'}),
     );
 
@@ -74,7 +73,7 @@ class ApplicationRepository {
     required String aplictGoogleFormUrl,
   }) async {
     final response = await dio.post(
-      '$baseUrl/$clubUUID',
+      '$basePath/$clubUUID',
       data: {
         'aplictGoogleFormUrl': aplictGoogleFormUrl,
       },

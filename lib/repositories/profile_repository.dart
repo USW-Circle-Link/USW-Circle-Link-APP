@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
@@ -9,23 +8,23 @@ final profileRepositoryProvider = Provider<ProfileRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return ProfileRepository(
-    baseUrl: '$protocol://$host:$port/profiles',
+    basePath: '/profiles',
     dio: dio,
   );
 });
 
 class ProfileRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   ProfileRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
   Future<ProfileModel> getProfile() async {
     final response = await dio.get(
-      '$baseUrl/me',
+      '$basePath/me',
       options: Options(
         headers: {
           'accessToken': 'true',
@@ -39,10 +38,12 @@ class ProfileRepository {
         'getProfile - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return ProfileModel.fromJson(response.data).setType(ProfileModelType.getProfile);
+      return ProfileModel.fromJson(response.data)
+          .setType(ProfileModelType.getProfile);
     } else {
       // Bad Request
-      throw ProfileModelError.fromJson(response.data).setType(ProfileModelType.getProfile);
+      throw ProfileModelError.fromJson(response.data)
+          .setType(ProfileModelType.getProfile);
     }
   }
 
@@ -58,11 +59,11 @@ class ProfileRepository {
       'studentNumber': studentNumber,
       'userHp': userHp,
       'major': major,
-      'userPw' : password,
+      'userPw': password,
     };
 
     final response = await dio.patch(
-      '$baseUrl/change',
+      '$basePath/change',
       options: Options(headers: {
         'accessToken': 'true',
         'Content-Type': 'application/json',

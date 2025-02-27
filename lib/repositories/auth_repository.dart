@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
@@ -16,17 +15,17 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(
-    baseUrl: '$protocol://$host:$port/users',
+    basePath: '/users',
     dio: dio,
   );
 });
 
 class AuthRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   AuthRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
@@ -41,7 +40,7 @@ class AuthRepository {
     logger.d('sendMail - body {$body}');
 
     final response = await dio.post(
-      '$baseUrl/temporary/register',
+      '$basePath/temporary/register',
       data: body,
       options: Options(headers: {
         'Content-Type': 'application/json',
@@ -65,7 +64,7 @@ class AuthRepository {
     required String email,
   }) async {
     final response = await dio.get(
-      '$baseUrl/email/verification',
+      '$basePath/email/verification',
       options: Options(headers: {
         'email': email,
       }),
@@ -84,7 +83,7 @@ class AuthRepository {
     required String id,
   }) async {
     final response = await dio.get(
-      '$baseUrl/verify-duplicate/$id',
+      '$basePath/verify-duplicate/$id',
     );
 
     logger.d(response.data);
@@ -106,7 +105,7 @@ class AuthRepository {
     final email = request.email;
     final uuid = request.uuid;
     final response = await dio.post(
-      '$baseUrl/signup',
+      '$basePath/signup',
       data: body,
       options: Options(
         headers: {
@@ -132,7 +131,7 @@ class AuthRepository {
     required SignUpRequest request,
   }) async {
     final body = request.toJson();
-    final response = await dio.post('$baseUrl/existing/register', data: body);
+    final response = await dio.post('$basePath/existing/register', data: body);
 
     logger.d(body);
 
@@ -163,7 +162,7 @@ class AuthRepository {
     };
 
     final response = await dio.post(
-      '$baseUrl/login',
+      '$basePath/login',
       data: body,
       options: Options(
         headers: {
@@ -199,7 +198,7 @@ class AuthRepository {
     required String refreshToken,
   }) async {
     final response = await dio.post(
-      '$protocol://$host:$port/integration/logout',
+      '/integration/logout',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',
@@ -228,7 +227,7 @@ class AuthRepository {
     required String confirmNewPw,
   }) async {
     final response = await dio.patch(
-      '$baseUrl/userpw',
+      '$basePath/userpw',
       data: {
         'userPw': userPw,
         'newPw': newPw,
@@ -262,7 +261,7 @@ class AuthRepository {
   Future<FindIdModel> findId({
     required String email,
   }) async {
-    final response = await dio.get('$baseUrl/find-account/$email');
+    final response = await dio.get('$basePath/find-account/$email');
 
     logger.d(response.data);
 
@@ -284,7 +283,7 @@ class AuthRepository {
       "email": email,
     };
     final response = await dio.post(
-      '$baseUrl/auth/send-code',
+      '$basePath/auth/send-code',
       data: body,
       options: Options(
         headers: {
@@ -315,7 +314,7 @@ class AuthRepository {
       "authCode": code,
     };
     final response = await dio.post(
-      '$baseUrl/auth/verify-token',
+      '$basePath/auth/verify-token',
       data: body,
       options: Options(
         headers: {
@@ -345,7 +344,7 @@ class AuthRepository {
     required String uuid,
   }) async {
     final response = await dio.patch(
-      '$baseUrl/reset-password',
+      '$basePath/reset-password',
       data: {
         'password': password,
         'confirmPassword': confirmPassword,

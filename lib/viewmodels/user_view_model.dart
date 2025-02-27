@@ -10,7 +10,6 @@ import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/repositories/delete_user_repository.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
-import 'package:usw_circle_link/repositories/user_me_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -20,7 +19,6 @@ import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 final userViewModelProvider =
     StateNotifierProvider<UserViewModel, AsyncValue<UserModel?>>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
-  final userMeRepository = ref.read(userMeRepositoryProvider);
   final deleteUserRepository = ref.read(deleteUserRepositoryProvider);
   final profileViewModel = ref.read(profileViewModelProvider.notifier);
   final firebaseCloudMessagingViewModel =
@@ -29,7 +27,6 @@ final userViewModelProvider =
 
   return UserViewModel(
     authRepository: authRepository,
-    userMeRepository: userMeRepository,
     deleteUserRepository: deleteUserRepository,
     profileViewModel: profileViewModel,
     firebaseCloudMessagingViewModel: firebaseCloudMessagingViewModel,
@@ -39,7 +36,6 @@ final userViewModelProvider =
 
 class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
   final AuthRepository authRepository;
-  final UserMeRepository userMeRepository;
   final DeleteUserRepository deleteUserRepository;
   final ProfileViewModel profileViewModel;
   final FirebaseCloudMessagingViewModel firebaseCloudMessagingViewModel;
@@ -47,7 +43,6 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
 
   UserViewModel({
     required this.authRepository,
-    required this.userMeRepository,
     required this.deleteUserRepository,
     required this.profileViewModel,
     required this.firebaseCloudMessagingViewModel,

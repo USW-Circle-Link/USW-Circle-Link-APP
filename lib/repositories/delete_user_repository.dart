@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 
@@ -9,23 +8,23 @@ final deleteUserRepositoryProvider = Provider<DeleteUserRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return DeleteUserRepository(
-    baseUrl: '$protocol://$host:$port/users',
+    basePath: '/users',
     dio: dio,
   );
 });
 
 class DeleteUserRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   DeleteUserRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
   Future<DeleteUserModel> sendCode() async {
     final response = await dio.post(
-      '$baseUrl/exit/send-code',
+      '$basePath/exit/send-code',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -55,7 +54,7 @@ class DeleteUserRepository {
       "authCode": code,
     };
     final response = await dio.delete(
-      '$baseUrl/exit',
+      '$basePath/exit',
       data: body,
       options: Options(
         headers: {

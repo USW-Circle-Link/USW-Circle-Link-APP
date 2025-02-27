@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
@@ -12,17 +11,17 @@ final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
 
   return CircleListRepository(
     dio: dio,
-    baseUrl: '$protocol://$host:$port/clubs',
+    basePath: '/clubs',
   );
 });
 
 class CircleListRepository {
   final Dio dio;
-  final String baseUrl;
+  final String basePath;
 
   CircleListRepository({
     required this.dio,
-    required this.baseUrl,
+    required this.basePath,
   });
 
   /// 모든 분과 동아리 목록 조회
@@ -35,7 +34,7 @@ class CircleListRepository {
   /// - CircleListModelError: 조회 중 오류가 발생한 경우
   Future<CircleListModel> fetchAllCircleList() async {
     final response = await dio.get(
-      '$baseUrl',
+      basePath,
     );
 
     logger.d('${response.data}');
@@ -63,7 +62,7 @@ class CircleListRepository {
   /// - CircleListModelError: 조회 중 오류가 발생한 경우
   Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
-      '$baseUrl/open',
+      '$basePath/open',
     );
 
     logger.d('${response.data}');
@@ -91,7 +90,7 @@ class CircleListRepository {
   /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyCircleList() async {
     final response = await dio.get(
-      '$protocol://$host:$port/mypages/my-clubs',
+      '/mypages/my-clubs',
     );
 
     logger.d('${response.data}');
@@ -117,7 +116,7 @@ class CircleListRepository {
   /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyApplicationList() async {
     final response = await dio.get(
-      '$protocol://$host:$port/mypages/aplict-clubs',
+      '/mypages/aplict-clubs',
     );
 
     logger.d('${response.data}');
@@ -143,7 +142,7 @@ class CircleListRepository {
   /// - CategoryModelError: 조회 중 오류가 발생한 경우
   Future<CategoryModel> fetchCategory() async {
     try {
-      final response = await dio.get('$baseUrl/categories');
+      final response = await dio.get('$basePath/categories');
 
       logger.d(response.data);
 
@@ -171,7 +170,7 @@ class CircleListRepository {
     List<String> clubCategoryUUIDs,
   ) async {
     final response = await dio.get(
-      '$baseUrl/filter',
+      '$basePath/filter',
       queryParameters: {
         'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
       },
@@ -205,7 +204,7 @@ class CircleListRepository {
     List<String> clubCategoryUUIDs,
   ) async {
     final response = await dio.get(
-      '$baseUrl/open/filter',
+      '$basePath/open/filter',
       queryParameters: {
         'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
       },

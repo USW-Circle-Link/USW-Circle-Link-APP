@@ -64,7 +64,7 @@ class TokenInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     logger.w(
-        '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.path}');
+        '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.baseUrl}${err.requestOptions.path}');
     // 401 에러가 발생했을 때 (status code)
     // 토큰을 재발급받는 시도를 하고, 토큰이 재발급되면
     // 다시 새로운 토큰을 요청한다.
@@ -92,7 +92,7 @@ class TokenInterceptor extends Interceptor {
 
       try {
         final response = await dio.post(
-          '$protocol://$host:$port/auth/refresh-token',
+          '/auth/refresh-token',
           options: Options(
             headers: {
               'Cookie': 'refreshToken=$refreshToken',
@@ -143,6 +143,8 @@ class TokenInterceptor extends Interceptor {
         options.headers.addAll({
           'Authorization': 'Bearer $accessToken',
         });
+        options.baseUrl = dio.options.baseUrl;
+        logger.d('options.baseUrl: ${options.baseUrl}');
 
         final newResponse = await dio.fetch(options);
 
