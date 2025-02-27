@@ -16,7 +16,7 @@ const servers = {
     'port': '8080',
   },
 };
-const SERVER = 'test_server';
+const SERVER = 'prod_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
@@ -30,7 +30,7 @@ const clubUUIDsKey = 'club_uuids';
 const iatKey = 'iat';
 const expKey = 'exp';
 // URL
-const feedback = "https://forms.gle/auVHQJtz9xTRmXEA8";
+const feedback = "https://forms.gle/Xhang1SZiZiVyabe6";
 // Color
 const accentColor = Color(0xffffB052);
 // Data

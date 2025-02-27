@@ -109,8 +109,8 @@ class AuthRepository {
     final uuid = request.uuid;
 
     final headers = {
-      'user_email': email,
-      'emailToken_uuid': uuid,
+      'email': email,
+      'emailTokenUUID': uuid,
     };
     logger.d(body);
     logger.d(headers);
@@ -123,7 +123,7 @@ class AuthRepository {
     );
 
     logger.d(
-        'signUpNewMember - ${response.data} 로 요청 성공! (${response.statusCode})');
+        'signUpNewMember - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return true;
