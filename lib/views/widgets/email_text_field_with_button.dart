@@ -6,9 +6,11 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class EmailTextFieldWithButton extends StatefulWidget {
   final VoidCallback? onPressed;
+  final TextEditingController? controller;
   const EmailTextFieldWithButton({
     super.key,
     this.onPressed,
+    this.controller,
   });
   @override
   _EmailTextFieldWithButtonState createState() =>
@@ -16,8 +18,6 @@ class EmailTextFieldWithButton extends StatefulWidget {
 }
 
 class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
-  final TextEditingController _controller = TextEditingController();
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -32,7 +32,9 @@ class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
       child: Row(
         children: [
           Expanded(
-            child: EmailTextField(),
+            child: EmailTextField(
+              controller: widget.controller,
+            ),
           ),
           SizedBox(width: 10.w), // 버튼과 텍스트 필드 사이의 간격
           TextButton(
@@ -57,11 +59,5 @@ class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
         ],
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
   }
 }

@@ -1,206 +1,173 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/models/request/sign_up_request.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/Logger.dart';
 import 'package:usw_circle_link/utils/regex/regex.dart';
+import 'package:usw_circle_link/viewmodels/state/sign_up_state.dart';
 
-final signUpViewModelProvider = StateNotifierProvider.autoDispose<
-    SignUpViewModel, AsyncValue<SignUpModel?>>((ref) {
-  final AuthRepository authRepository = ref.read(authRepositoryProvider);
-  return SignUpViewModel(authRepository: authRepository);
-});
+final signUpViewModelProvider =
+    AutoDisposeNotifierProvider<SignUpViewModel, SignUpState>(
+        SignUpViewModel.new);
 
-class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
-  final AuthRepository authRepository;
+class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
+  @override
+  SignUpState build() {
+    return SignUpState();
+  }
 
-  SignUpViewModel({
-    required this.authRepository,
-  }) : super(AsyncData(null));
-
-  Future<void> verifyId({required String id}) async {
+  Future<void> verifyId() async {
     try {
-      state = AsyncLoading();
+      state = state.copyWith(
+        isLoading: true,
+        idVerified: false,
+        error: null,
+        errorField: null,
+      );
+
+      final id = state.signUpForm['id'];
+
       if (id.isEmpty || !idRegExp.hasMatch(id)) {
-        final error = SignUpModelError(
-            message: '아이디가 형식에 맞지 않습니다.',
-            code: 'USR-F100',
-            type: SignUpModelType.verify);
-        throw error;
+        state = state.copyWith(
+          isLoading: false,
+          error: '아이디는 5~20자 이내 영어, 숫자만 가능합니다!',
+          errorField: FieldType.account,
+        );
+        return;
       }
-      final response = await authRepository.verifyId(id: id);
-      state = AsyncData(response);
+
+      final response = await ref.read(authRepositoryProvider).verifyId(id: id);
+
+      state = state.copyWith(
+        isLoading: false,
+        idVerified: response,
+      );
     } on SignUpModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error:
+            ErrorUtil.instance.getErrorMessage(e.code) ?? '아이디 중복 확인에 실패했습니다.',
+        errorField: FieldType.account,
+      );
     } catch (e) {
-      final error =
-          SignUpModelError(message: '예외발생 - $e', type: SignUpModelType.verify);
-      state = AsyncError(error, error.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: '아이디 중복 확인에 실패했습니다.',
+        errorField: FieldType.account,
+      );
     }
   }
 
-  Future<void> signUpExistingMember({
-    required String account,
-    required String password,
-    required String passwordConfirm,
-    required String username,
-    required String telephone,
-    required String studentNumber,
-    required String major,
-    required String email,
-    required List<CircleListData> clubs,
-  }) async {
+  Future<void> signUpNewMember() async {
     try {
-      state = AsyncLoading();
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        errorField: null,
+        signUpSuccess: false,
+      );
+
+      final response = await ref.read(authRepositoryProvider).signUpNewMember(
+            request: SignUpRequest.fromJson(state.signUpForm),
+          );
+      state = state.copyWith(
+        isLoading: false,
+        signUpSuccess: response,
+      );
+    } catch (e) {
+      logger.d(e);
+      state = state.copyWith(
+        isLoading: false,
+        error: '회원가입에 실패했습니다.',
+      );
+    }
+  }
+
+  Future<void> signUpExistingMember() async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        errorField: null,
+        signUpSuccess: false,
+      );
+
+      logger.d(state.signUpForm);
+
+      final account = state.signUpForm['account'];
+      final password = state.signUpForm['password'];
+      final confirmPassword = state.signUpForm['confirmPassword'];
+      final userName = state.signUpForm['userName'];
+      final telephone = state.signUpForm['telephone'];
+      final studentNumber = state.signUpForm['studentNumber'];
+      final major = state.signUpForm['major'];
+      final email = state.signUpForm['email'];
 
       final invalidField = validateField(
         account: account,
         password: password,
-        passwordConfirm: passwordConfirm,
-        username: username,
+        confirmPassword: confirmPassword,
+        userName: userName,
         telephone: telephone,
         studentNumber: studentNumber,
         major: major,
         email: email,
       );
 
-      switch (invalidField) {
-        case FieldType.password:
-          throw SignUpModelError(
-              message: '비밀번호가 형식에 맞지 않습니다!',
-              code: "USR-F200",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.passwordConfirm:
-          throw SignUpModelError(
-              message: '비밀번호가 일치하지 않습니다!',
-              code: "USR-F300",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.username:
-          throw SignUpModelError(
-              message: '이름이 형식에 맞지 않습니다!',
-              code: "USR-F400",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.telephone:
-          throw SignUpModelError(
-              message: '전화번호 형식에 맞지 않습니다!',
-              code: "USR-F500",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.studentNumber:
-          throw SignUpModelError(
-              message: '학번이 형식에 맞지 않습니다!',
-              code: "USR-F600",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.major:
-          throw SignUpModelError(
-              message: '학과가 형식에 맞지 않습니다!',
-              code: "USR-F700",
-              type: SignUpModelType.signUpExistingMember);
-        case FieldType.email:
-          throw SignUpModelError(
-              message: '이메일이 형식에 맞지 않습니다!',
-              code: "USR-F800",
-              type: SignUpModelType.signUpExistingMember);
-        default:
-          break;
+      if (invalidField != null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: switch (invalidField) {
+            FieldType.account => '아이디 중복 확인을 진행해주세요!',
+            FieldType.password => '비밀번호가 형식에 맞지 않습니다!',
+            FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
+            FieldType.username => '이름이 형식에 맞지 않습니다!',
+            FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
+            FieldType.studentNumber => '학번이 형식에 맞지 않습니다!',
+            FieldType.major => '학과가 형식에 맞지 않습니다!',
+            FieldType.email => '이메일이 형식에 맞지 않습니다!',
+            // 사용되지 않는 필드 혹은 이미 검증된 필드
+            FieldType.currentPassword => null,
+            FieldType.code => null,
+          },
+          errorField: invalidField,
+        );
+        return;
       }
 
-      final response = await authRepository.signUpExistingMember(
-        account: account,
-        password: password,
-        username: username,
-        telephone: telephone,
-        studentNumber: studentNumber,
-        email: email,
-        major: major,
-        clubs: clubs.map((e) => {"clubUUID": e.clubUUID}).toList(),
+      final response =
+          await ref.read(authRepositoryProvider).signUpExistingMember(
+                request: SignUpRequest.fromJson(state.signUpForm),
+              );
+      state = state.copyWith(
+        isLoading: false,
+        signUpSuccess: response,
       );
-      state = AsyncData(response);
     } on SignUpModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: ErrorUtil.instance.getErrorMessage(e.code) ?? '회원가입에 실패했습니다.',
+      );
     } catch (e) {
-      final error = SignUpModelError(
-          message: '예외발생 - $e', type: SignUpModelType.signUpExistingMember);
-      state = AsyncError(error, error.stackTrace);
+      logger.d(e);
+      state = state.copyWith(
+        isLoading: false,
+        error: '회원가입에 실패했습니다.',
+      );
     }
   }
 
-  Future<void> signUpTemporary({
-    required String id,
-    required String password,
-    required String passwordConfirm,
-    required String username,
-    required String telephone,
-    required String studentNumber,
-    required String major,
-  }) async {
-    try {
-      state = AsyncLoading();
-
-      final invalidField = validateField(
-        account: id,
-        password: password,
-        passwordConfirm: passwordConfirm,
-        username: username,
-        telephone: telephone,
-        studentNumber: studentNumber,
-        major: major,
-      );
-
-      switch (invalidField) {
-        case FieldType.password:
-          throw SignUpModelError(
-              message: '비밀번호가 형식에 맞지 않습니다!',
-              code: "USR-F200",
-              type: SignUpModelType.checkProfileIsExist);
-        case FieldType.passwordConfirm:
-          throw SignUpModelError(
-              message: '비밀번호가 일치하지 않습니다!',
-              code: "USR-F300",
-              type: SignUpModelType.checkProfileIsExist);
-        case FieldType.username:
-          throw SignUpModelError(
-              message: '이름이 형식에 맞지 않습니다!',
-              code: "USR-F400",
-              type: SignUpModelType.checkProfileIsExist);
-        case FieldType.telephone:
-          throw SignUpModelError(
-              message: '전화번호 형식에 맞지 않습니다!',
-              code: "USR-F500",
-              type: SignUpModelType.checkProfileIsExist);
-        case FieldType.studentNumber:
-          throw SignUpModelError(
-              message: '학번이 형식에 맞지 않습니다!',
-              code: "USR-F600",
-              type: SignUpModelType.checkProfileIsExist);
-        case FieldType.major:
-          throw SignUpModelError(
-              message: '학과가 형식에 맞지 않습니다!',
-              code: "USR-F700",
-              type: SignUpModelType.checkProfileIsExist);
-        default:
-          break;
-      }
-
-      final response = await authRepository.checkProfileIsExist(
-        username: username,
-        studentNumber: studentNumber,
-        userHp: telephone,
-        password: password,
-        passwordConfirm: passwordConfirm,
-      );
-      state = AsyncData(response);
-    } on SignUpModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
-    } catch (e) {
-      final error = SignUpModelError(
-          message: '예외발생 - $e', type: SignUpModelType.checkProfileIsExist);
-      state = AsyncError(error, error.stackTrace);
-    }
+  void setFormData(Map<String, dynamic> formData) {
+    state = state.copyWith(
+      signUpForm: formData,
+    );
   }
 
-  void initState() {
-    state = AsyncData(null);
+  void setIdVerified(bool isVerified) {
+    state = state.copyWith(
+      idVerified: isVerified,
+    );
   }
 
   /// 회원가입 필드 검증
@@ -230,22 +197,26 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
   FieldType? validateField({
     required String account,
     required String password,
-    required String passwordConfirm,
-    required String username,
+    required String confirmPassword,
+    required String userName,
     required String telephone,
     required String studentNumber,
-    required String major,
+    String? major,
     String? email,
   }) {
+    if (!state.idVerified) {
+      return FieldType.account;
+    }
+
     final isPasswordValid = password.validate();
-    logger.d(isPasswordValid);
+    logger.d('비밀번호 검증 결과 : $isPasswordValid');
     if (!isPasswordValid) {
       return FieldType.password;
     }
-    if (password != passwordConfirm) {
+    if (password != confirmPassword) {
       return FieldType.passwordConfirm;
     }
-    if (username.isEmpty || !nameRegExp.hasMatch(username)) {
+    if (userName.isEmpty || !nameRegExp.hasMatch(userName)) {
       return FieldType.username;
     }
 
@@ -257,7 +228,7 @@ class SignUpViewModel extends StateNotifier<AsyncValue<SignUpModel?>> {
       return FieldType.studentNumber;
     }
 
-    if (major.isEmpty) {
+    if (major == null || major.isEmpty) {
       return FieldType.major;
     }
 

@@ -1,72 +1,108 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/viewmodels/state/email_verification_state.dart';
 
-final emailVerificationViewModelProvider = StateNotifierProvider.autoDispose<
-    EmailVerificationViewModel, AsyncValue<EmailVerificationModel?>>((ref) {
-  final AuthRepository authRepository = ref.read(authRepositoryProvider);
-  return EmailVerificationViewModel(authRepository: authRepository);
-});
+final emailVerificationViewModelProvider = AutoDisposeNotifierProvider<
+    EmailVerificationViewModel,
+    EmailVerificationState>(EmailVerificationViewModel.new);
 
 class EmailVerificationViewModel
-    extends StateNotifier<AsyncValue<EmailVerificationModel?>> {
-  final AuthRepository authRepository;
-  EmailVerificationViewModel({required this.authRepository})
-      : super(AsyncData(null));
+    extends AutoDisposeNotifier<EmailVerificationState> {
+  @override
+  EmailVerificationState build() {
+    return EmailVerificationState();
+  }
 
-  Future<void> sendMail({
-    required String account,
-    required String password,
-    required String userName,
-    required String telephone,
-    required String studentNumber,
-    required String major,
-    required String email,
-  }) async {
+  Future<void> sendMail() async {
     try {
-      state = AsyncLoading();
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        isSendMailSuccess: false,
+        isVerifySuccess: false,
+        uuid: '',
+      );
+
+      final email = state.email;
+
       if (email.isEmpty) {
-        throw EmailVerificationModelError(
-            message: '이메일이 형식에 맞지 않습니다.',
-            code: 'EML-F100',
-            type: EmailVerificationModelType.sendMail);
+        state = state.copyWith(
+          isLoading: false,
+          error: '이메일을 입력해주세요.',
+        );
+        return;
       }
-      final response = await authRepository.sendMail(
-          account: account,
-          password: password,
-          userName: userName,
-          telephone: telephone,
-          studentNumber: studentNumber,
-          major: major,
-          email: email);
-      state = AsyncData(response);
+
+      final response =
+          await ref.read(authRepositoryProvider).sendMail(email: email);
+      state = state.copyWith(
+        isLoading: false,
+        isSendMailSuccess: true,
+        uuid: response.data.uuid,
+      );
     } on EmailVerificationModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: ErrorUtil.instance.getErrorMessage(e.code) ??
+            '인증 메일을 보내는 데 실패했습니다.',
+      );
     } catch (e) {
-      final error = EmailVerificationModelError(
-          message: '예외발생 - $e', type: EmailVerificationModelType.sendMail);
-      state = AsyncError(error, error.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: "인증 메일을 보내는 데 실패했습니다.",
+      );
     }
   }
 
-  Future<void> signUp({
-    required String account,
-  }) async {
+  Future<void> verifyEmailVerification() async {
     try {
-      state = AsyncLoading();
-      final response = await authRepository.signUp(account: account);
-      state = AsyncData(response);
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        isVerifySuccess: false,
+      );
+
+      final email = state.email;
+
+      final response = await ref
+          .read(authRepositoryProvider)
+          .verifyEmailVerification(email: email);
+
+      state = state.copyWith(
+        isLoading: false,
+        error: null,
+        isVerifySuccess: response,
+      );
     } on EmailVerificationModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: ErrorUtil.instance.getErrorMessage(e.code) ??
+            '인증에 실패하였습니다. 다시 시도해주세요.',
+        isVerifySuccess: false,
+      );
     } catch (e) {
-      final error = EmailVerificationModelError(
-          message: '예외발생 - $e',
-          type: EmailVerificationModelType.completeSignUp);
-      state = AsyncError(error, error.stackTrace);
+      state = state.copyWith(
+        isLoading: false,
+        error: "인증에 실패하였습니다. 다시 시도해주세요.",
+        isVerifySuccess: false,
+      );
     }
   }
 
   void initState() {
-    state = AsyncData(null);
+    state = state.copyWith(
+      isLoading: false,
+      error: null,
+      isSendMailSuccess: false,
+      isVerifySuccess: false,
+    );
+  }
+
+  void setEmail(String email) {
+    state = state.copyWith(
+      email: email,
+    );
   }
 }

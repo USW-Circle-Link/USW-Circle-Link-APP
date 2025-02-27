@@ -17,6 +17,7 @@ import 'package:usw_circle_link/views/screens/main_screen.dart';
 import 'package:usw_circle_link/views/screens/circle_list_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/notice_list_screen.dart';
+import 'package:usw_circle_link/views/screens/policy_agree_screen.dart';
 import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
@@ -32,6 +33,13 @@ final webviewRouter = GoRoute(
   ),
 );
 
+final signUpRouter = GoRoute(
+  path: 'sign_up',
+  builder: (_, state) => SignUpScreen(
+    newMemberSignUp: state.uri.queryParameters['newMember'] == 'true',
+    selectedCircles: state.extra as List<CircleListData>?,
+  ),
+);
 final routerProvider = Provider<GoRouter>((ref) {
   final provider = ref.read(authProvider);
   return GoRouter(
@@ -85,42 +93,24 @@ final routerProvider = Provider<GoRouter>((ref) {
                 builder: (_, __) => SignUpOptionScreen(),
                 routes: [
                   GoRoute(
-                    path: 'select_circle',
-                    builder: (_, __) => SelectCircleScreen(),
+                    path: 'policy_agree',
+                    builder: (_, __) => PolicyAgreeScreen(),
                     routes: [
                       GoRoute(
-                        path: 'sign_up',
-                        builder: (_, state) => SignUpScreen(
-                          newMemberSignUp:
-                              state.uri.queryParameters['newMember'] == 'true',
-                          selectedCircles: state.extra as List<CircleListData>,
-                        ),
+                        path: 'email_verification',
+                        builder: (_, state) => EmailVerificationScreen(),
+                        routes: [
+                          webviewRouter,
+                          signUpRouter,
+                        ],
                       ),
                     ],
                   ),
                   GoRoute(
-                    path: 'sign_up',
-                    builder: (_, state) => SignUpScreen(
-                      newMemberSignUp:
-                          state.uri.queryParameters['newMember'] == 'true',
-                    ),
+                    path: 'select_circle',
+                    builder: (_, __) => SelectCircleScreen(),
                     routes: [
-                      GoRoute(
-                        path: 'email_verification',
-                        builder: (_, state) => EmailVerificationScreen(
-                          account: state.uri.queryParameters['account']!,
-                          password: Uri.decodeComponent(
-                              state.uri.queryParameters['password']!),
-                          userName: state.uri.queryParameters['userName']!,
-                          telephone: state.uri.queryParameters['telephone']!,
-                          studentNumber:
-                              state.uri.queryParameters['studentNumber']!,
-                          major: state.uri.queryParameters['major']!,
-                        ),
-                        routes: [
-                          webviewRouter,
-                        ],
-                      ),
+                      signUpRouter,
                     ],
                   ),
                 ],

@@ -103,8 +103,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                         height: 40.h,
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go(
-                                '/login/sign_up_option/sign_up?newMember=true');
+                            context.go('/login/sign_up_option/policy_agree');
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xffffB052),

@@ -49,7 +49,7 @@ class ErrorUtil {
       case "USR-212": // 새 비밀번호 확인 불일치
         return "비밀번호가 일치하지 않습니다!";
       case "USR-F100": // 아이디 규칙 X
-        return "아이디는 8~20자 이내 영어, 숫자만 가능합니다!";
+        return "아이디는 5~20자 이내 영어, 숫자만 가능합니다!";
       case "USR-F200": // 비밀번호 규칙 X
       case "USR-203": // 비밀번호 규칙 X
       case "USR-214": // 비밀번호 규칙 X
