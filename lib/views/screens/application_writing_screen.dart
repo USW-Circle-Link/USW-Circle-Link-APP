@@ -37,8 +37,7 @@ class _ApplicationWritingScreenState
           switch (data?.type) {
             case ApplicationModelType.getApplication:
               logger.d('지원서 url : ${data!.data}');
-              context.push(
-                  '/circle/application_writing/webview/${Uri.encodeComponent(data.data!)}');
+              context.push('/webview/${Uri.encodeComponent(data.data!)}');
               break;
             case ApplicationModelType.apply:
               logger.d('지원서 제출 성공! - ${data!.message}');

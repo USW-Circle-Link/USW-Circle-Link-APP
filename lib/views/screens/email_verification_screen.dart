@@ -170,8 +170,8 @@ class _EmailVerificationScreenState
                                             final encodedUrl = Uri.encodeComponent(
                                                 'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                                            context.push(
-                                                '/login/sign_up_option/policy_agree/email_verification/webview/$encodedUrl');
+                                            context
+                                                .push('/webview/$encodedUrl');
                                           }
                                         : sendMail,
                             style: OutlinedButton.styleFrom(

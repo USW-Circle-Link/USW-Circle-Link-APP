@@ -87,8 +87,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                           final encodedUrl = Uri.encodeComponent(
                                               'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                                          context.push(
-                                              '/update_profile/delete_user/webview/$encodedUrl');
+                                          context.push('/webview/$encodedUrl');
                                         }
                                       : sendMail,
                           style: OutlinedButton.styleFrom(

@@ -447,7 +447,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
     final encodedUrl =
         Uri.encodeComponent('https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-    context.push(
-        '/login/sign_up_option/sign_up/email_verification/webview/$encodedUrl');
+    context.push('/webview/$encodedUrl');
   }
 }
