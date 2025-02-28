@@ -69,101 +69,106 @@ class NoticeDetailScreen extends ConsumerWidget {
           child: SizedBox(
             height: double.infinity,
             width: double.infinity,
-            child: Stack(
+            child: Column(
               children: [
-                SingleChildScrollView(
-                  child: Container(
-                    width: double.infinity,
-                    margin: EdgeInsets.only(top: 16.h),
-                    padding: EdgeInsets.only(
-                      left: 32.w,
-                      right: 32.w,
-                      bottom: 100.h, // image height size 만큼 올려줘야함
+                Expanded(
+                  child: SingleChildScrollView(
+                    child: Container(
+                      width: double.infinity,
+                      margin: EdgeInsets.only(top: 16.h),
+                      padding: EdgeInsets.only(
+                        left: 24.w,
+                        right: 24.w,
+                      ),
+                      child: state is NoticeDetailModel
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                TextFontWidget.fontRegular(
+                                  state.data.noticeTitle,
+                                  fontSize: 18.sp,
+                                  color: const Color(0xFF000000),
+                                  fontWeight: FontWeight.w800,
+                                ),
+                                SizedBox(
+                                  height: 6.h,
+                                ),
+                                TextFontWidget.fontRegular(
+                                  '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF767676),
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                SizedBox(
+                                  height: 16.h,
+                                ),
+                                Html(data: state.data.noticeContent),
+                              ],
+                            )
+                          : Container(),
                     ),
-                    child: state is NoticeDetailModel
-                        ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              TextFontWidget.fontRegular(
-                                state.data.noticeTitle,
-                                fontSize: 18.sp,
-                                color: const Color(0xFF000000),
-                                fontWeight: FontWeight.w800,
-                              ),
-                              SizedBox(
-                                height: 6.h,
-                              ),
-                              TextFontWidget.fontRegular(
-                                '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
-                                fontSize: 14.sp,
-                                color: const Color(0xFF767676),
-                                fontWeight: FontWeight.w400,
-                              ),
-                              SizedBox(
-                                height: 16.h,
-                              ),
-                              Html(data: state.data.noticeContent),
-                            ],
-                          )
-                        : Container(),
                   ),
                 ),
-                Positioned(
-                  bottom: 4.h,
-                  child: state is NoticeDetailModel &&
-                          state.data.noticePhotos != null
-                      ? SizedBox(
-                          height: 100.h,
-                          width: MediaQuery.of(context).size.width,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal, // 가로 방향으로 스크롤
-                            itemCount: state.data.noticePhotos!.length,
-                            itemBuilder: (context, index) {
-                              return InkWell(
-                                onTap: () {
-                                  open(
-                                      context, state.data.noticePhotos!, index);
-                                  // context.push('/image',
-                                  //     extra: state.data.noticePhotos?[index]);
-                                },
-                                child: Container(
-                                  width: 100.w, // 이미지의 너비
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 4.w,
-                                  ), // 이미지 사이의 여백
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        8.0), // 모서리를 둥글게 설정
-                                    child: Container(
-                                      color: Colors.grey,
-                                      child: Hero(
-                                        tag: state.data.noticePhotos![index],
-                                        child: Image.network(
-                                          state.data.noticePhotos![index],
-                                          fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Center(
-                                              child: TextFontWidget.fontRegular(
-                                                '이미지 없음',
-                                                fontSize: 14.sp,
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w400,
-                                              ),
-                                            );
-                                          },
-                                          // height: 100.h, // 이미지의 높이
-                                        ),
+                Divider(
+                  height: 1.h,
+                  color: const Color(0xFFE0E0E0),
+                ),
+                state is NoticeDetailModel && state.data.noticePhotos != null
+                    ? Container(
+                        margin: EdgeInsets.only(
+                          bottom: 10.h,
+                          left: 24.w,
+                          top: 10.h,
+                        ),
+                        height: 100.h,
+                        width: MediaQuery.of(context).size.width,
+                        child: ListView.builder(
+                          scrollDirection: Axis.horizontal, // 가로 방향으로 스크롤
+                          itemCount: state.data.noticePhotos!.length,
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                open(context, state.data.noticePhotos!, index);
+                                // context.push('/image',
+                                //     extra: state.data.noticePhotos?[index]);
+                              },
+                              child: Container(
+                                width: 100.w, // 이미지의 너비
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 4.w,
+                                ), // 이미지 사이의 여백
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.circular(8.0), // 모서리를 둥글게 설정
+                                  child: Container(
+                                    color: Colors.grey,
+                                    child: Hero(
+                                      tag: state.data.noticePhotos![index],
+                                      child: Image.network(
+                                        state.data.noticePhotos![index],
+                                        fit: BoxFit.cover, // 이미지를 박스에 맞게 채움
+                                        errorBuilder:
+                                            (context, error, stackTrace) {
+                                          return Center(
+                                            child: TextFontWidget.fontRegular(
+                                              '이미지 없음',
+                                              fontSize: 14.sp,
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w400,
+                                            ),
+                                          );
+                                        },
+                                        // height: 100.h, // 이미지의 높이
                                       ),
                                     ),
                                   ),
                                 ),
-                              );
-                            },
-                          ),
-                        )
-                      : Container(),
-                ),
+                              ),
+                            );
+                          },
+                        ),
+                      )
+                    : Container(),
               ],
             ),
           ),
