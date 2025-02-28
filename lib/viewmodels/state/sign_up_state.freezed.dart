@@ -22,6 +22,7 @@ mixin _$SignUpState {
   Map<String, dynamic> get signUpForm => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   FieldType? get errorField => throw _privateConstructorUsedError;
+  String? get dialogError => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $SignUpStateCopyWith<SignUpState> get copyWith =>
@@ -40,7 +41,8 @@ abstract class $SignUpStateCopyWith<$Res> {
       bool signUpSuccess,
       Map<String, dynamic> signUpForm,
       String? error,
-      FieldType? errorField});
+      FieldType? errorField,
+      String? dialogError});
 }
 
 /// @nodoc
@@ -62,6 +64,7 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
     Object? signUpForm = null,
     Object? error = freezed,
     Object? errorField = freezed,
+    Object? dialogError = freezed,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -88,6 +91,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
               as FieldType?,
+      dialogError: freezed == dialogError
+          ? _value.dialogError
+          : dialogError // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -106,7 +113,8 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
       bool signUpSuccess,
       Map<String, dynamic> signUpForm,
       String? error,
-      FieldType? errorField});
+      FieldType? errorField,
+      String? dialogError});
 }
 
 /// @nodoc
@@ -126,6 +134,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
     Object? signUpForm = null,
     Object? error = freezed,
     Object? errorField = freezed,
+    Object? dialogError = freezed,
   }) {
     return _then(_$SignUpStateImpl(
       isLoading: null == isLoading
@@ -152,6 +161,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
               as FieldType?,
+      dialogError: freezed == dialogError
+          ? _value.dialogError
+          : dialogError // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -165,7 +178,8 @@ class _$SignUpStateImpl implements _SignUpState {
       this.signUpSuccess = false,
       final Map<String, dynamic> signUpForm = const {},
       this.error,
-      this.errorField})
+      this.errorField,
+      this.dialogError})
       : _signUpForm = signUpForm;
 
   @override
@@ -190,10 +204,12 @@ class _$SignUpStateImpl implements _SignUpState {
   final String? error;
   @override
   final FieldType? errorField;
+  @override
+  final String? dialogError;
 
   @override
   String toString() {
-    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, errorField: $errorField)';
+    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, errorField: $errorField, dialogError: $dialogError)';
   }
 
   @override
@@ -211,7 +227,9 @@ class _$SignUpStateImpl implements _SignUpState {
                 .equals(other._signUpForm, _signUpForm) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.errorField, errorField) ||
-                other.errorField == errorField));
+                other.errorField == errorField) &&
+            (identical(other.dialogError, dialogError) ||
+                other.dialogError == dialogError));
   }
 
   @override
@@ -222,7 +240,8 @@ class _$SignUpStateImpl implements _SignUpState {
       signUpSuccess,
       const DeepCollectionEquality().hash(_signUpForm),
       error,
-      errorField);
+      errorField,
+      dialogError);
 
   @JsonKey(ignore: true)
   @override
@@ -238,7 +257,8 @@ abstract class _SignUpState implements SignUpState {
       final bool signUpSuccess,
       final Map<String, dynamic> signUpForm,
       final String? error,
-      final FieldType? errorField}) = _$SignUpStateImpl;
+      final FieldType? errorField,
+      final String? dialogError}) = _$SignUpStateImpl;
 
   @override
   bool get isLoading;
@@ -252,6 +272,8 @@ abstract class _SignUpState implements SignUpState {
   String? get error;
   @override
   FieldType? get errorField;
+  @override
+  String? get dialogError;
   @override
   @JsonKey(ignore: true)
   _$$SignUpStateImplCopyWith<_$SignUpStateImpl> get copyWith =>

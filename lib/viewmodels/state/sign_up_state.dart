@@ -12,5 +12,6 @@ class SignUpState with _$SignUpState {
     @Default({}) Map<String, dynamic> signUpForm,
     String? error,
     FieldType? errorField,
+    String? dialogError,
   }) = _SignUpState;
 }

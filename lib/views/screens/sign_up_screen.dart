@@ -136,14 +136,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               onPressed: isLoading
                   ? null
                   : () async {
-                      if (olderThan14YearsOld &&
+                      if (idVerified &&
+                          olderThan14YearsOld &&
                           privacyPolicyAgree &&
                           personalInformationCollectionAndUsageAgreementAgree) {
                         _submit();
+                      } else if (!idVerified) {
+                        DialogManager.instance.showAlertDialog(
+                          context: context,
+                          content: '아이디 중복 확인이 필요합니다.',
+                        );
                       } else if (!olderThan14YearsOld) {
                         DialogManager.instance.showAlertDialog(
                           context: context,
-                          content: '서비스 이용약관에 동의가 필요합니다.',
+                          content: '14세 이상 이용 동의가 필요합니다.',
                         );
                       } else if (!privacyPolicyAgree) {
                         DialogManager.instance.showAlertDialog(
