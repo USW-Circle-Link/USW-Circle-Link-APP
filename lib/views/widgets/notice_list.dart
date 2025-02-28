@@ -16,20 +16,21 @@ class NoticeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return noticeModel.data.isNotEmpty
+    final notices = noticeModel.data.reversed.toList();
+    return notices.isNotEmpty
         ? ListView.separated(
             separatorBuilder: (context, index) {
               return Divider(
                 thickness: 1.h,
               );
             },
-            itemCount: noticeModel.data.length,
+            itemCount: notices.length,
             itemBuilder: (context, index) {
               return Container(
                 margin: EdgeInsets.only(top: index == 0 ? 16.h : 0.h),
                 child: InkWell(
                   onTap: () {
-                    onItemClicked(noticeModel.data[index].noticeUUID);
+                    onItemClicked(notices[index].noticeUUID);
                   },
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16.w),
@@ -37,7 +38,7 @@ class NoticeList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFontWidget.fontRegular(
-                          noticeModel.data[index].noticeTitle,
+                          notices[index].noticeTitle,
                           fontSize: 18.sp,
                           color: const Color(0xFF000000),
                           fontWeight: FontWeight.w800,

@@ -11,13 +11,15 @@ class AlertTextDialog extends StatefulWidget {
     this.onRightButtonPressed,
     this.leftButtonText,
     this.rightButtonText,
+    this.rightButtonTextStyle,
+    this.leftButtonTextStyle,
   }) : super(key: key);
 
   final String? title;
   final String? content;
   final void Function()? onLeftButtonPressed, onRightButtonPressed;
   final String? leftButtonText, rightButtonText;
-
+  final TextStyle? rightButtonTextStyle, leftButtonTextStyle;
   @override
   _AlertTextDialogState createState() => _AlertTextDialogState();
 }
@@ -48,25 +50,25 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                             widget.title == null
                                 ? Container()
                                 : Container(
-                              margin: EdgeInsets.only(bottom: 8.h),
-                              child: TextFontWidget.fontRegular(
-                                widget.title!,
-                                color: Color(0xFF000000),
-                                fontSize: 18.sp,
-                                fontWeight: FontWeight.w800,
-                                textAlign: TextAlign.center,
-                              ),
-                            ),
+                                    margin: EdgeInsets.only(bottom: 8.h),
+                                    child: TextFontWidget.fontRegular(
+                                      widget.title!,
+                                      color: Color(0xFF000000),
+                                      fontSize: 18.sp,
+                                      fontWeight: FontWeight.w800,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
                           ],
                           widget.content == null
                               ? Container()
                               : TextFontWidget.fontRegular(
-                            widget.content!,
-                            color: Color(0xFF767676),
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.w400,
-                            textAlign: TextAlign.center,
-                          ),
+                                  widget.content!,
+                                  color: Color(0xFF767676),
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w400,
+                                  textAlign: TextAlign.center,
+                                ),
                         ],
                       ),
                     ),
@@ -96,11 +98,14 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                         bottomLeft: Radius.circular(15.r)),
                                   ),
                                 ),
-                                child: TextFontWidget.fontRegular(
+                                child: Text(
                                   widget.leftButtonText!,
-                                  color: Color(0xFF0085FF),
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w800,
+                                  style: widget.leftButtonTextStyle ??
+                                      TextFontWidget.fontRegularStyle(
+                                        fontSize: 18.sp,
+                                        color: Color(0xFF0085FF),
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                 ),
                               ),
                             ),
@@ -109,7 +114,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                               height: double.infinity,
                               child: DecoratedBox(
                                 decoration:
-                                BoxDecoration(color: Color(0xFFCECECE)),
+                                    BoxDecoration(color: Color(0xFFCECECE)),
                               ),
                             ),
                             Expanded(
@@ -126,11 +131,14 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                         bottomRight: Radius.circular(15.r)),
                                   ),
                                 ),
-                                child: TextFontWidget.fontRegular(
+                                child: Text(
                                   widget.rightButtonText!,
-                                  color: Color(0xFF0085FF),
-                                  fontSize: 18.sp,
-                                  fontWeight: FontWeight.w800,
+                                  style: widget.rightButtonTextStyle ??
+                                      TextFontWidget.fontRegularStyle(
+                                        fontSize: 18.sp,
+                                        color: Color(0xFF0085FF),
+                                        fontWeight: FontWeight.w800,
+                                      ),
                                 ),
                               ),
                             ),
@@ -152,11 +160,14 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                                 bottom: Radius.circular(15.r)),
                           ),
                         ),
-                        child: TextFontWidget.fontRegular(
+                        child: Text(
                           widget.leftButtonText!,
-                          color: Color(0xFF0085FF),
-                          fontSize: 18.sp,
-                          fontWeight: FontWeight.w800,
+                          style: widget.leftButtonTextStyle ??
+                              TextFontWidget.fontRegularStyle(
+                                fontSize: 18.sp,
+                                color: Color(0xFF0085FF),
+                                fontWeight: FontWeight.w800,
+                              ),
                         ),
                       ),
                   ],

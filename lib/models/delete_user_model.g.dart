@@ -6,25 +6,6 @@ part of 'delete_user_model.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
-_$DeleteUserModelImpl _$$DeleteUserModelImplFromJson(
-        Map<String, dynamic> json) =>
-    _$DeleteUserModelImpl(
-      message: json['message'] as String,
-      type: $enumDecodeNullable(_$DeleteUserModelTypeEnumMap, json['type']),
-    );
-
-Map<String, dynamic> _$$DeleteUserModelImplToJson(
-        _$DeleteUserModelImpl instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'type': _$DeleteUserModelTypeEnumMap[instance.type],
-    };
-
-const _$DeleteUserModelTypeEnumMap = {
-  DeleteUserModelType.sendCode: 'sendCode',
-  DeleteUserModelType.verifyCode: 'verifyCode',
-};
-
 _$DeleteUserModelErrorImpl _$$DeleteUserModelErrorImplFromJson(
         Map<String, dynamic> json) =>
     _$DeleteUserModelErrorImpl(
@@ -33,7 +14,6 @@ _$DeleteUserModelErrorImpl _$$DeleteUserModelErrorImplFromJson(
       code: json['code'] as String?,
       status: (json['status'] as num?)?.toInt(),
       error: json['error'] as String?,
-      type: $enumDecodeNullable(_$DeleteUserModelTypeEnumMap, json['type']),
     );
 
 Map<String, dynamic> _$$DeleteUserModelErrorImplToJson(
@@ -44,5 +24,4 @@ Map<String, dynamic> _$$DeleteUserModelErrorImplToJson(
       'code': instance.code,
       'status': instance.status,
       'error': instance.error,
-      'type': _$DeleteUserModelTypeEnumMap[instance.type],
     };

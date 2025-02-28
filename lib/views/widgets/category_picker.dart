@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/category_model.dart';
+import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/viewmodels/category_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -89,7 +90,11 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               ),
               Row(
                 children: <Widget>[
-                  SvgPicture.asset('assets/images/ic_category.svg'),
+                  Icon(
+                    MainIcons.ic_category,
+                    color: Color(0xFF111111),
+                    size: 15.sp,
+                  ),
                   SizedBox(
                     width: 10.w,
                   ),

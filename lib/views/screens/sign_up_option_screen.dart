@@ -103,11 +103,11 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                         height: 40.h,
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go(
-                                '/login/sign_up_option/sign_up?newMember=true');
+                            context.go('/login/sign_up_option/policy_agree');
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xffffB052),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4.r),
                             ),
@@ -166,6 +166,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xff404040),
+                            foregroundColor: Colors.white,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(4.r),
                             ),

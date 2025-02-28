@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 final loginViewModelProvider =
@@ -25,7 +25,8 @@ class LoginViewModel extends StateNotifier<UserModelBase?> {
   }) async {
     try {
       if (id.isEmpty || password.isEmpty) {
-        throw UserModelError(message: '아이디 비밀번호가 입력되지 않았습니다.', code: "USR-F800");
+        throw UserModelError(
+            message: '아이디 비밀번호가 입력되지 않았습니다.', code: "USR-F800");
       }
       // 첫 state는 Loading 상태
       state = UserModelLoading();

@@ -3,25 +3,24 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/dio.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return FCMRepository(
-    baseUrl: '$protocol://$host:$port/club-leader',
+    basePath: '/club-leader',
     dio: dio,
   );
 });
 
 class FCMRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   const FCMRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
@@ -55,7 +54,7 @@ class FCMRepository {
     };
 
     final response = await dio.patch(
-      '$baseUrl/fcmtoken',
+      '$basePath/fcmtoken',
       data: body,
       options: Options(
         headers: {

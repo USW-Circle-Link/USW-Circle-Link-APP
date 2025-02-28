@@ -8,8 +8,9 @@ import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/regex/regex.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -60,7 +61,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     if (route is PageRoute) {
       routeObserver.subscribe(this, route);
     }
-    ref.refresh(updateProfileViewModelProvider);
+    ref.invalidate(updateProfileViewModelProvider);
     _isInitialBindDone = false;
   }
 
@@ -152,22 +153,25 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
               DialogManager.instance.showAlertDialog(
                 context: context,
                 content: '프로필이 수정되었습니다!',
-                onLeftButtonPressed: () => context.go('/'),
+                onLeftButtonPressed: () => context.pop(),
               );
               break;
             default:
           }
         },
-        error: (error, stackTrace) {
+        error: (error, stackTrace) async {
           error = (error as ProfileModelError);
           logger.d('error - $stackTrace');
           switch (error.type) {
             case ProfileModelType.getProfile:
-              DialogManager.instance.showAlertDialog(
+              await DialogManager.instance.showAlertDialog(
                 context: context,
                 content: ErrorUtil.instance.getErrorMessage(error.code) ??
                     "프로필을 불러오는 데 문제가 발생했습니다!",
               );
+              if (mounted) {
+                context.pop();
+              }
               break;
             case ProfileModelType.updateProfile:
               if (error.code == "USR-204") {
@@ -260,15 +264,19 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
                   hintText: "이름",
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -311,16 +319,20 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_phone.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_phone,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintText: "전화번호 (- 제외입력)",
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -364,16 +376,20 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_tag.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_tag,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintText: "학번",
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -439,18 +455,22 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   textAlign: TextAlign.left,
                   textInputAction: TextInputAction.done,
                   hintText: (college == null && major == null)
-                      ? '학과'
+                      ? '단과대/학부(학과)'
                       : '${college ?? ""} / ${major ?? ""}',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_bookmark.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_bookmark,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'SUIT',
+                  ),
+                  textStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    color: const Color(0xff707070),
                   ),
                 ),
                 SizedBox(
@@ -470,6 +490,17 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                       : null,
                 ),
                 SizedBox(height: 68.h),
+
+                Container(
+                  alignment: Alignment.center,
+                  child: TextFontWidget.fontRegular(
+                    '허위 정보 기재 시 서비스 이용에 제한이 있을 수 있습니다.',
+                    color: const Color(0xFF868686),
+                    fontSize: 12.sp,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+                SizedBox(height: 12.h),
 
                 // 수정 완료 버튼
                 SizedBox(
@@ -512,6 +543,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     ),
                   ),
                 ),
+                SizedBox(height: 12.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

@@ -1,7 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/dio/Dio.dart';
+import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
@@ -10,24 +9,24 @@ final updateProfileRepositoryProvider =
   final dio = ref.watch(dioProvider);
 
   return UpdateProfileRepository(
-    baseUrl: '$protocol://$host:$port',
+    basePath: '/profiles',
     dio: dio,
   );
 });
 
 class UpdateProfileRepository {
   final Dio dio;
-  final String baseUrl;
+  final String basePath;
 
   UpdateProfileRepository({
     required this.dio,
-    required this.baseUrl,
+    required this.basePath,
   });
 
   Future<ProfileModel> getProfile() async {
     try {
       final response = await dio.get(
-        '$baseUrl/profiles/me',
+        '$basePath/me',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -57,7 +56,7 @@ class UpdateProfileRepository {
     };
 
     final response = await dio.patch(
-      '$baseUrl/profiles/change',
+      '$basePath/change',
       options: Options(headers: {
         'accessToken': 'true',
         'Content-Type': 'application/json',

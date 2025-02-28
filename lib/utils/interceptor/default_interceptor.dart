@@ -20,6 +20,8 @@ class DefaultInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     if (err.response?.statusCode == 500) {
       logger.e(err.response?.data);
+    } else if (err.response?.statusCode == 401) {
+      logger.e(err.response?.data);
     }
     return handler.next(err);
   }

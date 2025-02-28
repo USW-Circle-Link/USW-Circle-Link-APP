@@ -1,75 +1,112 @@
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
+import 'package:usw_circle_link/repositories/delete_user_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/viewmodels/state/delete_user_state.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 final deleteUserViewModelProvider =
-    StateNotifierProvider.autoDispose<DeleteUserViewModel, DeleteUserModelBase?>((ref) {
-  final UserViewModel userViewModel  = ref.read(userViewModelProvider.notifier);
-  final FlutterSecureStorage storage = ref.read(secureStorageProvider);
-  return DeleteUserViewModel(
-    userViewModel: userViewModel,
-    storage: storage,
-  );
-});
+    AutoDisposeNotifierProvider<DeleteUserViewModel, DeleteUserState>(
+        DeleteUserViewModel.new);
 
-class DeleteUserViewModel extends StateNotifier<DeleteUserModelBase?> {
-  final UserViewModel userViewModel;
-  final FlutterSecureStorage storage;
-  DeleteUserViewModel({
-    required this.userViewModel,
-    required this.storage,
-  }) : super(null);
-
-  Future<DeleteUserModelBase> sendCode() async {
-    try {
-      state = DeleteUserModelLoading();
-      final response =
-          await userViewModel.sendCode();
-
-      state = response;
-    } on DeleteUserModelError catch (e) {
-      state = e;
-    } catch (e) {
-      state = DeleteUserModelError(
-          message: '예외발생 - $e', type: DeleteUserModelType.sendCode);
-    }
-
-    return Future.value(state);
+class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
+  @override
+  DeleteUserState build() {
+    return DeleteUserState();
   }
 
-  void initState() {
-    state = null;
-  }
-
-  Future<void> verifyCode({
-    required String code,
-  }) async {
+  Future<void> sendCode() async {
     try {
-      if (code.isEmpty) {
-        throw DeleteUserModelError(
-          message: '인증코드가 형식에 맞지 않습니다.',
-          code: 'WT-F100',
-          type: DeleteUserModelType.verifyCode,
+      state = state.copyWith(
+        isLoading: true,
+        error: null,
+        isSendCodeSuccess: false,
+        isVerifyCodeSuccess: false,
+        isCodeError: false,
+      );
+
+      final result = await ref
+          .read(deleteUserRepositoryProvider)
+          .sendCode(); // true or exception
+
+      if (result) {
+        state = state.copyWith(
+          isLoading: false,
+          isSendCodeSuccess: true,
         );
       }
-      state = DeleteUserModelLoading();
-      final response = await userViewModel.verifyCode(
-        code: code,
-      );
-      state = response;
-
-      await userViewModel.logout();
     } on DeleteUserModelError catch (e) {
-      state = e;
+      state = state.copyWith(
+        isLoading: false,
+        error: ErrorUtil.instance.getErrorMessage(e.code) ??
+            '인증 코드를 전송하는 데 문제가 발생했습니다.',
+      );
     } catch (e) {
-      state = DeleteUserModelError(
-        message: '예외발생 - $e',
-        type: DeleteUserModelType.verifyCode,
+      state = state.copyWith(
+        isLoading: false,
+        error: '인증 코드를 전송하는 데 문제가 발생했습니다.',
       );
     }
+  }
+
+  Future<void> verifyCode() async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        isVerifyCodeSuccess: false,
+        error: null,
+        isCodeError: false,
+      );
+
+      final code = state.code;
+
+      if (code.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: '인증코드를 입력해 주세요.',
+          isCodeError: true,
+        );
+        return;
+      }
+
+      final result =
+          await ref.read(deleteUserRepositoryProvider).verifyCode(code: code);
+
+      if (result) {
+        state = state.copyWith(
+          isLoading: false,
+          isVerifyCodeSuccess: true,
+        );
+
+        await Future.wait([
+          ref.read(secureStorageProvider).delete(key: accessTokenKey),
+          ref.read(secureStorageProvider).delete(key: refreshTokenKey),
+          ref.read(secureStorageProvider).delete(key: clubUUIDsKey),
+        ]);
+
+        await ref.read(userViewModelProvider.notifier).logout();
+      }
+    } on DeleteUserModelError catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: ErrorUtil.instance.getErrorMessage(e.code) ??
+            '인증 코드를 확인하는 데 문제가 발생했습니다.',
+        isCodeError: true,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: '인증 코드를 확인하는 데 문제가 발생했습니다.',
+        isCodeError: true,
+      );
+    }
+  }
+
+  void setCode(String value) {
+    state = state.copyWith(
+      code: value,
+    );
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/login_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
       if (next is UserModel) {
         // 로그인 성공
-        context.go('/');
+        context.pop();
       }
     });
 
@@ -114,11 +115,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   textAlign: TextAlign.left,
                   hintText: '아이디',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -141,11 +141,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   textAlign: TextAlign.left,
                   hintText: '비밀번호',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   suffixIcon: IconButton(
                     onPressed: () {
@@ -153,13 +152,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         passwordVisible = !passwordVisible;
                       });
                     },
-                    icon: SvgPicture.asset(
+                    icon: Icon(
                       passwordVisible
-                          ? 'assets/images/ic_eye_open.svg'
-                          : 'assets/images/ic_eye_slash.svg',
-                      width: 25.w,
-                      height: 25.h,
-                      fit: BoxFit.scaleDown,
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
                     ),
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(

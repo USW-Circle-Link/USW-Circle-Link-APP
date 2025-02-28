@@ -7,7 +7,8 @@ enum FieldType {
   passwordConfirm,
   password,
   email,
-  currentPassword
+  currentPassword,
+  code
 }
 
 class ErrorUtil {
@@ -37,6 +38,7 @@ class ErrorUtil {
       case "VC-F100": // 인증코드 공백
         return "인증코드를 입력해주세요!";
       case "AC-101": // 인증코드가 일치하지 않음
+      case "WT-101": // 인증코드가 일치하지 않음
         return "인증코드가 일치하지 않습니다!";
       case "ATTEMPT-503": // 최대 시도 횟수 초과
         return "최대 시도 횟수를 초과했습니다! 잠시후 다시 시도해주세요!";
@@ -48,7 +50,7 @@ class ErrorUtil {
       case "USR-212": // 새 비밀번호 확인 불일치
         return "비밀번호가 일치하지 않습니다!";
       case "USR-F100": // 아이디 규칙 X
-        return "아이디는 8~20자 이내 영어, 숫자만 가능합니다!";
+        return "아이디는 5~20자 이내 영어, 숫자만 가능합니다!";
       case "USR-F200": // 비밀번호 규칙 X
       case "USR-203": // 비밀번호 규칙 X
       case "USR-214": // 비밀번호 규칙 X
@@ -72,6 +74,10 @@ class ErrorUtil {
         return "현재 비밀번호가 일치하지 않습니다";
       case "USR-210": // 해당 정보로 인증 중인 회원존재 X
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
+      case "USR-217": // 현재 비밀번호와 새 비밀번호가 같음
+        return "현재 비밀번호와 새 비밀번호가 같습니다!";
+      case "USR-216":
+        return "비회원 사용자입니다. 인증을 완료해주세요";
       default:
         return null;
     }
@@ -107,6 +113,8 @@ class ErrorUtil {
         return fieldType != FieldType.currentPassword;
       case "EML-F100":
         return fieldType != FieldType.email;
+      case "VC-F100":
+        return fieldType != FieldType.code;
       default:
         return null;
     }

@@ -1,32 +1,31 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return NoticeRepository(
-    baseUrl: '$protocol://$host:$port/my-notices',
+    basePath: '/my-notices',
     dio: dio,
   );
 });
 
 class NoticeRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   NoticeRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
   Future<NoticeModel> fetchNotices() async {
     final response = await dio.get(
-      baseUrl,
+      basePath,
     );
 
     logger.d(response.data);
@@ -48,7 +47,7 @@ class NoticeRepository {
     required String noticeUUID,
   }) async {
     final response = await dio.get(
-      '$baseUrl/$noticeUUID/details',
+      '$basePath/$noticeUUID/details',
     );
 
     logger.d(response.data);

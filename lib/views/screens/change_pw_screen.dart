@@ -6,7 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/change_pw_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -190,11 +191,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               textAlign: TextAlign.left,
                               hintText: '현재 비밀번호',
                               isAnimatedHint: false,
-                              prefixIcon: SvgPicture.asset(
-                                'assets/images/ic_password.svg',
-                                width: 13.w,
-                                height: 16.h,
-                                fit: BoxFit.scaleDown,
+                              prefixIcon: Icon(
+                                SignUpIcons.ic_password,
+                                color: Color(0xFF989898),
+                                size: 15.sp,
                               ),
                               suffixIcon: IconButton(
                                 onPressed: () {
@@ -202,13 +202,12 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                                     currentPWVisible = !currentPWVisible;
                                   });
                                 },
-                                icon: SvgPicture.asset(
+                                icon: Icon(
                                   currentPWVisible
-                                      ? 'assets/images/ic_eye_open.svg'
-                                      : 'assets/images/ic_eye_slash.svg',
-                                  width: 25.w,
-                                  height: 25.h,
-                                  fit: BoxFit.scaleDown,
+                                      ? SignUpIcons.ic_eye_open
+                                      : SignUpIcons.ic_eye_slash,
+                                  color: Color(0xFF989898),
+                                  size: 18.sp,
                                 ),
                               ),
                               hintStyle: TextStyle(
@@ -239,11 +238,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         textAlign: TextAlign.left,
                         hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 8~20자)',
                         isAnimatedHint: false,
-                        prefixIcon: SvgPicture.asset(
-                          'assets/images/ic_password.svg',
-                          width: 13.w,
-                          height: 16.h,
-                          fit: BoxFit.scaleDown,
+                        prefixIcon: Icon(
+                          SignUpIcons.ic_password,
+                          color: Color(0xFF989898),
+                          size: 15.sp,
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -251,13 +249,12 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               newPWVisible = !newPWVisible;
                             });
                           },
-                          icon: SvgPicture.asset(
+                          icon: Icon(
                             newPWVisible
-                                ? 'assets/images/ic_eye_open.svg'
-                                : 'assets/images/ic_eye_slash.svg',
-                            width: 25.w,
-                            height: 25.h,
-                            fit: BoxFit.scaleDown,
+                                ? SignUpIcons.ic_eye_open
+                                : SignUpIcons.ic_eye_slash,
+                            color: Color(0xFF989898),
+                            size: 18.sp,
                           ),
                         ),
                         hintStyle: TextStyle(
@@ -285,11 +282,10 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         textAlign: TextAlign.left,
                         hintText: '비밀번호 확인',
                         isAnimatedHint: false,
-                        prefixIcon: SvgPicture.asset(
-                          'assets/images/ic_password.svg',
-                          width: 13.w,
-                          height: 16.h,
-                          fit: BoxFit.scaleDown,
+                        prefixIcon: Icon(
+                          SignUpIcons.ic_password,
+                          color: Color(0xFF989898),
+                          size: 18.sp,
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -297,13 +293,12 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               newPWConfirmVisible = !newPWConfirmVisible;
                             });
                           },
-                          icon: SvgPicture.asset(
+                          icon: Icon(
                             newPWConfirmVisible
-                                ? 'assets/images/ic_eye_open.svg'
-                                : 'assets/images/ic_eye_slash.svg',
-                            width: 25.w,
-                            height: 25.h,
-                            fit: BoxFit.scaleDown,
+                                ? SignUpIcons.ic_eye_open
+                                : SignUpIcons.ic_eye_slash,
+                            color: Color(0xFF989898),
+                            size: 18.sp,
                           ),
                         ),
                         hintStyle: TextStyle(

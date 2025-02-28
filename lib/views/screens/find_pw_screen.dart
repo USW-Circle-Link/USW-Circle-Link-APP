@@ -37,7 +37,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                 logger.d('이메일 보내기 성공!');
                 DialogManager.instance.showAlertDialog(
                   context: context,
-                  content: '인증코드가 전송되었습니다',
+                  content: '인증코드가 전송되었습니다.\n5분 안에 인증을 완료해주세요.',
                 );
                 uuid = data!.data;
                 break;

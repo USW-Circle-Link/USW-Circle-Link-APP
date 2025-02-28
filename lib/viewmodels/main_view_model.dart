@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final circleViewModelProvider = StateNotifierProvider.autoDispose<
     CircleViewModel, AsyncValue<CircleListModel>>((ref) {

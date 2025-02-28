@@ -30,7 +30,7 @@ const clubUUIDsKey = 'club_uuids';
 const iatKey = 'iat';
 const expKey = 'exp';
 // URL
-const feedback = "https://forms.gle/auVHQJtz9xTRmXEA8";
+const feedback = "https://forms.gle/Xhang1SZiZiVyabe6";
 // Color
 const accentColor = Color(0xffffB052);
 // Data
