@@ -23,6 +23,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         isLoading: true,
         idVerified: false,
         error: null,
+        isDialogError: false,
         errorField: null,
       );
 
@@ -59,40 +60,59 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
     }
   }
 
-  Future<void> signUpNewMember() async {
+  Future<void> verifyEmail() async {
     try {
       state = state.copyWith(
         isLoading: true,
+        emailVerified: false,
         error: null,
+        isDialogError: false,
         errorField: null,
-        signUpSuccess: false,
       );
 
-      logger.d(state.signUpForm);
+      final email = state.signUpForm['email'];
 
-      final response = await ref.read(authRepositoryProvider).signUpNewMember(
-            request: SignUpRequest.fromJson(state.signUpForm),
-          );
+      if (email.isEmpty) {
+        state = state.copyWith(
+          isLoading: false,
+          error: '이메일을 입력해주세요.',
+          errorField: FieldType.email,
+        );
+        return;
+      }
+
+      final response =
+          await ref.read(authRepositoryProvider).verifyEmail(email: email);
+
       state = state.copyWith(
         isLoading: false,
-        signUpSuccess: response,
+        emailVerified: response,
+      );
+    } on SignUpModelError catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error:
+            ErrorUtil.instance.getErrorMessage(e.code) ?? '이메일 중복 확인에 실패했습니다.',
+        errorField: FieldType.email,
       );
     } catch (e) {
-      logger.d(e);
       state = state.copyWith(
         isLoading: false,
-        error: '회원가입에 실패했습니다.',
+        error: '이메일 중복 확인에 실패했습니다.',
+        errorField: FieldType.email,
       );
     }
   }
 
-  Future<void> signUpExistingMember() async {
+  Future<void> signUpNewMember() async {
     try {
       state = state.copyWith(
         isLoading: true,
-        error: null,
-        errorField: null,
         signUpSuccess: false,
+        error: null,
+        isDialogError: false,
+        errorField: null,
+        emailVerified: true,
       );
 
       logger.d(state.signUpForm);
@@ -124,11 +144,92 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
             FieldType.account => '아이디 중복 확인을 진행해주세요!',
             FieldType.password => '비밀번호가 형식에 맞지 않습니다!',
             FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
-            FieldType.username => '이름이 형식에 맞지 않습니다!',
+            FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
             FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
             FieldType.studentNumber => '학번이 형식에 맞지 않습니다!',
             FieldType.major => '학과가 형식에 맞지 않습니다!',
-            FieldType.email => '이메일이 형식에 맞지 않습니다!',
+            // 사용되지 않는 필드 혹은 이미 검증된 필드
+            FieldType.email => null,
+            FieldType.currentPassword => null,
+            FieldType.code => null,
+          },
+          errorField: invalidField,
+        );
+        return;
+      }
+
+      final response = await ref.read(authRepositoryProvider).signUpNewMember(
+            request: SignUpRequest.fromJson(state.signUpForm),
+          );
+      state = state.copyWith(
+        isLoading: false,
+        signUpSuccess: response,
+      );
+    } on SignUpModelError catch (e) {
+      final isDialogError = ErrorUtil.instance.isDialogError(e.code);
+      final errorField = ErrorUtil.instance.getFieldType(e.code);
+      final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
+      if (errorField == FieldType.account) {
+        state = state.copyWith(idVerified: false);
+      }
+      state = state.copyWith(
+        isLoading: false,
+        isDialogError: isDialogError || errorField == null,
+        error: errorMessage ?? '회원가입에 실패했습니다.',
+        errorField: errorField,
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: '회원가입에 실패했습니다.',
+      );
+    }
+  }
+
+  Future<void> signUpExistingMember() async {
+    try {
+      state = state.copyWith(
+        isLoading: true,
+        signUpSuccess: false,
+        error: null,
+        isDialogError: false,
+        errorField: null,
+      );
+
+      logger.d(state.signUpForm);
+
+      final account = state.signUpForm['account'];
+      final password = state.signUpForm['password'];
+      final confirmPassword = state.signUpForm['confirmPassword'];
+      final userName = state.signUpForm['userName'];
+      final telephone = state.signUpForm['telephone'];
+      final studentNumber = state.signUpForm['studentNumber'];
+      final major = state.signUpForm['major'];
+      final email = state.signUpForm['email'];
+
+      final invalidField = validateField(
+        account: account,
+        password: password,
+        confirmPassword: confirmPassword,
+        userName: userName,
+        telephone: telephone,
+        studentNumber: studentNumber,
+        major: major,
+        email: email,
+      );
+
+      if (invalidField != null) {
+        state = state.copyWith(
+          isLoading: false,
+          error: switch (invalidField) {
+            FieldType.account => '아이디 중복 확인을 진행해주세요!',
+            FieldType.password => '비밀번호가 형식에 맞지 않습니다!',
+            FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
+            FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
+            FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
+            FieldType.studentNumber => '학번이 형식에 맞지 않습니다!',
+            FieldType.major => '학과가 형식에 맞지 않습니다!',
+            FieldType.email => '이메일 중복 확인을 진행해주세요!',
             // 사용되지 않는 필드 혹은 이미 검증된 필드
             FieldType.currentPassword => null,
             FieldType.code => null,
@@ -147,12 +248,20 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         signUpSuccess: response,
       );
     } on SignUpModelError catch (e) {
+      final isDialogError = ErrorUtil.instance.isDialogError(e.code);
+      final errorField = ErrorUtil.instance.getFieldType(e.code);
+      final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
+      if (errorField == FieldType.account) {
+        state = state.copyWith(idVerified: false);
+      }
       state = state.copyWith(
         isLoading: false,
-        error: ErrorUtil.instance.getErrorMessage(e.code) ?? '회원가입에 실패했습니다.',
+        isDialogError: isDialogError || errorField == null,
+        error: errorMessage ?? '회원가입에 실패했습니다.',
+        errorField: errorField,
+        needToRedirectLogin: ErrorUtil.instance.isNeedToRedirectLogin(e.code),
       );
     } catch (e) {
-      logger.d(e);
       state = state.copyWith(
         isLoading: false,
         error: '회원가입에 실패했습니다.',
@@ -169,6 +278,12 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   void setIdVerified(bool isVerified) {
     state = state.copyWith(
       idVerified: isVerified,
+    );
+  }
+
+  void setEmailVerified(bool isVerified) {
+    state = state.copyWith(
+      emailVerified: isVerified,
     );
   }
 
@@ -221,20 +336,16 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
     if (userName.isEmpty || !nameRegExp.hasMatch(userName)) {
       return FieldType.username;
     }
-
     if (telephone.isEmpty || !telephoneRegExp.hasMatch(telephone)) {
       return FieldType.telephone;
     }
-
     if (!studentNumberRegExp.hasMatch(studentNumber)) {
       return FieldType.studentNumber;
     }
-
     if (major == null || major.isEmpty) {
       return FieldType.major;
     }
-
-    if (email != null && email.isEmpty) {
+    if (!state.emailVerified) {
       return FieldType.email;
     }
 

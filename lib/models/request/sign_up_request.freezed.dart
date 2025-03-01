@@ -35,9 +35,11 @@ mixin _$SignUpRequest {
   @JsonKey(name: "major")
   String get major => throw _privateConstructorUsedError;
   @JsonKey(name: "email")
-  String get email => throw _privateConstructorUsedError;
-  @JsonKey(name: "uuid")
-  String? get uuid => throw _privateConstructorUsedError;
+  String? get email => throw _privateConstructorUsedError;
+  @JsonKey(name: "emailTokenUUID")
+  String? get emailTokenUUID => throw _privateConstructorUsedError;
+  @JsonKey(name: "signupUUID")
+  String? get signupUUID => throw _privateConstructorUsedError;
   @JsonKey(name: "clubs")
   List<Map<String, String>>? get clubs => throw _privateConstructorUsedError;
 
@@ -61,8 +63,9 @@ abstract class $SignUpRequestCopyWith<$Res> {
       @JsonKey(name: "telephone") String telephone,
       @JsonKey(name: "studentNumber") String studentNumber,
       @JsonKey(name: "major") String major,
-      @JsonKey(name: "email") String email,
-      @JsonKey(name: "uuid") String? uuid,
+      @JsonKey(name: "email") String? email,
+      @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
+      @JsonKey(name: "signupUUID") String? signupUUID,
       @JsonKey(name: "clubs") List<Map<String, String>>? clubs});
 }
 
@@ -86,8 +89,9 @@ class _$SignUpRequestCopyWithImpl<$Res, $Val extends SignUpRequest>
     Object? telephone = null,
     Object? studentNumber = null,
     Object? major = null,
-    Object? email = null,
-    Object? uuid = freezed,
+    Object? email = freezed,
+    Object? emailTokenUUID = freezed,
+    Object? signupUUID = freezed,
     Object? clubs = freezed,
   }) {
     return _then(_value.copyWith(
@@ -119,13 +123,17 @@ class _$SignUpRequestCopyWithImpl<$Res, $Val extends SignUpRequest>
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      uuid: freezed == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      emailTokenUUID: freezed == emailTokenUUID
+          ? _value.emailTokenUUID
+          : emailTokenUUID // ignore: cast_nullable_to_non_nullable
+              as String?,
+      signupUUID: freezed == signupUUID
+          ? _value.signupUUID
+          : signupUUID // ignore: cast_nullable_to_non_nullable
               as String?,
       clubs: freezed == clubs
           ? _value.clubs
@@ -151,8 +159,9 @@ abstract class _$$SignUpRequestImplCopyWith<$Res>
       @JsonKey(name: "telephone") String telephone,
       @JsonKey(name: "studentNumber") String studentNumber,
       @JsonKey(name: "major") String major,
-      @JsonKey(name: "email") String email,
-      @JsonKey(name: "uuid") String? uuid,
+      @JsonKey(name: "email") String? email,
+      @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
+      @JsonKey(name: "signupUUID") String? signupUUID,
       @JsonKey(name: "clubs") List<Map<String, String>>? clubs});
 }
 
@@ -174,8 +183,9 @@ class __$$SignUpRequestImplCopyWithImpl<$Res>
     Object? telephone = null,
     Object? studentNumber = null,
     Object? major = null,
-    Object? email = null,
-    Object? uuid = freezed,
+    Object? email = freezed,
+    Object? emailTokenUUID = freezed,
+    Object? signupUUID = freezed,
     Object? clubs = freezed,
   }) {
     return _then(_$SignUpRequestImpl(
@@ -207,13 +217,17 @@ class __$$SignUpRequestImplCopyWithImpl<$Res>
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
+      email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      uuid: freezed == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
+              as String?,
+      emailTokenUUID: freezed == emailTokenUUID
+          ? _value.emailTokenUUID
+          : emailTokenUUID // ignore: cast_nullable_to_non_nullable
+              as String?,
+      signupUUID: freezed == signupUUID
+          ? _value.signupUUID
+          : signupUUID // ignore: cast_nullable_to_non_nullable
               as String?,
       clubs: freezed == clubs
           ? _value._clubs
@@ -234,8 +248,9 @@ class _$SignUpRequestImpl implements _SignUpRequest {
       @JsonKey(name: "telephone") required this.telephone,
       @JsonKey(name: "studentNumber") required this.studentNumber,
       @JsonKey(name: "major") required this.major,
-      @JsonKey(name: "email") required this.email,
-      @JsonKey(name: "uuid") this.uuid,
+      @JsonKey(name: "email") this.email,
+      @JsonKey(name: "emailTokenUUID") this.emailTokenUUID,
+      @JsonKey(name: "signupUUID") this.signupUUID,
       @JsonKey(name: "clubs") final List<Map<String, String>>? clubs})
       : _clubs = clubs;
 
@@ -265,10 +280,13 @@ class _$SignUpRequestImpl implements _SignUpRequest {
   final String major;
   @override
   @JsonKey(name: "email")
-  final String email;
+  final String? email;
   @override
-  @JsonKey(name: "uuid")
-  final String? uuid;
+  @JsonKey(name: "emailTokenUUID")
+  final String? emailTokenUUID;
+  @override
+  @JsonKey(name: "signupUUID")
+  final String? signupUUID;
   final List<Map<String, String>>? _clubs;
   @override
   @JsonKey(name: "clubs")
@@ -282,7 +300,7 @@ class _$SignUpRequestImpl implements _SignUpRequest {
 
   @override
   String toString() {
-    return 'SignUpRequest(account: $account, password: $password, confirmPassword: $confirmPassword, userName: $userName, telephone: $telephone, studentNumber: $studentNumber, major: $major, email: $email, uuid: $uuid, clubs: $clubs)';
+    return 'SignUpRequest(account: $account, password: $password, confirmPassword: $confirmPassword, userName: $userName, telephone: $telephone, studentNumber: $studentNumber, major: $major, email: $email, emailTokenUUID: $emailTokenUUID, signupUUID: $signupUUID, clubs: $clubs)';
   }
 
   @override
@@ -303,7 +321,10 @@ class _$SignUpRequestImpl implements _SignUpRequest {
                 other.studentNumber == studentNumber) &&
             (identical(other.major, major) || other.major == major) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
+            (identical(other.emailTokenUUID, emailTokenUUID) ||
+                other.emailTokenUUID == emailTokenUUID) &&
+            (identical(other.signupUUID, signupUUID) ||
+                other.signupUUID == signupUUID) &&
             const DeepCollectionEquality().equals(other._clubs, _clubs));
   }
 
@@ -319,7 +340,8 @@ class _$SignUpRequestImpl implements _SignUpRequest {
       studentNumber,
       major,
       email,
-      uuid,
+      emailTokenUUID,
+      signupUUID,
       const DeepCollectionEquality().hash(_clubs));
 
   @JsonKey(ignore: true)
@@ -345,8 +367,9 @@ abstract class _SignUpRequest implements SignUpRequest {
       @JsonKey(name: "telephone") required final String telephone,
       @JsonKey(name: "studentNumber") required final String studentNumber,
       @JsonKey(name: "major") required final String major,
-      @JsonKey(name: "email") required final String email,
-      @JsonKey(name: "uuid") final String? uuid,
+      @JsonKey(name: "email") final String? email,
+      @JsonKey(name: "emailTokenUUID") final String? emailTokenUUID,
+      @JsonKey(name: "signupUUID") final String? signupUUID,
       @JsonKey(name: "clubs")
       final List<Map<String, String>>? clubs}) = _$SignUpRequestImpl;
 
@@ -376,10 +399,13 @@ abstract class _SignUpRequest implements SignUpRequest {
   String get major;
   @override
   @JsonKey(name: "email")
-  String get email;
+  String? get email;
   @override
-  @JsonKey(name: "uuid")
-  String? get uuid;
+  @JsonKey(name: "emailTokenUUID")
+  String? get emailTokenUUID;
+  @override
+  @JsonKey(name: "signupUUID")
+  String? get signupUUID;
   @override
   @JsonKey(name: "clubs")
   List<Map<String, String>>? get clubs;

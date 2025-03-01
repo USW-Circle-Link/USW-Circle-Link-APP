@@ -38,8 +38,8 @@ final signUpRouter = GoRoute(
   path: 'sign_up',
   builder: (_, state) => SignUpScreen(
     newMemberSignUp: state.uri.queryParameters['newMember'] == 'true',
-    uuid: state.uri.queryParameters['uuid'],
-    email: state.uri.queryParameters['email'],
+    emailTokenUUID: state.uri.queryParameters['emailTokenUUID'],
+    signupUUID: state.uri.queryParameters['signupUUID'],
     selectedCircles: state.extra as List<CircleListData>?,
   ),
   routes: [

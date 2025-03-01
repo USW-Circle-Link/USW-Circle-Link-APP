@@ -198,9 +198,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           borderColor:
                               isCodeError ? const Color(0xFFFF3F3F) : null,
                           isAnimatedHint: false,
-                          suffixIcon: Container(
-                            margin: EdgeInsets.only(
-                                top: 6.h, bottom: 6.h, right: 8.w),
+                          paddingLeft: 0.w,
+                          paddingRight: 6.w,
+                          suffixIcon: SizedBox(
                             width: 83.w,
                             child: OutlinedButton(
                               onPressed: isLoading
@@ -244,7 +244,12 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                   borderRadius: BorderRadius.circular(16.r),
                                 ),
                                 minimumSize: Size.zero,
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsets.only(
+                                  left: 12.w,
+                                  right: 12.w,
+                                  top: 6.h,
+                                  bottom: 6.h,
+                                ),
                               ),
                               child: TextFontWidget.fontRegular(
                                 isLoading ? '로딩중' : '확인',
@@ -299,6 +304,15 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
           content: "회원 탈퇴가 완료되었습니다!",
           onLeftButtonPressed: () => context.go('/'),
         );
+      }
+    });
+
+    ref.listen(deleteUserViewModelProvider.select((state) => state.error),
+        (previous, next) {
+      final isDialogError = ref.read(
+          deleteUserViewModelProvider.select((state) => state.isDialogError));
+      if (next != null && isDialogError) {
+        DialogManager.instance.showAlertDialog(context: context, content: next);
       }
     });
   }

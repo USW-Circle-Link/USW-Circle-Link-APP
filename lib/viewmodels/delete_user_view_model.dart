@@ -40,12 +40,14 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
     } on DeleteUserModelError catch (e) {
       state = state.copyWith(
         isLoading: false,
+        isDialogError: true,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
             '인증 코드를 전송하는 데 문제가 발생했습니다.',
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
+        isDialogError: true,
         error: '인증 코드를 전송하는 데 문제가 발생했습니다.',
       );
     }

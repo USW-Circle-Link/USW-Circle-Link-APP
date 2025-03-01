@@ -4,6 +4,7 @@ import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/models/response/circle_list_response.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
@@ -227,6 +228,24 @@ class CircleListRepository {
 
     if (response.statusCode == 200) {
       return CircleFilteredListModel.fromJson(response.data);
+    } else {
+      // Bad Request
+      throw CircleListModelError.fromJson(response.data);
+    }
+  }
+
+  Future<CircleListResponse> fetchCircleList() async {
+    final response = await dio.get(
+      '$basePath/list',
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'fetchCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return CircleListResponse.fromJson(response.data);
     } else {
       // Bad Request
       throw CircleListModelError.fromJson(response.data);

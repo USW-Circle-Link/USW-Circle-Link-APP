@@ -16,9 +16,6 @@ extension PasswordValidation on String {
   bool validate() {
     logger.d(this);
     logger.d(nonWordRegExp);
-    for (var element in nonWordRegExp.allMatches(this)) {
-      logger.d(element.input);
-    }
     return wordRegExp.hasMatch(this) &&
         numberRegExp.hasMatch(this) &&
         nonWordRegExp.hasMatch(this) &&

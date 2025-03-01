@@ -1,3 +1,5 @@
+import 'package:usw_circle_link/utils/logger/logger.dart';
+
 enum FieldType {
   account,
   username,
@@ -17,9 +19,10 @@ class ErrorUtil {
   static final ErrorUtil instance = ErrorUtil._();
 
   String? getErrorMessage(String? code) {
+    logger.d('code - $code');
     switch (code) {
       case "USR-F400": // 이름 공백
-        return '이름을 입력해주세요. (특수문자 제외)';
+        return '이름은 특수문자 제외 2~30자 이내로 입력해주세요.';
       case "USR-F500": // 전화번호 형식에 맞지 않음
         return '전화번호를 입력해주세요. (- 제외 11자)';
       case "USR-F600": // 학번이 공백 혹은 8자리가 아님
@@ -28,8 +31,6 @@ class ErrorUtil {
         return '단과대학/학과를 선택해주세요.';
       case "EML-F100": // 이메일 형식에 맞지 않음
         return "이메일을 입력해주세요.";
-      case "USR-206": // 이미 가입된 포털 이메일
-        return "이미 가입된 포털 이메일입니다!";
       case "USR-201": // 해당 이메일을 가진 회원 존재 X
       case "USR-209": // 이메일, 아이디 일치 X
         return "해당 정보로 가입된 회원이 없습니다!";
@@ -76,8 +77,13 @@ class ErrorUtil {
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
       case "USR-217": // 현재 비밀번호와 새 비밀번호가 같음
         return "현재 비밀번호와 새 비밀번호가 같습니다!";
-      case "USR-216":
-        return "비회원 사용자입니다. 인증을 완료해주세요";
+      case "EMAIL_TOKEN-005":
+        return "인증에 실패하였습니다. 다시 시도해주세요.";
+      case "USR-206": // 이미 가입된 포털 이메일
+      case "CMEM-TEMP-302":
+        return "이미 사용 중인 이메일입니다.";
+      case "CMEM-TEMP-303":
+        return "이미 회원 가입 요청을 보냈습니다.\n동아리 회장의 가입 요청 수락까지 대기해주세요.";
       default:
         return null;
     }
@@ -115,6 +121,44 @@ class ErrorUtil {
         return fieldType != FieldType.email;
       case "VC-F100":
         return fieldType != FieldType.code;
+      default:
+        return null;
+    }
+  }
+
+  bool isDialogError(String? code) {
+    return [
+      "CMEM-TEMP-303",
+    ].contains(code);
+  }
+
+  bool isNeedToRedirectLogin(String? code) {
+    return [
+      "CMEM-TEMP-303",
+    ].contains(code);
+  }
+
+  FieldType? getFieldType(String? code) {
+    switch (code) {
+      case "USR-214":
+      case "USR-203":
+      case "USR-F200":
+        return FieldType.password;
+      case "USR-202":
+      case "USR-212":
+      case "USR-F300":
+        return FieldType.passwordConfirm;
+      case "USR-204":
+      case "USR-F900":
+        return FieldType.currentPassword;
+      case "USR-F400":
+      case "USR-F500":
+      case "USR-F600":
+      case "USR-F700":
+        return FieldType.username;
+      case "USR-F800":
+      case "USR-207":
+        return FieldType.account;
       default:
         return null;
     }

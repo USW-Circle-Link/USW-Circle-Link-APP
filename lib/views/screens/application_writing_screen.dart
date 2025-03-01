@@ -306,10 +306,7 @@ class _ApplicationWritingScreenState
                                           await ref
                                               .read(applicationViewModelProvider
                                                   .notifier)
-                                              .apply(
-                                                  clubUUID: widget.clubUUID,
-                                                  aplictGoogleFormUrl:
-                                                      state.value?.data ?? "");
+                                              .apply(clubUUID: widget.clubUUID);
                                         } else {
                                           DialogManager.instance
                                               .showAlertDialog(

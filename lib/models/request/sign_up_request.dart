@@ -13,8 +13,9 @@ class SignUpRequest with _$SignUpRequest {
     @JsonKey(name: "telephone") required String telephone,
     @JsonKey(name: "studentNumber") required String studentNumber,
     @JsonKey(name: "major") required String major,
-    @JsonKey(name: "email") required String email,
-    @JsonKey(name: "uuid") String? uuid,
+    @JsonKey(name: "email") String? email,
+    @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
+    @JsonKey(name: "signupUUID") String? signupUUID,
     @JsonKey(name: "clubs") List<Map<String, String>>? clubs,
   }) = _SignUpRequest;
 

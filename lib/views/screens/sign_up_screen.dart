@@ -1,5 +1,6 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,22 +14,25 @@ import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
 import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/widgets/rounded_email_field.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class SignUpScreen extends ConsumerStatefulWidget {
-  SignUpScreen(
-      {Key? key,
-      this.newMemberSignUp = true,
-      this.selectedCircles,
-      this.email,
-      this.uuid})
-      : super(key: key);
+  SignUpScreen({
+    Key? key,
+    this.newMemberSignUp = true,
+    this.selectedCircles,
+    this.email,
+    this.emailTokenUUID,
+    this.signupUUID,
+  }) : super(key: key);
 
   bool newMemberSignUp;
   List<CircleListData>? selectedCircles;
   String? email;
-  String? uuid;
+  String? emailTokenUUID;
+  String? signupUUID;
 
   @override
   _SignUpScreenState createState() => _SignUpScreenState();
@@ -48,8 +52,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   TextEditingController emailController = TextEditingController();
   bool passwordVisible = false;
   bool passwordConfirmVisible = false;
-
-  bool idVerified = false;
 
   bool privacyPolicyAgree = false;
   bool personalInformationCollectionAndUsageAgreementAgree = false;
@@ -84,6 +86,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
         ref.watch(signUpViewModelProvider.select((value) => value.isLoading));
     final idVerified =
         ref.watch(signUpViewModelProvider.select((value) => value.idVerified));
+    final emailVerified = ref
+        .watch(signUpViewModelProvider.select((value) => value.emailVerified));
     final error =
         ref.watch(signUpViewModelProvider.select((value) => value.error));
     final errorField =
@@ -136,16 +140,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               onPressed: isLoading
                   ? null
                   : () async {
-                      if (idVerified &&
-                          olderThan14YearsOld &&
+                      if (olderThan14YearsOld &&
                           privacyPolicyAgree &&
                           personalInformationCollectionAndUsageAgreementAgree) {
                         _submit();
-                      } else if (!idVerified) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: '아이디 중복 확인이 필요합니다.',
-                        );
                       } else if (!olderThan14YearsOld) {
                         DialogManager.instance.showAlertDialog(
                           context: context,
@@ -172,7 +170,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 ),
               ),
               child: TextFontWidget.fontRegular(
-                isLoading ? '로딩중...' : '다음',
+                isLoading
+                    ? '로딩중...'
+                    : _newMemberSignUp
+                        ? "다음"
+                        : "회원 가입 요청",
                 fontSize: 18.sp,
                 color: const Color(0xFFFFFFFF),
                 fontWeight: FontWeight.w800,
@@ -197,6 +199,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   leftTopCornerRadius: 8.r,
                   rightTopCornerRadius: 8.r,
                   borderWidth: 1.w,
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   maxLines: 1,
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
@@ -215,56 +222,47 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     color: Color(0xFF989898),
                     size: 15.sp,
                   ),
-                  suffixIcon: Container(
-                    margin: EdgeInsets.only(
-                      // top : 4, bottom : 4
-                      top: 6.h,
-                      bottom: 6.h,
-                      right: 8.w,
+                  suffixIcon: OutlinedButton(
+                    onPressed: isLoading || idVerified
+                        ? null
+                        : () async {
+                            final id = idController.text.trim();
+                            ref
+                                .read(signUpViewModelProvider.notifier)
+                                .setFormData({
+                              'id': id,
+                            });
+                            await ref
+                                .read(signUpViewModelProvider.notifier)
+                                .verifyId();
+                          },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor: idVerified
+                          ? const Color(0xFFE0E0E0)
+                          : const Color(0xffffB052),
+                      foregroundColor: Colors.white,
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 0.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.r), // radius 18
+                      ),
+                      minimumSize: Size.zero,
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 10.w, vertical: 7.h),
                     ),
-                    width: 83.w,
-                    //height: 38.h, //not working -> margin으로 높이 조절
-                    child: OutlinedButton(
-                      onPressed: isLoading || idVerified
-                          ? null
-                          : () async {
-                              final id = idController.text.trim();
-                              ref
-                                  .read(signUpViewModelProvider.notifier)
-                                  .setFormData({
-                                'id': id,
-                              });
-                              await ref
-                                  .read(signUpViewModelProvider.notifier)
-                                  .verifyId();
-                            },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor: idVerified
-                            ? const Color(0xFFE0E0E0)
-                            : const Color(0xffffB052),
-                        foregroundColor: Colors.white,
-                        side: const BorderSide(
-                          color: Colors.transparent,
-                          width: 0.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius:
-                              BorderRadius.circular(16.r), // radius 18
-                        ),
-                        minimumSize: Size.zero,
-                        padding: EdgeInsets.zero,
-                      ),
-                      child: TextFontWidget.fontRegular(
-                        isLoading ? '로딩 중 ...' : '중복 확인',
-                        fontSize: 14.sp,
-                        color: Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w800,
-                      ),
+                    child: TextFontWidget.fontRegular(
+                      isLoading ? '로딩 중 ...' : '중복 확인',
+                      fontSize: 12.sp,
+                      color: Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 RoundedTextField(
@@ -280,6 +278,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   borderWidth: 1.w,
                   maxLines: 1,
                   textInputType: TextInputType.text,
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   obscureText: !passwordVisible,
                   textInputAction: TextInputAction.next,
                   textAlign: TextAlign.left,
@@ -292,11 +295,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    constraints: BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
                       });
                     },
+                    padding: EdgeInsets.zero,
                     icon: Icon(
                       passwordVisible
                           ? SignUpIcons.ic_eye_open
@@ -308,6 +314,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 RoundedTextField(
@@ -328,6 +335,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textAlign: TextAlign.left,
                   hintText: '비밀번호 확인',
                   isAnimatedHint: false,
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   onChanged: (value) {},
                   prefixIcon: Icon(
                     SignUpIcons.ic_password,
@@ -335,6 +347,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    constraints: BoxConstraints(),
+                    visualDensity: VisualDensity.compact,
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       setState(() {
                         passwordConfirmVisible = !passwordConfirmVisible;
@@ -351,6 +366,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 SizedBox(
@@ -382,6 +398,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
                   hintText: '이름',
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   isAnimatedHint: false,
                   onChanged: (value) {},
                   prefixIcon: Icon(
@@ -392,6 +413,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 RoundedTextField(
@@ -411,6 +433,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textAlign: TextAlign.left,
                   hintText: '전화번호 (- 제외입력)',
                   isAnimatedHint: false,
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   onChanged: (value) {},
                   prefixIcon: Icon(
                     SignUpIcons.ic_phone,
@@ -420,6 +447,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 RoundedTextField(
@@ -438,6 +466,11 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textAlign: TextAlign.left,
                   textInputAction: TextInputAction.next,
                   hintText: '학번',
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   isAnimatedHint: false,
                   onChanged: (value) {},
                   prefixIcon: Icon(
@@ -448,6 +481,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 RoundedTextField(
@@ -481,15 +515,20 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   maxLines: 1,
                   textInputType: TextInputType.none,
                   textAlign: TextAlign.left,
+                  textStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
+                  ),
                   textInputAction: TextInputAction.done,
                   hintText: (college == null && major == null)
                       ? '단과대/학부(학과)'
                       : '${college ?? ""} / ${major ?? ""}',
                   isAnimatedHint: false,
                   suffixIcon: Icon(
-                    SignUpIcons.ic_down_arrow,
+                    CupertinoIcons.chevron_down,
                     color: Color(0xFF989898),
-                    size: 7.sp,
+                    size: 15.sp,
                   ),
                   prefixIcon: Icon(
                     SignUpIcons.ic_bookmark,
@@ -499,46 +538,83 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
                     fontWeight: FontWeight.w300,
+                    color: Color(0xFF989898),
                   ),
                 ),
                 if (!_newMemberSignUp)
-                  RoundedTextField(
+                  RoundedEmailField(
                     height: 50.h,
+                    textInputAction: TextInputAction.next,
                     textEditController: emailController,
                     leftBottomCornerRadius: 8.r,
                     rightBottomCornerRadius: 8.r,
                     leftTopCornerRadius: 0.r,
                     rightTopCornerRadius: 0.r,
                     borderWidth: 1.w,
+                    textStyle: TextFontWidget.fontRegularStyle(
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w300,
+                      color: Color(0xFF989898),
+                    ),
                     maxLines: 1,
+                    textInputType: TextInputType.text,
                     textAlign: TextAlign.left,
-                    textInputAction: TextInputAction.done,
-                    hintText: "포털 이메일 입력",
-                    isAnimatedHint: false,
+                    hintText: '포털 이메일 입력',
                     borderColor: errorField == FieldType.email
                         ? const Color(0xFFFF3F3F)
                         : null,
-                    suffixIcon: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10.w),
-                      child: Column(
-                        // 높이 에 대해서 Unbounded Contraints 를 만들어주기 위함
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          TextFontWidget.fontRegular('@suwon.ac.kr',
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w400,
-                              color: const Color(0xFF989898)),
-                        ],
-                      ),
-                    ),
+                    isAnimatedHint: false,
                     prefixIcon: Icon(
                       SignUpIcons.ic_mail,
                       color: Color(0xFF989898),
                       size: 15.sp,
                     ),
+                    onChanged: (value) {
+                      ref
+                          .read(signUpViewModelProvider.notifier)
+                          .setEmailVerified(false);
+                    },
+                    suffixIcon: OutlinedButton(
+                      onPressed: isLoading || emailVerified
+                          ? null
+                          : () async {
+                              final email = emailController.text.trim();
+                              ref
+                                  .read(signUpViewModelProvider.notifier)
+                                  .setFormData({
+                                'email': email,
+                              });
+                              await ref
+                                  .read(signUpViewModelProvider.notifier)
+                                  .verifyEmail();
+                            },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: emailVerified
+                            ? const Color(0xFFE0E0E0)
+                            : const Color(0xffffB052),
+                        foregroundColor: Colors.white,
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8.r), // radius 18
+                        ),
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 10.w, vertical: 7.h),
+                      ),
+                      child: TextFontWidget.fontRegular(
+                        isLoading ? '로딩 중 ...' : '중복 확인',
+                        fontSize: 12.sp,
+                        color: Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
                     hintStyle: TextFontWidget.fontRegularStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w300,
+                      color: Color(0xFF989898),
                     ),
                   ),
                 SizedBox(
@@ -783,12 +859,32 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     ref.listen(signUpViewModelProvider.select((value) => value.error),
         (_, next) {
+      logger.d('error - $next');
       final errorField = ref
           .watch(signUpViewModelProvider.select((value) => value.errorField));
       if (next != null &&
           _isBottomField(errorField) &&
           _isTopField(errorField)) {
         DialogManager.instance.showAlertDialog(context: context, content: next);
+      }
+    });
+
+    ref.listen(signUpViewModelProvider.select((value) => value.isDialogError),
+        (_, next) {
+      if (next) {
+        final error =
+            ref.read(signUpViewModelProvider.select((value) => value.error));
+        final needToRedirectLogin = ref.read(signUpViewModelProvider
+            .select((value) => value.needToRedirectLogin));
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: error ?? '',
+          onLeftButtonPressed: () {
+            if (needToRedirectLogin) {
+              context.go('/login');
+            }
+          },
+        );
       }
     });
   }
@@ -810,8 +906,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
       'telephone': phoneNumber,
       'studentNumber': studentNumber,
       'major': major,
-      'email': _newMemberSignUp ? widget.email : email,
-      'uuid': widget.uuid,
+      'email': _newMemberSignUp ? widget.signupUUID : email,
+      'emailTokenUUID': widget.emailTokenUUID,
+      'signupUUID': widget.signupUUID,
       'clubs': _selectedCircles.map((e) => {"clubUUID": e.clubUUID}).toList(),
     });
 

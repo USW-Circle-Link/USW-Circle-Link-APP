@@ -19,8 +19,9 @@ mixin _$EmailVerificationState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isSendMailSuccess => throw _privateConstructorUsedError;
   bool get isVerifySuccess => throw _privateConstructorUsedError;
+  String get emailTokenUUID => throw _privateConstructorUsedError;
+  String get signupUUID => throw _privateConstructorUsedError;
   String get email => throw _privateConstructorUsedError;
-  String get uuid => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -38,8 +39,9 @@ abstract class $EmailVerificationStateCopyWith<$Res> {
       {bool isLoading,
       bool isSendMailSuccess,
       bool isVerifySuccess,
+      String emailTokenUUID,
+      String signupUUID,
       String email,
-      String uuid,
       String? error});
 }
 
@@ -60,8 +62,9 @@ class _$EmailVerificationStateCopyWithImpl<$Res,
     Object? isLoading = null,
     Object? isSendMailSuccess = null,
     Object? isVerifySuccess = null,
+    Object? emailTokenUUID = null,
+    Object? signupUUID = null,
     Object? email = null,
-    Object? uuid = null,
     Object? error = freezed,
   }) {
     return _then(_value.copyWith(
@@ -77,13 +80,17 @@ class _$EmailVerificationStateCopyWithImpl<$Res,
           ? _value.isVerifySuccess
           : isVerifySuccess // ignore: cast_nullable_to_non_nullable
               as bool,
+      emailTokenUUID: null == emailTokenUUID
+          ? _value.emailTokenUUID
+          : emailTokenUUID // ignore: cast_nullable_to_non_nullable
+              as String,
+      signupUUID: null == signupUUID
+          ? _value.signupUUID
+          : signupUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      uuid: null == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
               as String,
       error: freezed == error
           ? _value.error
@@ -106,8 +113,9 @@ abstract class _$$EmailVerificationStateImplCopyWith<$Res>
       {bool isLoading,
       bool isSendMailSuccess,
       bool isVerifySuccess,
+      String emailTokenUUID,
+      String signupUUID,
       String email,
-      String uuid,
       String? error});
 }
 
@@ -127,8 +135,9 @@ class __$$EmailVerificationStateImplCopyWithImpl<$Res>
     Object? isLoading = null,
     Object? isSendMailSuccess = null,
     Object? isVerifySuccess = null,
+    Object? emailTokenUUID = null,
+    Object? signupUUID = null,
     Object? email = null,
-    Object? uuid = null,
     Object? error = freezed,
   }) {
     return _then(_$EmailVerificationStateImpl(
@@ -144,13 +153,17 @@ class __$$EmailVerificationStateImplCopyWithImpl<$Res>
           ? _value.isVerifySuccess
           : isVerifySuccess // ignore: cast_nullable_to_non_nullable
               as bool,
+      emailTokenUUID: null == emailTokenUUID
+          ? _value.emailTokenUUID
+          : emailTokenUUID // ignore: cast_nullable_to_non_nullable
+              as String,
+      signupUUID: null == signupUUID
+          ? _value.signupUUID
+          : signupUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       email: null == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
-              as String,
-      uuid: null == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
               as String,
       error: freezed == error
           ? _value.error
@@ -167,8 +180,9 @@ class _$EmailVerificationStateImpl implements _EmailVerificationState {
       {this.isLoading = false,
       this.isSendMailSuccess = false,
       this.isVerifySuccess = false,
+      this.emailTokenUUID = '',
+      this.signupUUID = '',
       this.email = '',
-      this.uuid = '',
       this.error});
 
   @override
@@ -182,16 +196,19 @@ class _$EmailVerificationStateImpl implements _EmailVerificationState {
   final bool isVerifySuccess;
   @override
   @JsonKey()
-  final String email;
+  final String emailTokenUUID;
   @override
   @JsonKey()
-  final String uuid;
+  final String signupUUID;
+  @override
+  @JsonKey()
+  final String email;
   @override
   final String? error;
 
   @override
   String toString() {
-    return 'EmailVerificationState(isLoading: $isLoading, isSendMailSuccess: $isSendMailSuccess, isVerifySuccess: $isVerifySuccess, email: $email, uuid: $uuid, error: $error)';
+    return 'EmailVerificationState(isLoading: $isLoading, isSendMailSuccess: $isSendMailSuccess, isVerifySuccess: $isVerifySuccess, emailTokenUUID: $emailTokenUUID, signupUUID: $signupUUID, email: $email, error: $error)';
   }
 
   @override
@@ -205,14 +222,17 @@ class _$EmailVerificationStateImpl implements _EmailVerificationState {
                 other.isSendMailSuccess == isSendMailSuccess) &&
             (identical(other.isVerifySuccess, isVerifySuccess) ||
                 other.isVerifySuccess == isVerifySuccess) &&
+            (identical(other.emailTokenUUID, emailTokenUUID) ||
+                other.emailTokenUUID == emailTokenUUID) &&
+            (identical(other.signupUUID, signupUUID) ||
+                other.signupUUID == signupUUID) &&
             (identical(other.email, email) || other.email == email) &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
             (identical(other.error, error) || other.error == error));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, isLoading, isSendMailSuccess,
-      isVerifySuccess, email, uuid, error);
+      isVerifySuccess, emailTokenUUID, signupUUID, email, error);
 
   @JsonKey(ignore: true)
   @override
@@ -227,8 +247,9 @@ abstract class _EmailVerificationState implements EmailVerificationState {
       {final bool isLoading,
       final bool isSendMailSuccess,
       final bool isVerifySuccess,
+      final String emailTokenUUID,
+      final String signupUUID,
       final String email,
-      final String uuid,
       final String? error}) = _$EmailVerificationStateImpl;
 
   @override
@@ -238,9 +259,11 @@ abstract class _EmailVerificationState implements EmailVerificationState {
   @override
   bool get isVerifySuccess;
   @override
-  String get email;
+  String get emailTokenUUID;
   @override
-  String get uuid;
+  String get signupUUID;
+  @override
+  String get email;
   @override
   String? get error;
   @override

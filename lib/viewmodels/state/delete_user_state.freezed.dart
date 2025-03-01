@@ -22,6 +22,7 @@ mixin _$DeleteUserState {
   String get code => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   bool get isCodeError => throw _privateConstructorUsedError;
+  bool get isDialogError => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $DeleteUserStateCopyWith<DeleteUserState> get copyWith =>
@@ -40,7 +41,8 @@ abstract class $DeleteUserStateCopyWith<$Res> {
       bool isVerifyCodeSuccess,
       String code,
       String? error,
-      bool isCodeError});
+      bool isCodeError,
+      bool isDialogError});
 }
 
 /// @nodoc
@@ -62,6 +64,7 @@ class _$DeleteUserStateCopyWithImpl<$Res, $Val extends DeleteUserState>
     Object? code = null,
     Object? error = freezed,
     Object? isCodeError = null,
+    Object? isDialogError = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -88,6 +91,10 @@ class _$DeleteUserStateCopyWithImpl<$Res, $Val extends DeleteUserState>
           ? _value.isCodeError
           : isCodeError // ignore: cast_nullable_to_non_nullable
               as bool,
+      isDialogError: null == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -106,7 +113,8 @@ abstract class _$$DeleteUserStateImplCopyWith<$Res>
       bool isVerifyCodeSuccess,
       String code,
       String? error,
-      bool isCodeError});
+      bool isCodeError,
+      bool isDialogError});
 }
 
 /// @nodoc
@@ -126,6 +134,7 @@ class __$$DeleteUserStateImplCopyWithImpl<$Res>
     Object? code = null,
     Object? error = freezed,
     Object? isCodeError = null,
+    Object? isDialogError = null,
   }) {
     return _then(_$DeleteUserStateImpl(
       isLoading: null == isLoading
@@ -152,6 +161,10 @@ class __$$DeleteUserStateImplCopyWithImpl<$Res>
           ? _value.isCodeError
           : isCodeError // ignore: cast_nullable_to_non_nullable
               as bool,
+      isDialogError: null == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -165,7 +178,8 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
       this.isVerifyCodeSuccess = false,
       this.code = '',
       this.error,
-      this.isCodeError = false});
+      this.isCodeError = false,
+      this.isDialogError = false});
 
   @override
   @JsonKey()
@@ -184,10 +198,13 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
   @override
   @JsonKey()
   final bool isCodeError;
+  @override
+  @JsonKey()
+  final bool isDialogError;
 
   @override
   String toString() {
-    return 'DeleteUserState(isLoading: $isLoading, isSendCodeSuccess: $isSendCodeSuccess, isVerifyCodeSuccess: $isVerifyCodeSuccess, code: $code, error: $error, isCodeError: $isCodeError)';
+    return 'DeleteUserState(isLoading: $isLoading, isSendCodeSuccess: $isSendCodeSuccess, isVerifyCodeSuccess: $isVerifyCodeSuccess, code: $code, error: $error, isCodeError: $isCodeError, isDialogError: $isDialogError)';
   }
 
   @override
@@ -204,12 +221,14 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
             (identical(other.code, code) || other.code == code) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.isCodeError, isCodeError) ||
-                other.isCodeError == isCodeError));
+                other.isCodeError == isCodeError) &&
+            (identical(other.isDialogError, isDialogError) ||
+                other.isDialogError == isDialogError));
   }
 
   @override
   int get hashCode => Object.hash(runtimeType, isLoading, isSendCodeSuccess,
-      isVerifyCodeSuccess, code, error, isCodeError);
+      isVerifyCodeSuccess, code, error, isCodeError, isDialogError);
 
   @JsonKey(ignore: true)
   @override
@@ -226,7 +245,8 @@ abstract class _DeleteUserState implements DeleteUserState {
       final bool isVerifyCodeSuccess,
       final String code,
       final String? error,
-      final bool isCodeError}) = _$DeleteUserStateImpl;
+      final bool isCodeError,
+      final bool isDialogError}) = _$DeleteUserStateImpl;
 
   @override
   bool get isLoading;
@@ -240,6 +260,8 @@ abstract class _DeleteUserState implements DeleteUserState {
   String? get error;
   @override
   bool get isCodeError;
+  @override
+  bool get isDialogError;
   @override
   @JsonKey(ignore: true)
   _$$DeleteUserStateImplCopyWith<_$DeleteUserStateImpl> get copyWith =>

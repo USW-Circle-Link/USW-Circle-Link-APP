@@ -24,7 +24,7 @@ mixin _$EmailVerificationResponse {
   @JsonKey(name: "message")
   String get message => throw _privateConstructorUsedError;
   @JsonKey(name: "data")
-  Data get data => throw _privateConstructorUsedError;
+  EmailVerificationData get data => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -40,9 +40,9 @@ abstract class $EmailVerificationResponseCopyWith<$Res> {
   @useResult
   $Res call(
       {@JsonKey(name: "message") String message,
-      @JsonKey(name: "data") Data data});
+      @JsonKey(name: "data") EmailVerificationData data});
 
-  $DataCopyWith<$Res> get data;
+  $EmailVerificationDataCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -70,14 +70,14 @@ class _$EmailVerificationResponseCopyWithImpl<$Res,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as EmailVerificationData,
     ) as $Val);
   }
 
   @override
   @pragma('vm:prefer-inline')
-  $DataCopyWith<$Res> get data {
-    return $DataCopyWith<$Res>(_value.data, (value) {
+  $EmailVerificationDataCopyWith<$Res> get data {
+    return $EmailVerificationDataCopyWith<$Res>(_value.data, (value) {
       return _then(_value.copyWith(data: value) as $Val);
     });
   }
@@ -94,10 +94,10 @@ abstract class _$$EmailVerificationResponseImplCopyWith<$Res>
   @useResult
   $Res call(
       {@JsonKey(name: "message") String message,
-      @JsonKey(name: "data") Data data});
+      @JsonKey(name: "data") EmailVerificationData data});
 
   @override
-  $DataCopyWith<$Res> get data;
+  $EmailVerificationDataCopyWith<$Res> get data;
 }
 
 /// @nodoc
@@ -124,13 +124,14 @@ class __$$EmailVerificationResponseImplCopyWithImpl<$Res>
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
-              as Data,
+              as EmailVerificationData,
     ));
   }
 }
 
 /// @nodoc
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class _$EmailVerificationResponseImpl implements _EmailVerificationResponse {
   const _$EmailVerificationResponseImpl(
       {@JsonKey(name: "message") required this.message,
@@ -144,7 +145,7 @@ class _$EmailVerificationResponseImpl implements _EmailVerificationResponse {
   final String message;
   @override
   @JsonKey(name: "data")
-  final Data data;
+  final EmailVerificationData data;
 
   @override
   String toString() {
@@ -182,7 +183,7 @@ class _$EmailVerificationResponseImpl implements _EmailVerificationResponse {
 abstract class _EmailVerificationResponse implements EmailVerificationResponse {
   const factory _EmailVerificationResponse(
           {@JsonKey(name: "message") required final String message,
-          @JsonKey(name: "data") required final Data data}) =
+          @JsonKey(name: "data") required final EmailVerificationData data}) =
       _$EmailVerificationResponseImpl;
 
   factory _EmailVerificationResponse.fromJson(Map<String, dynamic> json) =
@@ -193,43 +194,47 @@ abstract class _EmailVerificationResponse implements EmailVerificationResponse {
   String get message;
   @override
   @JsonKey(name: "data")
-  Data get data;
+  EmailVerificationData get data;
   @override
   @JsonKey(ignore: true)
   _$$EmailVerificationResponseImplCopyWith<_$EmailVerificationResponseImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
 
-Data _$DataFromJson(Map<String, dynamic> json) {
-  return _Data.fromJson(json);
+EmailVerificationData _$EmailVerificationDataFromJson(
+    Map<String, dynamic> json) {
+  return _EmailVerificationData.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Data {
-  @JsonKey(name: "emailToken_uuid")
-  String get uuid => throw _privateConstructorUsedError;
-  @JsonKey(name: "email")
-  String get email => throw _privateConstructorUsedError;
+mixin _$EmailVerificationData {
+  @JsonKey(name: "emailTokenUUID")
+  String get emailTokenUuid => throw _privateConstructorUsedError;
+  @JsonKey(name: "signupUUID")
+  String get signupUuid => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $DataCopyWith<Data> get copyWith => throw _privateConstructorUsedError;
+  $EmailVerificationDataCopyWith<EmailVerificationData> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $DataCopyWith<$Res> {
-  factory $DataCopyWith(Data value, $Res Function(Data) then) =
-      _$DataCopyWithImpl<$Res, Data>;
+abstract class $EmailVerificationDataCopyWith<$Res> {
+  factory $EmailVerificationDataCopyWith(EmailVerificationData value,
+          $Res Function(EmailVerificationData) then) =
+      _$EmailVerificationDataCopyWithImpl<$Res, EmailVerificationData>;
   @useResult
   $Res call(
-      {@JsonKey(name: "emailToken_uuid") String uuid,
-      @JsonKey(name: "email") String email});
+      {@JsonKey(name: "emailTokenUUID") String emailTokenUuid,
+      @JsonKey(name: "signupUUID") String signupUuid});
 }
 
 /// @nodoc
-class _$DataCopyWithImpl<$Res, $Val extends Data>
-    implements $DataCopyWith<$Res> {
-  _$DataCopyWithImpl(this._value, this._then);
+class _$EmailVerificationDataCopyWithImpl<$Res,
+        $Val extends EmailVerificationData>
+    implements $EmailVerificationDataCopyWith<$Res> {
+  _$EmailVerificationDataCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -239,55 +244,59 @@ class _$DataCopyWithImpl<$Res, $Val extends Data>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uuid = null,
-    Object? email = null,
+    Object? emailTokenUuid = null,
+    Object? signupUuid = null,
   }) {
     return _then(_value.copyWith(
-      uuid: null == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
+      emailTokenUuid: null == emailTokenUuid
+          ? _value.emailTokenUuid
+          : emailTokenUuid // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      signupUuid: null == signupUuid
+          ? _value.signupUuid
+          : signupUuid // ignore: cast_nullable_to_non_nullable
               as String,
     ) as $Val);
   }
 }
 
 /// @nodoc
-abstract class _$$DataImplCopyWith<$Res> implements $DataCopyWith<$Res> {
-  factory _$$DataImplCopyWith(
-          _$DataImpl value, $Res Function(_$DataImpl) then) =
-      __$$DataImplCopyWithImpl<$Res>;
+abstract class _$$EmailVerificationDataImplCopyWith<$Res>
+    implements $EmailVerificationDataCopyWith<$Res> {
+  factory _$$EmailVerificationDataImplCopyWith(
+          _$EmailVerificationDataImpl value,
+          $Res Function(_$EmailVerificationDataImpl) then) =
+      __$$EmailVerificationDataImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
-      {@JsonKey(name: "emailToken_uuid") String uuid,
-      @JsonKey(name: "email") String email});
+      {@JsonKey(name: "emailTokenUUID") String emailTokenUuid,
+      @JsonKey(name: "signupUUID") String signupUuid});
 }
 
 /// @nodoc
-class __$$DataImplCopyWithImpl<$Res>
-    extends _$DataCopyWithImpl<$Res, _$DataImpl>
-    implements _$$DataImplCopyWith<$Res> {
-  __$$DataImplCopyWithImpl(_$DataImpl _value, $Res Function(_$DataImpl) _then)
+class __$$EmailVerificationDataImplCopyWithImpl<$Res>
+    extends _$EmailVerificationDataCopyWithImpl<$Res,
+        _$EmailVerificationDataImpl>
+    implements _$$EmailVerificationDataImplCopyWith<$Res> {
+  __$$EmailVerificationDataImplCopyWithImpl(_$EmailVerificationDataImpl _value,
+      $Res Function(_$EmailVerificationDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? uuid = null,
-    Object? email = null,
+    Object? emailTokenUuid = null,
+    Object? signupUuid = null,
   }) {
-    return _then(_$DataImpl(
-      uuid: null == uuid
-          ? _value.uuid
-          : uuid // ignore: cast_nullable_to_non_nullable
+    return _then(_$EmailVerificationDataImpl(
+      emailTokenUuid: null == emailTokenUuid
+          ? _value.emailTokenUuid
+          : emailTokenUuid // ignore: cast_nullable_to_non_nullable
               as String,
-      email: null == email
-          ? _value.email
-          : email // ignore: cast_nullable_to_non_nullable
+      signupUuid: null == signupUuid
+          ? _value.signupUuid
+          : signupUuid // ignore: cast_nullable_to_non_nullable
               as String,
     ));
   }
@@ -295,68 +304,73 @@ class __$$DataImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$DataImpl implements _Data {
-  const _$DataImpl(
-      {@JsonKey(name: "emailToken_uuid") required this.uuid,
-      @JsonKey(name: "email") required this.email});
+class _$EmailVerificationDataImpl implements _EmailVerificationData {
+  const _$EmailVerificationDataImpl(
+      {@JsonKey(name: "emailTokenUUID") required this.emailTokenUuid,
+      @JsonKey(name: "signupUUID") required this.signupUuid});
 
-  factory _$DataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$DataImplFromJson(json);
+  factory _$EmailVerificationDataImpl.fromJson(Map<String, dynamic> json) =>
+      _$$EmailVerificationDataImplFromJson(json);
 
   @override
-  @JsonKey(name: "emailToken_uuid")
-  final String uuid;
+  @JsonKey(name: "emailTokenUUID")
+  final String emailTokenUuid;
   @override
-  @JsonKey(name: "email")
-  final String email;
+  @JsonKey(name: "signupUUID")
+  final String signupUuid;
 
   @override
   String toString() {
-    return 'Data(uuid: $uuid, email: $email)';
+    return 'EmailVerificationData(emailTokenUuid: $emailTokenUuid, signupUuid: $signupUuid)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$DataImpl &&
-            (identical(other.uuid, uuid) || other.uuid == uuid) &&
-            (identical(other.email, email) || other.email == email));
+            other is _$EmailVerificationDataImpl &&
+            (identical(other.emailTokenUuid, emailTokenUuid) ||
+                other.emailTokenUuid == emailTokenUuid) &&
+            (identical(other.signupUuid, signupUuid) ||
+                other.signupUuid == signupUuid));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, uuid, email);
+  int get hashCode => Object.hash(runtimeType, emailTokenUuid, signupUuid);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$DataImplCopyWith<_$DataImpl> get copyWith =>
-      __$$DataImplCopyWithImpl<_$DataImpl>(this, _$identity);
+  _$$EmailVerificationDataImplCopyWith<_$EmailVerificationDataImpl>
+      get copyWith => __$$EmailVerificationDataImplCopyWithImpl<
+          _$EmailVerificationDataImpl>(this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$DataImplToJson(
+    return _$$EmailVerificationDataImplToJson(
       this,
     );
   }
 }
 
-abstract class _Data implements Data {
-  const factory _Data(
-      {@JsonKey(name: "emailToken_uuid") required final String uuid,
-      @JsonKey(name: "email") required final String email}) = _$DataImpl;
+abstract class _EmailVerificationData implements EmailVerificationData {
+  const factory _EmailVerificationData(
+      {@JsonKey(name: "emailTokenUUID") required final String emailTokenUuid,
+      @JsonKey(name: "signupUUID")
+      required final String signupUuid}) = _$EmailVerificationDataImpl;
 
-  factory _Data.fromJson(Map<String, dynamic> json) = _$DataImpl.fromJson;
+  factory _EmailVerificationData.fromJson(Map<String, dynamic> json) =
+      _$EmailVerificationDataImpl.fromJson;
 
   @override
-  @JsonKey(name: "emailToken_uuid")
-  String get uuid;
+  @JsonKey(name: "emailTokenUUID")
+  String get emailTokenUuid;
   @override
-  @JsonKey(name: "email")
-  String get email;
+  @JsonKey(name: "signupUUID")
+  String get signupUuid;
   @override
   @JsonKey(ignore: true)
-  _$$DataImplCopyWith<_$DataImpl> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$EmailVerificationDataImplCopyWith<_$EmailVerificationDataImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }

@@ -33,8 +33,10 @@ class _EmailVerificationScreenState
         .select((value) => value.isVerifySuccess));
     final error = ref.watch(
         emailVerificationViewModelProvider.select((value) => value.error));
-    final uuid = ref.watch(
-        emailVerificationViewModelProvider.select((value) => value.uuid));
+    final emailTokenUUID = ref.watch(emailVerificationViewModelProvider
+        .select((value) => value.emailTokenUUID));
+    final signupUUID = ref.watch(
+        emailVerificationViewModelProvider.select((value) => value.signupUUID));
     final email = ref.watch(
         emailVerificationViewModelProvider.select((value) => value.email));
 
@@ -163,7 +165,7 @@ class _EmailVerificationScreenState
                                 : isVerifySuccess
                                     ? () {
                                         context.go(
-                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&uuid=$uuid&email=$email');
+                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&emailTokenUUID=$emailTokenUUID&signupUUID=$signupUUID');
                                       }
                                     : isSendMailSuccess
                                         ? () {
@@ -272,9 +274,11 @@ class _EmailVerificationScreenState
         emailVerificationViewModelProvider
             .select((value) => value.isVerifySuccess), (_, next) {
       if (next) {
-        final uuid = ref.read(
-            emailVerificationViewModelProvider.select((value) => value.uuid));
-        logger.d('이메일 인증 성공! - $uuid');
+        final emailTokenUUID = ref.read(emailVerificationViewModelProvider
+            .select((value) => value.emailTokenUUID));
+        final signupUUID = ref.read(emailVerificationViewModelProvider
+            .select((value) => value.signupUUID));
+        logger.d('이메일 인증 성공! - $emailTokenUUID, $signupUUID');
       }
     });
   }

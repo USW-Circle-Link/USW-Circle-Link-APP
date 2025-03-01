@@ -70,13 +70,10 @@ class ApplicationRepository {
 
   Future<ApplicationModel> apply({
     required String clubUUID,
-    required String aplictGoogleFormUrl,
   }) async {
     final response = await dio.post(
       '$basePath/$clubUUID',
-      data: {
-        'aplictGoogleFormUrl': aplictGoogleFormUrl,
-      },
+      data: {},
       options: Options(
         headers: {'accessToken': 'true'},
       ),

@@ -22,7 +22,8 @@ class EmailVerificationViewModel
         error: null,
         isSendMailSuccess: false,
         isVerifySuccess: false,
-        uuid: '',
+        emailTokenUUID: '',
+        signupUUID: '',
       );
 
       final email = state.email;
@@ -40,7 +41,8 @@ class EmailVerificationViewModel
       state = state.copyWith(
         isLoading: false,
         isSendMailSuccess: true,
-        uuid: response.data.uuid,
+        emailTokenUUID: response.data.emailTokenUUID,
+        email: response.data.email,
       );
     } on EmailVerificationModelError catch (e) {
       state = state.copyWith(
@@ -66,23 +68,16 @@ class EmailVerificationViewModel
 
       final email = state.email;
 
-      final result = await ref
+      final response = await ref
           .read(authRepositoryProvider)
-          .verifyEmailVerification(email: email);
+          .verifyEmailVerification(email: email); // true or error
 
-      if (result) {
-        state = state.copyWith(
-          isLoading: false,
-          error: null,
-          isVerifySuccess: true,
-        );
-      } else {
-        state = state.copyWith(
-          isLoading: false,
-          error: "인증에 실패하였습니다. 다시 시도해주세요.",
-          isVerifySuccess: false,
-        );
-      }
+      state = state.copyWith(
+        isLoading: false,
+        error: null,
+        isVerifySuccess: true,
+        signupUUID: response.data.signupUuid,
+      );
     } on EmailVerificationModelError catch (e) {
       state = state.copyWith(
         isLoading: false,

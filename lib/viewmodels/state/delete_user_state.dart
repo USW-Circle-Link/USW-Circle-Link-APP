@@ -11,5 +11,6 @@ class DeleteUserState with _$DeleteUserState {
     @Default('') String code,
     String? error,
     @Default(false) bool isCodeError,
+    @Default(false) bool isDialogError,
   }) = _DeleteUserState;
 }
