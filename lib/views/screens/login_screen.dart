@@ -147,6 +147,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    constraints: BoxConstraints(),
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;

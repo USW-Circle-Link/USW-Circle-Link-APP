@@ -292,7 +292,10 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              if (state.hasValue && state.value != null)
+                              if ((state.hasValue && state.value != null) ||
+                                  (state.hasError &&
+                                      (state.error as FindPwModelError).type ==
+                                          FindPwModelType.verifyCode))
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -338,6 +341,8 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   height: 50.h,
                                   textInputAction: TextInputAction.next,
                                   textEditController: codeEditController,
+                                  paddingLeft: 0.w,
+                                  paddingRight: 6.w,
                                   leftBottomCornerRadius: 8.r,
                                   rightBottomCornerRadius: 8.r,
                                   leftTopCornerRadius: 8.r,
@@ -352,11 +357,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                       : null,
                                   isAnimatedHint: false,
                                   suffixIcon: Container(
-                                    margin: EdgeInsets.only(
-                                        // top : 4, bottom : 4
-                                        top: 6.h,
-                                        bottom: 6.h,
-                                        right: 8.w),
                                     width: 83.w,
                                     //height: 38.h, //not working -> margin으로 높이 조절
                                     child: OutlinedButton(
@@ -388,7 +388,12 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                               16.r), // radius 18
                                         ),
                                         minimumSize: Size.zero,
-                                        padding: EdgeInsets.zero,
+                                        padding: EdgeInsets.only(
+                                          left: 12.w,
+                                          right: 12.w,
+                                          top: 6.h,
+                                          bottom: 6.h,
+                                        ),
                                       ),
                                       child: TextFontWidget.fontRegular(
                                         '확인',

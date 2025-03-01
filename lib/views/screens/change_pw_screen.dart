@@ -197,6 +197,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                                 size: 15.sp,
                               ),
                               suffixIcon: IconButton(
+                                padding: EdgeInsets.zero,
+                                visualDensity: VisualDensity.compact,
+                                constraints: BoxConstraints(),
                                 onPressed: () {
                                   setState(() {
                                     currentPWVisible = !currentPWVisible;
@@ -236,7 +239,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         obscureText: !newPWVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 8~20자)',
+                        hintText: '새 비밀번호',
                         isAnimatedHint: false,
                         prefixIcon: Icon(
                           SignUpIcons.ic_password,
@@ -244,6 +247,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                           size: 15.sp,
                         ),
                         suffixIcon: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          visualDensity: VisualDensity.compact,
                           onPressed: () {
                             setState(() {
                               newPWVisible = !newPWVisible;
@@ -288,6 +294,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                           size: 18.sp,
                         ),
                         suffixIcon: IconButton(
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          constraints: BoxConstraints(),
                           onPressed: () {
                             setState(() {
                               newPWConfirmVisible = !newPWConfirmVisible;
