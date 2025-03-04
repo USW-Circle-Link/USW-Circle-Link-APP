@@ -81,7 +81,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
     )..layout();
 
     setState(() {
-      _textWidth = textPainter.size.width;
+      _textWidth = textPainter.size.width + 5; // 여유 공간 확보
     });
   }
 
@@ -117,19 +117,18 @@ class _EmailTextFieldState extends State<EmailTextField> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double maxWidth =
-            constraints.maxWidth - _suffixWidth - 10.w; // 여유 공간 확보
+        double maxWidth = constraints.maxWidth - _suffixWidth - 20; // 여유 공간 확보
         double textFieldWidth = 0;
         if (widget.controller?.text.isEmpty ?? true) {
           textFieldWidth =
-              _hintTextWidth.w > maxWidth ? maxWidth : _hintTextWidth.w;
+              _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
         } else {
-          textFieldWidth = _textWidth.w > maxWidth ? maxWidth : _textWidth.w;
+          textFieldWidth = _textWidth > maxWidth ? maxWidth : _textWidth;
         }
         return Row(
           children: [
             Container(
-              width: textFieldWidth,
+              width: textFieldWidth.w,
               child: TextField(
                 focusNode: widget.focusNode,
                 enabled: widget.enabled,

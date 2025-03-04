@@ -37,12 +37,18 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                 logger.d('이메일 보내기 성공!');
                 DialogManager.instance.showAlertDialog(
                   context: context,
-                  content: '인증코드가 전송되었습니다.\n5분 안에 인증을 완료해주세요.',
+                  content: '이메일이 전송되었습니다.\n인증을 완료해 주세요.',
                 );
                 uuid = data!.data;
                 break;
               case FindPwModelType.verifyCode:
-                context.push('/login/find_pw/change_pw?uuid=${uuid!}');
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: '인증이 완료되었습니다.',
+                  onLeftButtonPressed: () {
+                    context.push('/login/find_pw/change_pw?uuid=${uuid!}');
+                  },
+                );
                 break;
               default:
             }
@@ -183,7 +189,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   (state.error as FindPwModelError).type ==
                                       FindPwModelType.sendCode)
                                 TextFontWidget.fontRegular(
-                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!"}',
+                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "이메일 전송에 실패했습니다. 잠시후 다시 시도해주세요."}',
                                   fontSize: 12.sp,
                                   color: const Color(0xFFFF5353),
                                   fontWeight: FontWeight.w400,
@@ -292,7 +298,10 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                               SizedBox(
                                 height: 20.h,
                               ),
-                              if ((state.hasValue && state.value != null) ||
+                              if ((state.hasValue &&
+                                      state.value != null &&
+                                      state.value!.type !=
+                                          FindPwModelType.verifyCode) ||
                                   (state.hasError &&
                                       (state.error as FindPwModelError).type ==
                                           FindPwModelType.verifyCode))
@@ -415,8 +424,8 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   (state.error as FindPwModelError).type ==
                                       FindPwModelType.verifyCode)
                                 TextFontWidget.fontRegular(
-                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!"}',
-                                  fontSize: 12.sp,
+                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "인증코드 확인 중 문제가 발생했습니다. 잠시후 다시 시도해주세요."}',
+                                  fontSize: 10.sp,
                                   color: const Color(0xFFFF5353),
                                   fontWeight: FontWeight.w400,
                                 ),

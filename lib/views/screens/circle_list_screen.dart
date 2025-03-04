@@ -99,7 +99,13 @@ class CircleListScreen extends ConsumerWidget {
           ),
           error: (error, stack) => Center(
             child: TextFontWidget.fontRegular(
-              '동아리 목록 조회에 실패하였습니다.',
+              listType == CircleListType.myCircles
+                  ? '나의 소속 동아리를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.'
+                  : '나의 지원 현황을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+              textAlign: TextAlign.center,
+              fontSize: 14.sp,
+              color: Color(0xFFA1A1A1),
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),

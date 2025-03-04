@@ -142,7 +142,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 10.h,
+                      ),
+                      if (error != null && !isCodeError) ...[
+                        TextFontWidget.fontRegular(
+                          '* $error',
+                          fontSize: 12.sp,
+                          color: const Color(0xFFFF3F3F),
+                        ),
+                      ],
+                      SizedBox(
+                        height: 10.h,
                       ),
                       if (isSendCodeSuccess) ...[
                         Row(
@@ -264,10 +274,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           ),
                         ),
                         SizedBox(height: 10.h),
-                        if (error != null) ...[
+                        if (error != null && isCodeError) ...[
                           TextFontWidget.fontRegular(
-                            error,
-                            fontSize: 12.sp,
+                            "* $error",
+                            fontSize: 11.sp,
                             color: const Color(0xFFFF3F3F),
                           ),
                         ]
@@ -290,7 +300,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
       if (next) {
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "인증 코드가 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+          content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
         );
       }
     });
@@ -301,18 +311,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
       if (next) {
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "회원 탈퇴가 완료되었습니다!",
+          content: "회원 탈퇴가 완료되었습니다.",
           onLeftButtonPressed: () => context.go('/'),
         );
-      }
-    });
-
-    ref.listen(deleteUserViewModelProvider.select((state) => state.error),
-        (previous, next) {
-      final isDialogError = ref.read(
-          deleteUserViewModelProvider.select((state) => state.isDialogError));
-      if (next != null && isDialogError) {
-        DialogManager.instance.showAlertDialog(context: context, content: next);
       }
     });
   }

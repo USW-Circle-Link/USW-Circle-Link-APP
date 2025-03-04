@@ -257,8 +257,14 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                 ],
               );
             },
-            error: (error, stackTrace) =>
-                Center(child: Text('동아리 목록을 불러올 수 없습니다')),
+            error: (error, stackTrace) => Center(
+                child: TextFontWidget.fontRegular(
+              '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+              textAlign: TextAlign.center,
+              fontSize: 14.sp,
+              color: Color(0xFFA1A1A1),
+              fontWeight: FontWeight.w400,
+            )),
             loading: () => Center(child: CircularProgressIndicator()),
           ),
         ),

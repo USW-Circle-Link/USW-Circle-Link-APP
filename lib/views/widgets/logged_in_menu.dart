@@ -139,7 +139,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
-                  title: '지원 현황 확인하기',
+                  title: '나의 지원 현황',
                   icon: MainIcons.ic_send_mail,
                   iconSize: 12.sp,
                   onTap: () => context.go('/circle_list',

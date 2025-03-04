@@ -14,6 +14,7 @@ class SignUpState with _$SignUpState {
     String? error,
     @Default(false) bool isDialogError,
     @Default(false) bool needToRedirectLogin,
+    @Default(false) bool needToRedirectSignUpOption,
     FieldType? errorField,
   }) = _SignUpState;
 }

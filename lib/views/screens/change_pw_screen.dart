@@ -60,7 +60,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
         DialogManager.instance.showAlertDialog(
           context: context,
           barrierDismissible: false,
-          content: '비밀번호가 변경되었습니다',
+          content: '비밀번호 변경이 완료되었습니다.',
           onLeftButtonPressed: () {
             context.go('/login');
           },
@@ -75,6 +75,15 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
           default:
             logger.e("예외발생 - $next");
             break;
+        }
+        if (ErrorUtil.instance.getErrorMessage(next.code) == null) {
+          DialogManager.instance.showAlertDialog(
+            context: context,
+            content: '비밀번호 변경 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.',
+            onLeftButtonPressed: () {
+              context.go('/');
+            },
+          );
         }
       }
     });
@@ -165,7 +174,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 60.h),
+                  margin: EdgeInsets.only(top: 30.h),
                   padding: EdgeInsets.only(left: 32.w, right: 32.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,7 +330,11 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                       TextFontWidget.fontRegular(
                         "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 8~20자 이내로 작성해주세요!",
                         fontSize: 12.sp,
-                        color: const Color(0xFF707070),
+                        color: state is ChangePwModelError &&
+                                !ErrorUtil.instance
+                                    .isValid(state.code, FieldType.password)
+                            ? const Color(0xFFFF3F3F)
+                            : const Color(0xFF707070),
                         fontWeight: FontWeight.w400,
                       ),
                       SizedBox(
@@ -329,7 +342,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                       ),
                       if (state is ChangePwModelError &&
                           ErrorUtil.instance
-                              .isValid(state.code, FieldType.password))
+                              .isValid(state.code, FieldType.password) &&
+                          ErrorUtil.instance.getErrorMessage(state.code) !=
+                              null)
                         TextFontWidget.fontRegular(
                           '* ${ErrorUtil.instance.getErrorMessage(state.code)}',
                           fontSize: 12.sp,

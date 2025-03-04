@@ -24,6 +24,7 @@ mixin _$SignUpState {
   String? get error => throw _privateConstructorUsedError;
   bool get isDialogError => throw _privateConstructorUsedError;
   bool get needToRedirectLogin => throw _privateConstructorUsedError;
+  bool get needToRedirectSignUpOption => throw _privateConstructorUsedError;
   FieldType? get errorField => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -46,6 +47,7 @@ abstract class $SignUpStateCopyWith<$Res> {
       String? error,
       bool isDialogError,
       bool needToRedirectLogin,
+      bool needToRedirectSignUpOption,
       FieldType? errorField});
 }
 
@@ -70,6 +72,7 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
     Object? error = freezed,
     Object? isDialogError = null,
     Object? needToRedirectLogin = null,
+    Object? needToRedirectSignUpOption = null,
     Object? errorField = freezed,
   }) {
     return _then(_value.copyWith(
@@ -105,6 +108,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.needToRedirectLogin
           : needToRedirectLogin // ignore: cast_nullable_to_non_nullable
               as bool,
+      needToRedirectSignUpOption: null == needToRedirectSignUpOption
+          ? _value.needToRedirectSignUpOption
+          : needToRedirectSignUpOption // ignore: cast_nullable_to_non_nullable
+              as bool,
       errorField: freezed == errorField
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
@@ -130,6 +137,7 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
       String? error,
       bool isDialogError,
       bool needToRedirectLogin,
+      bool needToRedirectSignUpOption,
       FieldType? errorField});
 }
 
@@ -152,6 +160,7 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
     Object? error = freezed,
     Object? isDialogError = null,
     Object? needToRedirectLogin = null,
+    Object? needToRedirectSignUpOption = null,
     Object? errorField = freezed,
   }) {
     return _then(_$SignUpStateImpl(
@@ -187,6 +196,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.needToRedirectLogin
           : needToRedirectLogin // ignore: cast_nullable_to_non_nullable
               as bool,
+      needToRedirectSignUpOption: null == needToRedirectSignUpOption
+          ? _value.needToRedirectSignUpOption
+          : needToRedirectSignUpOption // ignore: cast_nullable_to_non_nullable
+              as bool,
       errorField: freezed == errorField
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
@@ -207,6 +220,7 @@ class _$SignUpStateImpl implements _SignUpState {
       this.error,
       this.isDialogError = false,
       this.needToRedirectLogin = false,
+      this.needToRedirectSignUpOption = false,
       this.errorField})
       : _signUpForm = signUpForm;
 
@@ -240,11 +254,14 @@ class _$SignUpStateImpl implements _SignUpState {
   @JsonKey()
   final bool needToRedirectLogin;
   @override
+  @JsonKey()
+  final bool needToRedirectSignUpOption;
+  @override
   final FieldType? errorField;
 
   @override
   String toString() {
-    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, emailVerified: $emailVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, isDialogError: $isDialogError, needToRedirectLogin: $needToRedirectLogin, errorField: $errorField)';
+    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, emailVerified: $emailVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, isDialogError: $isDialogError, needToRedirectLogin: $needToRedirectLogin, needToRedirectSignUpOption: $needToRedirectSignUpOption, errorField: $errorField)';
   }
 
   @override
@@ -267,6 +284,10 @@ class _$SignUpStateImpl implements _SignUpState {
                 other.isDialogError == isDialogError) &&
             (identical(other.needToRedirectLogin, needToRedirectLogin) ||
                 other.needToRedirectLogin == needToRedirectLogin) &&
+            (identical(other.needToRedirectSignUpOption,
+                    needToRedirectSignUpOption) ||
+                other.needToRedirectSignUpOption ==
+                    needToRedirectSignUpOption) &&
             (identical(other.errorField, errorField) ||
                 other.errorField == errorField));
   }
@@ -282,6 +303,7 @@ class _$SignUpStateImpl implements _SignUpState {
       error,
       isDialogError,
       needToRedirectLogin,
+      needToRedirectSignUpOption,
       errorField);
 
   @JsonKey(ignore: true)
@@ -301,6 +323,7 @@ abstract class _SignUpState implements SignUpState {
       final String? error,
       final bool isDialogError,
       final bool needToRedirectLogin,
+      final bool needToRedirectSignUpOption,
       final FieldType? errorField}) = _$SignUpStateImpl;
 
   @override
@@ -319,6 +342,8 @@ abstract class _SignUpState implements SignUpState {
   bool get isDialogError;
   @override
   bool get needToRedirectLogin;
+  @override
+  bool get needToRedirectSignUpOption;
   @override
   FieldType? get errorField;
   @override

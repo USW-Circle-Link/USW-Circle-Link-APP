@@ -37,8 +37,6 @@ class _EmailVerificationScreenState
         .select((value) => value.emailTokenUUID));
     final signupUUID = ref.watch(
         emailVerificationViewModelProvider.select((value) => value.signupUUID));
-    final email = ref.watch(
-        emailVerificationViewModelProvider.select((value) => value.email));
 
     _listener();
 
@@ -116,9 +114,9 @@ class _EmailVerificationScreenState
                         if (error != null)
                           TextFontWidget.fontRegular(
                             '* $error',
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             color: const Color(0xFFFF5353),
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w300,
                           ),
                         if (isVerifySuccess)
                           TextFontWidget.fontRegular(
@@ -265,7 +263,7 @@ class _EmailVerificationScreenState
         logger.d('이메일 보내기 성공!');
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "인증 메일이 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+          content: "인증 메일이 전송되었습니다.\n인증을 완료해주세요.",
         );
       }
     });

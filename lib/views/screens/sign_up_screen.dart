@@ -53,7 +53,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool passwordVisible = false;
   bool passwordConfirmVisible = false;
 
-  bool privacyPolicyAgree = false;
+  bool termsOfServiceAgree = false;
   bool personalInformationCollectionAndUsageAgreementAgree = false;
   bool olderThan14YearsOld = false;
 
@@ -74,7 +74,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     _selectedCircles = widget.selectedCircles ?? [];
     if (_newMemberSignUp) {
       olderThan14YearsOld = true;
-      privacyPolicyAgree = true;
+      termsOfServiceAgree = true;
       personalInformationCollectionAndUsageAgreementAgree = true;
     }
     super.initState();
@@ -141,7 +141,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   ? null
                   : () async {
                       if (olderThan14YearsOld &&
-                          privacyPolicyAgree &&
+                          termsOfServiceAgree &&
                           personalInformationCollectionAndUsageAgreementAgree) {
                         _submit();
                       } else if (!olderThan14YearsOld) {
@@ -149,7 +149,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           context: context,
                           content: '14세 이상 이용 동의가 필요합니다.',
                         );
-                      } else if (!privacyPolicyAgree) {
+                      } else if (!termsOfServiceAgree) {
                         DialogManager.instance.showAlertDialog(
                           context: context,
                           content: '개인정보 처리방침에 동의가 필요합니다.',
@@ -703,15 +703,15 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           horizontal: VisualDensity.minimumDensity,
                           vertical: VisualDensity.minimumDensity,
                         ),
-                        value: privacyPolicyAgree,
+                        value: termsOfServiceAgree,
                         onChanged: (bool? value) async {
                           final agree = await DialogManager.instance
                               .showPolicyDialog(
-                                  context, PolicyType.privacyPolicy);
+                                  context, PolicyType.termsOfService);
                           setState(() {
-                            privacyPolicyAgree = agree;
+                            termsOfServiceAgree = agree;
                           });
-                          logger.d('개인정보 처리 방침 동의함 : $privacyPolicyAgree');
+                          logger.d('이용약관 동의함 : $termsOfServiceAgree');
                         },
                       ),
                       SizedBox(
@@ -721,16 +721,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         onTap: () async {
                           final agree = await DialogManager.instance
                               .showPolicyDialog(
-                                  context, PolicyType.privacyPolicy);
+                                  context, PolicyType.termsOfService);
                           setState(() {
-                            privacyPolicyAgree = agree;
+                            termsOfServiceAgree = agree;
                           });
-                          logger.d('개인정보 처리 방침 동의함 : $privacyPolicyAgree');
+                          logger.d('이용약관 동의함 : $termsOfServiceAgree');
                         },
                         child: RichText(
                           textAlign: TextAlign.center,
                           text: TextSpan(
-                            text: "개인 정보 처리 방침을 확인했습니다. (필수)",
+                            text: "서비스 이용약관을 확인했습니다. (필수)",
                             style: TextFontWidget.fontRegularStyle(
                               fontSize: 12.sp,
                               fontWeight: FontWeight.w600,
@@ -876,12 +876,17 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             ref.read(signUpViewModelProvider.select((value) => value.error));
         final needToRedirectLogin = ref.read(signUpViewModelProvider
             .select((value) => value.needToRedirectLogin));
+        final needToRedirectSignUpOption = ref.read(signUpViewModelProvider
+            .select((value) => value.needToRedirectSignUpOption));
         DialogManager.instance.showAlertDialog(
+          barrierDismissible: false,
           context: context,
           content: error ?? '',
           onLeftButtonPressed: () {
             if (needToRedirectLogin) {
               context.go('/login');
+            } else if (needToRedirectSignUpOption) {
+              context.go('/login/sign_up_option');
             }
           },
         );

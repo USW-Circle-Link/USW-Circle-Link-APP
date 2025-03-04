@@ -133,7 +133,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                               ),
                               if (state.hasError)
                                 TextFontWidget.fontRegular(
-                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindIdModelError).code) ?? "이메일을 보내는 데 실패했습니다\n잠시후 다시 시도해주세요!"}',
+                                  '* ${ErrorUtil.instance.getErrorMessage((state.error as FindIdModelError).code) ?? "이메일 전송에 실패했습니다. 잠시후 다시 시도해주세요."}',
                                   fontSize: 12.sp,
                                   color: const Color(0xFFFF5353),
                                   fontWeight: FontWeight.w400,

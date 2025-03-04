@@ -48,12 +48,12 @@ class EmailVerificationViewModel
       state = state.copyWith(
         isLoading: false,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증 메일을 보내는 데 실패했습니다.',
+            '인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.',
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: "인증 메일을 보내는 데 실패했습니다.",
+        error: "인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.",
       );
     }
   }

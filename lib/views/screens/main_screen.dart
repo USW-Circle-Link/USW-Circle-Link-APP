@@ -343,9 +343,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     return Center(
                       child: TextFontWidget.fontRegular(
                         ErrorUtil.instance.getErrorMessage(_error.code) ??
-                            '동아리를 불러오지 못했습니다...',
+                            '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                        textAlign: TextAlign.center,
                         fontSize: 14.sp,
-                        color: Colors.black,
+                        color: Color(0xFFA1A1A1),
                         fontWeight: FontWeight.w400,
                       ),
                     );

@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
@@ -120,18 +121,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
           error = error as ApplicationModelError;
           switch (error.type) {
             case ApplicationModelType.checkAvailableForApplication:
-              switch (error.code) {
-                case "USR-F401":
-                  DialogManager.instance.showAlertDialog(
-                      context: context,
-                      content: '로그인 후 이용해 주시기 바랍니다!',
-                      onLeftButtonPressed: () => context.go('/login'));
-                  break;
-                default:
-                  DialogManager.instance.showAlertDialog(
-                      context: context, content: '이미 지원한 동아리 또는 소속된 동아리입니다!');
-              }
-              break;
+              DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      "동아리 지원 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
+                  onLeftButtonPressed: () {
+                    if ((error as ApplicationModelError).code == "USR-F401") {
+                      context.go('/login');
+                    }
+                  });
             default:
           }
         },
@@ -240,7 +238,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             : clubIntroState.hasError
                 ? Center(
                     child: TextFontWidget.fontRegular(
-                      '동아리 정보를 불러오지 못했습니다.',
+                      '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                      textAlign: TextAlign.center,
+                      fontSize: 14.sp,
+                      color: Color(0xFFA1A1A1),
+                      fontWeight: FontWeight.w400,
                     ),
                   )
                 : NestedScrollView(

@@ -101,6 +101,61 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.only(left: 32.w, right: 32.w, bottom: 16.h),
+          width: double.infinity,
+          height: 56.h,
+          child: OutlinedButton(
+            onPressed: () async {
+              setState(() {
+                _passwordError = null;
+              });
+              final password = passwordController.text.trim();
+              logger.d('ProfileData: $profileData');
+              if (password.isEmpty) {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "비밀번호를 입력해주세요.",
+                );
+                return;
+              }
+              if (profileData == null) {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "프로필 정보가 없습니다. 다시 시도해주세요.",
+                );
+                return;
+              }
+              // updateProfile 호출 (password 매개변수를 포함)
+              await ref
+                  .read(updateProfileViewModelProvider.notifier)
+                  .updateProfile(
+                    userName: profileData['name']!,
+                    studentNumber: profileData['studentNumber']!,
+                    userHp: profileData['userHp']!,
+                    major: profileData['major']!,
+                    password: password,
+                  );
+            },
+            style: OutlinedButton.styleFrom(
+              backgroundColor: const Color(0xFFFFB052),
+              foregroundColor: const Color(0xFFFFFFFF),
+              side: const BorderSide(
+                color: Colors.transparent,
+                width: 0.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            child: TextFontWidget.fontRegular(
+              '확인',
+              fontSize: 18.sp,
+              color: const Color(0xFFFFFFFF),
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -109,7 +164,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
               children: [
                 SizedBox(height: 16.h),
                 TextFontWidget.fontRegular(
-                  '비밀번호',
+                  '비밀번호 확인',
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                 ),
@@ -134,6 +189,9 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                     size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    visualDensity: VisualDensity.compact,
+                    constraints: BoxConstraints(),
+                    padding: EdgeInsets.zero,
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
@@ -168,62 +226,6 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                         )
                       : const SizedBox.shrink(),
                 ),
-                SizedBox(height: 436.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _passwordError = null;
-                      });
-                      final password = passwordController.text.trim();
-                      logger.d('ProfileData: $profileData');
-                      if (password.isEmpty) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: "비밀번호를 입력해주세요.",
-                        );
-                        return;
-                      }
-                      if (profileData == null) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: "프로필 정보가 없습니다. 다시 시도해주세요.",
-                        );
-                        return;
-                      }
-                      // updateProfile 호출 (password 매개변수를 포함)
-                      await ref
-                          .read(updateProfileViewModelProvider.notifier)
-                          .updateProfile(
-                            userName: profileData['name']!,
-                            studentNumber: profileData['studentNumber']!,
-                            userHp: profileData['userHp']!,
-                            major: profileData['major']!,
-                            password: password,
-                          );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFB052),
-                      foregroundColor: const Color(0xFFFFFFFF),
-                      side: const BorderSide(
-                        color: Colors.transparent,
-                        width: 0.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: TextFontWidget.fontRegular(
-                      '확인',
-                      fontSize: 18.sp,
-                      color: const Color(0xFFFFFFFF),
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5.h),
               ],
             ),
           ),

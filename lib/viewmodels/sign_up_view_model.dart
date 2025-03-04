@@ -25,6 +25,8 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         error: null,
         isDialogError: false,
         errorField: null,
+        needToRedirectLogin: false,
+        needToRedirectSignUpOption: false,
       );
 
       final id = state.signUpForm['id'];
@@ -68,6 +70,8 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         error: null,
         isDialogError: false,
         errorField: null,
+        needToRedirectLogin: false,
+        needToRedirectSignUpOption: false,
       );
 
       final email = state.signUpForm['email'];
@@ -112,12 +116,13 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         error: null,
         isDialogError: false,
         errorField: null,
-        emailVerified: true,
+        needToRedirectLogin: false,
+        needToRedirectSignUpOption: false,
+        emailVerified: true, // 산규 회원은 이메일 검증 이미 완료
       );
 
       logger.d(state.signUpForm);
 
-      final account = state.signUpForm['account'];
       final password = state.signUpForm['password'];
       final confirmPassword = state.signUpForm['confirmPassword'];
       final userName = state.signUpForm['userName'];
@@ -127,7 +132,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       final email = state.signUpForm['email'];
 
       final invalidField = validateField(
-        account: account,
         password: password,
         confirmPassword: confirmPassword,
         userName: userName,
@@ -142,12 +146,13 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
           isLoading: false,
           error: switch (invalidField) {
             FieldType.account => '아이디 중복 확인을 진행해주세요!',
-            FieldType.password => '비밀번호가 형식에 맞지 않습니다!',
+            FieldType.password =>
+              '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
             FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
             FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
             FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
-            FieldType.studentNumber => '학번이 형식에 맞지 않습니다!',
-            FieldType.major => '학과가 형식에 맞지 않습니다!',
+            FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
+            FieldType.major => '단과대/학부(학과)를 선택해주세요.',
             // 사용되지 않는 필드 혹은 이미 검증된 필드
             FieldType.email => null,
             FieldType.currentPassword => null,
@@ -175,13 +180,16 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       state = state.copyWith(
         isLoading: false,
         isDialogError: isDialogError || errorField == null,
-        error: errorMessage ?? '회원가입에 실패했습니다.',
+        error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
         errorField: errorField,
+        needToRedirectSignUpOption:
+            ErrorUtil.instance.isNeedToRedirectSignUpOption(e.code),
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: '회원가입에 실패했습니다.',
+        isDialogError: true,
+        error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
       );
     }
   }
@@ -194,11 +202,12 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         error: null,
         isDialogError: false,
         errorField: null,
+        needToRedirectLogin: false,
+        needToRedirectSignUpOption: false,
       );
 
       logger.d(state.signUpForm);
 
-      final account = state.signUpForm['account'];
       final password = state.signUpForm['password'];
       final confirmPassword = state.signUpForm['confirmPassword'];
       final userName = state.signUpForm['userName'];
@@ -208,7 +217,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       final email = state.signUpForm['email'];
 
       final invalidField = validateField(
-        account: account,
         password: password,
         confirmPassword: confirmPassword,
         userName: userName,
@@ -223,13 +231,14 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
           isLoading: false,
           error: switch (invalidField) {
             FieldType.account => '아이디 중복 확인을 진행해주세요!',
-            FieldType.password => '비밀번호가 형식에 맞지 않습니다!',
+            FieldType.password =>
+              '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
             FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
             FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
             FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
-            FieldType.studentNumber => '학번이 형식에 맞지 않습니다!',
-            FieldType.major => '학과가 형식에 맞지 않습니다!',
-            FieldType.email => '이메일 중복 확인을 진행해주세요!',
+            FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
+            FieldType.major => '단과대/학부(학과)를 선택해주세요.',
+            FieldType.email => '이메일 중복 확인을 진행해주세요.',
             // 사용되지 않는 필드 혹은 이미 검증된 필드
             FieldType.currentPassword => null,
             FieldType.code => null,
@@ -257,14 +266,15 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       state = state.copyWith(
         isLoading: false,
         isDialogError: isDialogError || errorField == null,
-        error: errorMessage ?? '회원가입에 실패했습니다.',
+        error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
         errorField: errorField,
         needToRedirectLogin: ErrorUtil.instance.isNeedToRedirectLogin(e.code),
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: '회원가입에 실패했습니다.',
+        isDialogError: true,
+        error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
       );
     }
   }
@@ -312,7 +322,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   /// - 전공이 비어있으면 `FieldType.major`를 반환합니다.
   /// - 모든 필드가 유효하면 `null`을 반환합니다.
   FieldType? validateField({
-    required String account,
     required String password,
     required String confirmPassword,
     required String userName,

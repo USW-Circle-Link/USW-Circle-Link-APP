@@ -40,15 +40,13 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
     } on DeleteUserModelError catch (e) {
       state = state.copyWith(
         isLoading: false,
-        isDialogError: true,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증 코드를 전송하는 데 문제가 발생했습니다.',
+            '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        isDialogError: true,
-        error: '인증 코드를 전송하는 데 문제가 발생했습니다.',
+        error: '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
       );
     }
   }
@@ -94,13 +92,13 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
       state = state.copyWith(
         isLoading: false,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증 코드를 확인하는 데 문제가 발생했습니다.',
+            '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
         isCodeError: true,
       );
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: '인증 코드를 확인하는 데 문제가 발생했습니다.',
+        error: '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
         isCodeError: true,
       );
     }

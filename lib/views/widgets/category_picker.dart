@@ -114,23 +114,32 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               SizedBox(
                 height: 20.h,
               ),
-              state.when(
-                data: (data) => Wrap(
-                  spacing: 5.w,
-                  children: data?.data.map((category) {
-                        return _buildChip(category);
-                      }).toList() ??
-                      [],
+              Expanded(
+                child: state.when(
+                  data: (data) => SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 5.w,
+                      children: data?.data.map((category) {
+                            return _buildChip(category);
+                          }).toList() ??
+                          [],
+                    ),
+                  ),
+                  error: (error, stackTrace) => Container(
+                    alignment: Alignment.center,
+                    child: TextFontWidget.fontRegular(
+                      '카테고리를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w300,
+                      textAlign: TextAlign.center,
+                      color: Color(0xFFA1A1A1),
+                    ),
+                  ),
+                  loading: () => const Center(
+                      child: CircularProgressIndicator(
+                    color: accentColor,
+                  )),
                 ),
-                error: (error, stackTrace) => TextFontWidget.fontRegular(
-                  '카테고리를 불러오는 데 실패했습니다.\n다시 시도해주세요.',
-                  fontSize: 14.sp,
-                  fontWeight: FontWeight.w300,
-                ),
-                loading: () => const Center(
-                    child: CircularProgressIndicator(
-                  color: accentColor,
-                )),
               ),
             ],
           ),
