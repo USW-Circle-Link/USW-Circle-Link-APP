@@ -47,7 +47,7 @@ class NoticeDetailData with _$NoticeDetailData {
 @freezed
 class NoticeDetailModelError extends NoticeDetailModelBase
     with _$NoticeDetailModelError
-    implements Exception {
+    implements Error {
   NoticeDetailModelError._();
   factory NoticeDetailModelError({
     required String message,
@@ -62,6 +62,9 @@ class NoticeDetailModelError extends NoticeDetailModelBase
         message: message,
         type: type,
       );
+
+  @override
+  StackTrace? get stackTrace => StackTrace.fromString(toString());
 }
 
 class NoticeDetailLoading extends NoticeDetailModelBase {}

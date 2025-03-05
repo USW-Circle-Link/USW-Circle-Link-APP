@@ -7,7 +7,38 @@ class EmailTextField extends StatefulWidget {
   final TextEditingController? controller;
   final Function(String)? onChanged;
   final bool enabled;
-  EmailTextField({this.controller, this.onChanged, this.enabled = true});
+  final String? hintText;
+  final TextStyle? hintTextStyle;
+  final String? suffixText;
+  final TextStyle? suffixTextStyle;
+  final FocusNode? focusNode;
+  final bool readOnly;
+  final int maxLines;
+  final TextInputType? textInputType;
+  final TextInputAction? textInputAction;
+  final bool obscureText;
+  final TextStyle? textStyle;
+  final TextAlign? textAlign;
+  final InputDecoration? decoration;
+  const EmailTextField({
+    super.key,
+    this.controller,
+    this.onChanged,
+    this.enabled = true,
+    this.hintText,
+    this.hintTextStyle,
+    this.suffixText,
+    this.suffixTextStyle,
+    this.focusNode,
+    this.readOnly = false,
+    this.maxLines = 1,
+    this.textInputType,
+    this.textInputAction,
+    this.obscureText = false,
+    this.textStyle,
+    this.textAlign,
+    this.decoration,
+  });
   @override
   _EmailTextFieldState createState() => _EmailTextFieldState();
 }
@@ -16,14 +47,14 @@ class _EmailTextFieldState extends State<EmailTextField> {
   double _textWidth = 0.0;
   double _suffixWidth = 0.0;
   double _hintTextWidth = 0.0;
-  final String _hintText = '포털 이메일 입력';
-  final String _suffixText = '@suwon.ac.kr';
-  final TextStyle _suffixTextStyle = TextFontWidget.fontRegularStyle(
+  String _hintText = '포털 이메일 입력';
+  String _suffixText = '@suwon.ac.kr';
+  TextStyle _suffixTextStyle = TextFontWidget.fontRegularStyle(
     fontSize: 16.0,
     color: Color(0xFF6F6F6F),
     fontWeight: FontWeight.w300,
   );
-  final TextStyle _hintTextStyle = TextFontWidget.fontRegularStyle(
+  TextStyle _hintTextStyle = TextFontWidget.fontRegularStyle(
     fontSize: 16.0,
     color: Color(0xFF6F6F6F),
     fontWeight: FontWeight.w300,
@@ -32,6 +63,10 @@ class _EmailTextFieldState extends State<EmailTextField> {
   @override
   void initState() {
     super.initState();
+    _hintText = widget.hintText ?? _hintText;
+    _suffixText = widget.suffixText ?? _suffixText;
+    _hintTextStyle = widget.hintTextStyle ?? _hintTextStyle;
+    _suffixTextStyle = widget.suffixTextStyle ?? _suffixTextStyle;
     widget.controller?.addListener(_updateWidth);
     _calculateSuffixWidth();
     _calculateHintTextWidth();
@@ -40,13 +75,13 @@ class _EmailTextFieldState extends State<EmailTextField> {
   void _updateWidth() {
     final text = widget.controller?.text ?? '';
     final textPainter = TextPainter(
-      text: TextSpan(text: text, style: TextStyle(fontSize: 16.0)),
+      text: TextSpan(text: text, style: _hintTextStyle),
       maxLines: 1,
       textDirection: TextDirection.ltr,
     )..layout();
 
     setState(() {
-      _textWidth = textPainter.size.width;
+      _textWidth = textPainter.size.width + 5; // 여유 공간 확보
     });
   }
 
@@ -82,17 +117,20 @@ class _EmailTextFieldState extends State<EmailTextField> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double maxWidth =
-            constraints.maxWidth - _suffixWidth - 10.w; // 여유 공간 확보
+        double maxWidth = constraints.maxWidth - _suffixWidth - 20; // 여유 공간 확보
+        double textFieldWidth = 0;
+        if (widget.controller?.text.isEmpty ?? true) {
+          textFieldWidth =
+              _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
+        } else {
+          textFieldWidth = _textWidth > maxWidth ? maxWidth : _textWidth;
+        }
         return Row(
           children: [
             Container(
-              width: widget.controller?.text.isEmpty ?? true
-                  ? _hintTextWidth.w
-                  : _textWidth.w > maxWidth
-                      ? maxWidth
-                      : _textWidth.w,
+              width: textFieldWidth.w,
               child: TextField(
+                focusNode: widget.focusNode,
                 enabled: widget.enabled,
                 onChanged: (value) {
                   widget.onChanged?.call(value);
@@ -100,9 +138,15 @@ class _EmailTextFieldState extends State<EmailTextField> {
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: _hintText,
+                  hintStyle: _hintTextStyle, // 힌트 텍스트 스타일
                   border: InputBorder.none,
                 ),
-                style: _hintTextStyle,
+                style: _hintTextStyle, // 텍스트 필드 스타일
+                readOnly: widget.readOnly,
+                maxLines: widget.maxLines,
+                keyboardType: widget.textInputType,
+                textInputAction: widget.textInputAction,
+                obscureText: widget.obscureText,
               ),
             ),
             Text(

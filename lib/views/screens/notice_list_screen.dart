@@ -84,7 +84,11 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
                 default:
               }
               return TextFontWidget.fontRegular(
-                '공지사항을 불러오지 못했습니다...',
+                '공지사항을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                textAlign: TextAlign.center,
+                fontSize: 14.sp,
+                color: Color(0xFFA1A1A1),
+                fontWeight: FontWeight.w400,
               );
             },
             loading: () => CircularProgressIndicator(),

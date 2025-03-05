@@ -36,14 +36,13 @@ class ApplicationViewModel
 
   Future<void> apply({
     required String clubUUID,
-    required String aplictGoogleFormUrl,
   }) async {
     try {
       // 첫 state는 Loading 상태
       state = AsyncLoading();
 
-      final applicationResponse = await applicationRepository.apply(
-          clubUUID: clubUUID, aplictGoogleFormUrl: aplictGoogleFormUrl);
+      final applicationResponse =
+          await applicationRepository.apply(clubUUID: clubUUID);
 
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {

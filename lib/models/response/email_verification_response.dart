@@ -5,9 +5,10 @@ part 'email_verification_response.g.dart';
 
 @freezed
 class EmailVerificationResponse with _$EmailVerificationResponse {
+  @JsonSerializable(explicitToJson: true)
   const factory EmailVerificationResponse({
     @JsonKey(name: "message") required String message,
-    @JsonKey(name: "data") required Data data,
+    @JsonKey(name: "data") required EmailVerificationData data,
   }) = _EmailVerificationResponse;
 
   factory EmailVerificationResponse.fromJson(Map<String, dynamic> json) =>
@@ -15,11 +16,12 @@ class EmailVerificationResponse with _$EmailVerificationResponse {
 }
 
 @freezed
-class Data with _$Data {
-  const factory Data({
-    @JsonKey(name: "emailToken_uuid") required String uuid,
-    @JsonKey(name: "email") required String email,
-  }) = _Data;
+class EmailVerificationData with _$EmailVerificationData {
+  const factory EmailVerificationData({
+    @JsonKey(name: "emailTokenUUID") required String emailTokenUuid,
+    @JsonKey(name: "signupUUID") required String signupUuid,
+  }) = _EmailVerificationData;
 
-  factory Data.fromJson(Map<String, dynamic> json) => _$DataFromJson(json);
+  factory EmailVerificationData.fromJson(Map<String, dynamic> json) =>
+      _$EmailVerificationDataFromJson(json);
 }

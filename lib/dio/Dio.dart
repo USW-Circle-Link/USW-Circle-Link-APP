@@ -18,7 +18,7 @@ final dioProvider = Provider<Dio>((ref) {
   final storage = ref.watch(secureStorageProvider);
 
   dio.interceptors.addAll([
-    DefaultInterceptor(),
+    DefaultInterceptor(ref: ref),
     TokenInterceptor(storage: storage, ref: ref),
   ]);
 

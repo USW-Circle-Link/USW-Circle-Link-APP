@@ -18,9 +18,13 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$SignUpState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get idVerified => throw _privateConstructorUsedError;
+  bool get emailVerified => throw _privateConstructorUsedError;
   bool get signUpSuccess => throw _privateConstructorUsedError;
   Map<String, dynamic> get signUpForm => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
+  bool get isDialogError => throw _privateConstructorUsedError;
+  bool get needToRedirectLogin => throw _privateConstructorUsedError;
+  bool get needToRedirectSignUpOption => throw _privateConstructorUsedError;
   FieldType? get errorField => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -37,9 +41,13 @@ abstract class $SignUpStateCopyWith<$Res> {
   $Res call(
       {bool isLoading,
       bool idVerified,
+      bool emailVerified,
       bool signUpSuccess,
       Map<String, dynamic> signUpForm,
       String? error,
+      bool isDialogError,
+      bool needToRedirectLogin,
+      bool needToRedirectSignUpOption,
       FieldType? errorField});
 }
 
@@ -58,9 +66,13 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   $Res call({
     Object? isLoading = null,
     Object? idVerified = null,
+    Object? emailVerified = null,
     Object? signUpSuccess = null,
     Object? signUpForm = null,
     Object? error = freezed,
+    Object? isDialogError = null,
+    Object? needToRedirectLogin = null,
+    Object? needToRedirectSignUpOption = null,
     Object? errorField = freezed,
   }) {
     return _then(_value.copyWith(
@@ -71,6 +83,10 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
       idVerified: null == idVerified
           ? _value.idVerified
           : idVerified // ignore: cast_nullable_to_non_nullable
+              as bool,
+      emailVerified: null == emailVerified
+          ? _value.emailVerified
+          : emailVerified // ignore: cast_nullable_to_non_nullable
               as bool,
       signUpSuccess: null == signUpSuccess
           ? _value.signUpSuccess
@@ -84,6 +100,18 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      isDialogError: null == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needToRedirectLogin: null == needToRedirectLogin
+          ? _value.needToRedirectLogin
+          : needToRedirectLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needToRedirectSignUpOption: null == needToRedirectSignUpOption
+          ? _value.needToRedirectSignUpOption
+          : needToRedirectSignUpOption // ignore: cast_nullable_to_non_nullable
+              as bool,
       errorField: freezed == errorField
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
@@ -103,9 +131,13 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
   $Res call(
       {bool isLoading,
       bool idVerified,
+      bool emailVerified,
       bool signUpSuccess,
       Map<String, dynamic> signUpForm,
       String? error,
+      bool isDialogError,
+      bool needToRedirectLogin,
+      bool needToRedirectSignUpOption,
       FieldType? errorField});
 }
 
@@ -122,9 +154,13 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? idVerified = null,
+    Object? emailVerified = null,
     Object? signUpSuccess = null,
     Object? signUpForm = null,
     Object? error = freezed,
+    Object? isDialogError = null,
+    Object? needToRedirectLogin = null,
+    Object? needToRedirectSignUpOption = null,
     Object? errorField = freezed,
   }) {
     return _then(_$SignUpStateImpl(
@@ -135,6 +171,10 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
       idVerified: null == idVerified
           ? _value.idVerified
           : idVerified // ignore: cast_nullable_to_non_nullable
+              as bool,
+      emailVerified: null == emailVerified
+          ? _value.emailVerified
+          : emailVerified // ignore: cast_nullable_to_non_nullable
               as bool,
       signUpSuccess: null == signUpSuccess
           ? _value.signUpSuccess
@@ -148,6 +188,18 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      isDialogError: null == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needToRedirectLogin: null == needToRedirectLogin
+          ? _value.needToRedirectLogin
+          : needToRedirectLogin // ignore: cast_nullable_to_non_nullable
+              as bool,
+      needToRedirectSignUpOption: null == needToRedirectSignUpOption
+          ? _value.needToRedirectSignUpOption
+          : needToRedirectSignUpOption // ignore: cast_nullable_to_non_nullable
+              as bool,
       errorField: freezed == errorField
           ? _value.errorField
           : errorField // ignore: cast_nullable_to_non_nullable
@@ -162,9 +214,13 @@ class _$SignUpStateImpl implements _SignUpState {
   _$SignUpStateImpl(
       {this.isLoading = false,
       this.idVerified = false,
+      this.emailVerified = false,
       this.signUpSuccess = false,
       final Map<String, dynamic> signUpForm = const {},
       this.error,
+      this.isDialogError = false,
+      this.needToRedirectLogin = false,
+      this.needToRedirectSignUpOption = false,
       this.errorField})
       : _signUpForm = signUpForm;
 
@@ -174,6 +230,9 @@ class _$SignUpStateImpl implements _SignUpState {
   @override
   @JsonKey()
   final bool idVerified;
+  @override
+  @JsonKey()
+  final bool emailVerified;
   @override
   @JsonKey()
   final bool signUpSuccess;
@@ -189,11 +248,20 @@ class _$SignUpStateImpl implements _SignUpState {
   @override
   final String? error;
   @override
+  @JsonKey()
+  final bool isDialogError;
+  @override
+  @JsonKey()
+  final bool needToRedirectLogin;
+  @override
+  @JsonKey()
+  final bool needToRedirectSignUpOption;
+  @override
   final FieldType? errorField;
 
   @override
   String toString() {
-    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, errorField: $errorField)';
+    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, emailVerified: $emailVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, isDialogError: $isDialogError, needToRedirectLogin: $needToRedirectLogin, needToRedirectSignUpOption: $needToRedirectSignUpOption, errorField: $errorField)';
   }
 
   @override
@@ -205,11 +273,21 @@ class _$SignUpStateImpl implements _SignUpState {
                 other.isLoading == isLoading) &&
             (identical(other.idVerified, idVerified) ||
                 other.idVerified == idVerified) &&
+            (identical(other.emailVerified, emailVerified) ||
+                other.emailVerified == emailVerified) &&
             (identical(other.signUpSuccess, signUpSuccess) ||
                 other.signUpSuccess == signUpSuccess) &&
             const DeepCollectionEquality()
                 .equals(other._signUpForm, _signUpForm) &&
             (identical(other.error, error) || other.error == error) &&
+            (identical(other.isDialogError, isDialogError) ||
+                other.isDialogError == isDialogError) &&
+            (identical(other.needToRedirectLogin, needToRedirectLogin) ||
+                other.needToRedirectLogin == needToRedirectLogin) &&
+            (identical(other.needToRedirectSignUpOption,
+                    needToRedirectSignUpOption) ||
+                other.needToRedirectSignUpOption ==
+                    needToRedirectSignUpOption) &&
             (identical(other.errorField, errorField) ||
                 other.errorField == errorField));
   }
@@ -219,9 +297,13 @@ class _$SignUpStateImpl implements _SignUpState {
       runtimeType,
       isLoading,
       idVerified,
+      emailVerified,
       signUpSuccess,
       const DeepCollectionEquality().hash(_signUpForm),
       error,
+      isDialogError,
+      needToRedirectLogin,
+      needToRedirectSignUpOption,
       errorField);
 
   @JsonKey(ignore: true)
@@ -235,9 +317,13 @@ abstract class _SignUpState implements SignUpState {
   factory _SignUpState(
       {final bool isLoading,
       final bool idVerified,
+      final bool emailVerified,
       final bool signUpSuccess,
       final Map<String, dynamic> signUpForm,
       final String? error,
+      final bool isDialogError,
+      final bool needToRedirectLogin,
+      final bool needToRedirectSignUpOption,
       final FieldType? errorField}) = _$SignUpStateImpl;
 
   @override
@@ -245,11 +331,19 @@ abstract class _SignUpState implements SignUpState {
   @override
   bool get idVerified;
   @override
+  bool get emailVerified;
+  @override
   bool get signUpSuccess;
   @override
   Map<String, dynamic> get signUpForm;
   @override
   String? get error;
+  @override
+  bool get isDialogError;
+  @override
+  bool get needToRedirectLogin;
+  @override
+  bool get needToRedirectSignUpOption;
   @override
   FieldType? get errorField;
   @override

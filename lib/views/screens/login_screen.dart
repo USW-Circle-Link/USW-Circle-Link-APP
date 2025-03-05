@@ -65,11 +65,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 60.h),
+            margin: EdgeInsets.only(top: 120.h),
             padding: EdgeInsets.only(left: 32.w, right: 32.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                RichText(
+                  text: TextSpan(
+                    text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
+                    style: TextFontWidget.fontRegularStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFF282828),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    children: const [],
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 Wrap(
                   children: [
                     SizedBox(
@@ -87,20 +101,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 SizedBox(
                   height: 10.h,
-                ),
-                RichText(
-                  text: TextSpan(
-                    text: "동아리 찾기부터 지원, 합격 통지까지!\n동구라미에서 한 번에, 간편하게!",
-                    style: TextFontWidget.fontRegularStyle(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF282828),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: const [],
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
                 ),
                 RoundedTextField(
                   textInputAction: TextInputAction.next,
@@ -147,6 +147,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    constraints: BoxConstraints(),
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
@@ -170,7 +173,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 if (state is UserModelError)
                   TextFontWidget.fontRegular(
-                    '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했습니다.')}',
+                    '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했어요.')}',
                     fontSize: 12.sp,
                     color: const Color(0xFFFF3F3F),
                     fontWeight: FontWeight.w400,
@@ -202,7 +205,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       side: const BorderSide(
                           width: 0.0, color: Colors.transparent),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
                     ),
                     child: TextFontWidget.fontRegular(

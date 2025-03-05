@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:usw_circle_link/views/widgets/email_text_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-class RoundedTextField extends StatefulWidget {
+class RoundedEmailField extends StatefulWidget {
   final TextEditingController? textEditController;
   final double? height,
       marginLeft,
       marginTop,
       marginRight,
       marginBottom,
-      paddingLeft,
-      paddingRight,
-      paddingTop,
-      paddingBottom,
       leftTopCornerRadius,
       rightTopCornerRadius,
       leftBottomCornerRadius,
@@ -34,11 +31,10 @@ class RoundedTextField extends StatefulWidget {
   final Widget? prefixIcon;
   final Widget? suffixIcon;
   final TextInputAction? textInputAction;
-  final Function()? onTab;
   final Function(String value)? onChanged;
   final FocusNode? focusNode;
   final TextStyle? textStyle;
-  const RoundedTextField({
+  const RoundedEmailField({
     Key? key,
     this.height,
     this.textEditController,
@@ -46,10 +42,6 @@ class RoundedTextField extends StatefulWidget {
     this.marginTop,
     this.marginRight,
     this.marginBottom,
-    this.paddingLeft,
-    this.paddingRight,
-    this.paddingTop,
-    this.paddingBottom,
     this.leftTopCornerRadius,
     this.rightTopCornerRadius,
     this.leftBottomCornerRadius,
@@ -65,7 +57,6 @@ class RoundedTextField extends StatefulWidget {
     this.textInputAction,
     this.suffixIcon,
     this.hintStyle,
-    this.onTab,
     this.onChanged,
     this.isBackgroundFilled = false,
     this.isAnimatedHint = false,
@@ -76,10 +67,10 @@ class RoundedTextField extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _RoundedTextFieldState createState() => _RoundedTextFieldState();
+  _RoundedEmailFieldState createState() => _RoundedEmailFieldState();
 }
 
-class _RoundedTextFieldState extends State<RoundedTextField> {
+class _RoundedEmailFieldState extends State<RoundedEmailField> {
   FocusNode _focusNode = FocusNode();
 
   @override
@@ -107,12 +98,7 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
         right: widget.marginRight ?? 0,
         bottom: widget.marginBottom ?? 0,
       ),
-      padding: EdgeInsets.only(
-        left: widget.paddingLeft ?? 12.w,
-        right: widget.paddingRight ?? 12.w,
-        top: widget.paddingTop ?? 0,
-        bottom: widget.paddingBottom ?? 0,
-      ),
+      padding: EdgeInsets.only(left: 12.w, right: 12.w),
       decoration: BoxDecoration(
         border: Border.all(
           color: _focusNode.hasFocus
@@ -130,21 +116,21 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
       child: Row(
         children: [
           widget.prefixIcon ?? Container(),
+          SizedBox(
+            width: 10.w,
+          ),
           Expanded(
-            child: TextField(
+            child: EmailTextField(
               focusNode: _focusNode,
-              readOnly: widget.readOnly,
               controller: widget.textEditController,
-              maxLines: widget.maxLines,
-              keyboardType: widget.textInputType,
               textAlign: widget.textAlign ?? TextAlign.left,
               decoration:
                   widget.borderWidth == null ? null : setInputDecoration(),
-              onTap: widget.onTab,
               onChanged: widget.onChanged,
               obscureText: widget.obscureText,
-              style: widget.textStyle,
+              hintTextStyle: widget.hintStyle,
               textInputAction: widget.textInputAction,
+              textInputType: widget.textInputType,
             ),
           ),
           widget.suffixIcon ?? Container(),
@@ -155,22 +141,20 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
 
   InputDecoration setInputDecoration() {
     return InputDecoration(
-      filled: widget.isBackgroundFilled,
-      fillColor: widget.backgroundColor,
-      enabledBorder: OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      focusedBorder: OutlineInputBorder(
-        borderSide: BorderSide.none,
-      ),
-      hintText: widget.isAnimatedHint ? "" : widget.hintText ?? "",
-      label: widget.isAnimatedHint
-          ? TextFontWidget.fontRegular(
-              widget.hintText ?? "",
-            )
-          : null,
-      hintStyle: widget.hintStyle,
-      isDense: true,
-    );
+        filled: widget.isBackgroundFilled,
+        fillColor: widget.backgroundColor,
+        enabledBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderSide: BorderSide.none,
+        ),
+        hintText: widget.isAnimatedHint ? "" : widget.hintText ?? "",
+        label: widget.isAnimatedHint
+            ? TextFontWidget.fontRegular(
+                widget.hintText ?? "",
+              )
+            : null,
+        hintStyle: widget.hintStyle);
   }
 }

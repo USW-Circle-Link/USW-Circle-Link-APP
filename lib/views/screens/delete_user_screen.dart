@@ -87,8 +87,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                           final encodedUrl = Uri.encodeComponent(
                                               'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                                          context.push(
-                                              '/update_profile/delete_user/webview/$encodedUrl');
+                                          context.push('/webview/$encodedUrl');
                                         }
                                       : sendMail,
                           style: OutlinedButton.styleFrom(
@@ -143,7 +142,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 20.h,
+                        height: 10.h,
+                      ),
+                      if (error != null && !isCodeError) ...[
+                        TextFontWidget.fontRegular(
+                          '* $error',
+                          fontSize: 12.sp,
+                          color: const Color(0xFFFF3F3F),
+                        ),
+                      ],
+                      SizedBox(
+                        height: 10.h,
                       ),
                       if (isSendCodeSuccess) ...[
                         Row(
@@ -199,9 +208,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           borderColor:
                               isCodeError ? const Color(0xFFFF3F3F) : null,
                           isAnimatedHint: false,
-                          suffixIcon: Container(
-                            margin: EdgeInsets.only(
-                                top: 6.h, bottom: 6.h, right: 8.w),
+                          paddingLeft: 0.w,
+                          paddingRight: 6.w,
+                          suffixIcon: SizedBox(
                             width: 83.w,
                             child: OutlinedButton(
                               onPressed: isLoading
@@ -245,7 +254,12 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                   borderRadius: BorderRadius.circular(16.r),
                                 ),
                                 minimumSize: Size.zero,
-                                padding: EdgeInsets.zero,
+                                padding: EdgeInsets.only(
+                                  left: 12.w,
+                                  right: 12.w,
+                                  top: 6.h,
+                                  bottom: 6.h,
+                                ),
                               ),
                               child: TextFontWidget.fontRegular(
                                 isLoading ? '로딩중' : '확인',
@@ -260,10 +274,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           ),
                         ),
                         SizedBox(height: 10.h),
-                        if (error != null) ...[
+                        if (error != null && isCodeError) ...[
                           TextFontWidget.fontRegular(
-                            error,
-                            fontSize: 12.sp,
+                            "* $error",
+                            fontSize: 11.sp,
                             color: const Color(0xFFFF3F3F),
                           ),
                         ]
@@ -286,7 +300,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
       if (next) {
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "인증 코드가 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+          content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
         );
       }
     });
@@ -297,7 +311,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
       if (next) {
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "회원 탈퇴가 완료되었습니다!",
+          content: "회원 탈퇴가 완료되었습니다.",
           onLeftButtonPressed: () => context.go('/'),
         );
       }

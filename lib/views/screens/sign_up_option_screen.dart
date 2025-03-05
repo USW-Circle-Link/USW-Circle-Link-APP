@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -21,6 +22,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
       builder: (context, child) => Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
+          scrolledUnderElevation: 0,
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
           title: Padding(
@@ -46,6 +48,18 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                RichText(
+                  text: TextSpan(
+                    text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
+                    style: TextFontWidget.fontRegularStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFF282828),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    children: const [],
+                  ),
+                ),
+                SizedBox(height: 10.h),
                 Wrap(
                   children: [
                     SizedBox(
@@ -62,18 +76,6 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                   ],
                 ),
                 SizedBox(height: 10.h),
-                RichText(
-                  text: TextSpan(
-                    text: "동아리 찾기부터 지원, 합격 통지까지!\n동구라미에서 한 번에, 간편하게!",
-                    style: TextFontWidget.fontRegularStyle(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF282828),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: const [],
-                  ),
-                ),
-                SizedBox(height: 20.h),
                 Container(
                   padding:
                       EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
@@ -182,6 +184,34 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                       ),
                     ],
                   ),
+                ),
+                SizedBox(height: 30.h),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFontWidget.fontRegular(
+                      '이미 회원이신가요? ',
+                      fontSize: 12.sp,
+                      color: Color(0xFFA9A9A9),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: () {
+                        context.go('/login');
+                      },
+                      child: TextFontWidget.fontRegular(
+                        '로그인',
+                        fontSize: 12.sp,
+                        color: accentColor,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

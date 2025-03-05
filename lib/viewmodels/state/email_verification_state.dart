@@ -8,8 +8,9 @@ class EmailVerificationState with _$EmailVerificationState {
     @Default(false) bool isLoading,
     @Default(false) bool isSendMailSuccess,
     @Default(false) bool isVerifySuccess,
+    @Default('') String emailTokenUUID,
+    @Default('') String signupUUID,
     @Default('') String email,
-    @Default('') String uuid,
     String? error,
   }) = _EmailVerificationState;
 }

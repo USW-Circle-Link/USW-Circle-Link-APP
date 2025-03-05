@@ -33,10 +33,10 @@ class _EmailVerificationScreenState
         .select((value) => value.isVerifySuccess));
     final error = ref.watch(
         emailVerificationViewModelProvider.select((value) => value.error));
-    final uuid = ref.watch(
-        emailVerificationViewModelProvider.select((value) => value.uuid));
-    final email = ref.watch(
-        emailVerificationViewModelProvider.select((value) => value.email));
+    final emailTokenUUID = ref.watch(emailVerificationViewModelProvider
+        .select((value) => value.emailTokenUUID));
+    final signupUUID = ref.watch(
+        emailVerificationViewModelProvider.select((value) => value.signupUUID));
 
     _listener();
 
@@ -114,9 +114,9 @@ class _EmailVerificationScreenState
                         if (error != null)
                           TextFontWidget.fontRegular(
                             '* $error',
-                            fontSize: 12.sp,
+                            fontSize: 10.sp,
                             color: const Color(0xFFFF5353),
-                            fontWeight: FontWeight.w400,
+                            fontWeight: FontWeight.w300,
                           ),
                         if (isVerifySuccess)
                           TextFontWidget.fontRegular(
@@ -163,15 +163,15 @@ class _EmailVerificationScreenState
                                 : isVerifySuccess
                                     ? () {
                                         context.go(
-                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&uuid=$uuid&email=$email');
+                                            '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&emailTokenUUID=$emailTokenUUID&signupUUID=$signupUUID');
                                       }
                                     : isSendMailSuccess
                                         ? () {
                                             final encodedUrl = Uri.encodeComponent(
                                                 'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                                            context.push(
-                                                '/login/sign_up_option/policy_agree/email_verification/webview/$encodedUrl');
+                                            context
+                                                .push('/webview/$encodedUrl');
                                           }
                                         : sendMail,
                             style: OutlinedButton.styleFrom(
@@ -263,7 +263,7 @@ class _EmailVerificationScreenState
         logger.d('이메일 보내기 성공!');
         DialogManager.instance.showAlertDialog(
           context: context,
-          content: "인증 메일이 전송되었습니다.\n5분 안에 인증을 완료해주세요.",
+          content: "인증 메일이 전송되었습니다.\n인증을 완료해주세요.",
         );
       }
     });
@@ -272,9 +272,11 @@ class _EmailVerificationScreenState
         emailVerificationViewModelProvider
             .select((value) => value.isVerifySuccess), (_, next) {
       if (next) {
-        final uuid = ref.read(
-            emailVerificationViewModelProvider.select((value) => value.uuid));
-        logger.d('이메일 인증 성공! - $uuid');
+        final emailTokenUUID = ref.read(emailVerificationViewModelProvider
+            .select((value) => value.emailTokenUUID));
+        final signupUUID = ref.read(emailVerificationViewModelProvider
+            .select((value) => value.signupUUID));
+        logger.d('이메일 인증 성공! - $emailTokenUUID, $signupUUID');
       }
     });
   }
