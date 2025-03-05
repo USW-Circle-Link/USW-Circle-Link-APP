@@ -33,7 +33,7 @@ mixin _$SignUpRequest {
   @JsonKey(name: "studentNumber")
   String get studentNumber => throw _privateConstructorUsedError;
   @JsonKey(name: "major")
-  String get major => throw _privateConstructorUsedError;
+  String? get major => throw _privateConstructorUsedError;
   @JsonKey(name: "email")
   String? get email => throw _privateConstructorUsedError;
   @JsonKey(name: "emailTokenUUID")
@@ -62,7 +62,7 @@ abstract class $SignUpRequestCopyWith<$Res> {
       @JsonKey(name: "userName") String userName,
       @JsonKey(name: "telephone") String telephone,
       @JsonKey(name: "studentNumber") String studentNumber,
-      @JsonKey(name: "major") String major,
+      @JsonKey(name: "major") String? major,
       @JsonKey(name: "email") String? email,
       @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
       @JsonKey(name: "signupUUID") String? signupUUID,
@@ -88,7 +88,7 @@ class _$SignUpRequestCopyWithImpl<$Res, $Val extends SignUpRequest>
     Object? userName = null,
     Object? telephone = null,
     Object? studentNumber = null,
-    Object? major = null,
+    Object? major = freezed,
     Object? email = freezed,
     Object? emailTokenUUID = freezed,
     Object? signupUUID = freezed,
@@ -119,10 +119,10 @@ class _$SignUpRequestCopyWithImpl<$Res, $Val extends SignUpRequest>
           ? _value.studentNumber
           : studentNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      major: null == major
+      major: freezed == major
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -158,7 +158,7 @@ abstract class _$$SignUpRequestImplCopyWith<$Res>
       @JsonKey(name: "userName") String userName,
       @JsonKey(name: "telephone") String telephone,
       @JsonKey(name: "studentNumber") String studentNumber,
-      @JsonKey(name: "major") String major,
+      @JsonKey(name: "major") String? major,
       @JsonKey(name: "email") String? email,
       @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
       @JsonKey(name: "signupUUID") String? signupUUID,
@@ -182,7 +182,7 @@ class __$$SignUpRequestImplCopyWithImpl<$Res>
     Object? userName = null,
     Object? telephone = null,
     Object? studentNumber = null,
-    Object? major = null,
+    Object? major = freezed,
     Object? email = freezed,
     Object? emailTokenUUID = freezed,
     Object? signupUUID = freezed,
@@ -213,10 +213,10 @@ class __$$SignUpRequestImplCopyWithImpl<$Res>
           ? _value.studentNumber
           : studentNumber // ignore: cast_nullable_to_non_nullable
               as String,
-      major: null == major
+      major: freezed == major
           ? _value.major
           : major // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       email: freezed == email
           ? _value.email
           : email // ignore: cast_nullable_to_non_nullable
@@ -247,7 +247,7 @@ class _$SignUpRequestImpl implements _SignUpRequest {
       @JsonKey(name: "userName") required this.userName,
       @JsonKey(name: "telephone") required this.telephone,
       @JsonKey(name: "studentNumber") required this.studentNumber,
-      @JsonKey(name: "major") required this.major,
+      @JsonKey(name: "major") this.major,
       @JsonKey(name: "email") this.email,
       @JsonKey(name: "emailTokenUUID") this.emailTokenUUID,
       @JsonKey(name: "signupUUID") this.signupUUID,
@@ -277,7 +277,7 @@ class _$SignUpRequestImpl implements _SignUpRequest {
   final String studentNumber;
   @override
   @JsonKey(name: "major")
-  final String major;
+  final String? major;
   @override
   @JsonKey(name: "email")
   final String? email;
@@ -366,7 +366,7 @@ abstract class _SignUpRequest implements SignUpRequest {
       @JsonKey(name: "userName") required final String userName,
       @JsonKey(name: "telephone") required final String telephone,
       @JsonKey(name: "studentNumber") required final String studentNumber,
-      @JsonKey(name: "major") required final String major,
+      @JsonKey(name: "major") final String? major,
       @JsonKey(name: "email") final String? email,
       @JsonKey(name: "emailTokenUUID") final String? emailTokenUUID,
       @JsonKey(name: "signupUUID") final String? signupUUID,
@@ -396,7 +396,7 @@ abstract class _SignUpRequest implements SignUpRequest {
   String get studentNumber;
   @override
   @JsonKey(name: "major")
-  String get major;
+  String? get major;
   @override
   @JsonKey(name: "email")
   String? get email;

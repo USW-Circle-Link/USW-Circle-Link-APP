@@ -76,15 +76,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
 
       final email = state.signUpForm['email'];
 
-      if (email.isEmpty) {
-        state = state.copyWith(
-          isLoading: false,
-          error: '이메일을 입력해주세요.',
-          errorField: FieldType.email,
-        );
-        return;
-      }
-
       final response =
           await ref.read(authRepositoryProvider).verifyEmail(email: email);
 
@@ -129,7 +120,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       final telephone = state.signUpForm['telephone'];
       final studentNumber = state.signUpForm['studentNumber'];
       final major = state.signUpForm['major'];
-      final email = state.signUpForm['email'];
 
       final invalidField = validateField(
         password: password,
@@ -138,7 +128,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         telephone: telephone,
         studentNumber: studentNumber,
         major: major,
-        email: email,
       );
 
       if (invalidField != null) {
@@ -179,7 +168,8 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       }
       state = state.copyWith(
         isLoading: false,
-        isDialogError: isDialogError || errorField == null,
+        isDialogError: (isDialogError || errorField == null) &&
+            e.code != 'ABNORMAL-ACCESS',
         error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
         errorField: errorField,
         needToRedirectSignUpOption:
@@ -214,7 +204,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       final telephone = state.signUpForm['telephone'];
       final studentNumber = state.signUpForm['studentNumber'];
       final major = state.signUpForm['major'];
-      final email = state.signUpForm['email'];
 
       final invalidField = validateField(
         password: password,
@@ -223,7 +212,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         telephone: telephone,
         studentNumber: studentNumber,
         major: major,
-        email: email,
       );
 
       if (invalidField != null) {
@@ -265,12 +253,14 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       }
       state = state.copyWith(
         isLoading: false,
-        isDialogError: isDialogError || errorField == null,
+        isDialogError: (isDialogError || errorField == null) &&
+            e.code != 'ABNORMAL-ACCESS',
         error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
         errorField: errorField,
         needToRedirectLogin: ErrorUtil.instance.isNeedToRedirectLogin(e.code),
       );
     } catch (e) {
+      logger.e(e);
       state = state.copyWith(
         isLoading: false,
         isDialogError: true,
@@ -328,7 +318,6 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
     required String telephone,
     required String studentNumber,
     String? major,
-    String? email,
   }) {
     if (!state.idVerified) {
       return FieldType.account;

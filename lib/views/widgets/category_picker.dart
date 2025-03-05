@@ -154,7 +154,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       label: Text(category.clubCategoryName),
       selected: isSelected,
       onSelected: (value) {
-        if (selectedCategories.length == 3) {
+        if (selectedCategories.length == 3 && !isSelected) {
           return;
         }
         setState(() {

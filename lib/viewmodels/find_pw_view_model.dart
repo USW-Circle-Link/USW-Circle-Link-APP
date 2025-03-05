@@ -4,6 +4,7 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 
 final findPwViewModelProvider = StateNotifierProvider.autoDispose<
     FindPwViewModel, AsyncValue<FindPwModel?>>((ref) {
@@ -29,20 +30,18 @@ class FindPwViewModel extends StateNotifier<AsyncValue<FindPwModel?>> {
   }) async {
     try {
       state = AsyncLoading();
-      if (account.isEmpty) {
+
+      if (account.isEmpty ||
+          !idRegExp.hasMatch(account) ||
+          email.isEmpty ||
+          !emailVerificationUrlRegExp.hasMatch(email)) {
         throw FindPwModelError(
-          message: '아이디가 형식에 맞지 않습니다.',
-          code: 'EML-F200',
-          type: FindPwModelType.sendCode,
-        );
-      }
-      if (email.isEmpty) {
-        throw FindPwModelError(
-          message: '이메일이 형식에 맞지 않습니다.',
+          message: '올바른 정보를 입력해 주세요.',
           code: 'EML-F100',
           type: FindPwModelType.sendCode,
         );
       }
+
       final response =
           await authRepository.sendCode(account: account, email: email);
       final accessToken = response.data;

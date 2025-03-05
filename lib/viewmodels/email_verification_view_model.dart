@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/state/email_verification_state.dart';
 
 final emailVerificationViewModelProvider = AutoDisposeNotifierProvider<
@@ -28,10 +29,10 @@ class EmailVerificationViewModel
 
       final email = state.email;
 
-      if (email.isEmpty) {
+      if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
         state = state.copyWith(
           isLoading: false,
-          error: '이메일을 입력해주세요.',
+          error: '올바른 이메일을 입력해주세요.',
         );
         return;
       }

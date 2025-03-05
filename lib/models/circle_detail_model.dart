@@ -44,7 +44,7 @@ class CircleDetailModel {
       recruitmentStatus: json['recruitmentStatus'],
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
-      circleHashtag: List<String>.from(json['clubHashtag'] ?? []),
+      circleHashtag: List<String>.from(json['clubHashtags'] ?? []),
     );
   }
 

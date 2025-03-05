@@ -22,20 +22,27 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
     required String confirmNewPw,
   }) async {
     try {
+      // 첫 state는 Loading 상태
+      state = ChangePwModelLoading();
+
       if (userPw.isEmpty) {
         throw ChangePwModelError(
-            message: '현재 비밀번호가 입력되지 않았습니다.', code: "USR-F900", type:ChangePwModelType.changePW);
+            message: '현재 비밀번호가 입력되지 않았습니다.',
+            code: "USR-F900",
+            type: ChangePwModelType.changePW);
       }
       if (!newPw.validate()) {
         throw ChangePwModelError(
-            message: '새로운 비밀번호가 형식에 맞지 않습니다.', code: "USR-F200", type:ChangePwModelType.changePW);
+            message: '새로운 비밀번호가 형식에 맞지 않습니다.',
+            code: "USR-F200",
+            type: ChangePwModelType.changePW);
       }
       if (newPw != confirmNewPw) {
-        throw ChangePwModelError(message: '비밀번호가 일치하지 않습니다.', code: "USR-F300", type:ChangePwModelType.changePW);
+        throw ChangePwModelError(
+            message: '비밀번호가 일치하지 않습니다.',
+            code: "USR-F300",
+            type: ChangePwModelType.changePW);
       }
-
-      // 첫 state는 Loading 상태
-      state = ChangePwModelLoading();
 
       final changePWResponse = await userViewModel.changePW(
         userPw: userPw,
@@ -47,7 +54,8 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
     } on ChangePwModelError catch (e) {
       state = e;
     } catch (e) {
-      state = ChangePwModelError(message: '예외발생 - $e', type:ChangePwModelType.changePW);
+      state = ChangePwModelError(
+          message: '예외발생 - $e', type: ChangePwModelType.changePW);
     }
     return Future.value(state);
   }
@@ -58,16 +66,21 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
     required String uuid,
   }) async {
     try {
-      if (!newPw.validate()) {
-        throw ChangePwModelError(
-            message: '새로운 비밀번호가 형식에 맞지 않습니다.', code: "USR-F200", type:ChangePwModelType.resetPW);
-      }
-      if (newPw != confirmNewPw) {
-        throw ChangePwModelError(message: '비밀번호가 일치하지 않습니다.', code: "USR-F300", type:ChangePwModelType.resetPW);
-      }
-
       // 첫 state는 Loading 상태
       state = ChangePwModelLoading();
+
+      if (!newPw.validate()) {
+        throw ChangePwModelError(
+            message: '새로운 비밀번호가 형식에 맞지 않습니다.',
+            code: "USR-F200",
+            type: ChangePwModelType.resetPW);
+      }
+      if (newPw != confirmNewPw) {
+        throw ChangePwModelError(
+            message: '비밀번호가 일치하지 않습니다.',
+            code: "USR-F300",
+            type: ChangePwModelType.resetPW);
+      }
 
       final changePWResponse = await userViewModel.resetPW(
         newPw: newPw,
@@ -79,7 +92,8 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
     } on ChangePwModelError catch (e) {
       state = e;
     } catch (e) {
-      state = ChangePwModelError(message: '예외발생 - $e', type:ChangePwModelType.resetPW);
+      state = ChangePwModelError(
+          message: '예외발생 - $e', type: ChangePwModelType.resetPW);
     }
     return Future.value(state);
   }

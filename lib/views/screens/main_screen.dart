@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
@@ -7,6 +8,8 @@ import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -89,6 +92,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final profileState = ref.watch(profileViewModelProvider);
     ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
+    });
+
+    ref.listen(abnormalAccessNotifierProvider, (previous, next) {
+      logger.d(next);
+
+      DialogManager.instance.showAlertDialog(
+        context: context,
+        content: '알 수 없는 오류가 발생했어요.\n문제가 계속될 시, 관리자에게 문의해 주세요.',
+        barrierDismissible: false,
+        onLeftButtonPressed: () {
+          context.go('/');
+        },
+      );
     });
 
     return ScreenUtilInit(

@@ -14,7 +14,7 @@ _$SignUpRequestImpl _$$SignUpRequestImplFromJson(Map<String, dynamic> json) =>
       userName: json['userName'] as String,
       telephone: json['telephone'] as String,
       studentNumber: json['studentNumber'] as String,
-      major: json['major'] as String,
+      major: json['major'] as String?,
       email: json['email'] as String?,
       emailTokenUUID: json['emailTokenUUID'] as String?,
       signupUUID: json['signupUUID'] as String?,

@@ -80,6 +80,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
           DialogManager.instance.showAlertDialog(
             context: context,
             content: '비밀번호 변경 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.',
+            barrierDismissible: false,
             onLeftButtonPressed: () {
               context.go('/');
             },

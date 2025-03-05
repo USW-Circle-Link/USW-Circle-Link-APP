@@ -29,6 +29,7 @@ class CircleItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   border: Border.all(color: Color(0xFFDEDEDE), width: 1.w),
@@ -97,12 +98,17 @@ class CircleItem extends StatelessWidget {
                             border: Border.all(
                                 color: Color(0xFFDEDEDE), width: 1.w),
                           ),
-                          child: TextFontWidget.fontRegular(
-                            '#${circle.clubHashtags![index]}',
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFontWidget.fontRegular(
+                                '#${circle.clubHashtags![index]}',
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ],
                           ),
                         ),
                       ),

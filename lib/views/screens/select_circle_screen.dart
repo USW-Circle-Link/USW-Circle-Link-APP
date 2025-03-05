@@ -120,6 +120,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                                             return Stack(
                                               children: [
                                                 Container(
+                                                  alignment: Alignment.center,
                                                   constraints: BoxConstraints(
                                                     minHeight:
                                                         constraints.maxHeight,

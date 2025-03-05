@@ -12,7 +12,7 @@ class SignUpRequest with _$SignUpRequest {
     @JsonKey(name: "userName") required String userName,
     @JsonKey(name: "telephone") required String telephone,
     @JsonKey(name: "studentNumber") required String studentNumber,
-    @JsonKey(name: "major") required String major,
+    @JsonKey(name: "major") String? major,
     @JsonKey(name: "email") String? email,
     @JsonKey(name: "emailTokenUUID") String? emailTokenUUID,
     @JsonKey(name: "signupUUID") String? signupUUID,

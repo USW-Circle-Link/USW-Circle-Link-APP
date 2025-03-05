@@ -86,8 +86,11 @@ class AuthRepository {
   Future<bool> verifyId({
     required String id,
   }) async {
-    final response = await dio.get(
-      '$basePath/verify-duplicate/$id',
+    final response = await dio.post(
+      '$basePath/account/verify-duplicate',
+      data: {
+        'account': id,
+      },
     );
 
     logger.d(response.data);
@@ -105,8 +108,11 @@ class AuthRepository {
   }
 
   Future<bool> verifyEmail({required String email}) async {
-    final response = await dio.get(
-      '$basePath/check/$email/duplicate',
+    final response = await dio.post(
+      '$basePath/check/email/duplicate',
+      data: {
+        'email': email,
+      },
     );
 
     logger.d(response.data);
@@ -288,7 +294,12 @@ class AuthRepository {
   Future<FindIdModel> findId({
     required String email,
   }) async {
-    final response = await dio.get('$basePath/find-account/$email');
+    final response = await dio.post(
+      '$basePath/find-account',
+      data: {
+        'email': email,
+      },
+    );
 
     logger.d(response.data);
 
