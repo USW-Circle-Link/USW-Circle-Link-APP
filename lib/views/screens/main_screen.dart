@@ -1,14 +1,19 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
+import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -32,7 +37,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   OverlayEntry? _overlayEntry;
 
-  List<String> selectedGroups = [];
+  List<CategoryData> selectedCategories = [];
 
   @override
   void initState() {
@@ -44,10 +49,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void _handleMessage(RemoteMessage message) {
     // 내가 지정한 그 알람이면 지정한 화면으로 이동
     logger.d('_handleMessage');
-    if (message.data['data1'] == 'value1') {
-      // something to do ...
-      // e.g) context.go(...)
-    }
+    logger.d(message.notification?.title);
+    logger.d(message.notification?.body);
+
+    ref
+        .read(firebaseCloudMessagingViewModelProvider.notifier)
+        .addNotification(message.notification?.body ?? '');
   }
 
   void _showOverlay(BuildContext context) {
@@ -87,6 +94,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       logger.d(next);
     });
 
+    ref.listen(abnormalAccessNotifierProvider, (previous, next) {
+      logger.d(next);
+
+      DialogManager.instance.showAlertDialog(
+        context: context,
+        content: '알 수 없는 오류가 발생했어요.\n문제가 계속될 시, 관리자에게 문의해 주세요.',
+        barrierDismissible: false,
+        onLeftButtonPressed: () {
+          context.go('/');
+        },
+      );
+    });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(
@@ -99,8 +119,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               _scaffoldKey.currentState?.openDrawer();
             },
             icon: Icon(
-              Icons.menu_outlined,
-              color: Colors.grey,
+              Icons.menu,
+              color: Color(0xff717171),
+              size: 24.sp,
             ),
           ),
           title: Row(
@@ -125,7 +146,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               onPressed: () {
                 _showOverlay(context);
               },
-              icon: SvgPicture.asset('assets/images/bell.svg'),
+              icon: Icon(
+                MainIcons.ic_bell,
+                size: 18.sp,
+                color: Color(0xFF717171),
+              ),
             ),
           ],
         ),
@@ -231,19 +256,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           isScrollControlled: true,
                           builder: (context) {
                             return CategoryPicker(
-                                initialGroups: selectedGroups);
+                                initialCategories: selectedCategories);
                           },
                         );
                         setState(() {
-                          selectedGroups = result;
+                          selectedCategories = result;
                         });
                         await fetchCircleList();
                       },
                       style: OutlinedButton.styleFrom(
-                        backgroundColor: selectedGroups.isEmpty
+                        backgroundColor: selectedCategories.isEmpty
                             ? Colors.white
                             : Color(0xFFFFB052),
-                        foregroundColor: selectedGroups.isEmpty
+                        foregroundColor: selectedCategories.isEmpty
                             ? Color(0xFFFFB052)
                             : Colors.white,
                         minimumSize: Size.zero,
@@ -253,7 +278,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         ),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         side: BorderSide(
-                          color: selectedGroups.isEmpty
+                          color: selectedCategories.isEmpty
                               ? Color(0xFF959595)
                               : Color(0xFFFF9A21),
                         ),
@@ -263,19 +288,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       ),
                       child: Row(
                         children: [
-                          SvgPicture.asset(
-                            'assets/images/ic_filter.svg',
-                            colorFilter: selectedGroups.isEmpty
-                                ? null
-                                : ColorFilter.mode(
-                                    Colors.white,
-                                    BlendMode.srcIn,
-                                  ),
+                          Icon(
+                            MainIcons.ic_filter,
+                            size: 18.sp,
+                            color: selectedCategories.isEmpty
+                                ? Color(0xffa8a8a8)
+                                : Colors.white,
                           ),
+                          SizedBox(width: 4.w),
                           TextFontWidget.fontRegular(
                             '필터',
                             fontWeight: FontWeight.w500,
-                            color: selectedGroups.isEmpty
+                            color: selectedCategories.isEmpty
                                 ? Color(0xffa8a8a8)
                                 : Colors.white,
                           )
@@ -289,7 +313,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             SizedBox(
               height: 1.h,
             ),
-            ...selectedGroups.isEmpty
+            ...selectedCategories.isEmpty
                 ? []
                 : [
                     Container(
@@ -301,8 +325,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         scrollDirection: Axis.horizontal,
                         child: Wrap(
                           spacing: 10.w,
-                          children: selectedGroups.map((label) {
-                            return _buildChip(label);
+                          children: selectedCategories.map((category) {
+                            return _buildChip(category);
                           }).toList(),
                         ),
                       ),
@@ -317,8 +341,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     return circleList.data.isNotEmpty
                         ? CircleList(
                             state: circleListState.value as CircleListModel,
-                            onItemClicked: (clubId) {
-                              context.go('/circle?clubId=$clubId');
+                            onItemClicked: (clubUUID) {
+                              context.go('/circle?clubUUID=$clubUUID');
                             },
                           )
                         : Center(
@@ -335,9 +359,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     return Center(
                       child: TextFontWidget.fontRegular(
                         ErrorUtil.instance.getErrorMessage(_error.code) ??
-                            '동아리를 불러오지 못했습니다...',
+                            '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                        textAlign: TextAlign.center,
                         fontSize: 14.sp,
-                        color: Colors.black,
+                        color: Color(0xFFA1A1A1),
                         fontWeight: FontWeight.w400,
                       ),
                     );
@@ -350,14 +375,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildChip(String label) {
+  Widget _buildChip(CategoryData category) {
     return Chip(
       labelPadding: EdgeInsets.only(left: 10.w),
-      label: Text(label),
+      label: Text(category.clubCategoryName),
       deleteIcon: Icon(Icons.close, size: 16.sp),
       onDeleted: () async {
         setState(() {
-          selectedGroups.remove(label);
+          selectedCategories.remove(category);
         });
         await fetchCircleList();
       },
@@ -376,21 +401,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Future<void> fetchCircleList() async {
-    if (selectedGroups.isEmpty) {
+    if (selectedCategories.isEmpty) {
       if (isAllSelected) {
         await ref.read(circleViewModelProvider.notifier).fetchAllCircleList();
       } else {
         await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
       }
     } else {
+      final selectedCategoryUUIDs = selectedCategories
+          .map((category) => category.clubCategoryUUID)
+          .toList();
       if (isAllSelected) {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchAllFilteredCircleList(selectedGroups);
+            .fetchAllFilteredCircleList(selectedCategoryUUIDs);
       } else {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchOpenFilteredCircleList(selectedGroups);
+            .fetchOpenFilteredCircleList(selectedCategoryUUIDs);
       }
     }
   }

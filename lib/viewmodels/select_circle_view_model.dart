@@ -2,9 +2,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
 
-final selectCircleViewModelProvider =
-    StateNotifierProvider<SelectCircleViewModel, AsyncValue<CircleListModel?>>(
-        (ref) {
+final selectCircleViewModelProvider = StateNotifierProvider.autoDispose<
+    SelectCircleViewModel, AsyncValue<CircleListModel?>>((ref) {
   return SelectCircleViewModel(ref.read(circleListRepositoryProvider));
 });
 

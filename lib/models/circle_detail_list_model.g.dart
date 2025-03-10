@@ -23,7 +23,7 @@ Map<String, dynamic> _$$CircleDetailListModelImplToJson(
     };
 
 _$CircleImpl _$$CircleImplFromJson(Map<String, dynamic> json) => _$CircleImpl(
-      clubId: (json['clubId'] as num).toInt(),
+      clubUUID: json['clubUUID'] as String,
       mainPhotoPath: json['mainPhotoPath'] as String?,
       clubName: json['clubName'] as String,
       leaderName: json['leaderName'] as String,
@@ -35,7 +35,7 @@ _$CircleImpl _$$CircleImplFromJson(Map<String, dynamic> json) => _$CircleImpl(
 
 Map<String, dynamic> _$$CircleImplToJson(_$CircleImpl instance) =>
     <String, dynamic>{
-      'clubId': instance.clubId,
+      'clubUUID': instance.clubUUID,
       'mainPhotoPath': instance.mainPhotoPath,
       'clubName': instance.clubName,
       'leaderName': instance.leaderName,

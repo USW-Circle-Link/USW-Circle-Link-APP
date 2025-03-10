@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
@@ -16,9 +17,9 @@ import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
-  final int clubId;
+  final String clubUUID;
 
-  const CircleScreen({required this.clubId, super.key});
+  const CircleScreen({required this.clubUUID, super.key});
 
   @override
   ConsumerState<CircleScreen> createState() => _CircleScreenState();
@@ -94,8 +95,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
 
   @override
   Widget build(BuildContext context) {
-    final clubIntroState = ref.watch(clubIntroViewModelProvider(widget.clubId));
-    ref.listen(clubIntroViewModelProvider(widget.clubId), (previous, next) {
+    final clubIntroState =
+        ref.watch(clubIntroViewModelProvider(widget.clubUUID));
+    ref.listen(clubIntroViewModelProvider(widget.clubUUID), (previous, next) {
       logger.d(next);
     });
     final applicationState = ref.watch(applicationViewModelProvider);
@@ -109,7 +111,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             case ApplicationModelType.apply:
               break;
             case ApplicationModelType.checkAvailableForApplication:
-              context.go('/circle/application_writing?clubId=${widget.clubId}');
+              context.go(
+                  '/circle/application_writing?clubUUID=${widget.clubUUID}');
               break;
             default:
           }
@@ -118,18 +121,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
           error = error as ApplicationModelError;
           switch (error.type) {
             case ApplicationModelType.checkAvailableForApplication:
-              switch (error.code) {
-                case "USR-F401":
-                  DialogManager.instance.showAlertDialog(
-                      context: context,
-                      content: '로그인 후 이용해 주시기 바랍니다!',
-                      onLeftButtonPressed: () => context.go('/login'));
-                  break;
-                default:
-                  DialogManager.instance.showAlertDialog(
-                      context: context, content: '이미 지원한 동아리 또는 소속된 동아리입니다!');
-              }
-              break;
+              DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                      "동아리 지원 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
+                  onLeftButtonPressed: () {
+                    if ((error as ApplicationModelError).code == "USR-F401") {
+                      context.go('/login');
+                    }
+                  });
             default:
           }
         },
@@ -159,7 +159,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                       Navigator.pop(context);
                     },
                     icon: SvgPicture.asset(
-                      'assets/images/back.svg',
+                      'assets/images/ic_back_arrow.svg',
                       height: 36.h,
                       width: 36.w,
                     ),
@@ -209,7 +209,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                               await ref
                                   .read(applicationViewModelProvider.notifier)
                                   .checkAvailableForApplication(
-                                      clubId: widget.clubId);
+                                      clubUUID: widget.clubUUID);
                             },
                       style: OutlinedButton.styleFrom(
                         backgroundColor:
@@ -238,7 +238,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             : clubIntroState.hasError
                 ? Center(
                     child: TextFontWidget.fontRegular(
-                      '동아리 정보를 불러오지 못했습니다.',
+                      '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                      textAlign: TextAlign.center,
+                      fontSize: 14.sp,
+                      color: Color(0xFFA1A1A1),
+                      fontWeight: FontWeight.w400,
                     ),
                   )
                 : NestedScrollView(
@@ -327,7 +331,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                     ),
                                     child: Hero(
                                       transitionOnUserGestures: true,
-                                      tag: 'circle_${widget.clubId}',
+                                      tag: 'circle_${widget.clubUUID}',
                                       child: ClipRRect(
                                         borderRadius:
                                             BorderRadius.circular(12.r),
@@ -489,18 +493,25 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                     body: TabBarView(
                       controller: tabController,
                       children: [
-                        Container(
-                          alignment: Alignment.topLeft,
-                          padding: EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                          child: Html(data: clubIntroState.value!.introContent),
+                        SingleChildScrollView(
+                          child: Container(
+                            alignment: Alignment.topLeft,
+                            padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                            child: Html(
+                              data: clubIntroState.value!.introContent,
+                            ),
+                          ),
                         ),
                         if (clubIntroState.value!.recruitmentStatus == "OPEN")
-                          Container(
-                            alignment: Alignment.topLeft,
-                            padding:
-                                EdgeInsets.fromLTRB(24.sp, 24.sp, 24.sp, 0),
-                            child: Html(
-                              data: clubIntroState.value!.clubRecruitment ?? '',
+                          SingleChildScrollView(
+                            child: Container(
+                              alignment: Alignment.topLeft,
+                              padding:
+                                  EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                              child: Html(
+                                data:
+                                    clubIntroState.value!.clubRecruitment ?? '',
+                              ),
                             ),
                           ),
                       ],

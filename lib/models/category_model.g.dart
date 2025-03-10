@@ -22,13 +22,13 @@ Map<String, dynamic> _$$CategoryModelImplToJson(_$CategoryModelImpl instance) =>
 
 _$CategoryDataImpl _$$CategoryDataImplFromJson(Map<String, dynamic> json) =>
     _$CategoryDataImpl(
-      clubCategoryId: (json['clubCategoryId'] as num).toInt(),
+      clubCategoryUUID: json['clubCategoryUUID'] as String,
       clubCategoryName: json['clubCategoryName'] as String,
     );
 
 Map<String, dynamic> _$$CategoryDataImplToJson(_$CategoryDataImpl instance) =>
     <String, dynamic>{
-      'clubCategoryId': instance.clubCategoryId,
+      'clubCategoryUUID': instance.clubCategoryUUID,
       'clubCategoryName': instance.clubCategoryName,
     };
 

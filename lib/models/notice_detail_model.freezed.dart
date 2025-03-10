@@ -210,7 +210,7 @@ NoticeDetailData _$NoticeDetailDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$NoticeDetailData {
-  int get noticeId => throw _privateConstructorUsedError;
+  String get noticeUUID => throw _privateConstructorUsedError;
   String get noticeTitle => throw _privateConstructorUsedError;
   String get noticeContent => throw _privateConstructorUsedError;
   String? get adminName => throw _privateConstructorUsedError;
@@ -230,7 +230,7 @@ abstract class $NoticeDetailDataCopyWith<$Res> {
       _$NoticeDetailDataCopyWithImpl<$Res, NoticeDetailData>;
   @useResult
   $Res call(
-      {int noticeId,
+      {String noticeUUID,
       String noticeTitle,
       String noticeContent,
       String? adminName,
@@ -251,7 +251,7 @@ class _$NoticeDetailDataCopyWithImpl<$Res, $Val extends NoticeDetailData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noticeId = null,
+    Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? noticeContent = null,
     Object? adminName = freezed,
@@ -259,10 +259,10 @@ class _$NoticeDetailDataCopyWithImpl<$Res, $Val extends NoticeDetailData>
     Object? noticePhotos = freezed,
   }) {
     return _then(_value.copyWith(
-      noticeId: null == noticeId
-          ? _value.noticeId
-          : noticeId // ignore: cast_nullable_to_non_nullable
-              as int,
+      noticeUUID: null == noticeUUID
+          ? _value.noticeUUID
+          : noticeUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       noticeTitle: null == noticeTitle
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
@@ -296,7 +296,7 @@ abstract class _$$NoticeDetailDataImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {int noticeId,
+      {String noticeUUID,
       String noticeTitle,
       String noticeContent,
       String? adminName,
@@ -315,7 +315,7 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? noticeId = null,
+    Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? noticeContent = null,
     Object? adminName = freezed,
@@ -323,10 +323,10 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
     Object? noticePhotos = freezed,
   }) {
     return _then(_$NoticeDetailDataImpl(
-      noticeId: null == noticeId
-          ? _value.noticeId
-          : noticeId // ignore: cast_nullable_to_non_nullable
-              as int,
+      noticeUUID: null == noticeUUID
+          ? _value.noticeUUID
+          : noticeUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       noticeTitle: null == noticeTitle
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
@@ -356,7 +356,7 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$NoticeDetailDataImpl implements _NoticeDetailData {
   _$NoticeDetailDataImpl(
-      {required this.noticeId,
+      {required this.noticeUUID,
       required this.noticeTitle,
       required this.noticeContent,
       this.adminName,
@@ -368,7 +368,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
       _$$NoticeDetailDataImplFromJson(json);
 
   @override
-  final int noticeId;
+  final String noticeUUID;
   @override
   final String noticeTitle;
   @override
@@ -389,7 +389,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
 
   @override
   String toString() {
-    return 'NoticeDetailData(noticeId: $noticeId, noticeTitle: $noticeTitle, noticeContent: $noticeContent, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt, noticePhotos: $noticePhotos)';
+    return 'NoticeDetailData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, noticeContent: $noticeContent, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt, noticePhotos: $noticePhotos)';
   }
 
   @override
@@ -397,8 +397,8 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$NoticeDetailDataImpl &&
-            (identical(other.noticeId, noticeId) ||
-                other.noticeId == noticeId) &&
+            (identical(other.noticeUUID, noticeUUID) ||
+                other.noticeUUID == noticeUUID) &&
             (identical(other.noticeTitle, noticeTitle) ||
                 other.noticeTitle == noticeTitle) &&
             (identical(other.noticeContent, noticeContent) ||
@@ -415,7 +415,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      noticeId,
+      noticeUUID,
       noticeTitle,
       noticeContent,
       adminName,
@@ -439,7 +439,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
 
 abstract class _NoticeDetailData implements NoticeDetailData {
   factory _NoticeDetailData(
-      {required final int noticeId,
+      {required final String noticeUUID,
       required final String noticeTitle,
       required final String noticeContent,
       final String? adminName,
@@ -450,7 +450,7 @@ abstract class _NoticeDetailData implements NoticeDetailData {
       _$NoticeDetailDataImpl.fromJson;
 
   @override
-  int get noticeId;
+  String get noticeUUID;
   @override
   String get noticeTitle;
   @override

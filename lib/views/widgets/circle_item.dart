@@ -6,7 +6,7 @@ import 'package:usw_circle_link/utils/extensions.dart';
 
 class CircleItem extends StatelessWidget {
   final CircleListData circle;
-  final Function(int clubId) onItemClicked;
+  final Function(String clubUUID) onItemClicked;
 
   const CircleItem({
     Key? key,
@@ -20,7 +20,7 @@ class CircleItem extends StatelessWidget {
       color: Colors.transparent,
       child: InkWell(
         onTap: () {
-          onItemClicked(circle.clubId);
+          onItemClicked(circle.clubUUID);
         },
         child: Container(
           width: 120.w,
@@ -29,6 +29,7 @@ class CircleItem extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                alignment: Alignment.center,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10.r),
                   border: Border.all(color: Color(0xFFDEDEDE), width: 1.w),
@@ -37,7 +38,7 @@ class CircleItem extends StatelessWidget {
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(10.r),
                   child: Hero(
-                    tag: 'circle_${circle.clubId}',
+                    tag: 'circle_${circle.clubUUID}',
                     child: circle.mainPhoto?.isValidUrl ?? false
                         ? Image.network(
                             circle.mainPhoto!,
@@ -97,12 +98,17 @@ class CircleItem extends StatelessWidget {
                             border: Border.all(
                                 color: Color(0xFFDEDEDE), width: 1.w),
                           ),
-                          child: TextFontWidget.fontRegular(
-                            '#${circle.clubHashtags![index]}',
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                            fontSize: 12.sp,
-                            fontWeight: FontWeight.w300,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              TextFontWidget.fontRegular(
+                                '#${circle.clubHashtags![index]}',
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ],
                           ),
                         ),
                       ),

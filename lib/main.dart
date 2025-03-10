@@ -6,8 +6,10 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
@@ -113,8 +115,9 @@ Future<void> setupFlutterNotifications() async {
 }
 
 const appcastURL =
-    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/develop/appcast.xml';
+    'https://raw.githubusercontent.com/USW-Circle-Link/USW-Circle-Link-APP/refs/heads/main/appcast.xml';
 final upgrader = Upgrader(
+  messages: UpgraderMessages(code: 'ko'),
   debugLogging: true,
   storeController: UpgraderStoreController(
     onAndroid: () => UpgraderAppcastStore(appcastURL: appcastURL),
@@ -122,11 +125,27 @@ final upgrader = Upgrader(
   ),
 );
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
+
 class CircleLink extends ConsumerWidget {
   const CircleLink({super.key});
 
+  static const platform = MethodChannel('com.usw.circle_link.notifications');
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    platform.setMethodCallHandler((call) async {
+      logger.d('setMethodCallHandler');
+      logger.d('call.method: ${call.method}');
+      logger.d('call.arguments: ${call.arguments}');
+      logger.d('call.arguments type: ${call.arguments.runtimeType}');
+      if (call.method == 'storeNotification') {
+        final message = APNSPayload.fromMap(call.arguments);
+        logger.d('message: $message');
+        ref
+            .read(firebaseCloudMessagingViewModelProvider.notifier)
+            .addNotification(message.aps.alert.body ?? '');
+      }
+    });
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(

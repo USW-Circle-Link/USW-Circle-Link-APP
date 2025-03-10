@@ -185,7 +185,7 @@ CategoryData _$CategoryDataFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$CategoryData {
-  int get clubCategoryId => throw _privateConstructorUsedError;
+  String get clubCategoryUUID => throw _privateConstructorUsedError;
   String get clubCategoryName => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -200,7 +200,7 @@ abstract class $CategoryDataCopyWith<$Res> {
           CategoryData value, $Res Function(CategoryData) then) =
       _$CategoryDataCopyWithImpl<$Res, CategoryData>;
   @useResult
-  $Res call({int clubCategoryId, String clubCategoryName});
+  $Res call({String clubCategoryUUID, String clubCategoryName});
 }
 
 /// @nodoc
@@ -216,14 +216,14 @@ class _$CategoryDataCopyWithImpl<$Res, $Val extends CategoryData>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? clubCategoryId = null,
+    Object? clubCategoryUUID = null,
     Object? clubCategoryName = null,
   }) {
     return _then(_value.copyWith(
-      clubCategoryId: null == clubCategoryId
-          ? _value.clubCategoryId
-          : clubCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
+      clubCategoryUUID: null == clubCategoryUUID
+          ? _value.clubCategoryUUID
+          : clubCategoryUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       clubCategoryName: null == clubCategoryName
           ? _value.clubCategoryName
           : clubCategoryName // ignore: cast_nullable_to_non_nullable
@@ -240,7 +240,7 @@ abstract class _$$CategoryDataImplCopyWith<$Res>
       __$$CategoryDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int clubCategoryId, String clubCategoryName});
+  $Res call({String clubCategoryUUID, String clubCategoryName});
 }
 
 /// @nodoc
@@ -254,14 +254,14 @@ class __$$CategoryDataImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? clubCategoryId = null,
+    Object? clubCategoryUUID = null,
     Object? clubCategoryName = null,
   }) {
     return _then(_$CategoryDataImpl(
-      clubCategoryId: null == clubCategoryId
-          ? _value.clubCategoryId
-          : clubCategoryId // ignore: cast_nullable_to_non_nullable
-              as int,
+      clubCategoryUUID: null == clubCategoryUUID
+          ? _value.clubCategoryUUID
+          : clubCategoryUUID // ignore: cast_nullable_to_non_nullable
+              as String,
       clubCategoryName: null == clubCategoryName
           ? _value.clubCategoryName
           : clubCategoryName // ignore: cast_nullable_to_non_nullable
@@ -274,19 +274,19 @@ class __$$CategoryDataImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$CategoryDataImpl implements _CategoryData {
   _$CategoryDataImpl(
-      {required this.clubCategoryId, required this.clubCategoryName});
+      {required this.clubCategoryUUID, required this.clubCategoryName});
 
   factory _$CategoryDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$CategoryDataImplFromJson(json);
 
   @override
-  final int clubCategoryId;
+  final String clubCategoryUUID;
   @override
   final String clubCategoryName;
 
   @override
   String toString() {
-    return 'CategoryData(clubCategoryId: $clubCategoryId, clubCategoryName: $clubCategoryName)';
+    return 'CategoryData(clubCategoryUUID: $clubCategoryUUID, clubCategoryName: $clubCategoryName)';
   }
 
   @override
@@ -294,8 +294,8 @@ class _$CategoryDataImpl implements _CategoryData {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$CategoryDataImpl &&
-            (identical(other.clubCategoryId, clubCategoryId) ||
-                other.clubCategoryId == clubCategoryId) &&
+            (identical(other.clubCategoryUUID, clubCategoryUUID) ||
+                other.clubCategoryUUID == clubCategoryUUID) &&
             (identical(other.clubCategoryName, clubCategoryName) ||
                 other.clubCategoryName == clubCategoryName));
   }
@@ -303,7 +303,7 @@ class _$CategoryDataImpl implements _CategoryData {
   @JsonKey(ignore: true)
   @override
   int get hashCode =>
-      Object.hash(runtimeType, clubCategoryId, clubCategoryName);
+      Object.hash(runtimeType, clubCategoryUUID, clubCategoryName);
 
   @JsonKey(ignore: true)
   @override
@@ -321,14 +321,14 @@ class _$CategoryDataImpl implements _CategoryData {
 
 abstract class _CategoryData implements CategoryData {
   factory _CategoryData(
-      {required final int clubCategoryId,
+      {required final String clubCategoryUUID,
       required final String clubCategoryName}) = _$CategoryDataImpl;
 
   factory _CategoryData.fromJson(Map<String, dynamic> json) =
       _$CategoryDataImpl.fromJson;
 
   @override
-  int get clubCategoryId;
+  String get clubCategoryUUID;
   @override
   String get clubCategoryName;
   @override

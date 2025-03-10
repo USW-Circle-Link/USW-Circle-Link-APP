@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final circleViewModelProvider = StateNotifierProvider.autoDispose<
     CircleViewModel, AsyncValue<CircleListModel>>((ref) {
@@ -55,12 +55,13 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
     }
   }
 
-  Future<void> fetchAllFilteredCircleList(List<String> department) async {
+  Future<void> fetchAllFilteredCircleList(
+      List<String> clubCategoryUUIDs) async {
     try {
       state = AsyncValue.loading();
 
-      final response =
-          await circleListRepository.fetchAllFilteredCircleList(department);
+      final response = await circleListRepository
+          .fetchAllFilteredCircleList(clubCategoryUUIDs);
 
       state = AsyncValue.data(response.toCircleListModel());
     } on CircleListModelError catch (e) {
@@ -73,10 +74,11 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
     }
   }
 
-  Future<void> fetchOpenFilteredCircleList(List<String> department) async {
+  Future<void> fetchOpenFilteredCircleList(
+      List<String> clubCategoryUUIDs) async {
     try {
-      final response =
-          await circleListRepository.fetchOpenFilteredCircleList(department);
+      final response = await circleListRepository
+          .fetchOpenFilteredCircleList(clubCategoryUUIDs);
       state = AsyncValue.data(response.toCircleListModel());
     } on CircleListModelError catch (e) {
       state = AsyncValue.error(e, e.stackTrace);
@@ -94,8 +96,8 @@ extension on CircleFilteredListModel {
     final newList = <CircleListData>[];
     for (var category in data) {
       final clubs = category.clubs;
-      newList.addAll(clubs.map((e) => e.setDepartmentName(
-          category.clubCategoryName ?? category.categoryName ?? '')));
+      newList.addAll(
+          clubs.map((e) => e.setDepartmentName(category.clubCategoryName)));
     }
     return CircleListModel(message: message, data: newList);
   }

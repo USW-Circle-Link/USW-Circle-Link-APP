@@ -28,7 +28,7 @@ const _$NoticeModelTypeEnumMap = {
 
 _$NoticeDataImpl _$$NoticeDataImplFromJson(Map<String, dynamic> json) =>
     _$NoticeDataImpl(
-      noticeId: (json['noticeId'] as num).toInt(),
+      noticeUUID: json['noticeUUID'] as String,
       noticeTitle: json['noticeTitle'] as String,
       adminName: json['adminName'] as String,
       noticeCreatedAt: json['noticeCreatedAt'] as String,
@@ -36,7 +36,7 @@ _$NoticeDataImpl _$$NoticeDataImplFromJson(Map<String, dynamic> json) =>
 
 Map<String, dynamic> _$$NoticeDataImplToJson(_$NoticeDataImpl instance) =>
     <String, dynamic>{
-      'noticeId': instance.noticeId,
+      'noticeUUID': instance.noticeUUID,
       'noticeTitle': instance.noticeTitle,
       'adminName': instance.adminName,
       'noticeCreatedAt': instance.noticeCreatedAt,

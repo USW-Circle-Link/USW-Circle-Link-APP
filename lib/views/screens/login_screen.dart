@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/login_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -34,7 +35,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
       if (next is UserModel) {
         // 로그인 성공
-        context.go('/');
+        context.pop();
       }
     });
 
@@ -64,11 +65,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            margin: EdgeInsets.only(top: 60.h),
+            margin: EdgeInsets.only(top: 120.h),
             padding: EdgeInsets.only(left: 32.w, right: 32.w),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                RichText(
+                  text: TextSpan(
+                    text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
+                    style: TextFontWidget.fontRegularStyle(
+                      fontSize: 12.sp,
+                      color: const Color(0xFF282828),
+                      fontWeight: FontWeight.w400,
+                    ),
+                    children: const [],
+                  ),
+                ),
+                SizedBox(
+                  height: 10.h,
+                ),
                 Wrap(
                   children: [
                     SizedBox(
@@ -87,20 +102,6 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 SizedBox(
                   height: 10.h,
                 ),
-                RichText(
-                  text: TextSpan(
-                    text: "동아리 찾기부터 지원, 합격 통지까지!\n동구라미에서 한 번에, 간편하게!",
-                    style: TextFontWidget.fontRegularStyle(
-                      fontSize: 12.sp,
-                      color: const Color(0xFF282828),
-                      fontWeight: FontWeight.w400,
-                    ),
-                    children: const [],
-                  ),
-                ),
-                SizedBox(
-                  height: 20.h,
-                ),
                 RoundedTextField(
                   textInputAction: TextInputAction.next,
                   textEditController: idController,
@@ -114,11 +115,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   textAlign: TextAlign.left,
                   hintText: '아이디',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_person,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 14.sp,
@@ -141,25 +141,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   textAlign: TextAlign.left,
                   hintText: '비밀번호',
                   isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
                   ),
                   suffixIcon: IconButton(
+                    padding: EdgeInsets.zero,
+                    visualDensity: VisualDensity.compact,
+                    constraints: BoxConstraints(),
                     onPressed: () {
                       setState(() {
                         passwordVisible = !passwordVisible;
                       });
                     },
-                    icon: SvgPicture.asset(
+                    icon: Icon(
                       passwordVisible
-                          ? 'assets/images/ic_eye_open.svg'
-                          : 'assets/images/ic_eye_slash.svg',
-                      width: 25.w,
-                      height: 25.h,
-                      fit: BoxFit.scaleDown,
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
                     ),
                   ),
                   hintStyle: TextFontWidget.fontRegularStyle(
@@ -172,7 +173,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 ),
                 if (state is UserModelError)
                   TextFontWidget.fontRegular(
-                    '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했습니다.')}',
+                    '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했어요.')}',
                     fontSize: 12.sp,
                     color: const Color(0xFFFF3F3F),
                     fontWeight: FontWeight.w400,
@@ -204,7 +205,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       side: const BorderSide(
                           width: 0.0, color: Colors.transparent),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
+                        borderRadius: BorderRadius.circular(16.r),
                       ),
                     ),
                     child: TextFontWidget.fontRegular(

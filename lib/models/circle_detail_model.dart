@@ -1,5 +1,5 @@
 class CircleDetailModel {
-  final int? circleId;
+  final String? circleUUID;
   final String? mainPhotoPath;
   final List<String>? introPhotoPath;
   final String circleName;
@@ -13,7 +13,7 @@ class CircleDetailModel {
   final String? clubRecruitment;
 
   CircleDetailModel({
-    this.circleId,
+    this.circleUUID,
     this.mainPhotoPath,
     this.introPhotoPath,
     required this.circleName,
@@ -33,7 +33,7 @@ class CircleDetailModel {
 
   factory CircleDetailModel.fromJson(Map<String, dynamic> json) {
     return CircleDetailModel(
-      circleId: json['clubId'],
+      circleUUID: json['clubUUID'],
       mainPhotoPath: json['mainPhoto'],
       introPhotoPath: List<String>.from(json['introPhotos']),
       circleName: json['clubName'],
@@ -44,13 +44,13 @@ class CircleDetailModel {
       recruitmentStatus: json['recruitmentStatus'],
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
-      circleHashtag: List<String>.from(json['clubHashtag'] ?? []),
+      circleHashtag: List<String>.from(json['clubHashtags'] ?? []),
     );
   }
 
   @override
   String toString() {
-    return 'CircleDetailModel(circleId: $circleId, circleName: $circleName, leaderName: $leaderName, introContent: $introContent, recruitmentStatus: $recruitmentStatus, circleRoom: $circleRoom, circleHashtag: $circleHashtag, clubRecruitment: $clubRecruitment)';
+    return 'CircleDetailModel(circleUUID: $circleUUID, circleName: $circleName, leaderName: $leaderName, introContent: $introContent, recruitmentStatus: $recruitmentStatus, circleRoom: $circleRoom, circleHashtag: $circleHashtag, clubRecruitment: $clubRecruitment)';
   }
 }
 

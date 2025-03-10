@@ -3,27 +3,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/models/category_model.dart';
+import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/viewmodels/category_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CategoryPicker extends ConsumerStatefulWidget {
   const CategoryPicker({
     super.key,
-    this.initialGroups = const [],
+    this.initialCategories = const [],
   });
 
-  final List<String> initialGroups;
+  final List<CategoryData> initialCategories;
 
   @override
   _CategoryPickerState createState() => _CategoryPickerState();
 }
 
 class _CategoryPickerState extends ConsumerState<CategoryPicker> {
-  late Set<String> selectedGroups;
+  late Set<CategoryData> selectedCategories;
 
   @override
   void initState() {
-    selectedGroups = widget.initialGroups.toSet();
+    selectedCategories = widget.initialCategories.toSet();
     super.initState();
   }
 
@@ -35,7 +38,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       onPopInvokedWithResult: (didPop, result) {
         if (!didPop) {
           // dissmiss 나 뒤로가기
-          context.pop(selectedGroups.toList());
+          context.pop(selectedCategories.toList());
         }
       },
       child: Container(
@@ -67,7 +70,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                   ),
                   IconButton(
                     onPressed: () {
-                      context.pop(selectedGroups.toList());
+                      context.pop(selectedCategories.toList());
                     },
                     style: IconButton.styleFrom(
                       minimumSize: Size.zero,
@@ -87,7 +90,11 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               ),
               Row(
                 children: <Widget>[
-                  SvgPicture.asset('assets/images/ic_category.svg'),
+                  Icon(
+                    MainIcons.ic_category,
+                    color: Color(0xFF111111),
+                    size: 15.sp,
+                  ),
                   SizedBox(
                     width: 10.w,
                   ),
@@ -107,16 +114,32 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               SizedBox(
                 height: 20.h,
               ),
-              state.when(
-                data: (data) => Wrap(
-                  spacing: 5.w,
-                  children: data?.data.map((category) {
-                        return _buildChip(category.clubCategoryName);
-                      }).toList() ??
-                      [],
+              Expanded(
+                child: state.when(
+                  data: (data) => SingleChildScrollView(
+                    child: Wrap(
+                      spacing: 5.w,
+                      children: data?.data.map((category) {
+                            return _buildChip(category);
+                          }).toList() ??
+                          [],
+                    ),
+                  ),
+                  error: (error, stackTrace) => Container(
+                    alignment: Alignment.center,
+                    child: TextFontWidget.fontRegular(
+                      '카테고리를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w300,
+                      textAlign: TextAlign.center,
+                      color: Color(0xFFA1A1A1),
+                    ),
+                  ),
+                  loading: () => const Center(
+                      child: CircularProgressIndicator(
+                    color: accentColor,
+                  )),
                 ),
-                error: (error, stackTrace) => Text(error.toString()),
-                loading: () => const Center(child: CircularProgressIndicator()),
               ),
             ],
           ),
@@ -125,17 +148,19 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
     );
   }
 
-  Widget _buildChip(String label) {
-    final isSelected = selectedGroups.contains(label);
+  Widget _buildChip(CategoryData category) {
+    final isSelected = selectedCategories.contains(category);
     return FilterChip(
-      label: Text(label),
+      label: Text(category.clubCategoryName),
       selected: isSelected,
       onSelected: (value) {
-        if (selectedGroups.length == 3) {
+        if (selectedCategories.length == 3 && !isSelected) {
           return;
         }
         setState(() {
-          value ? selectedGroups.add(label) : selectedGroups.remove(label);
+          value
+              ? selectedCategories.add(category)
+              : selectedCategories.remove(category);
         });
       },
       showCheckmark: false,

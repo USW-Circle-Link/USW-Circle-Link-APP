@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -21,7 +22,7 @@ class VerifyPasswordScreen extends ConsumerStatefulWidget {
 class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
   final TextEditingController passwordController = TextEditingController();
   String? _passwordError; // 비밀번호 에러 메시지
-
+  bool passwordVisible = false;
   @override
   void initState() {
     super.initState();
@@ -80,7 +81,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                       Navigator.pop(context);
                     },
                     icon: SvgPicture.asset(
-                      'assets/images/back.svg',
+                      'assets/images/ic_back_arrow.svg',
                       height: 36.h,
                       width: 36.w,
                     ),
@@ -100,6 +101,61 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
             ),
           ),
         ),
+        bottomNavigationBar: Container(
+          margin: EdgeInsets.only(left: 32.w, right: 32.w, bottom: 16.h),
+          width: double.infinity,
+          height: 56.h,
+          child: OutlinedButton(
+            onPressed: () async {
+              setState(() {
+                _passwordError = null;
+              });
+              final password = passwordController.text.trim();
+              logger.d('ProfileData: $profileData');
+              if (password.isEmpty) {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "비밀번호를 입력해주세요.",
+                );
+                return;
+              }
+              if (profileData == null) {
+                DialogManager.instance.showAlertDialog(
+                  context: context,
+                  content: "프로필 정보가 없습니다. 다시 시도해주세요.",
+                );
+                return;
+              }
+              // updateProfile 호출 (password 매개변수를 포함)
+              await ref
+                  .read(updateProfileViewModelProvider.notifier)
+                  .updateProfile(
+                    userName: profileData['name']!,
+                    studentNumber: profileData['studentNumber']!,
+                    userHp: profileData['userHp']!,
+                    major: profileData['major']!,
+                    password: password,
+                  );
+            },
+            style: OutlinedButton.styleFrom(
+              backgroundColor: const Color(0xFFFFB052),
+              foregroundColor: const Color(0xFFFFFFFF),
+              side: const BorderSide(
+                color: Colors.transparent,
+                width: 0.0,
+              ),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
+              ),
+            ),
+            child: TextFontWidget.fontRegular(
+              '확인',
+              fontSize: 18.sp,
+              color: const Color(0xFFFFFFFF),
+              fontWeight: FontWeight.w800,
+            ),
+          ),
+        ),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.symmetric(horizontal: 32.w),
@@ -108,13 +164,14 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
               children: [
                 SizedBox(height: 16.h),
                 TextFontWidget.fontRegular(
-                  '비밀번호',
+                  '비밀번호 확인',
                   fontSize: 16.sp,
                   fontWeight: FontWeight.w400,
                 ),
                 SizedBox(height: 8.h),
                 RoundedTextField(
                   height: 50.h,
+                  obscureText: !passwordVisible,
                   textEditController: passwordController,
                   leftBottomCornerRadius: 8.r,
                   rightBottomCornerRadius: 8.r,
@@ -126,11 +183,27 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                   textInputType: TextInputType.text,
                   textAlign: TextAlign.left,
                   hintText: "비밀번호를 입력해주세요.",
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_password.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
+                  prefixIcon: Icon(
+                    SignUpIcons.ic_password,
+                    color: Color(0xFF989898),
+                    size: 15.sp,
+                  ),
+                  suffixIcon: IconButton(
+                    visualDensity: VisualDensity.compact,
+                    constraints: BoxConstraints(),
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      setState(() {
+                        passwordVisible = !passwordVisible;
+                      });
+                    },
+                    icon: Icon(
+                      passwordVisible
+                          ? SignUpIcons.ic_eye_open
+                          : SignUpIcons.ic_eye_slash,
+                      color: Color(0xFF989898),
+                      size: 18.sp,
+                    ),
                   ),
                   hintStyle: TextStyle(
                     fontSize: 14.sp,
@@ -153,62 +226,6 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                         )
                       : const SizedBox.shrink(),
                 ),
-                SizedBox(height: 436.h),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: () async {
-                      setState(() {
-                        _passwordError = null;
-                      });
-                      final password = passwordController.text.trim();
-                      logger.d('ProfileData: $profileData');
-                      if (password.isEmpty) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: "비밀번호를 입력해주세요.",
-                        );
-                        return;
-                      }
-                      if (profileData == null) {
-                        DialogManager.instance.showAlertDialog(
-                          context: context,
-                          content: "프로필 정보가 없습니다. 다시 시도해주세요.",
-                        );
-                        return;
-                      }
-                      // updateProfile 호출 (password 매개변수를 포함)
-                      await ref
-                          .read(updateProfileViewModelProvider.notifier)
-                          .updateProfile(
-                            userName: profileData['name']!,
-                            studentNumber: profileData['studentNumber']!,
-                            userHp: profileData['userHp']!,
-                            major: profileData['major']!,
-                            password: password,
-                          );
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFB052),
-                      foregroundColor: const Color(0xFFFFFFFF),
-                      side: const BorderSide(
-                        color: Colors.transparent,
-                        width: 0.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: TextFontWidget.fontRegular(
-                      '확인',
-                      fontSize: 18.sp,
-                      color: const Color(0xFFFFFFFF),
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 5.h),
               ],
             ),
           ),

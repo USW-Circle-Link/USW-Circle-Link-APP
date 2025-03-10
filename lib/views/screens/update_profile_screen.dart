@@ -8,8 +8,9 @@ import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/regex/regex.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -60,7 +61,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     if (route is PageRoute) {
       routeObserver.subscribe(this, route);
     }
-    ref.refresh(updateProfileViewModelProvider);
+    ref.invalidate(updateProfileViewModelProvider);
     _isInitialBindDone = false;
   }
 
@@ -119,7 +120,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
         majorError = null;
       }
 
-      logger.d("Validation Results: nameError=$nameError, phoneError=$phoneError, "
+      logger.d(
+          "Validation Results: nameError=$nameError, phoneError=$phoneError, "
           "studentNumberError=$studentNumberError, majorError=$majorError");
     });
   }
@@ -127,7 +129,6 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(updateProfileViewModelProvider);
-
 
     if (!_isInitialBindDone && !_hasUserEdited) {
       state.whenData((profile) {
@@ -151,23 +152,18 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
             case ProfileModelType.updateProfile:
               DialogManager.instance.showAlertDialog(
                 context: context,
-                content: '프로필이 수정되었습니다!',
-                onLeftButtonPressed: () => context.go('/'),
+                content: '수정이 완료되었습니다.',
+                onLeftButtonPressed: () => context.pop(),
               );
               break;
             default:
           }
         },
-        error: (error, stackTrace) {
+        error: (error, stackTrace) async {
           error = (error as ProfileModelError);
           logger.d('error - $stackTrace');
           switch (error.type) {
             case ProfileModelType.getProfile:
-              DialogManager.instance.showAlertDialog(
-                context: context,
-                content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                    "프로필을 불러오는 데 문제가 발생했습니다!",
-              );
               break;
             case ProfileModelType.updateProfile:
               if (error.code == "USR-204") {
@@ -176,7 +172,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                 DialogManager.instance.showAlertDialog(
                   context: context,
                   content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                      "프로필을 설정하는 데 문제가 발생했습니다!",
+                      "내 정보 수정 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
                 );
               }
               break;
@@ -211,7 +207,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     Navigator.pop(context);
                   },
                   icon: SvgPicture.asset(
-                    'assets/images/back.svg',
+                    'assets/images/ic_back_arrow.svg',
                     height: 36.h,
                     width: 36.w,
                   ),
@@ -230,310 +226,359 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
             ),
           ),
         ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 18.h),
-                // 이름 필드
-                TextFontWidget.fontRegular(
-                  '이름',
-                  color: const Color(0xff000000),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.12.sp,
-                ),
-                SizedBox(height: 12.h),
-                RoundedTextField(
-                  height: 50.h,
-                  textEditController: nameController,
-                  leftBottomCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  leftTopCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  borderColor: nameError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
-                  borderWidth: 1.w,
-                  maxLines: 1,
-                  textInputType: TextInputType.text,
-                  textAlign: TextAlign.left,
-                  hintText: "이름",
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_person.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'SUIT',
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                  child: nameError != null
-                      ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + nameError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
-                      : null,
-                ),
-                SizedBox(height: 12.h),
-
-                // 전화번호 필드
-                TextFontWidget.fontRegular(
-                  '전화번호',
-                  color: const Color(0xff000000),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.12.sp,
-                ),
-                SizedBox(height: 12.h),
-                RoundedTextField(
-                  height: 50.h,
-                  textEditController: phonenumberController,
-                  leftBottomCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  leftTopCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  borderColor: phoneError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
-                  borderWidth: 1.w,
-                  maxLines: 1,
-                  textInputType: TextInputType.text,
-                  textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_phone.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  hintText: "전화번호 (- 제외입력)",
-                  hintStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'SUIT',
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                  child: phoneError != null
-                      ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + phoneError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
-                      : null,
-                ),
-                SizedBox(height: 12.h),
-
-                // 학번 필드
-                TextFontWidget.fontRegular(
-                  '학번',
-                  color: const Color(0xff000000),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.12.sp,
-                ),
-                SizedBox(height: 12.h),
-                RoundedTextField(
-                  height: 50.h,
-                  textEditController: studentnumberController,
-                  leftBottomCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  leftTopCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  borderColor: studentNumberError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
-                  borderWidth: 1.w,
-                  maxLines: 1,
-                  textInputType: TextInputType.text,
-                  textAlign: TextAlign.left,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_tag.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  hintText: "학번",
-                  hintStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'SUIT',
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                  child: studentNumberError != null
-                      ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + studentNumberError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
-                      : null,
-                ),
-                SizedBox(height: 12.h),
-
-                // 학과 필드
-                TextFontWidget.fontRegular(
-                  '학부(학과)',
-                  color: const Color(0xff000000),
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
-                  height: 1.12.sp,
-                ),
-                SizedBox(height: 12.h),
-                RoundedTextField(
-                  height: 50.h,
-                  readOnly: true,
-                  onTab: () async {
-                    // 드롭다운을 여는 순간 true
-                    setState(() {
-                      _hasUserEdited = true;
-                    });
-                    await DialogManager.instance.showMajorPickerDialog(
-                      context: context,
-                      defaultCollege: college,
-                      defaultMajor: major,
-                      onChanged: (newCollege, newMajor) {
-                        logger.d('onChanged - $newCollege / $newMajor');
-                      },
-                      onConfirmPressed: (college, major) {
-                        setState(() {
-                          this.college = college;
-                          this.major = major;
-                          logger.d('${this.college} - ${this.major}');
-                        });
-                      },
-                    );
-                  },
-                  leftBottomCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  leftTopCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  borderColor: majorError == null
-                      ? const Color(0xffDBDBDB)
-                      : Colors.red,
-                  borderWidth: 1.w,
-                  maxLines: 1,
-                  textInputType: TextInputType.none,
-                  textAlign: TextAlign.left,
-                  textInputAction: TextInputAction.done,
-                  hintText: (college == null && major == null)
-                      ? '학과'
-                      : '${college ?? ""} / ${major ?? ""}',
-                  isAnimatedHint: false,
-                  prefixIcon: SvgPicture.asset(
-                    'assets/images/ic_bookmark.svg',
-                    width: 13.w,
-                    height: 16.h,
-                    fit: BoxFit.scaleDown,
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'SUIT',
-                  ),
-                ),
-                SizedBox(
-                  height: 25.h,
-                  child: majorError != null
-                      ? Padding(
-                    padding: EdgeInsets.only(top: 8.h),
-                    child: Text(
-                      '* ' + majorError!,
-                      style: TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.sp,
-                        height: 1.sp,
-                      ),
-                    ),
-                  )
-                      : null,
-                ),
-                SizedBox(height: 68.h),
-
-                // 수정 완료 버튼
-                SizedBox(
-                  width: double.infinity,
-                  height: 56.h,
-                  child: OutlinedButton(
-                    onPressed: () {
-                      validateFields();
-                      if (nameError == null &&
-                          phoneError == null &&
-                          studentNumberError == null &&
-                          majorError == null) {
-                        final profileData = {
-                          'name': nameController.text.trim(),
-                          'userHp': phonenumberController.text.trim(),
-                          'studentNumber': studentnumberController.text.trim(),
-                          'major': major ?? '',
-                        };
-                        logger.d('ProfileData: $profileData');
-                        context.go('/update_profile/verify_password',
-                            extra: profileData);
-                      }
-                    },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: const Color(0xFFFFB052),
-                      foregroundColor: const Color(0xFFFFFFFF),
-                      side: const BorderSide(
-                        color: Colors.transparent,
-                        width: 0.0,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.r),
-                      ),
-                    ),
-                    child: TextFontWidget.fontRegular(
-                      '수정 완료',
-                      fontSize: 18.sp,
-                      color: Colors.white,
-                      fontWeight: FontWeight.w800,
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+        body: state.when(
+          data: (data) {
+            return SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 32.w),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    TextButton(
-                      onPressed: () {
-                        context.go('/update_profile/delete_user');
+                    SizedBox(height: 18.h),
+                    // 이름 필드
+                    TextFontWidget.fontRegular(
+                      '이름',
+                      color: const Color(0xff000000),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                    SizedBox(height: 12.h),
+                    RoundedTextField(
+                      height: 50.h,
+                      textEditController: nameController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: nameError == null
+                          ? const Color(0xffDBDBDB)
+                          : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      hintText: "이름",
+                      prefixIcon: Icon(
+                        SignUpIcons.ic_person,
+                        color: Color(0xFF989898),
+                        size: 15.sp,
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontFamily: 'SUIT',
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff707070),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                      child: nameError != null
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Text(
+                                '* ' + nameError!,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12.sp,
+                                  height: 1.sp,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    SizedBox(height: 12.h),
+
+                    // 전화번호 필드
+                    TextFontWidget.fontRegular(
+                      '전화번호',
+                      color: const Color(0xff000000),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                    SizedBox(height: 12.h),
+                    RoundedTextField(
+                      height: 50.h,
+                      textEditController: phonenumberController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: phoneError == null
+                          ? const Color(0xffDBDBDB)
+                          : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      prefixIcon: Icon(
+                        SignUpIcons.ic_phone,
+                        color: Color(0xFF989898),
+                        size: 15.sp,
+                      ),
+                      hintText: "전화번호 (- 제외입력)",
+                      hintStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontFamily: 'SUIT',
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff707070),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                      child: phoneError != null
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Text(
+                                '* ' + phoneError!,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12.sp,
+                                  height: 1.sp,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    SizedBox(height: 12.h),
+
+                    // 학번 필드
+                    TextFontWidget.fontRegular(
+                      '학번',
+                      color: const Color(0xff000000),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                    SizedBox(height: 12.h),
+                    RoundedTextField(
+                      height: 50.h,
+                      textEditController: studentnumberController,
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: studentNumberError == null
+                          ? const Color(0xffDBDBDB)
+                          : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.text,
+                      textAlign: TextAlign.left,
+                      prefixIcon: Icon(
+                        SignUpIcons.ic_tag,
+                        color: Color(0xFF989898),
+                        size: 15.sp,
+                      ),
+                      hintText: "학번",
+                      hintStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontFamily: 'SUIT',
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff707070),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                      child: studentNumberError != null
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Text(
+                                '* ' + studentNumberError!,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12.sp,
+                                  height: 1.sp,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    SizedBox(height: 12.h),
+
+                    // 학과 필드
+                    TextFontWidget.fontRegular(
+                      '학부(학과)',
+                      color: const Color(0xff000000),
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      height: 1.12.sp,
+                    ),
+                    SizedBox(height: 12.h),
+                    RoundedTextField(
+                      height: 50.h,
+                      readOnly: true,
+                      onTab: () async {
+                        // 드롭다운을 여는 순간 true
+                        setState(() {
+                          _hasUserEdited = true;
+                        });
+                        await DialogManager.instance.showMajorPickerDialog(
+                          context: context,
+                          defaultCollege: college,
+                          defaultMajor: major,
+                          onChanged: (newCollege, newMajor) {
+                            logger.d('onChanged - $newCollege / $newMajor');
+                          },
+                          onConfirmPressed: (college, major) {
+                            setState(() {
+                              this.college = college;
+                              this.major = major;
+                              logger.d('${this.college} - ${this.major}');
+                            });
+                          },
+                        );
                       },
+                      leftBottomCornerRadius: 8.r,
+                      rightBottomCornerRadius: 8.r,
+                      leftTopCornerRadius: 8.r,
+                      rightTopCornerRadius: 8.r,
+                      borderColor: majorError == null
+                          ? const Color(0xffDBDBDB)
+                          : Colors.red,
+                      borderWidth: 1.w,
+                      maxLines: 1,
+                      textInputType: TextInputType.none,
+                      textAlign: TextAlign.left,
+                      textInputAction: TextInputAction.done,
+                      hintText: (college == null && major == null)
+                          ? '단과대/학부(학과)'
+                          : '${college ?? ""} / ${major ?? ""}',
+                      isAnimatedHint: false,
+                      prefixIcon: Icon(
+                        SignUpIcons.ic_bookmark,
+                        color: Color(0xFF989898),
+                        size: 15.sp,
+                      ),
+                      hintStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontFamily: 'SUIT',
+                      ),
+                      textStyle: TextStyle(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xff707070),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 25.h,
+                      child: majorError != null
+                          ? Padding(
+                              padding: EdgeInsets.only(top: 8.h),
+                              child: Text(
+                                '* ' + majorError!,
+                                style: TextStyle(
+                                  color: Colors.red,
+                                  fontSize: 12.sp,
+                                  height: 1.sp,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    SizedBox(height: 68.h),
+
+                    Container(
+                      alignment: Alignment.center,
                       child: TextFontWidget.fontRegular(
-                        '회원 탈퇴',
-                        color: const Color(0xffABABAB),
-                        fontSize: 16.sp,
+                        '허위 정보 기재 시 서비스 이용에 제한이 있을 수 있습니다.',
+                        color: const Color(0xFF868686),
+                        fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
+                    SizedBox(height: 12.h),
+
+                    // 수정 완료 버튼
+                    SizedBox(
+                      width: double.infinity,
+                      height: 56.h,
+                      child: OutlinedButton(
+                        onPressed: () {
+                          validateFields();
+                          if (nameError == null &&
+                              phoneError == null &&
+                              studentNumberError == null &&
+                              majorError == null) {
+                            final profileData = {
+                              'name': nameController.text.trim(),
+                              'userHp': phonenumberController.text.trim(),
+                              'studentNumber':
+                                  studentnumberController.text.trim(),
+                              'major': major ?? '',
+                            };
+                            logger.d('ProfileData: $profileData');
+                            context.go('/update_profile/verify_password',
+                                extra: profileData);
+                          }
+                        },
+                        style: OutlinedButton.styleFrom(
+                          backgroundColor: const Color(0xFFFFB052),
+                          foregroundColor: const Color(0xFFFFFFFF),
+                          side: const BorderSide(
+                            color: Colors.transparent,
+                            width: 0.0,
+                          ),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8.r),
+                          ),
+                        ),
+                        child: TextFontWidget.fontRegular(
+                          '수정 완료',
+                          fontSize: 18.sp,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 12.h),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        TextButton(
+                          onPressed: () {
+                            context.go('/update_profile/delete_user');
+                          },
+                          child: TextFontWidget.fontRegular(
+                            '회원 탈퇴',
+                            color: const Color(0xffABABAB),
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
+          error: (error, _) {
+            return Center(
+              child: TextFontWidget.fontRegular(
+                '내 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                textAlign: TextAlign.center,
+                fontSize: 14.sp,
+                color: Color(0xFFA1A1A1),
+                fontWeight: FontWeight.w400,
+              ),
+            );
+          },
+          loading: () {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          },
         ),
       ),
     );

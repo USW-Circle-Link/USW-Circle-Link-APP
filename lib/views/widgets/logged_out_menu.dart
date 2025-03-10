@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class LoggedOutMenu extends ConsumerWidget {
@@ -52,8 +53,10 @@ class LoggedOutMenu extends ConsumerWidget {
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
                         ),
-                        SvgPicture.asset(
-                          'assets/images/>.svg',
+                        Icon(
+                          MainIcons.ic_chevron_right,
+                          color: Colors.black,
+                          size: 24.sp,
                         ),
                       ],
                     )),
@@ -63,31 +66,34 @@ class LoggedOutMenu extends ConsumerWidget {
                 SizedBox(height: 10.h),
                 buildDrawerItem(
                   title: '내 정보',
-                  svgPath: 'assets/images/menubar1.svg',
-                  //onTap: () => context.go('/login'),
+                  icon: MainIcons.ic_rounded_person,
+                  iconSize: 18.sp,
                   onTap: () => context.go('/login'),
-                  trailingSvgPath: 'assets/images/>.svg',
+                  trailingIcon: MainIcons.ic_chevron_right,
                 ),
                 // 내 정보 부분 수정 끝
                 buildDrawerItem(
                   title: '나의 소속 동아리',
-                  svgPath: 'assets/images/menubar2.svg',
+                  icon: MainIcons.ic_verified,
+                  iconSize: 18.sp,
                   onTap: () => context.go('/login'),
-                  trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
+                  trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
-                  title: '지원 현황 확인하기',
-                  svgPath: 'assets/images/menubar3.svg',
+                  title: '나의 지원 현황',
+                  icon: MainIcons.ic_send_mail,
+                  iconSize: 12.sp,
                   onTap: () => context.go('/login'),
-                  trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
+                  trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
                   title: '공지 사항',
-                  svgPath: 'assets/images/menubar4.svg',
+                  icon: MainIcons.ic_chart,
+                  iconSize: 16.sp,
                   onTap: () {
                     context.go('/notices');
                   },
-                  trailingSvgPath: 'assets/images/>.svg', // 추가된 부분
+                  trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
               ],
             ),
@@ -160,9 +166,10 @@ void _launchURL() async {
 
 Widget buildDrawerItem({
   required String title,
-  required String svgPath,
+  required IconData icon,
+  double? iconSize,
   required VoidCallback onTap,
-  required String trailingSvgPath,
+  required IconData trailingIcon,
   Widget? subtitle,
   bool isExpanded = false,
 }) {
@@ -188,7 +195,7 @@ Widget buildDrawerItem({
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    SvgPicture.asset(svgPath),
+                    Icon(icon, size: iconSize, color: Colors.grey),
                   ],
                 ),
                 title: Padding(
@@ -204,7 +211,7 @@ Widget buildDrawerItem({
                 trailing: AnimatedRotation(
                   duration: const Duration(milliseconds: 300),
                   turns: isExpanded ? 0.5 : 0,
-                  child: SvgPicture.asset(trailingSvgPath),
+                  child: Icon(trailingIcon, color: Colors.grey),
                 ),
               ),
               if (isExpanded && subtitle != null)

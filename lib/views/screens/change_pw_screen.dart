@@ -6,7 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/change_pw_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -59,7 +60,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
         DialogManager.instance.showAlertDialog(
           context: context,
           barrierDismissible: false,
-          content: '비밀번호가 변경되었습니다',
+          content: '비밀번호 변경이 완료되었습니다.',
           onLeftButtonPressed: () {
             context.go('/login');
           },
@@ -74,6 +75,16 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
           default:
             logger.e("예외발생 - $next");
             break;
+        }
+        if (ErrorUtil.instance.getErrorMessage(next.code) == null) {
+          DialogManager.instance.showAlertDialog(
+            context: context,
+            content: '비밀번호 변경 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.',
+            barrierDismissible: false,
+            onLeftButtonPressed: () {
+              context.go('/');
+            },
+          );
         }
       }
     });
@@ -164,7 +175,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 60.h),
+                  margin: EdgeInsets.only(top: 30.h),
                   padding: EdgeInsets.only(left: 32.w, right: 32.w),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -190,25 +201,26 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                               textAlign: TextAlign.left,
                               hintText: '현재 비밀번호',
                               isAnimatedHint: false,
-                              prefixIcon: SvgPicture.asset(
-                                'assets/images/ic_password.svg',
-                                width: 13.w,
-                                height: 16.h,
-                                fit: BoxFit.scaleDown,
+                              prefixIcon: Icon(
+                                SignUpIcons.ic_password,
+                                color: Color(0xFF989898),
+                                size: 15.sp,
                               ),
                               suffixIcon: IconButton(
+                                padding: EdgeInsets.zero,
+                                visualDensity: VisualDensity.compact,
+                                constraints: BoxConstraints(),
                                 onPressed: () {
                                   setState(() {
                                     currentPWVisible = !currentPWVisible;
                                   });
                                 },
-                                icon: SvgPicture.asset(
+                                icon: Icon(
                                   currentPWVisible
-                                      ? 'assets/images/ic_eye_open.svg'
-                                      : 'assets/images/ic_eye_slash.svg',
-                                  width: 25.w,
-                                  height: 25.h,
-                                  fit: BoxFit.scaleDown,
+                                      ? SignUpIcons.ic_eye_open
+                                      : SignUpIcons.ic_eye_slash,
+                                  color: Color(0xFF989898),
+                                  size: 18.sp,
                                 ),
                               ),
                               hintStyle: TextStyle(
@@ -237,27 +249,28 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         obscureText: !newPWVisible,
                         textInputAction: TextInputAction.next,
                         textAlign: TextAlign.left,
-                        hintText: '새 비밀번호 (영어, 숫자, 특수문자 포함 5~20자)',
+                        hintText: '새 비밀번호',
                         isAnimatedHint: false,
-                        prefixIcon: SvgPicture.asset(
-                          'assets/images/ic_password.svg',
-                          width: 13.w,
-                          height: 16.h,
-                          fit: BoxFit.scaleDown,
+                        prefixIcon: Icon(
+                          SignUpIcons.ic_password,
+                          color: Color(0xFF989898),
+                          size: 15.sp,
                         ),
                         suffixIcon: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: BoxConstraints(),
+                          visualDensity: VisualDensity.compact,
                           onPressed: () {
                             setState(() {
                               newPWVisible = !newPWVisible;
                             });
                           },
-                          icon: SvgPicture.asset(
+                          icon: Icon(
                             newPWVisible
-                                ? 'assets/images/ic_eye_open.svg'
-                                : 'assets/images/ic_eye_slash.svg',
-                            width: 25.w,
-                            height: 25.h,
-                            fit: BoxFit.scaleDown,
+                                ? SignUpIcons.ic_eye_open
+                                : SignUpIcons.ic_eye_slash,
+                            color: Color(0xFF989898),
+                            size: 18.sp,
                           ),
                         ),
                         hintStyle: TextStyle(
@@ -285,25 +298,26 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         textAlign: TextAlign.left,
                         hintText: '비밀번호 확인',
                         isAnimatedHint: false,
-                        prefixIcon: SvgPicture.asset(
-                          'assets/images/ic_password.svg',
-                          width: 13.w,
-                          height: 16.h,
-                          fit: BoxFit.scaleDown,
+                        prefixIcon: Icon(
+                          SignUpIcons.ic_password,
+                          color: Color(0xFF989898),
+                          size: 18.sp,
                         ),
                         suffixIcon: IconButton(
+                          padding: EdgeInsets.zero,
+                          visualDensity: VisualDensity.compact,
+                          constraints: BoxConstraints(),
                           onPressed: () {
                             setState(() {
                               newPWConfirmVisible = !newPWConfirmVisible;
                             });
                           },
-                          icon: SvgPicture.asset(
+                          icon: Icon(
                             newPWConfirmVisible
-                                ? 'assets/images/ic_eye_open.svg'
-                                : 'assets/images/ic_eye_slash.svg',
-                            width: 25.w,
-                            height: 25.h,
-                            fit: BoxFit.scaleDown,
+                                ? SignUpIcons.ic_eye_open
+                                : SignUpIcons.ic_eye_slash,
+                            color: Color(0xFF989898),
+                            size: 18.sp,
                           ),
                         ),
                         hintStyle: TextStyle(
@@ -315,9 +329,13 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                         height: 10.h,
                       ),
                       TextFontWidget.fontRegular(
-                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 5~20자 이내로 작성해주세요!",
+                        "* 비밀번호는 영어, 숫자, 특수문자 모두 포함하여\n 8~20자 이내로 작성해주세요!",
                         fontSize: 12.sp,
-                        color: const Color(0xFF707070),
+                        color: state is ChangePwModelError &&
+                                !ErrorUtil.instance
+                                    .isValid(state.code, FieldType.password)
+                            ? const Color(0xFFFF3F3F)
+                            : const Color(0xFF707070),
                         fontWeight: FontWeight.w400,
                       ),
                       SizedBox(
@@ -325,7 +343,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                       ),
                       if (state is ChangePwModelError &&
                           ErrorUtil.instance
-                              .isValid(state.code, FieldType.password))
+                              .isValid(state.code, FieldType.password) &&
+                          ErrorUtil.instance.getErrorMessage(state.code) !=
+                              null)
                         TextFontWidget.fontRegular(
                           '* ${ErrorUtil.instance.getErrorMessage(state.code)}',
                           fontSize: 12.sp,

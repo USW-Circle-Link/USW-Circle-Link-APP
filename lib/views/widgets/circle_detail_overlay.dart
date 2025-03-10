@@ -6,9 +6,10 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/floor_photo_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:photo_view/photo_view.dart';
 
 class CircleDetailOverlay extends ConsumerWidget {
   final String? circleRoom;

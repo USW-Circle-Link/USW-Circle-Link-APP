@@ -32,7 +32,7 @@ class NoticeDetailModel extends NoticeDetailModelBase with _$NoticeDetailModel {
 class NoticeDetailData with _$NoticeDetailData {
   @JsonSerializable(explicitToJson: true)
   factory NoticeDetailData({
-    required int noticeId,
+    required String noticeUUID,
     required String noticeTitle,
     required String noticeContent,
     String? adminName,
@@ -47,7 +47,7 @@ class NoticeDetailData with _$NoticeDetailData {
 @freezed
 class NoticeDetailModelError extends NoticeDetailModelBase
     with _$NoticeDetailModelError
-    implements Exception {
+    implements Error {
   NoticeDetailModelError._();
   factory NoticeDetailModelError({
     required String message,
@@ -62,6 +62,9 @@ class NoticeDetailModelError extends NoticeDetailModelBase
         message: message,
         type: type,
       );
+
+  @override
+  StackTrace? get stackTrace => StackTrace.fromString(toString());
 }
 
 class NoticeDetailLoading extends NoticeDetailModelBase {}

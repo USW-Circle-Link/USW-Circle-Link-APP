@@ -7,7 +7,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart'
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 class TokenInterceptor extends Interceptor {
@@ -45,7 +45,8 @@ class TokenInterceptor extends Interceptor {
       options.headers.addAll({
         'Authorization': 'Bearer $accessToken',
       });
-    } else if (options.headers['refreshToken'] == 'true') {
+    }
+    if (options.headers['refreshToken'] == 'true') {
       // 헤더 삭제
       options.headers.remove('refreshToken');
 
@@ -54,9 +55,11 @@ class TokenInterceptor extends Interceptor {
 
       // 실제 토큰으로 대체
       options.headers.addAll({
-        'Authorization': 'Bearer $refreshToken',
+        'Cookie': 'refreshToken=$refreshToken',
       });
     }
+
+    logger.d('onRequest - options.headers - ${options.headers}');
 
     super.onRequest(options, handler);
   }
@@ -64,7 +67,7 @@ class TokenInterceptor extends Interceptor {
   @override
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     logger.w(
-        '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.path}');
+        '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.baseUrl}${err.requestOptions.path}');
     // 401 에러가 발생했을 때 (status code)
     // 토큰을 재발급받는 시도를 하고, 토큰이 재발급되면
     // 다시 새로운 토큰을 요청한다.
@@ -72,8 +75,9 @@ class TokenInterceptor extends Interceptor {
     // **** 토큰 만료 코드의 경우 response 예외에서 제외 필요 [DefaultInterceptor] ****
     final isStatus401 = err.response?.statusCode == 401;
     final isPathRefresh =
-        err.requestOptions.path.contains('/auth/refresh-token');
+        err.requestOptions.path.contains('/integration/refresh-token');
     final isPathLogin = err.requestOptions.path.contains('/users/login');
+
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
     if (isStatus401 && !isPathRefresh && !isPathLogin) {
       logger.d('액세스 토큰 재발급 중 ... ');
@@ -87,11 +91,15 @@ class TokenInterceptor extends Interceptor {
       }
       // 기존의 refresh token으로 새로운 accessToken 발급 시도
       // 반드시 새로운 Dio 객체를 생성해야 함
-      final dio = Dio();
+      final dio = Dio(
+        BaseOptions(
+          baseUrl: err.requestOptions.baseUrl,
+        ),
+      );
 
       try {
         final response = await dio.post(
-          '$protocol://$host:$port/auth/refresh-token',
+          '/integration/refresh-token',
           options: Options(
             headers: {
               'Cookie': 'refreshToken=$refreshToken',
@@ -123,15 +131,15 @@ class TokenInterceptor extends Interceptor {
         await storage.write(key: accessTokenKey, value: accessToken);
         await storage.write(key: refreshTokenKey, value: newRefreshToken);
         await storage.write(
-            key: clubIdsKey, value: jsonEncode(payload['clubIds'] ?? []));
+            key: clubUUIDsKey, value: jsonEncode(payload['clubUUIDs'] ?? []));
 
         // 디버깅용 확인 코드
         final accessToken0 = await storage.read(key: accessTokenKey);
         final refreshToken0 = await storage.read(key: refreshTokenKey);
-        final clubIdsJsonString = await storage.read(key: clubIdsKey);
-        final List<dynamic> clubIds = jsonDecode(clubIdsJsonString ?? "[]");
+        final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
+        final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
         logger.d(
-            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubIdsJsonString : $clubIdsJsonString / clubIds : $clubIds 저장 성공!');
+            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
 
         final options = err.requestOptions;
 

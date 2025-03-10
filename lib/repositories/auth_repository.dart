@@ -2,110 +2,46 @@ import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
-import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
+import 'package:usw_circle_link/models/request/sign_up_request.dart';
+import 'package:usw_circle_link/models/response/email_verification_response.dart';
+import 'package:usw_circle_link/models/response/send_mail_response.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/logger/Logger.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(
-    baseUrl: '$protocol://$host:$port/users',
+    basePath: '/users',
     dio: dio,
   );
 });
 
 class AuthRepository {
-  final String baseUrl;
+  final String basePath;
   final Dio dio;
 
   AuthRepository({
-    required this.baseUrl,
+    required this.basePath,
     required this.dio,
   });
 
   /////////// 회원가입 관련 API ///////////
-  Future<SignUpModel> verifyId({
-    required String id,
-  }) async {
-    final response = await dio.get(
-      '$baseUrl/verify-duplicate/$id',
-    );
-
-    logger.d(response.data);
-
-    logger
-        .d('verifyId - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-    if (response.statusCode == 200) {
-      return SignUpModel.fromJson(response.data)
-          .setType(SignUpModelType.verify);
-    } else {
-      // Bad Request
-      throw SignUpModelError.fromJson(response.data)
-          .setType(SignUpModelType.verify);
-    }
-  }
-
-  Future<SignUpModel> validatePasswordMatch({
-    required String password,
-    required String passwordConfirm,
-  }) async {
-    final body = {
-      "password": password,
-      "confirmPassword": passwordConfirm,
-    };
-
-    final response = await dio.post(
-      '$baseUrl/validate-passwords-match',
-      data: body,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      ),
-    );
-
-    logger.d(
-        'validatePasswordMatch - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-    if (response.statusCode == 200) {
-      return SignUpModel.fromJson(response.data)
-          .setType(SignUpModelType.validatePasswordMatch);
-    } else {
-      // Bad Request
-      throw SignUpModelError.fromJson(response.data)
-          .setType(SignUpModelType.validatePasswordMatch);
-    }
-  }
-
-  Future<EmailVerificationModel> sendMail({
-    required String account,
-    required String password,
-    required String userName,
-    required String telephone,
-    required String studentNumber,
-    required String major,
+  Future<SendMailResponse> sendMail({
     required String email,
   }) async {
     final body = {
-      "account": account,
-      "password": password,
-      "userName": userName,
-      "telephone": telephone,
-      "studentNumber": studentNumber,
-      "major": major,
       "email": email,
     };
 
     logger.d('sendMail - body {$body}');
 
     final response = await dio.post(
-      '$baseUrl/temporary/register',
+      '$basePath/temporary/register',
       data: body,
       options: Options(headers: {
         'Content-Type': 'application/json',
@@ -118,66 +54,117 @@ class AuthRepository {
         .d('sendMail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModel.fromJson(response.data)
-          .setType(EmailVerificationModelType.sendMail);
+      return SendMailResponse.fromJson(response.data);
     } else {
       // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data)
-          .setType(EmailVerificationModelType.sendMail);
+      throw EmailVerificationModelError.fromJson(response.data);
     }
   }
 
-  Future<EmailVerificationModel> signUp({
-    required String account,
+  Future<EmailVerificationResponse> verifyEmailVerification({
+    required String email,
   }) async {
-    final body = {
-      'account': account,
-    };
+    final response = await dio.get(
+      '$basePath/email/verification',
+      data: {
+        'email': email,
+      },
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'verifyEmailVerification - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return EmailVerificationResponse.fromJson(response.data);
+    } else {
+      throw EmailVerificationModelError.fromJson(response.data);
+    }
+  }
+
+  Future<bool> verifyId({
+    required String id,
+  }) async {
     final response = await dio.post(
-      '$baseUrl/finish-signup',
+      '$basePath/account/verify-duplicate',
+      data: {
+        'account': id,
+      },
+    );
+
+    logger.d(response.data);
+
+    logger
+        .d('verifyId - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // Bad Request
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.verify);
+    }
+  }
+
+  Future<bool> verifyEmail({required String email}) async {
+    final response = await dio.post(
+      '$basePath/check/email/duplicate',
+      data: {
+        'email': email,
+      },
+    );
+
+    logger.d(response.data);
+
+    logger.d(
+        'verifyEmail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return true;
+    } else {
+      // Bad Request
+      throw SignUpModelError.fromJson(response.data)
+          .setType(SignUpModelType.verify);
+    }
+  }
+
+  Future<bool> signUpNewMember({required SignUpRequest request}) async {
+    final body = request.toJson();
+    final emailTokenUUID = request.emailTokenUUID;
+    final signupUUID = request.signupUUID;
+
+    final headers = {
+      'signupUUID': signupUUID,
+      'emailTokenUUID': emailTokenUUID,
+    };
+    logger.d(body);
+    logger.d(headers);
+    final response = await dio.post(
+      '$basePath/signup',
       data: body,
       options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: headers,
       ),
     );
 
     logger.d(response.data);
 
-    logger.d('signUp - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+    logger.d(
+        'signUpNewMember - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return EmailVerificationModel.fromJson(response.data)
-          .setType(EmailVerificationModelType.completeSignUp);
+      return true;
     } else {
-      // Bad Request
-      throw EmailVerificationModelError.fromJson(response.data)
-          .setType(EmailVerificationModelType.completeSignUp);
+      throw SignUpModelError.fromJson(response.data);
     }
   }
 
-  Future<SignUpModel> signUpExistingMember({
-    required String account,
-    required String password,
-    required String username,
-    required String telephone,
-    required String studentNumber,
-    required String major,
-    required String email,
-    required List<Map<String, int>> clubs,
+  Future<bool> signUpExistingMember({
+    required SignUpRequest request,
   }) async {
-    final body = {
-      'account': account,
-      'password': password,
-      'userName': username,
-      'telephone': telephone,
-      'studentNumber': studentNumber,
-      'major': major,
-      'email': email,
-      'clubs': clubs,
-    };
-    final response = await dio.post('$baseUrl/existing/register', data: body);
+    final body = request.toJson();
+    final response = await dio.post('$basePath/existing/register', data: body);
 
     logger.d(body);
 
@@ -187,39 +174,10 @@ class AuthRepository {
         'signUpExistingMember - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return SignUpModel.fromJson(response.data)
-          .setType(SignUpModelType.signUpExistingMember);
+      return true;
     } else {
       throw SignUpModelError.fromJson(response.data)
           .setType(SignUpModelType.signUpExistingMember);
-    }
-  }
-
-  Future<SignUpModel> checkProfileIsExist({
-    required String username,
-    required String studentNumber,
-    required String userHp,
-  }) async {
-    final response = await dio.get(
-      '$protocol://$host:$port/profiles/duplication-check',
-      data: {
-        "userName": username,
-        "studentNumber": studentNumber,
-        "userHp": userHp,
-      },
-    );
-
-    logger.d(response.data);
-
-    logger.d(
-        'checkProfileIsExist - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-    if (response.statusCode == 200) {
-      return SignUpModel.fromJson(response.data)
-          .setType(SignUpModelType.checkProfileIsExist);
-    } else {
-      throw SignUpModelError.fromJson(response.data)
-          .setType(SignUpModelType.checkProfileIsExist);
     }
   }
   ////////////////////////////////////
@@ -237,7 +195,7 @@ class AuthRepository {
     };
 
     final response = await dio.post(
-      '$baseUrl/login',
+      '$basePath/login',
       data: body,
       options: Options(
         headers: {
@@ -273,7 +231,7 @@ class AuthRepository {
     required String refreshToken,
   }) async {
     final response = await dio.post(
-      '$protocol://$host:$port/integration/logout',
+      '/integration/logout',
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',
@@ -302,7 +260,7 @@ class AuthRepository {
     required String confirmNewPw,
   }) async {
     final response = await dio.patch(
-      '$baseUrl/userpw',
+      '$basePath/userpw',
       data: {
         'userPw': userPw,
         'newPw': newPw,
@@ -336,7 +294,12 @@ class AuthRepository {
   Future<FindIdModel> findId({
     required String email,
   }) async {
-    final response = await dio.get('$baseUrl/find-account/$email');
+    final response = await dio.post(
+      '$basePath/find-account',
+      data: {
+        'email': email,
+      },
+    );
 
     logger.d(response.data);
 
@@ -358,7 +321,7 @@ class AuthRepository {
       "email": email,
     };
     final response = await dio.post(
-      '$baseUrl/auth/send-code',
+      '$basePath/auth/send-code',
       data: body,
       options: Options(
         headers: {
@@ -389,7 +352,7 @@ class AuthRepository {
       "authCode": code,
     };
     final response = await dio.post(
-      '$baseUrl/auth/verify-token',
+      '$basePath/auth/verify-token',
       data: body,
       options: Options(
         headers: {
@@ -419,7 +382,7 @@ class AuthRepository {
     required String uuid,
   }) async {
     final response = await dio.patch(
-      '$baseUrl/reset-password',
+      '$basePath/reset-password',
       data: {
         'password': password,
         'confirmPassword': confirmPassword,
