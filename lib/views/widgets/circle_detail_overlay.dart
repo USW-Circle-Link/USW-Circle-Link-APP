@@ -239,7 +239,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                 onTap: clubInsta != null && clubInsta!.isNotEmpty
                     ? () async {
                         final Uri launchUri =
-                            Uri.parse('https://www.instagram.com/$clubInsta');
+                            Uri.parse('$clubInsta');
                         if (await canLaunchUrl(launchUri)) {
                           await launchUrl(launchUri,
                               mode: LaunchMode.externalApplication);
