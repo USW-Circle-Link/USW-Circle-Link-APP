@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
+import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/views/widgets/circle_group.dart';
 
 class CircleList extends StatelessWidget {
@@ -16,7 +17,11 @@ class CircleList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView(
       shrinkWrap: true,
-      children: state.data.getClassifiedList().entries.map((entry) {
+      children: state.data
+          .getClassifiedList()
+          .getSortedListWithValidImage()
+          .entries
+          .map((entry) {
         return CircleGroup(department: entry, onItemClicked: onItemClicked);
       }).toList(),
     );
@@ -33,6 +38,24 @@ extension GetClassifiedList on List<CircleListData> {
         }
         result[circle.departmentName!]!.add(circle);
       }
+    });
+    return result;
+  }
+}
+
+extension GetSortedListWithValidImage on Map<String, List<CircleListData>> {
+  Map<String, List<CircleListData>> getSortedListWithValidImage() {
+    final result = <String, List<CircleListData>>{};
+    forEach((key, value) {
+      final validImageList = value
+          .where((circle) =>
+              circle.mainPhoto != null && circle.mainPhoto!.isValidUrl)
+          .toList();
+      final invalidImageList = value
+          .where((circle) =>
+              circle.mainPhoto == null || !circle.mainPhoto!.isValidUrl)
+          .toList();
+      result[key] = [...validImageList, ...invalidImageList];
     });
     return result;
   }

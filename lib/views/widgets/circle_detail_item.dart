@@ -164,11 +164,9 @@ class CircleDetailItem extends StatelessWidget {
                                               imageUrl!,
                                               fit: BoxFit.cover,
                                             )
-                                          : Icon(
-                                              Icons.person,
-                                              color: const Color.fromARGB(
-                                                  255, 0, 0, 0),
-                                              size: 60,
+                                          : Image.asset(
+                                              'assets/images/circle_default_image.png',
+                                              fit: BoxFit.cover,
                                             ),
                                 ),
                               ),

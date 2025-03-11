@@ -55,6 +55,7 @@ const colleges = <String>[
 ];
 const majors = {
   '인문사회융합대학': <String>[
+    '인문사회융합대학',
     '인문학부',
     '국어국문학과',
     '사학과',
