@@ -61,7 +61,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
         body: SafeArea(
           child: state.when(
             data: (data) {
-              final circles = data?.data ?? [];
+              final circles = data?.data.getSortedListWithValidImage() ?? [];
               return Column(
                 children: [
                   Expanded(
@@ -146,32 +146,16 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                                                                 alignment:
                                                                     Alignment
                                                                         .center,
-                                                                color: const Color
-                                                                    .fromARGB(
-                                                                    255,
-                                                                    164,
-                                                                    164,
-                                                                    164),
-                                                                child: Icon(
-                                                                  Icons.person,
-                                                                  color: const Color
-                                                                      .fromARGB(
-                                                                      255,
-                                                                      255,
-                                                                      255,
-                                                                      255),
-                                                                  size: 60,
+                                                                child:
+                                                                    Image.asset(
+                                                                  'assets/images/circle_default_image.png',
                                                                 ),
                                                               );
                                                             },
                                                           )
                                                         : Center(
-                                                            child: Icon(
-                                                              Icons.person,
-                                                              color: const Color
-                                                                  .fromARGB(
-                                                                  255, 0, 0, 0),
-                                                              size: 80.w,
+                                                            child: Image.asset(
+                                                              'assets/images/circle_default_image.png',
                                                             ),
                                                           ),
                                                   ),
@@ -271,5 +255,15 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
         ),
       ),
     );
+  }
+}
+
+extension on List<CircleListData> {
+  List<CircleListData> getSortedListWithValidImage() {
+    final validImageList = where((element) =>
+        element.mainPhoto != null && element.mainPhoto!.isValidUrl).toList();
+    final invalidImageList = where((element) =>
+        element.mainPhoto == null || !element.mainPhoto!.isValidUrl).toList();
+    return [...validImageList, ...invalidImageList];
   }
 }
