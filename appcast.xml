@@ -4,20 +4,20 @@
     <title>동구라미</title>
     <!-- Android updates -->
     <item>
-      <title>Version 1.0.7</title>
+      <title>Version 1.0.9</title>
       <description>원활한 앱 사용을 위해서 업데이트를 진행해 주세요!
       </description>
       <pubDate>Sat, 10 March 2025 00:00:00 -0700</pubDate>
-      <enclosure url="https://play.google.com/store/apps/details?id=com.usw.flag.temp.usw_circle_link" sparkle:version="1.0.7" sparkle:os="android" />
+      <enclosure url="https://play.google.com/store/apps/details?id=com.usw.flag.temp.usw_circle_link" sparkle:version="1.0.9" sparkle:os="android" />
     </item>
 
     <!-- iOS updates -->
     <item>
-      <title>Version 1.0.7</title>
+      <title>Version 1.0.9</title>
       <description>원활한 앱 사용을 위해서 업데이트를 진행해 주세요!
       </description>
       <pubDate>Sat, 10 March 2025 00:00:00 -0700</pubDate>
-      <enclosure url="https://apps.apple.com/kr/app/%EB%8F%99%EA%B5%AC%EB%9D%BC%EB%AF%B8/id6692607046?l=en-GB" sparkle:version="1.0.7" sparkle:os="ios" />
+      <enclosure url="https://apps.apple.com/kr/app/%EB%8F%99%EA%B5%AC%EB%9D%BC%EB%AF%B8/id6692607046?l=en-GB" sparkle:version="1.0.9" sparkle:os="ios" />
     </item>
   </channel>
 </rss>
