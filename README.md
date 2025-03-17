@@ -2,7 +2,7 @@
 
 모바일 서비스 프로젝트입니다.
 
-![그래픽 이미지](https://drive.usercontent.google.com/download?id=1-iojj_uJPcmxzf8_Z4l79RbHfqV3rktl&export=view&authuser=0)
+![그래픽 이미지](https://drive.usercontent.google.com/download?id=1DCWixG_UA_LomZo2Xg5cDAJV9E0lzOHf&export=view&authuser=0)
 
 ## 📘 개요 
 
