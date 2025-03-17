@@ -9,6 +9,11 @@ import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class PolicyAgreeScreen extends StatefulWidget {
+  PolicyAgreeScreen({
+    super.key,
+    required this.newMemberSignUp,
+});
+  bool newMemberSignUp;
   @override
   _PolicyAgreeScreenState createState() => _PolicyAgreeScreenState();
 }
@@ -17,7 +22,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
   bool olderThan14YearsOld = false;
   bool privacyPolicyAgree = false;
   bool personalInformationCollectionAndUsageAgreementAgree = false;
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -208,8 +212,9 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     privacyPolicyAgree &&
                     personalInformationCollectionAndUsageAgreementAgree
                 ? () {
-                    context.go(
-                        '/login/sign_up_option/policy_agree/email_verification');
+                context.push(
+                    '/login/sign_up_option/policy_agree/${widget.newMemberSignUp ? "email_verification" : "select_circle"}'
+                );
                   }
                 : null,
             style: OutlinedButton.styleFrom(

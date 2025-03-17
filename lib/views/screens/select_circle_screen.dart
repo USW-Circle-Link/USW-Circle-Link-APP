@@ -216,8 +216,8 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                         onPressed: selectedCircles.isEmpty
                             ? null
                             : () {
-                                context.go(
-                                  '/login/sign_up_option/select_circle/sign_up',
+                                context.push(
+                                  '/login/sign_up_option/policy_agree/select_circle/sign_up',
                                   extra: selectedCircles,
                                 );
                               },

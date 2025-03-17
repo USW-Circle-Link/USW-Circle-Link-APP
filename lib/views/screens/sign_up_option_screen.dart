@@ -105,7 +105,10 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                         height: 40.h,
                         child: OutlinedButton(
                           onPressed: () {
-                            context.go('/login/sign_up_option/policy_agree');
+                            context.go(
+                                '/login/sign_up_option/policy_agree',
+                                extra: true,
+                            );
                           },
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xffffB052),
@@ -162,7 +165,10 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                                   '기존 동아리 회원 가입의 경우\n해당 동아리 회장의 가입 요청 수락 후\n로그인이 가능합니다.',
                               onLeftButtonPressed: () {
                                 context
-                                    .go('/login/sign_up_option/select_circle');
+                                    .go(
+                                  '/login/sign_up_option/policy_agree',
+                                extra: false,
+                                );
                               },
                             );
                           },
