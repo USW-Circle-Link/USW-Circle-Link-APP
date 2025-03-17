@@ -94,7 +94,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                       ),
                       SizedBox(height: 8.h),
                       TextFontWidget.fontRegular(
-                        '소속된 중앙 동아리가 없으신가요?',
+                        '아직 중앙동아리 회원이 아니신가요?',
                         fontSize: 12.sp,
                         color: Colors.black54,
                         fontWeight: FontWeight.w400,
@@ -145,7 +145,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                       ),
                       SizedBox(height: 8.h),
                       TextFontWidget.fontRegular(
-                        '소속된 중앙 동아리가 있으신가요?',
+                        '현재 중앙동아리 회원이신가요?',
                         fontSize: 12.sp,
                         color: Colors.black54,
                         fontWeight: FontWeight.w400,
