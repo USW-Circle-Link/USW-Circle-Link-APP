@@ -19,21 +19,27 @@ class CircleGroup extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: 10.h),
-      padding: EdgeInsets.only(left: 24.w, top: 16.h, bottom: 16.h),
+      padding: EdgeInsets.only(top: 16.h, bottom: 16.h,),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          TextFontWidget.fontRegular(
-            department.key.toDepartment(),
-            fontSize: 16.sp,
-            color: Colors.black,
-            fontWeight: FontWeight.w700,
+          Row(
+            children: [
+              SizedBox(width: 24.w,),
+              TextFontWidget.fontRegular(
+                department.key.toDepartment(),
+                fontSize: 16.sp,
+                color: Colors.black,
+                fontWeight: FontWeight.w700,
+              ),
+            ],
           ),
           SizedBox(height: 8.h), // 텍스트와 리스트 사이에 여백 추가
           SizedBox(
             height: 204.h, // ListView의 고정 높이 설정
             child: ListView.builder(
+              padding: EdgeInsets.symmetric(horizontal: 24.w),
               scrollDirection: Axis.horizontal,
               itemCount: department.value.length,
               itemBuilder: (context, index) {
