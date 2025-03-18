@@ -39,7 +39,7 @@ class CircleGroup extends StatelessWidget {
           SizedBox(
             height: 204.h, // ListView의 고정 높이 설정
             child: ListView.builder(
-              padding: EdgeInsets.symmetric(horizontal: 24.w),
+              padding: EdgeInsets.only(left: 24.w, right: 16.w),
               scrollDirection: Axis.horizontal,
               itemCount: department.value.length,
               itemBuilder: (context, index) {
