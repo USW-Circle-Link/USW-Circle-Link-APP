@@ -20,7 +20,7 @@ class CircleItem extends StatelessWidget {
       color: Colors.transparent,
       child: Container(
         width: 120.w,
-        margin: EdgeInsets.only(right: 3.w),
+        margin: EdgeInsets.only(right: 8.w),
         child: Stack(
           children: [
             Column(

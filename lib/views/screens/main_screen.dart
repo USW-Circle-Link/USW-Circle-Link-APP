@@ -84,17 +84,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     final circleListState = ref.watch(circleViewModelProvider);
     ref.listen(circleViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     final profileState = ref.watch(profileViewModelProvider);
     ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     ref.listen(abnormalAccessNotifierProvider, (previous, next) {
       logger.d(next);
 
@@ -275,13 +272,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           isScrollControlled: true,
                           builder: (context) {
                             return CategoryPicker(
-                                initialCategories: selectedCategories);
+                              initialCategories: selectedCategories,
+                              onSelectionChanged: (newSelection) {
+                                setState(() {
+                                  selectedCategories = newSelection;
+                                }); // 분과 선택과 동시에 동아리 리스트 최신화
+                                fetchCircleList();
+                              },
+                            );
                           },
                         );
-                        setState(() {
-                          selectedCategories = result;
-                        });
-                        await fetchCircleList();
+                        if (result != null) {
+                          setState(() {
+                            selectedCategories = result;
+                          });
+                          await fetchCircleList();
+                        }
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: selectedCategories.isEmpty

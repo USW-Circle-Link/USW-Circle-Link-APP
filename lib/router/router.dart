@@ -103,8 +103,17 @@ final routerProvider = Provider<GoRouter>((ref) {
                 routes: [
                   GoRoute(
                     path: 'policy_agree',
-                    builder: (_, __) => PolicyAgreeScreen(),
+                    builder: (context, state) => PolicyAgreeScreen(
+                      newMemberSignUp: state.extra as bool,
+                    ),
                     routes: [
+                      GoRoute(
+                        path: 'select_circle',
+                        builder: (_, __) => SelectCircleScreen(),
+                        routes: [
+                          signUpRouter,
+                        ],
+                      ),
                       GoRoute(
                         path: 'email_verification',
                         builder: (_, state) => EmailVerificationScreen(),
@@ -113,13 +122,6 @@ final routerProvider = Provider<GoRouter>((ref) {
                           signUpRouter,
                         ],
                       ),
-                    ],
-                  ),
-                  GoRoute(
-                    path: 'select_circle',
-                    builder: (_, __) => SelectCircleScreen(),
-                    routes: [
-                      signUpRouter,
                     ],
                   ),
                 ],
