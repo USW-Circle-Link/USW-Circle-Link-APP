@@ -112,6 +112,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           context: context,
           content: '네트워크에 연결되지 않았습니다.\nWi-Fi 또는 데이터를 연결해 주세요.',
           barrierDismissible: false,
+          canPop: false,
+          onPopInvoked: () async {
+            SystemNavigator.pop();
+          },
           onLeftButtonPressed: () async {
             await ref.read(networkConnectivityProvider.notifier).checkNetwork();
           },

@@ -29,7 +29,9 @@ class DialogManager {
     Function()? onRightButtonPressed,
     TextStyle? rightButtonTextStyle,
     TextStyle? leftButtonTextStyle,
-    barrierDismissible = true,
+    bool barrierDismissible = true,
+    bool canPop = true,
+    void Function()? onPopInvoked,
   }) async {
     await showDialog(
       barrierDismissible: barrierDismissible,
@@ -38,6 +40,8 @@ class DialogManager {
         key: _dialogKey,
         title: title ?? "알림",
         content: content,
+        canPop: canPop,
+        onPopInvoked: onPopInvoked,
         leftButtonText: rightButtonText == null ? '확인' : leftButtonText,
         rightButtonText: rightButtonText,
         onLeftButtonPressed: onLeftButtonPressed,
