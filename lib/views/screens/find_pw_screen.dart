@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
+import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -28,6 +29,8 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(findPwViewModelProvider);
+    final _ = ref.watch(timerProvider);
+    final timerNotifier = ref.watch(timerProvider.notifier);
     ref.listen(findPwViewModelProvider, (previous, next) {
       logger.d(next);
       next.when(
@@ -270,7 +273,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                         data: (data) {
                                           switch (data?.type) {
                                             case FindPwModelType.sendCode:
-                                              return '포털로 이동하기';
+                                              return '포털로 이동하기 ${timerNotifier.timerText}';
                                             case FindPwModelType.verifyCode:
                                               return '비밀번호를 변경하세요';
                                             default:
@@ -283,7 +286,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                             case FindPwModelType.sendCode:
                                               return '이메일 전송';
                                             case FindPwModelType.verifyCode:
-                                              return '포털로 이동하기';
+                                              return '포털로 이동하기 ${timerNotifier.timerText}';
                                             default:
                                               return '이메일 전송';
                                           }
@@ -451,10 +454,11 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
     return false;
   }
 
-  void sendMail() {
-    ref.read(findPwViewModelProvider.notifier).sendCode(
+  Future<void> sendMail() async {
+    await ref.read(findPwViewModelProvider.notifier).sendCode(
         account: idEditController.text.trim(),
         email: emailEditController.text.trim());
+    ref.read(timerProvider.notifier).startTimer();
   }
 
   void goToPortal() {
