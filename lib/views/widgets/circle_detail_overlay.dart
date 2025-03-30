@@ -8,6 +8,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/floor_photo_view_model.dart';
+import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class CircleDetailOverlay extends ConsumerWidget {
@@ -178,27 +179,25 @@ class CircleDetailOverlay extends ConsumerWidget {
                 ),
               ),
               GestureDetector(
-                onTap: leaderHp != null && leaderHp!.isNotEmpty
+                onTap: leaderHp != null &&
+                        leaderHp!.isNotEmpty &&
+                        ref
+                                .read(userViewModelProvider)
+                                .valueOrNull
+                                ?.data
+                                .accessToken !=
+                            null
                     ? () async {
                         await Clipboard.setData(ClipboardData(text: leaderHp!));
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('전화번호가 복사되었습니다.'),
-                            ),
-                          );
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                content: Text('전화번호가 복사되었습니다.'),
+                              ),
+                            );
                         }
-                        // final Uri launchUri = Uri(
-                        //   scheme: 'tel',
-                        //   path: leaderHp!.startsWith('+')
-                        //       ? leaderHp
-                        //       : '+82${leaderHp!.substring(1)}',
-                        // );
-                        // if (await canLaunchUrl(launchUri)) {
-                        //   await launchUrl(launchUri);
-                        // } else {
-                        //   logger.d('Could not launch $launchUri');
-                        // }
                       }
                     : null,
                 child: Container(
@@ -222,12 +221,26 @@ class CircleDetailOverlay extends ConsumerWidget {
                       ),
                       TextFontWidget.fontRegular(
                         leaderHp != null && leaderHp!.isNotEmpty
-                            ? leaderHp!.addDashOrNull() ?? "정보 없음"
+                            ? ref
+                                        .read(userViewModelProvider)
+                                        .valueOrNull
+                                        ?.data
+                                        .accessToken !=
+                                    null
+                                ? leaderHp!.addDashOrNull() ?? "정보 없음"
+                                : "로그인 후 이용해주세요."
                             : "정보 없음",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
-                        color: leaderHp != null && leaderHp!.isNotEmpty
+                        color: leaderHp != null &&
+                                leaderHp!.isNotEmpty &&
+                                ref
+                                        .read(userViewModelProvider)
+                                        .valueOrNull
+                                        ?.data
+                                        .accessToken !=
+                                    null
                             ? const Color(0xff6EA4EF)
                             : const Color(0xff9A9A9A),
                       )
