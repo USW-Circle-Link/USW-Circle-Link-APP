@@ -190,11 +190,13 @@ class CircleDetailOverlay extends ConsumerWidget {
                     ? () async {
                         await Clipboard.setData(ClipboardData(text: leaderHp!));
                         if (context.mounted) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('전화번호가 복사되었습니다.'),
-                            ),
-                          );
+                          ScaffoldMessenger.of(context)
+                            ..removeCurrentSnackBar()
+                            ..showSnackBar(
+                              const SnackBar(
+                                content: Text('전화번호가 복사되었습니다.'),
+                              ),
+                            );
                         }
                       }
                     : null,
@@ -218,15 +220,15 @@ class CircleDetailOverlay extends ConsumerWidget {
                         width: 4.w,
                       ),
                       TextFontWidget.fontRegular(
-                        leaderHp != null &&
-                                leaderHp!.isNotEmpty &&
-                                ref
+                        leaderHp != null && leaderHp!.isNotEmpty
+                            ? ref
                                         .read(userViewModelProvider)
                                         .valueOrNull
                                         ?.data
                                         .accessToken !=
                                     null
-                            ? leaderHp!.addDashOrNull() ?? "정보 없음"
+                                ? leaderHp!.addDashOrNull() ?? "정보 없음"
+                                : "로그인 후 이용해주세요."
                             : "정보 없음",
                         fontSize: 12.sp,
                         fontWeight: FontWeight.w400,
