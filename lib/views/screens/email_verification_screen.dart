@@ -1,10 +1,9 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/email_verification_view_model.dart';
@@ -24,30 +23,6 @@ class EmailVerificationScreen extends ConsumerStatefulWidget {
 class _EmailVerificationScreenState
     extends ConsumerState<EmailVerificationScreen> {
   final TextEditingController emailEditController = TextEditingController();
-  Timer? _timer;
-  int _timeLeft = 300; // 5분 = 300초
-
-  void startTimer() {
-    _timer?.cancel();
-    setState(() {
-      _timeLeft = 300;
-    });
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_timeLeft > 0) {
-        setState(() {
-          _timeLeft--;
-        });
-      } else {
-        _timer?.cancel();
-      }
-    });
-  }
-
-  String get timerText {
-    int minutes = _timeLeft ~/ 60;
-    int seconds = _timeLeft % 60;
-    return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -63,6 +38,9 @@ class _EmailVerificationScreenState
         .select((value) => value.emailTokenUUID));
     final signupUUID = ref.watch(
         emailVerificationViewModelProvider.select((value) => value.signupUUID));
+
+    final _ = ref.watch(timerProvider);
+    final timerNotifier = ref.watch(timerProvider.notifier);
 
     _listener();
 
@@ -217,7 +195,7 @@ class _EmailVerificationScreenState
                                   : isVerifySuccess
                                       ? '다음'
                                       : isSendMailSuccess
-                                          ? '포털로 이동하기 $timerText'
+                                          ? '포털로 이동하기 ${timerNotifier.timerText}'
                                           : '이메일 전송',
                               fontSize: 18.sp,
                               color: const Color(0xFFFFFFFF),
@@ -271,15 +249,14 @@ class _EmailVerificationScreenState
     );
   }
 
-  void sendMail() {
-    ref.read(emailVerificationViewModelProvider.notifier).sendMail();
-    startTimer();
+  Future<void> sendMail() async {
+    await ref.read(emailVerificationViewModelProvider.notifier).sendMail();
+    ref.read(timerProvider.notifier).startTimer();
   }
 
   @override
   void dispose() {
     emailEditController.dispose();
-    _timer?.cancel();
     super.dispose();
   }
 

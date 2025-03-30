@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -30,6 +31,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
         ref.watch(deleteUserViewModelProvider.select((state) => state.error));
     final isCodeError = ref.watch(
         deleteUserViewModelProvider.select((state) => state.isCodeError));
+
+    final _ = ref.watch(timerProvider);
+    final timerNotifier = ref.watch(timerProvider.notifier);
 
     _listen();
 
@@ -105,9 +109,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                             isLoading
                                 ? '로딩 중 ...'
                                 : isVerifyCodeSuccess
-                                    ? '포털로 이동하기'
+                                    ? '포털로 이동하기 ${timerNotifier.timerText}'
                                     : isSendCodeSuccess
-                                        ? '포털로 이동하기'
+                                        ? '포털로 이동하기 ${timerNotifier.timerText}'
                                         : '이메일 전송',
                             fontSize: 18.sp,
                             color: const Color(0xFFFFFFFF),
@@ -289,8 +293,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
             ));
   }
 
-  void sendMail() {
-    ref.read(deleteUserViewModelProvider.notifier).sendCode();
+  Future<void> sendMail() async {
+    await ref.read(deleteUserViewModelProvider.notifier).sendCode();
+    ref.read(timerProvider.notifier).startTimer();
   }
 
   void _listen() {
