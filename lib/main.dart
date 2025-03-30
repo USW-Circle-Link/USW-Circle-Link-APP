@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
@@ -10,6 +11,7 @@ import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
@@ -34,11 +36,15 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  // Native Splash
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  // 화면 방향 설정
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
   ]);
+  // Firebase 초기화
   await Firebase.initializeApp();
   // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
@@ -46,8 +52,20 @@ void main() async {
 
   // await Upgrader.clearSavedSettings();
 
+  final container = ProviderContainer();
+
+  container.listen(profileViewModelProvider, (previous, next) {
+    next.whenData((profile) {
+      logger.d('자동 로그인 완료: $profile');
+      if (profile != null) {
+        FlutterNativeSplash.remove();
+      }
+    });
+  });
+
   runApp(
     ProviderScope(
+      parent: container,
       child: CircleLink(),
     ),
   );

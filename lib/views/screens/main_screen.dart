@@ -9,6 +9,7 @@ import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
+import 'package:usw_circle_link/notifier/network_connectivity_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
@@ -103,6 +104,29 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         },
       );
     });
+
+    ref.listen(networkConnectivityProvider, (previous, next) async {
+      logger.d(next);
+      if (next == false) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '네트워크에 연결되지 않았습니다.\nWi-Fi 또는 데이터를 연결해 주세요.',
+          barrierDismissible: false,
+          canPop: false,
+          onPopInvoked: () async {
+            SystemNavigator.pop();
+          },
+          onLeftButtonPressed: () async {
+            await ref.read(networkConnectivityProvider.notifier).checkNetwork();
+          },
+        );
+      } else if (next == true) {
+        // dissmiss dialog and reload data
+        DialogManager.instance.dismissDialog(context);
+        await fetchCircleList();
+      }
+    });
+
     return ScreenUtilInit(
       designSize: const Size(375, 812),
       builder: (context, child) => Scaffold(

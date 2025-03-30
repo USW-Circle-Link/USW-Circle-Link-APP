@@ -10,6 +10,8 @@ class DialogManager {
 
   static final DialogManager instance = DialogManager._();
 
+  final GlobalKey _dialogKey = GlobalKey();
+
   /// ### showAlertDialog 함수 사용법 :
   /// #### 1. 글씨 종류
   /// * title 은 굵은 글씨
@@ -27,14 +29,19 @@ class DialogManager {
     Function()? onRightButtonPressed,
     TextStyle? rightButtonTextStyle,
     TextStyle? leftButtonTextStyle,
-    barrierDismissible = true,
+    bool barrierDismissible = true,
+    bool canPop = true,
+    void Function()? onPopInvoked,
   }) async {
     await showDialog(
       barrierDismissible: barrierDismissible,
       context: context,
       builder: (_) => AlertTextDialog(
+        key: _dialogKey,
         title: title ?? "알림",
         content: content,
+        canPop: canPop,
+        onPopInvoked: onPopInvoked,
         leftButtonText: rightButtonText == null ? '확인' : leftButtonText,
         rightButtonText: rightButtonText,
         onLeftButtonPressed: onLeftButtonPressed,
@@ -55,6 +62,7 @@ class DialogManager {
     await showDialog(
       context: context,
       builder: (_) => MajorPickerDialog(
+        key: _dialogKey,
         colleges: colleges,
         majors: majors,
         selectedCollege: defaultCollege,
@@ -69,7 +77,14 @@ class DialogManager {
       BuildContext context, PolicyType policyType) async {
     return await showDialog(
             context: context,
-            builder: (_) => PolicyDialog(policyType: policyType)) ??
+            builder: (_) =>
+                PolicyDialog(policyType: policyType, key: _dialogKey)) ??
         true;
+  }
+
+  void dismissDialog(BuildContext context) {
+    if (_dialogKey.currentContext != null) {
+      Navigator.of(context).pop();
+    }
   }
 }

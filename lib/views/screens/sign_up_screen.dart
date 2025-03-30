@@ -13,7 +13,6 @@ import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
 import 'package:usw_circle_link/views/widgets/rounded_email_field.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
