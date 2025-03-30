@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,7 +14,7 @@ class PolicyAgreeScreen extends StatefulWidget {
   PolicyAgreeScreen({
     super.key,
     required this.newMemberSignUp,
-});
+  });
   bool newMemberSignUp;
   @override
   _PolicyAgreeScreenState createState() => _PolicyAgreeScreenState();
@@ -212,9 +214,8 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     privacyPolicyAgree &&
                     personalInformationCollectionAndUsageAgreementAgree
                 ? () {
-                context.push(
-                    '/login/sign_up_option/policy_agree/${widget.newMemberSignUp ? "email_verification" : "select_circle"}'
-                );
+                    context.push(
+                        '/login/sign_up_option/policy_agree/${widget.newMemberSignUp ? "email_verification" : "select_circle"}');
                   }
                 : null,
             style: OutlinedButton.styleFrom(
