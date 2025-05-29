@@ -20,6 +20,7 @@ mixin _$DeleteUserState {
   bool get isSendCodeSuccess => throw _privateConstructorUsedError;
   bool get isVerifyCodeSuccess => throw _privateConstructorUsedError;
   String get code => throw _privateConstructorUsedError;
+  String get email => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   bool get isCodeError => throw _privateConstructorUsedError;
 
@@ -39,6 +40,7 @@ abstract class $DeleteUserStateCopyWith<$Res> {
       bool isSendCodeSuccess,
       bool isVerifyCodeSuccess,
       String code,
+      String email,
       String? error,
       bool isCodeError});
 }
@@ -60,6 +62,7 @@ class _$DeleteUserStateCopyWithImpl<$Res, $Val extends DeleteUserState>
     Object? isSendCodeSuccess = null,
     Object? isVerifyCodeSuccess = null,
     Object? code = null,
+    Object? email = null,
     Object? error = freezed,
     Object? isCodeError = null,
   }) {
@@ -79,6 +82,10 @@ class _$DeleteUserStateCopyWithImpl<$Res, $Val extends DeleteUserState>
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       error: freezed == error
           ? _value.error
@@ -105,6 +112,7 @@ abstract class _$$DeleteUserStateImplCopyWith<$Res>
       bool isSendCodeSuccess,
       bool isVerifyCodeSuccess,
       String code,
+      String email,
       String? error,
       bool isCodeError});
 }
@@ -124,6 +132,7 @@ class __$$DeleteUserStateImplCopyWithImpl<$Res>
     Object? isSendCodeSuccess = null,
     Object? isVerifyCodeSuccess = null,
     Object? code = null,
+    Object? email = null,
     Object? error = freezed,
     Object? isCodeError = null,
   }) {
@@ -143,6 +152,10 @@ class __$$DeleteUserStateImplCopyWithImpl<$Res>
       code: null == code
           ? _value.code
           : code // ignore: cast_nullable_to_non_nullable
+              as String,
+      email: null == email
+          ? _value.email
+          : email // ignore: cast_nullable_to_non_nullable
               as String,
       error: freezed == error
           ? _value.error
@@ -164,6 +177,7 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
       this.isSendCodeSuccess = false,
       this.isVerifyCodeSuccess = false,
       this.code = '',
+      this.email = '',
       this.error,
       this.isCodeError = false});
 
@@ -180,6 +194,9 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
   @JsonKey()
   final String code;
   @override
+  @JsonKey()
+  final String email;
+  @override
   final String? error;
   @override
   @JsonKey()
@@ -187,7 +204,7 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
 
   @override
   String toString() {
-    return 'DeleteUserState(isLoading: $isLoading, isSendCodeSuccess: $isSendCodeSuccess, isVerifyCodeSuccess: $isVerifyCodeSuccess, code: $code, error: $error, isCodeError: $isCodeError)';
+    return 'DeleteUserState(isLoading: $isLoading, isSendCodeSuccess: $isSendCodeSuccess, isVerifyCodeSuccess: $isVerifyCodeSuccess, code: $code, email: $email, error: $error, isCodeError: $isCodeError)';
   }
 
   @override
@@ -202,6 +219,7 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
             (identical(other.isVerifyCodeSuccess, isVerifyCodeSuccess) ||
                 other.isVerifyCodeSuccess == isVerifyCodeSuccess) &&
             (identical(other.code, code) || other.code == code) &&
+            (identical(other.email, email) || other.email == email) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.isCodeError, isCodeError) ||
                 other.isCodeError == isCodeError));
@@ -209,7 +227,7 @@ class _$DeleteUserStateImpl implements _DeleteUserState {
 
   @override
   int get hashCode => Object.hash(runtimeType, isLoading, isSendCodeSuccess,
-      isVerifyCodeSuccess, code, error, isCodeError);
+      isVerifyCodeSuccess, code, email, error, isCodeError);
 
   @JsonKey(ignore: true)
   @override
@@ -225,6 +243,7 @@ abstract class _DeleteUserState implements DeleteUserState {
       final bool isSendCodeSuccess,
       final bool isVerifyCodeSuccess,
       final String code,
+      final String email,
       final String? error,
       final bool isCodeError}) = _$DeleteUserStateImpl;
 
@@ -236,6 +255,8 @@ abstract class _DeleteUserState implements DeleteUserState {
   bool get isVerifyCodeSuccess;
   @override
   String get code;
+  @override
+  String get email;
   @override
   String? get error;
   @override

@@ -114,6 +114,7 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
         bottom: widget.paddingBottom ?? 0,
       ),
       decoration: BoxDecoration(
+        color: widget.backgroundColor,
         border: Border.all(
           color: _focusNode.hasFocus
               ? (widget.borderColor ?? const Color(0xffffB052))
@@ -155,8 +156,6 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
 
   InputDecoration setInputDecoration() {
     return InputDecoration(
-      filled: widget.isBackgroundFilled,
-      fillColor: widget.backgroundColor,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide.none,
       ),

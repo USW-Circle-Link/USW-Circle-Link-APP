@@ -9,6 +9,7 @@ class DeleteUserState with _$DeleteUserState {
     @Default(false) bool isSendCodeSuccess,
     @Default(false) bool isVerifyCodeSuccess,
     @Default('') String code,
+    @Default('') String email,
     String? error,
     @Default(false) bool isCodeError,
   }) = _DeleteUserState;
