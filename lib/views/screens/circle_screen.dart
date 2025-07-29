@@ -15,6 +15,7 @@ import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/views/screens/image_screen.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
   final String clubUUID;
@@ -266,7 +267,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                               itemBuilder:
                                                   (context, index, realIndex) {
                                                 return buildImage(
-                                                    introPhotos[index], index);
+                                                    introPhotos, index);
                                               },
                                               options: CarouselOptions(
                                                 height: 250.h,
@@ -345,12 +346,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                     .value!.mainPhotoPath!,
                                                 fit: BoxFit.cover,
                                               )
-                                            : Icon(
-                                                Icons.person,
-                                                color: const Color.fromARGB(
-                                                    255, 0, 0, 0),
-                                                size: 60,
-                                              ),
+                                            : Image.asset(
+                                                'assets/images/circle_default_image.png'),
                                       ),
                                     ),
                                   ),
@@ -542,20 +539,44 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
     );
   }
 
-  Widget buildImage(String imageUrl, int index) => Container(
-        color: Colors.grey,
-        child: Image.network(
-          imageUrl,
-          fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) {
-            return Center(
-                child: TextFontWidget.fontRegular('이미지 준비중 ...',
-                    fontSize: 14.sp,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800));
-          },
+  Widget buildImage(List<String> introPhotos, int index) => GestureDetector(
+        onTap: () {
+          openImageViewer(context, introPhotos, index);
+        },
+        child: Container(
+          color: Colors.grey,
+          child: Hero(
+            tag: introPhotos[index],
+            child: Image.network(
+              introPhotos[index],
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Center(
+                    child: TextFontWidget.fontRegular('이미지 준비중 ...',
+                        fontSize: 14.sp,
+                        color: Colors.white,
+                        fontWeight: FontWeight.w800));
+              },
+            ),
+          ),
         ),
       );
+
+  void openImageViewer(
+      BuildContext context, List<String> galleryItems, final int index) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageScreen(
+          galleryItems: galleryItems,
+          backgroundDecoration: const BoxDecoration(
+            color: Colors.black,
+          ),
+          initialIndex: index,
+        ),
+      ),
+    );
+  }
 }
 
 class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {

@@ -74,4 +74,27 @@ class DeleteUserRepository {
       throw DeleteUserModelError.fromJson(response.data);
     }
   }
+
+  Future<String> getEmail() async {
+    final response = await dio.get(
+      '$basePath/exit/email',
+      options: Options(
+        headers: {
+          'Content-Type': 'application/json',
+          'accessToken': 'true',
+        },
+      ),
+    );
+
+    logger.d(response.data);
+
+    logger
+        .d('getEmail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+    if (response.statusCode == 200) {
+      return response.data['message'];
+    } else {
+      throw DeleteUserModelError.fromJson(response.data);
+    }
+  }
 }

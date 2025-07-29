@@ -9,6 +9,7 @@ import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
+import 'package:usw_circle_link/notifier/network_connectivity_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
@@ -83,17 +84,14 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref.listen(userViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     final circleListState = ref.watch(circleViewModelProvider);
     ref.listen(circleViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     final profileState = ref.watch(profileViewModelProvider);
     ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
-
     ref.listen(abnormalAccessNotifierProvider, (previous, next) {
       logger.d(next);
 
@@ -105,6 +103,28 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           context.go('/');
         },
       );
+    });
+
+    ref.listen(networkConnectivityProvider, (previous, next) async {
+      logger.d(next);
+      if (next == false) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '네트워크에 연결되지 않았습니다.\nWi-Fi 또는 데이터를 연결해 주세요.',
+          barrierDismissible: false,
+          canPop: false,
+          onPopInvoked: () async {
+            SystemNavigator.pop();
+          },
+          onLeftButtonPressed: () async {
+            await ref.read(networkConnectivityProvider.notifier).checkNetwork();
+          },
+        );
+      } else if (next == true) {
+        // dissmiss dialog and reload data
+        DialogManager.instance.dismissDialog(context);
+        await fetchCircleList();
+      }
     });
 
     return ScreenUtilInit(
@@ -256,13 +276,22 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           isScrollControlled: true,
                           builder: (context) {
                             return CategoryPicker(
-                                initialCategories: selectedCategories);
+                              initialCategories: selectedCategories,
+                              onSelectionChanged: (newSelection) {
+                                setState(() {
+                                  selectedCategories = newSelection;
+                                }); // 분과 선택과 동시에 동아리 리스트 최신화
+                                fetchCircleList();
+                              },
+                            );
                           },
                         );
-                        setState(() {
-                          selectedCategories = result;
-                        });
-                        await fetchCircleList();
+                        if (result != null) {
+                          setState(() {
+                            selectedCategories = result;
+                          });
+                          await fetchCircleList();
+                        }
                       },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: selectedCategories.isEmpty

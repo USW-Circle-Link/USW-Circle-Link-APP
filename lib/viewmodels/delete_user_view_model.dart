@@ -4,6 +4,7 @@ import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/repositories/delete_user_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/state/delete_user_state.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
@@ -102,6 +103,14 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
         isCodeError: true,
       );
     }
+  }
+
+  Future<void> getEmail() async {
+    final result = await ref.read(deleteUserRepositoryProvider).getEmail();
+    logger.d(result);
+    state = state.copyWith(
+      email: result,
+    );
   }
 
   void setCode(String value) {

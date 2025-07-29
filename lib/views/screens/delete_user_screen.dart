@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
@@ -17,6 +18,16 @@ class DeleteUserScreen extends ConsumerStatefulWidget {
 
 class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   final TextEditingController codeEditController = TextEditingController();
+  final TextEditingController emailEditController = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() {
+      ref.read(deleteUserViewModelProvider.notifier).getEmail();
+      emailEditController.text =
+          ref.read(deleteUserViewModelProvider.select((state) => state.email));
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,6 +41,11 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
         ref.watch(deleteUserViewModelProvider.select((state) => state.error));
     final isCodeError = ref.watch(
         deleteUserViewModelProvider.select((state) => state.isCodeError));
+    final email =
+        ref.watch(deleteUserViewModelProvider.select((state) => state.email));
+
+    final _ = ref.watch(timerProvider);
+    final timerNotifier = ref.watch(timerProvider.notifier);
 
     _listen();
 
@@ -74,6 +90,34 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      TextFontWidget.fontRegular(
+                        '이메일',
+                        fontSize: 16.sp,
+                        color: Color(0xFF000000),
+                        fontWeight: FontWeight.w400,
+                      ),
+                      SizedBox(height: 5.h),
+                      RoundedTextField(
+                        height: 50.h,
+                        textEditController: emailEditController,
+                        leftBottomCornerRadius: 8.r,
+                        rightBottomCornerRadius: 8.r,
+                        leftTopCornerRadius: 8.r,
+                        rightTopCornerRadius: 8.r,
+                        borderWidth: 1.w,
+                        maxLines: 1,
+                        textInputType: TextInputType.text,
+                        textAlign: TextAlign.left,
+                        hintText: '이메일 입력',
+                        readOnly: true,
+                        paddingLeft: 0.w,
+                        textStyle: TextFontWidget.fontRegularStyle(
+                          fontSize: 14.sp,
+                          color: Color(0xFF959595),
+                        ),
+                        backgroundColor: Color(0xFFE6E6E6),
+                      ),
+                      SizedBox(height: 16.h),
                       SizedBox(
                         width: double.infinity,
                         height: 56.h,
@@ -105,9 +149,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                             isLoading
                                 ? '로딩 중 ...'
                                 : isVerifyCodeSuccess
-                                    ? '포털로 이동하기'
+                                    ? '포털로 이동하기 ${timerNotifier.timerText}'
                                     : isSendCodeSuccess
-                                        ? '포털로 이동하기'
+                                        ? '포털로 이동하기 ${timerNotifier.timerText}'
                                         : '이메일 전송',
                             fontSize: 18.sp,
                             color: const Color(0xFFFFFFFF),
@@ -289,8 +333,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
             ));
   }
 
-  void sendMail() {
-    ref.read(deleteUserViewModelProvider.notifier).sendCode();
+  Future<void> sendMail() async {
+    await ref.read(deleteUserViewModelProvider.notifier).sendCode();
+    ref.read(timerProvider.notifier).startTimer();
   }
 
   void _listen() {

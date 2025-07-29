@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
+import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -23,6 +24,8 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(findIdViewModelProvider);
+    final _ = ref.watch(timerProvider);
+    final timerNotifier = ref.watch(timerProvider.notifier);
     ref.listen(findIdViewModelProvider, (previous, next) {
       logger.d(next);
       next.when(
@@ -207,7 +210,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                                     state.when<String>(
                                         data: (data) {
                                           if (data != null) {
-                                            return '포털로 이동하기';
+                                            return '포털로 이동하기 ${timerNotifier.timerText}';
                                           } else {
                                             return '인증메일 전송';
                                           }
@@ -276,9 +279,10 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
             ));
   }
 
-  void sendMail() {
-    ref
+  Future<void> sendMail() async {
+    await ref
         .read(findIdViewModelProvider.notifier)
         .findId(email: emailEditController.text.trim());
+    ref.read(timerProvider.notifier).startTimer();
   }
 }

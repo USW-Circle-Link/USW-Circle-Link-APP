@@ -21,7 +21,7 @@ class NoticeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final notices = noticeModel.data.reversed.toList();
+    final notices = noticeModel.data.toList();
     return notices.isNotEmpty
         ? ListView.separated(
             separatorBuilder: (context, index) {
