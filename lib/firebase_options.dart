@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -51,18 +48,29 @@ class DefaultFirebaseOptions {
 
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyCHDObNz_8-GenD5mEJX7W2lP4sLVvne6M',
-    appId: '1:189705439962:android:c7594de8c05d67dc9873e3',
+    appId: '1:189705439962:android:742623cf9dcdcbc09873e3',
     messagingSenderId: '189705439962',
     projectId: 'usw-circle-link',
-    storageBucket: 'usw-circle-link.appspot.com',
+    storageBucket: 'usw-circle-link.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyDGyrVKYQmsJZufWL4dr2_3jsk-vR5NwW4',
-    appId: '1:189705439962:ios:5fc0314218a25fc99873e3',
+    appId: '1:189705439962:ios:82cfd02aa17cae699873e3',
     messagingSenderId: '189705439962',
     projectId: 'usw-circle-link',
-    storageBucket: 'usw-circle-link.appspot.com',
-    iosBundleId: 'com.example.uswCircleLink',
+    storageBucket: 'usw-circle-link.firebasestorage.app',
+    iosBundleId: 'com.usw.flag.uswCircleLink',
   );
+
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyCBQAPsaSqPdohRrWaoDmQt_KIdrmsZAyg',
+    appId: '1:189705439962:web:49017f94792010e29873e3',
+    messagingSenderId: '189705439962',
+    projectId: 'usw-circle-link',
+    authDomain: 'usw-circle-link.firebaseapp.com',
+    storageBucket: 'usw-circle-link.firebasestorage.app',
+    measurementId: 'G-5MR6EEZGX0',
+  );
+
 }

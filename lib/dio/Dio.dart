@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
@@ -11,6 +12,7 @@ final dioProvider = Provider<Dio>((ref) {
       baseUrl: '$protocol://$host:$port',
       headers: {
         'Content-Type': 'application/json',
+        if (kIsWeb) 'Access-Control-Allow-Origin': '*',
       },
     ),
   );

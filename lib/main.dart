@@ -12,6 +12,7 @@ import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
+import 'package:usw_circle_link/firebase_options.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
@@ -45,7 +46,9 @@ void main() async {
     DeviceOrientation.portraitDown,
   ]);
   // Firebase 초기화
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   await setupFlutterNotifications();
