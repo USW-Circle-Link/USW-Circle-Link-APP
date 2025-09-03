@@ -4,8 +4,8 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:usw_circle_link/firebase_options.dart';
-import 'package:usw_circle_link/main.dart';
+import '../firebase_options.dart';
+import '../main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
