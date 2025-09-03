@@ -35,12 +35,8 @@ mixin _$Club {
   /// Club hashtags
   List<String> get clubHashtags => throw _privateConstructorUsedError;
 
-  /// Serializes this Club to a JSON map.
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-
-  /// Create a copy of Club
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   $ClubCopyWith<Club> get copyWith => throw _privateConstructorUsedError;
 }
 
@@ -67,8 +63,6 @@ class _$ClubCopyWithImpl<$Res, $Val extends Club>
   // ignore: unused_field
   final $Res Function($Val) _then;
 
-  /// Create a copy of Club
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -125,8 +119,6 @@ class __$$ClubImplCopyWithImpl<$Res>
   __$$ClubImplCopyWithImpl(_$ClubImpl _value, $Res Function(_$ClubImpl) _then)
       : super(_value, _then);
 
-  /// Create a copy of Club
-  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -224,14 +216,12 @@ class _$ClubImpl implements _Club {
                 .equals(other._clubHashtags, _clubHashtags));
   }
 
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(runtimeType, clubUUID, clubName, mainPhoto,
       departmentName, const DeepCollectionEquality().hash(_clubHashtags));
 
-  /// Create a copy of Club
-  /// with the given fields replaced by the non-null parameter values.
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$ClubImplCopyWith<_$ClubImpl> get copyWith =>
@@ -255,30 +245,28 @@ abstract class _Club implements Club {
 
   factory _Club.fromJson(Map<String, dynamic> json) = _$ClubImpl.fromJson;
 
-  /// Club UUID
   @override
+
+  /// Club UUID
   String get clubUUID;
+  @override
 
   /// Club name
-  @override
   String get clubName;
+  @override
 
   /// Main photo URL
-  @override
   String get mainPhoto;
+  @override
 
   /// Department name
-  @override
   String get departmentName;
+  @override
 
   /// Club hashtags
-  @override
   List<String> get clubHashtags;
-
-  /// Create a copy of Club
-  /// with the given fields replaced by the non-null parameter values.
   @override
-  @JsonKey(includeFromJson: false, includeToJson: false)
+  @JsonKey(ignore: true)
   _$$ClubImplCopyWith<_$ClubImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
