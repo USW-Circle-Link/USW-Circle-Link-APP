@@ -1,10 +1,12 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
 import 'package:usw_circle_link/models/aps_payload.dart';
@@ -167,21 +169,30 @@ class CircleLink extends ConsumerWidget {
             .addNotification(message.aps.alert.body ?? '');
       }
     });
-    return MaterialApp.router(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        scaffoldBackgroundColor: Colors.white,
-        appBarTheme: AppBarTheme(
-          backgroundColor: Colors.white,
-        ),
-      ),
-      routerConfig: ref.read(routerProvider),
-      builder: (context, child) {
-        return UpgradeAlert(
-          showIgnore: false,
-          upgrader: upgrader,
-          navigatorKey: ref.read(routerProvider).routerDelegate.navigatorKey,
-          child: child,
+    return FlutterWebFrame(
+      maximumSize: const Size(475.0, 812.0),
+      enabled: kIsWeb,
+      builder: (context) {
+        return ClipRect(
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.white,
+              ),
+            ),
+            routerConfig: ref.read(routerProvider),
+            builder: (context, child) {
+              return UpgradeAlert(
+                showIgnore: false,
+                upgrader: upgrader,
+                navigatorKey:
+                    ref.read(routerProvider).routerDelegate.navigatorKey,
+                child: child,
+              );
+            },
+          ),
         );
       },
     );

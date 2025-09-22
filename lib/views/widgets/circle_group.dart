@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/circle_item.dart';
@@ -18,28 +17,28 @@ class CircleGroup extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 10.h),
-      padding: EdgeInsets.only(top: 16.h, bottom: 16.h,),
+      margin: EdgeInsets.only(bottom: 10),
+      padding: EdgeInsets.only(top: 16, bottom: 16),
       color: Colors.white,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              SizedBox(width: 24.w,),
+              SizedBox(width: 24),
               TextFontWidget.fontRegular(
                 department.key.toDepartment(),
-                fontSize: 16.sp,
+                fontSize: 16,
                 color: Colors.black,
                 fontWeight: FontWeight.w700,
               ),
             ],
           ),
-          SizedBox(height: 8.h), // 텍스트와 리스트 사이에 여백 추가
+          SizedBox(height: 8), // 텍스트와 리스트 사이에 여백 추가
           SizedBox(
-            height: 204.h, // ListView의 고정 높이 설정
+            height: 204, // ListView의 고정 높이 설정
             child: ListView.builder(
-              padding: EdgeInsets.only(left: 24.w, right: 16.w),
+              padding: EdgeInsets.only(left: 24, right: 16),
               scrollDirection: Axis.horizontal,
               itemCount: department.value.length,
               itemBuilder: (context, index) {
