@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:flutter_svg/svg.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
@@ -43,20 +43,18 @@ class _ImageScreenState extends ConsumerState<ImageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      child:  Scaffold(
+    return Scaffold(
         appBar: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0.0,
           title: Padding(
-            padding: EdgeInsets.only(left: 22.w, right: 22.w),
+            padding: EdgeInsets.only(left: 22, right: 22),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 SizedBox(
-                  width: 52.w,
-                  height: 52.h,
+                  width: 52,
+                  height: 52,
                   child: IconButton(
                     onPressed: () {
                       Navigator.of(context).pop();
@@ -66,7 +64,7 @@ class _ImageScreenState extends ConsumerState<ImageScreen> {
                     ),
                   ),
                 ),
-                SizedBox(width: 52.w, height: 52.h)
+                SizedBox(width: 52, height: 52)
               ],
             ),
           ),
@@ -89,7 +87,6 @@ class _ImageScreenState extends ConsumerState<ImageScreen> {
             ),
           ),
         ),
-      ),
     );
   }
 
@@ -102,7 +99,7 @@ class _ImageScreenState extends ConsumerState<ImageScreen> {
           return Center(
             child: TextFontWidget.fontRegular(
               '이미지 없음',
-              fontSize: 14.sp,
+              fontSize: 14,
               color: Colors.black,
               fontWeight: FontWeight.w400,
             ),

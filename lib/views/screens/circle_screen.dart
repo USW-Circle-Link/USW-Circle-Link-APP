@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -39,7 +38,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
         _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
-    final double width = 195.w;
+    final double width = 195;
 
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
@@ -137,21 +136,19 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
         loading: () {},
       );
     });
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) => Scaffold(
+    return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(62.h),
+          preferredSize: Size.fromHeight(62),
           child: AppBar(
             scrolledUnderElevation: 0,
-            toolbarHeight: 62.h,
+            toolbarHeight: 62,
             centerTitle: true,
             backgroundColor: Colors.white,
             automaticallyImplyLeading: false,
             title: SizedBox(
-              width: 375.w,
+              width: 375,
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -161,18 +158,18 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                     },
                     icon: SvgPicture.asset(
                       'assets/images/ic_back_arrow.svg',
-                      height: 36.h,
-                      width: 36.w,
+                      height: 36,
+                      width: 36,
                     ),
                   ),
-                  SizedBox(width: 78.2.w),
+                  SizedBox(width: 78.2),
                   TextFontWidget.fontRegular(
                     '동아리 소개',
                     color: Colors.black,
-                    fontSize: 18.sp,
+                    fontSize: 18,
                     fontWeight: FontWeight.w800,
-                    height: 1.111.h,
-                    letterSpacing: -0.45.sp,
+                    height: 1.111,
+                    letterSpacing: -0.45,
                   ),
                   Expanded(child: Container()),
                 ],
@@ -183,7 +180,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
         bottomNavigationBar: !clubIntroState.hasValue
             ? SizedBox.shrink()
             : Container(
-                padding: EdgeInsets.symmetric(vertical: 12.h, horizontal: 12.w),
+                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xffFFFFFF),
                   boxShadow: [
@@ -195,11 +192,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                     ),
                   ],
                 ),
-                height: 100.h,
+                height: 100,
                 alignment: Alignment.center,
                 child: SizedBox(
                   width: double.infinity,
-                  height: 56.h,
+                  height: 56,
                   child: Builder(builder: (context) {
                     final isClosed =
                         clubIntroState.value!.recruitmentStatus == "CLOSE";
@@ -221,12 +218,12 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                           width: 0.0,
                         ),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16.r),
+                          borderRadius: BorderRadius.circular(16),
                         ),
                       ),
                       child: TextFontWidget.fontRegular(
                         isClosed ? '모집마감' : '지원하기',
-                        fontSize: 18.sp,
+                        fontSize: 18,
                         color: const Color(0xFFFFFFFF),
                         fontWeight: FontWeight.w800,
                       ),
@@ -241,7 +238,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                     child: TextFontWidget.fontRegular(
                       '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                       textAlign: TextAlign.center,
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       color: Color(0xFFA1A1A1),
                       fontWeight: FontWeight.w400,
                     ),
@@ -253,7 +250,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                           delegate: SliverChildListDelegate(
                             [
                               SizedBox(
-                                height: 250.h,
+                                height: 250,
                                 child: Builder(builder: (context) {
                                   final introPhotos = clubIntroState.value!
                                       .getNotEmptyIntroPhotoPath();
@@ -270,7 +267,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                     introPhotos, index);
                                               },
                                               options: CarouselOptions(
-                                                height: 250.h,
+                                                height: 250,
                                                 viewportFraction: 1,
                                                 onPageChanged: (index,
                                                         reason) =>
@@ -279,7 +276,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                               ),
                                             ),
                                             Positioned(
-                                              bottom: 7.h,
+                                              bottom: 7,
                                               child: Row(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment.center,
@@ -287,12 +284,12 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                     introPhotos.length,
                                                     (index) {
                                                   return Container(
-                                                    width: 7.w,
-                                                    height: 7.h,
+                                                    width: 7,
+                                                    height: 7,
                                                     margin: index !=
                                                             introPhotos.length
                                                         ? EdgeInsets.only(
-                                                            right: 4.w)
+                                                            right: 4)
                                                         : null,
                                                     decoration: BoxDecoration(
                                                       color: index ==
@@ -301,7 +298,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                           : Color(0xFFD9D9D9),
                                                       borderRadius:
                                                           BorderRadius.circular(
-                                                              100.sp),
+                                                              100),
                                                     ),
                                                   );
                                                 }),
@@ -315,27 +312,27 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                         );
                                 }),
                               ),
-                              SizedBox(height: 16.h),
+                              SizedBox(height: 16),
                               Row(
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  SizedBox(width: 24.w),
+                                  SizedBox(width: 24),
                                   Container(
-                                    width: 82.w,
-                                    height: 82.h,
+                                    width: 82,
+                                    height: 82,
                                     decoration: BoxDecoration(
                                       border: Border.all(
                                           color: const Color(0xffc4c4c4)),
-                                      borderRadius: BorderRadius.circular(12.r),
+                                      borderRadius: BorderRadius.circular(12),
                                     ),
                                     child: Hero(
                                       transitionOnUserGestures: true,
                                       tag: 'circle_${widget.clubUUID}',
                                       child: ClipRRect(
                                         borderRadius:
-                                            BorderRadius.circular(12.r),
+                                            BorderRadius.circular(12),
                                         child: clubIntroState
                                                         .value!.mainPhotoPath !=
                                                     null &&
@@ -351,7 +348,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       ),
                                     ),
                                   ),
-                                  SizedBox(width: 16.w),
+                                  SizedBox(width: 16),
                                   Expanded(
                                     child: Column(
                                       mainAxisAlignment:
@@ -359,17 +356,17 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        SizedBox(height: 8.h),
+                                        SizedBox(height: 8),
                                         TextFontWidget.fontRegular(
                                           clubIntroState.value!.circleName,
                                           overflow: TextOverflow.ellipsis,
                                           color: Colors.black,
-                                          fontSize: 18.sp,
+                                          fontSize: 18,
                                           fontWeight: FontWeight.w900,
-                                          height: 1.h,
-                                          letterSpacing: -0.45.sp,
+                                          height: 1,
+                                          letterSpacing: -0.45,
                                         ),
-                                        SizedBox(height: 5.h),
+                                        SizedBox(height: 5),
                                         RichText(
                                           overflow: TextOverflow.ellipsis,
                                           text: TextSpan(
@@ -377,10 +374,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                             style:
                                                 TextFontWidget.fontRegularStyle(
                                               color: const Color(0xFF767676),
-                                              fontSize: 14.sp,
+                                              fontSize: 14,
                                               fontWeight: FontWeight.w400,
-                                              height: 1.h,
-                                              letterSpacing: -0.35.sp,
+                                              height: 1,
+                                              letterSpacing: -0.35,
                                             ),
                                             children: [
                                               TextSpan(
@@ -389,15 +386,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                 style: TextStyle(
                                                   color: Color(0xFF353549),
                                                   fontWeight: FontWeight.w800,
-                                                  fontSize: 14.sp,
-                                                  height: 1.h,
-                                                  letterSpacing: -0.35.sp,
+                                                  fontSize: 14,
+                                                  height: 1,
+                                                  letterSpacing: -0.35,
                                                 ),
                                               ),
                                             ],
                                           ),
                                         ),
-                                        SizedBox(height: 8.h),
+                                        SizedBox(height: 8),
                                         clubIntroState.whenOrNull(
                                                 data: (data) =>
                                                     SingleChildScrollView(
@@ -438,10 +435,10 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       icon: Icon(Icons.more_vert),
                                     ),
                                   ),
-                                  SizedBox(width: 12.w),
+                                  SizedBox(width: 12),
                                 ],
                               ),
-                              SizedBox(height: 16.h),
+                              SizedBox(height: 16),
                             ],
                           ),
                         ),
@@ -493,7 +490,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                         SingleChildScrollView(
                           child: Container(
                             alignment: Alignment.topLeft,
-                            padding: EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                            padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
                             child: Html(
                               data: clubIntroState.value!.introContent,
                             ),
@@ -504,7 +501,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                             child: Container(
                               alignment: Alignment.topLeft,
                               padding:
-                                  EdgeInsets.fromLTRB(24.w, 24.h, 24.w, 0.h),
+                                  EdgeInsets.fromLTRB(24, 24, 24, 0),
                               child: Html(
                                 data:
                                     clubIntroState.value!.clubRecruitment ?? '',
@@ -514,13 +511,13 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                       ],
                     ),
                   ),
-      ),
-    );
+      );
+
   }
 
   Widget _buildChip(String label) {
     return Container(
-      margin: EdgeInsets.only(right: 8.w),
+      margin: EdgeInsets.only(right: 8),
       child: Chip(
         label: Text(label),
         labelStyle: TextFontWidget.fontRegularStyle(
@@ -532,7 +529,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
         elevation: null,
         shape: RoundedRectangleBorder(
           side: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.all(Radius.circular(8.r)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
         ),
         padding: EdgeInsets.zero,
       ),
@@ -553,7 +550,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
               errorBuilder: (context, error, stackTrace) {
                 return Center(
                     child: TextFontWidget.fontRegular('이미지 준비중 ...',
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         color: Colors.white,
                         fontWeight: FontWeight.w800));
               },
