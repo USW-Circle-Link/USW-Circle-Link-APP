@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class RoundedTextField extends StatefulWidget {
@@ -100,7 +99,7 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height ?? 56.h,
+      height: widget.height ?? 56,
       margin: EdgeInsets.only(
         left: widget.marginLeft ?? 0,
         top: widget.marginTop ?? 0,
@@ -108,8 +107,8 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
         bottom: widget.marginBottom ?? 0,
       ),
       padding: EdgeInsets.only(
-        left: widget.paddingLeft ?? 12.w,
-        right: widget.paddingRight ?? 12.w,
+        left: widget.paddingLeft ?? 12,
+        right: widget.paddingRight ?? 12,
         top: widget.paddingTop ?? 0,
         bottom: widget.paddingBottom ?? 0,
       ),

@@ -90,6 +90,7 @@ dependencies:
   # Permission
   device_info_plus: ^10.1.2
   permission_handler: ^11.3.1
+  flutter_web_frame: ^1.0.0
 
 dev_dependencies:
   flutter_test:

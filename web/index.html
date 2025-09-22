@@ -16,6 +16,7 @@
     <meta charset="UTF-8">
     <meta content="IE=Edge" http-equiv="X-UA-Compatible">
     <meta name="description" content="A new Flutter project.">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <!-- iOS meta tags & icons -->
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -25,8 +26,51 @@
 
     <title>title</title>
     <link rel="manifest" href="manifest.json">
+
+    <style>
+        html, body {
+        height: 100%;
+        margin: 0;
+        background: #f0f2f5;
+        overflow: hidden;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        }
+
+        #app-frame {
+            width: 390px;
+            height: 844px;
+            background: #fff;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.12);
+            transform-origin: top center;
+        }
+
+        #flutter_container,
+        flt-glass-pane,
+        .flt-glass-pane {
+            width: 100% !important;
+            height: 100% !important;
+        }
+    </style>
+    <script src="flutter.js"></script>
 </head>
 <body>
+    <div id="app-frame">
+        <div id="flutter_container"></div>
+    </div>
+
+    <script>
+        const TARGET_W = 390, TARGET_H = 844;
+
+    function resizeFrame() {
+      const scale = Math.min(
+        window.innerWidth / TARGET_W,
+        window.innerHeight / TARGET_H
+      );
+      document.getElementById('app-frame').style.transform = `scale(${scale})`;
+    }
+    </script>
 <!-- This script installs service_worker.js to provide PWA functionality to
      application. For more information, see:
      https://developers.google.com/web/fundamentals/primers/service-workers -->

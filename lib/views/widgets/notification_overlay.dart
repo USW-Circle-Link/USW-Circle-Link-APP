@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/views/widgets/cloud_messaging.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -10,7 +9,7 @@ import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 class NotificationOverlay extends ConsumerStatefulWidget {
   final VoidCallback onDismiss;
 
-  const NotificationOverlay({required this.onDismiss});
+  const NotificationOverlay({required this.onDismiss, required GlobalKey<NotificationOverlayState> key});
 
   @override
   NotificationOverlayState createState() => NotificationOverlayState();
@@ -31,25 +30,25 @@ class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
           ),
         ),
         Positioned(
-          top: kToolbarHeight + 45.h,
-          right: 24.w,
+          top: kToolbarHeight + 45,
+          right: 24,
           child: Material(
             color: Colors.transparent,
             child: Container(
-              width: 208.w,
-              height: 220.h,
+              width: 208,
+              height: 220,
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16.r),
+                borderRadius: BorderRadius.circular(16),
                 color: Colors.white,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Padding(
-                    padding: EdgeInsets.only(top: 16.h),
+                    padding: EdgeInsets.only(top: 16),
                     child: TextFontWidget.fontRegular(
                       "알림",
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       fontWeight: FontWeight.w800,
                     ),
                   ),

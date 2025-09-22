@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/category_model.dart';
@@ -52,18 +51,18 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
         return false;
       },
       child: Container(
-        height: MediaQuery.of(context).size.height - kToolbarHeight - 50.h,
+        height: MediaQuery.of(context).size.height - kToolbarHeight - 50,
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.vertical(
-            top: Radius.circular(17.r),
+            top: Radius.circular(17),
           ),
         ),
         child: Padding(
           padding: EdgeInsets.only(
-            right: 48.w,
-            left: 48.w,
-            top: 48.h,
+            right: 48,
+            left: 48,
+            top: 48,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,11 +70,11 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
-                  SizedBox(width: 20.w),
+                  SizedBox(width: 20),
                   TextFontWidget.fontRegular(
                     '나에게 맞는 동아리 추천 받기',
                     color: Color(0xFF989898),
-                    fontSize: 14.sp,
+                    fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
                   IconButton(
@@ -92,21 +91,21 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                 ],
               ),
               Divider(
-                height: 70.h,
-                indent: 70.w,
-                endIndent: 70.w,
+                height: 70,
+                indent: 70,
+                endIndent: 70,
               ), // 카테고리 제목
               Row(
                 children: <Widget>[
                   Icon(
                     MainIcons.ic_category,
                     color: Color(0xFF111111),
-                    size: 15.sp,
+                    size: 15,
                   ),
-                  SizedBox(width: 10.w),
+                  SizedBox(width: 10),
                   TextFontWidget.fontRegular(
                     '관심 카테고리',
-                    fontSize: 14.sp,
+                    fontSize: 14,
                     fontWeight: FontWeight.w700,
                   )
                 ],
@@ -114,16 +113,16 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
               TextFontWidget.fontRegular(
                 '* 최대 3개까지 선택해주세요.',
                 color: Color(0xff909090),
-                fontSize: 12.sp,
+                fontSize: 12,
                 fontWeight: FontWeight.w300,
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 20),
               // 카테고리 선택 리스트
               Expanded(
                 child: state.when(
                   data: (data) => SingleChildScrollView(
                     child: Wrap(
-                      spacing: 5.w,
+                      spacing: 5,
                       children: data?.data
                               .map((category) => _buildChip(category))
                               .toList() ??
@@ -134,7 +133,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                     alignment: Alignment.center,
                     child: TextFontWidget.fontRegular(
                       '카테고리를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
-                      fontSize: 14.sp,
+                      fontSize: 14,
                       fontWeight: FontWeight.w300,
                       textAlign: TextAlign.center,
                       color: Color(0xFFA1A1A1),
@@ -173,7 +172,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       shape: RoundedRectangleBorder(
         side: BorderSide(
             color: isSelected ? Color(0xFFFF9A21) : Color(0xFFE5E5E5)),
-        borderRadius: BorderRadius.all(Radius.circular(15.r)),
+        borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       padding: EdgeInsets.all(0),
     );

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -15,7 +14,7 @@ class LoggedOutMenu extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     return Drawer(
       backgroundColor: const Color(0xffF0F2F5),
-      width: 290.w,
+      width: 290,
       child: Column(
         children: [
           Expanded(
@@ -32,7 +31,7 @@ class LoggedOutMenu extends ConsumerWidget {
                     child: Center(
                         child: Row(
                       children: [
-                        SizedBox(width: 3.w),
+                        SizedBox(width: 3),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -46,28 +45,28 @@ class LoggedOutMenu extends ConsumerWidget {
                             ),
                           ],
                         ),
-                        SizedBox(width: 16.w),
+                        SizedBox(width: 16),
                         TextFontWidget.fontRegular(
                           '로그인',
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
                         ),
                         Icon(
                           MainIcons.ic_chevron_right,
                           color: Colors.black,
-                          size: 24.sp,
+                          size: 24,
                         ),
                       ],
                     )),
                   ),
                 ),
                 // 내 정보 부분 수정 시작
-                SizedBox(height: 10.h),
+                SizedBox(height: 10),
                 buildDrawerItem(
                   title: '내 정보',
                   icon: MainIcons.ic_rounded_person,
-                  iconSize: 18.sp,
+                  iconSize: 18,
                   onTap: () => context.go('/login'),
                   trailingIcon: MainIcons.ic_chevron_right,
                 ),
@@ -75,21 +74,21 @@ class LoggedOutMenu extends ConsumerWidget {
                 buildDrawerItem(
                   title: '나의 소속 동아리',
                   icon: MainIcons.ic_verified,
-                  iconSize: 18.sp,
+                  iconSize: 18,
                   onTap: () => context.go('/login'),
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
                   title: '나의 지원 현황',
                   icon: MainIcons.ic_send_mail,
-                  iconSize: 12.sp,
+                  iconSize: 12,
                   onTap: () => context.go('/login'),
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
                   title: '공지 사항',
                   icon: MainIcons.ic_chart,
-                  iconSize: 16.sp,
+                  iconSize: 16,
                   onTap: () {
                     context.go('/notices');
                   },
@@ -101,7 +100,7 @@ class LoggedOutMenu extends ConsumerWidget {
           Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -109,7 +108,7 @@ class LoggedOutMenu extends ConsumerWidget {
                       onTap: _launchURL,
                       child: TextFontWidget.fontRegular(
                         '피드백',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
@@ -117,9 +116,9 @@ class LoggedOutMenu extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -127,17 +126,17 @@ class LoggedOutMenu extends ConsumerWidget {
                       onTap: () => context.go('/tems_of_serice'),
                       child: TextFontWidget.fontRegular(
                         '이용약관',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 16),
                     InkWell(
                       onTap: () => context.go('/privacy_policy'),
                       child: TextFontWidget.fontRegular(
                         '개인정보 처리 방침',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
@@ -145,7 +144,7 @@ class LoggedOutMenu extends ConsumerWidget {
                   ],
                 ),
               ),
-              SizedBox(height: 40.h),
+              SizedBox(height: 40),
             ],
           ),
         ],
@@ -174,23 +173,23 @@ Widget buildDrawerItem({
   bool isExpanded = false,
 }) {
   return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     child: Material(
       color: Colors.white,
-      borderRadius: BorderRadius.circular(8.r),
+      borderRadius: BorderRadius.circular(8),
       child: InkWell(
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         onTap: onTap,
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeInOut,
-          height: isExpanded ? 100.h : 56.h,
+          height: isExpanded ? 100 : 56,
           child: Column(
             children: [
               ListTile(
                 contentPadding: EdgeInsets.only(
-                  left: 16.w,
-                  right: isExpanded ? 15.w : 6.w,
+                  left: 16,
+                  right: isExpanded ? 15 : 6,
                 ),
                 leading: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -199,11 +198,11 @@ Widget buildDrawerItem({
                   ],
                 ),
                 title: Padding(
-                  padding: EdgeInsets.only(left: 10.w),
+                  padding: EdgeInsets.only(left: 10),
                   child: TextFontWidget.fontRegular(
                     title,
                     overflow: TextOverflow.ellipsis,
-                    fontSize: 15.sp,
+                    fontSize: 15,
                     color: const Color(0xff353549),
                     fontWeight: FontWeight.w400,
                   ),

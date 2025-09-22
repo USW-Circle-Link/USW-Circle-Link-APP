@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -24,7 +23,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.fromLTRB(16.w, 4.h, 0, 4.h),
+      padding: EdgeInsets.fromLTRB(16, 4, 0, 4),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -40,7 +39,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                 Expanded(
                   child: TextFontWidget.fontRegular(
                     widget.text,
-                    fontSize: 12.sp,
+                    fontSize: 12,
                     fontWeight: FontWeight.w400,
                     overflow: _isExpanded
                         ? TextOverflow.visible
@@ -48,9 +47,9 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                     maxLines: _isExpanded ? null : 1, // 확장 시 최대 줄 수 제한 해제
                   ),
                 ),
-                SizedBox(width: 8.w),
+                SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.close, size: 16.sp, color: Colors.grey),
+                  icon: Icon(Icons.close, size: 16, color: Colors.grey),
                   onPressed: () {
                     ref
                         .read(firebaseCloudMessagingViewModelProvider.notifier)
@@ -62,12 +61,12 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
           ),
           if (_isExpanded) // 확장 상태에서 짤린 부분만 보여주기
             Padding(
-              padding: EdgeInsets.only(top: 4.h),
+              padding: EdgeInsets.only(top: 4),
               child: TextFontWidget.fontRegular(
                 widget.text.length > 35
                     ? widget.text.substring(35) // 짤린 부분만 보여줌
                     : '', // 메시지가 짧을 경우 빈 문자열
-                fontSize: 12.sp,
+                fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),
             ),

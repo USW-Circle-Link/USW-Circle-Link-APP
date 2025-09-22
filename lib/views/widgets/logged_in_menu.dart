@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
@@ -31,7 +30,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
   Widget build(BuildContext context) {
     return Drawer(
       backgroundColor: const Color(0xffF0F2F5),
-      width: 290.w,
+      width: 290,
       child: Column(
         children: [
           Expanded(
@@ -48,7 +47,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     child: Center(
                         child: Row(
                       children: [
-                        SizedBox(width: 3.w),
+                        SizedBox(width: 3),
                         Stack(
                           alignment: Alignment.center,
                           children: [
@@ -62,16 +61,16 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                             ),
                           ],
                         ),
-                        SizedBox(width: 16.w),
+                        SizedBox(width: 16),
                         TextFontWidget.fontRegular(
                           widget.state.data.userName,
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
                         ),
                         TextFontWidget.fontRegular(
                           ' 님',
-                          fontSize: 14.sp,
+                          fontSize: 14,
                           color: const Color(0xFF767676),
                           fontWeight: FontWeight.w600,
                         ),
@@ -80,10 +79,10 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   ),
                 ),
                 // 내 정보 부분 수정 시작
-                SizedBox(height: 10.h),
+                SizedBox(height: 10),
                 buildDrawerItem(
                   title: '내 정보',
-                  iconSize: 18.sp,
+                  iconSize: 18,
                   icon: MainIcons.ic_rounded_person,
                   onTap: () {
                     // 내 정보 부분 클릭 시 확장 상태 변경
@@ -101,13 +100,13 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         onPressed: () => context.go('/update_profile'),
                         child: TextFontWidget.fontRegular(
                           '내 정보 수정',
-                          fontSize: 12.sp,
+                          fontSize: 12,
                           color: const Color(0xff353549),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
                       SizedBox(
-                        height: 16.h,
+                        height: 16,
                         child: VerticalDivider(
                           color: Color(0xffCECECE),
                           thickness: 1,
@@ -119,7 +118,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         },
                         child: TextFontWidget.fontRegular(
                           '비밀번호 변경',
-                          fontSize: 12.sp,
+                          fontSize: 12,
                           color: const Color(0xff353549),
                           fontWeight: FontWeight.w400,
                         ),
@@ -133,7 +132,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                 buildDrawerItem(
                   title: '나의 소속 동아리',
                   icon: MainIcons.ic_verified,
-                  iconSize: 18.sp,
+                  iconSize: 18,
                   onTap: () => context.go('/circle_list',
                       extra: CircleListType.myCircles),
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
@@ -141,7 +140,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                 buildDrawerItem(
                   title: '나의 지원 현황',
                   icon: MainIcons.ic_send_mail,
-                  iconSize: 12.sp,
+                  iconSize: 12,
                   onTap: () => context.go('/circle_list',
                       extra: CircleListType.myApplications),
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
@@ -149,7 +148,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                 buildDrawerItem(
                   title: '공지 사항',
                   icon: MainIcons.ic_chart,
-                  iconSize: 16.sp,
+                  iconSize: 16,
                   onTap: () {
                     context.go('/notices');
                   },
@@ -161,7 +160,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
           Column(
             children: [
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -169,12 +168,12 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                       onTap: _launchURL,
                       child: TextFontWidget.fontRegular(
                         '피드백',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 16),
                     InkWell(
                       onTap: () async {
                         await DialogManager.instance.showAlertDialog(
@@ -191,7 +190,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                       },
                       child: TextFontWidget.fontRegular(
                         '로그아웃',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
@@ -199,9 +198,9 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   ],
                 ),
               ),
-              SizedBox(height: 10.h),
+              SizedBox(height: 10),
               Container(
-                padding: EdgeInsets.symmetric(horizontal: 24.w),
+                padding: EdgeInsets.symmetric(horizontal: 24),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -209,17 +208,17 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                       onTap: () => context.go('/tems_of_serice'),
                       child: TextFontWidget.fontRegular(
                         '이용약관',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(width: 16.w),
+                    SizedBox(width: 16),
                     InkWell(
                       onTap: () => context.go('/privacy_policy'),
                       child: TextFontWidget.fontRegular(
                         '개인정보 처리 방침',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
                       ),
@@ -227,7 +226,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   ],
                 ),
               ),
-              SizedBox(height: 40.h),
+              SizedBox(height: 40),
             ],
           ),
         ],
@@ -255,23 +254,23 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
     bool isExpanded = false,
   }) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 4.h),
+      padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Material(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(8.r),
+        borderRadius: BorderRadius.circular(8),
         child: InkWell(
-          borderRadius: BorderRadius.circular(8.r),
+          borderRadius: BorderRadius.circular(8),
           onTap: onTap,
           child: AnimatedContainer(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
-            height: isExpanded ? 100.h : 56.h,
+            height: isExpanded ? 100 : 56,
             child: Column(
               children: [
                 ListTile(
                   contentPadding: EdgeInsets.only(
-                    left: 16.w,
-                    right: 6.w,
+                    left: 16,
+                    right: 6,
                   ),
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -280,11 +279,11 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     ],
                   ),
                   title: Padding(
-                    padding: EdgeInsets.only(left: 10.w),
+                    padding: EdgeInsets.only(left: 10),
                     child: TextFontWidget.fontRegular(
                       title,
                       overflow: TextOverflow.ellipsis,
-                      fontSize: 15.sp,
+                      fontSize: 15,
                       color: const Color(0xff353549),
                       fontWeight: FontWeight.w400,
                     ),
