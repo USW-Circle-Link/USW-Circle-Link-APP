@@ -337,10 +337,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                             );
                           },
                           error: (error, stackTrace) {
-                            final _error = error as CircleListModelError;
+                            final errorModel = error as CircleListModelError;
                             return Center(
                               child: TextFontWidget.fontRegular(
-                                ErrorUtil.instance.getErrorMessage(_error.code) ??
+                                ErrorUtil.instance.getErrorMessage(errorModel.code) ??
                                     '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                                 textAlign: TextAlign.center,
                                 fontSize: 14,
