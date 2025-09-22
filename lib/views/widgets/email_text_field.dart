@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -51,12 +50,12 @@ class _EmailTextFieldState extends State<EmailTextField> {
   String _suffixText = '@suwon.ac.kr';
   TextStyle _suffixTextStyle = TextFontWidget.fontRegularStyle(
     fontSize: 16.0,
-    color: Color(0xFF6F6F6F),
+    color: const Color(0xFF6F6F6F),
     fontWeight: FontWeight.w300,
   );
   TextStyle _hintTextStyle = TextFontWidget.fontRegularStyle(
     fontSize: 16.0,
-    color: Color(0xFF6F6F6F),
+    color: const Color(0xFF6F6F6F),
     fontWeight: FontWeight.w300,
   );
 
@@ -121,14 +120,14 @@ class _EmailTextFieldState extends State<EmailTextField> {
         double textFieldWidth = 0;
         if (widget.controller?.text.isEmpty ?? true) {
           textFieldWidth =
-              _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
+          _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
         } else {
           textFieldWidth = _textWidth > maxWidth ? maxWidth : _textWidth;
         }
         return Row(
           children: [
-            Container(
-              width: textFieldWidth.w,
+            SizedBox(
+              width: textFieldWidth, // .w 확장자 제거
               child: TextField(
                 focusNode: widget.focusNode,
                 enabled: widget.enabled,
@@ -153,8 +152,8 @@ class _EmailTextFieldState extends State<EmailTextField> {
               _suffixText,
               style: _suffixTextStyle.copyWith(
                 color: widget.controller?.text.isEmpty ?? true
-                    ? Color(0xFFB8B8B8)
-                    : Color(0xFF6F6F6F),
+                    ? const Color(0xFFB8B8B8)
+                    : const Color(0xFF6F6F6F),
               ),
             ),
           ],

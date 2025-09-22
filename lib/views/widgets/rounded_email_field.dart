@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/views/widgets/email_text_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
@@ -91,14 +90,14 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: widget.height ?? 56.h,
+      height: widget.height ?? 56.0,
       margin: EdgeInsets.only(
         left: widget.marginLeft ?? 0,
         top: widget.marginTop ?? 0,
         right: widget.marginRight ?? 0,
         bottom: widget.marginBottom ?? 0,
       ),
-      padding: EdgeInsets.only(left: 12.w, right: 12.w),
+      padding: const EdgeInsets.only(left: 12.0, right: 12.0),
       decoration: BoxDecoration(
         border: Border.all(
           color: _focusNode.hasFocus
@@ -116,8 +115,8 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
       child: Row(
         children: [
           widget.prefixIcon ?? Container(),
-          SizedBox(
-            width: 10.w,
+          const SizedBox(
+            width: 10.0,
           ),
           Expanded(
             child: EmailTextField(
@@ -125,7 +124,7 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
               controller: widget.textEditController,
               textAlign: widget.textAlign ?? TextAlign.left,
               decoration:
-                  widget.borderWidth == null ? null : setInputDecoration(),
+              widget.borderWidth == null ? null : setInputDecoration(),
               onChanged: widget.onChanged,
               obscureText: widget.obscureText,
               hintTextStyle: widget.hintStyle,
@@ -143,17 +142,17 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
     return InputDecoration(
         filled: widget.isBackgroundFilled,
         fillColor: widget.backgroundColor,
-        enabledBorder: OutlineInputBorder(
+        enabledBorder: const OutlineInputBorder(
           borderSide: BorderSide.none,
         ),
-        focusedBorder: OutlineInputBorder(
+        focusedBorder: const OutlineInputBorder(
           borderSide: BorderSide.none,
         ),
         hintText: widget.isAnimatedHint ? "" : widget.hintText ?? "",
         label: widget.isAnimatedHint
             ? TextFontWidget.fontRegular(
-                widget.hintText ?? "",
-              )
+          widget.hintText ?? "",
+        )
             : null,
         hintStyle: widget.hintStyle);
   }
