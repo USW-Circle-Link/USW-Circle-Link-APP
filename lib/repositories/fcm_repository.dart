@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {

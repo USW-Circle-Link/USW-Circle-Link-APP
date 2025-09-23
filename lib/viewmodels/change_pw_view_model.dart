@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
-import 'package:usw_circle_link/utils/regex/regex.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 final changePwViewModelProvider =

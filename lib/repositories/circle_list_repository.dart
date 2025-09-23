@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';

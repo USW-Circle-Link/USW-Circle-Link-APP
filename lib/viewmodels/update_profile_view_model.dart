@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/repositories/profile_repository.dart';
-import 'package:usw_circle_link/utils/regex/regex.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
     UpdateProfileViewModel, AsyncValue<ProfileModel>>((ref) {

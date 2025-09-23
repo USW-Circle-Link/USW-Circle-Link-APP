@@ -4,7 +4,7 @@ import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/utils/regex/regex.dart';
+import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/state/sign_up_state.dart';
 
 final signUpViewModelProvider =

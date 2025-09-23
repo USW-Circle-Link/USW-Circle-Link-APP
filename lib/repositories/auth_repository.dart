@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
