@@ -1,6 +1,5 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 
 class RoundedDropdown extends StatelessWidget {
@@ -48,7 +47,7 @@ class RoundedDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 48.h,
+      height: 48,
       margin: EdgeInsets.only(
         left: marginLeft ?? 0,
         top: marginTop ?? 0,
@@ -64,7 +63,7 @@ class RoundedDropdown extends StatelessWidget {
           SignUpIcons.ic_down_arrow,
           color: Color(0xFF989898),
         ),
-        iconSize: 7.sp,
+        iconSize: 7,
         hint: AutoSizeText(
           hintText ?? "",
           style: hintTextStyle,
@@ -80,7 +79,7 @@ class RoundedDropdown extends StatelessWidget {
   InputDecoration setInputDecoration() {
     return InputDecoration(
       isDense: false,
-      contentPadding: EdgeInsets.fromLTRB(16.w, 16.h, 16.w, 8.h),
+      contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 8),
       filled: isBackgroundFilled,
       fillColor: backgroundColor ?? Colors.white,
       enabledBorder: OutlineInputBorder(

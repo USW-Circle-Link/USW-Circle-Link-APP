@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
-// ignore: must_be_immutable
 class MajorPickerDialog extends StatefulWidget {
   MajorPickerDialog({
     Key? key,
@@ -32,137 +30,132 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
   @override
   Widget build(BuildContext context) {
     return Dialog(
-      child: ScreenUtilInit(
-          designSize: const Size(375, 812),
-          builder: (context, _) {
-            return Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15.r),
-                color: Colors.white,
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: <Widget>[
-                  RoundedDropdown(
-                    initValue: widget.selectedCollege,
-                    onChanged: (String? newValue) {
-                      isUserChange = false;
-                      _key.currentState!.reset();
-                      isUserChange = true;
-                      setState(() {
-                        widget
-                          ..selectedMajor = null
-                          ..selectedCollege = newValue;
-                      });
-
-                      widget.onChanged
-                          ?.call(widget.selectedCollege, widget.selectedMajor);
-                    },
-                    items: widget.colleges
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: TextFontWidget.fontRegular(
-                          value,
-                          color: Color(0xFF000000),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 0.1,
-                        ),
-                      );
-                    }).toList(),
-                    hintText: '단과대학 선택',
-                    leftTopCornerRadius: 8.r,
-                    leftBottomCornerRadius: 8.r,
-                    rightTopCornerRadius: 8.r,
-                    rightBottomCornerRadius: 8.r,
-                    borderColor: Color(0xFFCECECE),
-                    borderWidth: 1.w,
-                    marginTop: 32.h,
-                    marginLeft: 16.w,
-                    marginRight: 16.w,
-                    hintTextStyle: TextStyle(
-                      color: Color(0xFF767676),
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 0.1,
-                    ),
-                  ),
-                  SizedBox(height: 8),
-                  RoundedDropdown(
-                    globalKey: _key,
-                    initValue: widget.selectedMajor,
-                    onChanged: (String? newValue) {
-                      if (isUserChange) {
-                        // 단과대학 변경 시 state reset 에서도 onChanged 가 호출됨!
-                        widget
-                          ..selectedMajor = newValue
-                          ..onChanged?.call(widget.selectedCollege, newValue);
-                      }
-                    },
-                    items: (widget.majors[widget.selectedCollege] ?? [])
-                        .map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: TextFontWidget.fontRegular(
-                          value,
-                          color: Color(0xFF000000),
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.w400,
-                          height: 0.1,
-                        ),
-                      );
-                    }).toList(),
-                    hintText: '학부(학과) 선택',
-                    leftTopCornerRadius: 8.r,
-                    leftBottomCornerRadius: 8.r,
-                    rightTopCornerRadius: 8.r,
-                    rightBottomCornerRadius: 8.r,
-                    borderColor: Color(0xFFCECECE),
-                    borderWidth: 1.w,
-                    marginLeft: 16.w,
-                    marginRight: 16.w,
-                    hintTextStyle: TextStyle(
-                      color: Color(0xFF767676),
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w400,
-                      height: 0.1,
-                    ),
-                  ),
-                  SizedBox(height: 20),
-                  SizedBox.fromSize(
-                    size: Size.fromHeight(1.h),
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(color: Color(0xFFCECECE)),
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      widget.onConfirmPressed(
-                          widget.selectedCollege, widget.selectedMajor);
-                      Navigator.of(context).pop();
-                    },
-                    style: TextButton.styleFrom(
-                      minimumSize: Size.fromHeight(50.h),
-                      //primary: Colors.white,
-                      //onPrimary: Colors.blue,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                            top: Radius.zero, bottom: Radius.circular(15.r)),
-                      ),
-                    ),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(15),
+        clipBehavior: Clip.antiAlias,
+        child: SingleChildScrollView(
+          padding: EdgeInsets.zero,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              RoundedDropdown(
+                initValue: widget.selectedCollege,
+                onChanged: (String? newValue) {
+                  isUserChange = false;
+                  _key.currentState!.reset();
+                  isUserChange = true;
+                  setState(() {
+                    widget
+                      ..selectedMajor = null
+                      ..selectedCollege = newValue;
+                  });
+                  widget.onChanged?.call(widget.selectedCollege, widget.selectedMajor);
+                },
+                items: widget.colleges.map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
                     child: TextFontWidget.fontRegular(
-                      "확인",
-                      color: Color(0xFF0085FF),
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w800,
+                      value,
+                      color: const Color(0xFF000000),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 0.1,
+                    ),
+                  );
+                }).toList(),
+                hintText: '단과대학 선택',
+                leftTopCornerRadius: 8,
+                leftBottomCornerRadius: 8,
+                rightTopCornerRadius: 8,
+                rightBottomCornerRadius: 8,
+                borderColor: const Color(0xFFCECECE),
+                borderWidth: 1,
+                marginTop: 32,
+                marginLeft: 16,
+                marginRight: 16,
+                hintTextStyle: const TextStyle(
+                  color: Color(0xFF767676),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 0.1,
+                ),
+              ),
+              const SizedBox(height: 8),
+              RoundedDropdown(
+                globalKey: _key,
+                initValue: widget.selectedMajor,
+                onChanged: (String? newValue) {
+                  if (isUserChange) {
+                    widget
+                      ..selectedMajor = newValue
+                      ..onChanged?.call(widget.selectedCollege, newValue);
+                  }
+                },
+                items: (widget.majors[widget.selectedCollege] ?? [])
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: TextFontWidget.fontRegular(
+                      value,
+                      color: const Color(0xFF000000),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      height: 0.1,
+                    ),
+                  );
+                }).toList(),
+                hintText: '학부(학과) 선택',
+                leftTopCornerRadius: 8,
+                leftBottomCornerRadius: 8,
+                rightTopCornerRadius: 8,
+                rightBottomCornerRadius: 8,
+                borderColor: const Color(0xFFCECECE),
+                borderWidth: 1,
+                marginLeft: 16,
+                marginRight: 16,
+                hintTextStyle: const TextStyle(
+                  color: Color(0xFF767676),
+                  fontSize: 14,
+                  fontWeight: FontWeight.w400,
+                  height: 0.1,
+                ),
+              ),
+              const SizedBox(height: 20),
+              const SizedBox(
+                height: 1,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(color: Color(0xFFCECECE)),
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  widget.onConfirmPressed(widget.selectedCollege, widget.selectedMajor);
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.zero,
+                      bottom: Radius.circular(15),
                     ),
                   ),
-                ],
+                ),
+                child: TextFontWidget.fontRegular(
+                  "확인",
+                  color: const Color(0xFF0085FF),
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                ),
               ),
-            );
-          }),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

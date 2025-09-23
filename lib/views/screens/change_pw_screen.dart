@@ -90,8 +90,13 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
 
     return Scaffold(
       appBar: AppBar(
+        scrolledUnderElevation: 0,
+        toolbarHeight: 62,
+        centerTitle: true,
+        elevation: 0.0,
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
+        backgroundColor: const Color(0xffFFFFFF),
         title: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 22.0),
           child: Row(
