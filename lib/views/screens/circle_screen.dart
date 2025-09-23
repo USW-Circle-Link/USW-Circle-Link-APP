@@ -137,382 +137,370 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
       );
     });
     return Scaffold(
-        backgroundColor: Color(0xffFFFFFF),
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(62),
-          child: AppBar(
-            scrolledUnderElevation: 0,
-            toolbarHeight: 62,
-            centerTitle: true,
-            backgroundColor: Colors.white,
-            automaticallyImplyLeading: false,
-            title: SizedBox(
-              width: 375,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/ic_back_arrow.svg',
-                      height: 36,
-                      width: 36,
-                    ),
+      backgroundColor: Color(0xffFFFFFF),
+      resizeToAvoidBottomInset: false,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(62),
+        child: AppBar(
+          scrolledUnderElevation: 0,
+          toolbarHeight: 62,
+          centerTitle: true,
+          backgroundColor: Colors.white,
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/ic_back_arrow.svg',
+                    height: 36,
+                    width: 36,
                   ),
-                  SizedBox(width: 78.2),
-                  TextFontWidget.fontRegular(
-                    '동아리 소개',
-                    color: Colors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.w800,
-                    height: 1.111,
-                    letterSpacing: -0.45,
-                  ),
-                  Expanded(child: Container()),
-                ],
-              ),
+                ),
+                TextFontWidget.fontRegular(
+                  '동아리 소개',
+                  color: Colors.black,
+                  fontSize: 18,
+                  fontWeight: FontWeight.w800,
+                  height: 1.111,
+                  letterSpacing: -0.45,
+                ),
+                Expanded(child: Container()),
+              ],
             ),
           ),
         ),
-        bottomNavigationBar: !clubIntroState.hasValue
-            ? SizedBox.shrink()
-            : Container(
-                padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
-                decoration: BoxDecoration(
-                  color: const Color(0xffFFFFFF),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.grey.withOpacity(0.1),
-                      spreadRadius: 5,
-                      blurRadius: 7,
-                      offset: Offset(0, 3),
-                    ),
-                  ],
-                ),
-                height: 100,
-                alignment: Alignment.center,
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: Builder(builder: (context) {
-                    final isClosed =
-                        clubIntroState.value!.recruitmentStatus == "CLOSE";
-                    return OutlinedButton(
-                      onPressed: isClosed
-                          ? null
-                          : () async {
-                              await ref
-                                  .read(applicationViewModelProvider.notifier)
-                                  .checkAvailableForApplication(
-                                      clubUUID: widget.clubUUID);
-                            },
-                      style: OutlinedButton.styleFrom(
-                        backgroundColor:
-                            isClosed ? Colors.grey : Color(0xffffB052),
-                        foregroundColor: const Color(0xFFFFFFFF),
-                        side: const BorderSide(
-                          color: Colors.transparent,
-                          width: 0.0,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                      ),
-                      child: TextFontWidget.fontRegular(
-                        isClosed ? '모집마감' : '지원하기',
-                        fontSize: 18,
-                        color: const Color(0xFFFFFFFF),
-                        fontWeight: FontWeight.w800,
-                      ),
-                    );
-                  }),
-                ),
+      ),
+      bottomNavigationBar: !clubIntroState.hasValue
+          ? SizedBox.shrink()
+          : Container(
+              padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              decoration: BoxDecoration(
+                color: const Color(0xffFFFFFF),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.grey.withOpacity(0.1),
+                    spreadRadius: 5,
+                    blurRadius: 7,
+                    offset: Offset(0, 3),
+                  ),
+                ],
               ),
-        body: clubIntroState.isLoading || applicationState.isLoading
-            ? Center(child: CircularProgressIndicator())
-            : clubIntroState.hasError
-                ? Center(
-                    child: TextFontWidget.fontRegular(
-                      '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
-                      textAlign: TextAlign.center,
-                      fontSize: 14,
-                      color: Color(0xFFA1A1A1),
-                      fontWeight: FontWeight.w400,
+              height: 100,
+              alignment: Alignment.center,
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: Builder(builder: (context) {
+                  final isClosed =
+                      clubIntroState.value!.recruitmentStatus == "CLOSE";
+                  return OutlinedButton(
+                    onPressed: isClosed
+                        ? null
+                        : () async {
+                            await ref
+                                .read(applicationViewModelProvider.notifier)
+                                .checkAvailableForApplication(
+                                    clubUUID: widget.clubUUID);
+                          },
+                    style: OutlinedButton.styleFrom(
+                      backgroundColor:
+                          isClosed ? Colors.grey : Color(0xffffB052),
+                      foregroundColor: const Color(0xFFFFFFFF),
+                      side: const BorderSide(
+                        color: Colors.transparent,
+                        width: 0.0,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(16),
+                      ),
                     ),
-                  )
-                : NestedScrollView(
-                    headerSliverBuilder: (context, innerBoxScrolled) {
-                      return [
-                        SliverList(
-                          delegate: SliverChildListDelegate(
-                            [
-                              SizedBox(
-                                height: 250,
-                                child: Builder(builder: (context) {
-                                  final introPhotos = clubIntroState.value!
-                                      .getNotEmptyIntroPhotoPath();
-                                  return introPhotos != null &&
-                                          introPhotos.isNotEmpty
-                                      ? Stack(
-                                          alignment: Alignment.bottomCenter,
-                                          children: [
-                                            CarouselSlider.builder(
-                                              itemCount: introPhotos.length,
-                                              itemBuilder:
-                                                  (context, index, realIndex) {
-                                                return buildImage(
-                                                    introPhotos, index);
-                                              },
-                                              options: CarouselOptions(
-                                                height: 250,
-                                                viewportFraction: 1,
-                                                onPageChanged: (index,
-                                                        reason) =>
-                                                    setState(() =>
-                                                        activeIndex = index),
-                                              ),
+                    child: TextFontWidget.fontRegular(
+                      isClosed ? '모집마감' : '지원하기',
+                      fontSize: 18,
+                      color: const Color(0xFFFFFFFF),
+                      fontWeight: FontWeight.w800,
+                    ),
+                  );
+                }),
+              ),
+            ),
+      body: clubIntroState.isLoading || applicationState.isLoading
+          ? Center(child: CircularProgressIndicator())
+          : clubIntroState.hasError
+              ? Center(
+                  child: TextFontWidget.fontRegular(
+                    '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+                    textAlign: TextAlign.center,
+                    fontSize: 14,
+                    color: Color(0xFFA1A1A1),
+                    fontWeight: FontWeight.w400,
+                  ),
+                )
+              : NestedScrollView(
+                  headerSliverBuilder: (context, innerBoxScrolled) {
+                    return [
+                      SliverList(
+                        delegate: SliverChildListDelegate(
+                          [
+                            SizedBox(
+                              height: 250,
+                              child: Builder(builder: (context) {
+                                final introPhotos = clubIntroState.value!
+                                    .getNotEmptyIntroPhotoPath();
+                                return introPhotos != null &&
+                                        introPhotos.isNotEmpty
+                                    ? Stack(
+                                        alignment: Alignment.bottomCenter,
+                                        children: [
+                                          CarouselSlider.builder(
+                                            itemCount: introPhotos.length,
+                                            itemBuilder:
+                                                (context, index, realIndex) {
+                                              return buildImage(
+                                                  introPhotos, index);
+                                            },
+                                            options: CarouselOptions(
+                                              height: 250,
+                                              viewportFraction: 1,
+                                              onPageChanged: (index, reason) =>
+                                                  setState(() =>
+                                                      activeIndex = index),
                                             ),
-                                            Positioned(
-                                              bottom: 7,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: List.generate(
-                                                    introPhotos.length,
-                                                    (index) {
-                                                  return Container(
-                                                    width: 7,
-                                                    height: 7,
-                                                    margin: index !=
-                                                            introPhotos.length
-                                                        ? EdgeInsets.only(
-                                                            right: 4)
-                                                        : null,
-                                                    decoration: BoxDecoration(
-                                                      color: index ==
-                                                              activeIndex
-                                                          ? accentColor
-                                                          : Color(0xFFD9D9D9),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              100),
-                                                    ),
-                                                  );
-                                                }),
+                                          ),
+                                          Positioned(
+                                            bottom: 7,
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                  introPhotos.length, (index) {
+                                                return Container(
+                                                  width: 7,
+                                                  height: 7,
+                                                  margin: index !=
+                                                          introPhotos.length
+                                                      ? EdgeInsets.only(
+                                                          right: 4)
+                                                      : null,
+                                                  decoration: BoxDecoration(
+                                                    color: index == activeIndex
+                                                        ? accentColor
+                                                        : Color(0xFFD9D9D9),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            100),
+                                                  ),
+                                                );
+                                              }),
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                                    : Container(
+                                        color: const Color.fromARGB(
+                                            255, 36, 36, 36),
+                                      );
+                              }),
+                            ),
+                            SizedBox(height: 16),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(width: 24),
+                                Container(
+                                  width: 82,
+                                  height: 82,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: const Color(0xffc4c4c4)),
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: Hero(
+                                    transitionOnUserGestures: true,
+                                    tag: 'circle_${widget.clubUUID}',
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: clubIntroState
+                                                      .value!.mainPhotoPath !=
+                                                  null &&
+                                              clubIntroState.value!
+                                                  .mainPhotoPath!.isValidUrl
+                                          ? Image.network(
+                                              clubIntroState
+                                                  .value!.mainPhotoPath!,
+                                              fit: BoxFit.cover,
+                                            )
+                                          : Image.asset(
+                                              'assets/images/circle_default_image.png'),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 16),
+                                Expanded(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      SizedBox(height: 8),
+                                      TextFontWidget.fontRegular(
+                                        clubIntroState.value!.circleName,
+                                        overflow: TextOverflow.ellipsis,
+                                        color: Colors.black,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w900,
+                                        height: 1,
+                                        letterSpacing: -0.45,
+                                      ),
+                                      SizedBox(height: 5),
+                                      RichText(
+                                        overflow: TextOverflow.ellipsis,
+                                        text: TextSpan(
+                                          text: '동아리 회장 ',
+                                          style:
+                                              TextFontWidget.fontRegularStyle(
+                                            color: const Color(0xFF767676),
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w400,
+                                            height: 1,
+                                            letterSpacing: -0.35,
+                                          ),
+                                          children: [
+                                            TextSpan(
+                                              text: clubIntroState
+                                                  .value!.leaderName,
+                                              style: TextStyle(
+                                                color: Color(0xFF353549),
+                                                fontWeight: FontWeight.w800,
+                                                fontSize: 14,
+                                                height: 1,
+                                                letterSpacing: -0.35,
                                               ),
                                             ),
                                           ],
-                                        )
-                                      : Container(
-                                          color: const Color.fromARGB(
-                                              255, 36, 36, 36),
-                                        );
-                                }),
-                              ),
-                              SizedBox(height: 16),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SizedBox(width: 24),
-                                  Container(
-                                    width: 82,
-                                    height: 82,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: const Color(0xffc4c4c4)),
-                                      borderRadius: BorderRadius.circular(12),
-                                    ),
-                                    child: Hero(
-                                      transitionOnUserGestures: true,
-                                      tag: 'circle_${widget.clubUUID}',
-                                      child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(12),
-                                        child: clubIntroState
-                                                        .value!.mainPhotoPath !=
-                                                    null &&
-                                                clubIntroState.value!
-                                                    .mainPhotoPath!.isValidUrl
-                                            ? Image.network(
-                                                clubIntroState
-                                                    .value!.mainPhotoPath!,
-                                                fit: BoxFit.cover,
-                                              )
-                                            : Image.asset(
-                                                'assets/images/circle_default_image.png'),
+                                        ),
                                       ),
-                                    ),
+                                      SizedBox(height: 8),
+                                      clubIntroState.whenOrNull(
+                                              data: (data) =>
+                                                  SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Row(
+                                                      children: data
+                                                              .circleHashtag
+                                                              ?.map((tag) =>
+                                                                  _buildChip(
+                                                                      '#$tag'))
+                                                              .toList() ??
+                                                          [],
+                                                    ),
+                                                  )) ??
+                                          SizedBox.shrink(),
+                                    ],
                                   ),
-                                  SizedBox(width: 16),
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(height: 8),
-                                        TextFontWidget.fontRegular(
-                                          clubIntroState.value!.circleName,
-                                          overflow: TextOverflow.ellipsis,
-                                          color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.w900,
-                                          height: 1,
-                                          letterSpacing: -0.45,
-                                        ),
-                                        SizedBox(height: 5),
-                                        RichText(
-                                          overflow: TextOverflow.ellipsis,
-                                          text: TextSpan(
-                                            text: '동아리 회장 ',
-                                            style:
-                                                TextFontWidget.fontRegularStyle(
-                                              color: const Color(0xFF767676),
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1,
-                                              letterSpacing: -0.35,
-                                            ),
-                                            children: [
-                                              TextSpan(
-                                                text: clubIntroState
-                                                    .value!.leaderName,
-                                                style: TextStyle(
-                                                  color: Color(0xFF353549),
-                                                  fontWeight: FontWeight.w800,
-                                                  fontSize: 14,
-                                                  height: 1,
-                                                  letterSpacing: -0.35,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        SizedBox(height: 8),
-                                        clubIntroState.whenOrNull(
-                                                data: (data) =>
-                                                    SingleChildScrollView(
-                                                      scrollDirection:
-                                                          Axis.horizontal,
-                                                      child: Row(
-                                                        children: data
-                                                                .circleHashtag
-                                                                ?.map((tag) =>
-                                                                    _buildChip(
-                                                                        '#$tag'))
-                                                                .toList() ??
-                                                            [],
-                                                      ),
-                                                    )) ??
-                                            SizedBox.shrink(),
-                                      ],
-                                    ),
+                                ),
+                                Container(
+                                  alignment: Alignment.topCenter,
+                                  child: IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: BoxConstraints(),
+                                    visualDensity: VisualDensity.compact,
+                                    key: _iconKey,
+                                    onPressed: () {
+                                      if (_overlayEntry == null) {
+                                        _showOverlay(
+                                            clubIntroState.value!.circleRoom,
+                                            clubIntroState.value!.leaderHp,
+                                            clubIntroState.value!.circleInsta);
+                                      } else {
+                                        _removeOverlay();
+                                      }
+                                    },
+                                    icon: Icon(Icons.more_vert),
                                   ),
-                                  Container(
-                                    alignment: Alignment.topCenter,
-                                    child: IconButton(
-                                      padding: EdgeInsets.zero,
-                                      constraints: BoxConstraints(),
-                                      visualDensity: VisualDensity.compact,
-                                      key: _iconKey,
-                                      onPressed: () {
-                                        if (_overlayEntry == null) {
-                                          _showOverlay(
-                                              clubIntroState.value!.circleRoom,
-                                              clubIntroState.value!.leaderHp,
-                                              clubIntroState
-                                                  .value!.circleInsta);
-                                        } else {
-                                          _removeOverlay();
-                                        }
-                                      },
-                                      icon: Icon(Icons.more_vert),
-                                    ),
-                                  ),
-                                  SizedBox(width: 12),
-                                ],
-                              ),
-                              SizedBox(height: 16),
-                            ],
-                          ),
+                                ),
+                                SizedBox(width: 12),
+                              ],
+                            ),
+                            SizedBox(height: 16),
+                          ],
                         ),
-                        SliverPersistentHeader(
-                          delegate: _SliverAppBarDelegate(
-                            TabBar(
-                              controller: tabController,
-                              labelPadding: EdgeInsets.zero,
-                              labelColor: Color(0xFFFFFFFF),
-                              unselectedLabelColor: Color(0xFFCECECE),
-                              indicator: BoxDecoration(),
-                              tabs: [
+                      ),
+                      SliverPersistentHeader(
+                        delegate: _SliverAppBarDelegate(
+                          TabBar(
+                            controller: tabController,
+                            labelPadding: EdgeInsets.zero,
+                            labelColor: Color(0xFFFFFFFF),
+                            unselectedLabelColor: Color(0xFFCECECE),
+                            indicator: BoxDecoration(),
+                            tabs: [
+                              Tab(
+                                child: SizedBox.expand(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: selectedIndex == 0
+                                        ? Color(0xFFFFB052)
+                                        : Color(0xFFEBEBEB),
+                                    child:
+                                        TextFontWidget.fontRegular('동아리 소개 글'),
+                                  ),
+                                ),
+                              ),
+                              if (clubIntroState.value!.recruitmentStatus ==
+                                  "OPEN")
                                 Tab(
                                   child: SizedBox.expand(
                                     child: Container(
                                       alignment: Alignment.center,
-                                      color: selectedIndex == 0
+                                      color: selectedIndex == 1
                                           ? Color(0xFFFFB052)
                                           : Color(0xFFEBEBEB),
                                       child: TextFontWidget.fontRegular(
-                                          '동아리 소개 글'),
+                                          '동아리 모집 글'),
                                     ),
                                   ),
                                 ),
-                                if (clubIntroState.value!.recruitmentStatus ==
-                                    "OPEN")
-                                  Tab(
-                                    child: SizedBox.expand(
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        color: selectedIndex == 1
-                                            ? Color(0xFFFFB052)
-                                            : Color(0xFFEBEBEB),
-                                        child: TextFontWidget.fontRegular(
-                                            '동아리 모집 글'),
-                                      ),
-                                    ),
-                                  ),
-                              ],
-                            ),
+                            ],
                           ),
-                          pinned: true,
                         ),
-                      ];
-                    },
-                    body: TabBarView(
-                      controller: tabController,
-                      children: [
+                        pinned: true,
+                      ),
+                    ];
+                  },
+                  body: TabBarView(
+                    controller: tabController,
+                    children: [
+                      SingleChildScrollView(
+                        child: Container(
+                          alignment: Alignment.topLeft,
+                          padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
+                          child: Html(
+                            data: clubIntroState.value!.introContent,
+                          ),
+                        ),
+                      ),
+                      if (clubIntroState.value!.recruitmentStatus == "OPEN")
                         SingleChildScrollView(
                           child: Container(
                             alignment: Alignment.topLeft,
                             padding: EdgeInsets.fromLTRB(24, 24, 24, 0),
                             child: Html(
-                              data: clubIntroState.value!.introContent,
+                              data: clubIntroState.value!.clubRecruitment ?? '',
                             ),
                           ),
                         ),
-                        if (clubIntroState.value!.recruitmentStatus == "OPEN")
-                          SingleChildScrollView(
-                            child: Container(
-                              alignment: Alignment.topLeft,
-                              padding:
-                                  EdgeInsets.fromLTRB(24, 24, 24, 0),
-                              child: Html(
-                                data:
-                                    clubIntroState.value!.clubRecruitment ?? '',
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
+                    ],
                   ),
-      );
-
+                ),
+    );
   }
 
   Widget _buildChip(String label) {
