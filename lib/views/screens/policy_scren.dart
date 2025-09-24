@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
@@ -26,6 +27,12 @@ class PolicyScreen extends StatelessWidget {
 
   final PolicyType policyType;
   final bool isDialog;
+
+  String get webAssetPath {
+    // 웹 환경에서는 assets/ 경로가 추가로 필요합니다
+    return 'assets/${policyType.path}';
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,12 +102,25 @@ class PolicyScreen extends StatelessWidget {
       body: Column(
         children: [
           Flexible(
-            child: InAppWebView(
-              initialFile: policyType.path,
-              initialSettings: InAppWebViewSettings(
-                textZoom: 150,
-              ),
-            ),
+            child: kIsWeb
+                ? InAppWebView(
+                    initialUrlRequest: URLRequest(
+                      url: WebUri(webAssetPath),
+                    ),
+                    initialSettings: InAppWebViewSettings(
+                      textZoom: 150,
+                      allowFileAccessFromFileURLs: true,
+                      allowUniversalAccessFromFileURLs: true,
+                      allowContentAccess: true,
+                      allowFileAccess: true,
+                    ),
+                  )
+                : InAppWebView(
+                    initialFile: policyType.path,
+                    initialSettings: InAppWebViewSettings(
+                      textZoom: 150,
+                    ),
+                  ),
           ),
           const Divider(
             color: Colors.grey,
