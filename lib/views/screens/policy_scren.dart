@@ -3,6 +3,7 @@ import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:flutter/foundation.dart';
 
 enum PolicyType {
   privacyPolicy('assets/html/privacy_policy.html', '개인정보 처리방침'),
@@ -26,6 +27,7 @@ class PolicyScreen extends StatelessWidget {
 
   final PolicyType policyType;
   final bool isDialog;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -74,29 +76,34 @@ class PolicyScreen extends StatelessWidget {
       ),
       bottomNavigationBar: isDialog
           ? SizedBox(
-        height: 53.0,
-        child: TextButton(
-          style: TextButton.styleFrom(
-            foregroundColor: const Color(0xFF4791D7),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(0.0),
-            ),
-          ),
-          onPressed: () => Navigator.of(context).pop(true),
-          child: TextFontWidget.fontRegular(
-            '확인',
-            color: const Color(0xFF4791D7),
-            fontSize: 20.0,
-            fontWeight: FontWeight.w700,
-          ),
-        ),
-      )
+              height: 53.0,
+              child: TextButton(
+                style: TextButton.styleFrom(
+                  foregroundColor: const Color(0xFF4791D7),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(0.0),
+                  ),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: TextFontWidget.fontRegular(
+                  '확인',
+                  color: const Color(0xFF4791D7),
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+            )
           : null,
       body: Column(
         children: [
           Flexible(
             child: InAppWebView(
-              initialFile: policyType.path,
+              // 웹에서는 initialUrlRequest를 사용
+              initialUrlRequest: kIsWeb
+                  ? URLRequest(url: WebUri.uri(Uri.parse(policyType.path)))
+                  : null,
+              // 모바일에서는 initialFile을 사용
+              initialFile: kIsWeb ? null : policyType.path,
               initialSettings: InAppWebViewSettings(
                 textZoom: 150,
               ),
