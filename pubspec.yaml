@@ -120,9 +120,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/html/terms_of_service.html
-    - assets/html/privacy_policy.html
-    - assets/html/personal_information_collection_and_usage_agreement.html
+    - assets/html/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
