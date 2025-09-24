@@ -62,7 +62,7 @@ const RESOURCES = {"canvaskit/skwasm.js": "1ef3ea3a0fec4569e5d531da25f34095",
 "assets/packages/flutter_inappwebview/assets/t_rex_runner/t-rex.html": "16911fcc170c8af1c5457940bd0bf055",
 "assets/packages/flutter_inappwebview/assets/t_rex_runner/t-rex.css": "5a8d0222407e388155d7d1395a75d5b9",
 "assets/packages/flutter_inappwebview_web/assets/web/web_support.js": "509ae636cfdd93e49b5a6eaf0f06d79f",
-"flutter_bootstrap.js": "482ffe04c95fb705bcf30296b6acc27d",
+"flutter_bootstrap.js": "f5ca446f029bd6a3bba45379b8ad18cc",
 "splash/img/light-1x.png": "8dcf5033c88c709f2b2c44012a8467d6",
 "splash/img/light-3x.png": "b6f9511b9ce71b56f803c2f0b4663985",
 "splash/img/dark-3x.png": "b6f9511b9ce71b56f803c2f0b4663985",
@@ -72,8 +72,8 @@ const RESOURCES = {"canvaskit/skwasm.js": "1ef3ea3a0fec4569e5d531da25f34095",
 "splash/img/dark-1x.png": "8dcf5033c88c709f2b2c44012a8467d6",
 "splash/img/dark-4x.png": "380a525edf5c4346184d63e9753d7332",
 "favicon.png": "5dcef449791fa27946b3d35ad8803796",
-"index.html": "3c7c54058e790c96ca841cb131ee1624",
-"/": "3c7c54058e790c96ca841cb131ee1624"};
+"index.html": "2bacfd664554ce8147f1f82623db8d09",
+"/": "2bacfd664554ce8147f1f82623db8d09"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
