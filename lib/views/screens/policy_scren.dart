@@ -108,7 +108,7 @@ class PolicyScreen extends StatelessWidget {
                       url: WebUri(webAssetPath),
                     ),
                     initialSettings: InAppWebViewSettings(
-                      textZoom: 150,
+                      textZoom: 100,
                       allowFileAccessFromFileURLs: true,
                       allowUniversalAccessFromFileURLs: true,
                       allowContentAccess: true,
