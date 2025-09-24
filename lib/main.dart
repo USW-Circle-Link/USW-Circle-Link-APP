@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -15,6 +16,7 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/firebase_options.dart';
+
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
@@ -59,13 +61,34 @@ void main() async {
 
   final container = ProviderContainer();
 
-  container.listen(profileViewModelProvider, (previous, next) {
-    next.whenData((profile) {
-      logger.d('자동 로그인 완료: $profile');
-      if (profile != null) {
-        FlutterNativeSplash.remove();
-      }
+  // 웹 환경에서 스플래시 타임아웃 설정 (5초 후 강제 제거)
+  if (kIsWeb) {
+    Timer(const Duration(seconds: 5), () {
+      FlutterNativeSplash.remove();
+      logger.d('웹 타임아웃으로 스플래시 제거');
     });
+  }
+
+  container.listen(profileViewModelProvider, (previous, next) {
+    next.when(
+      data: (profile) {
+        logger.d('자동 로그인 완료: $profile');
+        if (profile != null) {
+          FlutterNativeSplash.remove();
+        } else if (!kIsWeb) {
+          // 모바일 앱에서만 profile이 null일 때 스플래시 제거
+          FlutterNativeSplash.remove();
+        }
+      },
+      loading: () {
+        logger.d('자동 로그인 중...');
+      },
+      error: (error, stack) {
+        logger.e('자동 로그인 에러: $error');
+        // 에러 발생 시에도 스플래시 제거
+        FlutterNativeSplash.remove();
+      },
+    );
   });
 
   runApp(
@@ -169,9 +192,16 @@ class CircleLink extends ConsumerWidget {
             .addNotification(message.aps.alert.body ?? '');
       }
     });
+
+    // 화면 크기 기반 모바일 웹 감지 (600px 이하를 모바일로 간주)
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobileWeb = kIsWeb && screenWidth <= 600;
+    
+    logger.d('Screen width: $screenWidth, isMobileWeb: $isMobileWeb');
+
     return FlutterWebFrame(
       maximumSize: const Size(475.0, 812.0),
-      enabled: kIsWeb,
+      enabled: kIsWeb && !isMobileWeb, // 모바일 웹에서는 FlutterWebFrame 비활성화
       builder: (context) {
         return ClipRect(
           child: MaterialApp.router(
