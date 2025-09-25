@@ -195,7 +195,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
           backgroundColor: const Color(0xffFFFFFF),
           automaticallyImplyLeading: false,
           title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 10.0),
+            padding: const EdgeInsets.symmetric(horizontal: 5.0),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

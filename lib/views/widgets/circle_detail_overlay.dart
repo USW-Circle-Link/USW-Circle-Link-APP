@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -88,8 +87,8 @@ class CircleDetailOverlay extends ConsumerWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-          width: width ?? 195.w,
-          height: 142.h,
+          width: width ?? 195,
+          height: 142,
           constraints: const BoxConstraints(
             maxWidth: 300,
             minHeight: 100,
@@ -99,7 +98,7 @@ class CircleDetailOverlay extends ConsumerWidget {
             boxShadow: [
               BoxShadow(
                 color: Colors.black26,
-                blurRadius: 6.r,
+                blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
             ],
@@ -107,26 +106,26 @@ class CircleDetailOverlay extends ConsumerWidget {
           child: Column(
             children: [
               Container(
-                height: 43.h,
+                height: 43,
                 decoration: BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
                   color: const Color(0xFF767676),
-                  width: 1.w,
+                  width: 1,
                 ))),
                 child: Row(
                   children: [
                     SizedBox(
-                      width: 10.w,
+                      width: 10,
                     ),
                     TextFontWidget.fontRegular(
                       '동아리 정보',
-                      fontSize: 13.sp,
+                      fontSize: 13,
                       fontWeight: FontWeight.w700,
                       color: Colors.black,
                     ),
                     SizedBox(
-                      width: 90.w,
+                      width: 90,
                     ),
                     InkWell(
                       onTap: onClose,
@@ -150,13 +149,13 @@ class CircleDetailOverlay extends ConsumerWidget {
                       }
                     : null,
                 child: Container(
-                  padding: EdgeInsets.all(10.sp),
-                  height: 33.h,
+                  padding: EdgeInsets.all(10),
+                  height: 33,
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
                     color: const Color(0xFF767676),
-                    width: 0.5.w,
+                    width: 0.5,
                   ))),
                   child: Row(
                     children: [
@@ -165,7 +164,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                         scale: 1,
                       ),
                       SizedBox(
-                        width: 4.w,
+                        width: 4,
                       ),
                       state.when(
                         data: (data) => _circleRoomText(
@@ -201,23 +200,23 @@ class CircleDetailOverlay extends ConsumerWidget {
                       }
                     : null,
                 child: Container(
-                  padding: EdgeInsets.all(10.sp),
-                  height: 33.h,
+                  padding: EdgeInsets.all(10),
+                  height: 33,
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
                     color: const Color(0xFF767676),
-                    width: 0.5.w,
+                    width: 0.5,
                   ))),
                   child: Row(
                     children: [
                       SvgPicture.asset(
                         'assets/images/phonelogo.svg',
-                        height: 12.h,
-                        width: 12.w,
+                        height: 12,
+                        width: 12,
                       ),
                       SizedBox(
-                        width: 4.w,
+                        width: 4,
                       ),
                       TextFontWidget.fontRegular(
                         leaderHp != null && leaderHp!.isNotEmpty
@@ -230,7 +229,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                                 ? leaderHp!.addDashOrNull() ?? "정보 없음"
                                 : "로그인 후 이용해주세요."
                             : "정보 없음",
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
                         color: leaderHp != null &&
@@ -262,13 +261,13 @@ class CircleDetailOverlay extends ConsumerWidget {
                       }
                     : null,
                 child: Container(
-                  padding: EdgeInsets.all(10.sp),
-                  height: 33.h,
+                  padding: EdgeInsets.all(10),
+                  height: 33,
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
                     color: const Color(0xFF767676),
-                    width: 0.5.w,
+                    width: 0.5,
                   ))),
                   child: Row(
                     children: [
@@ -276,13 +275,13 @@ class CircleDetailOverlay extends ConsumerWidget {
                         'assets/images/Instagram_logo.png',
                       ),
                       SizedBox(
-                        width: 4.w,
+                        width: 4,
                       ),
                       TextFontWidget.fontRegular(
                         clubInsta != null && clubInsta!.isNotEmpty
                             ? '인스타그램'
                             : '정보 없음',
-                        fontSize: 12.sp,
+                        fontSize: 12,
                         fontWeight: FontWeight.w400,
                         height: -0.1,
                         color: clubInsta != null && clubInsta!.isNotEmpty
@@ -301,7 +300,7 @@ class CircleDetailOverlay extends ConsumerWidget {
   Widget _circleRoomText(String? circleRoom, String? floorPhotoPath) {
     return TextFontWidget.fontRegular(
       '동아리방 | ${circleRoom != null && circleRoom.isNotEmpty ? "학생회관 $circleRoom호" : "정보 없음"}',
-      fontSize: 12.sp,
+      fontSize: 12,
       fontWeight: FontWeight.w400,
       height: -0.1,
       color: floorPhotoPath != null && floorPhotoPath.isValidUrl
