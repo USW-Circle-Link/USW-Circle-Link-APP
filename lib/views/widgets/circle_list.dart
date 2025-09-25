@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/views/widgets/circle_group.dart';
+import 'package:usw_circle_link/common/scroll_behavior.dart';
 
 class CircleList extends StatelessWidget {
   const CircleList({
@@ -15,15 +16,18 @@ class CircleList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      shrinkWrap: true,
-      children: state.data
-          .getClassifiedList()
-          .getSortedListWithValidImage()
-          .entries
-          .map((entry) {
-        return CircleGroup(department: entry, onItemClicked: onItemClicked);
-      }).toList(),
+    return ScrollConfiguration(
+        behavior: MyScrollBehavior(),
+        child: ListView(
+          shrinkWrap: true,
+          children: state.data
+              .getClassifiedList()
+              .getSortedListWithValidImage()
+              .entries
+              .map((entry) {
+            return CircleGroup(department: entry, onItemClicked: onItemClicked);
+          }).toList(),
+        )
     );
   }
 }
