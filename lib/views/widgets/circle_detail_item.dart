@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
@@ -60,7 +59,7 @@ class CircleDetailItem extends StatelessWidget {
         _iconKey.currentContext!.findRenderObject() as RenderBox;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     final Size size = renderBox.size;
-    final double width = 195.w;
+    final double width = 195;
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
@@ -100,19 +99,19 @@ class CircleDetailItem extends StatelessWidget {
       child: Column(
         children: [
           Container(
-            width: 327.w,
+            width: 375,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
               color: const Color(0xffFFFFFF),
             ),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(8.r),
+                borderRadius: BorderRadius.circular(8),
                 onTap: () => context.push('/circle?clubUUID=$clubUUID'),
                 child: Padding(
                   padding:
-                      EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
+                      EdgeInsets.symmetric(vertical: 14, horizontal: 21),
                   child: Stack(
                     children: [
                       if (status != CircleDetailItemStatus.undefined)
@@ -121,19 +120,19 @@ class CircleDetailItem extends StatelessWidget {
                           right: 0,
                           child: Container(
                             padding: EdgeInsets.symmetric(
-                                vertical: 5.h, horizontal: 10.w),
+                                vertical: 5, horizontal: 10),
                             decoration: BoxDecoration(
                               color: status.color,
-                              borderRadius: BorderRadius.circular(16.sp),
+                              borderRadius: BorderRadius.circular(16),
                             ),
                             child: Container(
                               child: TextFontWidget.fontRegular(
                                 status.text,
                                 color: const Color(0xffFFFFFF),
-                                fontSize: 10.sp,
+                                fontSize: 10,
                                 fontWeight: FontWeight.w800,
-                                height: 1.h,
-                                letterSpacing: -0.6.sp,
+                                height: 1,
+                                letterSpacing: -0.6,
                               ),
                             ),
                           ),
@@ -143,12 +142,12 @@ class CircleDetailItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 80.h,
-                            width: 67.w,
+                            height: 80,
+                            width: 67,
                             decoration: BoxDecoration(
                               border:
                                   Border.all(color: const Color(0xffc4c4c4)),
-                              borderRadius: BorderRadius.circular(8.r),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: HeroMode(
                               enabled:
@@ -157,7 +156,7 @@ class CircleDetailItem extends StatelessWidget {
                               child: Hero(
                                 tag: 'circle_${clubUUID}',
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.r),
+                                  borderRadius: BorderRadius.circular(8),
                                   child:
                                       imageUrl != null && imageUrl!.isValidUrl
                                           ? Image.network(
@@ -172,33 +171,33 @@ class CircleDetailItem extends StatelessWidget {
                               ),
                             ),
                           ),
-                          SizedBox(width: 16.w),
+                          SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 8.h),
+                                SizedBox(height: 8),
                                 TextFontWidget.fontRegular(
                                   name,
                                   overflow: TextOverflow.ellipsis,
                                   color: Colors.black,
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w900,
-                                  height: 1.h,
-                                  letterSpacing: -0.45.sp,
+                                  height: 1,
+                                  letterSpacing: -0.45,
                                 ),
-                                SizedBox(height: 5.h),
+                                SizedBox(height: 5),
                                 RichText(
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                     text: '동아리 회장 ',
                                     style: TextFontWidget.fontRegularStyle(
                                       color: const Color(0xFF767676),
-                                      fontSize: 14.sp,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      height: 1.h,
-                                      letterSpacing: -0.35.sp,
+                                      height: 1,
+                                      letterSpacing: -0.35,
                                     ),
                                     children: [
                                       TextSpan(
@@ -206,9 +205,9 @@ class CircleDetailItem extends StatelessWidget {
                                         style: TextStyle(
                                           color: Color(0xFF353549),
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 14.sp,
-                                          height: 1.h,
-                                          letterSpacing: -0.35.sp,
+                                          fontSize: 14,
+                                          height: 1,
+                                          letterSpacing: -0.35,
                                         ),
                                       ),
                                     ],
@@ -243,7 +242,7 @@ class CircleDetailItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 12.h),
+          SizedBox(height: 12),
         ],
       ),
     );

@@ -26,42 +26,38 @@ class CircleListScreen extends ConsumerWidget {
     return Scaffold(
       backgroundColor: const Color(0xffF0F2F5),
       resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(62),
-        child: AppBar(
-          scrolledUnderElevation: 0,
-          toolbarHeight: 62,
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: const Color(0xffFFFFFF),
-          automaticallyImplyLeading: false,
-          title: SizedBox(
-            width: 375,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
+      appBar: AppBar(
+        scrolledUnderElevation: 0,
+        toolbarHeight: 62,
+        centerTitle: true,
+        elevation: 0.0,
+        backgroundColor: const Color(0xffFFFFFF),
+        automaticallyImplyLeading: false,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 52.0,
+                height: 52.0,
+                child: IconButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Navigator.of(context).pop();
                   },
                   icon: SvgPicture.asset(
                     'assets/images/ic_back_arrow.svg',
-                    height: 36,
-                    width: 36,
                   ),
                 ),
-                SizedBox(width: 62.25),
-                TextFontWidget.fontRegular(
-                  listType.title,
-                  color: Colors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.w800,
-                  height: 1.111,
-                  letterSpacing: -0.45,
-                ),
-                Expanded(child: Container()),
-              ],
-            ),
+              ),
+              TextFontWidget.fontRegular(
+                listType.title,
+                fontSize: 18.0,
+                color: const Color(0xFF111111),
+                fontWeight: FontWeight.w800,
+              ),
+              const SizedBox(width: 52.0, height: 52.0)
+            ],
           ),
         ),
       ),
