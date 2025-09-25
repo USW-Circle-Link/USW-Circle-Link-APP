@@ -198,32 +198,25 @@ class CircleLink extends ConsumerWidget {
 
     logger.d('Screen width: $screenWidth, isMobileWeb: $isMobileWeb');
 
-    return FlutterWebFrame(
-      maximumSize: const Size(475.0, 812.0),
-      enabled: kIsWeb && !isMobileWeb, // 모바일 웹에서는 FlutterWebFrame 비활성화
-      builder: (context) {
-        return ClipRect(
-          child: MaterialApp.router(
-            debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              appBarTheme: AppBarTheme(
-                backgroundColor: Colors.white,
-              ),
-            ),
-            routerConfig: ref.read(routerProvider),
-            builder: (context, child) {
-              return UpgradeAlert(
-                showIgnore: false,
-                upgrader: upgrader,
-                navigatorKey:
-                    ref.read(routerProvider).routerDelegate.navigatorKey,
-                child: child,
-              );
-            },
+    return ClipRect(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          appBarTheme: AppBarTheme(
+            backgroundColor: Colors.white,
           ),
-        );
-      },
+        ),
+        routerConfig: ref.read(routerProvider),
+        builder: (context, child) {
+          return UpgradeAlert(
+            showIgnore: false,
+            upgrader: upgrader,
+            navigatorKey: ref.read(routerProvider).routerDelegate.navigatorKey,
+            child: child,
+          );
+        },
+      ),
     );
   }
 }
