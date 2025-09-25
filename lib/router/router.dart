@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
+import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
 import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
@@ -134,10 +135,12 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           webviewRouter,
           GoRoute(
-            path: 'circle_list',
-            builder: (_, state) => CircleListScreen(
-              listType: state.extra as CircleListType,
-            ),
+            path: 'circle_list/:type',
+            builder: (_, state) {
+              final typeParam = state.pathParameters['type'];
+              final listType = parseCircleListType(typeParam);
+              return CircleListScreen(listType: listType);
+            },
           ),
           GoRoute(
             path: 'update_profile',
