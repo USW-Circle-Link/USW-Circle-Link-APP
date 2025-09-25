@@ -17,7 +17,6 @@ import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/firebase_options.dart';
 
-
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
   logger.d('백그라운드 알림 수신 완료!');
@@ -196,7 +195,7 @@ class CircleLink extends ConsumerWidget {
     // 화면 크기 기반 모바일 웹 감지 (600px 이하를 모바일로 간주)
     final screenWidth = MediaQuery.of(context).size.width;
     final isMobileWeb = kIsWeb && screenWidth <= 600;
-    
+
     logger.d('Screen width: $screenWidth, isMobileWeb: $isMobileWeb');
 
     return FlutterWebFrame(
