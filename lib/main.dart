@@ -1,11 +1,10 @@
-import 'dart:async';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
+//import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -42,7 +41,7 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   // Native Splash
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+  //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // 화면 방향 설정
   await SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
@@ -60,40 +59,19 @@ void main() async {
 
   final container = ProviderContainer();
 
-  // 웹 환경에서 스플래시 타임아웃 설정 (5초 후 강제 제거)
-  if (kIsWeb) {
-    Timer(const Duration(seconds: 5), () {
-      FlutterNativeSplash.remove();
-      logger.d('웹 타임아웃으로 스플래시 제거');
-    });
-  }
-
   container.listen(profileViewModelProvider, (previous, next) {
-    next.when(
-      data: (profile) {
-        logger.d('자동 로그인 완료: $profile');
-        if (profile != null) {
-          FlutterNativeSplash.remove();
-        } else if (!kIsWeb) {
-          // 모바일 앱에서만 profile이 null일 때 스플래시 제거
-          FlutterNativeSplash.remove();
-        }
-      },
-      loading: () {
-        logger.d('자동 로그인 중...');
-      },
-      error: (error, stack) {
-        logger.e('자동 로그인 에러: $error');
-        // 에러 발생 시에도 스플래시 제거
-        FlutterNativeSplash.remove();
-      },
-    );
+    next.whenData((profile) {
+      logger.d('자동 로그인 완료: $profile');
+      if (profile != null) {
+        //FlutterNativeSplash.remove();
+      }
+    });
   });
 
   runApp(
     ProviderScope(
       parent: container,
-      child: CircleLink(),
+      child: Container(),
     ),
   );
 }
@@ -191,32 +169,32 @@ class CircleLink extends ConsumerWidget {
             .addNotification(message.aps.alert.body ?? '');
       }
     });
-
-    // 화면 크기 기반 모바일 웹 감지 (600px 이하를 모바일로 간주)
-    final screenWidth = MediaQuery.of(context).size.width;
-    final isMobileWeb = kIsWeb && screenWidth <= 600;
-
-    logger.d('Screen width: $screenWidth, isMobileWeb: $isMobileWeb');
-
-    return ClipRect(
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData(
-          scaffoldBackgroundColor: Colors.white,
-          appBarTheme: AppBarTheme(
-            backgroundColor: Colors.white,
+    return FlutterWebFrame(
+      maximumSize: const Size(475.0, 812.0),
+      enabled: kIsWeb,
+      builder: (context) {
+        return ClipRect(
+          child: MaterialApp.router(
+            debugShowCheckedModeBanner: false,
+            theme: ThemeData(
+              scaffoldBackgroundColor: Colors.white,
+              appBarTheme: AppBarTheme(
+                backgroundColor: Colors.white,
+              ),
+            ),
+            routerConfig: ref.read(routerProvider),
+            builder: (context, child) {
+              return UpgradeAlert(
+                showIgnore: false,
+                upgrader: upgrader,
+                navigatorKey:
+                    ref.read(routerProvider).routerDelegate.navigatorKey,
+                child: child,
+              );
+            },
           ),
-        ),
-        routerConfig: ref.read(routerProvider),
-        builder: (context, child) {
-          return UpgradeAlert(
-            showIgnore: false,
-            upgrader: upgrader,
-            navigatorKey: ref.read(routerProvider).routerDelegate.navigatorKey,
-            child: child,
-          );
-        },
-      ),
+        );
+      },
     );
   }
 }

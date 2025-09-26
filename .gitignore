@@ -87,3 +87,6 @@ Gemfile.lock
 .DS_Store
 
 .vscode/
+
+.gemini/
+gha-creds-*.json
