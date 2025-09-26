@@ -34,7 +34,7 @@ dependencies:
   ## UI
   flutter_screenutil: ^5.9.3
   # 스플래쉬
-  flutter_native_splash: ^2.4.2
+  flutter_native_splash: 2.4.2
   # 웹뷰
   flutter_inappwebview: ^6.0.0
   # 텍스트
@@ -107,8 +107,6 @@ dev_dependencies:
   retrofit_generator: '>=7.0.0 <8.0.0'
   json_serializable: ^6.8.0
   freezed: ^2.5.2
-
-  flutter_native_splash: ^2.4.2
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
