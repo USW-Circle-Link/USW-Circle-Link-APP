@@ -71,7 +71,7 @@ void main() async {
   runApp(
     ProviderScope(
       parent: container,
-      child: Container(),
+      child: CircleLink(),
     ),
   );
 }
