@@ -117,22 +117,25 @@ Future<void> setupFlutterNotifications() async {
               onDidReceiveNotificationResponse);
 
   logger.d('Android - $result');
-  // iOS foreground notification 권한
-  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-  // IOS background 권한 체킹 , 요청
-  await FirebaseMessaging.instance.requestPermission(
-    alert: true,
-    announcement: true,
-    badge: true,
-    carPlay: true,
-    criticalAlert: true,
-    provisional: true,
-    sound: true,
-  );
+  if (!kIsWeb) {
+    // iOS foreground notification 권한
+    await FirebaseMessaging.instance
+        .setForegroundNotificationPresentationOptions(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+    // IOS background 권한 체킹 , 요청
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      announcement: true,
+      badge: true,
+      carPlay: true,
+      criticalAlert: true,
+      provisional: true,
+      sound: true,
+    );
+  }
   // 셋팅flag 설정
   isFlutterLocalNotificationsInitialized = true;
 }
