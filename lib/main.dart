@@ -117,6 +117,8 @@ Future<void> setupFlutterNotifications() async {
               onDidReceiveNotificationResponse);
 
   logger.d('Android - $result');
+
+  // 모바일 웹인 경우 처리
   if (!kIsWeb) {
     // iOS foreground notification 권한
     await FirebaseMessaging.instance

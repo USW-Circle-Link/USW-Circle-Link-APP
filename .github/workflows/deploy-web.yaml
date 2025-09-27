@@ -27,11 +27,11 @@ jobs:
         run: flutter pub get
 
       - name: Build Flutter web
-        run: flutter build web --release --base-href /USW-Circle-Link-APP/
+        run: flutter build web --release 
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
-          # cname: donggurami.net
+          cname: donggurami.net
