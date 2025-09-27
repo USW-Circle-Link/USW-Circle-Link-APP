@@ -12,7 +12,7 @@ final dioProvider = Provider<Dio>((ref) {
       baseUrl: '$protocol://$host:$port',
       headers: {
         'Content-Type': 'application/json',
-        if (kIsWeb) 'Access-Control-Allow-Origin': '*',
+        // if (kIsWeb) 'Access-Control-Allow-Origin': '*',
       },
     ),
   );
