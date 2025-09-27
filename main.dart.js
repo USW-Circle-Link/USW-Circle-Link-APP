@@ -122678,12 +122678,8 @@ return A.q($async$Cl,r)}}
 A.a3B.prototype={
 gnR(){return A.cy([B.aN,B.bX,B.bD,B.bn,B.cD],t.E)}}
 A.bcc.prototype={
-$1(a){var s,r=$.bAg(),q=$.bA4(),p=$.bAf(),o=A.A(t.N,t.z)
-o.m(0,"Content-Type","application/json")
-o.m(0,"Access-Control-Allow-Origin","*")
-s=A.blR(A.bkM(A.c(r)+"://"+A.c(q)+":"+A.c(p),o))
-o=s.aaP$
-o.G(o,A.b([new A.KZ(a),new A.Rb(a,a.bR($.anD(),t.ka))],t.lC))
+$1(a){var s=A.blR(A.bkM(A.c($.bAg())+"://"+A.c($.bA4())+":"+A.c($.bAf()),A.F(["Content-Type","application/json"],t.N,t.z))),r=s.aaP$
+r.G(r,A.b([new A.KZ(a),new A.Rb(a,a.bR($.anD(),t.ka))],t.lC))
 return s},
 $S:794}
 A.bd1.prototype={
