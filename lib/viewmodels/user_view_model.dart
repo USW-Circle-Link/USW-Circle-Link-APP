@@ -85,7 +85,8 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
     required String password,
   }) async {
     try {
-      final token = await firebaseCloudMessagingViewModel.getToken();
+      // final token = await firebaseCloudMessagingViewModel.getToken();
+      final token = "dummy_token";
       logger.d('FCM Token - $token');
 
       final response = await authRepository.login(
