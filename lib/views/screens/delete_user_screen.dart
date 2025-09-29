@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
@@ -49,20 +48,18 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
 
     _listen();
 
-    return ScreenUtilInit(
-        designSize: const Size(375, 812),
-        builder: (context, child) => Scaffold(
+    return Scaffold(
               appBar: AppBar(
                 automaticallyImplyLeading: false,
                 titleSpacing: 0.0,
                 title: Padding(
-                  padding: EdgeInsets.only(left: 22.w, right: 22.w),
+                  padding: EdgeInsets.only(left: 22, right: 22),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       SizedBox(
-                        width: 52.w,
-                        height: 52.h,
+                        width: 52,
+                        height: 52,
                         child: IconButton(
                           onPressed: () {
                             Navigator.of(context).pop();
@@ -74,53 +71,53 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                       ),
                       TextFontWidget.fontRegular(
                         '회원탈퇴',
-                        fontSize: 18.sp,
+                        fontSize: 18,
                         color: Color(0xFF111111),
                         fontWeight: FontWeight.w800,
                       ),
-                      SizedBox(width: 52.w, height: 52.h)
+                      SizedBox(width: 52, height: 52)
                     ],
                   ),
                 ),
               ),
               body: SingleChildScrollView(
                 child: Container(
-                  margin: EdgeInsets.only(top: 30.h),
-                  padding: EdgeInsets.only(left: 32.w, right: 32.w),
+                  margin: EdgeInsets.only(top: 30),
+                  padding: EdgeInsets.only(left: 32, right: 32),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TextFontWidget.fontRegular(
                         '이메일',
-                        fontSize: 16.sp,
+                        fontSize: 16,
                         color: Color(0xFF000000),
                         fontWeight: FontWeight.w400,
                       ),
-                      SizedBox(height: 5.h),
+                      SizedBox(height: 5),
                       RoundedTextField(
-                        height: 50.h,
+                        height: 50,
                         textEditController: emailEditController,
-                        leftBottomCornerRadius: 8.r,
-                        rightBottomCornerRadius: 8.r,
-                        leftTopCornerRadius: 8.r,
-                        rightTopCornerRadius: 8.r,
-                        borderWidth: 1.w,
+                        leftBottomCornerRadius: 8,
+                        rightBottomCornerRadius: 8,
+                        leftTopCornerRadius: 8,
+                        rightTopCornerRadius: 8,
+                        borderWidth: 1,
                         maxLines: 1,
                         textInputType: TextInputType.text,
                         textAlign: TextAlign.left,
                         hintText: '이메일 입력',
                         readOnly: true,
-                        paddingLeft: 0.w,
+                        paddingLeft: 0,
                         textStyle: TextFontWidget.fontRegularStyle(
-                          fontSize: 14.sp,
+                          fontSize: 14,
                           color: Color(0xFF959595),
                         ),
                         backgroundColor: Color(0xFFE6E6E6),
                       ),
-                      SizedBox(height: 16.h),
+                      SizedBox(height: 16),
                       SizedBox(
                         width: double.infinity,
-                        height: 56.h,
+                        height: 56,
                         child: OutlinedButton(
                           onPressed: isLoading
                               ? null
@@ -142,7 +139,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                               width: 0.0,
                             ),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.r),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: TextFontWidget.fontRegular(
@@ -153,14 +150,14 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                     : isSendCodeSuccess
                                         ? '포털로 이동하기 ${timerNotifier.timerText}'
                                         : '이메일 전송',
-                            fontSize: 18.sp,
+                            fontSize: 18,
                             color: const Color(0xFFFFFFFF),
                             fontWeight: FontWeight.w800,
                           ),
                         ),
                       ),
                       SizedBox(
-                        height: 16.h,
+                        height: 16,
                       ),
                       RichText(
                         textAlign: TextAlign.center,
@@ -168,7 +165,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           text: "* 가입하신 포털 메일로 ",
                           style: TextStyle(
                               fontFamily: 'SUIT',
-                              fontSize: 12.sp,
+                              fontSize: 12,
                               color: const Color(0xFF6F6F6F),
                               fontWeight: FontWeight.w400),
                           children: const [
@@ -186,17 +183,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                       ),
                       SizedBox(
-                        height: 10.h,
+                        height: 10,
                       ),
                       if (error != null && !isCodeError) ...[
                         TextFontWidget.fontRegular(
                           '* $error',
-                          fontSize: 12.sp,
+                          fontSize: 12,
                           color: const Color(0xFFFF3F3F),
                         ),
                       ],
                       SizedBox(
-                        height: 10.h,
+                        height: 10,
                       ),
                       if (isSendCodeSuccess) ...[
                         Row(
@@ -204,7 +201,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           children: [
                             TextFontWidget.fontRegular(
                               '메일을 받지 못하셨나요?',
-                              fontSize: 12.sp,
+                              fontSize: 12,
                               color: const Color(0xFF989898),
                               fontWeight: FontWeight.w400,
                               textDecoration: TextDecoration.underline,
@@ -219,7 +216,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                               onPressed: sendMail,
                               child: TextFontWidget.fontRegular(
                                 '재전송',
-                                fontSize: 12.sp,
+                                fontSize: 12,
                                 color: const Color(0xFF2F8ADF),
                                 fontWeight: FontWeight.w400,
                                 textDecoration: TextDecoration.underline,
@@ -229,17 +226,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 20,
                         ),
                         RoundedTextField(
-                          height: 50.h,
+                          height: 50,
                           textInputAction: TextInputAction.next,
                           textEditController: codeEditController,
-                          leftBottomCornerRadius: 8.r,
-                          rightBottomCornerRadius: 8.r,
-                          leftTopCornerRadius: 8.r,
-                          rightTopCornerRadius: 8.r,
-                          borderWidth: 1.w,
+                          leftBottomCornerRadius: 8,
+                          rightBottomCornerRadius: 8,
+                          leftTopCornerRadius: 8,
+                          rightTopCornerRadius: 8,
+                          borderWidth: 1,
                           maxLines: 1,
                           textInputType: TextInputType.text,
                           textAlign: TextAlign.left,
@@ -252,10 +249,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                           borderColor:
                               isCodeError ? const Color(0xFFFF3F3F) : null,
                           isAnimatedHint: false,
-                          paddingLeft: 0.w,
-                          paddingRight: 6.w,
+                          paddingLeft: 0,
+                          paddingRight: 6,
                           suffixIcon: SizedBox(
-                            width: 83.w,
+                            width: 83,
                             child: OutlinedButton(
                               onPressed: isLoading
                                   ? null
@@ -275,7 +272,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                               rightButtonTextStyle:
                                                   TextFontWidget
                                                       .fontRegularStyle(
-                                                fontSize: 18.sp,
+                                                fontSize: 18,
                                                 color: const Color(0xFFFF3B30),
                                                 fontWeight: FontWeight.w800,
                                               ));
@@ -295,33 +292,33 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                                   width: 0.0,
                                 ),
                                 shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16.r),
+                                  borderRadius: BorderRadius.circular(16),
                                 ),
                                 minimumSize: Size.zero,
                                 padding: EdgeInsets.only(
-                                  left: 12.w,
-                                  right: 12.w,
-                                  top: 6.h,
-                                  bottom: 6.h,
+                                  left: 12,
+                                  right: 12,
+                                  top: 6,
+                                  bottom: 6,
                                 ),
                               ),
                               child: TextFontWidget.fontRegular(
                                 isLoading ? '로딩중' : '확인',
-                                fontSize: 14.sp,
+                                fontSize: 14,
                                 color: Color(0xFFFFFFFF),
                                 fontWeight: FontWeight.w800,
                               ),
                             ),
                           ),
                           hintStyle: TextFontWidget.fontRegularStyle(
-                            fontSize: 14.sp,
+                            fontSize: 14,
                           ),
                         ),
-                        SizedBox(height: 10.h),
+                        SizedBox(height: 10),
                         if (error != null && isCodeError) ...[
                           TextFontWidget.fontRegular(
                             "* $error",
-                            fontSize: 11.sp,
+                            fontSize: 11,
                             color: const Color(0xFFFF3F3F),
                           ),
                         ]
@@ -330,7 +327,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                   ),
                 ),
               ),
-            ));
+            );
   }
 
   Future<void> sendMail() async {
