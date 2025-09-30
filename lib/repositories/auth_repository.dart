@@ -108,7 +108,7 @@ class AuthRepository {
   }
 
   Future<bool> verifyEmail({required String email}) async {
-    final response = await dio.get(
+    final response = await dio.post(
       '$basePath/check/email/duplicate',
       data: {
         'email': email,
