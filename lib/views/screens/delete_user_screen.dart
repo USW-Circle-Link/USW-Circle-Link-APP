@@ -37,11 +37,11 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
     final isVerifyCodeSuccess = ref.watch(deleteUserViewModelProvider
         .select((state) => state.isVerifyCodeSuccess));
     final error =
-        ref.watch(deleteUserViewModelProvider.select((state) => state.error));
+    ref.watch(deleteUserViewModelProvider.select((state) => state.error));
     final isCodeError = ref.watch(
         deleteUserViewModelProvider.select((state) => state.isCodeError));
     final email =
-        ref.watch(deleteUserViewModelProvider.select((state) => state.email));
+    ref.watch(deleteUserViewModelProvider.select((state) => state.email));
 
     final _ = ref.watch(timerProvider);
     final timerNotifier = ref.watch(timerProvider.notifier);
@@ -49,285 +49,278 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
     _listen();
 
     return Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: false,
-                titleSpacing: 0.0,
-                title: Padding(
-                  padding: EdgeInsets.only(left: 22, right: 22),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      SizedBox(
-                        width: 52,
-                        height: 52,
-                        child: IconButton(
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          icon: SvgPicture.asset(
-                            'assets/images/ic_back_arrow.svg',
-                          ),
-                        ),
-                      ),
-                      TextFontWidget.fontRegular(
-                        '회원탈퇴',
-                        fontSize: 18,
-                        color: Color(0xFF111111),
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 22.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 52.0,
+                height: 52.0,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/ic_back_arrow.svg',
+                  ),
+                ),
+              ),
+              TextFontWidget.fontRegular(
+                '회원탈퇴',
+                fontSize: 18.0,
+                color: const Color(0xFF111111),
+                fontWeight: FontWeight.w800,
+              ),
+              const SizedBox(width: 52.0, height: 52.0)
+            ],
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(top: 30.0),
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              TextFontWidget.fontRegular(
+                '이메일',
+                fontSize: 16.0,
+                color: const Color(0xFF000000),
+                fontWeight: FontWeight.w400,
+              ),
+              const SizedBox(height: 5.0),
+              RoundedTextField(
+                height: 50.0,
+                textEditController: emailEditController,
+                leftBottomCornerRadius: 8.0,
+                rightBottomCornerRadius: 8.0,
+                leftTopCornerRadius: 8.0,
+                rightTopCornerRadius: 8.0,
+                borderWidth: 1.0,
+                maxLines: 1,
+                textInputType: TextInputType.text,
+                textAlign: TextAlign.left,
+                hintText: '이메일 입력',
+                readOnly: true,
+                paddingLeft: 0.0,
+                textStyle: TextFontWidget.fontRegularStyle(
+                  fontSize: 14.0,
+                  color: const Color(0xFF959595),
+                ),
+                backgroundColor: const Color(0xFFE6E6E6),
+              ),
+              const SizedBox(height: 16.0),
+              SizedBox(
+                width: double.infinity,
+                height: 56.0,
+                child: OutlinedButton(
+                  onPressed: isLoading
+                      ? null
+                      : isVerifyCodeSuccess
+                      ? null
+                      : isSendCodeSuccess
+                      ? () {
+                    final encodedUrl = Uri.encodeComponent(
+                        'https://mail.suwon.ac.kr:10443/m/index.jsp');
+
+                    context.push('/webview/$encodedUrl');
+                  }
+                      : sendMail,
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: const Color(0xffffB052),
+                    foregroundColor: const Color(0xFFFFFFFF),
+                    side: const BorderSide(
+                      color: Colors.transparent,
+                      width: 0.0,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                  ),
+                  child: TextFontWidget.fontRegular(
+                    isLoading
+                        ? '로딩 중 ...'
+                        : isVerifyCodeSuccess
+                        ? '포털로 이동하기 ${timerNotifier.timerText}'
+                        : isSendCodeSuccess
+                        ? '포털로 이동하기 ${timerNotifier.timerText}'
+                        : '이메일 전송',
+                    fontSize: 18.0,
+                    color: const Color(0xFFFFFFFF),
+                    fontWeight: FontWeight.w800,
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 16.0,
+              ),
+              RichText(
+                textAlign: TextAlign.center,
+                text: TextSpan(
+                  text: "* 가입하신 포털 메일로 ",
+                  style: const TextStyle(
+                      fontFamily: 'SUIT',
+                      fontSize: 12.0,
+                      color: Color(0xFF6F6F6F),
+                      fontWeight: FontWeight.w400),
+                  children: const [
+                    TextSpan(
+                      text: "인증코드",
+                      style: TextStyle(
+                        color: Color(0xffffB052),
                         fontWeight: FontWeight.w800,
                       ),
-                      SizedBox(width: 52, height: 52)
-                    ],
-                  ),
+                    ),
+                    TextSpan(
+                      text: '를 전송합니다',
+                    ),
+                  ],
                 ),
               ),
-              body: SingleChildScrollView(
-                child: Container(
-                  margin: EdgeInsets.only(top: 30),
-                  padding: EdgeInsets.only(left: 32, right: 32),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TextFontWidget.fontRegular(
-                        '이메일',
-                        fontSize: 16,
-                        color: Color(0xFF000000),
+              const SizedBox(
+                height: 10.0,
+              ),
+              if (error != null && !isCodeError) ...[
+                TextFontWidget.fontRegular(
+                  '* $error',
+                  fontSize: 12.0,
+                  color: const Color(0xFFFF3F3F),
+                ),
+              ],
+              const SizedBox(
+                height: 10.0,
+              ),
+              if (isSendCodeSuccess) ...[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFontWidget.fontRegular(
+                      '메일을 받지 못하셨나요?',
+                      fontSize: 12.0,
+                      color: const Color(0xFF989898),
+                      fontWeight: FontWeight.w400,
+                      textDecoration: TextDecoration.underline,
+                      decorationColor: const Color(0xFF989898),
+                    ),
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        minimumSize: Size.zero,
+                        padding: EdgeInsets.zero,
+                        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                      ),
+                      onPressed: sendMail,
+                      child: TextFontWidget.fontRegular(
+                        '재전송',
+                        fontSize: 12.0,
+                        color: const Color(0xFF2F8ADF),
                         fontWeight: FontWeight.w400,
+                        textDecoration: TextDecoration.underline,
+                        decorationColor: const Color(0xFF2F8ADF),
                       ),
-                      SizedBox(height: 5),
-                      RoundedTextField(
-                        height: 50,
-                        textEditController: emailEditController,
-                        leftBottomCornerRadius: 8,
-                        rightBottomCornerRadius: 8,
-                        leftTopCornerRadius: 8,
-                        rightTopCornerRadius: 8,
-                        borderWidth: 1,
-                        maxLines: 1,
-                        textInputType: TextInputType.text,
-                        textAlign: TextAlign.left,
-                        hintText: '이메일 입력',
-                        readOnly: true,
-                        paddingLeft: 0,
-                        textStyle: TextFontWidget.fontRegularStyle(
-                          fontSize: 14,
-                          color: Color(0xFF959595),
-                        ),
-                        backgroundColor: Color(0xFFE6E6E6),
-                      ),
-                      SizedBox(height: 16),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 56,
-                        child: OutlinedButton(
-                          onPressed: isLoading
-                              ? null
-                              : isVerifyCodeSuccess
-                                  ? null
-                                  : isSendCodeSuccess
-                                      ? () {
-                                          final encodedUrl = Uri.encodeComponent(
-                                              'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 20.0,
+                ),
+                RoundedTextField(
+                  height: 50.0,
+                  textInputAction: TextInputAction.next,
+                  textEditController: codeEditController,
+                  leftBottomCornerRadius: 8.0,
+                  rightBottomCornerRadius: 8.0,
+                  leftTopCornerRadius: 8.0,
+                  rightTopCornerRadius: 8.0,
+                  borderWidth: 1.0,
+                  maxLines: 1,
+                  textInputType: TextInputType.text,
+                  textAlign: TextAlign.left,
+                  hintText: '인증코드 4자리 입력',
+                  onChanged: (value) {
+                    ref.read(deleteUserViewModelProvider.notifier).setCode(value);
+                  },
+                  borderColor: isCodeError ? const Color(0xFFFF3F3F) : null,
+                  isAnimatedHint: false,
+                  paddingLeft: 0.0,
+                  paddingRight: 6.0,
+                  suffixIcon: SizedBox(
+                    width: 83.0,
+                    child: OutlinedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () async {
+                        bool cancel = true;
+                        await DialogManager.instance.showAlertDialog(
+                            context: context,
+                            title: '주의!',
+                            content: '회원 탈퇴를 하시겠습니까?\n탈퇴 후 복구할 수 없습니다.',
+                            leftButtonText: '취소',
+                            rightButtonText: '탈퇴',
+                            onRightButtonPressed: () {
+                              cancel = false;
+                            },
+                            rightButtonTextStyle:
+                            TextFontWidget.fontRegularStyle(
+                              fontSize: 18.0,
+                              color: const Color(0xFFFF3B30),
+                              fontWeight: FontWeight.w800,
+                            ));
 
-                                          context.push('/webview/$encodedUrl');
-                                        }
-                                      : sendMail,
-                          style: OutlinedButton.styleFrom(
-                            backgroundColor: const Color(0xffffB052),
-                            foregroundColor: const Color(0xFFFFFFFF),
-                            side: const BorderSide(
-                              color: Colors.transparent,
-                              width: 0.0,
-                            ),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                            isLoading
-                                ? '로딩 중 ...'
-                                : isVerifyCodeSuccess
-                                    ? '포털로 이동하기 ${timerNotifier.timerText}'
-                                    : isSendCodeSuccess
-                                        ? '포털로 이동하기 ${timerNotifier.timerText}'
-                                        : '이메일 전송',
-                            fontSize: 18,
-                            color: const Color(0xFFFFFFFF),
-                            fontWeight: FontWeight.w800,
-                          ),
+                        if (!cancel) {
+                          await ref
+                              .read(deleteUserViewModelProvider.notifier)
+                              .verifyCode();
+                        }
+                      },
+                      style: OutlinedButton.styleFrom(
+                        backgroundColor: const Color(0xFF000000),
+                        foregroundColor: const Color(0xFFFFFFFF),
+                        side: const BorderSide(
+                          color: Colors.transparent,
+                          width: 0.0,
+                        ),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.0),
+                        ),
+                        minimumSize: Size.zero,
+                        padding: const EdgeInsets.only(
+                          left: 12.0,
+                          right: 12.0,
+                          top: 6.0,
+                          bottom: 6.0,
                         ),
                       ),
-                      SizedBox(
-                        height: 16,
+                      child: TextFontWidget.fontRegular(
+                        isLoading ? '로딩중' : '확인',
+                        fontSize: 14.0,
+                        color: const Color(0xFFFFFFFF),
+                        fontWeight: FontWeight.w800,
                       ),
-                      RichText(
-                        textAlign: TextAlign.center,
-                        text: TextSpan(
-                          text: "* 가입하신 포털 메일로 ",
-                          style: TextStyle(
-                              fontFamily: 'SUIT',
-                              fontSize: 12,
-                              color: const Color(0xFF6F6F6F),
-                              fontWeight: FontWeight.w400),
-                          children: const [
-                            TextSpan(
-                              text: "인증코드",
-                              style: TextStyle(
-                                color: Color(0xffffB052),
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                            TextSpan(
-                              text: '를 전송합니다',
-                            ),
-                          ],
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (error != null && !isCodeError) ...[
-                        TextFontWidget.fontRegular(
-                          '* $error',
-                          fontSize: 12,
-                          color: const Color(0xFFFF3F3F),
-                        ),
-                      ],
-                      SizedBox(
-                        height: 10,
-                      ),
-                      if (isSendCodeSuccess) ...[
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            TextFontWidget.fontRegular(
-                              '메일을 받지 못하셨나요?',
-                              fontSize: 12,
-                              color: const Color(0xFF989898),
-                              fontWeight: FontWeight.w400,
-                              textDecoration: TextDecoration.underline,
-                              decorationColor: Color(0xFF989898),
-                            ),
-                            TextButton(
-                              style: TextButton.styleFrom(
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.zero,
-                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              ),
-                              onPressed: sendMail,
-                              child: TextFontWidget.fontRegular(
-                                '재전송',
-                                fontSize: 12,
-                                color: const Color(0xFF2F8ADF),
-                                fontWeight: FontWeight.w400,
-                                textDecoration: TextDecoration.underline,
-                                decorationColor: Color(0xFF2F8ADF),
-                              ),
-                            ),
-                          ],
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        RoundedTextField(
-                          height: 50,
-                          textInputAction: TextInputAction.next,
-                          textEditController: codeEditController,
-                          leftBottomCornerRadius: 8,
-                          rightBottomCornerRadius: 8,
-                          leftTopCornerRadius: 8,
-                          rightTopCornerRadius: 8,
-                          borderWidth: 1,
-                          maxLines: 1,
-                          textInputType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          hintText: '인증코드 4자리 입력',
-                          onChanged: (value) {
-                            ref
-                                .read(deleteUserViewModelProvider.notifier)
-                                .setCode(value);
-                          },
-                          borderColor:
-                              isCodeError ? const Color(0xFFFF3F3F) : null,
-                          isAnimatedHint: false,
-                          paddingLeft: 0,
-                          paddingRight: 6,
-                          suffixIcon: SizedBox(
-                            width: 83,
-                            child: OutlinedButton(
-                              onPressed: isLoading
-                                  ? null
-                                  : () async {
-                                      bool cancel = true;
-                                      await DialogManager.instance
-                                          .showAlertDialog(
-                                              context: context,
-                                              title: '주의!',
-                                              content:
-                                                  '회원 탈퇴를 하시겠습니까?\n탈퇴 후 복구할 수 없습니다.',
-                                              leftButtonText: '취소',
-                                              rightButtonText: '탈퇴',
-                                              onRightButtonPressed: () {
-                                                cancel = false;
-                                              },
-                                              rightButtonTextStyle:
-                                                  TextFontWidget
-                                                      .fontRegularStyle(
-                                                fontSize: 18,
-                                                color: const Color(0xFFFF3B30),
-                                                fontWeight: FontWeight.w800,
-                                              ));
-
-                                      if (!cancel) {
-                                        await ref
-                                            .read(deleteUserViewModelProvider
-                                                .notifier)
-                                            .verifyCode();
-                                      }
-                                    },
-                              style: OutlinedButton.styleFrom(
-                                backgroundColor: const Color(0xFF000000),
-                                foregroundColor: const Color(0xFFFFFFFF),
-                                side: const BorderSide(
-                                  color: Colors.transparent,
-                                  width: 0.0,
-                                ),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                minimumSize: Size.zero,
-                                padding: EdgeInsets.only(
-                                  left: 12,
-                                  right: 12,
-                                  top: 6,
-                                  bottom: 6,
-                                ),
-                              ),
-                              child: TextFontWidget.fontRegular(
-                                isLoading ? '로딩중' : '확인',
-                                fontSize: 14,
-                                color: Color(0xFFFFFFFF),
-                                fontWeight: FontWeight.w800,
-                              ),
-                            ),
-                          ),
-                          hintStyle: TextFontWidget.fontRegularStyle(
-                            fontSize: 14,
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        if (error != null && isCodeError) ...[
-                          TextFontWidget.fontRegular(
-                            "* $error",
-                            fontSize: 11,
-                            color: const Color(0xFFFF3F3F),
-                          ),
-                        ]
-                      ]
-                    ],
+                    ),
+                  ),
+                  hintStyle: TextFontWidget.fontRegularStyle(
+                    fontSize: 14.0,
                   ),
                 ),
-              ),
-            );
+                const SizedBox(height: 10.0),
+                if (error != null && isCodeError) ...[
+                  TextFontWidget.fontRegular(
+                    "* $error",
+                    fontSize: 11.0,
+                    color: const Color(0xFFFF3F3F),
+                  ),
+                ]
+              ]
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   Future<void> sendMail() async {
@@ -338,25 +331,25 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   void _listen() {
     ref.listen(
         deleteUserViewModelProvider.select((state) => state.isSendCodeSuccess),
-        (previous, next) {
-      if (next) {
-        DialogManager.instance.showAlertDialog(
-          context: context,
-          content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
-        );
-      }
-    });
+            (previous, next) {
+          if (next) {
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
+            );
+          }
+        });
 
     ref.listen(
-        deleteUserViewModelProvider
-            .select((state) => state.isVerifyCodeSuccess), (previous, next) {
-      if (next) {
-        DialogManager.instance.showAlertDialog(
-          context: context,
-          content: "회원 탈퇴가 완료되었습니다.",
-          onLeftButtonPressed: () => context.go('/'),
-        );
-      }
-    });
+        deleteUserViewModelProvider.select((state) => state.isVerifyCodeSuccess),
+            (previous, next) {
+          if (next) {
+            DialogManager.instance.showAlertDialog(
+              context: context,
+              content: "회원 탈퇴가 완료되었습니다.",
+              onLeftButtonPressed: () => context.go('/'),
+            );
+          }
+        });
   }
 }
