@@ -351,7 +351,7 @@ class AuthRepository {
     final body = {
       "authCode": code,
     };
-    final response = await dio.get(
+    final response = await dio.post(
       '$basePath/auth/verify-token',
       data: body,
       options: Options(
