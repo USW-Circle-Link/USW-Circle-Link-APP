@@ -64,7 +64,7 @@ class AuthRepository {
   Future<EmailVerificationResponse> verifyEmailVerification({
     required String email,
   }) async {
-    final response = await dio.get(
+    final response = await dio.post(
       '$basePath/email/verification',
       data: {
         'email': email,
