@@ -381,6 +381,20 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                     clubIntroState
                                                         .value!.mainPhotoPath!,
                                                     fit: BoxFit.cover,
+                                                    errorBuilder:
+                                                        (BuildContext context,
+                                                            Object exception,
+                                                            StackTrace?
+                                                                stackTrace) {
+                                                      return Container(
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Image.asset(
+                                                          'assets/images/circle_default_image.png',
+                                                          fit: BoxFit.cover,
+                                                        ),
+                                                      );
+                                                    },
                                                   )
                                                 : Image.asset(
                                                     'assets/images/circle_default_image.png'),
