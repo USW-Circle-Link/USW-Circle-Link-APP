@@ -37,6 +37,8 @@ dependencies:
   flutter_native_splash: 2.4.2
   # 웹뷰
   flutter_inappwebview: ^6.0.0
+  #iframe 클릭 이벤트 처리
+  pointer_interceptor: ^0.9.3
   # 텍스트
   auto_size_text: ^3.0.0
   flutter_html: ^3.0.0-beta.2

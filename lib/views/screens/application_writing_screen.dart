@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
@@ -40,7 +41,7 @@ class _ApplicationWritingScreenState
                   break;
                 case ApplicationModelType.apply:
                   logger.d('지원서 제출 성공! - ${data!.message}');
-                  context.go('/circle_list', extra: CircleListType.myApplications);
+                  context.replace('/circle_list/${CircleListType.myApplications.routeKey}');
                   break;
                 default:
                   break;
