@@ -51,10 +51,6 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
   bool passwordVisible = false;
   bool passwordConfirmVisible = false;
 
-  bool termsOfServiceAgree = false;
-  bool personalInformationCollectionAndUsageAgreementAgree = false;
-  bool olderThan14YearsOld = false;
-
   String id = "",
       password = "",
       name = "",
@@ -70,26 +66,22 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
     logger.d(widget.selectedCircles?.first.clubName);
     _newMemberSignUp = widget.newMemberSignUp;
     _selectedCircles = widget.selectedCircles ?? [];
-    if (_newMemberSignUp) {
-      olderThan14YearsOld = true;
-      termsOfServiceAgree = true;
-      personalInformationCollectionAndUsageAgreementAgree = true;
-    }
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     final isLoading =
-    ref.watch(signUpViewModelProvider.select((value) => value.isLoading));
+        ref.watch(signUpViewModelProvider.select((value) => value.isLoading));
     final idVerified =
-    ref.watch(signUpViewModelProvider.select((value) => value.idVerified));
+        ref.watch(signUpViewModelProvider.select((value) => value.idVerified));
     final emailVerified = ref
         .watch(signUpViewModelProvider.select((value) => value.emailVerified));
     final error =
-    ref.watch(signUpViewModelProvider.select((value) => value.error));
+        ref.watch(signUpViewModelProvider.select((value) => value.error));
     final errorField =
-    ref.watch(signUpViewModelProvider.select((value) => value.errorField));
+        ref.watch(signUpViewModelProvider.select((value) => value.errorField));
 
     _listen();
 
@@ -135,27 +127,10 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
             onPressed: isLoading
                 ? null
                 : () async {
-              if (olderThan14YearsOld &&
-                  termsOfServiceAgree &&
-                  personalInformationCollectionAndUsageAgreementAgree) {
-                _submit();
-              } else if (!olderThan14YearsOld) {
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '14세 이상 이용 동의가 필요합니다.',
-                );
-              } else if (!termsOfServiceAgree) {
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '개인정보 처리방침에 동의가 필요합니다.',
-                );
-              } else if (!personalInformationCollectionAndUsageAgreementAgree) {
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '개인정보 수집 동의가 필요합니다.',
-                );
-              }
-            },
+                    if (true) {
+                      _submit();
+                    }
+                  },
             style: OutlinedButton.styleFrom(
               backgroundColor: accentColor,
               foregroundColor: const Color(0xFFFFFFFF),
@@ -168,8 +143,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               isLoading
                   ? '로딩중...'
                   : _newMemberSignUp
-                  ? "다음"
-                  : "회원 가입 요청",
+                      ? "다음"
+                      : "회원 가입 요청",
               fontSize: 18.0,
               color: const Color(0xFFFFFFFF),
               fontWeight: FontWeight.w800,
@@ -221,16 +196,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   onPressed: isLoading || idVerified
                       ? null
                       : () async {
-                    final id = idController.text.trim();
-                    ref
-                        .read(signUpViewModelProvider.notifier)
-                        .setFormData({
-                      'id': id,
-                    });
-                    await ref
-                        .read(signUpViewModelProvider.notifier)
-                        .verifyId();
-                  },
+                          final id = idController.text.trim();
+                          ref
+                              .read(signUpViewModelProvider.notifier)
+                              .setFormData({
+                            'id': id,
+                          });
+                          await ref
+                              .read(signUpViewModelProvider.notifier)
+                              .verifyId();
+                        },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: idVerified
                         ? const Color(0xFFE0E0E0)
@@ -244,8 +219,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       borderRadius: BorderRadius.circular(8.0), // radius 18
                     ),
                     minimumSize: Size.zero,
-                    padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 7.0),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10.0, vertical: 7.0),
                   ),
                   child: TextFontWidget.fontRegular(
                     isLoading ? '로딩 중 ...' : '중복 확인',
@@ -573,16 +548,16 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     onPressed: isLoading || emailVerified
                         ? null
                         : () async {
-                      final email = emailController.text.trim();
-                      ref
-                          .read(signUpViewModelProvider.notifier)
-                          .setFormData({
-                        'email': email,
-                      });
-                      await ref
-                          .read(signUpViewModelProvider.notifier)
-                          .verifyEmail();
-                    },
+                            final email = emailController.text.trim();
+                            ref
+                                .read(signUpViewModelProvider.notifier)
+                                .setFormData({
+                              'email': email,
+                            });
+                            await ref
+                                .read(signUpViewModelProvider.notifier)
+                                .verifyEmail();
+                          },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: emailVerified
                           ? const Color(0xFFE0E0E0)
@@ -646,68 +621,68 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   void _listen() {
     ref.listen(signUpViewModelProvider.select((value) => value.idVerified),
-            (previous, next) {
-          if (next) {
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: '아이디 사용이 가능합니다!',
-            );
-            idFocusNode.unfocus();
-          }
-        });
+        (previous, next) {
+      if (next) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '아이디 사용이 가능합니다!',
+        );
+        idFocusNode.unfocus();
+      }
+    });
     ref.listen(signUpViewModelProvider.select((value) => value.signUpSuccess),
-            (_, next) {
-          if (next) {
-            if (_newMemberSignUp) {
-              context.go(
-                  '/login/sign_up_option/policy_agree/email_verification/sign_up/success');
-            } else {
-              DialogManager.instance.showAlertDialog(
-                context: context,
-                content: '회원 가입 요청이 전송 되었습니다.\n동아리 회장의 요청 수락을 대기해주세요.',
-                onLeftButtonPressed: () {
-                  context.go('/login');
-                },
-              );
-            }
-          }
-        });
+        (_, next) {
+      if (next) {
+        if (_newMemberSignUp) {
+          context.go(
+              '/login/sign_up_option/policy_agree/email_verification/sign_up/success');
+        } else {
+          DialogManager.instance.showAlertDialog(
+            context: context,
+            content: '회원 가입 요청이 전송 되었습니다.\n동아리 회장의 요청 수락을 대기해주세요.',
+            onLeftButtonPressed: () {
+              context.go('/login');
+            },
+          );
+        }
+      }
+    });
 
     ref.listen(signUpViewModelProvider.select((value) => value.error),
-            (_, next) {
-          logger.d('error - $next');
-          final errorField = ref
-              .watch(signUpViewModelProvider.select((value) => value.errorField));
-          if (next != null &&
-              _isBottomField(errorField) &&
-              _isTopField(errorField)) {
-            DialogManager.instance.showAlertDialog(context: context, content: next);
-          }
-        });
+        (_, next) {
+      logger.d('error - $next');
+      final errorField = ref
+          .watch(signUpViewModelProvider.select((value) => value.errorField));
+      if (next != null &&
+          _isBottomField(errorField) &&
+          _isTopField(errorField)) {
+        DialogManager.instance.showAlertDialog(context: context, content: next);
+      }
+    });
 
     ref.listen(signUpViewModelProvider.select((value) => value.isDialogError),
-            (_, next) {
-          if (next) {
-            final error =
+        (_, next) {
+      if (next) {
+        final error =
             ref.read(signUpViewModelProvider.select((value) => value.error));
-            final needToRedirectLogin = ref.read(signUpViewModelProvider
-                .select((value) => value.needToRedirectLogin));
-            final needToRedirectSignUpOption = ref.read(signUpViewModelProvider
-                .select((value) => value.needToRedirectSignUpOption));
-            DialogManager.instance.showAlertDialog(
-              barrierDismissible: false,
-              context: context,
-              content: error ?? '',
-              onLeftButtonPressed: () {
-                if (needToRedirectLogin) {
-                  context.go('/login');
-                } else if (needToRedirectSignUpOption) {
-                  context.go('/login/sign_up_option');
-                }
-              },
-            );
-          }
-        });
+        final needToRedirectLogin = ref.read(signUpViewModelProvider
+            .select((value) => value.needToRedirectLogin));
+        final needToRedirectSignUpOption = ref.read(signUpViewModelProvider
+            .select((value) => value.needToRedirectSignUpOption));
+        DialogManager.instance.showAlertDialog(
+          barrierDismissible: false,
+          context: context,
+          content: error ?? '',
+          onLeftButtonPressed: () {
+            if (needToRedirectLogin) {
+              context.go('/login');
+            } else if (needToRedirectSignUpOption) {
+              context.go('/login/sign_up_option');
+            }
+          },
+        );
+      }
+    });
   }
 
   void _submit() async {
