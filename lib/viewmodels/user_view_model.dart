@@ -60,7 +60,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       }
 
       // FCM Token 전송
-      await firebaseCloudMessagingViewModel.sendToken();
+      // await firebaseCloudMessagingViewModel.sendToken();
 
       final accessToken = await storage.read(key: accessTokenKey);
       final refreshToken = await storage.read(key: refreshTokenKey);

@@ -1,0 +1,2 @@
+/Users/jeong-uchang/USW-Circle-Link-APP/android/app/.cxx/Debug/y56e4o64/x86/CMakeFiles/edit_cache.dir
+/Users/jeong-uchang/USW-Circle-Link-APP/android/app/.cxx/Debug/y56e4o64/x86/CMakeFiles/rebuild_cache.dir
