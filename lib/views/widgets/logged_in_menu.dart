@@ -11,6 +11,7 @@ import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/views/widgets/circle_certificate_dialog.dart';
 
 class LoggedInMenu extends ConsumerStatefulWidget {
   const LoggedInMenu({
@@ -152,6 +153,18 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     context.go('/notices');
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
+                ),
+                buildDrawerItem(
+                    title: '동아리 인증',
+                    icon: MainIcons.ic_chart,
+                    iconSize: 12,
+                    onTap: () {
+                      showDialog(
+                          context: context,
+                          builder: (_) => CircleCertificateDialog(),
+                      );
+                    },
+                    trailingIcon: MainIcons.ic_chevron_right,
                 ),
               ],
             ),

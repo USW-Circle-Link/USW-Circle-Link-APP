@@ -6,6 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/views/widgets/circle_certificate_dialog.dart';
 
 class LoggedOutMenu extends ConsumerWidget {
   const LoggedOutMenu({Key? key}) : super(key: key);
@@ -93,6 +94,13 @@ class LoggedOutMenu extends ConsumerWidget {
                     context.go('/notices');
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
+                ),
+                buildDrawerItem(
+                  title: '동아리 인증',
+                  icon: MainIcons.ic_chart,
+                  iconSize: 12,
+                  onTap: () => context.go('/login'),
+                  trailingIcon: MainIcons.ic_chevron_right,
                 ),
               ],
             ),
