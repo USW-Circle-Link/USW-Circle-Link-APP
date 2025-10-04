@@ -7,11 +7,15 @@ import 'package:usw_circle_link/utils/interceptor/token_interceptor.dart';
 
 final dioProvider = Provider<Dio>((ref) {
   final dio = Dio(
-    BaseOptions(baseUrl: '$protocol://$host:$port', headers: {
-      'Content-Type': 'application/json',
-    }, extra: {
-      'withCredentials': true,
-    }),
+    BaseOptions(
+      baseUrl: '$protocol://$host:$port',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      extra: {
+        'withCredentials': true,
+      },
+    ),
   );
 
   final storage = ref.watch(secureStorageProvider);
