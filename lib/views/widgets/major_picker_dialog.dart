@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable
+
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/views/widgets/rounded_dropdown.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -53,9 +55,11 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                       ..selectedMajor = null
                       ..selectedCollege = newValue;
                   });
-                  widget.onChanged?.call(widget.selectedCollege, widget.selectedMajor);
+                  widget.onChanged
+                      ?.call(widget.selectedCollege, widget.selectedMajor);
                 },
-                items: widget.colleges.map<DropdownMenuItem<String>>((String value) {
+                items: widget.colleges
+                    .map<DropdownMenuItem<String>>((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
                     child: TextFontWidget.fontRegular(
@@ -133,7 +137,8 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
               ),
               TextButton(
                 onPressed: () {
-                  widget.onConfirmPressed(widget.selectedCollege, widget.selectedMajor);
+                  widget.onConfirmPressed(
+                      widget.selectedCollege, widget.selectedMajor);
                   Navigator.of(context).pop();
                 },
                 style: TextButton.styleFrom(
