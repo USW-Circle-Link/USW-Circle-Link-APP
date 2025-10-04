@@ -18,7 +18,7 @@ class CircleItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 120,
+        width: 143,
         margin: EdgeInsets.only(right: 8),
         child: Stack(
           children: [
@@ -40,6 +40,8 @@ class CircleItem extends StatelessWidget {
                           ? Image.network(
                               circle.mainPhoto!,
                               fit: BoxFit.cover,
+                              height: double.infinity,
+                              width: double.infinity,
                               errorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
                                 return Container(

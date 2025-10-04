@@ -181,7 +181,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                   height: 52.0,
                   child: IconButton(
                     onPressed: () {
-                      Navigator.of(context).pop();
+                      context.go('/');
                     },
                     icon: SvgPicture.asset(
                       'assets/images/ic_back_arrow.svg',

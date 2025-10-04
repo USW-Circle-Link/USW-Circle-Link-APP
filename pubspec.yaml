@@ -63,7 +63,7 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Routing
-  go_router: ^14.2.1
+  go_router: ^16.2.4
 
   # Update Alert
   upgrader: ^11.3.1
