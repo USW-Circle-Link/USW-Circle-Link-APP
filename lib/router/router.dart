@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
