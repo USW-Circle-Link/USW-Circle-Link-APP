@@ -102,25 +102,28 @@ class PolicyScreen extends StatelessWidget {
       body: Column(
         children: [
           Flexible(
-            child: kIsWeb
-                ? InAppWebView(
-                    initialUrlRequest: URLRequest(
-                      url: WebUri(webAssetPath),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: kIsWeb
+                  ? InAppWebView(
+                      initialUrlRequest: URLRequest(
+                        url: WebUri(webAssetPath),
+                      ),
+                      initialSettings: InAppWebViewSettings(
+                        textZoom: 50,
+                        allowFileAccessFromFileURLs: true,
+                        allowUniversalAccessFromFileURLs: true,
+                        allowContentAccess: true,
+                        allowFileAccess: true,
+                      ),
+                    )
+                  : InAppWebView(
+                      initialFile: policyType.path,
+                      initialSettings: InAppWebViewSettings(
+                        textZoom: 150,
+                      ),
                     ),
-                    initialSettings: InAppWebViewSettings(
-                      textZoom: 50,
-                      allowFileAccessFromFileURLs: true,
-                      allowUniversalAccessFromFileURLs: true,
-                      allowContentAccess: true,
-                      allowFileAccess: true,
-                    ),
-                  )
-                : InAppWebView(
-                    initialFile: policyType.path,
-                    initialSettings: InAppWebViewSettings(
-                      textZoom: 150,
-                    ),
-                  ),
+            ),
           ),
           const Divider(
             color: Colors.grey,
