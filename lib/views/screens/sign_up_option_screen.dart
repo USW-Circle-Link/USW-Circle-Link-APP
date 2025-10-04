@@ -73,8 +73,8 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
               ),
               const SizedBox(height: 40.0),
               Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 16.0),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black12),
                   borderRadius: BorderRadius.circular(8.0),
@@ -102,8 +102,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                       child: OutlinedButton(
                         onPressed: () {
                           context.go(
-                            '/login/sign_up_option/policy_agree',
-                            extra: true,
+                            '/login/sign_up_option/policy_agree?newMemberSignUp=true',
                           );
                         },
                         style: OutlinedButton.styleFrom(
@@ -127,8 +126,8 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
               ),
               const SizedBox(height: 20.0),
               Container(
-                padding:
-                const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16.0),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 16.0, horizontal: 16.0),
                 decoration: BoxDecoration(
                   border: Border.all(color: Colors.black12),
                   borderRadius: BorderRadius.circular(8.0),
@@ -158,11 +157,10 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                           DialogManager.instance.showAlertDialog(
                             context: context,
                             content:
-                            '기존 동아리 회원 가입의 경우\n해당 동아리 회장의 가입 요청 수락 후\n로그인이 가능합니다.',
+                                '기존 동아리 회원 가입의 경우\n해당 동아리 회장의 가입 요청 수락 후\n로그인이 가능합니다.',
                             onLeftButtonPressed: () {
                               context.go(
-                                '/login/sign_up_option/policy_agree',
-                                extra: false,
+                                '/login/sign_up_option/policy_agree?newMemberSignUp=false',
                               );
                             },
                           );

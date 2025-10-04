@@ -39,7 +39,7 @@ void onDidReceiveNotificationResponse(NotificationResponse details) {
 }
 
 void main() async {
-  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   // Native Splash
   //FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   // 화면 방향 설정

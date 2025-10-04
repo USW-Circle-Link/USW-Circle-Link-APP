@@ -208,17 +208,17 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
         height: 56.0,
         child: OutlinedButton(
           onPressed: olderThan14YearsOld &&
-              privacyPolicyAgree &&
-              personalInformationCollectionAndUsageAgreementAgree
+                  privacyPolicyAgree &&
+                  personalInformationCollectionAndUsageAgreementAgree
               ? () {
-            context.push(
-                '/login/sign_up_option/policy_agree/${widget.newMemberSignUp ? "email_verification" : "select_circle"}');
-          }
+                  context.go(
+                      '/login/sign_up_option/policy_agree/${widget.newMemberSignUp ? "email_verification" : "select_circle"}');
+                }
               : null,
           style: OutlinedButton.styleFrom(
             backgroundColor: olderThan14YearsOld &&
-                privacyPolicyAgree &&
-                personalInformationCollectionAndUsageAgreementAgree
+                    privacyPolicyAgree &&
+                    personalInformationCollectionAndUsageAgreementAgree
                 ? accentColor
                 : const Color(0xFFB8B8B8),
             foregroundColor: Colors.white,

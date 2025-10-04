@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
@@ -37,11 +38,11 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
     final isVerifyCodeSuccess = ref.watch(deleteUserViewModelProvider
         .select((state) => state.isVerifyCodeSuccess));
     final error =
-    ref.watch(deleteUserViewModelProvider.select((state) => state.error));
+        ref.watch(deleteUserViewModelProvider.select((state) => state.error));
     final isCodeError = ref.watch(
         deleteUserViewModelProvider.select((state) => state.isCodeError));
     final email =
-    ref.watch(deleteUserViewModelProvider.select((state) => state.email));
+        ref.watch(deleteUserViewModelProvider.select((state) => state.email));
 
     final _ = ref.watch(timerProvider);
     final timerNotifier = ref.watch(timerProvider.notifier);
@@ -122,15 +123,17 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                   onPressed: isLoading
                       ? null
                       : isVerifyCodeSuccess
-                      ? null
-                      : isSendCodeSuccess
-                      ? () {
-                    final encodedUrl = Uri.encodeComponent(
-                        'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                          ? null
+                          : isSendCodeSuccess
+                              ? () {
+                                  // final encodedUrl = Uri.encodeComponent(
+                                  //     'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                    context.push('/webview/$encodedUrl');
-                  }
-                      : sendMail,
+                                  // context.push('/webview/$encodedUrl');
+                                  launchUrl(
+                                      Uri.parse('http://portal.suwon.ac.kr'));
+                                }
+                              : sendMail,
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xffffB052),
                     foregroundColor: const Color(0xFFFFFFFF),
@@ -146,10 +149,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                     isLoading
                         ? '로딩 중 ...'
                         : isVerifyCodeSuccess
-                        ? '포털로 이동하기 ${timerNotifier.timerText}'
-                        : isSendCodeSuccess
-                        ? '포털로 이동하기 ${timerNotifier.timerText}'
-                        : '이메일 전송',
+                            ? '포털로 이동하기 ${timerNotifier.timerText}'
+                            : isSendCodeSuccess
+                                ? '포털로 이동하기 ${timerNotifier.timerText}'
+                                : '이메일 전송',
                     fontSize: 18.0,
                     color: const Color(0xFFFFFFFF),
                     fontWeight: FontWeight.w800,
@@ -242,7 +245,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                   textAlign: TextAlign.left,
                   hintText: '인증코드 4자리 입력',
                   onChanged: (value) {
-                    ref.read(deleteUserViewModelProvider.notifier).setCode(value);
+                    ref
+                        .read(deleteUserViewModelProvider.notifier)
+                        .setCode(value);
                   },
                   borderColor: isCodeError ? const Color(0xFFFF3F3F) : null,
                   isAnimatedHint: false,
@@ -254,29 +259,29 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                       onPressed: isLoading
                           ? null
                           : () async {
-                        bool cancel = true;
-                        await DialogManager.instance.showAlertDialog(
-                            context: context,
-                            title: '주의!',
-                            content: '회원 탈퇴를 하시겠습니까?\n탈퇴 후 복구할 수 없습니다.',
-                            leftButtonText: '취소',
-                            rightButtonText: '탈퇴',
-                            onRightButtonPressed: () {
-                              cancel = false;
-                            },
-                            rightButtonTextStyle:
-                            TextFontWidget.fontRegularStyle(
-                              fontSize: 18.0,
-                              color: const Color(0xFFFF3B30),
-                              fontWeight: FontWeight.w800,
-                            ));
+                              bool cancel = true;
+                              await DialogManager.instance.showAlertDialog(
+                                  context: context,
+                                  title: '주의!',
+                                  content: '회원 탈퇴를 하시겠습니까?\n탈퇴 후 복구할 수 없습니다.',
+                                  leftButtonText: '취소',
+                                  rightButtonText: '탈퇴',
+                                  onRightButtonPressed: () {
+                                    cancel = false;
+                                  },
+                                  rightButtonTextStyle:
+                                      TextFontWidget.fontRegularStyle(
+                                    fontSize: 18.0,
+                                    color: const Color(0xFFFF3B30),
+                                    fontWeight: FontWeight.w800,
+                                  ));
 
-                        if (!cancel) {
-                          await ref
-                              .read(deleteUserViewModelProvider.notifier)
-                              .verifyCode();
-                        }
-                      },
+                              if (!cancel) {
+                                await ref
+                                    .read(deleteUserViewModelProvider.notifier)
+                                    .verifyCode();
+                              }
+                            },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: const Color(0xFF000000),
                         foregroundColor: const Color(0xFFFFFFFF),
@@ -289,10 +294,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                         ),
                         minimumSize: Size.zero,
                         padding: const EdgeInsets.only(
-                          left: 12.0,
-                          right: 12.0,
-                          top: 6.0,
-                          bottom: 6.0,
+                          left: 10.0,
+                          right: 10.0,
+                          top: 14.0,
+                          bottom: 14.0,
                         ),
                       ),
                       child: TextFontWidget.fontRegular(
@@ -331,25 +336,25 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   void _listen() {
     ref.listen(
         deleteUserViewModelProvider.select((state) => state.isSendCodeSuccess),
-            (previous, next) {
-          if (next) {
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
-            );
-          }
-        });
+        (previous, next) {
+      if (next) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",
+        );
+      }
+    });
 
     ref.listen(
-        deleteUserViewModelProvider.select((state) => state.isVerifyCodeSuccess),
-            (previous, next) {
-          if (next) {
-            DialogManager.instance.showAlertDialog(
-              context: context,
-              content: "회원 탈퇴가 완료되었습니다.",
-              onLeftButtonPressed: () => context.go('/'),
-            );
-          }
-        });
+        deleteUserViewModelProvider
+            .select((state) => state.isVerifyCodeSuccess), (previous, next) {
+      if (next) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: "회원 탈퇴가 완료되었습니다.",
+          onLeftButtonPressed: () => context.go('/'),
+        );
+      }
+    });
   }
 }

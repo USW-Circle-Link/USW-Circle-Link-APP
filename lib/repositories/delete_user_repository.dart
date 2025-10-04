@@ -76,7 +76,7 @@ class DeleteUserRepository {
   }
 
   Future<String> getEmail() async {
-    final response = await dio.get(
+    final response = await dio.post(
       '$basePath/exit/email',
       options: Options(
         headers: {

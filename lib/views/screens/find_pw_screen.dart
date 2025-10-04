@@ -75,13 +75,13 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
     });
 
     idEditController.addListener(
-          () {
+      () {
         ref.read(findPwViewModelProvider.notifier).initState();
       },
     );
 
     emailEditController.addListener(
-          () {
+      () {
         ref.read(findPwViewModelProvider.notifier).initState();
       },
     );
@@ -143,7 +143,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                               borderSide: BorderSide(color: Color(0xFFFFB052)),
                             ),
                             contentPadding:
-                            EdgeInsets.only(left: 8.0, bottom: 8.0),
+                                EdgeInsets.only(left: 8.0, bottom: 8.0),
                           ),
                           textInputAction: TextInputAction.next,
                         ),
@@ -274,8 +274,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                   }
                                 },
                                 error: (error, __) {
-                                  switch (
-                                  (error as FindPwModelError).type) {
+                                  switch ((error as FindPwModelError).type) {
                                     case FindPwModelType.sendCode:
                                       return '이메일 전송';
                                     case FindPwModelType.verifyCode:
@@ -295,8 +294,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                         height: 20.0,
                       ),
                       if ((state.hasValue &&
-                          state.value != null &&
-                          state.value!.type != FindPwModelType.verifyCode) ||
+                              state.value != null &&
+                              state.value!.type !=
+                                  FindPwModelType.verifyCode) ||
                           (state.hasError &&
                               (state.error as FindPwModelError).type ==
                                   FindPwModelType.verifyCode))
@@ -333,8 +333,8 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                         height: 20.0,
                       ),
                       if ((state.hasValue &&
-                          state.value != null &&
-                          state.value!.type == FindPwModelType.sendCode) ||
+                              state.value != null &&
+                              state.value!.type == FindPwModelType.sendCode) ||
                           (state.hasError &&
                               (state.error as FindPwModelError).type ==
                                   FindPwModelType.verifyCode))
@@ -363,16 +363,16 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                               onPressed: state.isLoading
                                   ? null
                                   : () async {
-                                final code =
-                                codeEditController.text.trim();
-                                await ref
-                                    .read(findPwViewModelProvider
-                                    .notifier)
-                                    .verifyCode(
-                                  code: code,
-                                  uuid: uuid,
-                                );
-                              },
+                                      final code =
+                                          codeEditController.text.trim();
+                                      await ref
+                                          .read(
+                                              findPwViewModelProvider.notifier)
+                                          .verifyCode(
+                                            code: code,
+                                            uuid: uuid,
+                                          );
+                                    },
                               style: OutlinedButton.styleFrom(
                                 backgroundColor: const Color(0xFF000000),
                                 foregroundColor: const Color(0xFFFFFFFF),
@@ -382,12 +382,12 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                                 ),
                                 shape: RoundedRectangleBorder(
                                   borderRadius:
-                                  BorderRadius.circular(16.0), // radius 18
+                                      BorderRadius.circular(16.0), // radius 18
                                 ),
                                 minimumSize: Size.zero,
                                 padding: const EdgeInsets.symmetric(
-                                  horizontal: 12.0,
-                                  vertical: 6.0,
+                                  horizontal: 10.0,
+                                  vertical: 14.0,
                                 ),
                               ),
                               child: TextFontWidget.fontRegular(
@@ -446,7 +446,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
 
   void goToPortal() {
     final encodedUrl =
-    Uri.encodeComponent('https://mail.suwon.ac.kr:10443/m/index.jsp');
+        Uri.encodeComponent('https://mail.suwon.ac.kr:10443/m/index.jsp');
 
     context.push('/webview/$encodedUrl');
   }

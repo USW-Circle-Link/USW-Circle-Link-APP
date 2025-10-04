@@ -108,7 +108,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
       textDirection: TextDirection.ltr,
     )..layout();
 
-    _hintTextWidth = textPainter.size.width;
+    _hintTextWidth = textPainter.size.width + 5;
     logger.d('hintTextWidth: $_hintTextWidth');
   }
 
@@ -116,11 +116,11 @@ class _EmailTextFieldState extends State<EmailTextField> {
   Widget build(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
-        double maxWidth = constraints.maxWidth - _suffixWidth - 20; // 여유 공간 확보
+        double maxWidth = constraints.maxWidth - _suffixWidth - 0; // 여유 공간 확보
         double textFieldWidth = 0;
         if (widget.controller?.text.isEmpty ?? true) {
           textFieldWidth =
-          _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
+              _hintTextWidth > maxWidth ? maxWidth : _hintTextWidth;
         } else {
           textFieldWidth = _textWidth > maxWidth ? maxWidth : _textWidth;
         }

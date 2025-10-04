@@ -37,11 +37,9 @@ class UpdateProfileRepository {
       if (response.statusCode == 200) {
         return ProfileModel.fromJson(response.data);
       } else {
-        print('Failed to fetch data: ${response.statusCode}');
         throw Exception('프로필 조회에 실패하였습니다');
       }
     } catch (e) {
-      print('Error fetching profile: $e');
       throw Exception('프로필 조회 중 오류가 발생했습니다');
     }
   }

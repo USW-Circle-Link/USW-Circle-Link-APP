@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -49,7 +50,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
     });
 
     emailEditController.addListener(
-          () {
+      () {
         ref.read(findIdViewModelProvider.notifier).initState();
       },
     );
@@ -108,13 +109,11 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                           decoration: InputDecoration(
                             hintText: "포털 이메일 입력",
                             focusedBorder: const UnderlineInputBorder(
-                              borderSide:
-                              BorderSide(color: Color(0xFFFFB052)),
+                              borderSide: BorderSide(color: Color(0xFFFFB052)),
                             ),
                             contentPadding: const EdgeInsets.only(left: 8.0),
                             suffixIcon: Column(
-                              mainAxisAlignment:
-                              MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextFontWidget.fontRegular(
                                   '@ suwon.ac.kr',
@@ -179,17 +178,19 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                         child: OutlinedButton(
                           onPressed: state.when<VoidCallback?>(
                               data: (data) => () {
-                                if (data != null) {
-                                  final encodedUrl =
-                                  Uri.encodeComponent(
-                                      'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                                    if (data != null) {
+                                      // final encodedUrl =
+                                      // Uri.encodeComponent(
+                                      //     'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                                  context
-                                      .push('/webview/$encodedUrl');
-                                } else {
-                                  sendMail();
-                                }
-                              },
+                                      // context
+                                      //     .push('/webview/$encodedUrl');
+                                      launchUrl(Uri.parse(
+                                          'https://portal.suwon.ac.kr'));
+                                    } else {
+                                      sendMail();
+                                    }
+                                  },
                               error: (_, __) => sendMail,
                               loading: () => null),
                           style: OutlinedButton.styleFrom(
@@ -239,8 +240,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                               style: TextButton.styleFrom(
                                 minimumSize: Size.zero,
                                 padding: EdgeInsets.zero,
-                                tapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               onPressed: sendMail,
                               child: TextFontWidget.fontRegular(
@@ -248,8 +248,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                                 fontSize: 12.0,
                                 color: const Color(0xFF2F8ADF),
                                 fontWeight: FontWeight.w400,
-                                textDecoration:
-                                TextDecoration.underline,
+                                textDecoration: TextDecoration.underline,
                                 decorationColor: const Color(0xFF2F8ADF),
                               ),
                             ),

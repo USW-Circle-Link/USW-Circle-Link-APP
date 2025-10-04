@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -96,17 +97,16 @@ class _EmailVerificationScreenState
                         enabled: !isVerifySuccess,
                         onChanged: (value) {
                           ref
-                              .read(
-                              emailVerificationViewModelProvider.notifier)
+                              .read(emailVerificationViewModelProvider.notifier)
                               .setEmail(value.trim());
                         },
                         onPressed: isSendMailSuccess
                             ? () {
-                          ref
-                              .read(emailVerificationViewModelProvider
-                              .notifier)
-                              .verifyEmailVerification();
-                        }
+                                ref
+                                    .read(emailVerificationViewModelProvider
+                                        .notifier)
+                                    .verifyEmailVerification();
+                              }
                             : null,
                       ),
                       const SizedBox(
@@ -162,19 +162,21 @@ class _EmailVerificationScreenState
                           onPressed: isLoading
                               ? null
                               : isVerifySuccess
-                              ? () {
-                            context.go(
-                                '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&emailTokenUUID=$emailTokenUUID&signupUUID=$signupUUID');
-                          }
-                              : isSendMailSuccess
-                              ? () {
-                            final encodedUrl = Uri.encodeComponent(
-                                'https://mail.suwon.ac.kr:10443/m/index.jsp');
+                                  ? () {
+                                      context.go(
+                                          '/login/sign_up_option/policy_agree/email_verification/sign_up?newMember=true&emailTokenUUID=$emailTokenUUID&signupUUID=$signupUUID');
+                                    }
+                                  : isSendMailSuccess
+                                      ? () {
+                                          // final encodedUrl = Uri.encodeComponent(
+                                          //     'https://mail.suwon.ac.kr:10443/m/index.jsp');
 
-                            context
-                                .push('/webview/$encodedUrl');
-                          }
-                              : sendMail,
+                                          // context
+                                          //     .push('/webview/$encodedUrl');
+                                          launchUrl(Uri.parse(
+                                              'https://portal.suwon.ac.kr'));
+                                        }
+                                      : sendMail,
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xffffB052),
                             foregroundColor: const Color(0xFFFFFFFF),
@@ -190,10 +192,10 @@ class _EmailVerificationScreenState
                             isLoading
                                 ? '로딩 중 ...'
                                 : isVerifySuccess
-                                ? '다음'
-                                : isSendMailSuccess
-                                ? '포털로 이동하기 ${timerNotifier.timerText}'
-                                : '이메일 전송',
+                                    ? '다음'
+                                    : isSendMailSuccess
+                                        ? '포털로 이동하기 ${timerNotifier.timerText}'
+                                        : '이메일 전송',
                             fontSize: 18.0,
                             color: const Color(0xFFFFFFFF),
                             fontWeight: FontWeight.w800,
@@ -219,8 +221,7 @@ class _EmailVerificationScreenState
                               style: TextButton.styleFrom(
                                 minimumSize: Size.zero,
                                 padding: EdgeInsets.zero,
-                                tapTargetSize:
-                                MaterialTapTargetSize.shrinkWrap,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               onPressed: sendMail,
                               child: TextFontWidget.fontRegular(
