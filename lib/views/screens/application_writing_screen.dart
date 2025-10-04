@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
@@ -37,7 +38,8 @@ class _ApplicationWritingScreenState
           switch (data?.type) {
             case ApplicationModelType.getApplication:
               logger.d('지원서 url : ${data!.data}');
-              context.push('/webview/${Uri.encodeComponent(data.data!)}');
+              // context.push('/webview/${Uri.encodeComponent(data.data!)}');
+              launchUrl(Uri.parse(data.data!));
               break;
             case ApplicationModelType.apply:
               logger.d('지원서 제출 성공! - ${data!.message}');

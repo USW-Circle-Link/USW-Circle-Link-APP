@@ -72,8 +72,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isLoading =
-        ref.watch(signUpViewModelProvider.select((value) => value.isLoading));
+    final isSignUpLoading = ref.watch(
+        signUpViewModelProvider.select((value) => value.isSignUpLoading));
+    final isVerifyIdLoading = ref.watch(
+        signUpViewModelProvider.select((value) => value.isVerifyIdLoading));
+    final isVerifyEmailLoading = ref.watch(
+        signUpViewModelProvider.select((value) => value.isVerifyEmailLoading));
     final idVerified =
         ref.watch(signUpViewModelProvider.select((value) => value.idVerified));
     final emailVerified = ref
@@ -124,7 +128,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
           margin: const EdgeInsets.only(bottom: 10.0),
           height: 56.0,
           child: OutlinedButton(
-            onPressed: isLoading
+            onPressed: isSignUpLoading
                 ? null
                 : () async {
                     if (true) {
@@ -140,7 +144,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
               ),
             ),
             child: TextFontWidget.fontRegular(
-              isLoading
+              isSignUpLoading
                   ? '로딩중...'
                   : _newMemberSignUp
                       ? "다음"
@@ -193,7 +197,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   size: 15.0,
                 ),
                 suffixIcon: OutlinedButton(
-                  onPressed: isLoading || idVerified
+                  onPressed: isVerifyIdLoading || idVerified
                       ? null
                       : () async {
                           final id = idController.text.trim();
@@ -216,14 +220,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       width: 0.0,
                     ),
                     shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0), // radius 18
+                      borderRadius: BorderRadius.circular(10.0), // radius 18
                     ),
                     minimumSize: Size.zero,
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 10.0, vertical: 7.0),
+                        horizontal: 10.0, vertical: 14.0),
                   ),
                   child: TextFontWidget.fontRegular(
-                    isLoading ? '로딩 중 ...' : '중복 확인',
+                    isVerifyIdLoading ? '로딩 중 ...' : '중복 확인',
                     fontSize: 12.0,
                     color: const Color(0xFFFFFFFF),
                     fontWeight: FontWeight.w600,
@@ -545,7 +549,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         .setEmailVerified(false);
                   },
                   suffixIcon: OutlinedButton(
-                    onPressed: isLoading || emailVerified
+                    onPressed: isVerifyEmailLoading || emailVerified
                         ? null
                         : () async {
                             final email = emailController.text.trim();
@@ -568,14 +572,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         width: 0.0,
                       ),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0), // radius 18
+                        borderRadius: BorderRadius.circular(10.0), // radius 18
                       ),
                       minimumSize: Size.zero,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 10.0, vertical: 7.0),
+                          horizontal: 10.0, vertical: 14.0),
                     ),
                     child: TextFontWidget.fontRegular(
-                      isLoading ? '로딩 중 ...' : '중복 확인',
+                      isVerifyEmailLoading ? '로딩 중 ...' : '중복 확인',
                       fontSize: 12.0,
                       color: const Color(0xFFFFFFFF),
                       fontWeight: FontWeight.w600,

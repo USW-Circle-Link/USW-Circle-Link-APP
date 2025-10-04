@@ -266,7 +266,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           : Colors.white,
                       minimumSize: Size.zero,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 7, vertical: 5),
+                          horizontal: 8, vertical: 12),
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                       side: BorderSide(
                         color: selectedCategories.isEmpty

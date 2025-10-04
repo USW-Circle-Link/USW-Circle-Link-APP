@@ -16,7 +16,9 @@ final _privateConstructorUsedError = UnsupportedError(
 
 /// @nodoc
 mixin _$SignUpState {
-  bool get isLoading => throw _privateConstructorUsedError;
+  bool get isVerifyIdLoading => throw _privateConstructorUsedError;
+  bool get isSignUpLoading => throw _privateConstructorUsedError;
+  bool get isVerifyEmailLoading => throw _privateConstructorUsedError;
   bool get idVerified => throw _privateConstructorUsedError;
   bool get emailVerified => throw _privateConstructorUsedError;
   bool get signUpSuccess => throw _privateConstructorUsedError;
@@ -39,7 +41,9 @@ abstract class $SignUpStateCopyWith<$Res> {
       _$SignUpStateCopyWithImpl<$Res, SignUpState>;
   @useResult
   $Res call(
-      {bool isLoading,
+      {bool isVerifyIdLoading,
+      bool isSignUpLoading,
+      bool isVerifyEmailLoading,
       bool idVerified,
       bool emailVerified,
       bool signUpSuccess,
@@ -64,7 +68,9 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isLoading = null,
+    Object? isVerifyIdLoading = null,
+    Object? isSignUpLoading = null,
+    Object? isVerifyEmailLoading = null,
     Object? idVerified = null,
     Object? emailVerified = null,
     Object? signUpSuccess = null,
@@ -76,9 +82,17 @@ class _$SignUpStateCopyWithImpl<$Res, $Val extends SignUpState>
     Object? errorField = freezed,
   }) {
     return _then(_value.copyWith(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
+      isVerifyIdLoading: null == isVerifyIdLoading
+          ? _value.isVerifyIdLoading
+          : isVerifyIdLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSignUpLoading: null == isSignUpLoading
+          ? _value.isSignUpLoading
+          : isSignUpLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isVerifyEmailLoading: null == isVerifyEmailLoading
+          ? _value.isVerifyEmailLoading
+          : isVerifyEmailLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       idVerified: null == idVerified
           ? _value.idVerified
@@ -129,7 +143,9 @@ abstract class _$$SignUpStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isLoading,
+      {bool isVerifyIdLoading,
+      bool isSignUpLoading,
+      bool isVerifyEmailLoading,
       bool idVerified,
       bool emailVerified,
       bool signUpSuccess,
@@ -152,7 +168,9 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? isLoading = null,
+    Object? isVerifyIdLoading = null,
+    Object? isSignUpLoading = null,
+    Object? isVerifyEmailLoading = null,
     Object? idVerified = null,
     Object? emailVerified = null,
     Object? signUpSuccess = null,
@@ -164,9 +182,17 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
     Object? errorField = freezed,
   }) {
     return _then(_$SignUpStateImpl(
-      isLoading: null == isLoading
-          ? _value.isLoading
-          : isLoading // ignore: cast_nullable_to_non_nullable
+      isVerifyIdLoading: null == isVerifyIdLoading
+          ? _value.isVerifyIdLoading
+          : isVerifyIdLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isSignUpLoading: null == isSignUpLoading
+          ? _value.isSignUpLoading
+          : isSignUpLoading // ignore: cast_nullable_to_non_nullable
+              as bool,
+      isVerifyEmailLoading: null == isVerifyEmailLoading
+          ? _value.isVerifyEmailLoading
+          : isVerifyEmailLoading // ignore: cast_nullable_to_non_nullable
               as bool,
       idVerified: null == idVerified
           ? _value.idVerified
@@ -212,7 +238,9 @@ class __$$SignUpStateImplCopyWithImpl<$Res>
 
 class _$SignUpStateImpl implements _SignUpState {
   _$SignUpStateImpl(
-      {this.isLoading = false,
+      {this.isVerifyIdLoading = false,
+      this.isSignUpLoading = false,
+      this.isVerifyEmailLoading = false,
       this.idVerified = false,
       this.emailVerified = false,
       this.signUpSuccess = false,
@@ -226,7 +254,13 @@ class _$SignUpStateImpl implements _SignUpState {
 
   @override
   @JsonKey()
-  final bool isLoading;
+  final bool isVerifyIdLoading;
+  @override
+  @JsonKey()
+  final bool isSignUpLoading;
+  @override
+  @JsonKey()
+  final bool isVerifyEmailLoading;
   @override
   @JsonKey()
   final bool idVerified;
@@ -261,7 +295,7 @@ class _$SignUpStateImpl implements _SignUpState {
 
   @override
   String toString() {
-    return 'SignUpState(isLoading: $isLoading, idVerified: $idVerified, emailVerified: $emailVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, isDialogError: $isDialogError, needToRedirectLogin: $needToRedirectLogin, needToRedirectSignUpOption: $needToRedirectSignUpOption, errorField: $errorField)';
+    return 'SignUpState(isVerifyIdLoading: $isVerifyIdLoading, isSignUpLoading: $isSignUpLoading, isVerifyEmailLoading: $isVerifyEmailLoading, idVerified: $idVerified, emailVerified: $emailVerified, signUpSuccess: $signUpSuccess, signUpForm: $signUpForm, error: $error, isDialogError: $isDialogError, needToRedirectLogin: $needToRedirectLogin, needToRedirectSignUpOption: $needToRedirectSignUpOption, errorField: $errorField)';
   }
 
   @override
@@ -269,8 +303,12 @@ class _$SignUpStateImpl implements _SignUpState {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$SignUpStateImpl &&
-            (identical(other.isLoading, isLoading) ||
-                other.isLoading == isLoading) &&
+            (identical(other.isVerifyIdLoading, isVerifyIdLoading) ||
+                other.isVerifyIdLoading == isVerifyIdLoading) &&
+            (identical(other.isSignUpLoading, isSignUpLoading) ||
+                other.isSignUpLoading == isSignUpLoading) &&
+            (identical(other.isVerifyEmailLoading, isVerifyEmailLoading) ||
+                other.isVerifyEmailLoading == isVerifyEmailLoading) &&
             (identical(other.idVerified, idVerified) ||
                 other.idVerified == idVerified) &&
             (identical(other.emailVerified, emailVerified) ||
@@ -295,7 +333,9 @@ class _$SignUpStateImpl implements _SignUpState {
   @override
   int get hashCode => Object.hash(
       runtimeType,
-      isLoading,
+      isVerifyIdLoading,
+      isSignUpLoading,
+      isVerifyEmailLoading,
       idVerified,
       emailVerified,
       signUpSuccess,
@@ -315,7 +355,9 @@ class _$SignUpStateImpl implements _SignUpState {
 
 abstract class _SignUpState implements SignUpState {
   factory _SignUpState(
-      {final bool isLoading,
+      {final bool isVerifyIdLoading,
+      final bool isSignUpLoading,
+      final bool isVerifyEmailLoading,
       final bool idVerified,
       final bool emailVerified,
       final bool signUpSuccess,
@@ -327,7 +369,11 @@ abstract class _SignUpState implements SignUpState {
       final FieldType? errorField}) = _$SignUpStateImpl;
 
   @override
-  bool get isLoading;
+  bool get isVerifyIdLoading;
+  @override
+  bool get isSignUpLoading;
+  @override
+  bool get isVerifyEmailLoading;
   @override
   bool get idVerified;
   @override

@@ -20,7 +20,9 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   Future<void> verifyId() async {
     try {
       state = state.copyWith(
-        isLoading: true,
+        isVerifyIdLoading: true,
+        isSignUpLoading: false,
+        isVerifyEmailLoading: false,
         idVerified: false,
         error: null,
         isDialogError: false,
@@ -33,7 +35,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
 
       if (id.isEmpty || !idRegExp.hasMatch(id)) {
         state = state.copyWith(
-          isLoading: false,
+          isVerifyIdLoading: false,
           error: '아이디는 5~20자 이내 영어, 숫자만 가능합니다!',
           errorField: FieldType.account,
         );
@@ -43,19 +45,19 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       final response = await ref.read(authRepositoryProvider).verifyId(id: id);
 
       state = state.copyWith(
-        isLoading: false,
+        isVerifyIdLoading: false,
         idVerified: response,
       );
     } on SignUpModelError catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isVerifyIdLoading: false,
         error:
             ErrorUtil.instance.getErrorMessage(e.code) ?? '아이디 중복 확인에 실패했습니다.',
         errorField: FieldType.account,
       );
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isVerifyIdLoading: false,
         error: '아이디 중복 확인에 실패했습니다.',
         errorField: FieldType.account,
       );
@@ -65,7 +67,9 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   Future<void> verifyEmail() async {
     try {
       state = state.copyWith(
-        isLoading: true,
+        isVerifyIdLoading: false,
+        isSignUpLoading: false,
+        isVerifyEmailLoading: true,
         emailVerified: false,
         error: null,
         isDialogError: false,
@@ -80,19 +84,19 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
           await ref.read(authRepositoryProvider).verifyEmail(email: email);
 
       state = state.copyWith(
-        isLoading: false,
+        isVerifyEmailLoading: false,
         emailVerified: response,
       );
     } on SignUpModelError catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isVerifyEmailLoading: false,
         error:
             ErrorUtil.instance.getErrorMessage(e.code) ?? '이메일 중복 확인에 실패했습니다.',
         errorField: FieldType.email,
       );
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isVerifyEmailLoading: false,
         error: '이메일 중복 확인에 실패했습니다.',
         errorField: FieldType.email,
       );
@@ -102,7 +106,9 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   Future<void> signUpNewMember() async {
     try {
       state = state.copyWith(
-        isLoading: true,
+        isVerifyIdLoading: false,
+        isSignUpLoading: true,
+        isVerifyEmailLoading: false,
         signUpSuccess: false,
         error: null,
         isDialogError: false,
@@ -132,7 +138,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
 
       if (invalidField != null) {
         state = state.copyWith(
-          isLoading: false,
+          isSignUpLoading: false,
           error: switch (invalidField) {
             FieldType.account => '아이디 중복 확인을 진행해주세요!',
             FieldType.password =>
@@ -156,7 +162,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
             request: SignUpRequest.fromJson(state.signUpForm),
           );
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         signUpSuccess: response,
       );
     } on SignUpModelError catch (e) {
@@ -167,7 +173,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         state = state.copyWith(idVerified: false);
       }
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         isDialogError: (isDialogError || errorField == null) &&
             e.code != 'ABNORMAL-ACCESS',
         error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
@@ -177,7 +183,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       );
     } catch (e) {
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         isDialogError: true,
         error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
       );
@@ -187,7 +193,9 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   Future<void> signUpExistingMember() async {
     try {
       state = state.copyWith(
-        isLoading: true,
+        isVerifyIdLoading: false,
+        isSignUpLoading: true,
+        isVerifyEmailLoading: false,
         signUpSuccess: false,
         error: null,
         isDialogError: false,
@@ -216,7 +224,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
 
       if (invalidField != null) {
         state = state.copyWith(
-          isLoading: false,
+          isSignUpLoading: false,
           error: switch (invalidField) {
             FieldType.account => '아이디 중복 확인을 진행해주세요!',
             FieldType.password =>
@@ -241,7 +249,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
                 request: SignUpRequest.fromJson(state.signUpForm),
               );
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         signUpSuccess: response,
       );
     } on SignUpModelError catch (e) {
@@ -252,7 +260,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         state = state.copyWith(idVerified: false);
       }
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         isDialogError: (isDialogError || errorField == null) &&
             e.code != 'ABNORMAL-ACCESS',
         error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
@@ -262,7 +270,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
     } catch (e) {
       logger.e(e);
       state = state.copyWith(
-        isLoading: false,
+        isSignUpLoading: false,
         isDialogError: true,
         error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
       );

@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
@@ -56,8 +55,6 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
       final profile = await profileViewModel.getProfile();
       if (profile is ProfileModel) {
         logger.d('로그인 정보 확인 성공! : $profile');
-        debugPrint('[debugPrint]로그인 정보 확인 성공! : ${profile}');
-        print('[print]로그인 정보 확인 성공! : ${profile}');
       } else {
         throw AutoLoginException(message: '로그인 정보 확인 실패! : $profile');
       }
