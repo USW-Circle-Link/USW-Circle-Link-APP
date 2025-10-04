@@ -10,8 +10,8 @@ const RESOURCES = {"flutter.js": "888483df48293866f9f41d3d9274a779",
 "icons/apple-touch-icon.png": "9659bef10ae1b8934a50d3e0f2cc2c2b",
 "icons/Icon-maskable-192.png": "c9e719ba1d1bc4eaafefe82ffb5ae5ad",
 "manifest.json": "d12d0f0172b4ff7f81820bc73d0dd6ff",
-"index.html": "cef716d18186b3287d827b88e8e8d210",
-"/": "cef716d18186b3287d827b88e8e8d210",
+"index.html": "e496c6b56af06361403395066a2585b9",
+"/": "e496c6b56af06361403395066a2585b9",
 "firebase-messaging-sw.js": "b86d8dc407c6ae1e8d54577a28a4d82b",
 "assets/shaders/ink_sparkle.frag": "ecc85a2e95f5e9f53123dcaf8cb9b6ce",
 "assets/AssetManifest.bin.json": "475067c425b761f16a1d2b2221b96b19",
@@ -64,9 +64,9 @@ const RESOURCES = {"flutter.js": "888483df48293866f9f41d3d9274a779",
 "canvaskit/canvaskit.js.symbols": "58832fbed59e00d2190aa295c4d70360",
 "canvaskit/skwasm.js.symbols": "0088242d10d7e7d6d2649d1fe1bda7c1",
 "favicon.png": "b824a693cf1dc1444b46296a817eb9a7",
-"flutter_bootstrap.js": "0fb5e7d55f9ac8f8941079e4d5a3eeb4",
+"flutter_bootstrap.js": "885652f4aad71f646168b220314dbb4f",
 "version.json": "3be0fc023c66c0452066a5b8686bb807",
-"main.dart.js": "6d33de4686d72ce6b3c7ee49f5b9dd55"};
+"main.dart.js": "b39cc978ac55016e3c82211f6e791623"};
 // The application shell files that are downloaded before a service worker can
 // start.
 const CORE = ["main.dart.js",
