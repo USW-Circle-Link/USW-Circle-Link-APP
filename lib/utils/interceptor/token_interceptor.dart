@@ -43,7 +43,7 @@ class TokenInterceptor extends Interceptor {
 
       // 실제 토큰으로 대체
       options.headers.addAll({
-        'Authorization': 'Bearer $accessToken',
+        'Authorization': 'Bearer $accessToken 1',
       });
     }
     if (options.headers['refreshToken'] == 'true') {
