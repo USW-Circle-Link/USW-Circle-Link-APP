@@ -172,12 +172,14 @@ class TokenInterceptor extends Interceptor {
         return handler.resolve(newResponse);
       } on DioException catch (e) {
         logger.e(e);
+        print(e);
         // 새로운 Access Token임에도 에러가 발생한다면, Refresh Token마저도 만료된 것임
         await ref.read(userViewModelProvider.notifier).logout();
 
         return handler.reject(e);
       } catch (e) {
         logger.e(e);
+        print(e);
         await ref.read(userViewModelProvider.notifier).logout();
       }
     } else if (isStatus401 && isPathLogin) {
