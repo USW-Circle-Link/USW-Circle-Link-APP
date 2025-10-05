@@ -124420,11 +124420,12 @@ a7.a1(0,"\uc800\uc7a5\ub41c \ub9ac\ud504\ub808\uc26c \ud1a0\ud070 - "+(a9?"\uc5c
 A.b0("\uc800\uc7a5\ub41c \ub9ac\ud504\ub808\uc26c \ud1a0\ud070 - "+(a9?"\uc5c6\uc74c!":a5))
 if(a9){q=b6.D2(b5)
 s=1
-break}m=A.blk(A.bkg(b1.uG$,null,null))
+break}a9=t.N
+b0=t.z
+m=A.blk(A.bkg(b1.uG$,A.G(["withCredentials",!0],a9,b0),null))
 p=8
-a9=t.z
 s=11
-return A.m(m.Kf("/integration/refresh-token",null,a9),$async$hL)
+return A.m(m.Kf("/integration/refresh-token",null,b0),$async$hL)
 case 11:l=b8
 a7.a1(0,l.a)
 A.b0(l.a)
@@ -124441,9 +124442,9 @@ s=12
 return A.m(a8.oo(0,"access_token",j),$async$hL)
 case 12:s=13
 return A.m(a8.oo(0,"refresh_token",i),$async$hL)
-case 13:b0=J.as(h,"clubUUIDs")
+case 13:b2=J.as(h,"clubUUIDs")
 s=14
-return A.m(a8.oo(0,"club_uuids",B.b0.HT(b0==null?[]:b0,null)),$async$hL)
+return A.m(a8.oo(0,"club_uuids",B.b0.HT(b2==null?[]:b2,null)),$async$hL)
 case 14:s=15
 return A.m(a8.jq(0,"access_token"),$async$hL)
 case 15:g=b8
@@ -124462,12 +124463,12 @@ a7.a1(0,"\uc0c8\ub85c\uc6b4 \uc561\uc138\uc2a4 \ud1a0\ud070\uc73c\ub85c \uc694\u
 A.b0("\uc0c8\ub85c\uc6b4 \uc561\uc138\uc2a4 \ud1a0\ud070\uc73c\ub85c \uc694\uccad\ubcf4\ub0b4\ub294 \uc911 ... ")
 a7=c.b
 a7===$&&A.a()
-a7.G(0,A.G(["Authorization","Bearer "+A.c(j)],t.N,a9))
+a7.G(0,A.G(["Authorization","Bearer "+A.c(j)],a9,b0))
 s=18
-return A.m(J.bzP(m,c,a9),$async$hL)
+return A.m(J.bzP(m,c,b0),$async$hL)
 case 18:b=b8
-a9=b6.ab(b)
-q=a9
+b0=b6.ab(b)
+q=b0
 s=1
 break
 p=2
