@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
@@ -232,7 +233,7 @@ class AuthRepository {
       options: Options(
         headers: {
           'Authorization': 'Bearer $accessToken',
-          'Cookie': 'refreshToken=$refreshToken',
+          if (!kIsWeb) 'Cookie': 'refreshToken=$refreshToken',
         },
       ),
     );

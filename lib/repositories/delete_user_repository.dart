@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
@@ -58,7 +59,7 @@ class DeleteUserRepository {
         headers: {
           'Content-Type': 'application/json',
           'accessToken': 'true',
-          'refreshToken': 'true'
+          if (!kIsWeb) 'refreshToken': 'true'
         },
       ),
     );
