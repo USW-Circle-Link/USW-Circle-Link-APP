@@ -52,6 +52,7 @@ class UserViewModel extends StateNotifier<AsyncValue<UserModel?>> {
 
   Future<void> getMe() async {
     try {
+      state = AsyncValue.loading();
       final profile = await profileViewModel.getProfile();
       if (profile is ProfileModel) {
         logger.d('로그인 정보 확인 성공! : $profile');

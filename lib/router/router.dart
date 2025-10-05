@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/notifier/auth_notifier.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
@@ -50,7 +49,6 @@ final signUpRouter = GoRoute(
   ],
 );
 final routerProvider = Provider<GoRouter>((ref) {
-  final provider = ref.read(authProvider);
   return GoRouter(
     routes: [
       GoRoute(
@@ -208,7 +206,6 @@ final routerProvider = Provider<GoRouter>((ref) {
       ),
     ],
     initialLocation: '/',
-    refreshListenable: provider,
     debugLogDiagnostics: true,
     observers: [
       RefreshObserver(ref: ref),
