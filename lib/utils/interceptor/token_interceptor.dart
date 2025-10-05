@@ -98,6 +98,9 @@ class TokenInterceptor extends Interceptor {
       final dio = Dio(
         BaseOptions(
           baseUrl: err.requestOptions.baseUrl,
+          extra: {
+            'withCredentials': true,
+          },
         ),
       );
 
