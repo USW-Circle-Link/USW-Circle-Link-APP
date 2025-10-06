@@ -124357,7 +124357,7 @@ case 5:o=d
 $.ar().a0(0,"\ud5e4\ub354\uc5d0 \uc561\uc138\uc2a4 \ud1a0\ud070 \ucd94\uac00 \uc911 ... - "+A.c(o))
 if(o==null){q=b.D2(A.Dz(null,"\uc800\uc7a5\uc18c\uc5d0 \ud1a0\ud070\uc774 \uc874\uc7ac\ud558\uc9c0 \uc54a\uc2b5\ub2c8\ub2e4",a,null,null,B.mA))
 s=1
-break}a.b.G(0,A.I(["Authorization","Bearer "+o+" 1"],t.N,t.z))
+break}a.b.G(0,A.I(["Authorization","Bearer "+o],t.N,t.z))
 case 4:s=J.f(a.b.h(0,"refreshToken"),"true")?6:7
 break
 case 6:a.b.E(0,"refreshToken")
