@@ -36,23 +36,24 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
   @override
   Widget build(BuildContext context) {
     ref.listen<AsyncValue<ProfileModel>>(updateProfileViewModelProvider,
-            (previous, next) {
-          next.when(
-            data: (profile) {
-              if (profile.type == ProfileModelType.updateProfile) {
-                Navigator.pop(context);
-              }
-            },
-            error: (error, stackTrace) {
-              if (error is ProfileModelError && error.code == "USR-204") {
-                setState(() {
-                  _passwordError = "비밀번호가 일치하지 않습니다.";
-                });
-              }
-            },
-            loading: () {},
-          );
-        });
+        (previous, next) {
+      next.when(
+        data: (profile) {
+          if (profile.type == ProfileModelType.updateProfile) {
+            Navigator.pop(context);
+          }
+        },
+        error: (error, stackTrace) {
+          logger.e('error: $error');
+          if (error is ProfileModelError && error.code == "USR-204") {
+            setState(() {
+              _passwordError = "비밀번호가 일치하지 않습니다.";
+            });
+          }
+        },
+        loading: () {},
+      );
+    });
     final profileData = widget.profileData;
     logger.d('ProfileData: $profileData');
 
@@ -127,12 +128,12 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
             await ref
                 .read(updateProfileViewModelProvider.notifier)
                 .updateProfile(
-              userName: profileData['name']!,
-              studentNumber: profileData['studentNumber']!,
-              userHp: profileData['userHp']!,
-              major: profileData['major']!,
-              password: password,
-            );
+                  userName: profileData['name']!,
+                  studentNumber: profileData['studentNumber']!,
+                  userHp: profileData['userHp']!,
+                  major: profileData['major']!,
+                  password: password,
+                );
           },
           style: OutlinedButton.styleFrom(
             backgroundColor: const Color(0xFFFFB052),
@@ -212,15 +213,13 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                 height: 25.0,
                 child: _passwordError != null
                     ? Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Text(
-                    "* $_passwordError",
-                    style: const TextStyle(
-                        color: Colors.red,
-                        fontSize: 12.0,
-                        height: 1.0),
-                  ),
-                )
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "* $_passwordError",
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 12.0, height: 1.0),
+                        ),
+                      )
                     : const SizedBox.shrink(),
               ),
             ],
