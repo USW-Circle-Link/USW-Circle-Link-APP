@@ -45,9 +45,7 @@ class ProfileData with _$ProfileData {
 }
 
 @freezed
-class ProfileModelError extends ProfileModelBase
-    with _$ProfileModelError
-    implements Error {
+class ProfileModelError with _$ProfileModelError implements Exception {
   ProfileModelError._();
 
   factory ProfileModelError({
@@ -65,8 +63,5 @@ class ProfileModelError extends ProfileModelBase
         type: type,
       );
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }
-
-class ProfileModelLoading extends ProfileModelBase {}
