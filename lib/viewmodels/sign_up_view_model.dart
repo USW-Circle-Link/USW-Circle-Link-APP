@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/request/sign_up_request.dart';
 import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 import 'package:usw_circle_link/viewmodels/state/sign_up_state.dart';
 
 final signUpViewModelProvider =
@@ -42,13 +44,32 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         return;
       }
 
-      final response = await ref.read(authRepositoryProvider).verifyId(id: id);
+      final result = await ref.read(authRepositoryProvider).verifyId(id: id);
 
-      state = state.copyWith(
-        isVerifyIdLoading: false,
-        idVerified: response,
-      );
+      switch (result) {
+        case Ok():
+          state = state.copyWith(
+            isVerifyIdLoading: false,
+            idVerified: result.value,
+          );
+        case Error():
+          state = state.copyWith(
+            isVerifyIdLoading: false,
+            error: result.error.toString(),
+            errorField: FieldType.account,
+          );
+      }
     } on SignUpModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'SignUpModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'SignUp_VerifyId',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isVerifyIdLoading: false,
         error:
@@ -56,6 +77,15 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         errorField: FieldType.account,
       );
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'SignUp_VerifyId',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isVerifyIdLoading: false,
         error: '아이디 중복 확인에 실패했습니다.',
@@ -80,14 +110,33 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
 
       final email = state.signUpForm['email'];
 
-      final response =
+      final result =
           await ref.read(authRepositoryProvider).verifyEmail(email: email);
 
-      state = state.copyWith(
-        isVerifyEmailLoading: false,
-        emailVerified: response,
-      );
+      switch (result) {
+        case Ok():
+          state = state.copyWith(
+            isVerifyEmailLoading: false,
+            emailVerified: result.value,
+          );
+        case Error():
+          state = state.copyWith(
+            isVerifyEmailLoading: false,
+            error: result.error.toString(),
+            errorField: FieldType.email,
+          );
+      }
     } on SignUpModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'SignUpModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'SignUp_VerifyEmail',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isVerifyEmailLoading: false,
         error:
@@ -95,6 +144,15 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         errorField: FieldType.email,
       );
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'SignUp_VerifyEmail',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isVerifyEmailLoading: false,
         error: '이메일 중복 확인에 실패했습니다.',
@@ -158,14 +216,47 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         return;
       }
 
-      final response = await ref.read(authRepositoryProvider).signUpNewMember(
+      final result = await ref.read(authRepositoryProvider).signUpNewMember(
             request: SignUpRequest.fromJson(state.signUpForm),
           );
-      state = state.copyWith(
-        isSignUpLoading: false,
-        signUpSuccess: response,
-      );
+
+      switch (result) {
+        case Ok():
+          // Firebase Analytics: 회원가입 성공
+          analytics.logSignUp(
+            signUpMethod: AnalyticsParam.signUpMethod,
+            parameters: {
+              'method': 'new_member',
+              AnalyticsParam.account: state.signUpForm['id'] ?? '',
+              AnalyticsParam.userName: userName,
+              AnalyticsParam.studentNumber: studentNumber,
+              AnalyticsParam.major: major ?? '',
+              AnalyticsParam.userHp: telephone,
+              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            },
+          );
+
+          state = state.copyWith(
+            isSignUpLoading: false,
+            signUpSuccess: result.value,
+          );
+        case Error():
+          state = state.copyWith(
+            isSignUpLoading: false,
+            error: result.error.toString(),
+          );
+      }
     } on SignUpModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'SignUpModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'SignUp_NewMember',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       final isDialogError = ErrorUtil.instance.isDialogError(e.code);
       final errorField = ErrorUtil.instance.getFieldType(e.code);
       final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
@@ -182,6 +273,15 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
             ErrorUtil.instance.isNeedToRedirectSignUpOption(e.code),
       );
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'SignUp_NewMember',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isSignUpLoading: false,
         isDialogError: true,
@@ -244,15 +344,49 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         return;
       }
 
-      final response =
+      final result =
           await ref.read(authRepositoryProvider).signUpExistingMember(
                 request: SignUpRequest.fromJson(state.signUpForm),
               );
-      state = state.copyWith(
-        isSignUpLoading: false,
-        signUpSuccess: response,
-      );
+
+      switch (result) {
+        case Ok():
+          // Firebase Analytics: 회원가입 성공
+          analytics.logSignUp(
+            signUpMethod: AnalyticsParam.signUpMethod,
+            parameters: {
+              'method': 'existing_member',
+              AnalyticsParam.account: state.signUpForm['id'] ?? '',
+              AnalyticsParam.email: state.signUpForm['email'] ?? '',
+              AnalyticsParam.userName: userName,
+              AnalyticsParam.studentNumber: studentNumber,
+              AnalyticsParam.major: major ?? '',
+              AnalyticsParam.userHp: telephone,
+              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            },
+          );
+
+          state = state.copyWith(
+            isSignUpLoading: false,
+            signUpSuccess: result.value,
+          );
+        case Error():
+          state = state.copyWith(
+            isSignUpLoading: false,
+            error: result.error.toString(),
+          );
+      }
     } on SignUpModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'SignUpModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'SignUp_ExistingMember',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       final isDialogError = ErrorUtil.instance.isDialogError(e.code);
       final errorField = ErrorUtil.instance.getFieldType(e.code);
       final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
@@ -269,6 +403,15 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
       );
     } catch (e) {
       logger.e(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'SignUp_ExistingMember',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isSignUpLoading: false,
         isDialogError: true,

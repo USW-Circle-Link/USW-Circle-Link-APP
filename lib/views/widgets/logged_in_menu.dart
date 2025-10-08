@@ -3,13 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
-import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import 'package:usw_circle_link/viewmodels/state/user_state.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class LoggedInMenu extends ConsumerStatefulWidget {
@@ -18,7 +18,7 @@ class LoggedInMenu extends ConsumerStatefulWidget {
     required this.state,
   }) : super(key: key);
 
-  final ProfileModel state;
+  final UserState state;
 
   @override
   _LoggedInMenuState createState() => _LoggedInMenuState();
@@ -64,7 +64,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         ),
                         SizedBox(width: 16),
                         TextFontWidget.fontRegular(
-                          widget.state.data.userName,
+                          widget.state.userName ?? '',
                           fontSize: 18,
                           color: Colors.black,
                           fontWeight: FontWeight.w800,
@@ -134,14 +134,16 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   title: '나의 소속 동아리',
                   icon: MainIcons.ic_verified,
                   iconSize: 18,
-                  onTap: () => context.go('/circle_list/${CircleListType.myCircles.routeKey}'),
+                  onTap: () => context
+                      .go('/circle_list/${CircleListType.myCircles.routeKey}'),
                   trailingIcon: MainIcons.ic_chevron_right,
                 ),
                 buildDrawerItem(
                   title: '나의 지원 현황',
                   icon: MainIcons.ic_send_mail,
                   iconSize: 12,
-                  onTap: () => context.go('/circle_list/${CircleListType.myApplications.routeKey}'),
+                  onTap: () => context.go(
+                      '/circle_list/${CircleListType.myApplications.routeKey}'),
                   trailingIcon: MainIcons.ic_chevron_right,
                 ),
                 buildDrawerItem(
@@ -183,7 +185,8 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                           onRightButtonPressed: () async {
                             await ref
                                 .read(userViewModelProvider.notifier)
-                                .logout();
+                                .logout
+                                .execute();
                           },
                         );
                       },

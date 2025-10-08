@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -29,11 +30,30 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
       state = AsyncValue.data(response);
     } on CircleListModelError catch (e) {
       logger.d(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CircleListModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message ?? 'unknown',
+          AnalyticsParam.screen: 'CircleList_FetchAll',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(e, e.stackTrace);
     } catch (e) {
       final error = CircleListModelError(
           message: '예외발생! - $e', type: CircleListModelType.all);
       logger.e(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'CircleList_FetchAll',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(error, error.stackTrace);
     }
   }
@@ -46,9 +66,28 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
 
       state = AsyncValue.data(response);
     } on CircleListModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CircleListModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message ?? 'unknown',
+          AnalyticsParam.screen: 'CircleList_FetchOpen',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(e, e.stackTrace);
     } catch (e) {
       logger.e(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'CircleList_FetchOpen',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       final error = CircleListModelError(
           message: '예외발생! - $e', type: CircleListModelType.department);
       state = AsyncValue.error(error, error.stackTrace);
@@ -65,11 +104,30 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
 
       state = AsyncValue.data(response.toCircleListModel());
     } on CircleListModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CircleListModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message ?? 'unknown',
+          AnalyticsParam.screen: 'CircleList_FetchFilteredAll',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(e, e.stackTrace);
     } catch (e) {
       final error = CircleListModelError(
           message: '예외발생! - $e', type: CircleListModelType.filtered_all);
       logger.e(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'CircleList_FetchFilteredAll',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(error, error.stackTrace);
     }
   }
@@ -81,11 +139,30 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
           .fetchOpenFilteredCircleList(clubCategoryUUIDs);
       state = AsyncValue.data(response.toCircleListModel());
     } on CircleListModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CircleListModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message ?? 'unknown',
+          AnalyticsParam.screen: 'CircleList_FetchFilteredOpen',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(e, e.stackTrace);
     } catch (e) {
       final error = CircleListModelError(
           message: '예외발생! - $e', type: CircleListModelType.filtered_open);
       logger.e(e);
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'CircleList_FetchFilteredOpen',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncValue.error(error, error.stackTrace);
     }
   }

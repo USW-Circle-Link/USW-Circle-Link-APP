@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/models/delete_user_model.dart';
 import 'package:usw_circle_link/repositories/delete_user_repository.dart';
@@ -39,12 +40,31 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
         );
       }
     } on DeleteUserModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'DeleteUserModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'DeleteUser_SendCode',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isLoading: false,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
             '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
       );
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'DeleteUser_SendCode',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isLoading: false,
         error: '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
@@ -72,10 +92,25 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
         return;
       }
 
+      final userState = ref.read(userViewModelProvider);
+
       final result =
           await ref.read(deleteUserRepositoryProvider).verifyCode(code: code);
 
       if (result) {
+        // Firebase Analytics: 회원탈퇴 성공
+        analytics.logEvent(
+          name: AnalyticsEvent.deleteAccount,
+          parameters: {
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            AnalyticsParam.major: userState.state.major ?? 'unknown',
+            AnalyticsParam.userName: userState.state.userName ?? 'unknown',
+            AnalyticsParam.studentNumber:
+                userState.state.studentNumber ?? 'unknown',
+            AnalyticsParam.userHp: userState.state.userHp ?? 'unknown',
+          },
+        );
+
         state = state.copyWith(
           isLoading: false,
           isVerifyCodeSuccess: true,
@@ -87,9 +122,19 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
           ref.read(secureStorageProvider).delete(key: clubUUIDsKey),
         ]);
 
-        await ref.read(userViewModelProvider.notifier).logout();
+        await ref.read(userViewModelProvider.notifier).logout.execute();
       }
     } on DeleteUserModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'DeleteUserModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'DeleteUser_VerifyCode',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isLoading: false,
         error: ErrorUtil.instance.getErrorMessage(e.code) ??
@@ -97,6 +142,15 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
         isCodeError: true,
       );
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'DeleteUser_VerifyCode',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = state.copyWith(
         isLoading: false,
         error: '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
