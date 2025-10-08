@@ -1,10 +1,8 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:usw_circle_link/firebase_options.dart';
 import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -30,15 +28,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   }
 
   Future<void> initializeFCM() async {
-    logger.d('Firebase 초기화 중 ...');
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-      name: 'USW_Circle_Link',
-    );
-
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
-
-    logger.d('Firebase 초기화 성공!');
   }
 
   // fcm 전경 처리 - 로컬 알림 보이기
