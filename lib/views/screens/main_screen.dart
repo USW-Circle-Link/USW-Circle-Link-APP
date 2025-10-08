@@ -3,10 +3,9 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/models/profile_model.dart';
-import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
 import 'package:usw_circle_link/notifier/network_connectivity_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -15,7 +14,6 @@ import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
-import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/category_picker.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
@@ -89,11 +87,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       logger.d(next);
     });
 
-    final profileState = ref.watch(profileViewModelProvider);
-    ref.listen(profileViewModelProvider, (previous, next) {
-      logger.d(next);
-    });
-
     ref.listen(abnormalAccessNotifierProvider, (previous, next) {
       logger.d(next);
       DialogManager.instance.showAlertDialog(
@@ -157,8 +150,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         ],
       ),
-      drawer: userState.value is UserModel && profileState.value is ProfileModel
-          ? LoggedInMenu(state: profileState.value as ProfileModel)
+      drawer: userState.state.isAuthorized
+          ? LoggedInMenu(state: userState.state)
           : const LoggedOutMenu(),
       body: Column(
         children: [
@@ -245,6 +238,27 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           return CategoryPicker(
                             initialCategories: selectedCategories,
                             onSelectionChanged: (newSelection) {
+                              // Firebase Analytics: 필터 선택
+                              final userState =
+                                  ref.read(userViewModelProvider).state;
+                              analytics.logEvent(
+                                name: AnalyticsEvent.filterSelect,
+                                parameters: {
+                                  AnalyticsParam.filterCategories: newSelection
+                                      .map((c) => c.clubCategoryName)
+                                      .join(','),
+                                  'category_count': newSelection.length,
+                                  AnalyticsParam.studentNumber:
+                                      userState.studentNumber ?? '',
+                                  AnalyticsParam.userName:
+                                      userState.userName ?? '',
+                                  AnalyticsParam.major: userState.major ?? '',
+                                  AnalyticsParam.userHp: userState.userHp ?? '',
+                                  AnalyticsParam.timestamp:
+                                      DateTime.now().toIso8601String(),
+                                },
+                              );
+
                               setState(() => selectedCategories = newSelection);
                               fetchCircleList();
                             },
@@ -328,6 +342,23 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     ? CircleList(
                         state: circleListState.value as CircleListModel,
                         onItemClicked: (clubUUID) {
+                          // Firebase Analytics: 동아리 클릭
+                          final userState =
+                              ref.read(userViewModelProvider).state;
+                          analytics.logEvent(
+                            name: AnalyticsEvent.clubClick,
+                            parameters: {
+                              AnalyticsParam.clubUUID: clubUUID,
+                              AnalyticsParam.studentNumber:
+                                  userState.studentNumber ?? '',
+                              AnalyticsParam.userName: userState.userName ?? '',
+                              AnalyticsParam.major: userState.major ?? '',
+                              AnalyticsParam.userHp: userState.userHp ?? '',
+                              AnalyticsParam.timestamp:
+                                  DateTime.now().toIso8601String(),
+                            },
+                          );
+
                           context.go('/circle?clubUUID=$clubUUID');
                         },
                       )

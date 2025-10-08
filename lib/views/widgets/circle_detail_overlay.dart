@@ -180,12 +180,7 @@ class CircleDetailOverlay extends ConsumerWidget {
               GestureDetector(
                 onTap: leaderHp != null &&
                         leaderHp!.isNotEmpty &&
-                        ref
-                                .read(userViewModelProvider)
-                                .valueOrNull
-                                ?.data
-                                .accessToken !=
-                            null
+                        ref.read(userViewModelProvider).state.isAuthorized
                     ? () async {
                         await Clipboard.setData(ClipboardData(text: leaderHp!));
                         if (context.mounted) {
@@ -220,12 +215,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                       ),
                       TextFontWidget.fontRegular(
                         leaderHp != null && leaderHp!.isNotEmpty
-                            ? ref
-                                        .read(userViewModelProvider)
-                                        .valueOrNull
-                                        ?.data
-                                        .accessToken !=
-                                    null
+                            ? ref.read(userViewModelProvider).state.isAuthorized
                                 ? leaderHp!.addDashOrNull() ?? "정보 없음"
                                 : "로그인 후 이용해주세요."
                             : "정보 없음",
@@ -235,11 +225,9 @@ class CircleDetailOverlay extends ConsumerWidget {
                         color: leaderHp != null &&
                                 leaderHp!.isNotEmpty &&
                                 ref
-                                        .read(userViewModelProvider)
-                                        .valueOrNull
-                                        ?.data
-                                        .accessToken !=
-                                    null
+                                    .read(userViewModelProvider)
+                                    .state
+                                    .isAuthorized
                             ? const Color(0xff6EA4EF)
                             : const Color(0xff9A9A9A),
                       )

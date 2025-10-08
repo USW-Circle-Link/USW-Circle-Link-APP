@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/login_view_model.dart';
-import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import '../../utils/icons/sign_up_icons_icons.dart';
+import '../../utils/logger/logger.dart';
+import '../../views/widgets/rounded_rext_field.dart';
+import '../../views/widgets/text_font_widget.dart';
+import '../../viewmodels/login_view_model.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
@@ -25,18 +23,19 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(loginViewModelProvider);
-    ref.listen<UserModelBase?>(loginViewModelProvider,
-            (UserModelBase? previous, UserModelBase? next) {
-          logger.d('$next');
-          if (next is UserModelError) {
-            logger.e(next.message);
-          }
-          if (next is UserModel) {
-            // 로그인 성공
-            context.pop();
-          }
-        });
+    final isLoading =
+        ref.watch(loginViewModelProvider.select((state) => state.isLoading));
+    final isLoginError =
+        ref.watch(loginViewModelProvider.select((state) => state.isLoginError));
+    final error =
+        ref.watch(loginViewModelProvider.select((state) => state.error));
+
+    ref.listen(loginViewModelProvider.select((state) => state.isLoginSuccess),
+        (previous, next) {
+      if (next) {
+        context.pop();
+      }
+    });
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -44,7 +43,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
-          padding: const EdgeInsets.only(left: 22.0), // icon에 10.0 정도의 여백이 기본적으로 존재
+          padding:
+              const EdgeInsets.only(left: 22.0), // icon에 10.0 정도의 여백이 기본적으로 존재
           child: Row(
             children: [
               IconButton(
@@ -168,9 +168,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
               const SizedBox(
                 height: 8.0,
               ),
-              if (state is UserModelError)
+              if (isLoginError)
                 TextFontWidget.fontRegular(
-                  '* ${(ErrorUtil.instance.getErrorMessage(state.code) ?? '로그인에 실패했어요.')}',
+                  '* $error',
                   fontSize: 12.0,
                   color: const Color(0xFFFF3F3F),
                   fontWeight: FontWeight.w400,
@@ -182,25 +182,23 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 width: double.infinity,
                 height: 56.0,
                 child: OutlinedButton(
-                  onPressed: state is UserModelLoading
+                  onPressed: isLoading
                       ? null
                       : () async {
-                    final id = idController.text.trim(),
-                        password = passwordController.text.trim();
-                    logger.d('id:$id / pw:$password');
+                          final id = idController.text.trim(),
+                              password = passwordController.text.trim();
+                          logger.d('id:$id / pw:$password');
 
-                    await ref
-                        .read(loginViewModelProvider.notifier)
-                        .login(
-                      id: id,
-                      password: password,
-                    );
-                  },
+                          await ref.read(loginViewModelProvider.notifier).login(
+                                id: id,
+                                password: password,
+                              );
+                        },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: const Color(0xffffB052),
                     foregroundColor: const Color(0xffffffff),
-                    side: const BorderSide(
-                        width: 0.0, color: Colors.transparent),
+                    side:
+                        const BorderSide(width: 0.0, color: Colors.transparent),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(16.0),
                     ),
