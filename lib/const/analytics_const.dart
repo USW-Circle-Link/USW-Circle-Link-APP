@@ -12,6 +12,7 @@ class AnalyticsEvent {
   // 계정 관련
   static const String signUp = 'sign_up';
   static const String deleteAccount = 'delete_account';
+  static const String refreshToken = 'refresh_token';
 
   // 사용자 행동
   static const String clubClick = 'club_click';
