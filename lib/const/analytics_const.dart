@@ -21,7 +21,7 @@ class AnalyticsEvent {
   static const String profileUpdate = 'profile_update';
 
   // 디버깅
-  static const String error = 'error';
+  static const String error = 'debug_error';
 }
 
 class AnalyticsParam {
