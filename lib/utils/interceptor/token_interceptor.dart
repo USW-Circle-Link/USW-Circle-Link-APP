@@ -5,7 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/user_model.dart';
+import 'package:usw_circle_link/models/login_data.dart';
 import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -68,8 +68,6 @@ class TokenInterceptor extends Interceptor {
   void onError(DioException err, ErrorInterceptorHandler handler) async {
     logger.w(
         '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.baseUrl}${err.requestOptions.path}');
-    print(
-        '요청 거부됨 - 상태코드 ${err.response?.statusCode} / 요청경로 ${err.requestOptions.baseUrl}${err.requestOptions.path}');
     // 401 에러가 발생했을 때 (status code)
     // 토큰을 재발급받는 시도를 하고, 토큰이 재발급되면
     // 다시 새로운 토큰을 요청한다.
@@ -83,11 +81,9 @@ class TokenInterceptor extends Interceptor {
     // token을 refresh하려는 의도가 아니었는데 401 에러가 발생했을 때
     if (isStatus401 && !isPathRefresh && !isPathLogin) {
       logger.d('액세스 토큰 재발급 중 ... ');
-      print('액세스 토큰 재발급 중 ... ');
 
       final refreshToken = await storage.read(key: refreshTokenKey);
       logger.d('저장된 리프레쉬 토큰 - ${refreshToken ?? "없음!"}');
-      print('저장된 리프레쉬 토큰 - ${refreshToken ?? "없음!"}');
 
       // refreshToken이 null이면 에러 반환
       if (refreshToken == null) {
@@ -117,11 +113,8 @@ class TokenInterceptor extends Interceptor {
         );
 
         logger.d(response.data);
-        print(response.data);
 
         logger.d(
-            'refreshAccessToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-        print(
             'refreshAccessToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
         if (response.statusCode != 200) {
@@ -131,7 +124,7 @@ class TokenInterceptor extends Interceptor {
             type: DioExceptionType.cancel,
           );
         }
-        final data = UserModel.fromJson(response.data).data;
+        final data = LoginData.fromJson(response.data['data']);
 
         final accessToken = data.accessToken;
         final newRefreshToken = data.refreshToken;
@@ -139,7 +132,6 @@ class TokenInterceptor extends Interceptor {
         final payload = JwtDecoder.decode(accessToken);
 
         logger.d('onError - payload - $payload');
-        print('onError - payload - $payload');
         // secure storage도 update
         await storage.write(key: accessTokenKey, value: accessToken);
         await storage.write(key: refreshTokenKey, value: newRefreshToken);
@@ -153,14 +145,11 @@ class TokenInterceptor extends Interceptor {
         final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
         logger.d(
             'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
-        print(
-            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
 
         final options = err.requestOptions;
 
         // 원래 보내려던 요청 재전송
         logger.d('새로운 액세스 토큰으로 요청보내는 중 ... ');
-        print('새로운 액세스 토큰으로 요청보내는 중 ... ');
 
         // 요청의 헤더에 새로 발급받은 accessToken으로 변경하기
         options.headers.addAll({
@@ -172,15 +161,13 @@ class TokenInterceptor extends Interceptor {
         return handler.resolve(newResponse);
       } on DioException catch (e) {
         logger.e(e);
-        print(e);
         // 새로운 Access Token임에도 에러가 발생한다면, Refresh Token마저도 만료된 것임
-        await ref.read(userViewModelProvider.notifier).logout();
+        await ref.read(userViewModelProvider.notifier).logout.execute();
 
         return handler.reject(e);
       } catch (e) {
         logger.e(e);
-        print(e);
-        await ref.read(userViewModelProvider.notifier).logout();
+        await ref.read(userViewModelProvider.notifier).logout.execute();
       }
     } else if (isStatus401 && isPathLogin) {
       if (err.response != null) {
