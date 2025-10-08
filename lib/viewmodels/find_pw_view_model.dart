@@ -5,6 +5,7 @@ import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/secure_storage/secure_storage.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final findPwViewModelProvider = StateNotifierProvider.autoDispose<
     FindPwViewModel, AsyncValue<FindPwModel?>>((ref) {
@@ -42,21 +43,31 @@ class FindPwViewModel extends StateNotifier<AsyncValue<FindPwModel?>> {
         );
       }
 
-      final response =
+      final result =
           await authRepository.sendCode(account: account, email: email);
-      final accessToken = response.data;
 
-      if (accessToken == null) {
-        throw FindPwModelError(
-          message: '액세스토큰이 존재하지 않습니다.',
-          code: "EML-F300",
-          type: FindPwModelType.sendCode,
-        );
+      switch (result) {
+        case Ok():
+          final findPwModel = result.value;
+          final accessToken = findPwModel.data;
+
+          if (accessToken == null) {
+            throw FindPwModelError(
+              message: '액세스토큰이 존재하지 않습니다.',
+              code: "EML-F300",
+              type: FindPwModelType.sendCode,
+            );
+          }
+
+          storage.write(key: accessTokenKey, value: accessToken);
+          state = AsyncData(findPwModel);
+        case Error():
+          final error = FindPwModelError(
+            message: result.error.toString(),
+            type: FindPwModelType.sendCode,
+          );
+          state = AsyncError(error, error.stackTrace);
       }
-
-      await storage.write(key: accessTokenKey, value: accessToken);
-
-      state = AsyncData(response);
     } on FindPwModelError catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
     } catch (e) {
@@ -92,11 +103,21 @@ class FindPwViewModel extends StateNotifier<AsyncValue<FindPwModel?>> {
           type: FindPwModelType.verifyCode,
         );
       }
-      final response = await authRepository.verifyCode(
+      final result = await authRepository.verifyCode(
         code: code,
         uuid: uuid,
       );
-      state = AsyncData(response);
+
+      switch (result) {
+        case Ok():
+          state = AsyncData(result.value);
+        case Error():
+          final error = FindPwModelError(
+            message: result.error.toString(),
+            type: FindPwModelType.verifyCode,
+          );
+          state = AsyncError(error, error.stackTrace);
+      }
     } on FindPwModelError catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
     } catch (e) {

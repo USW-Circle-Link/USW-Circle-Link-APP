@@ -1,7 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/repositories/profile_repository.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
     UpdateProfileViewModel, AsyncValue<ProfileModel>>((ref) {
@@ -13,7 +16,6 @@ final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
   );
 });
 
-
 class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
   final ProfileRepository profileRepository;
   UpdateProfileViewModel({
@@ -21,10 +23,42 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
   }) : super(AsyncValue.loading()) {
     Future.sync(() async {
       try {
-        state = AsyncValue.data(await profileRepository.getProfile());
+        final result = await profileRepository.getProfile();
+        switch (result) {
+          case Ok():
+            state = AsyncValue.data(ProfileModel(
+              message: '프로필 조회 성공',
+              data: result.value,
+              type: ProfileModelType.getProfile,
+            ));
+          case Error():
+            final error = ProfileModelError(
+                message: result.error.toString(),
+                type: ProfileModelType.getProfile);
+            state = AsyncError(error, error.stackTrace);
+        }
       } on ProfileModelError catch (e) {
+        analytics.logEvent(
+          name: AnalyticsEvent.error,
+          parameters: {
+            AnalyticsParam.errorType: 'ProfileModelError',
+            AnalyticsParam.errorCode: e.code ?? 'unknown',
+            AnalyticsParam.errorMessage: e.message,
+            AnalyticsParam.screen: 'Profile_GetProfile',
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+          },
+        );
         state = AsyncError(e, e.stackTrace);
       } catch (e) {
+        analytics.logEvent(
+          name: AnalyticsEvent.error,
+          parameters: {
+            AnalyticsParam.errorType: e.runtimeType.toString(),
+            AnalyticsParam.errorMessage: e.toString(),
+            AnalyticsParam.screen: 'Profile_GetProfile',
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+          },
+        );
         final error = ProfileModelError(
             message: '예외발생! - $e', type: ProfileModelType.getProfile);
         state = AsyncError(error, error.stackTrace);
@@ -68,18 +102,63 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             code: "USR-F700",
             type: ProfileModelType.updateProfile);
       }
-      state = AsyncData(
-        await profileRepository.updateProfile(
-          userName: userName,
-          studentNumber: studentNumber,
-          userHp: userHp,
-          major: major,
-          password: password,
-        ),
+      final result = await profileRepository.updateProfile(
+        userName: userName,
+        studentNumber: studentNumber,
+        userHp: userHp,
+        major: major,
+        password: password,
       );
+
+      switch (result) {
+        case Ok():
+          // Firebase Analytics: 프로필 업데이트 성공
+          analytics.logEvent(
+            name: AnalyticsEvent.profileUpdate,
+            parameters: {
+              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            },
+          );
+
+          state = AsyncData(ProfileModel(
+            message: '프로필 업데이트 성공',
+            data: ProfileData(
+              userName: userName,
+              studentNumber: studentNumber,
+              userHp: userHp,
+              major: major,
+              password: null,
+            ),
+            type: ProfileModelType.updateProfile,
+          ));
+        case Error():
+          final error = ProfileModelError(
+              message: result.error.toString(),
+              type: ProfileModelType.updateProfile);
+          state = AsyncError(error, error.stackTrace);
+      }
     } on ProfileModelError catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'ProfileModelError',
+          AnalyticsParam.errorCode: e.code ?? 'unknown',
+          AnalyticsParam.errorMessage: e.message,
+          AnalyticsParam.screen: 'Profile_UpdateProfile',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       state = AsyncError(e, e.stackTrace);
     } catch (e) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'Profile_UpdateProfile',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
       final error = ProfileModelError(
           message: '예외발생! - $e', type: ProfileModelType.updateProfile);
       state = AsyncError(error, error.stackTrace);

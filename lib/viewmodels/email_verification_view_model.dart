@@ -3,6 +3,7 @@ import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 import 'package:usw_circle_link/viewmodels/state/email_verification_state.dart';
 
 final emailVerificationViewModelProvider = AutoDisposeNotifierProvider<
@@ -37,14 +38,24 @@ class EmailVerificationViewModel
         return;
       }
 
-      final response =
+      final result =
           await ref.read(authRepositoryProvider).sendMail(email: email);
-      state = state.copyWith(
-        isLoading: false,
-        isSendMailSuccess: true,
-        emailTokenUUID: response.data.emailTokenUUID,
-        email: response.data.email,
-      );
+
+      switch (result) {
+        case Ok():
+          final sendMailResponse = result.value;
+          state = state.copyWith(
+            isLoading: false,
+            isSendMailSuccess: true,
+            emailTokenUUID: sendMailResponse.data.emailTokenUUID,
+            email: sendMailResponse.data.email,
+          );
+        case Error():
+          state = state.copyWith(
+            isLoading: false,
+            error: result.error.toString(),
+          );
+      }
     } on EmailVerificationModelError catch (e) {
       state = state.copyWith(
         isLoading: false,
@@ -69,16 +80,26 @@ class EmailVerificationViewModel
 
       final email = state.email;
 
-      final response = await ref
+      final result = await ref
           .read(authRepositoryProvider)
           .verifyEmailVerification(email: email); // true or error
 
-      state = state.copyWith(
-        isLoading: false,
-        error: null,
-        isVerifySuccess: true,
-        signupUUID: response.data.signupUuid,
-      );
+      switch (result) {
+        case Ok():
+          final emailVerificationResponse = result.value;
+          state = state.copyWith(
+            isLoading: false,
+            error: null,
+            isVerifySuccess: true,
+            signupUUID: emailVerificationResponse.data.signupUuid,
+          );
+        case Error():
+          state = state.copyWith(
+            isLoading: false,
+            error: result.error.toString(),
+            isVerifySuccess: false,
+          );
+      }
     } on EmailVerificationModelError catch (e) {
       state = state.copyWith(
         isLoading: false,
