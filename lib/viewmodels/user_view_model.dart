@@ -89,8 +89,11 @@ class UserViewModel extends ChangeNotifier {
           FirebaseAnalytics.instance.logLogin(
             loginMethod: LoginMethod.autoLogin.name,
             parameters: {
-              'timestamp': DateTime.now().toIso8601String(),
-              'profile': result.value.toJson(),
+              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              AnalyticsParam.major: result.value.major,
+              AnalyticsParam.userName: result.value.userName,
+              AnalyticsParam.studentNumber: result.value.studentNumber,
+              AnalyticsParam.userHp: result.value.userHp,
             },
           );
 
