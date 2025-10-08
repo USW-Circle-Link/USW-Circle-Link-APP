@@ -13,7 +13,6 @@ import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
-import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/firebase_options.dart';
 
 @pragma('vm:entry-point')
@@ -50,6 +49,7 @@ void main() async {
   // Firebase 초기화
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
+    // name: 'USW_Circle_Link',
   );
   // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
@@ -58,15 +58,6 @@ void main() async {
   // await Upgrader.clearSavedSettings();
 
   final container = ProviderContainer();
-
-  container.listen(profileViewModelProvider, (previous, next) {
-    next.whenData((profile) {
-      logger.d('자동 로그인 완료: $profile');
-      if (profile != null) {
-        //FlutterNativeSplash.remove();
-      }
-    });
-  });
 
   runApp(
     ProviderScope(
