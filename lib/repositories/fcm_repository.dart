@@ -25,7 +25,10 @@ class FCMRepository {
   });
 
   Future<String> getToken() async {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) {
+      // 초기화 되지 않은 경우 초기화
+      await Firebase.initializeApp();
+    }
 
     // iOS
     String? token;
