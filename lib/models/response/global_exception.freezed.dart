@@ -3,7 +3,7 @@
 // ignore_for_file: type=lint
 // ignore_for_file: unused_element, deprecated_member_use, deprecated_member_use_from_same_package, use_function_type_syntax_for_parameters, unnecessary_const, avoid_init_to_null, invalid_override_different_default_values_named, prefer_expression_function_bodies, annotate_overrides, invalid_annotation_target, unnecessary_question_mark
 
-part of 'exception.dart';
+part of 'global_exception.dart';
 
 // **************************************************************************
 // FreezedGenerator
@@ -14,12 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-Exception _$ExceptionFromJson(Map<String, dynamic> json) {
-  return _Exception.fromJson(json);
+GlobalException _$GlobalExceptionFromJson(Map<String, dynamic> json) {
+  return _GlobalException.fromJson(json);
 }
 
 /// @nodoc
-mixin _$Exception {
+mixin _$GlobalException {
   @JsonKey(name: "exception")
   String? get exception => throw _privateConstructorUsedError;
   @JsonKey(name: "code")
@@ -33,14 +33,15 @@ mixin _$Exception {
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
-  $ExceptionCopyWith<Exception> get copyWith =>
+  $GlobalExceptionCopyWith<GlobalException> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class $ExceptionCopyWith<$Res> {
-  factory $ExceptionCopyWith(Exception value, $Res Function(Exception) then) =
-      _$ExceptionCopyWithImpl<$Res, Exception>;
+abstract class $GlobalExceptionCopyWith<$Res> {
+  factory $GlobalExceptionCopyWith(
+          GlobalException value, $Res Function(GlobalException) then) =
+      _$GlobalExceptionCopyWithImpl<$Res, GlobalException>;
   @useResult
   $Res call(
       {@JsonKey(name: "exception") String? exception,
@@ -51,9 +52,9 @@ abstract class $ExceptionCopyWith<$Res> {
 }
 
 /// @nodoc
-class _$ExceptionCopyWithImpl<$Res, $Val extends Exception>
-    implements $ExceptionCopyWith<$Res> {
-  _$ExceptionCopyWithImpl(this._value, this._then);
+class _$GlobalExceptionCopyWithImpl<$Res, $Val extends GlobalException>
+    implements $GlobalExceptionCopyWith<$Res> {
+  _$GlobalExceptionCopyWithImpl(this._value, this._then);
 
   // ignore: unused_field
   final $Val _value;
@@ -95,11 +96,11 @@ class _$ExceptionCopyWithImpl<$Res, $Val extends Exception>
 }
 
 /// @nodoc
-abstract class _$$ExceptionImplCopyWith<$Res>
-    implements $ExceptionCopyWith<$Res> {
-  factory _$$ExceptionImplCopyWith(
-          _$ExceptionImpl value, $Res Function(_$ExceptionImpl) then) =
-      __$$ExceptionImplCopyWithImpl<$Res>;
+abstract class _$$GlobalExceptionImplCopyWith<$Res>
+    implements $GlobalExceptionCopyWith<$Res> {
+  factory _$$GlobalExceptionImplCopyWith(_$GlobalExceptionImpl value,
+          $Res Function(_$GlobalExceptionImpl) then) =
+      __$$GlobalExceptionImplCopyWithImpl<$Res>;
   @override
   @useResult
   $Res call(
@@ -111,11 +112,11 @@ abstract class _$$ExceptionImplCopyWith<$Res>
 }
 
 /// @nodoc
-class __$$ExceptionImplCopyWithImpl<$Res>
-    extends _$ExceptionCopyWithImpl<$Res, _$ExceptionImpl>
-    implements _$$ExceptionImplCopyWith<$Res> {
-  __$$ExceptionImplCopyWithImpl(
-      _$ExceptionImpl _value, $Res Function(_$ExceptionImpl) _then)
+class __$$GlobalExceptionImplCopyWithImpl<$Res>
+    extends _$GlobalExceptionCopyWithImpl<$Res, _$GlobalExceptionImpl>
+    implements _$$GlobalExceptionImplCopyWith<$Res> {
+  __$$GlobalExceptionImplCopyWithImpl(
+      _$GlobalExceptionImpl _value, $Res Function(_$GlobalExceptionImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -127,7 +128,7 @@ class __$$ExceptionImplCopyWithImpl<$Res>
     Object? status = freezed,
     Object? error = freezed,
   }) {
-    return _then(_$ExceptionImpl(
+    return _then(_$GlobalExceptionImpl(
       exception: freezed == exception
           ? _value.exception
           : exception // ignore: cast_nullable_to_non_nullable
@@ -154,16 +155,17 @@ class __$$ExceptionImplCopyWithImpl<$Res>
 
 /// @nodoc
 @JsonSerializable()
-class _$ExceptionImpl implements _Exception {
-  const _$ExceptionImpl(
+class _$GlobalExceptionImpl extends _GlobalException {
+  _$GlobalExceptionImpl(
       {@JsonKey(name: "exception") this.exception,
       @JsonKey(name: "code") this.code,
       @JsonKey(name: "message") this.message,
       @JsonKey(name: "status") this.status,
-      @JsonKey(name: "error") this.error});
+      @JsonKey(name: "error") this.error})
+      : super._();
 
-  factory _$ExceptionImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ExceptionImplFromJson(json);
+  factory _$GlobalExceptionImpl.fromJson(Map<String, dynamic> json) =>
+      _$$GlobalExceptionImplFromJson(json);
 
   @override
   @JsonKey(name: "exception")
@@ -183,14 +185,14 @@ class _$ExceptionImpl implements _Exception {
 
   @override
   String toString() {
-    return 'Exception(exception: $exception, code: $code, message: $message, status: $status, error: $error)';
+    return 'GlobalException(exception: $exception, code: $code, message: $message, status: $status, error: $error)';
   }
 
   @override
   bool operator ==(Object other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ExceptionImpl &&
+            other is _$GlobalExceptionImpl &&
             (identical(other.exception, exception) ||
                 other.exception == exception) &&
             (identical(other.code, code) || other.code == code) &&
@@ -207,27 +209,29 @@ class _$ExceptionImpl implements _Exception {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ExceptionImplCopyWith<_$ExceptionImpl> get copyWith =>
-      __$$ExceptionImplCopyWithImpl<_$ExceptionImpl>(this, _$identity);
+  _$$GlobalExceptionImplCopyWith<_$GlobalExceptionImpl> get copyWith =>
+      __$$GlobalExceptionImplCopyWithImpl<_$GlobalExceptionImpl>(
+          this, _$identity);
 
   @override
   Map<String, dynamic> toJson() {
-    return _$$ExceptionImplToJson(
+    return _$$GlobalExceptionImplToJson(
       this,
     );
   }
 }
 
-abstract class _Exception implements Exception {
-  const factory _Exception(
+abstract class _GlobalException extends GlobalException {
+  factory _GlobalException(
       {@JsonKey(name: "exception") final String? exception,
       @JsonKey(name: "code") final String? code,
       @JsonKey(name: "message") final String? message,
       @JsonKey(name: "status") final int? status,
-      @JsonKey(name: "error") final String? error}) = _$ExceptionImpl;
+      @JsonKey(name: "error") final String? error}) = _$GlobalExceptionImpl;
+  _GlobalException._() : super._();
 
-  factory _Exception.fromJson(Map<String, dynamic> json) =
-      _$ExceptionImpl.fromJson;
+  factory _GlobalException.fromJson(Map<String, dynamic> json) =
+      _$GlobalExceptionImpl.fromJson;
 
   @override
   @JsonKey(name: "exception")
@@ -246,6 +250,6 @@ abstract class _Exception implements Exception {
   String? get error;
   @override
   @JsonKey(ignore: true)
-  _$$ExceptionImplCopyWith<_$ExceptionImpl> get copyWith =>
+  _$$GlobalExceptionImplCopyWith<_$GlobalExceptionImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
