@@ -45,6 +45,7 @@ class UserViewModel extends ChangeNotifier {
     getMe = Command0(_getMe)..execute();
     login = Command2(_login);
     logout = Command0(_logout);
+    abnormalLogout = Command0(_abnormalLogout);
     changePW = Command3(_changePW);
     resetPW = Command3(_resetPW);
   }
@@ -61,6 +62,7 @@ class UserViewModel extends ChangeNotifier {
   late final Command0<void> getMe;
   late final Command2<void, String, String> login;
   late final Command0<void> logout;
+  late final Command0<void> abnormalLogout;
   late final Command3<ChangePwModel, String, String, String> changePW;
   late final Command3<ChangePwModel, String, String, String> resetPW;
 
@@ -102,7 +104,7 @@ class UserViewModel extends ChangeNotifier {
             _state = _state.copyWith(error: result.error);
           } else {
             logger.w('로그인 정보 확인 실패! : ${result.error}');
-            await _performLogout();
+            await _abnormalLogout();
           }
           return Result.error(result.error);
       }
@@ -177,7 +179,7 @@ class UserViewModel extends ChangeNotifier {
   /// 로그아웃 처리
   Future<Result<void>> _logout() async {
     try {
-      await _performLogout();
+      await _performLogout(false);
       return Result.ok(null);
     } catch (e) {
       logger.e('로그아웃 중 에러 발생: $e');
@@ -187,8 +189,21 @@ class UserViewModel extends ChangeNotifier {
     }
   }
 
+  /// 비정상 로그아웃 처리
+  Future<Result<void>> _abnormalLogout() async {
+    try {
+      await _performLogout(true);
+      return Result.ok(null);
+    } catch (e) {
+      logger.e('비정상 로그아웃 실패: $e');
+      return Result.error(Exception('비정상 로그아웃 실패: $e'));
+    } finally {
+      notifyListeners();
+    }
+  }
+
   /// 실제 로그아웃 수행 (내부 메서드)
-  Future<void> _performLogout() async {
+  Future<void> _performLogout(bool? isAbnormalLogout) async {
     // 토큰 조회
     final tokenResult = await _tokenRepository.getTokens();
 
@@ -211,7 +226,9 @@ class UserViewModel extends ChangeNotifier {
 
     // Firebase Analytics
     FirebaseAnalytics.instance.logEvent(
-      name: LogoutMethod.logout.name,
+      name: isAbnormalLogout ?? false
+          ? LogoutMethod.abnormalLogout.name
+          : LogoutMethod.logout.name,
       parameters: {
         'timestamp': DateTime.now().toIso8601String(),
       },
@@ -253,7 +270,7 @@ class UserViewModel extends ChangeNotifier {
         case Ok<ChangePwModel>():
           logger.d('비밀번호 변경 성공');
           // 비밀번호 변경 후 재로그인 필요
-          await _performLogout();
+          await _abnormalLogout();
           return result;
 
         case Error<ChangePwModel>():
