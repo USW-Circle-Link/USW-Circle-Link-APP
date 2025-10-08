@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final findIdViewModelProvider = StateNotifierProvider.autoDispose<
     FindIdViewModel, AsyncValue<FindIdModel?>>((ref) {
@@ -25,8 +26,14 @@ class FindIdViewModel extends StateNotifier<AsyncValue<FindIdModel?>> {
         throw FindIdModelError(message: '올바른 이메일을 입력해 주세요.', code: 'EML-F100');
       }
 
-      final response = await authRepository.findId(email: email);
-      state = AsyncData(response);
+      final result = await authRepository.findId(email: email);
+      switch (result) {
+        case Ok():
+          state = AsyncData(result.value);
+        case Error():
+          final error = FindIdModelError(message: result.error.toString());
+          state = AsyncError(error, error.stackTrace);
+      }
     } on FindIdModelError catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
     } catch (e) {
