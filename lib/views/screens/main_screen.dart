@@ -2,6 +2,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
@@ -36,7 +37,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<NotificationOverlayState> _notificationOverlayKey =
-      GlobalKey<NotificationOverlayState>();
+  GlobalKey<NotificationOverlayState>();
   OverlayEntry? _overlayEntry;
 
   List<CategoryData> selectedCategories = [];
@@ -175,9 +176,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       DecoratedBox(
                         decoration: isAllSelected
                             ? const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.black)),
-                              )
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black)),
+                        )
                             : const BoxDecoration(),
                         child: TextButton(
                           onPressed: () async {
@@ -205,9 +206,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       DecoratedBox(
                         decoration: !isAllSelected
                             ? const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.black)),
-                              )
+                          border: Border(
+                              bottom: BorderSide(color: Colors.black)),
+                        )
                             : const BoxDecoration(),
                         child: TextButton(
                           onPressed: () async {
@@ -237,7 +238,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   OutlinedButton(
                     onPressed: () async {
                       final result =
-                          await showModalBottomSheet<List<CategoryData>>(
+                      await showModalBottomSheet<List<CategoryData>>(
                         context: context,
                         useRootNavigator: false,
                         isScrollControlled: true,
@@ -304,41 +305,41 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ...selectedCategories.isEmpty
               ? []
               : [
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.only(left: 24),
-                    height: 60,
-                    alignment: Alignment.centerLeft,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        spacing: 10,
-                        children: selectedCategories.map((category) {
-                          return _buildChip(category);
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(left: 24),
+              height: 60,
+              alignment: Alignment.centerLeft,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Wrap(
+                  spacing: 10,
+                  children: selectedCategories.map((category) {
+                    return _buildChip(category);
+                  }).toList(),
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+          ],
           Expanded(
             child: circleListState.when<Widget>(
               data: (circleList) {
                 return circleList.data.isNotEmpty
                     ? CircleList(
-                        state: circleListState.value as CircleListModel,
-                        onItemClicked: (clubUUID) {
-                          context.go('/circle?clubUUID=$clubUUID');
-                        },
-                      )
+                  state: circleListState.value as CircleListModel,
+                  onItemClicked: (clubUUID) {
+                    context.go('/circle?clubUUID=$clubUUID');
+                  },
+                )
                     : Center(
-                        child: TextFontWidget.fontRegular(
-                          '동아리가 없습니다',
-                          fontSize: 14,
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      );
+                  child: TextFontWidget.fontRegular(
+                    '동아리가 없습니다',
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w400,
+                  ),
+                );
               },
               error: (error, stackTrace) {
                 final errorModel = error as CircleListModelError;

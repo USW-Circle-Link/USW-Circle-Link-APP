@@ -30,7 +30,7 @@ class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
           ),
         ),
         Positioned(
-          top: kToolbarHeight - 10,
+          top: kToolbarHeight + 45,
           right: 24,
           child: Material(
             color: Colors.transparent,

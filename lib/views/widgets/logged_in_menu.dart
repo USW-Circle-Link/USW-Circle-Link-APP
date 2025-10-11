@@ -121,7 +121,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         child: TextFontWidget.fontRegular(
                           '비밀번호 변경',
                           fontSize: 12,
-                          color: const Color(0xff353549),
+                          color: const Color(0xFFEEB879),
                           fontWeight: FontWeight.w400,
                         ),
                       ),
@@ -155,13 +155,16 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
                 buildDrawerItem(
-                    title: '동아리 인증',
-                    icon: MainIcons.ic_chart,
-                    iconSize: 12,
+                    title: '코드 입력',
+                    icon: MainIcons.ic_pumpkin,
+                    iconSize: 25,
+                    color: const Color(0xFFEEB879),
+
                     onTap: () {
                       showDialog(
                           context: context,
-                          builder: (_) => CircleCertificateDialog(),
+                          builder: (_) =>
+                            CircleCertificateDialog()
                       );
                     },
                     trailingIcon: MainIcons.ic_chevron_right,
@@ -264,11 +267,12 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
     required IconData trailingIcon,
     Widget? subtitle,
     bool isExpanded = false,
+    Color? color,
   }) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Material(
-        color: Colors.white,
+        color: color ?? Colors.white,
         borderRadius: BorderRadius.circular(8),
         child: InkWell(
           borderRadius: BorderRadius.circular(8),

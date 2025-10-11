@@ -39,4 +39,7 @@ class MainIcons {
       IconData(0xe807, fontFamily: _kFontFam, fontPackage: _kFontPkg);
   static const IconData ic_chart =
       IconData(0xe808, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+  static const IconData ic_pumpkin =
+      IconData(0xe900, fontFamily: _kFontFam, fontPackage: _kFontPkg);
+
 }

@@ -1,32 +1,73 @@
-
-
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../repositories/wristband_repository.dart';
+import '../const/data.dart';
+import '../repositories/certificate_circle_repository.dart';
+import '../repositories/circle_list_repository.dart';
 
-class CertificateViewModel extends StateNotifier<AsyncValue<void>> {
-  CertificateViewModel({required this.repository}) : super(const AsyncValue.data(null));
+class CertificateViewModel extends StateNotifier<AsyncValue<String>> {
+  CertificateViewModel({required this.repository, required this.circleListRepository})
+      : super(const AsyncValue.data(""));
 
   final CertificateRepository repository;
+  final CircleListRepository circleListRepository;
+  final circleListRepositoryProvider = Provider((ref) => CircleListRepository(dio: Dio(), basePath: "/clubs"));
 
-  Future<void> certificate() async {
-    /// 1. 사용자 로그인 정보(유저 id, 동아리 id) 가져 오기
-    state = const AsyncValue.loading(); //로딩 시작
+  // 인증 코드 + 소속 동아리 검증
+  Future<bool> certificate({
+    required int code,
+  }) async {
+    // 1️⃣ 입력값 검증
+    if (code == 0) {
+      state = AsyncValue.error("*인증 코드를 입력하세요.", StackTrace.current);
+      return false;
+    }
+
+    // 2️⃣ 코드가 지정된 코드와 일치하는지 검사 (ex: 1115)
+    if (code != validCertificateCode) {
+      state = AsyncValue.error("*일치하지 않은 번호입니다.", StackTrace.current);
+      return false;
+    }
+
+    // 3️⃣ 소속 동아리 목록 조회
+    state = const AsyncValue.loading();
     try {
-      await repository.certificateRepository(); // 서버 API 호출
-      state = AsyncValue.data(null);
-    }
-    catch (e, st) {
-     state = AsyncValue.error(e, st);
-     print("에러 발생: $e",);
-    }
+      final circleList = await circleListRepository.fetchMyCircleList();
+      final circles = circleList.data;
 
-    /// 2. Repository 통해 서버 호출
-    /// 3. 성공/실패 상태 갱신
+      if (circles.isEmpty) {
+        state = AsyncValue.error("*소속된 동아리가 없습니다.", StackTrace.current);
+        return false;
+      }
+
+      // ✅ 첫 번째 동아리 UUID 추출
+      final clubUUID = circles.first.clubUUID;
+
+      // 4️⃣ 서버 인증 API 호출
+      final success = await repository.certificateRepository(
+        clubUUID: clubUUID,
+        code: code,
+      );
+
+     if(success) {
+       state = const AsyncValue.data("인증 성공!");
+       return true;
+     } else {
+       print("서버 인증 실패");
+       return false;
+     }
+    } catch (e, st) {
+     state = AsyncValue.error("오류 발생: $e", st);
+     return false;
+    }
   }
 }
 
+
 final certificateViewModelProvider =
-    StateNotifierProvider<CertificateViewModel, AsyncValue<void>>(
-        (ref) => CertificateViewModel(repository: ref.read(certificateRepositoryProvider)),
+    StateNotifierProvider<CertificateViewModel, AsyncValue<String>>(
+        (ref) => CertificateViewModel(
+            repository: ref.read(certificateRepositoryProvider),
+            circleListRepository: ref.read(circleListRepositoryProvider),
+        ),
     );
 

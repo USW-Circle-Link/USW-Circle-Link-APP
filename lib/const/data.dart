@@ -488,3 +488,6 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
 ];
+
+// 축제 입장용 인증 코드
+const validCertificateCode = 1115;
