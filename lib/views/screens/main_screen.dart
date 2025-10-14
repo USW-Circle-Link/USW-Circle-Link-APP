@@ -4,10 +4,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/models/profile_model.dart';
-import 'package:usw_circle_link/models/user_model.dart';
 import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
 import 'package:usw_circle_link/notifier/network_connectivity_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -16,7 +15,6 @@ import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/main_view_model.dart';
-import 'package:usw_circle_link/viewmodels/profile_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/views/widgets/category_picker.dart';
 import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
@@ -37,7 +35,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   final GlobalKey<NotificationOverlayState> _notificationOverlayKey =
-  GlobalKey<NotificationOverlayState>();
+      GlobalKey<NotificationOverlayState>();
   OverlayEntry? _overlayEntry;
 
   List<CategoryData> selectedCategories = [];
@@ -87,11 +85,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     final circleListState = ref.watch(circleViewModelProvider);
     ref.listen(circleViewModelProvider, (previous, next) {
-      logger.d(next);
-    });
-
-    final profileState = ref.watch(profileViewModelProvider);
-    ref.listen(profileViewModelProvider, (previous, next) {
       logger.d(next);
     });
 
@@ -158,8 +151,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         ],
       ),
-      drawer: userState.value is UserModel && profileState.value is ProfileModel
-          ? LoggedInMenu(state: profileState.value as ProfileModel)
+      drawer: userState.state.isAuthorized
+          ? LoggedInMenu(state: userState.state)
           : const LoggedOutMenu(),
       body: Column(
         children: [
@@ -176,9 +169,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       DecoratedBox(
                         decoration: isAllSelected
                             ? const BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(color: Colors.black)),
-                        )
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.black)),
+                              )
                             : const BoxDecoration(),
                         child: TextButton(
                           onPressed: () async {
@@ -206,9 +199,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       DecoratedBox(
                         decoration: !isAllSelected
                             ? const BoxDecoration(
-                          border: Border(
-                              bottom: BorderSide(color: Colors.black)),
-                        )
+                                border: Border(
+                                    bottom: BorderSide(color: Colors.black)),
+                              )
                             : const BoxDecoration(),
                         child: TextButton(
                           onPressed: () async {
@@ -238,7 +231,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   OutlinedButton(
                     onPressed: () async {
                       final result =
-                      await showModalBottomSheet<List<CategoryData>>(
+                          await showModalBottomSheet<List<CategoryData>>(
                         context: context,
                         useRootNavigator: false,
                         isScrollControlled: true,
@@ -246,6 +239,27 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                           return CategoryPicker(
                             initialCategories: selectedCategories,
                             onSelectionChanged: (newSelection) {
+                              // Firebase Analytics: 필터 선택
+                              final userState =
+                                  ref.read(userViewModelProvider).state;
+                              analytics.logEvent(
+                                name: AnalyticsEvent.filterSelect,
+                                parameters: {
+                                  AnalyticsParam.filterCategories: newSelection
+                                      .map((c) => c.clubCategoryName)
+                                      .join(','),
+                                  'category_count': newSelection.length,
+                                  AnalyticsParam.studentNumber:
+                                      userState.studentNumber ?? '',
+                                  AnalyticsParam.userName:
+                                      userState.userName ?? '',
+                                  AnalyticsParam.major: userState.major ?? '',
+                                  AnalyticsParam.userHp: userState.userHp ?? '',
+                                  AnalyticsParam.timestamp:
+                                      DateTime.now().toIso8601String(),
+                                },
+                              );
+
                               setState(() => selectedCategories = newSelection);
                               fetchCircleList();
                             },
@@ -305,41 +319,58 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ...selectedCategories.isEmpty
               ? []
               : [
-            Container(
-              color: Colors.white,
-              padding: const EdgeInsets.only(left: 24),
-              height: 60,
-              alignment: Alignment.centerLeft,
-              child: SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Wrap(
-                  spacing: 10,
-                  children: selectedCategories.map((category) {
-                    return _buildChip(category);
-                  }).toList(),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-          ],
+                  Container(
+                    color: Colors.white,
+                    padding: const EdgeInsets.only(left: 24),
+                    height: 60,
+                    alignment: Alignment.centerLeft,
+                    child: SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Wrap(
+                        spacing: 10,
+                        children: selectedCategories.map((category) {
+                          return _buildChip(category);
+                        }).toList(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
           Expanded(
             child: circleListState.when<Widget>(
               data: (circleList) {
                 return circleList.data.isNotEmpty
                     ? CircleList(
-                  state: circleListState.value as CircleListModel,
-                  onItemClicked: (clubUUID) {
-                    context.go('/circle?clubUUID=$clubUUID');
-                  },
-                )
+                        state: circleListState.value as CircleListModel,
+                        onItemClicked: (clubUUID) {
+                          // Firebase Analytics: 동아리 클릭
+                          final userState =
+                              ref.read(userViewModelProvider).state;
+                          analytics.logEvent(
+                            name: AnalyticsEvent.clubClick,
+                            parameters: {
+                              AnalyticsParam.clubUUID: clubUUID,
+                              AnalyticsParam.studentNumber:
+                                  userState.studentNumber ?? '',
+                              AnalyticsParam.userName: userState.userName ?? '',
+                              AnalyticsParam.major: userState.major ?? '',
+                              AnalyticsParam.userHp: userState.userHp ?? '',
+                              AnalyticsParam.timestamp:
+                                  DateTime.now().toIso8601String(),
+                            },
+                          );
+
+                          context.go('/circle?clubUUID=$clubUUID');
+                        },
+                      )
                     : Center(
-                  child: TextFontWidget.fontRegular(
-                    '동아리가 없습니다',
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w400,
-                  ),
-                );
+                        child: TextFontWidget.fontRegular(
+                          '동아리가 없습니다',
+                          fontSize: 14,
+                          color: Colors.black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      );
               },
               error: (error, stackTrace) {
                 final errorModel = error as CircleListModelError;
