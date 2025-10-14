@@ -146,30 +146,38 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   trailingIcon: MainIcons.ic_chevron_right,
                 ),
                 buildDrawerItem(
-                  title: '공지 사항',
-                  icon: MainIcons.ic_chart,
-                  iconSize: 16,
-                  onTap: () {
-                    context.go('/notices');
-                  },
-                  trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
-                ),
-                buildDrawerItem(
-                    title: '코드 입력',
-                    icon: MainIcons.ic_pumpkin,
-                    iconSize: 25,
-                    color: const Color(0xFFEEB879),
-
+                    title: '공지 사항',
+                    icon: MainIcons.ic_chart,
+                    iconSize: 16,
                     onTap: () {
-                      showDialog(
-                          context: context,
-                          builder: (_) =>
-                            CircleCertificateDialog()
-                      );
+                      context.go('/notices');
                     },
-                    trailingIcon: MainIcons.ic_chevron_right,
+                    trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
+                  ),
+              Container(
+                decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                colors: [Color(0xFF3B2667), Color(0xFF9B63C3)],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter
                 ),
-              ],
+                ),
+                child: buildDrawerItem(
+                    title: '동아리의 밤 입장하기',
+                    iconSize: 25,
+                    leadingImg: Image.asset('assets/images/ghost.png'),
+                    trailingImg:Image.asset('assets/images/pumpkin.png'),
+                    color: Colors.transparent,
+                    onTap: () {
+                        showDialog(
+                        context: context,
+                        builder: (_) => CircleCertificateDialog()
+                        );
+                      },
+                  ),
+
+                ),
+                ],
             ),
           ),
           Column(
@@ -261,10 +269,12 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
 
   Widget buildDrawerItem({
     required String title,
-    required IconData icon,
+    IconData? icon,
     double? iconSize,
+    Image? leadingImg,
+    Image? trailingImg,
     required VoidCallback onTap,
-    required IconData trailingIcon,
+    IconData? trailingIcon,
     Widget? subtitle,
     bool isExpanded = false,
     Color? color,
@@ -272,8 +282,9 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Material(
-        color: color ?? Colors.white,
+        color: title == '동아리의 밤 입장하기' ? Colors.transparent : Colors.white,
         borderRadius: BorderRadius.circular(8),
+
         child: InkWell(
           borderRadius: BorderRadius.circular(8),
           onTap: onTap,
@@ -291,7 +302,9 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   leading: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(icon, size: iconSize, color: Colors.grey),
+                      if(leadingImg != null)
+                        SizedBox(width: 35, height: 35, child: leadingImg)
+                      else Icon(icon, size: iconSize, color: Colors.grey),
                     ],
                   ),
                   title: Padding(
@@ -300,11 +313,16 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                       title,
                       overflow: TextOverflow.ellipsis,
                       fontSize: 15,
-                      color: const Color(0xff353549),
-                      fontWeight: FontWeight.w400,
+                      color: title == '동아리의 밤 입장하기'
+                        ? Colors.white : const Color(0xff353549),
+                      fontWeight: title == '동아리의 밤 입장하기'
+                          ? FontWeight.bold : FontWeight.w400,
                     ),
                   ),
-                  trailing: AnimatedRotation(
+                  trailing: trailingImg != null?
+                  SizedBox(
+                    width: 35, height: 35, child: trailingImg)
+                  : AnimatedRotation(
                     duration: const Duration(milliseconds: 300),
                     turns: isExpanded ? 0.25 : 0,
                     child: Icon(trailingIcon, color: Colors.grey),

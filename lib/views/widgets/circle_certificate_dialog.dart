@@ -26,9 +26,9 @@ class CircleCertificateDialog extends ConsumerWidget {
         }
 
         // ✅ 이미 인증된 경우
-        // if (snapshot.data == 'true') {
-        //   return _buildSimpleAlert(context, "이미 인증된 사용자입니다.");
-        // }
+        if (snapshot.data == 'true') {
+          return _buildSimpleAlert(context, "이미 입장 처리된 회원 입니다.", true);
+        }
 
         return Dialog(
           backgroundColor: Colors.transparent,
@@ -41,7 +41,7 @@ class CircleCertificateDialog extends ConsumerWidget {
               filter: ImageFilter.blur(sigmaX: 11, sigmaY: 11),
               child: Container(
                 width: 273,
-                height: 283,
+                height: 223,
                 decoration: BoxDecoration(
                   color: const Color.fromRGBO(25, 21, 29, 0.80),
                   borderRadius: BorderRadius.circular(14),
@@ -62,7 +62,7 @@ class CircleCertificateDialog extends ConsumerWidget {
                       ),
                       child: const Center(
                         child: Text(
-                          "코드를 입력해주세요.",
+                          "🎃 코드 입력하기 🎃",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontSize: 17,
@@ -76,16 +76,16 @@ class CircleCertificateDialog extends ConsumerWidget {
                     ),
 
                     // 아이콘 (성공/실패/기본)
-                    Center(
-                      child: Icon(
-                        message == null
-                            ? Icons.lock_outline
-                            : message.contains("성공")
-                              ? Icons.verified_rounded
-                              : Icons.error_outline_rounded,
-                        size: 50,
-                      ),
-                    ),
+                    // Center(
+                    //   child: Icon(
+                    //     message == null
+                    //         ? Icons.lock_outline
+                    //         : message.contains("성공")
+                    //           ? Icons.verified_rounded
+                    //           : Icons.error_outline_rounded,
+                    //     size: 50,
+                    //   ),
+                    // ),
 
                     Padding(
                       padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
@@ -113,7 +113,7 @@ class CircleCertificateDialog extends ConsumerWidget {
                               ),
                               cursorColor: Colors.white,
                               decoration: const InputDecoration(
-                                hintText: '번호를 입력해주세요.',
+                                hintText: 'xxxx...',
                                 hintStyle: TextStyle(
                                   color: Color(0xFFA0A0A0),
                                   fontSize: 16,
@@ -193,8 +193,12 @@ class CircleCertificateDialog extends ConsumerWidget {
                 await storage.write(key: 'is_certificated', value: 'true');
                 ref.read(certificateMessageProvider.notifier)
                     .state = "회원 인증을 성공했습니다!";
+                //Navigator.of(context).pop();
+                showDialog(
+                    context: context,
+                    builder: (context) => _buildSimpleAlert(context, "팔찌를 받아 입장해주세요.", false),
+                    );
               } else {
-
                 /// 그 외 실패(인증 코드 틀렸 거나 소속된 동아리 없을 경우)
                 final state = ref.read(certificateViewModelProvider);
                 state.whenOrNull(
@@ -229,27 +233,66 @@ class CircleCertificateDialog extends ConsumerWidget {
   }
 
 
-  // Widget _buildSimpleAlert(BuildContext context, String msg) {
-  //   return Dialog(
-  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-  //     child: Container(
-  //       width: 240,
-  //       padding: const EdgeInsets.all(20),
-  //       child: Column(
-  //         mainAxisSize: MainAxisSize.min,
-  //         children: [
-  //           const Text("알림",
-  //               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
-  //           const SizedBox(height: 10),
-  //           Text(msg, textAlign: TextAlign.center),
-  //           const SizedBox(height: 16),
-  //           TextButton(
-  //             onPressed: () => Navigator.pop(context),
-  //             child: const Text("확인"),
-  //           )
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  Widget _buildSimpleAlert(BuildContext context, String msg, bool already) {
+    if(already == false) {
+      return Dialog(
+        backgroundColor: Colors.white,
+        insetPadding:
+        const EdgeInsets.symmetric(horizontal: 40, vertical: 200),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            width: 240,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+
+              children: [
+                const Text("👻 확인완료 👻",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 20),
+                Text(msg, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("확인",),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    } else {
+      return Dialog(
+        backgroundColor: Colors.white,
+        insetPadding:
+        const EdgeInsets.symmetric(horizontal: 40, vertical: 200),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(14),
+          child: Container(
+            width: 240,
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+
+              children: [
+                const Text("이미 입장됨.",
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                const SizedBox(height: 20),
+                Text(msg, textAlign: TextAlign.center),
+                const SizedBox(height: 16),
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text("확인",),
+                )
+              ],
+            ),
+          ),
+        ),
+      );
+    };
+
+  }
 }
