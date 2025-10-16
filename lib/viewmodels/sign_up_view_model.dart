@@ -53,13 +53,16 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
             idVerified: result.value,
           );
         case Error():
+          logger.d('1 - ${result}');
+
           state = state.copyWith(
             isVerifyIdLoading: false,
-            error: result.error.toString(),
+            error: (result.error as SignUpModelError).message,
             errorField: FieldType.account,
           );
       }
     } on SignUpModelError catch (e) {
+      logger.d('2-${e}');
       analytics.logEvent(
         name: AnalyticsEvent.error,
         parameters: {
@@ -77,6 +80,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         errorField: FieldType.account,
       );
     } catch (e) {
+      logger.d('3-${e}');
       analytics.logEvent(
         name: AnalyticsEvent.error,
         parameters: {
