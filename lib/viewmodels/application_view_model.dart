@@ -130,16 +130,6 @@ class ApplicationViewModel
 
       state = AsyncData(applicationResponse);
     } on ApplicationModelError catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: 'ApplicationModelError',
-          AnalyticsParam.errorCode: e.code ?? 'unknown',
-          AnalyticsParam.errorMessage: e.message,
-          AnalyticsParam.screen: 'Application_CheckAvailable',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
       state = AsyncError(e, e.stackTrace);
     } on DioException catch (e) {
       analytics.logEvent(
