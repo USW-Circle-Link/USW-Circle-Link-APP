@@ -168,7 +168,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     InkWell(
                       onTap: _launchURL,
                       child: TextFontWidget.fontRegular(
-                        '피드백',
+                        '문의하기',
                         fontSize: 12,
                         color: Colors.black,
                         fontWeight: FontWeight.w400,
@@ -237,7 +237,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
   }
 
   void _launchURL() async {
-    const url = feedback;
+    const url = inquiry;
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
