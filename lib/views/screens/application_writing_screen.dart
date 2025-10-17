@@ -40,7 +40,11 @@ class _ApplicationWritingScreenState
               logger.d('지원서 url : ${data!.data}');
               print('지원서 url : ${data.data}');
               // context.push('/webview/${Uri.encodeComponent(data.data!)}');
-              launchUrl(Uri.parse(data.data!));
+              launchUrl(Uri.parse(data.data!)).then((value) {
+                print('launchUrl 결과 : $value');
+              }, onError: (error) {
+                print('launchUrl 오류 : $error');
+              });
               break;
             case ApplicationModelType.apply:
               logger.d('지원서 제출 성공! - ${data!.message}');
