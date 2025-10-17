@@ -38,6 +38,7 @@ class _ApplicationWritingScreenState
           switch (data?.type) {
             case ApplicationModelType.getApplication:
               logger.d('지원서 url : ${data!.data}');
+              print('지원서 url : ${data.data}');
               // context.push('/webview/${Uri.encodeComponent(data.data!)}');
               launchUrl(Uri.parse(data.data!));
               break;
