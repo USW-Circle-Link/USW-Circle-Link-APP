@@ -17,6 +17,14 @@ class SelectCircleScreen extends ConsumerStatefulWidget {
 class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
   final List<CircleListData> selectedCircles = [];
 
+  TextStyle circleNameTextStyle({bool isSelected = false}) {
+    return TextFontWidget.fontRegularStyle(
+      fontSize: 16.0,
+      color: isSelected ? const Color(0xffffB052) : Colors.black,
+      fontWeight: FontWeight.w400,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(selectCircleViewModelProvider);
@@ -78,125 +86,145 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                           ),
                           const SizedBox(height: 20.0),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                            child: GridView.builder(
-                              shrinkWrap: true,
-                              physics: const NeverScrollableScrollPhysics(),
-                              gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                crossAxisSpacing: 20.0,
-                                mainAxisSpacing: 10.0,
-                                childAspectRatio: 0.69,
-                              ),
-                              itemCount: circles.length,
-                              itemBuilder: (context, index) {
-                                final circle = circles[index];
-                                final isSelected =
-                                selectedCircles.contains(circle);
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 12.0),
+                            child:
+                                LayoutBuilder(builder: (context, constraints) {
+                              const crossAxisSpacing = 20.0;
+                              final widthPerItem =
+                                  (constraints.maxWidth - crossAxisSpacing) / 2;
+                              final textPainter = TextPainter(
+                                  text: TextSpan(
+                                      text: '높이 확보용 텍스트',
+                                      style: circleNameTextStyle()),
+                                  maxLines: 1,
+                                  textDirection: TextDirection.ltr)
+                                ..layout();
+                              final textHeight = textPainter.size.height;
+                              const margin = 8.0;
+                              final heightPerItem =
+                                  widthPerItem + textHeight + margin + 3;
+                              final childAspectRatio =
+                                  widthPerItem / heightPerItem;
+                              return GridView.builder(
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  crossAxisSpacing: crossAxisSpacing,
+                                  mainAxisSpacing: 10.0,
+                                  childAspectRatio: childAspectRatio, // 0.69
+                                ),
+                                itemCount: circles.length,
+                                itemBuilder: (context, index) {
+                                  final circle = circles[index];
+                                  final isSelected =
+                                      selectedCircles.contains(circle);
 
-                                return GestureDetector(
-                                  onTap: () {
-                                    setState(() {
-                                      if (isSelected) {
-                                        selectedCircles.remove(circle);
-                                      } else {
-                                        selectedCircles.add(circle);
-                                      }
-                                    });
-                                  },
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: [
-                                      Expanded(
-                                        child: LayoutBuilder(
+                                  return GestureDetector(
+                                    onTap: () {
+                                      setState(() {
+                                        if (isSelected) {
+                                          selectedCircles.remove(circle);
+                                        } else {
+                                          selectedCircles.add(circle);
+                                        }
+                                      });
+                                    },
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        LayoutBuilder(
                                             builder: (context, constraints) {
-                                              final borderRadius =
+                                          final borderRadius =
                                               BorderRadius.circular(8.0);
-                                              return Stack(
-                                                children: [
-                                                  Container(
-                                                    alignment: Alignment.center,
-                                                    constraints: BoxConstraints(
-                                                      minHeight:
-                                                      constraints.maxHeight,
-                                                      maxHeight:
-                                                      constraints.maxHeight,
-                                                    ),
-                                                    child: ClipRRect(
-                                                      borderRadius: borderRadius,
-                                                      child: circle.mainPhoto
-                                                          ?.isValidUrl ??
+                                          return Stack(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.center,
+                                                constraints: BoxConstraints(
+                                                  minHeight:
+                                                      constraints.maxWidth,
+                                                  maxHeight:
+                                                      constraints.maxWidth,
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius: borderRadius,
+                                                  child: circle.mainPhoto
+                                                              ?.isValidUrl ??
                                                           false
-                                                          ? Image.network(
-                                                        circle.mainPhoto!,
-                                                        fit: BoxFit.cover,
-                                                        errorBuilder:
-                                                            (BuildContext
-                                                        context,
-                                                            Object
-                                                            exception,
-                                                            StackTrace?
-                                                            stackTrace) {
-                                                          return Container(
-                                                            alignment:
-                                                            Alignment
-                                                                .center,
-                                                            child:
-                                                            Image.asset(
-                                                              'assets/images/circle_default_image.png',
-                                                            ),
-                                                          );
-                                                        },
-                                                      )
-                                                          : Center(
-                                                        child: Image.asset(
-                                                          'assets/images/circle_default_image.png',
+                                                      ? Image.network(
+                                                          circle.mainPhoto!,
+                                                          fit: BoxFit.cover,
+                                                          width:
+                                                              double.infinity,
+                                                          height:
+                                                              double.infinity,
+                                                          errorBuilder:
+                                                              (BuildContext
+                                                                      context,
+                                                                  Object
+                                                                      exception,
+                                                                  StackTrace?
+                                                                      stackTrace) {
+                                                            return Container(
+                                                              alignment:
+                                                                  Alignment
+                                                                      .center,
+                                                              child:
+                                                                  Image.asset(
+                                                                'assets/images/circle_default_image.png',
+                                                              ),
+                                                            );
+                                                          },
+                                                        )
+                                                      : Center(
+                                                          child: Image.asset(
+                                                            'assets/images/circle_default_image.png',
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Container(
-                                                    constraints: BoxConstraints(
-                                                      minHeight:
-                                                      constraints.maxHeight,
-                                                      maxHeight:
-                                                      constraints.maxHeight,
-                                                    ),
-                                                    decoration: BoxDecoration(
-                                                      color: isSelected
-                                                          ? const Color(
-                                                          0xffffB052)
-                                                          .withOpacity(0.2)
-                                                          : Colors.transparent,
-                                                      border: Border.all(
-                                                        color: isSelected
-                                                            ? const Color(
+                                                ),
+                                              ),
+                                              Container(
+                                                constraints: BoxConstraints(
+                                                  minHeight:
+                                                      constraints.maxWidth,
+                                                  maxHeight:
+                                                      constraints.maxWidth,
+                                                ),
+                                                decoration: BoxDecoration(
+                                                  color: isSelected
+                                                      ? const Color(0xffffB052)
+                                                          .withValues(
+                                                              alpha: 0.2)
+                                                      : Colors.transparent,
+                                                  border: Border.all(
+                                                    color: isSelected
+                                                        ? const Color(
                                                             0xffffB052)
-                                                            : const Color(0xFFB8B8B8),
-                                                      ),
-                                                      borderRadius: borderRadius,
-                                                    ),
+                                                        : const Color(
+                                                            0xFFB8B8B8),
                                                   ),
-                                                ],
-                                              );
-                                            }),
-                                      ),
-                                      const SizedBox(height: 8.0),
-                                      TextFontWidget.fontRegular(
-                                        circle.clubName,
-                                        fontSize: 16.0,
-                                        color: isSelected
-                                            ? const Color(0xffffB052)
-                                            : Colors.black,
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
+                                                  borderRadius: borderRadius,
+                                                ),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                        const SizedBox(height: margin),
+                                        Text(
+                                          circle.clubName,
+                                          style: circleNameTextStyle(
+                                              isSelected: isSelected),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              );
+                            }),
                           ),
                         ],
                       ),
@@ -213,11 +241,11 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                       onPressed: selectedCircles.isEmpty
                           ? null
                           : () {
-                        context.push(
-                          '/login/sign_up_option/policy_agree/select_circle/sign_up',
-                          extra: selectedCircles,
-                        );
-                      },
+                              context.push(
+                                '/login/sign_up_option/policy_agree/select_circle/sign_up',
+                                extra: selectedCircles,
+                              );
+                            },
                       style: OutlinedButton.styleFrom(
                         backgroundColor: selectedCircles.isEmpty
                             ? Colors.grey
@@ -241,12 +269,12 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
           },
           error: (error, stackTrace) => Center(
               child: TextFontWidget.fontRegular(
-                '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
-                textAlign: TextAlign.center,
-                fontSize: 14.0,
-                color: const Color(0xFFA1A1A1),
-                fontWeight: FontWeight.w400,
-              )),
+            '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+            textAlign: TextAlign.center,
+            fontSize: 14.0,
+            color: const Color(0xFFA1A1A1),
+            fontWeight: FontWeight.w400,
+          )),
           loading: () => const Center(child: CircularProgressIndicator()),
         ),
       ),
@@ -257,9 +285,9 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
 extension on List<CircleListData> {
   List<CircleListData> getSortedListWithValidImage() {
     final validImageList = where((element) =>
-    element.mainPhoto != null && element.mainPhoto!.isValidUrl).toList();
+        element.mainPhoto != null && element.mainPhoto!.isValidUrl).toList();
     final invalidImageList = where((element) =>
-    element.mainPhoto == null || !element.mainPhoto!.isValidUrl).toList();
+        element.mainPhoto == null || !element.mainPhoto!.isValidUrl).toList();
     return [...validImageList, ...invalidImageList];
   }
 }
