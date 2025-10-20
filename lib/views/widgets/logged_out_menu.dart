@@ -95,23 +95,18 @@ class LoggedOutMenu extends ConsumerWidget {
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
-                Container(
-                  decoration: const BoxDecoration(
-                    gradient: LinearGradient(
-                        colors: [Color(0xFF3B2667), Color(0xFF9B63C3)],
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter
-                    ),
+                buildDrawerItem(
+                  title: '동아리의 밤 입장하기',
+                  iconSize: 25,
+                  leadingImg: Image.asset('assets/images/ghost.png'),
+                  trailingImg:Image.asset('assets/images/pumpkin.png'),
+                  color: Colors.transparent,
+                  onTap: () => context.go('/login'),
+                  gradient: LinearGradient(
+                      colors: [Color(0xFF3B2667), Color(0xFF9B63C3)],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter
                   ),
-                  child: buildDrawerItem(
-                    title: '동아리의 밤 입장하기',
-                    iconSize: 25,
-                    leadingImg: Image.asset('assets/images/ghost.png'),
-                    trailingImg:Image.asset('assets/images/pumpkin.png'),
-                    color: Colors.transparent,
-                    onTap: () => context.go('/login'),
-                  ),
-
                 ),
               ],
             ),
@@ -193,64 +188,91 @@ Widget buildDrawerItem({
   Widget? subtitle,
   bool isExpanded = false,
   Color? color,
+  Gradient? gradient,
 }) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    child: Material(
-      color: title == '동아리의 밤 입장하기' ? Colors.transparent : Colors.white,
-      borderRadius: BorderRadius.circular(8),
+  final radius = BorderRadius.circular(8);
+  final hasGradient = gradient != null;
 
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: isExpanded ? 100 : 56,
-          child: Column(
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.only(
-                  left: 16,
-                  right: isExpanded ? 15 : 6,
-                ),
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    if(leadingImg != null)
-                      SizedBox(width: 35, height: 35, child: leadingImg)
-                    else Icon(icon, size: iconSize, color: Colors.grey),
-                  ],
-                ),
-                title: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: TextFontWidget.fontRegular(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    fontSize: 15,
-                    color: title == '동아리의 밤 입장하기'
-                        ? Colors.white : const Color(0xff353549),
-                    fontWeight: title == '동아리의 밤 입장하기'
-                        ? FontWeight.bold : FontWeight.w400,
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+    child: Material(
+      color: Colors.transparent,
+      shape: RoundedRectangleBorder(borderRadius: radius),
+      clipBehavior: Clip.antiAlias, // 잉크 이펙트 라운드 처리
+      child: Ink(
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          gradient: gradient,
+          color: hasGradient ? null : (color ?? Colors.white),
+        ),
+        child: InkWell(
+          borderRadius: radius,
+          onTap: onTap,
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: isExpanded ? 100 : 56,
+            child: Column(
+              children: [
+                ListTile(
+                  contentPadding: EdgeInsets.only(
+                    left: 16,
+                    right: isExpanded ? 15 : 6,
+                  ),
+                  leading: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      if (leadingImg != null)
+                        Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                          child: SizedBox(width: 32, height: 32, child: leadingImg),
+                        )
+                      else
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Icon(
+                            icon,
+                            size: iconSize ?? 20,
+                            color: hasGradient ? Colors.white : Colors.grey,
+                          ),
+                        )
+                    ],
+                  ),
+                  title: Padding(
+                    padding: title == "동아리의 밤 입장하기" ? const EdgeInsets.only(left: 5, top: 7) : const EdgeInsets.only(left: 10,top: 7),
+                    child: TextFontWidget.fontRegular(
+                      title,
+                      overflow: TextOverflow.ellipsis,
+                      fontSize: 15,
+                      color: hasGradient ? Colors.white : const Color(0xff353549),
+                      fontWeight: hasGradient ? FontWeight.bold : FontWeight.w400,
+                    ),
+                  ),
+                  trailing: trailingImg != null
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 7, right: 7),
+                          child: SizedBox(width: 32, height: 32, child: trailingImg))
+                      : AnimatedRotation(
+                    duration: const Duration(milliseconds: 300),
+                    turns: isExpanded ? 0.25 : 0,
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 7),
+                      child: Icon(
+                        trailingIcon,
+                        color: hasGradient ? Colors.white : Colors.grey,
+                      ),
+                    )
                   ),
                 ),
-                trailing: trailingImg != null?
-                SizedBox(
-                    width: 35, height: 35, child: trailingImg)
-                    : AnimatedRotation(
-                  duration: const Duration(milliseconds: 300),
-                  turns: isExpanded ? 0.25 : 0,
-                  child: Icon(trailingIcon, color: Colors.grey),
-                ),
-              ),
-              if (isExpanded && subtitle != null)
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    child: subtitle,
+                if (isExpanded && subtitle != null)
+                  Expanded(
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: subtitle,
+                    ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

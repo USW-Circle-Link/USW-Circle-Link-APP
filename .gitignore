@@ -8,7 +8,6 @@
 .dart_tool/package_config.json
 .flutter-plugins
 .flutter-plugins-dependencies
-.fvm/flutter_sdk
 .packages
 .pub-cache/
 .pub/
@@ -90,3 +89,6 @@ Gemfile.lock
 
 .gemini/
 gha-creds-*.json
+
+# FVM Version Cache
+.fvm/
