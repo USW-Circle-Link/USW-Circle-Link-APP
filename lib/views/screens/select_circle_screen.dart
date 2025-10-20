@@ -197,8 +197,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                                                 decoration: BoxDecoration(
                                                   color: isSelected
                                                       ? const Color(0xffffB052)
-                                                          .withValues(
-                                                              alpha: 0.2)
+                                                          .withOpacity(0.2)
                                                       : Colors.transparent,
                                                   border: Border.all(
                                                     color: isSelected
