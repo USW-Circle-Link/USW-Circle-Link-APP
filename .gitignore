@@ -93,3 +93,4 @@ gha-creds-*.json
 # FVM Version Cache
 .fvm/
 .playwright-mcp/
+.DS_Store

@@ -1,14 +1,19 @@
 {
-    "name": "usw_circle_link",
-    "short_name": "usw_circle_link",
+    "name": "동구라미",
+    "short_name": "동구라미",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "description": "수원대학교 동아리 지원 플랫폼",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
+        {
+            "src": "icons/apple-touch-icon.png",
+            "sizes": "180x180",
+            "type": "image/png"
+        },
         {
             "src": "icons/Icon-192.png",
             "sizes": "192x192",

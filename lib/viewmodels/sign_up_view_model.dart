@@ -55,7 +55,7 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         case Error():
           state = state.copyWith(
             isVerifyIdLoading: false,
-            error: result.error.toString(),
+            error: (result.error as SignUpModelError).message,
             errorField: FieldType.account,
           );
       }

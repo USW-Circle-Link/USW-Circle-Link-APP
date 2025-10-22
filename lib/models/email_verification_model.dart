@@ -16,7 +16,7 @@ class EmailVerificationModel with _$EmailVerificationModel {
 @freezed
 class EmailVerificationModelError
     with _$EmailVerificationModelError
-    implements Error {
+    implements Error, Exception {
   EmailVerificationModelError._();
   factory EmailVerificationModelError({
     String? exception,

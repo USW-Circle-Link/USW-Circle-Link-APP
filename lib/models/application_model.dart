@@ -3,11 +3,14 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'application_model.freezed.dart';
 part 'application_model.g.dart';
 
-enum ApplicationModelType {getApplication, apply, checkAvailableForApplication}
+enum ApplicationModelType {
+  getApplication,
+  apply,
+  checkAvailableForApplication
+}
 
 @freezed
 class ApplicationModel with _$ApplicationModel {
-
   ApplicationModel._();
 
   factory ApplicationModel({
@@ -16,16 +19,16 @@ class ApplicationModel with _$ApplicationModel {
     ApplicationModelType? type,
   }) = _ApplicationModel;
 
-  factory ApplicationModel.fromJson(Map<String, dynamic> json) => _$ApplicationModelFromJson(json);
+  factory ApplicationModel.fromJson(Map<String, dynamic> json) =>
+      _$ApplicationModelFromJson(json);
 
-   ApplicationModel setType(ApplicationModelType type) {
+  ApplicationModel setType(ApplicationModelType type) {
     return ApplicationModel(message: message, type: type, data: data);
   }
 }
 
 @freezed
 class ApplicationModelError with _$ApplicationModelError implements Error {
-
   ApplicationModelError._();
 
   factory ApplicationModelError({
@@ -34,16 +37,17 @@ class ApplicationModelError with _$ApplicationModelError implements Error {
     String? code,
   }) = _ApplicationModelError;
 
-  factory ApplicationModelError.fromJson(Map<String, dynamic> json) => _$ApplicationModelErrorFromJson(json);
+  factory ApplicationModelError.fromJson(Map<String, dynamic> json) =>
+      _$ApplicationModelErrorFromJson(json);
 
   ApplicationModelError setType(ApplicationModelType type) {
-    return ApplicationModelError(message: message, type: type, code:code);
+    return ApplicationModelError(message: message, type: type, code: code);
   }
 
   ApplicationModelError setCode(String code) {
-    return ApplicationModelError(message: message, type: type, code:code);
+    return ApplicationModelError(message: message, type: type, code: code);
   }
-  
+
   @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }

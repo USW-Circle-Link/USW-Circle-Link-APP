@@ -31,7 +31,7 @@ class SignUpModel with _$SignUpModel {
 }
 
 @freezed
-class SignUpModelError extends Error with _$SignUpModelError {
+class SignUpModelError with _$SignUpModelError implements Exception {
   SignUpModelError._();
 
   factory SignUpModelError({
