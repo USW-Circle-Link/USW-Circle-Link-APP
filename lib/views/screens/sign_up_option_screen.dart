@@ -90,7 +90,8 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                     ),
                     const SizedBox(height: 8.0),
                     TextFontWidget.fontRegular(
-                      '아직 중앙동아리 회원이 아니신가요?',
+                      '지금 동구라미에서 중앙동아리에 가입해 보세요!',
+                      // '아직 중앙동아리 회원이 아니신가요?',
                       fontSize: 12.0,
                       color: Colors.black54,
                       fontWeight: FontWeight.w400,
@@ -126,6 +127,8 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
               ),
               const SizedBox(height: 20.0),
               Container(
+                height: 0.0,
+                width: 0.0,
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
                 decoration: BoxDecoration(
