@@ -9,7 +9,6 @@ import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/models/request/sign_up_request.dart';
 import 'package:usw_circle_link/models/response/email_verification_response.dart';
 import 'package:usw_circle_link/models/response/send_mail_response.dart';
-import 'package:usw_circle_link/models/sign_up_model.dart';
 import 'package:usw_circle_link/models/login_data.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
