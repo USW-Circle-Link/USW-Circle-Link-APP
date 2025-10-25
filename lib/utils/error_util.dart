@@ -91,6 +91,8 @@ class ErrorUtil {
         return "이미 지원한 동아리 또는\n소속된 동아리입니다.";
       case "ABNORMAL-ACCESS":
         return "비정상적인 접근입니다.";
+      case "CINT-202":
+        return "아직 지원서가 등록되지 않았어요.";
       default:
         return null;
     }

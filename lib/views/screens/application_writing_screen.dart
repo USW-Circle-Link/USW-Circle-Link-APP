@@ -8,6 +8,7 @@ import 'package:usw_circle_link/models/application_model.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
+import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/application_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -62,14 +63,16 @@ class _ApplicationWritingScreenState
               logger.d('지원서 불러오기 실패 : $error');
               DialogManager.instance.showAlertDialog(
                 context: context,
-                content: "지원서를 불러오는 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
+                content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                    "지원서를 불러오는 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
               );
               break;
             case ApplicationModelType.apply:
               logger.d('지원서 제출 실패 : $error');
               DialogManager.instance.showAlertDialog(
                 context: context,
-                content: "지원서 제출 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
+                content: ErrorUtil.instance.getErrorMessage(error.code) ??
+                    "지원서 제출 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
               );
               break;
             default:
