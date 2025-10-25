@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/analytics_const.dart';
 import 'package:usw_circle_link/models/request/sign_up_request.dart';
-import 'package:usw_circle_link/models/sign_up_model.dart';
+import '../models/response/global_exception.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -20,407 +20,336 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
   }
 
   Future<void> verifyId() async {
-    try {
+    state = state.copyWith(
+      isVerifyIdLoading: true,
+      isSignUpLoading: false,
+      isVerifyEmailLoading: false,
+      idVerified: false,
+      error: null,
+      isDialogError: false,
+      errorField: null,
+      needToRedirectLogin: false,
+      needToRedirectSignUpOption: false,
+    );
+
+    final id = state.signUpForm['id'];
+
+    if (id.isEmpty || !idRegExp.hasMatch(id)) {
       state = state.copyWith(
-        isVerifyIdLoading: true,
-        isSignUpLoading: false,
-        isVerifyEmailLoading: false,
-        idVerified: false,
-        error: null,
-        isDialogError: false,
-        errorField: null,
-        needToRedirectLogin: false,
-        needToRedirectSignUpOption: false,
+        isVerifyIdLoading: false,
+        error: '아이디는 5~20자 이내 영어, 숫자만 가능합니다!',
+        errorField: FieldType.account,
       );
+      return;
+    }
 
-      final id = state.signUpForm['id'];
+    final result = await ref.read(authRepositoryProvider).verifyId(id: id);
 
-      if (id.isEmpty || !idRegExp.hasMatch(id)) {
+    switch (result) {
+      case Ok():
         state = state.copyWith(
           isVerifyIdLoading: false,
-          error: '아이디는 5~20자 이내 영어, 숫자만 가능합니다!',
-          errorField: FieldType.account,
+          idVerified: result.value,
         );
-        return;
-      }
-
-      final result = await ref.read(authRepositoryProvider).verifyId(id: id);
-
-      switch (result) {
-        case Ok():
-          state = state.copyWith(
-            isVerifyIdLoading: false,
-            idVerified: result.value,
-          );
-        case Error():
-          logger.d('1 - ${result}');
-
-          state = state.copyWith(
-            isVerifyIdLoading: false,
-            error: (result.error as SignUpModelError).message,
-            errorField: FieldType.account,
-          );
-      }
-    } on SignUpModelError catch (e) {
-      logger.d('2-${e}');
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: 'SignUpModelError',
-          AnalyticsParam.errorCode: e.code ?? 'unknown',
-          AnalyticsParam.errorMessage: e.message,
-          AnalyticsParam.screen: 'SignUp_VerifyId',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isVerifyIdLoading: false,
-        error:
-            ErrorUtil.instance.getErrorMessage(e.code) ?? '아이디 중복 확인에 실패했습니다.',
-        errorField: FieldType.account,
-      );
-    } catch (e) {
-      logger.d('3-${e}');
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: e.runtimeType.toString(),
-          AnalyticsParam.errorMessage: e.toString(),
-          AnalyticsParam.screen: 'SignUp_VerifyId',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isVerifyIdLoading: false,
-        error: '아이디 중복 확인에 실패했습니다.',
-        errorField: FieldType.account,
-      );
+      case Error():
+        var error = result.error;
+        switch (error) {
+          case GlobalException():
+            analytics.logEvent(
+              name: AnalyticsEvent.error,
+              parameters: {
+                AnalyticsParam.errorType: 'SignUpModelError',
+                AnalyticsParam.errorCode: error.code ?? 'unknown',
+                AnalyticsParam.errorMessage: error.message ?? 'unknown',
+                AnalyticsParam.screen: 'SignUp_VerifyId',
+                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              },
+            );
+            state = state.copyWith(
+              isVerifyIdLoading: false,
+              error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  '아이디 중복 확인에 실패했습니다.',
+              errorField: FieldType.account,
+            );
+          default:
+            break;
+        }
     }
   }
 
   Future<void> verifyEmail() async {
-    try {
-      state = state.copyWith(
-        isVerifyIdLoading: false,
-        isSignUpLoading: false,
-        isVerifyEmailLoading: true,
-        emailVerified: false,
-        error: null,
-        isDialogError: false,
-        errorField: null,
-        needToRedirectLogin: false,
-        needToRedirectSignUpOption: false,
-      );
+    state = state.copyWith(
+      isVerifyIdLoading: false,
+      isSignUpLoading: false,
+      isVerifyEmailLoading: true,
+      emailVerified: false,
+      error: null,
+      isDialogError: false,
+      errorField: null,
+      needToRedirectLogin: false,
+      needToRedirectSignUpOption: false,
+    );
 
-      final email = state.signUpForm['email'];
+    final email = state.signUpForm['email'];
 
-      final result =
-          await ref.read(authRepositoryProvider).verifyEmail(email: email);
+    final result =
+        await ref.read(authRepositoryProvider).verifyEmail(email: email);
 
-      switch (result) {
-        case Ok():
-          state = state.copyWith(
-            isVerifyEmailLoading: false,
-            emailVerified: result.value,
-          );
-        case Error():
-          state = state.copyWith(
-            isVerifyEmailLoading: false,
-            error: result.error.toString(),
-            errorField: FieldType.email,
-          );
-      }
-    } on SignUpModelError catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: 'SignUpModelError',
-          AnalyticsParam.errorCode: e.code ?? 'unknown',
-          AnalyticsParam.errorMessage: e.message,
-          AnalyticsParam.screen: 'SignUp_VerifyEmail',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isVerifyEmailLoading: false,
-        error:
-            ErrorUtil.instance.getErrorMessage(e.code) ?? '이메일 중복 확인에 실패했습니다.',
-        errorField: FieldType.email,
-      );
-    } catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: e.runtimeType.toString(),
-          AnalyticsParam.errorMessage: e.toString(),
-          AnalyticsParam.screen: 'SignUp_VerifyEmail',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isVerifyEmailLoading: false,
-        error: '이메일 중복 확인에 실패했습니다.',
-        errorField: FieldType.email,
-      );
+    switch (result) {
+      case Ok():
+        state = state.copyWith(
+          isVerifyEmailLoading: false,
+          emailVerified: result.value,
+        );
+      case Error():
+        var error = result.error;
+        switch (error) {
+          case GlobalException():
+            analytics.logEvent(
+              name: AnalyticsEvent.error,
+              parameters: {
+                AnalyticsParam.errorType: 'SignUpModelError',
+                AnalyticsParam.errorCode: error.code ?? 'unknown',
+                AnalyticsParam.errorMessage: error.message ?? 'unknown',
+                AnalyticsParam.screen: 'SignUp_VerifyEmail',
+                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              },
+            );
+            state = state.copyWith(
+              isVerifyEmailLoading: false,
+              error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                  '이메일 중복 확인에 실패했습니다.',
+              errorField: FieldType.email,
+            );
+          default:
+            break;
+        }
     }
   }
 
   Future<void> signUpNewMember() async {
-    try {
+    state = state.copyWith(
+      isVerifyIdLoading: false,
+      isSignUpLoading: true,
+      isVerifyEmailLoading: false,
+      signUpSuccess: false,
+      error: null,
+      isDialogError: false,
+      errorField: null,
+      needToRedirectLogin: false,
+      needToRedirectSignUpOption: false,
+      emailVerified: true, // 산규 회원은 이메일 검증 이미 완료
+    );
+
+    logger.d(state.signUpForm);
+
+    final password = state.signUpForm['password'];
+    final confirmPassword = state.signUpForm['confirmPassword'];
+    final userName = state.signUpForm['userName'];
+    final telephone = state.signUpForm['telephone'];
+    final studentNumber = state.signUpForm['studentNumber'];
+    final major = state.signUpForm['major'];
+
+    final invalidField = validateField(
+      password: password,
+      confirmPassword: confirmPassword,
+      userName: userName,
+      telephone: telephone,
+      studentNumber: studentNumber,
+      major: major,
+    );
+
+    if (invalidField != null) {
       state = state.copyWith(
-        isVerifyIdLoading: false,
-        isSignUpLoading: true,
-        isVerifyEmailLoading: false,
-        signUpSuccess: false,
-        error: null,
-        isDialogError: false,
-        errorField: null,
-        needToRedirectLogin: false,
-        needToRedirectSignUpOption: false,
-        emailVerified: true, // 산규 회원은 이메일 검증 이미 완료
+        isSignUpLoading: false,
+        error: switch (invalidField) {
+          FieldType.account => '아이디 중복 확인을 진행해주세요!',
+          FieldType.password =>
+            '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
+          FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
+          FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
+          FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
+          FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
+          FieldType.major => '단과대/학부(학과)를 선택해주세요.',
+          // 사용되지 않는 필드 혹은 이미 검증된 필드
+          FieldType.email => null,
+          FieldType.currentPassword => null,
+          FieldType.code => null,
+        },
+        errorField: invalidField,
       );
+      return;
+    }
 
-      logger.d(state.signUpForm);
+    final result = await ref.read(authRepositoryProvider).signUpNewMember(
+          request: SignUpRequest.fromJson(state.signUpForm),
+        );
 
-      final password = state.signUpForm['password'];
-      final confirmPassword = state.signUpForm['confirmPassword'];
-      final userName = state.signUpForm['userName'];
-      final telephone = state.signUpForm['telephone'];
-      final studentNumber = state.signUpForm['studentNumber'];
-      final major = state.signUpForm['major'];
+    switch (result) {
+      case Ok():
+        // Firebase Analytics: 회원가입 성공
+        analytics.logSignUp(
+          signUpMethod: AnalyticsParam.signUpMethod,
+          parameters: {
+            'method': 'new_member',
+            AnalyticsParam.account: state.signUpForm['id'] ?? '',
+            AnalyticsParam.userName: userName,
+            AnalyticsParam.studentNumber: studentNumber,
+            AnalyticsParam.major: major ?? '',
+            AnalyticsParam.userHp: telephone,
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+          },
+        );
 
-      final invalidField = validateField(
-        password: password,
-        confirmPassword: confirmPassword,
-        userName: userName,
-        telephone: telephone,
-        studentNumber: studentNumber,
-        major: major,
-      );
-
-      if (invalidField != null) {
         state = state.copyWith(
           isSignUpLoading: false,
-          error: switch (invalidField) {
-            FieldType.account => '아이디 중복 확인을 진행해주세요!',
-            FieldType.password =>
-              '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
-            FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
-            FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
-            FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
-            FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
-            FieldType.major => '단과대/학부(학과)를 선택해주세요.',
-            // 사용되지 않는 필드 혹은 이미 검증된 필드
-            FieldType.email => null,
-            FieldType.currentPassword => null,
-            FieldType.code => null,
-          },
-          errorField: invalidField,
+          signUpSuccess: result.value,
         );
-        return;
-      }
-
-      final result = await ref.read(authRepositoryProvider).signUpNewMember(
-            request: SignUpRequest.fromJson(state.signUpForm),
-          );
-
-      switch (result) {
-        case Ok():
-          // Firebase Analytics: 회원가입 성공
-          analytics.logSignUp(
-            signUpMethod: AnalyticsParam.signUpMethod,
-            parameters: {
-              'method': 'new_member',
-              AnalyticsParam.account: state.signUpForm['id'] ?? '',
-              AnalyticsParam.userName: userName,
-              AnalyticsParam.studentNumber: studentNumber,
-              AnalyticsParam.major: major ?? '',
-              AnalyticsParam.userHp: telephone,
-              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-            },
-          );
-
-          state = state.copyWith(
-            isSignUpLoading: false,
-            signUpSuccess: result.value,
-          );
-        case Error():
-          state = state.copyWith(
-            isSignUpLoading: false,
-            error: result.error.toString(),
-          );
-      }
-    } on SignUpModelError catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: 'SignUpModelError',
-          AnalyticsParam.errorCode: e.code ?? 'unknown',
-          AnalyticsParam.errorMessage: e.message,
-          AnalyticsParam.screen: 'SignUp_NewMember',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      final isDialogError = ErrorUtil.instance.isDialogError(e.code);
-      final errorField = ErrorUtil.instance.getFieldType(e.code);
-      final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
-      if (errorField == FieldType.account) {
-        state = state.copyWith(idVerified: false);
-      }
-      state = state.copyWith(
-        isSignUpLoading: false,
-        isDialogError: (isDialogError || errorField == null) &&
-            e.code != 'ABNORMAL-ACCESS',
-        error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-        errorField: errorField,
-        needToRedirectSignUpOption:
-            ErrorUtil.instance.isNeedToRedirectSignUpOption(e.code),
-      );
-    } catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: e.runtimeType.toString(),
-          AnalyticsParam.errorMessage: e.toString(),
-          AnalyticsParam.screen: 'SignUp_NewMember',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isSignUpLoading: false,
-        isDialogError: true,
-        error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-      );
+      case Error():
+        var error = result.error;
+        switch (error) {
+          case GlobalException():
+            analytics.logEvent(
+              name: AnalyticsEvent.error,
+              parameters: {
+                AnalyticsParam.errorType: 'SignUpModelError',
+                AnalyticsParam.errorCode: error.code ?? 'unknown',
+                AnalyticsParam.errorMessage: error.message ?? 'unknown',
+                AnalyticsParam.screen: 'SignUp_NewMember',
+                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              },
+            );
+            final isDialogError = ErrorUtil.instance.isDialogError(error.code);
+            final errorField = ErrorUtil.instance.getFieldType(error.code);
+            final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
+            if (errorField == FieldType.account) {
+              state = state.copyWith(idVerified: false);
+            }
+            state = state.copyWith(
+              isSignUpLoading: false,
+              isDialogError: (isDialogError || errorField == null) &&
+                  error.code != 'ABNORMAL-ACCESS',
+              error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+              errorField: errorField,
+              needToRedirectSignUpOption:
+                  ErrorUtil.instance.isNeedToRedirectSignUpOption(error.code),
+            );
+          default:
+            break;
+        }
     }
   }
 
   Future<void> signUpExistingMember() async {
-    try {
+    state = state.copyWith(
+      isVerifyIdLoading: false,
+      isSignUpLoading: true,
+      isVerifyEmailLoading: false,
+      signUpSuccess: false,
+      error: null,
+      isDialogError: false,
+      errorField: null,
+      needToRedirectLogin: false,
+      needToRedirectSignUpOption: false,
+    );
+
+    logger.d(state.signUpForm);
+
+    final password = state.signUpForm['password'];
+    final confirmPassword = state.signUpForm['confirmPassword'];
+    final userName = state.signUpForm['userName'];
+    final telephone = state.signUpForm['telephone'];
+    final studentNumber = state.signUpForm['studentNumber'];
+    final major = state.signUpForm['major'];
+
+    final invalidField = validateField(
+      password: password,
+      confirmPassword: confirmPassword,
+      userName: userName,
+      telephone: telephone,
+      studentNumber: studentNumber,
+      major: major,
+    );
+
+    if (invalidField != null) {
       state = state.copyWith(
-        isVerifyIdLoading: false,
-        isSignUpLoading: true,
-        isVerifyEmailLoading: false,
-        signUpSuccess: false,
-        error: null,
-        isDialogError: false,
-        errorField: null,
-        needToRedirectLogin: false,
-        needToRedirectSignUpOption: false,
+        isSignUpLoading: false,
+        error: switch (invalidField) {
+          FieldType.account => '아이디 중복 확인을 진행해주세요!',
+          FieldType.password =>
+            '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
+          FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
+          FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
+          FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
+          FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
+          FieldType.major => '단과대/학부(학과)를 선택해주세요.',
+          FieldType.email => '이메일 중복 확인을 진행해주세요.',
+          // 사용되지 않는 필드 혹은 이미 검증된 필드
+          FieldType.currentPassword => null,
+          FieldType.code => null,
+        },
+        errorField: invalidField,
       );
+      return;
+    }
 
-      logger.d(state.signUpForm);
+    final result = await ref.read(authRepositoryProvider).signUpExistingMember(
+          request: SignUpRequest.fromJson(state.signUpForm),
+        );
 
-      final password = state.signUpForm['password'];
-      final confirmPassword = state.signUpForm['confirmPassword'];
-      final userName = state.signUpForm['userName'];
-      final telephone = state.signUpForm['telephone'];
-      final studentNumber = state.signUpForm['studentNumber'];
-      final major = state.signUpForm['major'];
+    switch (result) {
+      case Ok():
+        // Firebase Analytics: 회원가입 성공
+        analytics.logSignUp(
+          signUpMethod: AnalyticsParam.signUpMethod,
+          parameters: {
+            'method': 'existing_member',
+            AnalyticsParam.account: state.signUpForm['id'] ?? '',
+            AnalyticsParam.email: state.signUpForm['email'] ?? '',
+            AnalyticsParam.userName: userName,
+            AnalyticsParam.studentNumber: studentNumber,
+            AnalyticsParam.major: major ?? '',
+            AnalyticsParam.userHp: telephone,
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+          },
+        );
 
-      final invalidField = validateField(
-        password: password,
-        confirmPassword: confirmPassword,
-        userName: userName,
-        telephone: telephone,
-        studentNumber: studentNumber,
-        major: major,
-      );
-
-      if (invalidField != null) {
         state = state.copyWith(
           isSignUpLoading: false,
-          error: switch (invalidField) {
-            FieldType.account => '아이디 중복 확인을 진행해주세요!',
-            FieldType.password =>
-              '비밀번호는 영어, 숫자, 특수문자를 모두 포함하여\n8~20자 이내로 작성해주세요.',
-            FieldType.passwordConfirm => '비밀번호가 일치하지 않습니다!',
-            FieldType.username => '이름은 특수문자 제외 2~30자 이내로 입력해주세요.',
-            FieldType.telephone => '전화번호 형식에 맞지 않습니다!',
-            FieldType.studentNumber => '학번은 숫자 8자로 입력해주세요.',
-            FieldType.major => '단과대/학부(학과)를 선택해주세요.',
-            FieldType.email => '이메일 중복 확인을 진행해주세요.',
-            // 사용되지 않는 필드 혹은 이미 검증된 필드
-            FieldType.currentPassword => null,
-            FieldType.code => null,
-          },
-          errorField: invalidField,
+          signUpSuccess: result.value,
         );
-        return;
-      }
-
-      final result =
-          await ref.read(authRepositoryProvider).signUpExistingMember(
-                request: SignUpRequest.fromJson(state.signUpForm),
-              );
-
-      switch (result) {
-        case Ok():
-          // Firebase Analytics: 회원가입 성공
-          analytics.logSignUp(
-            signUpMethod: AnalyticsParam.signUpMethod,
-            parameters: {
-              'method': 'existing_member',
-              AnalyticsParam.account: state.signUpForm['id'] ?? '',
-              AnalyticsParam.email: state.signUpForm['email'] ?? '',
-              AnalyticsParam.userName: userName,
-              AnalyticsParam.studentNumber: studentNumber,
-              AnalyticsParam.major: major ?? '',
-              AnalyticsParam.userHp: telephone,
-              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-            },
-          );
-
-          state = state.copyWith(
-            isSignUpLoading: false,
-            signUpSuccess: result.value,
-          );
-        case Error():
-          state = state.copyWith(
-            isSignUpLoading: false,
-            error: result.error.toString(),
-          );
-      }
-    } on SignUpModelError catch (e) {
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: 'SignUpModelError',
-          AnalyticsParam.errorCode: e.code ?? 'unknown',
-          AnalyticsParam.errorMessage: e.message,
-          AnalyticsParam.screen: 'SignUp_ExistingMember',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      final isDialogError = ErrorUtil.instance.isDialogError(e.code);
-      final errorField = ErrorUtil.instance.getFieldType(e.code);
-      final errorMessage = ErrorUtil.instance.getErrorMessage(e.code);
-      if (errorField == FieldType.account) {
-        state = state.copyWith(idVerified: false);
-      }
-      state = state.copyWith(
-        isSignUpLoading: false,
-        isDialogError: (isDialogError || errorField == null) &&
-            e.code != 'ABNORMAL-ACCESS',
-        error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-        errorField: errorField,
-        needToRedirectLogin: ErrorUtil.instance.isNeedToRedirectLogin(e.code),
-      );
-    } catch (e) {
-      logger.e(e);
-      analytics.logEvent(
-        name: AnalyticsEvent.error,
-        parameters: {
-          AnalyticsParam.errorType: e.runtimeType.toString(),
-          AnalyticsParam.errorMessage: e.toString(),
-          AnalyticsParam.screen: 'SignUp_ExistingMember',
-          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-        },
-      );
-      state = state.copyWith(
-        isSignUpLoading: false,
-        isDialogError: true,
-        error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-      );
+      case Error():
+        var error = result.error;
+        switch (error) {
+          case GlobalException():
+            analytics.logEvent(
+              name: AnalyticsEvent.error,
+              parameters: {
+                AnalyticsParam.errorType: 'SignUpModelError',
+                AnalyticsParam.errorCode: error.code ?? 'unknown',
+                AnalyticsParam.errorMessage: error.message ?? 'unknown',
+                AnalyticsParam.screen: 'SignUp_ExistingMember',
+                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              },
+            );
+            final isDialogError = ErrorUtil.instance.isDialogError(error.code);
+            final errorField = ErrorUtil.instance.getFieldType(error.code);
+            final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
+            if (errorField == FieldType.account) {
+              state = state.copyWith(idVerified: false);
+            }
+            state = state.copyWith(
+              isSignUpLoading: false,
+              isDialogError: (isDialogError || errorField == null) &&
+                  error.code != 'ABNORMAL-ACCESS',
+              error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+              errorField: errorField,
+              needToRedirectLogin:
+                  ErrorUtil.instance.isNeedToRedirectLogin(error.code),
+            );
+          default:
+            break;
+        }
     }
   }
 

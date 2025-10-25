@@ -66,7 +66,7 @@ class AuthRepository {
             EmailVerificationModelError.fromJson(response.data) as Exception);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -93,7 +93,7 @@ class AuthRepository {
             EmailVerificationModelError.fromJson(response.data) as Exception);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -114,11 +114,10 @@ class AuthRepository {
         return Result.ok(true);
       } else {
         // Bad Request
-        return Result.error(SignUpModelError.fromJson(response.data)
-            .setType(SignUpModelType.verify) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -140,11 +139,10 @@ class AuthRepository {
         return Result.ok(true);
       } else {
         // Bad Request
-        return Result.error(SignUpModelError.fromJson(response.data)
-            .setType(SignUpModelType.verify) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -176,11 +174,10 @@ class AuthRepository {
       if (response.statusCode == 200) {
         return Result.ok(true);
       } else {
-        return Result.error(
-            SignUpModelError.fromJson(response.data) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -202,11 +199,10 @@ class AuthRepository {
       if (response.statusCode == 200) {
         return Result.ok(true);
       } else {
-        return Result.error(SignUpModelError.fromJson(response.data)
-            .setType(SignUpModelType.signUpExistingMember) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
   ////////////////////////////////////
@@ -253,7 +249,7 @@ class AuthRepository {
         return Result.error(error);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -284,7 +280,7 @@ class AuthRepository {
         return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
   ////////////////////////////////////
@@ -325,7 +321,7 @@ class AuthRepository {
             .setType(ChangePwModelType.changePW));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
   ///////////////////////////////////////
@@ -351,7 +347,7 @@ class AuthRepository {
             FindIdModelError.fromJson(response.data) as Exception);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -387,7 +383,7 @@ class AuthRepository {
             .setType(FindPwModelType.sendCode) as Exception);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -423,7 +419,7 @@ class AuthRepository {
             .setType(FindPwModelType.verifyCode) as Exception);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 
@@ -461,7 +457,7 @@ class AuthRepository {
             .setType(ChangePwModelType.resetPW));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
   ////////////////////////////////////

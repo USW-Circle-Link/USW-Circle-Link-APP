@@ -22,3 +22,13 @@ class GlobalException with _$GlobalException implements Exception {
 
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }
+
+extension GlobalExceptionExtension on Exception {
+  GlobalException toGlobalException() => GlobalException(
+        exception: toString(),
+        code: null,
+        message: toString(),
+        status: null,
+        error: toString(),
+      );
+}
