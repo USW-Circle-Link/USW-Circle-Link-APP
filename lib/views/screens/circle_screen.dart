@@ -4,18 +4,14 @@ import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/common/scroll_behavior.dart';
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/application_model.dart';
-import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/extensions.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/application_view_model.dart';
-import 'package:usw_circle_link/viewmodels/circle_view_model.dart';
-import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
-import 'package:usw_circle_link/views/screens/image_screen.dart';
+import '../../common/scroll_behavior.dart';
+import '../../const/data.dart';
+import '../../utils/extensions.dart';
+import '../../viewmodels/circle_view_model.dart';
+import '../widgets/circle_detail_overlay.dart';
+import '../widgets/text_font_widget.dart';
+import '../screens/image_screen.dart';
+import '../../utils/dialog_manager.dart';
 
 class CircleScreen extends ConsumerStatefulWidget {
   final String clubUUID;
@@ -120,46 +116,32 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
 
   @override
   Widget build(BuildContext context) {
-    final clubIntroState =
-        ref.watch(clubIntroViewModelProvider(widget.clubUUID));
-    ref.listen(clubIntroViewModelProvider(widget.clubUUID), (previous, next) {
-      logger.d(next);
+    final isLoading = ref.watch(clubIntroViewModelProvider(widget.clubUUID)
+        .select((state) => state.isLoading));
+    ref.listen(
+        clubIntroViewModelProvider(widget.clubUUID)
+            .select((state) => state.canApply), (previous, next) {
+      if (next == null) {
+      } else if (next) {
+        context.go('/circle/application_writing?clubUUID=${widget.clubUUID}');
+      } else {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '지원 가능한 동아리가 아닙니다.',
+        );
+      }
     });
-    final applicationState = ref.watch(applicationViewModelProvider);
-    ref.listen(applicationViewModelProvider, (previous, next) {
-      logger.d(next);
-      next.when(
-        data: (data) {
-          switch (data?.type) {
-            case ApplicationModelType.getApplication:
-              break;
-            case ApplicationModelType.apply:
-              break;
-            case ApplicationModelType.checkAvailableForApplication:
-              context.go(
-                  '/circle/application_writing?clubUUID=${widget.clubUUID}');
-              break;
-            default:
-          }
-        },
-        error: (error, stackTrace) {
-          error = error as ApplicationModelError;
-          switch (error.type) {
-            case ApplicationModelType.checkAvailableForApplication:
-              DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                      "동아리 지원 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
-                  onLeftButtonPressed: () {
-                    if ((error as ApplicationModelError).code == "USR-F401") {
-                      context.go('/login');
-                    }
-                  });
-            default:
-          }
-        },
-        loading: () {},
-      );
+    final circleDetail = ref.watch(clubIntroViewModelProvider(widget.clubUUID)
+        .select((state) => state.circleDetail));
+    ref.listen(
+        clubIntroViewModelProvider(widget.clubUUID)
+            .select((state) => state.error), (prev, next) {
+      if (next != null) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: next,
+        );
+      }
     });
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
@@ -199,7 +181,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             ),
           ),
         ),
-        bottomNavigationBar: !clubIntroState.hasValue
+        bottomNavigationBar: circleDetail == null
             ? SizedBox.shrink()
             : Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
@@ -220,14 +202,15 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                   width: double.infinity,
                   height: 56,
                   child: Builder(builder: (context) {
-                    final isClosed =
-                        clubIntroState.value!.recruitmentStatus == "CLOSE";
+                    final isClosed = circleDetail.recruitmentStatus == "CLOSE";
                     return OutlinedButton(
                       onPressed: isClosed
                           ? null
                           : () async {
                               await ref
-                                  .read(applicationViewModelProvider.notifier)
+                                  .read(clubIntroViewModelProvider(
+                                          widget.clubUUID)
+                                      .notifier)
                                   .checkAvailableForApplication(
                                       clubUUID: widget.clubUUID);
                             },
@@ -253,9 +236,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                   }),
                 ),
               ),
-        body: clubIntroState.isLoading || applicationState.isLoading
+        body: isLoading
             ? const Center(child: CircularProgressIndicator())
-            : clubIntroState.hasError
+            : circleDetail == null
                 ? Center(
                     child: TextFontWidget.fontRegular(
                       '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
@@ -281,7 +264,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                   SizedBox(
                                     height: 250,
                                     child: Builder(builder: (context) {
-                                      final introPhotos = clubIntroState.value!
+                                      final introPhotos = circleDetail
                                           .getNotEmptyIntroPhotoPath();
                                       return introPhotos != null &&
                                               introPhotos.isNotEmpty
@@ -370,16 +353,12 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(12),
-                                            child: clubIntroState.value!
-                                                            .mainPhotoPath !=
+                                            child: circleDetail.mainPhotoPath !=
                                                         null &&
-                                                    clubIntroState
-                                                        .value!
-                                                        .mainPhotoPath!
+                                                    circleDetail.mainPhotoPath!
                                                         .isValidUrl
                                                 ? Image.network(
-                                                    clubIntroState
-                                                        .value!.mainPhotoPath!,
+                                                    circleDetail.mainPhotoPath!,
                                                     fit: BoxFit.cover,
                                                     errorBuilder:
                                                         (BuildContext context,
@@ -411,7 +390,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                           children: [
                                             const SizedBox(height: 8),
                                             TextFontWidget.fontRegular(
-                                              clubIntroState.value!.circleName,
+                                              circleDetail.circleName,
                                               overflow: TextOverflow.ellipsis,
                                               color: Colors.black,
                                               fontSize: 18,
@@ -435,8 +414,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                 ),
                                                 children: [
                                                   TextSpan(
-                                                    text: clubIntroState
-                                                        .value!.leaderName,
+                                                    text:
+                                                        circleDetail.leaderName,
                                                     style: const TextStyle(
                                                       color: Color(0xFF353549),
                                                       fontWeight:
@@ -450,22 +429,23 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                               ),
                                             ),
                                             const SizedBox(height: 8),
-                                            clubIntroState.whenOrNull(
-                                                    data: (data) =>
-                                                        SingleChildScrollView(
-                                                          scrollDirection:
-                                                              Axis.horizontal,
-                                                          child: Row(
-                                                            children: data
-                                                                    .circleHashtag
-                                                                    ?.map((tag) =>
-                                                                        _buildChip(
-                                                                            '#$tag'))
-                                                                    .toList() ??
-                                                                [],
-                                                          ),
-                                                        )) ??
-                                                const SizedBox.shrink(),
+                                            circleDetail.circleHashtag !=
+                                                        null &&
+                                                    circleDetail.circleHashtag!
+                                                        .isNotEmpty
+                                                ? SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.horizontal,
+                                                    child: Row(
+                                                      children: circleDetail
+                                                          .circleHashtag!
+                                                          .map((tag) =>
+                                                              _buildChip(
+                                                                  '#$tag'))
+                                                          .toList(),
+                                                    ),
+                                                  )
+                                                : const SizedBox.shrink(),
                                           ],
                                         ),
                                       ),
@@ -482,12 +462,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                             onPressed: () {
                                               if (_overlayEntry == null) {
                                                 _showOverlay(
-                                                  clubIntroState
-                                                      .value!.circleRoom,
-                                                  clubIntroState
-                                                      .value!.leaderHp,
-                                                  clubIntroState
-                                                      .value!.circleInsta,
+                                                  circleDetail.circleRoom,
+                                                  circleDetail.leaderHp,
+                                                  circleDetail.circleInsta,
                                                 );
                                               } else {
                                                 _removeOverlay();
@@ -525,8 +502,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                         ),
                                       ),
                                     ),
-                                    if (clubIntroState
-                                            .value!.recruitmentStatus ==
+                                    if (circleDetail.recruitmentStatus ==
                                         "OPEN")
                                       Tab(
                                         child: SizedBox.expand(
@@ -556,21 +532,18 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 padding:
                                     const EdgeInsets.fromLTRB(24, 24, 24, 0),
                                 child: Html(
-                                  data: clubIntroState.value!.introContent,
+                                  data: circleDetail.introContent,
                                 ),
                               ),
                             ),
-                            if (clubIntroState.value!.recruitmentStatus ==
-                                "OPEN")
+                            if (circleDetail.recruitmentStatus == "OPEN")
                               SingleChildScrollView(
                                 child: Container(
                                   alignment: Alignment.topLeft,
                                   padding:
                                       const EdgeInsets.fromLTRB(24, 24, 24, 0),
                                   child: Html(
-                                    data:
-                                        clubIntroState.value!.clubRecruitment ??
-                                            '',
+                                    data: circleDetail.clubRecruitment ?? '',
                                   ),
                                 ),
                               ),

@@ -106,7 +106,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                 maxLines: 1,
                 textInputType: TextInputType.text,
                 textAlign: TextAlign.left,
-                hintText: '이메일 입력',
+                hintText: '이메일로 인증코드가 전송됩니다.',
                 readOnly: true,
                 paddingLeft: 0.0,
                 textStyle: TextFontWidget.fontRegularStyle(

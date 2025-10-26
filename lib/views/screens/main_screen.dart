@@ -3,25 +3,27 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/analytics_const.dart';
-import 'package:usw_circle_link/models/category_model.dart';
-import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/notifier/abnormal_access_notifier.dart';
-import 'package:usw_circle_link/notifier/network_connectivity_notifier.dart';
-import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
-import 'package:usw_circle_link/viewmodels/main_view_model.dart';
-import 'package:usw_circle_link/viewmodels/user_view_model.dart';
-import 'package:usw_circle_link/views/widgets/category_picker.dart';
-import 'package:usw_circle_link/views/widgets/logged_in_menu.dart';
-import 'package:usw_circle_link/views/widgets/logged_out_menu.dart';
-import 'package:usw_circle_link/views/widgets/notification_overlay.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
-import 'package:usw_circle_link/views/widgets/circle_list.dart';
-import 'package:usw_circle_link/views/widgets/app_bar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../../const/analytics_const.dart';
+import '../../models/category_model.dart';
+import '../../models/circle_list_model.dart';
+import '../../models/response/global_exception.dart';
+import '../../notifier/abnormal_access_notifier.dart';
+import '../../notifier/network_connectivity_notifier.dart';
+import '../../utils/dialog_manager.dart';
+import '../../utils/error_util.dart';
+import '../../utils/icons/main_icons_icons.dart';
+import '../../utils/logger/logger.dart';
+import '../../viewmodels/fcm_view_model.dart';
+import '../../viewmodels/main_view_model.dart';
+import '../../viewmodels/user_view_model.dart';
+import '../../views/widgets/category_picker.dart';
+import '../../views/widgets/logged_in_menu.dart';
+import '../../views/widgets/logged_out_menu.dart';
+import '../../views/widgets/notification_overlay.dart';
+import '../../views/widgets/text_font_widget.dart';
+import '../../views/widgets/circle_list.dart';
+import '../../views/widgets/app_bar.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -44,6 +46,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     // 알림 클릭시
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
     super.initState();
+    _checkAndShowNoticeDialog();
   }
 
   void _handleMessage(RemoteMessage message) {
@@ -55,6 +58,44 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref
         .read(firebaseCloudMessagingViewModelProvider.notifier)
         .addNotification(message.notification?.body ?? '');
+  }
+
+  Future<void> _checkAndShowNoticeDialog() async {
+    final prefs = await SharedPreferences.getInstance();
+    final dontShowAgain = prefs.getBool('notice_dont_show_again') ?? false;
+
+    if (dontShowAgain && mounted) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _showNoticeDialog();
+      });
+    }
+  }
+
+  void _showNoticeDialog() {
+    DialogManager.instance.showAlertDialog(
+      context: context,
+      title: '안내',
+      content:
+          '이전에 기존회원 가입을 하신 분들 중\n아이디/비밀번호 찾기 이후에도 로그인이 안 되시는 분들은\n[신규 회원가입] 후 자신이 속한 동아리에 지원해주세요.\n자세한 내용은 <공지사항>을 확인해 주세요.',
+      leftButtonText: '더 이상 보지 않기',
+      leftButtonTextStyle: TextFontWidget.fontRegularStyle(
+        color: const Color(0xffA8A8A8),
+        fontWeight: FontWeight.w700,
+        fontSize: 16,
+      ),
+      rightButtonText: '확인',
+      rightButtonTextStyle: TextFontWidget.fontRegularStyle(
+        color: const Color(0xff0085FF),
+        fontWeight: FontWeight.w800,
+        fontSize: 16,
+      ),
+      onLeftButtonPressed: () async {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool('notice_dont_show_again', true);
+      },
+      onRightButtonPressed: () async {},
+      barrierDismissible: true,
+    );
   }
 
   void _showOverlay(BuildContext context) {
@@ -372,7 +413,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       );
               },
               error: (error, stackTrace) {
-                final errorModel = error as CircleListModelError;
+                final errorModel = error as GlobalException;
                 return Center(
                   child: TextFontWidget.fontRegular(
                     ErrorUtil.instance.getErrorMessage(errorModel.code) ??

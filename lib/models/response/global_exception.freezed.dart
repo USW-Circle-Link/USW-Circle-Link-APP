@@ -30,6 +30,8 @@ mixin _$GlobalException {
   int? get status => throw _privateConstructorUsedError;
   @JsonKey(name: "error")
   String? get error => throw _privateConstructorUsedError;
+  String? get screen => throw _privateConstructorUsedError;
+  String? get errorType => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -48,7 +50,9 @@ abstract class $GlobalExceptionCopyWith<$Res> {
       @JsonKey(name: "code") String? code,
       @JsonKey(name: "message") String? message,
       @JsonKey(name: "status") int? status,
-      @JsonKey(name: "error") String? error});
+      @JsonKey(name: "error") String? error,
+      String? screen,
+      String? errorType});
 }
 
 /// @nodoc
@@ -69,6 +73,8 @@ class _$GlobalExceptionCopyWithImpl<$Res, $Val extends GlobalException>
     Object? message = freezed,
     Object? status = freezed,
     Object? error = freezed,
+    Object? screen = freezed,
+    Object? errorType = freezed,
   }) {
     return _then(_value.copyWith(
       exception: freezed == exception
@@ -91,6 +97,14 @@ class _$GlobalExceptionCopyWithImpl<$Res, $Val extends GlobalException>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      screen: freezed == screen
+          ? _value.screen
+          : screen // ignore: cast_nullable_to_non_nullable
+              as String?,
+      errorType: freezed == errorType
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -108,7 +122,9 @@ abstract class _$$GlobalExceptionImplCopyWith<$Res>
       @JsonKey(name: "code") String? code,
       @JsonKey(name: "message") String? message,
       @JsonKey(name: "status") int? status,
-      @JsonKey(name: "error") String? error});
+      @JsonKey(name: "error") String? error,
+      String? screen,
+      String? errorType});
 }
 
 /// @nodoc
@@ -127,6 +143,8 @@ class __$$GlobalExceptionImplCopyWithImpl<$Res>
     Object? message = freezed,
     Object? status = freezed,
     Object? error = freezed,
+    Object? screen = freezed,
+    Object? errorType = freezed,
   }) {
     return _then(_$GlobalExceptionImpl(
       exception: freezed == exception
@@ -149,6 +167,14 @@ class __$$GlobalExceptionImplCopyWithImpl<$Res>
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
+      screen: freezed == screen
+          ? _value.screen
+          : screen // ignore: cast_nullable_to_non_nullable
+              as String?,
+      errorType: freezed == errorType
+          ? _value.errorType
+          : errorType // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -161,7 +187,9 @@ class _$GlobalExceptionImpl extends _GlobalException {
       @JsonKey(name: "code") this.code,
       @JsonKey(name: "message") this.message,
       @JsonKey(name: "status") this.status,
-      @JsonKey(name: "error") this.error})
+      @JsonKey(name: "error") this.error,
+      this.screen,
+      this.errorType})
       : super._();
 
   factory _$GlobalExceptionImpl.fromJson(Map<String, dynamic> json) =>
@@ -182,10 +210,14 @@ class _$GlobalExceptionImpl extends _GlobalException {
   @override
   @JsonKey(name: "error")
   final String? error;
+  @override
+  final String? screen;
+  @override
+  final String? errorType;
 
   @override
   String toString() {
-    return 'GlobalException(exception: $exception, code: $code, message: $message, status: $status, error: $error)';
+    return 'GlobalException(exception: $exception, code: $code, message: $message, status: $status, error: $error, screen: $screen, errorType: $errorType)';
   }
 
   @override
@@ -198,13 +230,16 @@ class _$GlobalExceptionImpl extends _GlobalException {
             (identical(other.code, code) || other.code == code) &&
             (identical(other.message, message) || other.message == message) &&
             (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error));
+            (identical(other.error, error) || other.error == error) &&
+            (identical(other.screen, screen) || other.screen == screen) &&
+            (identical(other.errorType, errorType) ||
+                other.errorType == errorType));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, exception, code, message, status, error);
+  int get hashCode => Object.hash(
+      runtimeType, exception, code, message, status, error, screen, errorType);
 
   @JsonKey(ignore: true)
   @override
@@ -227,7 +262,9 @@ abstract class _GlobalException extends GlobalException {
       @JsonKey(name: "code") final String? code,
       @JsonKey(name: "message") final String? message,
       @JsonKey(name: "status") final int? status,
-      @JsonKey(name: "error") final String? error}) = _$GlobalExceptionImpl;
+      @JsonKey(name: "error") final String? error,
+      final String? screen,
+      final String? errorType}) = _$GlobalExceptionImpl;
   _GlobalException._() : super._();
 
   factory _GlobalException.fromJson(Map<String, dynamic> json) =
@@ -248,6 +285,10 @@ abstract class _GlobalException extends GlobalException {
   @override
   @JsonKey(name: "error")
   String? get error;
+  @override
+  String? get screen;
+  @override
+  String? get errorType;
   @override
   @JsonKey(ignore: true)
   _$$GlobalExceptionImplCopyWith<_$GlobalExceptionImpl> get copyWith =>

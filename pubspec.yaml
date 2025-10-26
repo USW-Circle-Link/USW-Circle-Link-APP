@@ -93,8 +93,13 @@ dependencies:
   device_info_plus: ^10.1.2
   permission_handler: ^11.3.1
   flutter_web_frame: ^1.0.0
+  
+  # Sentry
+  sentry_dio: ^9.7.0
+  sentry_flutter: ^9.7.0
 
 dev_dependencies:
+  sentry_dart_plugin: ^3.1.1
   flutter_test:
     sdk: flutter
 
@@ -179,3 +184,8 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  project: flutter
+  org: university-of-suwon

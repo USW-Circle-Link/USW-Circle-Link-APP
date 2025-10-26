@@ -1,6 +1,7 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/response/global_exception.dart';
 import '../../const/analytics_const.dart';
 import '../../models/change_pw_model.dart';
 import '../../models/profile_model.dart';
@@ -10,8 +11,8 @@ import '../../repositories/profile_repository.dart';
 import '../../repositories/token_repository.dart';
 import '../../../utils/command.dart';
 import '../../../utils/result.dart';
-import '../../../utils/decoder/jwt_decoder.dart';
 import '../../../utils/logger/logger.dart';
+import '../utils/error_util.dart';
 import 'state/user_state.dart';
 
 /// UserViewModel Provider
@@ -86,7 +87,7 @@ class UserViewModel extends ChangeNotifier {
           // UserState 업데이트
           _updateStateFromProfile(result.value);
 
-          FirebaseAnalytics.instance.logLogin(
+          analytics.logLogin(
             loginMethod: LoginMethod.autoLogin.name,
             parameters: {
               AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
@@ -134,20 +135,9 @@ class UserViewModel extends ChangeNotifier {
         case Ok():
           logger.d('UserViewModel - 로그인 완료! ${result.value}');
 
-          // JWT 디코딩
-          final payload = JwtDecoder.decode(result.value.accessToken);
-          logger.d('payload - $payload');
-
-          // 토큰 저장 (TokenRepository 사용)
-          final clubUUIDs = (payload['clubUUIDs'] as List<dynamic>?)
-                  ?.map((e) => e.toString())
-                  .toList() ??
-              [];
-
           final saveResult = await _tokenRepository.saveTokens(
             accessToken: result.value.accessToken,
             refreshToken: result.value.refreshToken,
-            clubUUIDs: clubUUIDs,
           );
 
           if (saveResult is Error) {
@@ -161,18 +151,23 @@ class UserViewModel extends ChangeNotifier {
             error: null,
           );
 
-          FirebaseAnalytics.instance
-              .logLogin(loginMethod: LoginMethod.login.name);
+          analytics.logLogin(loginMethod: LoginMethod.login.name);
 
           return Result.ok(null);
 
         case Error():
           logger.d('UserViewModel - 로그인 실패! ${result.error}');
-          _state = _state.copyWith(
-            isAuthorized: false,
-            error: result.error,
-          );
-          return Result.error(result.error);
+          final exception = result.error;
+          if (exception is GlobalException) {
+            _state = _state.copyWith(
+              isAuthorized: false,
+              error: result.error,
+            );
+            return Result.error(result.error);
+          }
+          await ErrorUtil.instance
+              .logError(exception.toGlobalException(screen: 'Login'));
+          return Result.error(exception);
       }
     } finally {
       notifyListeners();
@@ -228,7 +223,7 @@ class UserViewModel extends ChangeNotifier {
     }
 
     // Firebase Analytics
-    FirebaseAnalytics.instance.logEvent(
+    analytics.logEvent(
       name: isAbnormalLogout ?? false
           ? LogoutMethod.abnormalLogout.name
           : LogoutMethod.logout.name,

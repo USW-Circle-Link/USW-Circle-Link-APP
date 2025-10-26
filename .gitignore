@@ -90,3 +90,5 @@ Gemfile.lock
 
 .gemini/
 gha-creds-*.json
+
+sentry.properties

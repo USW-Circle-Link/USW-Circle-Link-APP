@@ -14,6 +14,8 @@ _$GlobalExceptionImpl _$$GlobalExceptionImplFromJson(
       message: json['message'] as String?,
       status: (json['status'] as num?)?.toInt(),
       error: json['error'] as String?,
+      screen: json['screen'] as String?,
+      errorType: json['errorType'] as String?,
     );
 
 Map<String, dynamic> _$$GlobalExceptionImplToJson(
@@ -24,4 +26,6 @@ Map<String, dynamic> _$$GlobalExceptionImplToJson(
       'message': instance.message,
       'status': instance.status,
       'error': instance.error,
+      'screen': instance.screen,
+      'errorType': instance.errorType,
     };

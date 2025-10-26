@@ -1,9 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/Dio.dart';
-import 'package:usw_circle_link/models/delete_user_model.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
+import '../dio/Dio.dart';
+import '../models/response/global_exception.dart';
+import '../utils/logger/logger.dart';
 
 final deleteUserRepositoryProvider = Provider<DeleteUserRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -42,7 +42,7 @@ class DeleteUserRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw DeleteUserModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -72,7 +72,7 @@ class DeleteUserRepository {
     if (response.statusCode == 200) {
       return true;
     } else {
-      throw DeleteUserModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -95,7 +95,7 @@ class DeleteUserRepository {
     if (response.statusCode == 200) {
       return response.data['message'];
     } else {
-      throw DeleteUserModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 }

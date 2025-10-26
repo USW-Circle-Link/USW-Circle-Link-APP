@@ -7,6 +7,8 @@ import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/response/circle_list_response.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
+import '../models/response/global_exception.dart';
+
 final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
@@ -48,8 +50,7 @@ class CircleListRepository {
           .setType(CircleListModelType.all);
     } else {
       // Bad Request
-      throw CircleListModelError.fromJson(response.data)
-          .setType(CircleListModelType.all);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -76,8 +77,7 @@ class CircleListRepository {
           .setType(CircleListModelType.department);
     } else {
       // Bad Request
-      throw CircleListModelError.fromJson(response.data)
-          .setType(CircleListModelType.department);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -196,7 +196,7 @@ class CircleListRepository {
       return CircleFilteredListModel.fromJson(response.data);
     } else {
       // Bad Request
-      throw CircleListModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -230,7 +230,7 @@ class CircleListRepository {
       return CircleFilteredListModel.fromJson(response.data);
     } else {
       // Bad Request
-      throw CircleListModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 
@@ -248,7 +248,7 @@ class CircleListRepository {
       return CircleListResponse.fromJson(response.data);
     } else {
       // Bad Request
-      throw CircleListModelError.fromJson(response.data);
+      throw GlobalException.fromJson(response.data);
     }
   }
 }

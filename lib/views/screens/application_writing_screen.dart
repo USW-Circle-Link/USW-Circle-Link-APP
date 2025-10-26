@@ -3,15 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/application_model.dart';
-import 'package:usw_circle_link/models/circle_detail_list_model.dart';
-import 'package:usw_circle_link/router/circle_list_route.dart';
-import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/application_view_model.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import '../../const/data.dart';
+import '../../models/circle_detail_list_model.dart';
+import '../../router/circle_list_route.dart';
+import '../../utils/dialog_manager.dart';
+import '../../utils/logger/logger.dart';
+import '../../viewmodels/application_view_model.dart';
+import '../../views/widgets/text_font_widget.dart';
 
 class ApplicationWritingScreen extends ConsumerStatefulWidget {
   const ApplicationWritingScreen({Key? key, required this.clubUUID})
@@ -30,59 +28,32 @@ class _ApplicationWritingScreenState
 
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(applicationViewModelProvider);
-    ref.listen<AsyncValue<ApplicationModel?>>(applicationViewModelProvider,
-        (AsyncValue<ApplicationModel?>? previous,
-            AsyncValue<ApplicationModel?>? next) {
-      next?.when(
-        data: (data) {
-          switch (data?.type) {
-            case ApplicationModelType.getApplication:
-              logger.d('지원서 url : ${data!.data}');
-              print('지원서 url : ${data.data}');
-              // context.push('/webview/${Uri.encodeComponent(data.data!)}');
-              launchUrl(Uri.parse(data.data!)).then((value) {
-                print('launchUrl 결과 : $value');
-              }, onError: (error) {
-                print('launchUrl 오류 : $error');
-              });
-              break;
-            case ApplicationModelType.apply:
-              logger.d('지원서 제출 성공! - ${data!.message}');
-              context.replace(
-                  '/circle_list/${CircleListType.myApplications.routeKey}');
-              break;
-            default:
-              break;
-          }
-        },
-        error: (error, stackTrace) {
-          error = error as ApplicationModelError;
-          switch (error.type) {
-            case ApplicationModelType.getApplication:
-              logger.d('지원서 불러오기 실패 : $error');
-              DialogManager.instance.showAlertDialog(
-                context: context,
-                content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                    "지원서를 불러오는 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
-              );
-              break;
-            case ApplicationModelType.apply:
-              logger.d('지원서 제출 실패 : $error');
-              DialogManager.instance.showAlertDialog(
-                context: context,
-                content: ErrorUtil.instance.getErrorMessage(error.code) ??
-                    "지원서 제출 중 문제가 발생했습니다.\n잠시 후 다시 시도해주세요.",
-              );
-              break;
-            default:
-              logger.e('예외발생! : $error');
-              break;
-          }
-        },
-        loading: () {},
+    final isLoading = ref
+        .watch(applicationViewModelProvider.select((state) => state.isLoading));
+    final applicationUrl = ref.watch(
+        applicationViewModelProvider.select((state) => state.applicationUrl));
+    ref.listen(
+        applicationViewModelProvider.select((state) => state.applicationUrl),
+        (prev, next) {
+      launchUrl(Uri.parse(next!)).then((value) {
+        print('launchUrl 결과 : $value');
+      }).onError((error, stackTrace) {
+        print('launchUrl 오류 : $error');
+      });
+    });
+    ref.listen(applicationViewModelProvider.select((state) => state.error),
+        (prev, next) {
+      DialogManager.instance.showAlertDialog(
+        context: context,
+        content: next,
       );
     });
+    ref.listen(
+        applicationViewModelProvider.select((state) => state.applySuccess),
+        (prev, next) {
+      context.replace('/circle_list/${CircleListType.myApplications.routeKey}');
+    });
+
     return Scaffold(
       appBar: AppBar(
         automaticallyImplyLeading: false,
@@ -138,9 +109,7 @@ class _ApplicationWritingScreenState
                         ),
                         value: isDone,
                         onChanged: (bool? value) {
-                          if (state.hasValue &&
-                              state.value?.type ==
-                                  ApplicationModelType.getApplication) {
+                          if (applicationUrl != null) {
                             setState(() {
                               isDone = value ?? false;
                             });
@@ -162,9 +131,7 @@ class _ApplicationWritingScreenState
                       ),
                       GestureDetector(
                         onTap: () {
-                          if (state.hasValue &&
-                              state.value?.type ==
-                                  ApplicationModelType.getApplication) {
+                          if (applicationUrl != null) {
                             setState(() {
                               isDone = !isDone;
                             });
@@ -198,7 +165,7 @@ class _ApplicationWritingScreenState
                     child: OutlinedButton(
                       onPressed: isDone
                           ? () async {
-                              if (state.hasValue) {
+                              if (applicationUrl != null) {
                                 await ref
                                     .read(applicationViewModelProvider.notifier)
                                     .apply(clubUUID: widget.clubUUID);
@@ -237,7 +204,7 @@ class _ApplicationWritingScreenState
           ),
         ),
       ),
-      body: state.isLoading
+      body: isLoading
           ? Center(child: CircularProgressIndicator())
           : SingleChildScrollView(
               child: Container(
@@ -267,7 +234,7 @@ class _ApplicationWritingScreenState
                       width: double.infinity,
                       height: 56,
                       child: OutlinedButton(
-                        onPressed: state.isLoading
+                        onPressed: isLoading
                             ? null
                             : () async {
                                 await ref

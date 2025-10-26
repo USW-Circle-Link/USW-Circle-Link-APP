@@ -5,10 +5,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../../const/analytics_const.dart';
 import '../../models/login_data.dart';
-import '../../utils/decoder/jwt_decoder.dart';
 import '../../utils/logger/logger.dart';
 import '../../viewmodels/user_view_model.dart';
-
 import '../../repositories/token_repository.dart';
 import '../result.dart';
 
@@ -36,13 +34,12 @@ class TokenInterceptor extends Interceptor {
           logger.d("헤더에 액세스 토큰 추가 중 ... - ${result.value.accessToken}");
           break;
         case Error():
-          logger.e("토큰 조회 실패 - ${result.error}");
-          return handler.reject(
-            DioException(
-              requestOptions: options,
-              message: "저장소에 토큰이 존재하지 않습니다",
-              type: DioExceptionType.cancel,
-            ),
+          logger.d("토큰 조회 실패 - ${result.error}");
+          return handler.resolve(
+            Response(requestOptions: options, statusCode: 401, data: {
+              'message': "저장소에 토큰이 존재하지 않습니다",
+              'code': "USR-F401",
+            }),
           );
       }
       final accessToken = result.value.accessToken;
@@ -153,12 +150,9 @@ class TokenInterceptor extends Interceptor {
         }
         final data = LoginData.fromJson(response.data['data']);
 
-        final payload = JwtDecoder.decode(data.accessToken);
-
         final result = await ref.read(tokenRepositoryProvider).saveTokens(
               accessToken: data.accessToken,
               refreshToken: data.refreshToken,
-              clubUUIDs: payload['clubUUIDs'] ?? [],
             );
 
         switch (result) {
@@ -193,7 +187,7 @@ class TokenInterceptor extends Interceptor {
 
         final newResponse = await dio.fetch(options);
 
-        FirebaseAnalytics.instance.logEvent(
+        analytics.logEvent(
           name: AnalyticsEvent.refreshToken,
           parameters: {
             AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
@@ -206,7 +200,7 @@ class TokenInterceptor extends Interceptor {
         /// => 리프레쉬 토큰이 만료된거라면 if 조건문에서 처리
         logger.e(e);
 
-        FirebaseAnalytics.instance.logEvent(
+        analytics.logEvent(
           name: AnalyticsEvent.refreshToken,
           parameters: {
             AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
@@ -217,7 +211,7 @@ class TokenInterceptor extends Interceptor {
       } catch (e) {
         logger.e(e);
         await ref.read(userViewModelProvider.notifier).abnormalLogout.execute();
-        FirebaseAnalytics.instance.logEvent(
+        analytics.logEvent(
           name: AnalyticsEvent.refreshToken,
           parameters: {
             AnalyticsParam.timestamp: DateTime.now().toIso8601String(),

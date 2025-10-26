@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
@@ -14,6 +16,7 @@ import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/firebase_options.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
@@ -59,12 +62,42 @@ void main() async {
 
   final container = ProviderContainer();
 
-  runApp(
-    ProviderScope(
-      parent: container,
-      child: CircleLink(),
-    ),
-  );
+  runZonedGuarded(() async {
+    if (!kDebugMode) {
+      await SentryFlutter.init(
+        (options) {
+          options.dsn =
+              'https://2f96467892c3ddebe142f690ef452288@o4510253419724800.ingest.us.sentry.io/4510253420642304';
+          // Adds request headers and IP for users, for more info visit:
+          // https://docs.sentry.io/platforms/dart/guides/flutter/data-management/data-collected/
+          options.sendDefaultPii = true;
+          options.enableLogs = true;
+          // Set tracesSampleRate to 1.0 to capture 100% of transactions for tracing.
+          // We recommend adjusting this value in production.
+          options.tracesSampleRate = 1.0;
+          // The sampling rate for profiling is relative to tracesSampleRate
+          // Setting to 1.0 will profile 100% of sampled transactions:
+          options.profilesSampleRate = 1.0;
+          // Configure Session Replay
+          options.replay.sessionSampleRate = 0.1;
+          options.replay.onErrorSampleRate = 1.0;
+        },
+        appRunner: () => runApp(SentryWidget(
+          child: ProviderScope(
+            parent: container,
+            child: CircleLink(),
+          ),
+        )),
+      );
+    } else {
+      runApp(ProviderScope(
+        parent: container,
+        child: CircleLink(),
+      ));
+    }
+  }, (error, stackTrace) async {
+    await Sentry.captureException(error, stackTrace: stackTrace);
+  });
 }
 
 // 필요 변수

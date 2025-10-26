@@ -15,6 +15,8 @@ class GlobalException with _$GlobalException implements Exception {
     @JsonKey(name: "message") String? message,
     @JsonKey(name: "status") int? status,
     @JsonKey(name: "error") String? error,
+    String? screen,
+    String? errorType,
   }) = _GlobalException;
 
   factory GlobalException.fromJson(Map<String, dynamic> json) =>
@@ -24,11 +26,18 @@ class GlobalException with _$GlobalException implements Exception {
 }
 
 extension GlobalExceptionExtension on Exception {
-  GlobalException toGlobalException() => GlobalException(
-        exception: toString(),
-        code: null,
-        message: toString(),
-        status: null,
-        error: toString(),
-      );
+  GlobalException toGlobalException({String? screen}) {
+    if (this is GlobalException) {
+      return this as GlobalException;
+    }
+    return GlobalException(
+      exception: runtimeType.toString(),
+      code: null,
+      message: '예외발생! - ${toString()}',
+      status: null,
+      error: toString(),
+      screen: screen,
+      errorType: runtimeType.toString(),
+    );
+  }
 }

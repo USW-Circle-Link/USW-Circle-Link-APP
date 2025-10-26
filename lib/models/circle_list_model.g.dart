@@ -88,19 +88,3 @@ Map<String, dynamic> _$$CircleFilteredListDataImplToJson(
       'clubCategoryName': instance.clubCategoryName,
       'clubs': instance.clubs,
     };
-
-_$CircleListModelErrorImpl _$$CircleListModelErrorImplFromJson(
-        Map<String, dynamic> json) =>
-    _$CircleListModelErrorImpl(
-      message: json['message'] as String?,
-      code: json['code'] as String?,
-      type: $enumDecodeNullable(_$CircleListModelTypeEnumMap, json['type']),
-    );
-
-Map<String, dynamic> _$$CircleListModelErrorImplToJson(
-        _$CircleListModelErrorImpl instance) =>
-    <String, dynamic>{
-      'message': instance.message,
-      'code': instance.code,
-      'type': _$CircleListModelTypeEnumMap[instance.type],
-    };

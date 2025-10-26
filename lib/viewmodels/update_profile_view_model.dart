@@ -1,10 +1,12 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/const/analytics_const.dart';
-import 'package:usw_circle_link/models/profile_model.dart';
-import 'package:usw_circle_link/repositories/profile_repository.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/utils/regex/Regex.dart';
-import 'package:usw_circle_link/utils/result.dart';
+import '../const/analytics_const.dart';
+import '../models/profile_model.dart';
+import '../repositories/profile_repository.dart';
+import '../utils/logger/logger.dart';
+import '../utils/regex/Regex.dart';
+import '../utils/result.dart';
+import '../utils/error_util.dart';
+import '../models/response/global_exception.dart';
 
 final updateProfileViewModelProvider = StateNotifierProvider.autoDispose<
     UpdateProfileViewModel, AsyncValue<ProfileModel>>((ref) {
@@ -38,27 +40,10 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             state = AsyncError(error, error.stackTrace);
         }
       } on ProfileModelError catch (e) {
-        analytics.logEvent(
-          name: AnalyticsEvent.error,
-          parameters: {
-            AnalyticsParam.errorType: 'ProfileModelError',
-            AnalyticsParam.errorCode: e.code ?? 'unknown',
-            AnalyticsParam.errorMessage: e.message,
-            AnalyticsParam.screen: 'Profile_GetProfile',
-            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-          },
-        );
         state = AsyncError(e, e.stackTrace);
-      } catch (e) {
-        analytics.logEvent(
-          name: AnalyticsEvent.error,
-          parameters: {
-            AnalyticsParam.errorType: e.runtimeType.toString(),
-            AnalyticsParam.errorMessage: e.toString(),
-            AnalyticsParam.screen: 'Profile_GetProfile',
-            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-          },
-        );
+      } on Exception catch (e) {
+        ErrorUtil.instance
+            .logError(e.toGlobalException(), screen: 'Profile_GetProfile');
         final error = ProfileModelError(
             message: '예외발생! - $e', type: ProfileModelType.getProfile);
         state = AsyncError(error, error.stackTrace);
@@ -137,17 +122,10 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
           error = ProfileModelError(
               message: result.error.toString(),
               type: ProfileModelType.updateProfile);
+          ErrorUtil.instance.logError(error.toGlobalException(),
+              screen: 'Profile_UpdateProfile');
         }
-        analytics.logEvent(
-          name: AnalyticsEvent.error,
-          parameters: {
-            AnalyticsParam.errorType: 'ProfileModelError',
-            AnalyticsParam.errorCode: error.code ?? 'unknown',
-            AnalyticsParam.errorMessage: error.message,
-            AnalyticsParam.screen: 'Profile_UpdateProfile',
-            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-          },
-        );
+
         state = AsyncError(error, error.stackTrace);
     }
   }

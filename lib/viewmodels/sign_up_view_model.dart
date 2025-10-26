@@ -53,26 +53,21 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         );
       case Error():
         var error = result.error;
-        switch (error) {
-          case GlobalException():
-            analytics.logEvent(
-              name: AnalyticsEvent.error,
-              parameters: {
-                AnalyticsParam.errorType: 'SignUpModelError',
-                AnalyticsParam.errorCode: error.code ?? 'unknown',
-                AnalyticsParam.errorMessage: error.message ?? 'unknown',
-                AnalyticsParam.screen: 'SignUp_VerifyId',
-                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-              },
-            );
-            state = state.copyWith(
-              isVerifyIdLoading: false,
-              error: ErrorUtil.instance.getErrorMessage(error.code) ??
-                  '아이디 중복 확인에 실패했습니다.',
-              errorField: FieldType.account,
-            );
-          default:
-            break;
+        if (error is GlobalException) {
+          state = state.copyWith(
+            isVerifyIdLoading: false,
+            error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                '아이디 중복 확인에 실패했습니다.',
+            errorField: FieldType.account,
+          );
+        } else {
+          ErrorUtil.instance
+              .logError(error.toGlobalException(), screen: 'SignUp_VerifyId');
+          state = state.copyWith(
+            isVerifyIdLoading: false,
+            error: '아이디 중복 확인에 실패했습니다.',
+            errorField: FieldType.account,
+          );
         }
     }
   }
@@ -103,26 +98,21 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         );
       case Error():
         var error = result.error;
-        switch (error) {
-          case GlobalException():
-            analytics.logEvent(
-              name: AnalyticsEvent.error,
-              parameters: {
-                AnalyticsParam.errorType: 'SignUpModelError',
-                AnalyticsParam.errorCode: error.code ?? 'unknown',
-                AnalyticsParam.errorMessage: error.message ?? 'unknown',
-                AnalyticsParam.screen: 'SignUp_VerifyEmail',
-                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-              },
-            );
-            state = state.copyWith(
-              isVerifyEmailLoading: false,
-              error: ErrorUtil.instance.getErrorMessage(error.code) ??
-                  '이메일 중복 확인에 실패했습니다.',
-              errorField: FieldType.email,
-            );
-          default:
-            break;
+        if (error is GlobalException) {
+          state = state.copyWith(
+            isVerifyEmailLoading: false,
+            error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                '이메일 중복 확인에 실패했습니다.',
+            errorField: FieldType.email,
+          );
+        } else {
+          ErrorUtil.instance.logError(error.toGlobalException(),
+              screen: 'SignUp_VerifyEmail');
+          state = state.copyWith(
+            isVerifyEmailLoading: false,
+            error: '이메일 중복 확인에 실패했습니다.',
+            errorField: FieldType.email,
+          );
         }
     }
   }
@@ -207,35 +197,31 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         );
       case Error():
         var error = result.error;
-        switch (error) {
-          case GlobalException():
-            analytics.logEvent(
-              name: AnalyticsEvent.error,
-              parameters: {
-                AnalyticsParam.errorType: 'SignUpModelError',
-                AnalyticsParam.errorCode: error.code ?? 'unknown',
-                AnalyticsParam.errorMessage: error.message ?? 'unknown',
-                AnalyticsParam.screen: 'SignUp_NewMember',
-                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-              },
-            );
-            final isDialogError = ErrorUtil.instance.isDialogError(error.code);
-            final errorField = ErrorUtil.instance.getFieldType(error.code);
-            final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
-            if (errorField == FieldType.account) {
-              state = state.copyWith(idVerified: false);
-            }
-            state = state.copyWith(
-              isSignUpLoading: false,
-              isDialogError: (isDialogError || errorField == null) &&
-                  error.code != 'ABNORMAL-ACCESS',
-              error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-              errorField: errorField,
-              needToRedirectSignUpOption:
-                  ErrorUtil.instance.isNeedToRedirectSignUpOption(error.code),
-            );
-          default:
-            break;
+        if (error is GlobalException) {
+          final isDialogError = ErrorUtil.instance.isDialogError(error.code);
+          final errorField = ErrorUtil.instance.getFieldType(error.code);
+          final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
+          if (errorField == FieldType.account) {
+            state = state.copyWith(idVerified: false);
+          }
+          state = state.copyWith(
+            isSignUpLoading: false,
+            isDialogError: (isDialogError || errorField == null) &&
+                error.code != 'ABNORMAL-ACCESS',
+            error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+            errorField: errorField,
+            needToRedirectSignUpOption:
+                ErrorUtil.instance.isNeedToRedirectSignUpOption(error.code),
+          );
+        } else {
+          ErrorUtil.instance
+              .logError(error.toGlobalException(), screen: 'SignUp_NewMember');
+          state = state.copyWith(
+            isSignUpLoading: false,
+            error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+            errorField: null,
+            needToRedirectSignUpOption: false,
+          );
         }
     }
   }
@@ -320,35 +306,31 @@ class SignUpViewModel extends AutoDisposeNotifier<SignUpState> {
         );
       case Error():
         var error = result.error;
-        switch (error) {
-          case GlobalException():
-            analytics.logEvent(
-              name: AnalyticsEvent.error,
-              parameters: {
-                AnalyticsParam.errorType: 'SignUpModelError',
-                AnalyticsParam.errorCode: error.code ?? 'unknown',
-                AnalyticsParam.errorMessage: error.message ?? 'unknown',
-                AnalyticsParam.screen: 'SignUp_ExistingMember',
-                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-              },
-            );
-            final isDialogError = ErrorUtil.instance.isDialogError(error.code);
-            final errorField = ErrorUtil.instance.getFieldType(error.code);
-            final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
-            if (errorField == FieldType.account) {
-              state = state.copyWith(idVerified: false);
-            }
-            state = state.copyWith(
-              isSignUpLoading: false,
-              isDialogError: (isDialogError || errorField == null) &&
-                  error.code != 'ABNORMAL-ACCESS',
-              error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
-              errorField: errorField,
-              needToRedirectLogin:
-                  ErrorUtil.instance.isNeedToRedirectLogin(error.code),
-            );
-          default:
-            break;
+        if (error is GlobalException) {
+          final isDialogError = ErrorUtil.instance.isDialogError(error.code);
+          final errorField = ErrorUtil.instance.getFieldType(error.code);
+          final errorMessage = ErrorUtil.instance.getErrorMessage(error.code);
+          if (errorField == FieldType.account) {
+            state = state.copyWith(idVerified: false);
+          }
+          state = state.copyWith(
+            isSignUpLoading: false,
+            isDialogError: (isDialogError || errorField == null) &&
+                error.code != 'ABNORMAL-ACCESS',
+            error: errorMessage ?? '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+            errorField: errorField,
+            needToRedirectLogin:
+                ErrorUtil.instance.isNeedToRedirectLogin(error.code),
+          );
+        } else {
+          ErrorUtil.instance.logError(error.toGlobalException(),
+              screen: 'SignUp_ExistingMember');
+          state = state.copyWith(
+            isSignUpLoading: false,
+            error: '회원 가입 중 문제가 발생했어요.\n잠시 후 다시 시도해주세요.',
+            errorField: null,
+            needToRedirectLogin: false,
+          );
         }
     }
   }

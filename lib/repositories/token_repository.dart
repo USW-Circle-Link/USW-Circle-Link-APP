@@ -68,15 +68,13 @@ class TokenRepository {
   Future<Result<void>> saveTokens({
     required String accessToken,
     required String refreshToken,
-    required List<String> clubUUIDs,
   }) async {
     try {
       await _storage.write(key: accessTokenKey, value: accessToken);
       await _storage.write(key: refreshTokenKey, value: refreshToken);
-      await _storage.write(key: clubUUIDsKey, value: jsonEncode(clubUUIDs));
 
       logger.d(
-          'TokenRepository - 토큰 저장 성공: accessToken=$accessToken, refreshToken=$refreshToken, clubUUIDs=$clubUUIDs');
+          'TokenRepository - 토큰 저장 성공: accessToken=$accessToken, refreshToken=$refreshToken');
 
       return Result.ok(null);
     } on Exception catch (e) {

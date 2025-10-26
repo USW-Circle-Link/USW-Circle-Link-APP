@@ -1,4 +1,8 @@
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+
+import '../const/analytics_const.dart';
+import '../models/response/global_exception.dart';
 
 enum FieldType {
   account,
@@ -75,8 +79,6 @@ class ErrorUtil {
         return "비밀번호를 변경하는 데 잠시 문제가 생겼습니다. 잠시후에 다시 시도해주세요!";
       case "USR-217": // 현재 비밀번호와 새 비밀번호가 같음
         return "현재 비밀번호와 동일한 비밀번호는 사용할 수 없습니다.";
-      case "EMAIL_TOKEN-005":
-        return "인증에 실패하였습니다. 다시 시도해주세요.";
       case "USR-206": // 이미 가입된 포털 이메일
       case "CMEM-TEMP-302":
         return "이미 사용 중인 이메일입니다.";
@@ -93,6 +95,8 @@ class ErrorUtil {
         return "비정상적인 접근입니다.";
       case "CINT-202":
         return "아직 지원서가 등록되지 않았어요.";
+      case "EMAIL_TOKEN-005":
+        return "인증이 완료되지 않았습니다. 인증을 완료해주세요.";
       default:
         return null;
     }
@@ -178,5 +182,21 @@ class ErrorUtil {
       default:
         return null;
     }
+  }
+
+  Future<void> logError(GlobalException exception, {String? screen}) async {
+    final message =
+        '[${exception.exception}](${exception.status}) message: ${exception.message} / code: ${exception.code} / screen: ${exception.screen} / errorType: ${exception.errorType}';
+    await Sentry.captureException(message);
+    analytics.logEvent(
+      name: AnalyticsEvent.error,
+      parameters: {
+        AnalyticsParam.errorType: exception.runtimeType.toString(),
+        AnalyticsParam.errorCode: exception.code ?? 'unknown',
+        AnalyticsParam.errorMessage: exception.message ?? 'unknown',
+        AnalyticsParam.screen: exception.screen ?? 'unknown',
+        AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+      },
+    );
   }
 }
