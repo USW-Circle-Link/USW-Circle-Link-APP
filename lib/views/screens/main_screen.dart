@@ -64,7 +64,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final prefs = await SharedPreferences.getInstance();
     final dontShowAgain = prefs.getBool('notice_dont_show_again') ?? false;
 
-    if (dontShowAgain && mounted) {
+    if (!dontShowAgain && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         _showNoticeDialog();
       });
