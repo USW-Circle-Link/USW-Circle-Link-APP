@@ -45,10 +45,12 @@ class _ApplicationWritingScreenState
     });
     ref.listen(applicationViewModelProvider.select((state) => state.error),
         (prev, next) {
-      DialogManager.instance.showAlertDialog(
-        context: context,
-        content: next,
-      );
+      if (next != null) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: next,
+        );
+      }
     });
     ref.listen(
         applicationViewModelProvider.select((state) => state.applySuccess),
