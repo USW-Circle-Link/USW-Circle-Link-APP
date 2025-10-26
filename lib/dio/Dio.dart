@@ -6,9 +6,13 @@ import 'package:usw_circle_link/utils/interceptor/default_interceptor.dart';
 import 'package:usw_circle_link/utils/interceptor/token_interceptor.dart';
 
 final dioProvider = Provider<Dio>((ref) {
+  final baseUrl = (port == null || port!.isEmpty)
+      ? '$protocol://$host' 
+      : '$protocol://$host:$port';
+  
   final dio = Dio(
     BaseOptions(
-      baseUrl: '$protocol://$host:$port',
+      baseUrl: baseUrl,
       headers: {
         'Content-Type': 'application/json',
       },

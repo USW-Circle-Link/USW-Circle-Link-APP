@@ -1,61 +1,79 @@
-import 'dart:convert';
-
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:http/http.dart' as http;
-import 'package:usw_circle_link/const/data.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
 
-const accessTokenKey = 'access_token';
+final certificateRepositoryProvider = Provider<CertificateRepository>((ref) {
+  final dio = ref.watch(dioProvider);
+
+  return CertificateRepository(
+    dio: dio,
+    basePath: '/users/event',
+  );
+});
 
 class CertificateRepository {
-  Future<bool> certificateRepository({
+  final Dio dio;
+  final String basePath;
+
+  CertificateRepository({
+    required this.dio,
+    required this.basePath,
+  });
+
+  Future<Map<String, dynamic>> certificateRepository({
     required String clubUUID,
     required int code,
-   }) //async{
-  //    await Future.delayed(const Duration(seconds: 1)); // 테스트용 딜레이
-  //     print("테스트용: code=$code, clubUUID=$clubUUID");
-  //     return true; // ✅ 서버 없이 성공 응답
-//
-// // 🧩 가짜 데이터 예시
-//     const validClubUUID = "54e34bfa-2131-4f58-9c05-b498255612a6"; // 가입된 동아리
-//
-//     // 🧪 동아리에 가입되지 않은 경우
-//     if (clubUUID != validClubUUID) {
-//       throw Exception("소속 동아리가 없어 인증에 실패했습니다.");
-//     }
-//
-//     // 🧪 3) 정상 인증
-//     return true;
-  // }
-async {
-
-    final storage = const FlutterSecureStorage();
-    final accessToken = await storage.read(key: accessTokenKey);
-
-    final url = Uri.parse("https://donggurami.net/api/user/event/verify");
-    final body = jsonEncode({
-       'clubUUID' : clubUUID,
-      'code' : code});
-
-      final response = await http.post(
-        url,
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer $accessToken',
+  }) async {
+    try {
+      final response = await dio.post(
+        '$basePath/verify',
+        data: {
+          'clubUUID': clubUUID,
+          'code': code,
         },
-        body: body,
       );
 
-      if (response.statusCode == 200) {
-        // 서버가 {"success": true} 식으로 응답한다고 가정
-        final data = jsonDecode(response.body);
-        return data['success'] == true;
-      } else {
-        throw Exception("서버 통신 실패 (${response.body})");
-        }
-      }
+      logger.d(response.data);
+
+      logger.d(
+          'certificateRepository - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      // 200 성공 또는 400 이미 인증된 경우 모두 반환
+      return response.data as Map<String, dynamic>;
+    } on Exception catch (e) {
+      logger.e('certificateRepository Error: $e');
+      throw Exception("서버 통신 실패: $e");
+    }
   }
 
+  Future<Map<String, dynamic>> getCertificateStatus() async {
+    try {
+      final response = await dio.get(
+        '$basePath/status',
+        options: Options(
+          headers: {
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-final certificateRepositoryProvider =
-    Provider((ref) => CertificateRepository());
+      logger.d(response.data);
+
+      logger.d(
+          'getCertificateStatus - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        throw Exception("서버 통신 실패 (${response.statusCode}: ${response.data})");
+      }
+    } on DioException catch (e) {
+      logger.e('getCertificateStatus DioException: $e');
+      throw Exception("서버 통신 실패: ${e.message}");
+    } catch (e) {
+      logger.e('getCertificateStatus Error: $e');
+      rethrow;
+    }
+  }
+}

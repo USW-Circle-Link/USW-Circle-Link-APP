@@ -1,73 +1,143 @@
-import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../const/data.dart';
-import '../repositories/certificate_circle_repository.dart';
-import '../repositories/circle_list_repository.dart';
+import 'package:usw_circle_link/const/analytics_const.dart';
+import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/repositories/certificate_circle_repository.dart';
+import 'package:usw_circle_link/repositories/circle_list_repository.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
+
+final certificateViewModelProvider = StateNotifierProvider.autoDispose<
+    CertificateViewModel, AsyncValue<String>>((ref) {
+  final repository = ref.read(certificateRepositoryProvider);
+  final circleListRepository = ref.read(circleListRepositoryProvider);
+  
+  return CertificateViewModel(
+    repository: repository,
+    circleListRepository: circleListRepository,
+  );
+});
 
 class CertificateViewModel extends StateNotifier<AsyncValue<String>> {
-  CertificateViewModel({required this.repository, required this.circleListRepository})
-      : super(const AsyncValue.data(""));
-
   final CertificateRepository repository;
   final CircleListRepository circleListRepository;
-  final circleListRepositoryProvider = Provider((ref) => CircleListRepository(dio: Dio(), basePath: "/clubs"));
 
-  // 인증 코드 + 소속 동아리 검증
-  Future<bool> certificate({
-    required int code,
-  }) async {
-    // 1️⃣ 입력값 검증
-    if (code == 0) {
-      state = AsyncValue.error("*인증 코드를 입력하세요.", StackTrace.current);
-      return false;
-    }
+  CertificateViewModel({
+    required this.repository,
+    required this.circleListRepository,
+  }) : super(AsyncData(""));
 
-    // 2️⃣ 코드가 지정된 코드와 일치하는지 검사 (ex: 1115)
-    if (code != validCertificateCode) {
-      state = AsyncValue.error("*일치하지 않은 번호입니다.", StackTrace.current);
-      return false;
-    }
-
-    // 3️⃣ 소속 동아리 목록 조회
-    state = const AsyncValue.loading();
+  Future<bool> certificate({required int code}) async {
     try {
+      state = AsyncLoading();
+      
+      if (code == 0) {
+        state = AsyncError(
+          Exception("*인증 코드를 입력하세요."),
+          StackTrace.current,
+        );
+        return false;
+      }
+
+      if (code != validCertificateCode) {
+        state = AsyncError(
+          Exception("*일치하지 않은 번호입니다."),
+          StackTrace.current,
+        );
+        return false;
+      }
+
       final circleList = await circleListRepository.fetchMyCircleList();
       final circles = circleList.data;
 
       if (circles.isEmpty) {
-        state = AsyncValue.error("*소속된 동아리가 없습니다.", StackTrace.current);
+        state = AsyncError(
+          Exception("*소속된 동아리가 없습니다."),
+          StackTrace.current,
+        );
         return false;
       }
 
-      // ✅ 첫 번째 동아리 UUID 추출
       final clubUUID = circles.first.clubUUID;
 
-      // 4️⃣ 서버 인증 API 호출
-      final success = await repository.certificateRepository(
+      final result = await repository.certificateRepository(
         clubUUID: clubUUID,
         code: code,
       );
 
-     if(success) {
-       state = const AsyncValue.data("인증 성공!");
-       return true;
-     } else {
-       print("서버 인증 실패");
-       return false;
-     }
+      // 이미 인증된 사용자인지 확인
+      final isAlreadyCertified = result['message'] == '이미 인증된 사용자입니다.';
+      
+      if (isAlreadyCertified) {
+        state = AsyncData("이미 인증 완료");
+      } else {
+        state = AsyncData("인증 성공!");
+      }
+      return true;
+    } on Exception catch (e, st) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CertificateError',
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'Certificate_Certificate',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
+      logger.e('Certificate error: $e');
+      state = AsyncError(e, st);
+      return false;
     } catch (e, st) {
-     state = AsyncValue.error("오류 발생: $e", st);
-     return false;
+      final error = Exception("오류 발생: $e");
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'Certificate_Certificate',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
+      logger.e('Certificate unexpected error: $e');
+      state = AsyncError(error, st);
+      return false;
+    }
+  }
+
+  Future<Map<String, dynamic>?> getCertificateStatus() async {
+    try {
+      state = AsyncLoading();
+      
+      final status = await repository.getCertificateStatus();
+      
+      state = AsyncData("상태 조회 성공");
+      return status;
+    } on Exception catch (e, st) {
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: 'CertificateStatusError',
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'Certificate_GetStatus',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
+      logger.e('Certificate status error: $e');
+      state = AsyncError(e, st);
+      return null;
+    } catch (e, st) {
+      final error = Exception("상태 조회 실패: $e");
+      analytics.logEvent(
+        name: AnalyticsEvent.error,
+        parameters: {
+          AnalyticsParam.errorType: e.runtimeType.toString(),
+          AnalyticsParam.errorMessage: e.toString(),
+          AnalyticsParam.screen: 'Certificate_GetStatus',
+          AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+        },
+      );
+      logger.e('Certificate status unexpected error: $e');
+      state = AsyncError(error, st);
+      return null;
     }
   }
 }
-
-
-final certificateViewModelProvider =
-    StateNotifierProvider<CertificateViewModel, AsyncValue<String>>(
-        (ref) => CertificateViewModel(
-            repository: ref.read(certificateRepositoryProvider),
-            circleListRepository: ref.read(circleListRepositoryProvider),
-        ),
-    );
 
