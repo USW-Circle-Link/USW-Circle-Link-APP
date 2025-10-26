@@ -74,7 +74,34 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
     state = state.copyWith(
       isLoading: true,
       error: null,
+      applySuccess: false,
     );
+
+    final canApplyResult = await applicationRepository
+        .checkAvailableForApplication(clubUUID: clubUUID);
+    switch (canApplyResult) {
+      case Ok():
+        if (!canApplyResult.value) {
+          state = state.copyWith(
+            isLoading: false,
+            applySuccess: true,
+            error: '이미 지원한 동아리 입니다.',
+          );
+          return;
+        }
+        break;
+      case Error():
+        var error = canApplyResult.error;
+        if (error is GlobalException) {
+          state = state.copyWith(
+            isLoading: false,
+            error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                '동아리 지원 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+          );
+          return;
+        }
+        break;
+    }
 
     final result = await applicationRepository.apply(clubUUID: clubUUID);
 
@@ -96,6 +123,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
 
         state = state.copyWith(
           isLoading: false,
+          applySuccess: true,
         );
         break;
       case Error():

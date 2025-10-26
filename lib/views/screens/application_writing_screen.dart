@@ -35,11 +35,13 @@ class _ApplicationWritingScreenState
     ref.listen(
         applicationViewModelProvider.select((state) => state.applicationUrl),
         (prev, next) {
-      launchUrl(Uri.parse(next!)).then((value) {
-        print('launchUrl 결과 : $value');
-      }).onError((error, stackTrace) {
-        print('launchUrl 오류 : $error');
-      });
+      if (next != null) {
+        launchUrl(Uri.parse(next)).then((value) {
+          print('launchUrl 결과 : $value');
+        }).onError((error, stackTrace) {
+          print('launchUrl 오류 : $error');
+        });
+      }
     });
     ref.listen(applicationViewModelProvider.select((state) => state.error),
         (prev, next) {
@@ -51,7 +53,10 @@ class _ApplicationWritingScreenState
     ref.listen(
         applicationViewModelProvider.select((state) => state.applySuccess),
         (prev, next) {
-      context.replace('/circle_list/${CircleListType.myApplications.routeKey}');
+      if (next) {
+        context
+            .replace('/circle_list/${CircleListType.myApplications.routeKey}');
+      }
     });
 
     return Scaffold(
