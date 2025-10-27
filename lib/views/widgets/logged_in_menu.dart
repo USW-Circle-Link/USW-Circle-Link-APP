@@ -12,6 +12,8 @@ import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/viewmodels/state/user_state.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
+import 'drawer_event_item.dart';
+
 class LoggedInMenu extends ConsumerStatefulWidget {
   const LoggedInMenu({
     Key? key,
@@ -154,6 +156,11 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                     context.go('/notices');
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
+                ),
+                buildDrawerEventItem(
+                  title: '동아리의 밤 입장하기',
+                  onTap: () => DialogManager.instance
+                      .showCircleCertificateDialog(context),
                 ),
               ],
             ),

@@ -7,6 +7,8 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
+import 'drawer_event_item.dart';
+
 class LoggedOutMenu extends ConsumerWidget {
   const LoggedOutMenu({Key? key}) : super(key: key);
 
@@ -93,6 +95,10 @@ class LoggedOutMenu extends ConsumerWidget {
                     context.go('/notices');
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
+                ),
+                buildDrawerEventItem(
+                  title: '동아리의 밤 입장하기',
+                  onTap: () => context.go('/login'),
                 ),
               ],
             ),
