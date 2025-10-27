@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/email_verification_model.dart';
+import 'package:usw_circle_link/models/response/global_exception.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
@@ -52,8 +52,8 @@ class EmailVerificationViewModel
       case Error():
         state = state.copyWith(
           isLoading: false,
-          error: ErrorUtil.instance.getErrorMessage(
-                  (result.error as EmailVerificationModelError).code) ??
+          error: ErrorUtil.instance
+                  .getErrorMessage((result.error as GlobalException).code) ??
               '인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.',
         );
     }
@@ -84,8 +84,8 @@ class EmailVerificationViewModel
       case Error():
         state = state.copyWith(
           isLoading: false,
-          error: ErrorUtil.instance.getErrorMessage(
-                  (result.error as EmailVerificationModelError).code) ??
+          error: ErrorUtil.instance
+                  .getErrorMessage((result.error as GlobalException).code) ??
               '인증에 실패하였습니다. 다시 시도해주세요.',
           isVerifySuccess: false,
         );
