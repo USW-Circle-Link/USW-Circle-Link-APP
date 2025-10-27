@@ -14,6 +14,13 @@ Widget buildDrawerEventItem({
       begin: Alignment.topCenter,
       end: Alignment.bottomCenter);
 
+  // 2025-10-30 일 15:00 시부터 버튼 보이게
+  final now = DateTime.now();
+  final eventDate = DateTime(2025, 10, 30, 15, 0);
+  if (!now.isAfter(eventDate)) {
+    return const SizedBox.shrink();
+  }
+
   return Padding(
     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
     child: Material(
