@@ -12,23 +12,3 @@ class EmailVerificationModel with _$EmailVerificationModel {
     required String uuid,
   }) = _EmailVerificationModel;
 }
-
-@freezed
-class EmailVerificationModelError
-    with _$EmailVerificationModelError
-    implements Error, Exception {
-  EmailVerificationModelError._();
-  factory EmailVerificationModelError({
-    String? exception,
-    String? code,
-    String? error,
-    int? status,
-    required String message,
-  }) = _EmailVerificationModelError;
-
-  factory EmailVerificationModelError.fromJson(Map<String, dynamic> json) =>
-      _$EmailVerificationModelErrorFromJson(json);
-
-  @override
-  StackTrace get stackTrace => StackTrace.fromString(toString());
-}

@@ -23,7 +23,7 @@ class FindPwModel with _$FindPwModel {
 }
 
 @freezed
-class FindPwModelError with _$FindPwModelError implements Error {
+class FindPwModelError with _$FindPwModelError implements Error, Exception {
   FindPwModelError._();
 
   factory FindPwModelError({

@@ -3,7 +3,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
-import 'package:usw_circle_link/models/email_verification_model.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
 import 'package:usw_circle_link/models/find_pw_model.dart';
 import 'package:usw_circle_link/models/request/sign_up_request.dart';
@@ -61,8 +60,7 @@ class AuthRepository {
         return Result.ok(SendMailResponse.fromJson(response.data));
       } else {
         // Bad Request
-        return Result.error(
-            EmailVerificationModelError.fromJson(response.data) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
       return Result.error(e.toGlobalException());
@@ -88,8 +86,7 @@ class AuthRepository {
       if (response.statusCode == 200) {
         return Result.ok(EmailVerificationResponse.fromJson(response.data));
       } else {
-        return Result.error(
-            EmailVerificationModelError.fromJson(response.data) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
       return Result.error(e.toGlobalException());
@@ -342,8 +339,7 @@ class AuthRepository {
       if (response.statusCode == 200) {
         return Result.ok(FindIdModel.fromJson(response.data));
       } else {
-        return Result.error(
-            FindIdModelError.fromJson(response.data) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
       return Result.error(e.toGlobalException());

@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:usw_circle_link/models/find_id_model.dart';
+import 'package:usw_circle_link/models/global_exception.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
@@ -39,7 +39,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
             }
           },
           error: (error, stackTrace) {
-            error = error as FindIdModelError;
+            error = error as GlobalException;
             switch (error.code) {
               default:
                 logger.e('예외발생 - $next');
@@ -132,7 +132,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                       ),
                       if (state.hasError)
                         TextFontWidget.fontRegular(
-                          '* ${ErrorUtil.instance.getErrorMessage((state.error as FindIdModelError).code) ?? "이메일 전송에 실패했습니다. 잠시후 다시 시도해주세요."}',
+                          '* ${ErrorUtil.instance.getErrorMessage((state.error as GlobalException).code) ?? "이메일 전송에 실패했습니다. 잠시후 다시 시도해주세요."}',
                           fontSize: 12.0,
                           color: const Color(0xFFFF5353),
                           fontWeight: FontWeight.w400,

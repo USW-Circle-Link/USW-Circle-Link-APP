@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
+import 'package:usw_circle_link/models/response/global_exception.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/utils/result.dart';
@@ -23,7 +24,7 @@ class FindIdViewModel extends StateNotifier<AsyncValue<FindIdModel?>> {
       state = AsyncLoading();
 
       if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
-        throw FindIdModelError(message: '올바른 이메일을 입력해 주세요.', code: 'EML-F100');
+        throw GlobalException(message: '올바른 이메일을 입력해 주세요.', code: 'EML-F100');
       }
 
       final result = await authRepository.findId(email: email);
@@ -31,13 +32,13 @@ class FindIdViewModel extends StateNotifier<AsyncValue<FindIdModel?>> {
         case Ok():
           state = AsyncData(result.value);
         case Error():
-          final error = FindIdModelError(message: result.error.toString());
+          final error = GlobalException(message: result.error.toString());
           state = AsyncError(error, error.stackTrace);
       }
-    } on FindIdModelError catch (e, stackTrace) {
+    } on GlobalException catch (e, stackTrace) {
       state = AsyncError(e, stackTrace);
     } catch (e) {
-      final error = FindIdModelError(message: '예외발생 - $e');
+      final error = GlobalException(message: '예외발생 - $e');
       state = AsyncError(error, error.stackTrace);
     }
 
