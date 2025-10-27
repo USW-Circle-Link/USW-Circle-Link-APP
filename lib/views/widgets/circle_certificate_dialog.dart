@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../viewmodels/event_certificate_view_model.dart';
 import 'text_font_widget.dart';
 
 class CircleCertificateDialog extends ConsumerStatefulWidget {
@@ -15,8 +16,6 @@ class CircleCertificateDialog extends ConsumerStatefulWidget {
 class _CircleCertificateDialogState
     extends ConsumerState<CircleCertificateDialog> {
   final TextEditingController _textController = TextEditingController();
-  String? _errorMessage = "test";
-  bool _isLoading = false;
 
   @override
   void initState() {
@@ -31,13 +30,6 @@ class _CircleCertificateDialogState
 
   @override
   Widget build(BuildContext context) {
-    // Listen to certificate state changes
-    // ref.listen(certificateViewModelProvider, _handleStateChange);
-
-    if (_isLoading) {
-      return const Center(child: CircularProgressIndicator());
-    }
-
     return _buildCertificateDialog();
   }
 
@@ -67,13 +59,7 @@ class _CircleCertificateDialogState
                     child: _buildInputSection(),
                   ),
                 ),
-                if (_isLoading)
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Center(child: CircularProgressIndicator()),
-                  )
-                else
-                  const SizedBox(height: 8),
+                const SizedBox(height: 8),
                 _buildButtons(),
               ],
             ),
@@ -94,23 +80,25 @@ class _CircleCertificateDialogState
           ),
         ),
       ),
-      child: const Center(
-        child: Text(
+      child: Center(
+        child: TextFontWidget.fontRegular(
           "🎃 코드 입력하기 🎃",
           textAlign: TextAlign.center,
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w400,
-            color: Colors.white,
-            height: 22 / 17,
-            fontFamily: 'SF Pro',
-          ),
+          fontSize: 17,
+          color: Colors.white,
+          fontWeight: FontWeight.w400,
         ),
       ),
     );
   }
 
   Widget _buildInputSection() {
+    final isLoading = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.isLoading));
+    final error = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.error));
+    final isSuccess = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.isSuccess));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Column(
@@ -131,7 +119,7 @@ class _CircleCertificateDialogState
               controller: _textController,
               keyboardType: TextInputType.number,
               textAlignVertical: TextAlignVertical.center,
-              enabled: !_isLoading,
+              enabled: !isLoading,
               style: TextFontWidget.fontRegularStyle(
                 fontSize: 16,
                 color: Colors.white,
@@ -149,15 +137,16 @@ class _CircleCertificateDialogState
               ),
             ),
           ),
-          if (_errorMessage != null) ...[
+          if (error != null || isSuccess == true) ...[
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: TextFontWidget.fontRegular(
-                _errorMessage!,
+                isSuccess == true ? "인증 완료" : error!,
                 textAlign: TextAlign.center,
-                color: Colors.redAccent,
-                fontSize: 13,
+                color:
+                    isSuccess == true ? Colors.greenAccent : Colors.redAccent,
+                fontSize: 14,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
               ),
@@ -183,17 +172,26 @@ class _CircleCertificateDialogState
   }
 
   Widget _buildConfirmButton() {
+    final isLoading = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.isLoading));
     return SizedBox(
       width: 100,
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Colors.white,
+          disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        onPressed: () {},
+        onPressed: isLoading
+            ? null
+            : () async {
+                await ref
+                    .read(eventCertificateViewModelProvider.notifier)
+                    .verify(_textController.text);
+              },
         child: TextFontWidget.fontRegular(
-          "확인",
+          isLoading ? "로딩중..." : "확인",
           color: Colors.black,
           fontWeight: FontWeight.w600,
         ),
@@ -210,7 +208,7 @@ class _CircleCertificateDialogState
           side: const BorderSide(color: Colors.white54),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
-        onPressed: _isLoading ? null : () => Navigator.pop(context),
+        onPressed: () => Navigator.pop(context),
         child: TextFontWidget.fontRegular(
           "취소",
           color: Colors.white,

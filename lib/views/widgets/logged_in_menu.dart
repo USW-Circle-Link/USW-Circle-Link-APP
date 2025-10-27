@@ -12,6 +12,7 @@ import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import 'package:usw_circle_link/viewmodels/state/user_state.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
+import '../../viewmodels/event_certificate_view_model.dart';
 import 'drawer_event_item.dart';
 
 class LoggedInMenu extends ConsumerStatefulWidget {
@@ -31,6 +32,25 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
 
   @override
   Widget build(BuildContext context) {
+    ref.listen(
+        eventCertificateViewModelProvider.select(
+            (value) => [value.error, value.isDialogError]), (previous, next) {
+      if (next[1] as bool && next[0] != null) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: next[0] as String,
+        );
+      }
+    });
+
+    ref.listen(
+        eventCertificateViewModelProvider.select((value) => value.status),
+        (previous, next) {
+      print('status: $next');
+      if (next != null && !next) {
+        DialogManager.instance.showCircleCertificateDialog(context);
+      }
+    });
     return Drawer(
       backgroundColor: const Color(0xffF0F2F5),
       width: 290,
@@ -159,8 +179,11 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                 ),
                 buildDrawerEventItem(
                   title: '동아리의 밤 입장하기',
-                  onTap: () => DialogManager.instance
-                      .showCircleCertificateDialog(context),
+                  onTap: () async {
+                    await ref
+                        .read(eventCertificateViewModelProvider.notifier)
+                        .getStatus();
+                  },
                 ),
               ],
             ),
