@@ -5,6 +5,8 @@ import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/utils/result.dart';
 
+import '../utils/error_util.dart';
+
 final findIdViewModelProvider = StateNotifierProvider.autoDispose<
     FindIdViewModel, AsyncValue<FindIdModel?>>((ref) {
   final AuthRepository authRepository = ref.read(authRepositoryProvider);
@@ -20,29 +22,26 @@ class FindIdViewModel extends StateNotifier<AsyncValue<FindIdModel?>> {
   Future<void> findId({
     required String email,
   }) async {
-    try {
-      state = AsyncLoading();
+    state = AsyncLoading();
 
-      if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
-        throw GlobalException(message: '올바른 이메일을 입력해 주세요.', code: 'EML-F100');
-      }
-
-      final result = await authRepository.findId(email: email);
-      switch (result) {
-        case Ok():
-          state = AsyncData(result.value);
-        case Error():
-          final error = GlobalException(message: result.error.toString());
-          state = AsyncError(error, error.stackTrace);
-      }
-    } on GlobalException catch (e, stackTrace) {
-      state = AsyncError(e, stackTrace);
-    } catch (e) {
-      final error = GlobalException(message: '예외발생 - $e');
-      state = AsyncError(error, error.stackTrace);
+    if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
+      throw GlobalException(message: '올바른 이메일을 입력해 주세요.', code: 'EML-F100');
     }
 
-    return Future.value(state);
+    final result = await authRepository.findId(email: email);
+    switch (result) {
+      case Ok():
+        state = AsyncData(result.value);
+      case Error():
+        var exception = result.error;
+        if (exception is GlobalException) {
+          state = AsyncError(exception, exception.stackTrace);
+          return;
+        }
+        exception = exception.toGlobalException();
+        await ErrorUtil.instance.logError(exception, screen: 'FindId');
+        state = AsyncError(exception, exception.stackTrace);
+    }
   }
 
   void initState() {

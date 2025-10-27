@@ -3,13 +3,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:usw_circle_link/models/global_exception.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_id_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+
+import '../../models/response/global_exception.dart';
 
 class FindIdScreen extends ConsumerStatefulWidget {
   const FindIdScreen({Key? key}) : super(key: key);
@@ -39,12 +40,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
             }
           },
           error: (error, stackTrace) {
-            error = error as GlobalException;
-            switch (error.code) {
-              default:
-                logger.e('예외발생 - $next');
-                break;
-            }
+            logger.e('예외발생 - $error');
           },
           loading: () {});
     });

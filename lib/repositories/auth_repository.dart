@@ -1,10 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/Dio.dart';
+import '../dio/Dio.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/models/find_id_model.dart';
-import 'package:usw_circle_link/models/find_pw_model.dart';
+import 'package:usw_circle_link/models/response/find_pw_response.dart';
 import 'package:usw_circle_link/models/request/sign_up_request.dart';
 import 'package:usw_circle_link/models/response/email_verification_response.dart';
 import 'package:usw_circle_link/models/response/send_mail_response.dart';
@@ -346,7 +346,7 @@ class AuthRepository {
     }
   }
 
-  Future<Result<FindPwModel>> sendCode({
+  Future<Result<FindPwResponse>> sendCode({
     required String account,
     required String email,
   }) async {
@@ -371,18 +371,16 @@ class AuthRepository {
           'sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
       if (response.statusCode == 200) {
-        return Result.ok(FindPwModel.fromJson(response.data)
-            .setType(FindPwModelType.sendCode));
+        return Result.ok(FindPwResponse.fromJson(response.data));
       } else {
-        return Result.error(FindPwModelError.fromJson(response.data)
-            .setType(FindPwModelType.sendCode) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
       return Result.error(e.toGlobalException());
     }
   }
 
-  Future<Result<FindPwModel>> verifyCode({
+  Future<Result<FindPwResponse>> verifyCode({
     required String code,
     required String uuid,
   }) async {
@@ -407,11 +405,9 @@ class AuthRepository {
           'verifyCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
       if (response.statusCode == 200) {
-        return Result.ok(FindPwModel.fromJson(response.data)
-            .setType(FindPwModelType.verifyCode));
+        return Result.ok(FindPwResponse.fromJson(response.data));
       } else {
-        return Result.error(FindPwModelError.fromJson(response.data)
-            .setType(FindPwModelType.verifyCode) as Exception);
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
       return Result.error(e.toGlobalException());

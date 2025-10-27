@@ -2,11 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/models/find_pw_model.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/utils/error_util.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_pw_view_model.dart';
 import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -23,56 +21,45 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
   final TextEditingController emailEditController = TextEditingController();
   final TextEditingController codeEditController = TextEditingController();
 
-  String? uuid;
-
   @override
   Widget build(BuildContext context) {
-    final state = ref.watch(findPwViewModelProvider);
+    final isSendCodeSuccess = ref.watch(
+        findPwViewModelProvider.select((state) => state.isSendCodeSuccess));
+    final isVerifyCodeSuccess = ref.watch(
+        findPwViewModelProvider.select((state) => state.isVerifyCodeSuccess));
+    final isLoading =
+        ref.watch(findPwViewModelProvider.select((state) => state.isLoading));
+    final error =
+        ref.watch(findPwViewModelProvider.select((state) => state.error));
+    final isCodeError =
+        ref.watch(findPwViewModelProvider.select((state) => state.isCodeError));
+    final uuid =
+        ref.watch(findPwViewModelProvider.select((state) => state.uuid));
+    ref.listen(
+        findPwViewModelProvider.select((state) => state.isSendCodeSuccess),
+        (previous, next) {
+      if (next != null && next) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '이메일이 전송되었습니다.\n인증을 완료해 주세요.',
+        );
+      }
+    });
+    ref.listen(
+        findPwViewModelProvider.select((state) => state.isVerifyCodeSuccess),
+        (previous, next) {
+      if (next != null && next && uuid != null) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '인증이 완료되었습니다.',
+          onLeftButtonPressed: () {
+            context.push('/login/find_pw/change_pw?uuid=$uuid');
+          },
+        );
+      }
+    });
     final _ = ref.watch(timerProvider);
     final timerNotifier = ref.watch(timerProvider.notifier);
-    ref.listen(findPwViewModelProvider, (previous, next) {
-      logger.d(next);
-      next.when(
-          data: (data) {
-            switch (data?.type) {
-              case FindPwModelType.sendCode:
-                logger.d('이메일 보내기 성공!');
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '이메일이 전송되었습니다.\n인증을 완료해 주세요.',
-                );
-                uuid = data!.data;
-                break;
-              case FindPwModelType.verifyCode:
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: '인증이 완료되었습니다.',
-                  onLeftButtonPressed: () {
-                    context.push('/login/find_pw/change_pw?uuid=${uuid!}');
-                  },
-                );
-                break;
-              default:
-            }
-          },
-          error: (error, stackTrace) {
-            error = error as FindPwModelError;
-            switch (error.type) {
-              case FindPwModelType.verifyCode:
-                switch (error.code) {
-                  case "USR-208": // 존재하지 않는 계정
-                    break;
-                  default:
-                    logger.e('예외발생 - $next');
-                    break;
-                }
-                break;
-              default:
-                logger.e('예외발생 - $next');
-            }
-          },
-          loading: () {});
-    });
 
     idEditController.addListener(
       () {
@@ -182,11 +169,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      if (state.hasError &&
-                          (state.error as FindPwModelError).type ==
-                              FindPwModelType.sendCode)
+                      if (error != null && isCodeError != true)
                         TextFontWidget.fontRegular(
-                          '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "이메일 전송에 실패했습니다. 잠시후 다시 시도해주세요."}',
+                          '* $error',
                           fontSize: 12.0,
                           color: const Color(0xFFFF5353),
                           fontWeight: FontWeight.w400,
@@ -225,31 +210,16 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                         width: double.infinity,
                         height: 56.0,
                         child: OutlinedButton(
-                          onPressed: state.when<VoidCallback?>(
-                              data: (data) {
-                                switch (data?.type) {
-                                  case FindPwModelType.sendCode:
-                                    return goToPortal;
-                                  case FindPwModelType.verifyCode:
-                                    return () {
-                                      context.push(
-                                          '/login/find_pw/change_pw?uuid=${uuid!}');
-                                    };
-                                  default: // null
-                                    return sendMail;
-                                }
-                              },
-                              error: (error, __) {
-                                switch ((error as FindPwModelError).type) {
-                                  case FindPwModelType.sendCode:
-                                    return sendMail;
-                                  case FindPwModelType.verifyCode:
-                                    return goToPortal;
-                                  default:
-                                    return sendMail;
-                                }
-                              },
-                              loading: () => null),
+                          onPressed: isLoading
+                              ? null
+                              : isSendCodeSuccess == true
+                                  ? isVerifyCodeSuccess == true
+                                      ? () {
+                                          context.push(
+                                              '/login/find_pw/change_pw?uuid=${uuid!}');
+                                        }
+                                      : goToPortal
+                                  : sendMail,
                           style: OutlinedButton.styleFrom(
                             backgroundColor: const Color(0xffffB052),
                             foregroundColor: const Color(0xFFFFFFFF),
@@ -262,28 +232,13 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                             ),
                           ),
                           child: TextFontWidget.fontRegular(
-                            state.when<String>(
-                                data: (data) {
-                                  switch (data?.type) {
-                                    case FindPwModelType.sendCode:
-                                      return '포털로 이동하기 ${timerNotifier.timerText}';
-                                    case FindPwModelType.verifyCode:
-                                      return '비밀번호를 변경하세요';
-                                    default:
-                                      return '이메일 전송';
-                                  }
-                                },
-                                error: (error, __) {
-                                  switch ((error as FindPwModelError).type) {
-                                    case FindPwModelType.sendCode:
-                                      return '이메일 전송';
-                                    case FindPwModelType.verifyCode:
-                                      return '포털로 이동하기 ${timerNotifier.timerText}';
-                                    default:
-                                      return '이메일 전송';
-                                  }
-                                },
-                                loading: () => '로딩 중 ...'),
+                            isLoading
+                                ? '로딩 중 ...'
+                                : isSendCodeSuccess == true
+                                    ? isVerifyCodeSuccess == true
+                                        ? '비밀번호를 변경하세요'
+                                        : '포털로 이동하기 ${timerNotifier.timerText}'
+                                    : '이메일 전송',
                             fontSize: 18.0,
                             color: const Color(0xFFFFFFFF),
                             fontWeight: FontWeight.w800,
@@ -293,13 +248,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      if ((state.hasValue &&
-                              state.value != null &&
-                              state.value!.type !=
-                                  FindPwModelType.verifyCode) ||
-                          (state.hasError &&
-                              (state.error as FindPwModelError).type ==
-                                  FindPwModelType.verifyCode))
+                      if (isSendCodeSuccess == true)
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -332,12 +281,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                       const SizedBox(
                         height: 20.0,
                       ),
-                      if ((state.hasValue &&
-                              state.value != null &&
-                              state.value!.type == FindPwModelType.sendCode) ||
-                          (state.hasError &&
-                              (state.error as FindPwModelError).type ==
-                                  FindPwModelType.verifyCode))
+                      if (isSendCodeSuccess == true)
                         RoundedTextField(
                           height: 50.0,
                           textInputAction: TextInputAction.next,
@@ -353,14 +297,14 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                           textInputType: TextInputType.text,
                           textAlign: TextAlign.left,
                           hintText: '인증코드 4자리 입력',
-                          borderColor: codeIsInvalid(state.valueOrNull)
+                          borderColor: isCodeError == true
                               ? const Color(0xFFFF3F3F)
                               : null,
                           isAnimatedHint: false,
                           suffixIcon: SizedBox(
                             width: 83.0,
                             child: OutlinedButton(
-                              onPressed: state.isLoading
+                              onPressed: isLoading
                                   ? null
                                   : () async {
                                       final code =
@@ -406,11 +350,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                       const SizedBox(
                         height: 10.0,
                       ),
-                      if (state.hasError &&
-                          (state.error as FindPwModelError).type ==
-                              FindPwModelType.verifyCode)
+                      if (isCodeError == true && error != null)
                         TextFontWidget.fontRegular(
-                          '* ${ErrorUtil.instance.getErrorMessage((state.error as FindPwModelError).code) ?? "인증코드 확인 중 문제가 발생했습니다. 잠시후 다시 시도해주세요."}',
+                          '* $error',
                           fontSize: 10.0,
                           color: const Color(0xFFFF5353),
                           fontWeight: FontWeight.w400,
@@ -433,10 +375,6 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
     super.dispose();
   }
 
-  bool codeIsInvalid(FindPwModel? state) {
-    return false;
-  }
-
   Future<void> sendMail() async {
     await ref.read(findPwViewModelProvider.notifier).sendCode(
         account: idEditController.text.trim(),
@@ -445,9 +383,9 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
   }
 
   void goToPortal() {
-    final encodedUrl =
-        Uri.encodeComponent('https://mail.suwon.ac.kr:10443/m/index.jsp');
+    // final encodedUrl = Uri.encodeComponent('https://portal.suwon.ac.kr');
 
-    context.push('/webview/$encodedUrl');
+    // context.push('/webview/$encodedUrl');
+    launchUrl(Uri.parse('https://portal.suwon.ac.kr'));
   }
 }
