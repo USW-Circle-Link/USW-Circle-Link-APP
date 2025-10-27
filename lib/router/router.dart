@@ -103,7 +103,8 @@ final routerProvider = Provider<GoRouter>((ref) {
                     path: 'policy_agree',
                     builder: (context, state) => PolicyAgreeScreen(
                       newMemberSignUp:
-                          state.uri.queryParameters['newMemberSignUp'] ==
+                          (state.uri.queryParameters['newMemberSignUp'] ??
+                                  'true') ==
                               'true',
                     ),
                     routes: [
