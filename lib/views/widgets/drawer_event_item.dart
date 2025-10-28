@@ -18,7 +18,7 @@ Widget buildDrawerEventItem({
   final now = DateTime.now();
   final eventDate = DateTime(2025, 10, 30, 15, 0);
   if (!now.isAfter(eventDate)) {
-    return const SizedBox.shrink();
+    // return const SizedBox.shrink();
   }
 
   return Padding(
@@ -57,9 +57,7 @@ Widget buildDrawerEventItem({
                     ],
                   ),
                   title: Padding(
-                    padding: title == "동아리의 밤 입장하기"
-                        ? const EdgeInsets.only(left: 5, top: 7)
-                        : const EdgeInsets.only(left: 10, top: 7),
+                    padding: const EdgeInsets.only(left: 5, top: 7),
                     child: TextFontWidget.fontRegular(
                       title,
                       overflow: TextOverflow.ellipsis,

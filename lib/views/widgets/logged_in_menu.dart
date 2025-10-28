@@ -33,22 +33,20 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
   @override
   Widget build(BuildContext context) {
     ref.listen(
-        eventCertificateViewModelProvider.select(
-            (value) => [value.error, value.isDialogError]), (previous, next) {
-      if (next[1] as bool && next[0] != null) {
-        DialogManager.instance.showAlertDialog(
-          context: context,
-          content: next[0] as String,
-        );
-      }
-    });
-
-    ref.listen(
-        eventCertificateViewModelProvider.select((value) => value.status),
-        (previous, next) {
-      print('status: $next');
-      if (next != null && !next) {
-        DialogManager.instance.showCircleCertificateDialog(context);
+        eventCertificateViewModelProvider
+            .select((value) => [value.isDialogError, value.error]),
+        (previous, next) async {
+      final isDialogError = next[0] as bool;
+      final error = next[1] as String?;
+      print('next: $next');
+      if (isDialogError && error != null) {
+        DialogManager.instance.dismissDialog(context);
+        DialogManager.instance
+            .showAlertDialog(context: context, content: error);
+      } else if (!isDialogError && error == null) {
+        // Dialog 닫기
+        DialogManager.instance.dismissDialog(context);
+        await DialogManager.instance.showCircleCertificateDialog(context);
       }
     });
     return Drawer(

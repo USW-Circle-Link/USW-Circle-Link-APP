@@ -8,7 +8,7 @@ class VerifyEventResponse with _$VerifyEventResponse {
   factory VerifyEventResponse({
     required String clubUUID,
     required bool isFirstVerify,
-    required String verifiedAt,
+    @JsonKey(name: "verified_at") required String verifiedAt,
   }) = _VerifyEventResponse;
 
   factory VerifyEventResponse.fromJson(Map<String, dynamic> json) =>

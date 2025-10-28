@@ -11,7 +11,7 @@ _$VerifyEventResponseImpl _$$VerifyEventResponseImplFromJson(
     _$VerifyEventResponseImpl(
       clubUUID: json['clubUUID'] as String,
       isFirstVerify: json['isFirstVerify'] as bool,
-      verifiedAt: json['verifiedAt'] as String,
+      verifiedAt: json['verified_at'] as String,
     );
 
 Map<String, dynamic> _$$VerifyEventResponseImplToJson(
@@ -19,5 +19,5 @@ Map<String, dynamic> _$$VerifyEventResponseImplToJson(
     <String, dynamic>{
       'clubUUID': instance.clubUUID,
       'isFirstVerify': instance.isFirstVerify,
-      'verifiedAt': instance.verifiedAt,
+      'verified_at': instance.verifiedAt,
     };

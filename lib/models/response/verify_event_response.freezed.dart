@@ -22,6 +22,7 @@ VerifyEventResponse _$VerifyEventResponseFromJson(Map<String, dynamic> json) {
 mixin _$VerifyEventResponse {
   String get clubUUID => throw _privateConstructorUsedError;
   bool get isFirstVerify => throw _privateConstructorUsedError;
+  @JsonKey(name: "verified_at")
   String get verifiedAt => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -36,7 +37,10 @@ abstract class $VerifyEventResponseCopyWith<$Res> {
           VerifyEventResponse value, $Res Function(VerifyEventResponse) then) =
       _$VerifyEventResponseCopyWithImpl<$Res, VerifyEventResponse>;
   @useResult
-  $Res call({String clubUUID, bool isFirstVerify, String verifiedAt});
+  $Res call(
+      {String clubUUID,
+      bool isFirstVerify,
+      @JsonKey(name: "verified_at") String verifiedAt});
 }
 
 /// @nodoc
@@ -81,7 +85,10 @@ abstract class _$$VerifyEventResponseImplCopyWith<$Res>
       __$$VerifyEventResponseImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String clubUUID, bool isFirstVerify, String verifiedAt});
+  $Res call(
+      {String clubUUID,
+      bool isFirstVerify,
+      @JsonKey(name: "verified_at") String verifiedAt});
 }
 
 /// @nodoc
@@ -122,7 +129,7 @@ class _$VerifyEventResponseImpl implements _VerifyEventResponse {
   _$VerifyEventResponseImpl(
       {required this.clubUUID,
       required this.isFirstVerify,
-      required this.verifiedAt});
+      @JsonKey(name: "verified_at") required this.verifiedAt});
 
   factory _$VerifyEventResponseImpl.fromJson(Map<String, dynamic> json) =>
       _$$VerifyEventResponseImplFromJson(json);
@@ -132,6 +139,7 @@ class _$VerifyEventResponseImpl implements _VerifyEventResponse {
   @override
   final bool isFirstVerify;
   @override
+  @JsonKey(name: "verified_at")
   final String verifiedAt;
 
   @override
@@ -174,9 +182,10 @@ class _$VerifyEventResponseImpl implements _VerifyEventResponse {
 
 abstract class _VerifyEventResponse implements VerifyEventResponse {
   factory _VerifyEventResponse(
-      {required final String clubUUID,
-      required final bool isFirstVerify,
-      required final String verifiedAt}) = _$VerifyEventResponseImpl;
+          {required final String clubUUID,
+          required final bool isFirstVerify,
+          @JsonKey(name: "verified_at") required final String verifiedAt}) =
+      _$VerifyEventResponseImpl;
 
   factory _VerifyEventResponse.fromJson(Map<String, dynamic> json) =
       _$VerifyEventResponseImpl.fromJson;
@@ -186,6 +195,7 @@ abstract class _VerifyEventResponse implements VerifyEventResponse {
   @override
   bool get isFirstVerify;
   @override
+  @JsonKey(name: "verified_at")
   String get verifiedAt;
   @override
   @JsonKey(ignore: true)

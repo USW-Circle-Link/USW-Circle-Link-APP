@@ -22,8 +22,7 @@ class EventCertificateViewModel extends StateNotifier<EventState> {
     state = state.copyWith(
       isLoading: true,
       error: null,
-      status: null,
-      isDialogError: false,
+      isDialogError: null,
     );
 
     final result = await eventRepository.getStatus();
@@ -33,15 +32,14 @@ class EventCertificateViewModel extends StateNotifier<EventState> {
           // 이미 입장한 회원
           state = state.copyWith(
             isLoading: false,
-            status: true,
-            error: "이미 입장한 회원입니다.",
             isDialogError: true,
+            error: "이미 입장한 회원입니다.",
           );
         } else {
-          // 입장하지 않은 회원
+          // 중앙동아리 소속인데 인증 아직 안 한 사람
           state = state.copyWith(
             isLoading: false,
-            status: false,
+            isDialogError: false,
           );
         }
       case Error():
@@ -49,9 +47,9 @@ class EventCertificateViewModel extends StateNotifier<EventState> {
         if (exception is GlobalException) {
           state = state.copyWith(
             isLoading: false,
+            isDialogError: true,
             error: ErrorUtil.instance.getErrorMessage(exception.code) ??
                 exception.message,
-            isDialogError: true,
           );
           return;
         }
@@ -59,8 +57,8 @@ class EventCertificateViewModel extends StateNotifier<EventState> {
         ErrorUtil.instance.logError(exception, screen: 'EventCertificate');
         state = state.copyWith(
           isLoading: false,
-          error: exception.message,
           isDialogError: true,
+          error: exception.message,
         );
     }
   }

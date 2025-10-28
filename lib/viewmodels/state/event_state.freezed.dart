@@ -18,9 +18,8 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$EventState {
   bool get isLoading => throw _privateConstructorUsedError;
   bool get isSuccess => throw _privateConstructorUsedError;
-  bool? get status => throw _privateConstructorUsedError;
+  bool? get isDialogError => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
-  bool get isDialogError => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $EventStateCopyWith<EventState> get copyWith =>
@@ -34,11 +33,7 @@ abstract class $EventStateCopyWith<$Res> {
       _$EventStateCopyWithImpl<$Res, EventState>;
   @useResult
   $Res call(
-      {bool isLoading,
-      bool isSuccess,
-      bool? status,
-      String? error,
-      bool isDialogError});
+      {bool isLoading, bool isSuccess, bool? isDialogError, String? error});
 }
 
 /// @nodoc
@@ -56,9 +51,8 @@ class _$EventStateCopyWithImpl<$Res, $Val extends EventState>
   $Res call({
     Object? isLoading = null,
     Object? isSuccess = null,
-    Object? status = freezed,
+    Object? isDialogError = freezed,
     Object? error = freezed,
-    Object? isDialogError = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -69,18 +63,14 @@ class _$EventStateCopyWithImpl<$Res, $Val extends EventState>
           ? _value.isSuccess
           : isSuccess // ignore: cast_nullable_to_non_nullable
               as bool,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
+      isDialogError: freezed == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
               as bool?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDialogError: null == isDialogError
-          ? _value.isDialogError
-          : isDialogError // ignore: cast_nullable_to_non_nullable
-              as bool,
     ) as $Val);
   }
 }
@@ -94,11 +84,7 @@ abstract class _$$EventStateImplCopyWith<$Res>
   @override
   @useResult
   $Res call(
-      {bool isLoading,
-      bool isSuccess,
-      bool? status,
-      String? error,
-      bool isDialogError});
+      {bool isLoading, bool isSuccess, bool? isDialogError, String? error});
 }
 
 /// @nodoc
@@ -114,9 +100,8 @@ class __$$EventStateImplCopyWithImpl<$Res>
   $Res call({
     Object? isLoading = null,
     Object? isSuccess = null,
-    Object? status = freezed,
+    Object? isDialogError = freezed,
     Object? error = freezed,
-    Object? isDialogError = null,
   }) {
     return _then(_$EventStateImpl(
       isLoading: null == isLoading
@@ -127,18 +112,14 @@ class __$$EventStateImplCopyWithImpl<$Res>
           ? _value.isSuccess
           : isSuccess // ignore: cast_nullable_to_non_nullable
               as bool,
-      status: freezed == status
-          ? _value.status
-          : status // ignore: cast_nullable_to_non_nullable
+      isDialogError: freezed == isDialogError
+          ? _value.isDialogError
+          : isDialogError // ignore: cast_nullable_to_non_nullable
               as bool?,
       error: freezed == error
           ? _value.error
           : error // ignore: cast_nullable_to_non_nullable
               as String?,
-      isDialogError: null == isDialogError
-          ? _value.isDialogError
-          : isDialogError // ignore: cast_nullable_to_non_nullable
-              as bool,
     ));
   }
 }
@@ -149,9 +130,8 @@ class _$EventStateImpl implements _EventState {
   _$EventStateImpl(
       {this.isLoading = false,
       this.isSuccess = false,
-      this.status = null,
-      this.error,
-      this.isDialogError = false});
+      this.isDialogError = null,
+      this.error});
 
   @override
   @JsonKey()
@@ -161,16 +141,13 @@ class _$EventStateImpl implements _EventState {
   final bool isSuccess;
   @override
   @JsonKey()
-  final bool? status;
+  final bool? isDialogError;
   @override
   final String? error;
-  @override
-  @JsonKey()
-  final bool isDialogError;
 
   @override
   String toString() {
-    return 'EventState(isLoading: $isLoading, isSuccess: $isSuccess, status: $status, error: $error, isDialogError: $isDialogError)';
+    return 'EventState(isLoading: $isLoading, isSuccess: $isSuccess, isDialogError: $isDialogError, error: $error)';
   }
 
   @override
@@ -182,15 +159,14 @@ class _$EventStateImpl implements _EventState {
                 other.isLoading == isLoading) &&
             (identical(other.isSuccess, isSuccess) ||
                 other.isSuccess == isSuccess) &&
-            (identical(other.status, status) || other.status == status) &&
-            (identical(other.error, error) || other.error == error) &&
             (identical(other.isDialogError, isDialogError) ||
-                other.isDialogError == isDialogError));
+                other.isDialogError == isDialogError) &&
+            (identical(other.error, error) || other.error == error));
   }
 
   @override
-  int get hashCode => Object.hash(
-      runtimeType, isLoading, isSuccess, status, error, isDialogError);
+  int get hashCode =>
+      Object.hash(runtimeType, isLoading, isSuccess, isDialogError, error);
 
   @JsonKey(ignore: true)
   @override
@@ -203,20 +179,17 @@ abstract class _EventState implements EventState {
   factory _EventState(
       {final bool isLoading,
       final bool isSuccess,
-      final bool? status,
-      final String? error,
-      final bool isDialogError}) = _$EventStateImpl;
+      final bool? isDialogError,
+      final String? error}) = _$EventStateImpl;
 
   @override
   bool get isLoading;
   @override
   bool get isSuccess;
   @override
-  bool? get status;
+  bool? get isDialogError;
   @override
   String? get error;
-  @override
-  bool get isDialogError;
   @override
   @JsonKey(ignore: true)
   _$$EventStateImplCopyWith<_$EventStateImpl> get copyWith =>

@@ -7,8 +7,7 @@ class EventState with _$EventState {
   factory EventState({
     @Default(false) bool isLoading,
     @Default(false) bool isSuccess,
-    @Default(null) bool? status,
+    @Default(null) bool? isDialogError,
     String? error,
-    @Default(false) bool isDialogError,
   }) = _EventState;
 }
