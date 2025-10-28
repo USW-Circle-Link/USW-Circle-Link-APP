@@ -142,7 +142,7 @@ class _CircleCertificateDialogState
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: TextFontWidget.fontRegular(
-                isSuccess == true ? "인증 완료" : error!,
+                isSuccess == true ? "🥳🎉👏 인증 완료 🥳🎉👏" : error!,
                 textAlign: TextAlign.center,
                 color:
                     isSuccess == true ? Colors.greenAccent : Colors.redAccent,
@@ -159,12 +159,16 @@ class _CircleCertificateDialogState
   }
 
   Widget _buildButtons() {
+    final isSuccess = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.isSuccess));
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          _buildConfirmButton(),
+          if (isSuccess == false) ...[
+            _buildConfirmButton(),
+          ],
           _buildCancelButton(),
         ],
       ),
@@ -200,6 +204,8 @@ class _CircleCertificateDialogState
   }
 
   Widget _buildCancelButton() {
+    final isSuccess = ref.watch(
+        eventCertificateViewModelProvider.select((state) => state.isSuccess));
     return SizedBox(
       width: 100,
       height: 40,
@@ -210,7 +216,7 @@ class _CircleCertificateDialogState
         ),
         onPressed: () => Navigator.pop(context),
         child: TextFontWidget.fontRegular(
-          "취소",
+          isSuccess == true ? "입장하기" : "취소",
           color: Colors.white,
           fontWeight: FontWeight.w600,
         ),

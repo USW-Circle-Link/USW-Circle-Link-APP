@@ -38,7 +38,6 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
         (previous, next) async {
       final isDialogError = next[0] as bool;
       final error = next[1] as String?;
-      print('next: $next');
       if (isDialogError && error != null) {
         DialogManager.instance.dismissDialog(context);
         DialogManager.instance
