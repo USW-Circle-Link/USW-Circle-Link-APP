@@ -35,44 +35,23 @@ Widget buildDrawerEventItem({
         child: InkWell(
           borderRadius: radius,
           onTap: onTap,
-          child: AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            height: 56,
-            child: Column(
-              children: [
-                ListTile(
-                  contentPadding: EdgeInsets.only(
-                    left: 16,
-                    right: 6,
-                  ),
-                  leading: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.only(top: 8),
-                        child:
-                            SizedBox(width: 32, height: 32, child: leadingImg),
-                      )
-                    ],
-                  ),
-                  title: Padding(
-                    padding: const EdgeInsets.only(left: 5, top: 7),
-                    child: TextFontWidget.fontRegular(
-                      title,
-                      overflow: TextOverflow.ellipsis,
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  trailing: Padding(
-                    padding: const EdgeInsets.only(top: 7, right: 7),
-                    child: SizedBox(width: 32, height: 32, child: trailingImg),
-                  ),
-                ),
-              ],
+          child: ListTile(
+            minTileHeight: 56,
+            titleAlignment: ListTileTitleAlignment.center,
+            contentPadding: EdgeInsets.only(
+              left: 6,
+              right: 6,
             ),
+            leading: SizedBox(width: 32, height: 32, child: leadingImg),
+            title: TextFontWidget.fontRegular(
+              title,
+              overflow: TextOverflow.ellipsis,
+              fontSize: 15,
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              textAlign: TextAlign.center,
+            ),
+            trailing: SizedBox(width: 32, height: 32, child: trailingImg),
           ),
         ),
       ),

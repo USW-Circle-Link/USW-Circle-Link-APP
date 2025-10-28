@@ -8,6 +8,7 @@ import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 import 'drawer_event_item.dart';
+import 'drawer_item.dart';
 
 class LoggedOutMenu extends ConsumerWidget {
   const LoggedOutMenu({Key? key}) : super(key: key);
@@ -167,69 +168,4 @@ void _launchURL() async {
   } else {
     throw 'URL을 열 수 없습니다: $url';
   }
-}
-
-Widget buildDrawerItem({
-  required String title,
-  required IconData icon,
-  double? iconSize,
-  required VoidCallback onTap,
-  required IconData trailingIcon,
-  Widget? subtitle,
-  bool isExpanded = false,
-}) {
-  return Padding(
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 4),
-    child: Material(
-      color: Colors.white,
-      borderRadius: BorderRadius.circular(8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(8),
-        onTap: onTap,
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeInOut,
-          height: isExpanded ? 100 : 56,
-          child: Column(
-            children: [
-              ListTile(
-                contentPadding: EdgeInsets.only(
-                  left: 16,
-                  right: isExpanded ? 15 : 6,
-                ),
-                leading: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(icon, size: iconSize, color: Colors.grey),
-                  ],
-                ),
-                title: Padding(
-                  padding: EdgeInsets.only(left: 10),
-                  child: TextFontWidget.fontRegular(
-                    title,
-                    overflow: TextOverflow.ellipsis,
-                    fontSize: 15,
-                    color: const Color(0xff353549),
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
-                trailing: AnimatedRotation(
-                  duration: const Duration(milliseconds: 300),
-                  turns: isExpanded ? 0.5 : 0,
-                  child: Icon(trailingIcon, color: Colors.grey),
-                ),
-              ),
-              if (isExpanded && subtitle != null)
-                Expanded(
-                  child: Container(
-                    width: double.infinity,
-                    child: subtitle,
-                  ),
-                ),
-            ],
-          ),
-        ),
-      ),
-    ),
-  );
 }
