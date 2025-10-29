@@ -138,3 +138,5 @@ results:"v"==b[0]?[]:[f[b[0]]]},l=1;l<b.length;++l)h.parameters.push(f[b[l]]);b=
 );
 })();
 export default skwasm_heavy;
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="e2602fbc-ded9-5166-84d7-879dd02ae7bf")}catch(e){}}();
+//# debugId=e2602fbc-ded9-5166-84d7-879dd02ae7bf
