@@ -3,6 +3,7 @@ import 'package:flutter/material.dart' hide AppBar;
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../const/analytics_const.dart';
 import '../../models/category_model.dart';
@@ -63,6 +64,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   Future<void> _checkAndShowNoticeDialog() async {
     final prefs = await SharedPreferences.getInstance();
     final dontShowAgain = prefs.getBool('notice_dont_show_again') ?? false;
+    try {
+      throw StateError('test error');
+    } catch (error, stackTrace) {
+      await Sentry.captureException(error, stackTrace: stackTrace);
+    }
 
     if (!dontShowAgain && mounted) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
