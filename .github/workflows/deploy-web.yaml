@@ -41,10 +41,40 @@ jobs:
 
       - name: Verify source maps
         run: |
-          echo "Checking for source map files..."
-          ls -lah build/web/*.map || true
-          echo "Checking main.dart.js source map reference..."
-          tail -1 build/web/main.dart.js || true
+          echo "=== Checking build/web directory structure ==="
+          ls -lah build/web/ | head -20
+          
+          echo ""
+          echo "=== Checking for main.dart.js files ==="
+          if [ -f "build/web/main.dart.js" ]; then
+            echo "✓ main.dart.js exists"
+            ls -lh build/web/main.dart.js
+          else
+            echo "✗ main.dart.js NOT FOUND"
+            exit 1
+          fi
+          
+          if [ -f "build/web/main.dart.js.map" ]; then
+            echo "✓ main.dart.js.map exists"
+            ls -lh build/web/main.dart.js.map
+          else
+            echo "✗ main.dart.js.map NOT FOUND"
+            exit 1
+          fi
+          
+          echo ""
+          echo "=== Checking source map reference in main.dart.js ==="
+          if grep -q "sourceMappingURL" build/web/main.dart.js; then
+            echo "✓ Source map reference found:"
+            tail -1 build/web/main.dart.js | grep -o "sourceMappingURL.*" || tail -1 build/web/main.dart.js
+          else
+            echo "✗ Source map reference NOT FOUND in main.dart.js"
+            exit 1
+          fi
+          
+          echo ""
+          echo "=== Checking for other source map files ==="
+          find build/web -name "*.map" -type f | head -10
 
       - name: Install Sentry CLI
         run: curl -sL https://sentry.io/get-cli/ | bash
@@ -61,11 +91,20 @@ jobs:
           export SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
           export SENTRY_ORG="${{ secrets.SENTRY_ORG }}"
           export SENTRY_PROJECT="${{ secrets.SENTRY_PROJECT }}"
+          
+          echo "=== Uploading source maps from ./build/web ==="
+          echo "Files to upload:"
+          find ./build/web -name "*.js" -o -name "*.map" | head -20
+          
           sentry-cli releases files "usw_circle_link@${{ steps.version.outputs.version }}" upload-sourcemaps ./build/web \
             --url-prefix "~" \
             --ext js \
             --ext map \
             --log-level=info
+          
+          echo ""
+          echo "=== Verifying uploaded files ==="
+          sentry-cli releases files "usw_circle_link@${{ steps.version.outputs.version }}" list | grep -E "(main\.dart\.js|\.map)" || echo "No matching files found in release"
 
       - name: Finalize Sentry release
         run: |
