@@ -68,6 +68,10 @@ void main() async {
         (options) {
           options.dsn =
               'https://2f96467892c3ddebe142f690ef452288@o4510253419724800.ingest.us.sentry.io/4510253420642304';
+          // Release 설정 - GitHub Actions의 release와 일치시켜야 Source Maps가 작동합니다
+          // 환경 변수로 전달되거나, 없으면 pubspec.yaml의 버전 사용
+          options.release = const String.fromEnvironment('SENTRY_RELEASE',
+              defaultValue: 'usw_circle_link@1.0.11+27');
           // Adds request headers and IP for users, for more info visit:
           // https://docs.sentry.io/platforms/dart/guides/flutter/data-management/data-collected/
           options.sendDefaultPii = true;

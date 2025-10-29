@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up Flutter
         uses: subosito/flutter-action@v2
@@ -26,8 +28,16 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - name: Get version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "release=usw_circle_link@$VERSION" >> $GITHUB_OUTPUT
+          echo "Release version: usw_circle_link@$VERSION"
+
       - name: Build Flutter web
-        run: flutter build web --release
+        run: flutter build web --release --dart-define=SENTRY_RELEASE=usw_circle_link@${{ steps.version.outputs.version }}
 
       - name: Create Sentry release and upload source maps
         uses: getsentry/action-release@v3
@@ -37,6 +47,7 @@ jobs:
           SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
         with:
           environment: production
+          release: usw_circle_link@${{ steps.version.outputs.version }}
           sourcemaps: ./build/web
           url_prefix: "~"
           strip_common_prefix: true
