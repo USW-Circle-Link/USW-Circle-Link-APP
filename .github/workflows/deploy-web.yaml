@@ -37,7 +37,7 @@ jobs:
           echo "Release version: usw_circle_link@$VERSION"
 
       - name: Build Flutter web
-        run: flutter build web --release --dart-define=SENTRY_RELEASE=usw_circle_link@${{ steps.version.outputs.version }}
+        run: flutter build web --release --source-maps --dart-define=SENTRY_RELEASE=usw_circle_link@${{ steps.version.outputs.version }}
 
       - name: Verify source maps
         run: |
