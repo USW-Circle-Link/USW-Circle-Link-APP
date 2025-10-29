@@ -107,12 +107,12 @@ jobs:
           
           echo ""
           echo "=== Verifying uploaded files ==="
-          echo "Using sourcemaps command (releases files is deprecated):"
-          sentry-cli sourcemaps explain "usw_circle_link@${{ steps.version.outputs.version }}" "~/main.dart.js" || echo "Source map explanation not available"
+          echo "Checking uploaded source maps (note: releases files is deprecated but still works):"
+          sentry-cli releases files "usw_circle_link@${{ steps.version.outputs.version }}" list 2>&1 | grep -i "main\|map" || echo "Checking all files..."
           
           echo ""
-          echo "Checking release artifacts with sourcemaps inspect:"
-          sentry-cli sourcemaps inspect "usw_circle_link@${{ steps.version.outputs.version }}" || echo "Inspection not available"
+          echo "Full list of uploaded files:"
+          sentry-cli releases files "usw_circle_link@${{ steps.version.outputs.version }}" list 2>&1 | head -20 || echo "Could not list files"
 
       - name: Finalize Sentry release
         run: |
