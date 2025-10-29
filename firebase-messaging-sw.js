@@ -19,5 +19,3 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((message) => {
   console.log("onBackgroundMessage", message);
 });
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="3da0d1d3-1cc6-5907-b2c6-714e29d15f85")}catch(e){}}();
-//# debugId=3da0d1d3-1cc6-5907-b2c6-714e29d15f85
