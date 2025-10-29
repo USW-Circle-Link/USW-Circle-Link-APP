@@ -37,9 +37,9 @@ _flutter.buildConfig = {"engineRevision":"035316565ad77281a75305515e4682e6c4c6f7
 
 _flutter.loader.load({
   serviceWorkerSettings: {
-    serviceWorkerVersion: "675901850"
+    serviceWorkerVersion: "2550196536"
   }
 });
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="cf427ce4-0671-51f9-a32d-b5ef023eb1b9")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="66ff9ec8-d753-5936-b885-7aa5770f014b")}catch(e){}}();
 //# sourceMappingURL=flutter.js.map
-//# debugId=cf427ce4-0671-51f9-a32d-b5ef023eb1b9
+//# debugId=66ff9ec8-d753-5936-b885-7aa5770f014b
