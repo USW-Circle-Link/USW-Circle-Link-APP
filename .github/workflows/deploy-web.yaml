@@ -39,19 +39,41 @@ jobs:
       - name: Build Flutter web
         run: flutter build web --release --dart-define=SENTRY_RELEASE=usw_circle_link@${{ steps.version.outputs.version }}
 
-      - name: Create Sentry release and upload source maps
-        uses: getsentry/action-release@v3
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          release: usw_circle_link@${{ steps.version.outputs.version }}
-          sourcemaps: ./build/web
-          url_prefix: "~"
-          strip_common_prefix: true
-          finalize: true
+      - name: Verify source maps
+        run: |
+          echo "Checking for source map files..."
+          ls -lah build/web/*.map || true
+          echo "Checking main.dart.js source map reference..."
+          tail -1 build/web/main.dart.js || true
+
+      - name: Install Sentry CLI
+        run: curl -sL https://sentry.io/get-cli/ | bash
+
+      - name: Create Sentry release
+        run: |
+          export SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
+          export SENTRY_ORG="${{ secrets.SENTRY_ORG }}"
+          export SENTRY_PROJECT="${{ secrets.SENTRY_PROJECT }}"
+          sentry-cli releases new "usw_circle_link@${{ steps.version.outputs.version }}"
+
+      - name: Upload source maps to Sentry
+        run: |
+          export SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
+          export SENTRY_ORG="${{ secrets.SENTRY_ORG }}"
+          export SENTRY_PROJECT="${{ secrets.SENTRY_PROJECT }}"
+          sentry-cli releases files "usw_circle_link@${{ steps.version.outputs.version }}" upload-sourcemaps ./build/web \
+            --url-prefix "~" \
+            --ext js \
+            --ext map \
+            --log-level=info
+
+      - name: Finalize Sentry release
+        run: |
+          export SENTRY_AUTH_TOKEN="${{ secrets.SENTRY_AUTH_TOKEN }}"
+          export SENTRY_ORG="${{ secrets.SENTRY_ORG }}"
+          export SENTRY_PROJECT="${{ secrets.SENTRY_PROJECT }}"
+          sentry-cli releases finalize "usw_circle_link@${{ steps.version.outputs.version }}"
+          sentry-cli releases deploys "usw_circle_link@${{ steps.version.outputs.version }}" new -e production
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
