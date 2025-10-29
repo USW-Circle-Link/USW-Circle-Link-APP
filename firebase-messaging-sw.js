@@ -1,5 +1,7 @@
 // Please see this file for the latest firebase-js-sdk version:
 // https://github.com/firebase/flutterfire/blob/main/packages/firebase_core/firebase_core_web/lib/src/firebase_sdk_version.dart
+
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="3158aa95-7e81-59ab-b576-edfd30c3692b")}catch(e){}}();
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js");
 importScripts("https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js");
 
@@ -19,5 +21,4 @@ const messaging = firebase.messaging();
 messaging.onBackgroundMessage((message) => {
   console.log("onBackgroundMessage", message);
 });
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="3da0d1d3-1cc6-5907-b2c6-714e29d15f85")}catch(e){}}();
-//# debugId=3da0d1d3-1cc6-5907-b2c6-714e29d15f85
+//# debugId=3158aa95-7e81-59ab-b576-edfd30c3692b
