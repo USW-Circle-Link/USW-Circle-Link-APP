@@ -175,6 +175,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                   },
                   trailingIcon: MainIcons.ic_chevron_right, // 추가된 부분
                 ),
+                /**
                 buildDrawerEventItem(
                   title: '동아리의 밤 입장하기',
                   onTap: () async {
@@ -183,6 +184,7 @@ class _LoggedInMenuState extends ConsumerState<LoggedInMenu> {
                         .getStatus();
                   },
                 ),
+                */
               ],
             ),
           ),
