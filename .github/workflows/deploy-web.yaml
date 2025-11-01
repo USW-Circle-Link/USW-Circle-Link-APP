@@ -46,27 +46,9 @@ jobs:
         run: |
           echo "Checking for source map files..."
           ls -lah build/web | head -20
-        
-      - name: Check sentry auth token is exists
-        run: |
-          if [ -z "${{ env.SENTRY_AUTH_TOKEN }}" ]; then
-            echo "SENTRY_AUTH_TOKEN is not set"
-            exit 1
-          fi
       
       - name: Upload source maps to Sentry
         run: flutter pub run sentry_dart_plugin --auth-token ${{ env.SENTRY_AUTH_TOKEN }} --project usw_circle_link --release usw_circle_link@${{ steps.version.outputs.version }} --sourcemaps build/web
-
-      # - name: Create Sentry release and upload source maps
-      #   uses: getsentry/action-release@v3
-      #   env:
-      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-      #     SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-      #     SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-      #   with:
-      #     environment: production
-      #     release: usw_circle_link@${{ steps.version.outputs.version }}
-      #     sourcemaps: ./build/web
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
