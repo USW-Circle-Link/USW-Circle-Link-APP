@@ -43,10 +43,14 @@ jobs:
         run: |
           echo "Checking for source map files..."
           ls -lah build/web | head -20
+        
+      - name: Set environment variable
+        run: |
+          echo "SENETRAY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
       
       - name: Upload source maps to Sentry
         run: flutter pub run sentry_dart_plugin
-
+        
       # - name: Create Sentry release and upload source maps
       #   uses: getsentry/action-release@v3
       #   env:
