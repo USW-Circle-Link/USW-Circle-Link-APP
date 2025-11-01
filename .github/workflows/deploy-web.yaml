@@ -14,6 +14,9 @@ jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
 
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -44,13 +47,16 @@ jobs:
           echo "Checking for source map files..."
           ls -lah build/web | head -20
         
-      - name: Set environment variable
+      - name: Check sentry auth token is exists
         run: |
-          echo "SENETRAY_AUTH_TOKEN=${{ secrets.SENTRY_AUTH_TOKEN }}" >> $GITHUB_ENV
+          if [ -z "${{ env.SENTRY_AUTH_TOKEN }}" ]; then
+            echo "SENTRY_AUTH_TOKEN is not set"
+            exit 1
+          fi
       
       - name: Upload source maps to Sentry
-        run: flutter pub run sentry_dart_plugin
-        
+        run: flutter pub run sentry_dart_plugin --auth-token ${{ env.SENTRY_AUTH_TOKEN }} --project usw_circle_link --release usw_circle_link@${{ steps.version.outputs.version }} --sourcemaps build/web
+
       # - name: Create Sentry release and upload source maps
       #   uses: getsentry/action-release@v3
       #   env:
