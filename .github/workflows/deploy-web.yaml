@@ -43,17 +43,20 @@ jobs:
         run: |
           echo "Checking for source map files..."
           ls -lah build/web | head -20
+      
+      - name: Upload source maps to Sentry
+        run: flutter pub run sentry_dart_plugin
 
-      - name: Create Sentry release and upload source maps
-        uses: getsentry/action-release@v3
-        env:
-          SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
-          SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
-          SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
-        with:
-          environment: production
-          release: usw_circle_link@${{ steps.version.outputs.version }}
-          sourcemaps: ./build/web
+      # - name: Create Sentry release and upload source maps
+      #   uses: getsentry/action-release@v3
+      #   env:
+      #     SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+      #     SENTRY_ORG: ${{ secrets.SENTRY_ORG }}
+      #     SENTRY_PROJECT: ${{ secrets.SENTRY_PROJECT }}
+      #   with:
+      #     environment: production
+      #     release: usw_circle_link@${{ steps.version.outputs.version }}
+      #     sourcemaps: ./build/web
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
