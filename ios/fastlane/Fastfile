@@ -1,0 +1,35 @@
+default_platform(:ios)
+
+platform :ios do
+  desc "Build and upload to TestFlight"
+  lane :release do
+    setup_ci if ENV['CI']
+
+    # Match로 인증서 가져오기
+    match(
+      type: "appstore",
+      readonly: true,
+      git_url: "https://github.com/USW-Circle-Link/USW-Circle-Link-FastlaneCert.git"
+    )
+
+    # Flutter 빌드
+    sh("cd ../.. && flutter build ios --release --no-codesign")
+
+    # iOS 빌드
+    build_app(
+      workspace: "Runner.xcworkspace",
+      scheme: "Runner",
+      export_method: "app-store",
+      export_options: {
+        provisioningProfiles: {
+          "com.usw.flag.uswCircleLink" => "match AppStore com.usw.flag.uswCircleLink"
+        }
+      }
+    )
+
+    # TestFlight 업로드
+    upload_to_testflight(
+      skip_waiting_for_build_processing: true
+    )
+  end
+end
