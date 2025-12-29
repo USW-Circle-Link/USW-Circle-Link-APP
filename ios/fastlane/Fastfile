@@ -21,11 +21,22 @@ platform :ios do
     # Flutter 빌드
     sh("cd ../.. && flutter build ios --release --no-codesign --no-pub")
 
+    # Xcode 프로젝트 서명 설정
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Runner.xcodeproj",
+      team_id: ENV["FASTLANE_TEAM_ID"],
+      profile_name: "match AppStore com.usw.flag.uswCircleLink",
+      code_sign_identity: "Apple Distribution"
+    )
+
     # iOS 빌드
     build_app(
       workspace: "Runner.xcworkspace",
       scheme: "Runner",
       export_method: "app-store",
+      clean: true,
+      xcargs: "-allowProvisioningUpdates",
       export_options: {
         provisioningProfiles: {
           "com.usw.flag.uswCircleLink" => "match AppStore com.usw.flag.uswCircleLink"
