@@ -26,6 +26,8 @@ jobs:
       - name: Clean and Install dependencies
         run: |
           flutter clean
+          rm -rf ~/Library/Developer/Xcode/DerivedData
+          rm -rf ios/Pods ios/Podfile.lock
           flutter pub get
 
       - name: Install CocoaPods
