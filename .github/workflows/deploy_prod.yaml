@@ -79,10 +79,10 @@ jobs:
       # key.properties 생성
       - name: Create key properties
         run: |
-          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/key.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/key.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/key.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=${{ steps.android_keystore.outputs.filePath }}" >> android/app/key.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/app/key.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/app/key.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/app/key.properties
 
       # Google Play JSON Key 생성
       - name: Create Google Play JSON Key
