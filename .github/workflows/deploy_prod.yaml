@@ -8,7 +8,7 @@ on:
 jobs:
   # IOS
   deploy_ios:
-    runs-on: macOS
+    runs-on: [self-hosted, macOS]
     steps:    
       - uses: actions/checkout@v4
 
@@ -25,7 +25,7 @@ jobs:
 
   # AOS
   deploy_android:
-    runs-on: macOS
+    runs-on: [self-hosted, macOS]
     needs: [ deploy_ios ]
     steps:
       - uses: actions/checkout@v4
