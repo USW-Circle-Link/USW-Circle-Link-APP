@@ -32,7 +32,7 @@ jobs:
 
       - name: Install CocoaPods
         run: |
-          arch -arm64 brew install cocoapods || true
+          sudo arch -arm64 gem install cocoapods
           cd ios && arch -arm64 pod install --repo-update
 
       # 빌드 및 배포
