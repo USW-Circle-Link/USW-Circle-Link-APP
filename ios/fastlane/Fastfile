@@ -12,8 +12,14 @@ platform :ios do
       git_url: "https://github.com/USW-Circle-Link/USW-Circle-Link-FastlaneCert.git"
     )
 
+    # CocoaPods 설치
+    cocoapods(
+      podfile: "./Podfile",
+      repo_update: true
+    )
+
     # Flutter 빌드
-    sh("cd ../.. && flutter build ios --release --no-codesign")
+    sh("cd ../.. && flutter build ios --release --no-codesign --no-pub")
 
     # iOS 빌드
     build_app(
