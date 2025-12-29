@@ -65,7 +65,7 @@ lib/
 
 - Uses FlutterWebFrame wrapper (475x812 mobile dimensions on web)
 - Firebase local notifications disabled on web (kIsWeb check)
-- Deployment: GitHub Actions → GitHub Pages (create-web-branch triggers deploy)
+- Deployment: GitHub Actions → GitHub Pages (main triggers deploy)
 - Custom domain: donggurami.net (CNAME configuration)
 
 ## Testing
@@ -84,7 +84,7 @@ flutter pub run build_runner build
 
 ## Deployment
 
-Web deployment triggers automatically on push to `create-web-branch`:
+Web deployment triggers automatically on push to `main`:
 1. Builds Flutter web with source maps
 2. Uploads source maps to Sentry
 3. Deploys to GitHub Pages

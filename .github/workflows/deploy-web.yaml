@@ -3,7 +3,7 @@ name: Deploy Flutter Web to GitHub Pages
 on:
   push:
     branches:
-      - create-web-branch
+      - main
 
 permissions:
   contents: write
@@ -46,7 +46,7 @@ jobs:
         run: |
           echo "Checking for source map files..."
           ls -lah build/web | head -20
-      
+
       - name: Upload source maps to Sentry
         run: flutter pub run sentry_dart_plugin --auth-token ${{ env.SENTRY_AUTH_TOKEN }} --project usw_circle_link --release usw_circle_link@${{ steps.version.outputs.version }} --sourcemaps build/web
 
@@ -56,3 +56,21 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./build/web
           cname: donggurami.net
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## 동구라미 v${{ steps.version.outputs.version }}
+
+            ### 배포 정보
+            - 배포 일시: ${{ github.event.head_commit.timestamp }}
+            - 커밋: ${{ github.sha }}
+            - 배포 URL: https://donggurami.net
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
