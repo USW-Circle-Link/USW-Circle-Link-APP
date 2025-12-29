@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -45,6 +44,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
           }
         },
         error: (error, stackTrace) {
+          logger.e('error: $error');
           if (error is ProfileModelError && error.code == "USR-204") {
             setState(() {
               _passwordError = "비밀번호가 일치하지 않습니다.";
@@ -57,177 +57,172 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
     final profileData = widget.profileData;
     logger.d('ProfileData: $profileData');
 
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) => Scaffold(
-        backgroundColor: const Color(0xffFFFFFF),
-        resizeToAvoidBottomInset: false,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(62.h),
-          child: AppBar(
-            scrolledUnderElevation: 0,
-            toolbarHeight: 62.h,
-            centerTitle: true,
-            elevation: 0.0,
-            backgroundColor: const Color(0xffFFFFFF),
-            automaticallyImplyLeading: false,
-            title: SizedBox(
-              width: 375.w,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/ic_back_arrow.svg',
-                      height: 36.h,
-                      width: 36.w,
-                    ),
-                  ),
-                  SizedBox(width: 69.8.w),
-                  TextFontWidget.fontRegular(
-                    '내 정보 수정',
-                    color: Colors.black,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w700,
-                    height: 1.111.h,
-                    letterSpacing: -0.45.sp,
-                  ),
-                  Expanded(child: Container()),
-                ],
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: Container(
-          margin: EdgeInsets.only(left: 32.w, right: 32.w, bottom: 16.h),
-          width: double.infinity,
-          height: 56.h,
-          child: OutlinedButton(
-            onPressed: () async {
-              setState(() {
-                _passwordError = null;
-              });
-              final password = passwordController.text.trim();
-              logger.d('ProfileData: $profileData');
-              if (password.isEmpty) {
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: "비밀번호를 입력해주세요.",
-                );
-                return;
-              }
-              if (profileData == null) {
-                DialogManager.instance.showAlertDialog(
-                  context: context,
-                  content: "프로필 정보가 없습니다. 다시 시도해주세요.",
-                );
-                return;
-              }
-              // updateProfile 호출 (password 매개변수를 포함)
-              await ref
-                  .read(updateProfileViewModelProvider.notifier)
-                  .updateProfile(
-                    userName: profileData['name']!,
-                    studentNumber: profileData['studentNumber']!,
-                    userHp: profileData['userHp']!,
-                    major: profileData['major']!,
-                    password: password,
-                  );
-            },
-            style: OutlinedButton.styleFrom(
-              backgroundColor: const Color(0xFFFFB052),
-              foregroundColor: const Color(0xFFFFFFFF),
-              side: const BorderSide(
-                color: Colors.transparent,
-                width: 0.0,
-              ),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: TextFontWidget.fontRegular(
-              '확인',
-              fontSize: 18.sp,
-              color: const Color(0xFFFFFFFF),
-              fontWeight: FontWeight.w800,
-            ),
-          ),
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 32.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return Scaffold(
+      backgroundColor: const Color(0xffFFFFFF),
+      resizeToAvoidBottomInset: false,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(62.0),
+        child: AppBar(
+          scrolledUnderElevation: 0,
+          toolbarHeight: 62.0,
+          centerTitle: true,
+          elevation: 0.0,
+          backgroundColor: const Color(0xffFFFFFF),
+          automaticallyImplyLeading: false,
+          title: SizedBox(
+            width: 375.0,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                SizedBox(height: 16.h),
+                IconButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/ic_back_arrow.svg',
+                    height: 36.0,
+                    width: 36.0,
+                  ),
+                ),
+                const SizedBox(width: 69.8),
                 TextFontWidget.fontRegular(
-                  '비밀번호 확인',
-                  fontSize: 16.sp,
-                  fontWeight: FontWeight.w400,
+                  '내 정보 수정',
+                  color: Colors.black,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w700,
+                  height: 1.111,
+                  letterSpacing: -0.45,
                 ),
-                SizedBox(height: 8.h),
-                RoundedTextField(
-                  height: 50.h,
-                  obscureText: !passwordVisible,
-                  textEditController: passwordController,
-                  leftBottomCornerRadius: 8.r,
-                  rightBottomCornerRadius: 8.r,
-                  leftTopCornerRadius: 8.r,
-                  rightTopCornerRadius: 8.r,
-                  borderColor: const Color(0xffDBDBDB),
-                  borderWidth: 1.w,
-                  maxLines: 1,
-                  textInputType: TextInputType.text,
-                  textAlign: TextAlign.left,
-                  hintText: "비밀번호를 입력해주세요.",
-                  prefixIcon: Icon(
-                    SignUpIcons.ic_password,
-                    color: Color(0xFF989898),
-                    size: 15.sp,
-                  ),
-                  suffixIcon: IconButton(
-                    visualDensity: VisualDensity.compact,
-                    constraints: BoxConstraints(),
-                    padding: EdgeInsets.zero,
-                    onPressed: () {
-                      setState(() {
-                        passwordVisible = !passwordVisible;
-                      });
-                    },
-                    icon: Icon(
-                      passwordVisible
-                          ? SignUpIcons.ic_eye_open
-                          : SignUpIcons.ic_eye_slash,
-                      color: Color(0xFF989898),
-                      size: 18.sp,
-                    ),
-                  ),
-                  hintStyle: TextStyle(
-                    fontSize: 14.sp,
-                    fontFamily: 'SUIT',
-                  ),
-                ),
-                // 비밀번호 불일치 에러 메시지 영역 (빨간 텍스트)
-                SizedBox(
-                  height: 25.h,
-                  child: _passwordError != null
-                      ? Padding(
-                          padding: EdgeInsets.only(top: 8.h),
-                          child: Text(
-                            "* $_passwordError",
-                            style: TextStyle(
-                                color: Colors.red,
-                                fontSize: 12.sp,
-                                height: 1.sp),
-                          ),
-                        )
-                      : const SizedBox.shrink(),
-                ),
+                Expanded(child: Container()),
               ],
             ),
+          ),
+        ),
+      ),
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.only(left: 32.0, right: 32.0, bottom: 16.0),
+        width: double.infinity,
+        height: 56.0,
+        child: OutlinedButton(
+          onPressed: () async {
+            setState(() {
+              _passwordError = null;
+            });
+            final password = passwordController.text.trim();
+            logger.d('ProfileData: $profileData');
+            if (password.isEmpty) {
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: "비밀번호를 입력해주세요.",
+              );
+              return;
+            }
+            if (profileData == null) {
+              DialogManager.instance.showAlertDialog(
+                context: context,
+                content: "프로필 정보가 없습니다. 다시 시도해주세요.",
+              );
+              return;
+            }
+            // updateProfile 호출 (password 매개변수를 포함)
+            await ref
+                .read(updateProfileViewModelProvider.notifier)
+                .updateProfile(
+                  userName: profileData['name']!,
+                  studentNumber: profileData['studentNumber']!,
+                  userHp: profileData['userHp']!,
+                  major: profileData['major']!,
+                  password: password,
+                );
+          },
+          style: OutlinedButton.styleFrom(
+            backgroundColor: const Color(0xFFFFB052),
+            foregroundColor: const Color(0xFFFFFFFF),
+            side: const BorderSide(
+              color: Colors.transparent,
+              width: 0.0,
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8.0),
+            ),
+          ),
+          child: TextFontWidget.fontRegular(
+            '확인',
+            fontSize: 18.0,
+            color: const Color(0xFFFFFFFF),
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 32.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 16.0),
+              TextFontWidget.fontRegular(
+                '비밀번호 확인',
+                fontSize: 16.0,
+                fontWeight: FontWeight.w400,
+              ),
+              const SizedBox(height: 8.0),
+              RoundedTextField(
+                height: 50.0,
+                obscureText: !passwordVisible,
+                textEditController: passwordController,
+                leftBottomCornerRadius: 8.0,
+                rightBottomCornerRadius: 8.0,
+                leftTopCornerRadius: 8.0,
+                rightTopCornerRadius: 8.0,
+                borderColor: const Color(0xffDBDBDB),
+                borderWidth: 1.0,
+                maxLines: 1,
+                textInputType: TextInputType.text,
+                textAlign: TextAlign.left,
+                hintText: "비밀번호를 입력해주세요.",
+                prefixIcon: const Icon(
+                  SignUpIcons.ic_password,
+                  color: Color(0xFF989898),
+                  size: 15.0,
+                ),
+                suffixIcon: IconButton(
+                  visualDensity: VisualDensity.compact,
+                  constraints: const BoxConstraints(),
+                  padding: EdgeInsets.zero,
+                  onPressed: () {
+                    setState(() {
+                      passwordVisible = !passwordVisible;
+                    });
+                  },
+                  icon: Icon(
+                    passwordVisible
+                        ? SignUpIcons.ic_eye_open
+                        : SignUpIcons.ic_eye_slash,
+                    color: const Color(0xFF989898),
+                    size: 18.0,
+                  ),
+                ),
+                hintStyle: const TextStyle(
+                  fontSize: 14.0,
+                  fontFamily: 'SUIT',
+                ),
+              ),
+              // 비밀번호 불일치 에러 메시지 영역 (빨간 텍스트)
+              SizedBox(
+                height: 25.0,
+                child: _passwordError != null
+                    ? Padding(
+                        padding: const EdgeInsets.only(top: 8.0),
+                        child: Text(
+                          "* $_passwordError",
+                          style: const TextStyle(
+                              color: Colors.red, fontSize: 12.0, height: 1.0),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ],
           ),
         ),
       ),

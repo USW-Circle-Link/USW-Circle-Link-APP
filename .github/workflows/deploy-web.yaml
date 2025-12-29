@@ -1,0 +1,76 @@
+name: Deploy Flutter Web to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      SENTRY_AUTH_TOKEN: ${{ secrets.SENTRY_AUTH_TOKEN }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: "stable"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Get version from pubspec.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' pubspec.yaml | sed 's/version: //')
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "release=usw_circle_link@$VERSION" >> $GITHUB_OUTPUT
+          echo "Release version: usw_circle_link@$VERSION"
+
+      - name: Build Flutter web
+        run: flutter build web --release --source-maps --dart-define=SENTRY_RELEASE=usw_circle_link@${{ steps.version.outputs.version }}
+
+      - name: Verify source maps
+        run: |
+          echo "Checking for source map files..."
+          ls -lah build/web | head -20
+
+      - name: Upload source maps to Sentry
+        run: flutter pub run sentry_dart_plugin --auth-token ${{ env.SENTRY_AUTH_TOKEN }} --project usw_circle_link --release usw_circle_link@${{ steps.version.outputs.version }} --sourcemaps build/web
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build/web
+          cname: donggurami.net
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: Release v${{ steps.version.outputs.version }}
+          body: |
+            ## 동구라미 v${{ steps.version.outputs.version }}
+
+            ### 배포 정보
+            - 배포 일시: ${{ github.event.head_commit.timestamp }}
+            - 커밋: ${{ github.sha }}
+            - 배포 URL: https://donggurami.net
+          draft: false
+          prerelease: false
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

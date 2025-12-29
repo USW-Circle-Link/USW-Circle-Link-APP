@@ -34,9 +34,11 @@ dependencies:
   ## UI
   flutter_screenutil: ^5.9.3
   # 스플래쉬
-  flutter_native_splash: ^2.4.2
+  flutter_native_splash: 2.4.2
   # 웹뷰
   flutter_inappwebview: ^6.0.0
+  #iframe 클릭 이벤트 처리
+  pointer_interceptor: ^0.9.3
   # 텍스트
   auto_size_text: ^3.0.0
   flutter_html: ^3.0.0-beta.2
@@ -61,7 +63,7 @@ dependencies:
   json_annotation: ^4.9.0
 
   # Routing
-  go_router: ^14.2.1
+  go_router: ^16.2.4
 
   # Update Alert
   upgrader: ^11.3.1
@@ -90,8 +92,14 @@ dependencies:
   # Permission
   device_info_plus: ^10.1.2
   permission_handler: ^11.3.1
+  flutter_web_frame: ^1.0.0
+  
+  # Sentry
+  sentry_dio: ^9.7.0
+  sentry_flutter: ^9.7.0
 
 dev_dependencies:
+  sentry_dart_plugin: ^3.1.1
   flutter_test:
     sdk: flutter
 
@@ -119,9 +127,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
-    - assets/html/terms_of_service.html
-    - assets/html/privacy_policy.html
-    - assets/html/personal_information_collection_and_usage_agreement.html
+    - assets/html/
 
   # To add assets to your application, add an assets section, like this:
   # assets:
@@ -178,3 +184,9 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+sentry:
+  upload_debug_symbols: true
+  upload_source_maps: true
+  upload_sources: true
+  project: flutter
+  org: university-of-suwon

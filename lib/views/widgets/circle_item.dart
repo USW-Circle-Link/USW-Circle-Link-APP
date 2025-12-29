@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
@@ -19,8 +18,8 @@ class CircleItem extends StatelessWidget {
     return Material(
       color: Colors.transparent,
       child: Container(
-        width: 120.w,
-        margin: EdgeInsets.only(right: 8.w),
+        width: 143,
+        margin: EdgeInsets.only(right: 8),
         child: Stack(
           children: [
             Column(
@@ -29,18 +28,20 @@ class CircleItem extends StatelessWidget {
                 Container(
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10.r),
-                    border: Border.all(color: Color(0xFFDEDEDE), width: 1.w),
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Color(0xFFDEDEDE), width: 1),
                   ),
-                  height: 143.h,
+                  height: 143,
                   child: ClipRRect(
-                    borderRadius: BorderRadius.circular(10.r),
+                    borderRadius: BorderRadius.circular(10),
                     child: Hero(
                       tag: 'circle_${circle.clubUUID}',
                       child: circle.mainPhoto?.isValidUrl ?? false
                           ? Image.network(
                               circle.mainPhoto!,
                               fit: BoxFit.cover,
+                              height: double.infinity,
+                              width: double.infinity,
                               errorBuilder: (BuildContext context,
                                   Object exception, StackTrace? stackTrace) {
                                 return Container(
@@ -61,17 +62,17 @@ class CircleItem extends StatelessWidget {
                     ),
                   ),
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 8),
                 TextFontWidget.fontRegular(
                   overflow: TextOverflow.ellipsis,
                   circle.clubName,
-                  fontSize: 14.sp,
+                  fontSize: 14,
                   fontWeight: FontWeight.w600,
                 ),
-                SizedBox(height: 8.h),
+                SizedBox(height: 8),
                 Flexible(
                   child: LayoutBuilder(builder: (context, constraints) {
-                    final margin = 5.w;
+                    final margin = 5;
                     final width = (constraints.maxWidth - margin) / 2;
                     return Row(
                       children: List.generate(
@@ -84,13 +85,13 @@ class CircleItem extends StatelessWidget {
                             maxHeight: constraints.maxHeight,
                           ),
                           child: Container(
-                            margin:
-                                EdgeInsets.only(right: index == 0 ? margin : 0),
-                            padding: EdgeInsets.symmetric(horizontal: 5.w),
+                            margin: EdgeInsets.only(
+                                right: index == 0.0 ? margin.toDouble() : 0.0),
+                            padding: EdgeInsets.symmetric(horizontal: 5),
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(6.r),
+                              borderRadius: BorderRadius.circular(6),
                               border: Border.all(
-                                  color: Color(0xFFDEDEDE), width: 1.w),
+                                  color: Color(0xFFDEDEDE), width: 1),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -99,7 +100,7 @@ class CircleItem extends StatelessWidget {
                                   '#${circle.clubHashtags![index]}',
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
-                                  fontSize: 12.sp,
+                                  fontSize: 12,
                                   fontWeight: FontWeight.w300,
                                 ),
                               ],

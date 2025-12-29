@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/views/widgets/circle_detail_overlay.dart';
@@ -21,12 +20,13 @@ enum CircleDetailItemStatus {
 
   factory CircleDetailItemStatus.getByCode(String code) {
     return CircleDetailItemStatus.values.firstWhere(
-        (value) => value.code == code,
-        orElse: () => CircleDetailItemStatus.undefined);
+          (value) => value.code == code,
+      orElse: () => CircleDetailItemStatus.undefined,
+    );
   }
 }
 
-class CircleDetailItem extends StatelessWidget {
+class CircleDetailItem extends StatefulWidget {
   final String clubUUID;
   final String name;
   final String? imageUrl;
@@ -36,9 +36,7 @@ class CircleDetailItem extends StatelessWidget {
   final String? circleRoom;
   final String? statusString;
 
-  late CircleDetailItemStatus status;
-
-  CircleDetailItem({
+  const CircleDetailItem({
     super.key,
     required this.clubUUID,
     required this.leader,
@@ -48,38 +46,67 @@ class CircleDetailItem extends StatelessWidget {
     required this.instaId,
     this.circleRoom,
     this.statusString,
-  }) {
-    status = CircleDetailItemStatus.getByCode(statusString ?? 'UNDEFINED');
-  }
+  });
+
+  @override
+  State<CircleDetailItem> createState() => _CircleDetailItemState();
+}
+
+class _CircleDetailItemState extends State<CircleDetailItem> {
+  late CircleDetailItemStatus status;
 
   final GlobalKey _iconKey = GlobalKey();
+  final LayerLink _link = LayerLink();
   OverlayEntry? _overlayEntry;
 
+  // 화면 우측 공간이 부족하면 오른쪽 정렬
+  bool _alignRight = false;
+
+  @override
+  void initState() {
+    super.initState();
+    status = CircleDetailItemStatus.getByCode(widget.statusString ?? 'UNDEFINED');
+  }
+
   void _showOverlay() {
-    final RenderBox renderBox =
-        _iconKey.currentContext!.findRenderObject() as RenderBox;
-    final Offset offset = renderBox.localToGlobal(Offset.zero);
-    final Size size = renderBox.size;
-    final double width = 195.w;
+    if (_overlayEntry != null) return;
+
+    // 화면 우측 공간 측정 후 정렬 방향 결정
+    const double overlayWidth = 195;
+    final box = _iconKey.currentContext?.findRenderObject() as RenderBox?;
+    if (box != null) {
+      final screenWidth = MediaQuery.of(context).size.width;
+      final offset = box.localToGlobal(Offset.zero);
+      final spaceRight = screenWidth - (offset.dx + box.size.width);
+      _alignRight = spaceRight < overlayWidth;
+    } else {
+      _alignRight = false;
+    }
+
     _overlayEntry = OverlayEntry(
       builder: (context) => Stack(
         children: [
-          GestureDetector(
-            onTap: _removeOverlay,
-            child: Container(
-              color: Colors.transparent,
+          // 바깥 영역 탭 시 닫힘
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: HitTestBehavior.opaque,
+              onTap: _removeOverlay,
+              child: const SizedBox.shrink(),
             ),
           ),
-          Positioned(
-            top: offset.dy + size.height,
-            left: offset.dx + size.width / 2 - width,
+          CompositedTransformFollower(
+            link: _link,
+            showWhenUnlinked: false,
+            targetAnchor: _alignRight ? Alignment.bottomRight : Alignment.bottomLeft,
+            followerAnchor: _alignRight ? Alignment.topRight : Alignment.topLeft,
+            offset: const Offset(0, 8), // 앵커와의 간격
             child: Material(
               color: Colors.transparent,
               child: CircleDetailOverlay(
-                width: width,
-                circleRoom: circleRoom,
-                leaderHp: leaderHp,
-                clubInsta: instaId,
+                width: overlayWidth,
+                circleRoom: widget.circleRoom,
+                leaderHp: widget.leaderHp,
+                clubInsta: widget.instaId,
                 onClose: _removeOverlay,
               ),
             ),
@@ -87,6 +114,8 @@ class CircleDetailItem extends StatelessWidget {
         ],
       ),
     );
+
+    Overlay.of(context, rootOverlay: true).insert(_overlayEntry!);
   }
 
   void _removeOverlay() {
@@ -95,24 +124,29 @@ class CircleDetailItem extends StatelessWidget {
   }
 
   @override
+  void dispose() {
+    _removeOverlay();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Center(
       child: Column(
         children: [
           Container(
-            width: 327.w,
+            width: 375,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(8.r),
+              borderRadius: BorderRadius.circular(8),
               color: const Color(0xffFFFFFF),
             ),
             child: Material(
               color: Colors.transparent,
               child: InkWell(
-                borderRadius: BorderRadius.circular(8.r),
-                onTap: () => context.push('/circle?clubUUID=$clubUUID'),
+                borderRadius: BorderRadius.circular(8),
+                onTap: () => context.push('/circle?clubUUID=${widget.clubUUID}'),
                 child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(vertical: 14.h, horizontal: 21.w),
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 21),
                   child: Stack(
                     children: [
                       if (status != CircleDetailItemStatus.undefined)
@@ -120,21 +154,18 @@ class CircleDetailItem extends StatelessWidget {
                           bottom: 0,
                           right: 0,
                           child: Container(
-                            padding: EdgeInsets.symmetric(
-                                vertical: 5.h, horizontal: 10.w),
+                            padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
                             decoration: BoxDecoration(
                               color: status.color,
-                              borderRadius: BorderRadius.circular(16.sp),
+                              borderRadius: BorderRadius.circular(16),
                             ),
-                            child: Container(
-                              child: TextFontWidget.fontRegular(
-                                status.text,
-                                color: const Color(0xffFFFFFF),
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w800,
-                                height: 1.h,
-                                letterSpacing: -0.6.sp,
-                              ),
+                            child: TextFontWidget.fontRegular(
+                              status.text,
+                              color: const Color(0xffFFFFFF),
+                              fontSize: 10,
+                              fontWeight: FontWeight.w800,
+                              height: 1,
+                              letterSpacing: -0.6,
                             ),
                           ),
                         ),
@@ -143,72 +174,63 @@ class CircleDetailItem extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Container(
-                            height: 80.h,
-                            width: 67.w,
+                            height: 80,
+                            width: 67,
                             decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: const Color(0xffc4c4c4)),
-                              borderRadius: BorderRadius.circular(8.r),
+                              border: Border.all(color: const Color(0xffc4c4c4)),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                             child: HeroMode(
-                              enabled:
-                                  ModalRoute.of(context)?.animation?.status !=
-                                      AnimationStatus.reverse,
+                              enabled: ModalRoute.of(context)?.animation?.status != AnimationStatus.reverse,
                               child: Hero(
-                                tag: 'circle_${clubUUID}',
+                                tag: 'circle_${widget.clubUUID}',
                                 child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.r),
-                                  child:
-                                      imageUrl != null && imageUrl!.isValidUrl
-                                          ? Image.network(
-                                              imageUrl!,
-                                              fit: BoxFit.cover,
-                                            )
-                                          : Image.asset(
-                                              'assets/images/circle_default_image.png',
-                                              fit: BoxFit.cover,
-                                            ),
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: widget.imageUrl != null && widget.imageUrl!.isValidUrl
+                                      ? Image.network(widget.imageUrl!, fit: BoxFit.cover)
+                                      : Image.asset('assets/images/circle_default_image.png', fit: BoxFit.cover),
                                 ),
                               ),
                             ),
                           ),
-                          SizedBox(width: 16.w),
+                          const SizedBox(width: 16),
                           Expanded(
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.start,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                SizedBox(height: 8.h),
+                                const SizedBox(height: 8),
                                 TextFontWidget.fontRegular(
-                                  name,
+                                  widget.name,
                                   overflow: TextOverflow.ellipsis,
                                   color: Colors.black,
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   fontWeight: FontWeight.w900,
-                                  height: 1.h,
-                                  letterSpacing: -0.45.sp,
+                                  height: 1,
+                                  letterSpacing: -0.45,
                                 ),
-                                SizedBox(height: 5.h),
+                                const SizedBox(height: 5),
                                 RichText(
                                   overflow: TextOverflow.ellipsis,
                                   text: TextSpan(
                                     text: '동아리 회장 ',
                                     style: TextFontWidget.fontRegularStyle(
                                       color: const Color(0xFF767676),
-                                      fontSize: 14.sp,
+                                      fontSize: 14,
                                       fontWeight: FontWeight.w400,
-                                      height: 1.h,
-                                      letterSpacing: -0.35.sp,
+                                      height: 1,
+                                      letterSpacing: -0.35,
                                     ),
                                     children: [
+                                      const TextSpan(text: ''),
                                       TextSpan(
-                                        text: leader,
-                                        style: TextStyle(
+                                        text: widget.leader,
+                                        style: const TextStyle(
                                           color: Color(0xFF353549),
                                           fontWeight: FontWeight.w800,
-                                          fontSize: 14.sp,
-                                          height: 1.h,
-                                          letterSpacing: -0.35.sp,
+                                          fontSize: 14,
+                                          height: 1,
+                                          letterSpacing: -0.35,
                                         ),
                                       ),
                                     ],
@@ -217,22 +239,25 @@ class CircleDetailItem extends StatelessWidget {
                               ],
                             ),
                           ),
-                          Container(
-                            alignment: Alignment.topCenter,
-                            child: IconButton(
-                              padding: EdgeInsets.zero,
-                              constraints: BoxConstraints(),
-                              visualDensity: VisualDensity.compact,
-                              key: _iconKey,
-                              onPressed: () {
-                                if (_overlayEntry == null) {
-                                  _showOverlay();
-                                  Overlay.of(context).insert(_overlayEntry!);
-                                } else {
-                                  _removeOverlay();
-                                }
-                              },
-                              icon: Icon(Icons.more_vert),
+                          // 앵커 위젯
+                          CompositedTransformTarget(
+                            link: _link,
+                            child: Container(
+                              alignment: Alignment.topCenter,
+                              child: IconButton(
+                                key: _iconKey,
+                                padding: EdgeInsets.zero,
+                                constraints: const BoxConstraints(),
+                                visualDensity: VisualDensity.compact,
+                                icon: const Icon(Icons.more_vert),
+                                onPressed: () {
+                                  if (_overlayEntry == null) {
+                                    _showOverlay();
+                                  } else {
+                                    _removeOverlay();
+                                  }
+                                },
+                              ),
                             ),
                           ),
                         ],
@@ -243,7 +268,7 @@ class CircleDetailItem extends StatelessWidget {
               ),
             ),
           ),
-          SizedBox(height: 12.h),
+          const SizedBox(height: 12),
         ],
       ),
     );

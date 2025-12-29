@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
@@ -37,11 +37,9 @@ class UpdateProfileRepository {
       if (response.statusCode == 200) {
         return ProfileModel.fromJson(response.data);
       } else {
-        print('Failed to fetch data: ${response.statusCode}');
         throw Exception('프로필 조회에 실패하였습니다');
       }
     } catch (e) {
-      print('Error fetching profile: $e');
       throw Exception('프로필 조회 중 오류가 발생했습니다');
     }
   }

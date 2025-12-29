@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
 
 class AlertTextDialog extends StatefulWidget {
@@ -41,7 +40,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
       child: Dialog(
         child: Container(
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(15.r),
+            borderRadius: BorderRadius.circular(15),
             color: Colors.white,
           ),
           child: Column(
@@ -49,8 +48,8 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
             children: [
               Padding(
                 padding: EdgeInsets.symmetric(
-                  vertical: 15.h,
-                  horizontal: 15.h,
+                  vertical: 15,
+                  horizontal: 15,
                 ),
                 child: Column(
                   children: [
@@ -58,11 +57,11 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                       if (widget.title != null)
                         Container(
                           margin: EdgeInsets.only(
-                              bottom: widget.content != null ? 8.h : 0),
+                              bottom: widget.content != null ? 8 : 0),
                           child: TextFontWidget.fontRegular(
                             widget.title!,
                             color: Color(0xFF000000),
-                            fontSize: 18.sp,
+                            fontSize: 18,
                             fontWeight: FontWeight.w800,
                             textAlign: TextAlign.center,
                           ),
@@ -72,7 +71,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                       TextFontWidget.fontRegular(
                         widget.content!,
                         color: Color(0xFF767676),
-                        fontSize: 14.sp,
+                        fontSize: 14,
                         fontWeight: FontWeight.w400,
                         textAlign: TextAlign.center,
                       ),
@@ -80,7 +79,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                 ),
               ),
               SizedBox.fromSize(
-                size: Size.fromHeight(0.5.h),
+                size: Size.fromHeight(0.5),
                 child: DecoratedBox(
                   decoration: BoxDecoration(color: Color(0xFFCECECE)),
                 ),
@@ -88,7 +87,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
               if (widget.leftButtonText != null &&
                   widget.rightButtonText != null)
                 SizedBox(
-                  height: 56.h,
+                  height: 56,
                   child: Row(
                     children: [
                       Expanded(
@@ -98,18 +97,18 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            minimumSize: Size.fromHeight(56.h),
+                            minimumSize: Size.fromHeight(56),
                             foregroundColor: Color(0xFF0085FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                  bottomLeft: Radius.circular(15.r)),
+                                  bottomLeft: Radius.circular(15)),
                             ),
                           ),
                           child: Text(
                             widget.leftButtonText!,
                             style: widget.leftButtonTextStyle ??
                                 TextFontWidget.fontRegularStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   color: Color(0xFF0085FF),
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -117,7 +116,7 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                         ),
                       ),
                       SizedBox(
-                        width: 0.5.w,
+                        width: 0.5,
                         height: double.infinity,
                         child: DecoratedBox(
                           decoration: BoxDecoration(color: Color(0xFFCECECE)),
@@ -130,18 +129,18 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                             Navigator.of(context).pop();
                           },
                           style: TextButton.styleFrom(
-                            minimumSize: Size.fromHeight(56.h),
+                            minimumSize: Size.fromHeight(56),
                             foregroundColor: Color(0xFF0085FF),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(15.r)),
+                                  bottomRight: Radius.circular(15)),
                             ),
                           ),
                           child: Text(
                             widget.rightButtonText!,
                             style: widget.rightButtonTextStyle ??
                                 TextFontWidget.fontRegularStyle(
-                                  fontSize: 18.sp,
+                                  fontSize: 18,
                                   color: Color(0xFF0085FF),
                                   fontWeight: FontWeight.w800,
                                 ),
@@ -158,18 +157,18 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                     Navigator.of(context).pop();
                   },
                   style: TextButton.styleFrom(
-                    minimumSize: Size.fromHeight(50.h),
+                    minimumSize: Size.fromHeight(50),
                     foregroundColor: Color(0xFF0085FF),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.vertical(
-                          top: Radius.zero, bottom: Radius.circular(15.r)),
+                          top: Radius.zero, bottom: Radius.circular(15)),
                     ),
                   ),
                   child: Text(
                     widget.leftButtonText!,
                     style: widget.leftButtonTextStyle ??
                         TextFontWidget.fontRegularStyle(
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           color: Color(0xFF0085FF),
                           fontWeight: FontWeight.w800,
                         ),

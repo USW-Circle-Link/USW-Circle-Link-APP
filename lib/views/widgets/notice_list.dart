@@ -1,7 +1,6 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
@@ -26,37 +25,37 @@ class NoticeList extends StatelessWidget {
         ? ListView.separated(
             separatorBuilder: (context, index) {
               return Divider(
-                thickness: 1.h,
+                thickness: 1,
               );
             },
             itemCount: notices.length,
             itemBuilder: (context, index) {
               return Container(
-                margin: EdgeInsets.only(top: index == 0 ? 16.h : 0.h),
+                margin: EdgeInsets.only(top: index == 0 ? 16 : 0),
                 child: InkWell(
                   onTap: () {
                     onItemClicked(notices[index].noticeUUID);
                   },
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFontWidget.fontRegular(
                           notices[index].noticeTitle,
-                          fontSize: 18.sp,
+                          fontSize: 18,
                           color: const Color(0xFF000000),
                           fontWeight: FontWeight.w800,
                         ),
                         SizedBox(
-                          height: 20.h,
+                          height: 20,
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             TextFontWidget.fontRegular(
                               noticeModel.data[index].adminName,
-                              fontSize: 14.sp,
+                              fontSize: 14,
                               color: const Color(0xFF767676),
                               fontWeight: FontWeight.w400,
                             ),
@@ -64,7 +63,7 @@ class NoticeList extends StatelessWidget {
                               noticeModel.data[index].noticeCreatedAt
                                   .parseDateTime()
                                   .getFormattedString(),
-                              fontSize: 14.sp,
+                              fontSize: 14,
                               color: const Color(0xFF767676),
                               fontWeight: FontWeight.w400,
                             ),

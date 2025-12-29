@@ -5,6 +5,8 @@ import 'package:usw_circle_link/views/widgets/alert_text_dialog.dart';
 import 'package:usw_circle_link/views/widgets/major_picker_dialog.dart';
 import 'package:usw_circle_link/views/widgets/policy_dialog.dart';
 
+import '../views/widgets/circle_certificate_dialog.dart';
+
 class DialogManager {
   DialogManager._();
 
@@ -86,5 +88,12 @@ class DialogManager {
     if (_dialogKey.currentContext != null) {
       Navigator.of(context).pop();
     }
+  }
+
+  Future<void> showCircleCertificateDialog(BuildContext context) async {
+    await showDialog(
+      context: context,
+      builder: (_) => CircleCertificateDialog(key: _dialogKey),
+    );
   }
 }

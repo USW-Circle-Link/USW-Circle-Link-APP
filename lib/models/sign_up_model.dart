@@ -29,31 +29,3 @@ class SignUpModel with _$SignUpModel {
   SignUpModel setType(SignUpModelType type) =>
       SignUpModel(message: message, data: data, type: type);
 }
-
-@freezed
-class SignUpModelError extends Error with _$SignUpModelError {
-  SignUpModelError._();
-
-  factory SignUpModelError({
-    SignUpModelType? type,
-    String? exception,
-    String? code,
-    String? error,
-    int? status,
-    required String message,
-  }) = _SignUpModelError;
-
-  factory SignUpModelError.fromJson(Map<String, dynamic> json) =>
-      _$SignUpModelErrorFromJson(json);
-
-  SignUpModelError setType(SignUpModelType type) => SignUpModelError(
-      exception: exception,
-      code: code,
-      error: error,
-      status: status,
-      message: message,
-      type: type);
-
-  @override
-  StackTrace get stackTrace => StackTrace.fromString(toString());
-}

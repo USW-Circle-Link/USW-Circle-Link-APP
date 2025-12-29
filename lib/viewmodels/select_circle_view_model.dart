@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/repositories/circle_list_repository.dart';
+import '../models/circle_list_model.dart';
+import '../repositories/circle_list_repository.dart';
+import '../models/response/global_exception.dart';
 
 final selectCircleViewModelProvider = StateNotifierProvider.autoDispose<
     SelectCircleViewModel, AsyncValue<CircleListModel?>>((ref) {
@@ -21,12 +22,11 @@ class SelectCircleViewModel
     try {
       final response = await _circleListRepository.fetchAllCircleList();
       state = AsyncData(response);
-    } on CircleListModelError catch (e) {
+    } on GlobalException catch (e) {
       state = AsyncError(e, e.stackTrace);
-    } catch (e) {
-      final error = CircleListModelError(
-          message: '예외발생 - $e', type: CircleListModelType.all);
-      state = AsyncError(error, error.stackTrace);
+    } on Exception catch (e) {
+      final exception = e.toGlobalException(screen: 'SelectCircle_FetchAll');
+      state = AsyncError(exception, exception.stackTrace);
     }
   }
 }

@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
@@ -25,7 +25,10 @@ class FCMRepository {
   });
 
   Future<String> getToken() async {
-    await Firebase.initializeApp();
+    if (Firebase.apps.isEmpty) {
+      // 초기화 되지 않은 경우 초기화
+      await Firebase.initializeApp();
+    }
 
     // iOS
     String? token;

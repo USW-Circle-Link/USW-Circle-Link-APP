@@ -31,6 +31,7 @@ const iatKey = 'iat';
 const expKey = 'exp';
 // URL
 const feedback = "https://forms.gle/Xhang1SZiZiVyabe6";
+const inquiry = "https://open.kakao.com/o/sUDq9KXh";
 // Color
 const accentColor = Color(0xffffB052);
 // Data

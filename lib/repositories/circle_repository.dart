@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/dio/dio.dart';
+import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/circle_detail_model.dart';
 import 'package:usw_circle_link/models/floor_photo_model.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+
+import '../utils/result.dart';
 
 enum FloorType {
   B1,
@@ -37,7 +39,7 @@ class CircleRepository {
 
   CircleRepository({required this.dio, required this.basePath});
 
-  Future<CircleDetailModel> fetchClubIntro(String clubUUID) async {
+  Future<Result<CircleDetailModel>> fetchClubIntro(String clubUUID) async {
     try {
       final response = await dio.get(
         '$basePath/intro/$clubUUID',
@@ -48,9 +50,9 @@ class CircleRepository {
       logger.d(
           'fetchClubIntro - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      return CircleDetailModel.fromJson(response.data['data']);
-    } catch (e) {
-      throw CircleDetailModelError(message: "에외발생 - $e");
+      return Result.ok(CircleDetailModel.fromJson(response.data['data']));
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 

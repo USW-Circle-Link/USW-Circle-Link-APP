@@ -1,7 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/circle_list_model.dart';
-import 'package:usw_circle_link/repositories/circle_list_repository.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
+import '../models/circle_list_model.dart';
+import '../repositories/circle_list_repository.dart';
+import '../utils/logger/logger.dart';
+
+import '../models/response/global_exception.dart';
 
 final circleViewModelProvider = StateNotifierProvider.autoDispose<
     CircleViewModel, AsyncValue<CircleListModel>>((ref) {
@@ -27,14 +29,13 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
       final response = await circleListRepository.fetchAllCircleList();
 
       state = AsyncValue.data(response);
-    } on CircleListModelError catch (e) {
+    } on GlobalException catch (e) {
       logger.d(e);
       state = AsyncValue.error(e, e.stackTrace);
-    } catch (e) {
-      final error = CircleListModelError(
-          message: '예외발생! - $e', type: CircleListModelType.all);
+    } on Exception catch (e) {
       logger.e(e);
-      state = AsyncValue.error(error, error.stackTrace);
+      final exception = e.toGlobalException(screen: 'CircleList_FetchAll');
+      state = AsyncValue.error(exception, exception.stackTrace);
     }
   }
 
@@ -45,13 +46,12 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
       final response = await circleListRepository.fetchOpenCircleList();
 
       state = AsyncValue.data(response);
-    } on CircleListModelError catch (e) {
+    } on GlobalException catch (e) {
       state = AsyncValue.error(e, e.stackTrace);
-    } catch (e) {
+    } on Exception catch (e) {
       logger.e(e);
-      final error = CircleListModelError(
-          message: '예외발생! - $e', type: CircleListModelType.department);
-      state = AsyncValue.error(error, error.stackTrace);
+      final exception = e.toGlobalException(screen: 'CircleList_FetchOpen');
+      state = AsyncValue.error(exception, exception.stackTrace);
     }
   }
 
@@ -64,13 +64,12 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
           .fetchAllFilteredCircleList(clubCategoryUUIDs);
 
       state = AsyncValue.data(response.toCircleListModel());
-    } on CircleListModelError catch (e) {
+    } on GlobalException catch (e) {
       state = AsyncValue.error(e, e.stackTrace);
-    } catch (e) {
-      final error = CircleListModelError(
-          message: '예외발생! - $e', type: CircleListModelType.filtered_all);
-      logger.e(e);
-      state = AsyncValue.error(error, error.stackTrace);
+    } on Exception catch (e) {
+      final exception =
+          e.toGlobalException(screen: 'CircleList_FetchFilteredAll');
+      state = AsyncValue.error(exception, exception.stackTrace);
     }
   }
 
@@ -80,13 +79,12 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
       final response = await circleListRepository
           .fetchOpenFilteredCircleList(clubCategoryUUIDs);
       state = AsyncValue.data(response.toCircleListModel());
-    } on CircleListModelError catch (e) {
+    } on GlobalException catch (e) {
       state = AsyncValue.error(e, e.stackTrace);
-    } catch (e) {
-      final error = CircleListModelError(
-          message: '예외발생! - $e', type: CircleListModelType.filtered_open);
-      logger.e(e);
-      state = AsyncValue.error(error, error.stackTrace);
+    } on Exception catch (e) {
+      final exception =
+          e.toGlobalException(screen: 'CircleList_FetchFilteredOpen');
+      state = AsyncValue.error(exception, exception.stackTrace);
     }
   }
 }

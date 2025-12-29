@@ -1,11 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/utils/regex/Regex.dart';
-import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import '../models/response/global_exception.dart';
+import '../utils/error_util.dart';
+import '../utils/logger/logger.dart';
+import '../utils/regex/Regex.dart';
+import '../viewmodels/state/login_state.dart';
+import '../viewmodels/user_view_model.dart';
+
+import '../utils/result.dart';
 
 final loginViewModelProvider =
-    StateNotifierProvider.autoDispose<LoginViewModel, UserModelBase?>((ref) {
+    StateNotifierProvider.autoDispose<LoginViewModel, LoginState>((ref) {
   final userViewModel = ref.watch(userViewModelProvider.notifier);
 
   return LoginViewModel(
@@ -13,42 +17,59 @@ final loginViewModelProvider =
   );
 });
 
-class LoginViewModel extends StateNotifier<UserModelBase?> {
+class LoginViewModel extends StateNotifier<LoginState> {
   final UserViewModel userViewModel;
   LoginViewModel({
     required this.userViewModel,
-  }) : super(
-            userViewModel.state.value); // Login Page 에 들어왔다는 것은 User 정보가 없다는 얘기
+  }) : super(LoginState()); // Login Page 에 들어왔다는 것은 User 정보가 없다는 얘기
 
-  Future<UserModelBase> login({
+  Future<void> login({
     required String id,
     required String password,
   }) async {
-    try {
-      // 첫 state는 Loading 상태
-      state = UserModelLoading();
+    // 첫 state는 Loading 상태
+    state = state.copyWith(
+      isLoading: true,
+      isLoginSuccess: false,
+      isLoginError: false,
+      error: '',
+    );
 
-      if ((id.isEmpty || !idRegExp.hasMatch(id)) ||
-          (password.isEmpty || !password.validate())) {
-        throw UserModelError(message: '아이디 비밀번호가 입력되지 않았습니다', code: "USR-F800");
-      }
+    if ((id.isEmpty || !idRegExp.hasMatch(id)) ||
+        (password.isEmpty || !password.validate())) {
+      final exception =
+          GlobalException(message: '아이디 비밀번호가 입력되지 않았습니다', code: "USR-F800");
+      state = state.copyWith(
+        isLoading: false,
+        isLoginError: true,
+        error: ErrorUtil.instance.getErrorMessage(exception.code) ??
+            '로그인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+      );
+      return;
+    }
 
-      final userResponse =
-          await userViewModel.login(id: id, password: password);
-      logger.d('LoginViewModel - 로그인 완료');
+    await userViewModel.login.execute(id, password);
 
-      state = userResponse;
+    final result = userViewModel.login.result;
+    switch (result) {
+      case Ok():
+        logger.d('LoginViewModel - 로그인 완료');
 
-      return userResponse;
-    } catch (e) {
-      if (e is UserModelError) {
-        state = e;
-      } else {
-        state = UserModelError(message: '예외발생 : $e');
-      }
-
-      // 반환되는 값은 `UserModelError`임
-      return Future.value(state);
+        state = state.copyWith(
+          isLoading: false,
+          isLoginSuccess: true,
+        );
+        break;
+      case Error():
+        final exception = result.error.toGlobalException(screen: 'Login');
+        state = state.copyWith(
+          isLoading: false,
+          isLoginError: true,
+          error: ErrorUtil.instance.getErrorMessage(exception.code) ??
+              '로그인에 실패했어요.',
+        );
+        break;
+      default:
     }
   }
 }

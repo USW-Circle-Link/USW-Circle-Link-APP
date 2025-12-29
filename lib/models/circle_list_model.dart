@@ -85,27 +85,3 @@ class CircleFilteredListData with _$CircleFilteredListData {
   factory CircleFilteredListData.fromJson(Map<String, dynamic> json) =>
       _$CircleFilteredListDataFromJson(json);
 }
-
-@freezed
-class CircleListModelError with _$CircleListModelError implements Error {
-  CircleListModelError._();
-
-  factory CircleListModelError({
-    String? message,
-    String? code,
-    CircleListModelType? type,
-  }) = _CircleListModelError;
-
-  factory CircleListModelError.fromJson(Map<String, dynamic> json) =>
-      _$CircleListModelErrorFromJson(json);
-
-  CircleListModelError setType(CircleListModelType type) =>
-      CircleListModelError(
-        message: message,
-        code: code,
-        type: type,
-      );
-
-  @override
-  StackTrace get stackTrace => StackTrace.fromString(toString());
-}

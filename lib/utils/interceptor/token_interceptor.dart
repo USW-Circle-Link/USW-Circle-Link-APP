@@ -1,14 +1,13 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart'
-    hide Options;
-import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/models/user_model.dart';
-import 'package:usw_circle_link/utils/decoder/jwt_decoder.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../const/analytics_const.dart';
+import '../../models/login_data.dart';
+import '../../utils/logger/logger.dart';
+import '../../viewmodels/user_view_model.dart';
+import '../../repositories/token_repository.dart';
+import '../result.dart';
 
 class TokenInterceptor extends Interceptor {
   final Ref ref;
@@ -28,30 +27,48 @@ class TokenInterceptor extends Interceptor {
       // 헤더 삭제
       options.headers.remove('accessToken');
 
-      final accessToken = await storage.read(key: accessTokenKey);
-      logger.d("헤더에 액세스 토큰 추가 중 ... - $accessToken");
-
-      if (accessToken == null) {
-        return handler.reject(
-          DioException(
-            requestOptions: options,
-            message: "저장소에 토큰이 존재하지 않습니다",
-            type: DioExceptionType.cancel,
-          ),
-        );
+      final result = await ref.read(tokenRepositoryProvider).getTokens();
+      switch (result) {
+        case Ok():
+          logger.d("헤더에 액세스 토큰 추가 중 ... - ${result.value.accessToken}");
+          break;
+        case Error():
+          logger.d("토큰 조회 실패 - ${result.error}");
+          return handler.resolve(
+            Response(requestOptions: options, statusCode: 401, data: {
+              'message': "저장소에 토큰이 존재하지 않습니다",
+              'code': "USR-F401",
+            }),
+          );
       }
+      final accessToken = result.value.accessToken;
 
       // 실제 토큰으로 대체
       options.headers.addAll({
         'Authorization': 'Bearer $accessToken',
       });
     }
-    if (options.headers['refreshToken'] == 'true') {
+    if (options.headers['refreshToken'] == 'true' && !kIsWeb) {
+      // 웹 환경에서는 리프레시 토큰 사용 안함 withCredentials 옵션 사용
       // 헤더 삭제
       options.headers.remove('refreshToken');
 
-      final refreshToken = await storage.read(key: refreshTokenKey);
-      logger.d("헤더에 리프레쉬 토큰 추가 중 ... - $refreshToken");
+      final result = await ref.read(tokenRepositoryProvider).getTokens();
+      switch (result) {
+        case Ok():
+          logger.d("헤더에 리프레쉬 토큰 추가 중 ... - ${result.value.refreshToken}");
+          break;
+        case Error():
+          logger.e("토큰 조회 실패 - ${result.error}");
+          return handler.reject(
+            DioException(
+              requestOptions: options,
+              message: "저장소에 토큰이 존재하지 않습니다",
+              type: DioExceptionType.cancel,
+            ),
+          );
+      }
+      final refreshToken = result.value.refreshToken;
 
       // 실제 토큰으로 대체
       options.headers.addAll({
@@ -82,29 +99,40 @@ class TokenInterceptor extends Interceptor {
     if (isStatus401 && !isPathRefresh && !isPathLogin) {
       logger.d('액세스 토큰 재발급 중 ... ');
 
-      final refreshToken = await storage.read(key: refreshTokenKey);
-      logger.d('저장된 리프레쉬 토큰 - ${refreshToken ?? "없음!"}');
-
-      // refreshToken이 null이면 에러 반환
-      if (refreshToken == null) {
-        return handler.reject(err);
+      final result = await ref.read(tokenRepositoryProvider).getTokens();
+      switch (result) {
+        case Error():
+          logger.e("리프레시 토큰 조회 실패 - ${result.error}");
+          // 토큰이 없을 때 에러 반환
+          return handler.reject(err);
+        case Ok():
+          logger.d('저장된 리프레쉬 토큰 - ${result.value.refreshToken}');
+          break;
       }
+
+      final refreshToken = result.value.refreshToken;
+
       // 기존의 refresh token으로 새로운 accessToken 발급 시도
       // 반드시 새로운 Dio 객체를 생성해야 함
       final dio = Dio(
         BaseOptions(
           baseUrl: err.requestOptions.baseUrl,
+          extra: {
+            'withCredentials': true,
+          },
         ),
       );
 
       try {
         final response = await dio.post(
           '/integration/refresh-token',
-          options: Options(
-            headers: {
-              'Cookie': 'refreshToken=$refreshToken',
-            },
-          ),
+          options: (!kIsWeb)
+              ? Options(
+                  headers: {
+                    'Cookie': 'refreshToken=$refreshToken',
+                  },
+                )
+              : null,
         );
 
         logger.d(response.data);
@@ -119,27 +147,32 @@ class TokenInterceptor extends Interceptor {
             type: DioExceptionType.cancel,
           );
         }
-        final data = UserModel.fromJson(response.data).data;
+        final data = LoginData.fromJson(response.data['data']);
 
-        final accessToken = data.accessToken;
-        final newRefreshToken = data.refreshToken;
+        final result = await ref.read(tokenRepositoryProvider).saveTokens(
+              accessToken: data.accessToken,
+              refreshToken: data.refreshToken,
+            );
 
-        final payload = JwtDecoder.decode(accessToken);
-
-        logger.d('onError - payload - $payload');
-        // secure storage도 update
-        await storage.write(key: accessTokenKey, value: accessToken);
-        await storage.write(key: refreshTokenKey, value: newRefreshToken);
-        await storage.write(
-            key: clubUUIDsKey, value: jsonEncode(payload['clubUUIDs'] ?? []));
+        switch (result) {
+          case Ok():
+            break;
+          case Error():
+            logger.e("토큰 저장 실패 - ${result.error}");
+            return handler.reject(err);
+        }
 
         // 디버깅용 확인 코드
-        final accessToken0 = await storage.read(key: accessTokenKey);
-        final refreshToken0 = await storage.read(key: refreshTokenKey);
-        final clubUUIDsJsonString = await storage.read(key: clubUUIDsKey);
-        final List<dynamic> clubUUIDs = jsonDecode(clubUUIDsJsonString ?? "[]");
-        logger.d(
-            'onError - AccessToken : $accessToken0 / RefreshToken : $refreshToken0 / clubUUIDsJsonString : $clubUUIDsJsonString / clubUUIDs : $clubUUIDs 저장 성공!');
+        final _result = await ref.read(tokenRepositoryProvider).getTokens();
+        switch (_result) {
+          case Ok():
+            logger.d(
+                'onError - AccessToken : ${_result.value.accessToken} / RefreshToken : ${_result.value.refreshToken} / clubUUIDs : ${_result.value.clubUUIDs} 저장 성공!');
+            break;
+          case Error():
+            logger.e("디버깅용 토큰 조회 실패 - ${_result.error}");
+            break;
+        }
 
         final options = err.requestOptions;
 
@@ -148,21 +181,42 @@ class TokenInterceptor extends Interceptor {
 
         // 요청의 헤더에 새로 발급받은 accessToken으로 변경하기
         options.headers.addAll({
-          'Authorization': 'Bearer $accessToken',
+          'Authorization': 'Bearer ${data.accessToken}',
         });
 
         final newResponse = await dio.fetch(options);
 
+        analytics.logEvent(
+          name: AnalyticsEvent.refreshToken,
+          parameters: {
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+          },
+        );
+
         return handler.resolve(newResponse);
       } on DioException catch (e) {
+        /// 네트워크 에러
+        /// => 리프레쉬 토큰이 만료된거라면 if 조건문에서 처리
         logger.e(e);
-        // 새로운 Access Token임에도 에러가 발생한다면, Refresh Token마저도 만료된 것임
-        await ref.read(userViewModelProvider.notifier).logout();
 
+        analytics.logEvent(
+          name: AnalyticsEvent.refreshToken,
+          parameters: {
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            AnalyticsParam.errorMessage: e.toString(),
+          },
+        );
         return handler.reject(e);
       } catch (e) {
         logger.e(e);
-        await ref.read(userViewModelProvider.notifier).logout();
+        await ref.read(userViewModelProvider.notifier).abnormalLogout.execute();
+        analytics.logEvent(
+          name: AnalyticsEvent.refreshToken,
+          parameters: {
+            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+            AnalyticsParam.errorMessage: e.toString(),
+          },
+        );
       }
     } else if (isStatus401 && isPathLogin) {
       if (err.response != null) {

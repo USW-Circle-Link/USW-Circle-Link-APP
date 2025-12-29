@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
@@ -29,70 +28,67 @@ class _NoticeListScreenState extends ConsumerState<NoticeListScreen> {
         loading: () {},
       );
     });
-    return ScreenUtilInit(
-      designSize: const Size(375, 812),
-      builder: (context, child) => Scaffold(
-        appBar: AppBar(
-          scrolledUnderElevation: 0.0,
-          automaticallyImplyLeading: false,
-          titleSpacing: 0.0,
-          title: Padding(
-            padding: EdgeInsets.only(left: 22.w, right: 22.w),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 52.w,
-                  height: 52.h,
-                  child: IconButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/ic_back_arrow.svg',
-                    ),
+    return Scaffold(
+      appBar: AppBar(
+        scrolledUnderElevation: 0.0,
+        automaticallyImplyLeading: false,
+        titleSpacing: 0.0,
+        title: Padding(
+          padding: EdgeInsets.only(left: 22, right: 22),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 52,
+                height: 52,
+                child: IconButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  icon: SvgPicture.asset(
+                    'assets/images/ic_back_arrow.svg',
                   ),
                 ),
-                TextFontWidget.fontRegular(
-                  '공지사항',
-                  fontSize: 18.sp,
-                  color: Color(0xFF111111),
-                  fontWeight: FontWeight.w800,
-                ),
-                SizedBox(width: 52.w, height: 52.h)
-              ],
-            ),
+              ),
+              TextFontWidget.fontRegular(
+                '공지사항',
+                fontSize: 18,
+                color: Color(0xFF111111),
+                fontWeight: FontWeight.w800,
+              ),
+              SizedBox(width: 52, height: 52)
+            ],
           ),
         ),
-        body: Center(
-          child: state.when<Widget>(
-            data: (noticeModel) {
-              return Container(
-                  padding: EdgeInsets.only(left: 16.w, right: 16.w),
-                  child: NoticeList(
-                    noticeModel: noticeModel,
-                    onItemClicked: (noticeId) {
-                      context.go('/notices/$noticeId/detail');
-                    },
-                  ));
-            },
-            error: (error, stackTrace) {
-              error = error as NoticeModelError;
-              switch (error.type) {
-                case NoticeModelType.fetchAll:
-                  break;
-                default:
-              }
-              return TextFontWidget.fontRegular(
-                '공지사항을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
-                textAlign: TextAlign.center,
-                fontSize: 14.sp,
-                color: Color(0xFFA1A1A1),
-                fontWeight: FontWeight.w400,
-              );
-            },
-            loading: () => CircularProgressIndicator(),
-          ),
+      ),
+      body: Center(
+        child: state.when<Widget>(
+          data: (noticeModel) {
+            return Container(
+                padding: EdgeInsets.only(left: 16, right: 16),
+                child: NoticeList(
+                  noticeModel: noticeModel,
+                  onItemClicked: (noticeId) {
+                    context.go('/notices/$noticeId/detail');
+                  },
+                ));
+          },
+          error: (error, stackTrace) {
+            error = error as NoticeModelError;
+            switch (error.type) {
+              case NoticeModelType.fetchAll:
+                break;
+              default:
+            }
+            return TextFontWidget.fontRegular(
+              '공지사항을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
+              textAlign: TextAlign.center,
+              fontSize: 14,
+              color: Color(0xFFA1A1A1),
+              fontWeight: FontWeight.w400,
+            );
+          },
+          loading: () => CircularProgressIndicator(),
         ),
       ),
     );

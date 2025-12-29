@@ -6,7 +6,9 @@ part 'sign_up_state.freezed.dart';
 @freezed
 class SignUpState with _$SignUpState {
   factory SignUpState({
-    @Default(false) bool isLoading,
+    @Default(false) bool isVerifyIdLoading,
+    @Default(false) bool isSignUpLoading,
+    @Default(false) bool isVerifyEmailLoading,
     @Default(false) bool idVerified,
     @Default(false) bool emailVerified,
     @Default(false) bool signUpSuccess,

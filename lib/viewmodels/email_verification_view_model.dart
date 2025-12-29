@@ -1,8 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:usw_circle_link/models/email_verification_model.dart';
+import 'package:usw_circle_link/models/response/global_exception.dart';
 import 'package:usw_circle_link/repositories/auth_repository.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 import 'package:usw_circle_link/viewmodels/state/email_verification_state.dart';
 
 final emailVerificationViewModelProvider = AutoDisposeNotifierProvider<
@@ -17,81 +18,77 @@ class EmailVerificationViewModel
   }
 
   Future<void> sendMail() async {
-    try {
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      isSendMailSuccess: false,
+      isVerifySuccess: false,
+      emailTokenUUID: '',
+      signupUUID: '',
+    );
+
+    final email = state.email;
+
+    if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
       state = state.copyWith(
-        isLoading: true,
-        error: null,
-        isSendMailSuccess: false,
-        isVerifySuccess: false,
-        emailTokenUUID: '',
-        signupUUID: '',
+        isLoading: false,
+        error: '올바른 이메일을 입력해주세요.',
       );
+      return;
+    }
 
-      final email = state.email;
+    final result =
+        await ref.read(authRepositoryProvider).sendMail(email: email);
 
-      if (email.isEmpty || !emailVerificationUrlRegExp.hasMatch(email)) {
+    switch (result) {
+      case Ok():
+        final sendMailResponse = result.value;
         state = state.copyWith(
           isLoading: false,
-          error: '올바른 이메일을 입력해주세요.',
+          isSendMailSuccess: true,
+          emailTokenUUID: sendMailResponse.data.emailTokenUUID,
+          email: sendMailResponse.data.email,
         );
-        return;
-      }
-
-      final response =
-          await ref.read(authRepositoryProvider).sendMail(email: email);
-      state = state.copyWith(
-        isLoading: false,
-        isSendMailSuccess: true,
-        emailTokenUUID: response.data.emailTokenUUID,
-        email: response.data.email,
-      );
-    } on EmailVerificationModelError catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.',
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: "인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.",
-      );
+      case Error():
+        state = state.copyWith(
+          isLoading: false,
+          error: ErrorUtil.instance
+                  .getErrorMessage((result.error as GlobalException).code) ??
+              '인증 메일을 보내는 데 실패했습니다. 잠시 후 다시 시도해주세요.',
+        );
     }
   }
 
   Future<void> verifyEmailVerification() async {
-    try {
-      state = state.copyWith(
-        isLoading: true,
-        error: null,
-        isVerifySuccess: false,
-      );
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      isVerifySuccess: false,
+    );
 
-      final email = state.email;
+    final email = state.email;
 
-      final response = await ref
-          .read(authRepositoryProvider)
-          .verifyEmailVerification(email: email); // true or error
+    final result = await ref
+        .read(authRepositoryProvider)
+        .verifyEmailVerification(email: email); // true or error
 
-      state = state.copyWith(
-        isLoading: false,
-        error: null,
-        isVerifySuccess: true,
-        signupUUID: response.data.signupUuid,
-      );
-    } on EmailVerificationModelError catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증에 실패하였습니다. 다시 시도해주세요.',
-        isVerifySuccess: false,
-      );
-    } catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: "인증에 실패하였습니다. 다시 시도해주세요.",
-        isVerifySuccess: false,
-      );
+    switch (result) {
+      case Ok():
+        final emailVerificationResponse = result.value;
+        state = state.copyWith(
+          isLoading: false,
+          error: null,
+          isVerifySuccess: true,
+          signupUUID: emailVerificationResponse.data.signupUuid,
+        );
+      case Error():
+        state = state.copyWith(
+          isLoading: false,
+          error: ErrorUtil.instance
+                  .getErrorMessage((result.error as GlobalException).code) ??
+              '인증에 실패하였습니다. 다시 시도해주세요.',
+          isVerifySuccess: false,
+        );
     }
   }
 
