@@ -1,0 +1,18 @@
+default_platform(:android)
+
+platform :android do
+  desc "Build and upload to Play Store Internal Track"
+  lane :deploy do
+    # Flutter 빌드
+    sh("cd ../.. && flutter build appbundle --release")
+
+    # Play Store 업로드 (Internal Track)
+    upload_to_play_store(
+      track: "internal",
+      aab: "../build/app/outputs/bundle/release/app-release.aab",
+      skip_upload_metadata: true,
+      skip_upload_images: true,
+      skip_upload_screenshots: true
+    )
+  end
+end
