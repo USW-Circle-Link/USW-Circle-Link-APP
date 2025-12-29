@@ -23,8 +23,10 @@ jobs:
           fi
           flutter --version
 
-      - name: Install dependencies
-        run: flutter pub get
+      - name: Clean and Install dependencies
+        run: |
+          flutter clean
+          flutter pub get
 
       - name: Install CocoaPods
         run: |
