@@ -82,9 +82,38 @@ Generated files follow patterns: `*.freezed.dart`, `*.g.dart`. After modifying m
 flutter pub run build_runner build
 ```
 
+## Environment Setup
+
+Required configuration files before running the project:
+
+| File | Description |
+|------|-------------|
+| `android/app/key.properties` | Android signing key (copy from `key.example.properties`) |
+| `android/app/google-services.json` | Firebase Android config |
+| `ios/Runner/GoogleService-Info.plist` | Firebase iOS config |
+| `ios/fastlane/Appfile`, `Fastfile` | iOS Fastlane config (for deployment) |
+| `android/fastlane/Appfile`, `Fastfile` | Android Fastlane config (for deployment) |
+
 ## Deployment
 
-Web deployment triggers automatically on push to `main`:
+### Web (GitHub Pages)
+Triggers automatically on push to `main`:
 1. Builds Flutter web with source maps
 2. Uploads source maps to Sentry
 3. Deploys to GitHub Pages
+
+### iOS (TestFlight via Fastlane)
+```bash
+cd ios && fastlane release
+```
+Uses Fastlane Match for certificate management.
+
+### Android (Play Store via Fastlane)
+```bash
+cd android && fastlane deploy
+```
+Deploys to Play Store Internal Track.
+
+### GitHub Actions Runner
+- Web deployment: `ubuntu-latest` (GitHub-hosted)
+- iOS/Android deployment (`deploy_prod`): `self-hosted, macOS` required
