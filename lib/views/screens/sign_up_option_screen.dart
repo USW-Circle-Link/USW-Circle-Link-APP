@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class SignUpOptionScreen extends ConsumerStatefulWidget {
   const SignUpOptionScreen({Key? key}) : super(key: key);
@@ -18,26 +18,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 22.0),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: SvgPicture.asset(
-                  'assets/images/ic_back_arrow.svg',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(top: 60.0),

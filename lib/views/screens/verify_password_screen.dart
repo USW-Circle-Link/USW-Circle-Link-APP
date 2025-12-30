@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
-import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class VerifyPasswordScreen extends ConsumerStatefulWidget {
   final Map<String, String>? profileData;
@@ -60,45 +60,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),
       resizeToAvoidBottomInset: false,
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(62.0),
-        child: AppBar(
-          scrolledUnderElevation: 0,
-          toolbarHeight: 62.0,
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: const Color(0xffFFFFFF),
-          automaticallyImplyLeading: false,
-          title: SizedBox(
-            width: 375.0,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                    height: 36.0,
-                    width: 36.0,
-                  ),
-                ),
-                const SizedBox(width: 69.8),
-                TextFontWidget.fontRegular(
-                  '내 정보 수정',
-                  color: Colors.black,
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w700,
-                  height: 1.111,
-                  letterSpacing: -0.45,
-                ),
-                Expanded(child: Container()),
-              ],
-            ),
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '내 정보 수정'),
       bottomNavigationBar: Container(
         margin: const EdgeInsets.only(left: 32.0, right: 32.0, bottom: 16.0),
         width: double.infinity,

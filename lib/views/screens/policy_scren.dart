@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 enum PolicyType {
   privacyPolicy('assets/html/privacy_policy.html', '개인정보 처리방침'),
@@ -36,48 +36,15 @@ class PolicyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: !isDialog
-              ? const EdgeInsets.symmetric(horizontal: 22.0)
-              : EdgeInsets.zero,
-          child: Row(
-            mainAxisAlignment: isDialog
-                ? MainAxisAlignment.start
-                : MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    // 이전 화면으로 돌아가기
-                    if (isDialog) {
-                      context.pop(false);
-                    } else {
-                      context.pop();
-                    }
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                policyType.title,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-              if (!isDialog)
-                const SizedBox(
-                  width: 52.0,
-                  height: 52.0,
-                ),
-            ],
-          ),
-        ),
+      appBar: DetailAppBar(
+        title: policyType.title,
+        onBackPressed: () {
+          if (isDialog) {
+            context.pop(false);
+          } else {
+            context.pop();
+          }
+        },
       ),
       bottomNavigationBar: isDialog
           ? SizedBox(

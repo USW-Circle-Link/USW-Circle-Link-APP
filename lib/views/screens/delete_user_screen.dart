@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
-import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class DeleteUserScreen extends ConsumerStatefulWidget {
   const DeleteUserScreen({Key? key}) : super(key: key);
@@ -50,37 +50,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
     _listen();
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '회원탈퇴',
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '회원탈퇴'),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(top: 30.0),

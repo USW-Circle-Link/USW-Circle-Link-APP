@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/viewmodels/select_circle_view_model.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 
 class SelectCircleScreen extends ConsumerStatefulWidget {
@@ -31,38 +31,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '기존 동아리 회원 가입',
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '기존 동아리 회원 가입'),
       body: SafeArea(
         child: state.when(
           data: (data) {

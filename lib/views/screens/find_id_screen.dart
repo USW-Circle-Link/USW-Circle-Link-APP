@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
@@ -8,7 +7,9 @@ import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_id_view_model.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 import '../../models/response/global_exception.dart';
 
@@ -45,44 +46,8 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
           loading: () {});
     });
 
-    emailEditController.addListener(
-      () {
-        ref.read(findIdViewModelProvider.notifier).initState();
-      },
-    );
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0.0,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '아이디 찾기',
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '아이디 찾기'),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -95,33 +60,15 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 46.0,
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: emailEditController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          decoration: InputDecoration(
-                            hintText: "포털 이메일 입력",
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFB052)),
-                            ),
-                            contentPadding: const EdgeInsets.only(left: 8.0),
-                            suffixIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFontWidget.fontRegular(
-                                  '@ suwon.ac.kr',
-                                  fontSize: 16.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                )
-                              ],
-                            ),
-                          ),
-                          textInputAction: TextInputAction.done,
-                        ),
+                      EmailTextField(
+                        controller: emailEditController,
+                        hintText: '포털 이메일 입력',
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) {
+                          ref
+                              .read(findIdViewModelProvider.notifier)
+                              .initState();
+                        },
                       ),
                       const SizedBox(
                         height: 20.0,
