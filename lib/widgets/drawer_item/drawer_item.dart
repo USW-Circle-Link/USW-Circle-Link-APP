@@ -106,8 +106,8 @@ class DrawerItem extends StatelessWidget {
                 ),
                 style: TileStyle(
                   padding: EdgeInsets.only(
-                    left: (style.contentPadding as EdgeInsets).left,
-                    right: isExpanded ? 15 : (style.contentPadding as EdgeInsets).right,
+                    left: style.contentPadding.left,
+                    right: isExpanded ? 15 : style.contentPadding.right,
                     top: 12,
                     bottom: 12,
                   ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/const/data.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_screen.dart';
 import 'package:usw_circle_link/widgets/alert_text_dialog/alert_text_dialog.dart';
 import 'package:usw_circle_link/widgets/major_picker_dialog/major_picker_dialog.dart';
 import 'package:usw_circle_link/widgets/policy_dialog/policy_dialog.dart';

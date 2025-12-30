@@ -119,7 +119,7 @@ DetailAppBar(
 - policy_agree_screen.dart
 - select_circle_screen.dart
 - notice_detail_screen.dart
-- policy_scren.dart
+- policy_screen.dart
 - application_writing_screen.dart
 
 ## 관련 컴포넌트

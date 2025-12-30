@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_screen.dart';
 
 class PolicyDialog extends StatefulWidget {
   const PolicyDialog({Key? key, required this.policyType}) : super(key: key);

@@ -301,7 +301,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Future<void> _showCategoryPicker() async {
-    final result = await showModalBottomSheet<List<CategoryData>>(
+    await showModalBottomSheet<List<CategoryData>>(
       context: context,
       useRootNavigator: false,
       isScrollControlled: true,
@@ -331,10 +331,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         );
       },
     );
-    if (result != null) {
-      setState(() => selectedCategories = result);
-      await fetchCircleList();
-    }
   }
 
   Future<void> fetchCircleList() async {

@@ -5,7 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_screen.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
