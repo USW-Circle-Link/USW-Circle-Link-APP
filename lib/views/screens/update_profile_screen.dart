@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/main.dart';
@@ -11,8 +10,9 @@ import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
-import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class UpdateProfileScreen extends ConsumerStatefulWidget {
   const UpdateProfileScreen({super.key});
@@ -187,41 +187,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     return Scaffold(
       backgroundColor: const Color(0xffFFFFFF),
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        toolbarHeight: 62,
-        centerTitle: true,
-        elevation: 0.0,
-        backgroundColor: const Color(0xffFFFFFF),
-        automaticallyImplyLeading: false,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '내 정보 수정',
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '내 정보 수정'),
       body: state.when(
         data: (data) {
           return SingleChildScrollView(

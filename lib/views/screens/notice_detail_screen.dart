@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:usw_circle_link/models/notice_detail_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_detail_view_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
 import 'package:usw_circle_link/views/screens/image_screen.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class NoticeDetailScreen extends ConsumerWidget {
   const NoticeDetailScreen({
@@ -36,32 +36,7 @@ class NoticeDetailScreen extends ConsumerWidget {
       }
     });
     return Scaffold(
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: EdgeInsets.only(left: 22, right: 22),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52,
-                height: 52,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              SizedBox(width: 52, height: 52)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(),
       body: SafeArea(
         child: SizedBox(
           height: double.infinity,

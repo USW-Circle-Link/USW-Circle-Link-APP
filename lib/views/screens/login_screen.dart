@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import '../../utils/icons/sign_up_icons_icons.dart';
+import '../../widgets/detail_app_bar/detail_app_bar.dart';
 import '../../utils/logger/logger.dart';
-import '../../views/widgets/rounded_rext_field.dart';
-import '../../views/widgets/text_font_widget.dart';
+import '../../widgets/rounded_text_field/rounded_text_field.dart';
+import '../../widgets/text_font_widget/text_font_widget.dart';
 import '../../viewmodels/login_view_model.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -39,27 +39,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding:
-              const EdgeInsets.only(left: 22.0), // icon에 10.0 정도의 여백이 기본적으로 존재
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  // Navigate back to the previous screen by popping the current route
-                  Navigator.of(context).pop();
-                },
-                icon: SvgPicture.asset(
-                  'assets/images/ic_back_arrow.svg',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(),
       body: SingleChildScrollView(
         child: Container(
           margin: const EdgeInsets.only(top: 120.0),

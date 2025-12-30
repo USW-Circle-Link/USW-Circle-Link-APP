@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class ImageScreen extends ConsumerStatefulWidget {
   ImageScreen({

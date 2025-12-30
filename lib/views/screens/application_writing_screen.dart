@@ -9,7 +9,8 @@ import '../../router/circle_list_route.dart';
 import '../../utils/dialog_manager.dart';
 import '../../utils/logger/logger.dart';
 import '../../viewmodels/application_view_model.dart';
-import '../../views/widgets/text_font_widget.dart';
+import '../../widgets/detail_app_bar/detail_app_bar.dart';
+import '../../widgets/text_font_widget/text_font_widget.dart';
 
 class ApplicationWritingScreen extends ConsumerStatefulWidget {
   const ApplicationWritingScreen({Key? key, required this.clubUUID})
@@ -62,38 +63,7 @@ class _ApplicationWritingScreenState
     });
 
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        scrolledUnderElevation: 0,
-        title: Padding(
-          padding: EdgeInsets.only(left: 22, right: 22),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52,
-                height: 52,
-                child: IconButton(
-                  onPressed: () {
-                    context.pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '지원하기',
-                fontSize: 20,
-                color: Color(0xFF111111),
-                fontWeight: FontWeight.w700,
-              ),
-              SizedBox(width: 52, height: 52),
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '지원하기'),
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: EdgeInsets.only(left: 32, right: 32, bottom: 20),

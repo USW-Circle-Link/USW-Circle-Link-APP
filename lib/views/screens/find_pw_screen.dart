@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/find_pw_view_model.dart';
-import 'package:usw_circle_link/views/widgets/rounded_rext_field.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
+import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class FindPwScreen extends ConsumerStatefulWidget {
   const FindPwScreen({Key? key}) : super(key: key);
@@ -61,50 +62,8 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
     final _ = ref.watch(timerProvider);
     final timerNotifier = ref.watch(timerProvider.notifier);
 
-    idEditController.addListener(
-      () {
-        ref.read(findPwViewModelProvider.notifier).initState();
-      },
-    );
-
-    emailEditController.addListener(
-      () {
-        ref.read(findPwViewModelProvider.notifier).initState();
-      },
-    );
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        scrolledUnderElevation: 0.0,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 22.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                '비밀번호 찾기',
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(title: '비밀번호 찾기'),
       body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -117,54 +76,41 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(
-                        height: 46.0,
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: idEditController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          decoration: const InputDecoration(
-                            hintText: "아이디 입력",
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFB052)),
-                            ),
-                            contentPadding:
-                                EdgeInsets.only(left: 8.0, bottom: 8.0),
-                          ),
-                          textInputAction: TextInputAction.next,
+                      RoundedTextField(
+                        height: 50.0,
+                        textEditController: idEditController,
+                        leftBottomCornerRadius: 8.0,
+                        rightBottomCornerRadius: 8.0,
+                        leftTopCornerRadius: 8.0,
+                        rightTopCornerRadius: 8.0,
+                        borderWidth: 1.0,
+                        maxLines: 1,
+                        textInputType: TextInputType.text,
+                        textInputAction: TextInputAction.next,
+                        textAlign: TextAlign.left,
+                        hintText: '아이디 입력',
+                        isAnimatedHint: false,
+                        onChanged: (value) {
+                          ref
+                              .read(findPwViewModelProvider.notifier)
+                              .initState();
+                        },
+                        hintStyle: TextFontWidget.fontRegularStyle(
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.w300,
+                          color: const Color(0xFF989898),
                         ),
                       ),
-                      const SizedBox(
-                        height: 14.0,
-                      ),
-                      SizedBox(
-                        height: 46.0,
-                        child: TextField(
-                          textAlignVertical: TextAlignVertical.center,
-                          controller: emailEditController,
-                          keyboardType: TextInputType.text,
-                          textAlign: TextAlign.left,
-                          decoration: InputDecoration(
-                            hintText: "포털 이메일 입력",
-                            focusedBorder: const UnderlineInputBorder(
-                              borderSide: BorderSide(color: Color(0xFFFFB052)),
-                            ),
-                            contentPadding: const EdgeInsets.only(left: 8.0),
-                            suffixIcon: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                TextFontWidget.fontRegular(
-                                  '@ suwon.ac.kr',
-                                  fontSize: 16.0,
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.w400,
-                                )
-                              ],
-                            ),
-                          ),
-                          textInputAction: TextInputAction.done,
-                        ),
+                      const SizedBox(height: 14.0),
+                      EmailTextField(
+                        controller: emailEditController,
+                        hintText: '포털 이메일 입력',
+                        textInputAction: TextInputAction.done,
+                        onChanged: (value) {
+                          ref
+                              .read(findPwViewModelProvider.notifier)
+                              .initState();
+                        },
                       ),
                       const SizedBox(
                         height: 10.0,

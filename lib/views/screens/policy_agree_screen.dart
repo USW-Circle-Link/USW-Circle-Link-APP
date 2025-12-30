@@ -1,13 +1,13 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/views/screens/policy_screen.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class PolicyAgreeScreen extends StatefulWidget {
   PolicyAgreeScreen({
@@ -26,25 +26,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        titleSpacing: 0.0,
-        title: Padding(
-          padding: const EdgeInsets.only(left: 22.0),
-          child: Row(
-            children: [
-              IconButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                icon: SvgPicture.asset(
-                  'assets/images/ic_back_arrow.svg',
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: const DetailAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
         child: Column(

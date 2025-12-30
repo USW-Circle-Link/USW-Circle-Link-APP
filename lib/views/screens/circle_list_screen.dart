@@ -1,11 +1,14 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
-import 'package:usw_circle_link/views/widgets/circle_detail_item.dart';
-import 'package:usw_circle_link/views/widgets/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/circle_info_tile/circle_info_tile.dart';
+import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
+import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
+import 'package:usw_circle_link/widgets/card/app_card.dart';
+import 'package:usw_circle_link/widgets/card/app_card_styles.dart';
 
 class CircleListScreen extends ConsumerWidget {
   final CircleListType listType;
@@ -22,72 +25,55 @@ class CircleListScreen extends ConsumerWidget {
       logger.d('next: $next');
     });
 
-    // ScreenUtilInit 위젯을 제거하고 바로 Scaffold를 반환합니다.
     return Scaffold(
       backgroundColor: const Color(0xffF0F2F5),
       resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        scrolledUnderElevation: 0,
-        toolbarHeight: 62,
-        centerTitle: true,
-        elevation: 0.0,
-        backgroundColor: const Color(0xffFFFFFF),
-        automaticallyImplyLeading: false,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 52.0,
-                height: 52.0,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  },
-                  icon: SvgPicture.asset(
-                    'assets/images/ic_back_arrow.svg',
-                  ),
-                ),
-              ),
-              TextFontWidget.fontRegular(
-                listType.title,
-                fontSize: 18.0,
-                color: const Color(0xFF111111),
-                fontWeight: FontWeight.w800,
-              ),
-              const SizedBox(width: 52.0, height: 52.0)
-            ],
-          ),
-        ),
-      ),
+      appBar: DetailAppBar(title: listType.title),
       body: state.when(
         data: (data) => data.data.isNotEmpty
             ? Padding(
-          padding: EdgeInsets.fromLTRB(0, 24, 0, 0),
-          child: ListView.builder(
-            itemCount: data.data.length,
-            itemBuilder: (context, index) {
-              final circle = data.data[index];
-              return CircleDetailItem(
-                clubUUID: circle.clubUUID,
-                leader: circle.leaderName,
-                name: circle.clubName,
-                imageUrl: circle.mainPhotoPath ?? '',
-                leaderHp: circle.leaderHp,
-                instaId: circle.clubInsta,
-                circleRoom: circle.clubRoomNumber,
-                // 'status'가 없으면 null로 처리
-                statusString: circle.aplictStatus,
-              );
-            },
-          ),
-        )
+                padding: const EdgeInsets.only(top: 8),
+                child: ListView.builder(
+                  itemCount: data.data.length,
+                  itemBuilder: (context, index) {
+                    final circle = data.data[index];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 4),
+                      child: AppCard(
+                        style: AppCardStyle.listItemStyle.copyWith(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 16, horizontal: 0),
+                        ),
+                        child: InkWell(
+                          onTap: () {
+                            context.push(
+                              '/circle?clubUUID=${circle.clubUUID}',
+                            );
+                          },
+                          child: CircleInfoTile(
+                            clubUUID: circle.clubUUID,
+                            name: circle.clubName,
+                            leaderName: circle.leaderName,
+                            imageUrl: circle.mainPhotoPath,
+                            circleRoom: circle.clubRoomNumber,
+                            leaderHp: circle.leaderHp,
+                            clubInsta: circle.clubInsta,
+                            showMoreMenu: true,
+                            status:
+                                CircleInfoStatus.fromCode(circle.aplictStatus),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              )
             : Center(
-          child: TextFontWidget.fontRegular(
-            '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
-          ),
-        ),
+                child: TextFontWidget.fontRegular(
+                  '${listType == CircleListType.myCircles ? "소속된" : "지원한"} 동아리가 없습니다.',
+                ),
+              ),
         loading: () => Center(
           child: CircularProgressIndicator(),
         ),
