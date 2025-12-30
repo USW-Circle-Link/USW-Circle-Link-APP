@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart' hide Badge;
 import 'package:usw_circle_link/utils/extensions.dart';
 import '../badge/badge.dart';
+import '../circle_detail_overlay/circle_detail_overlay.dart';
 import '../popover/popover.dart';
 import '../popover/popover_controller.dart';
-import '../popover/popover_menu.dart';
-import '../popover/popover_menu_item.dart';
-import '../popover/popover_menu_styles.dart';
 import '../popover/popover_styles.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'circle_info_tile_styles.dart';
@@ -297,51 +295,12 @@ class _CircleInfoTileState extends State<CircleInfoTile> {
   }
 
   Widget _buildMoreButton() {
-    final menuItems = <PopoverMenuItem>[];
+    // 모든 정보가 없으면 버튼 숨김
+    final hasCircleRoom = widget.circleRoom != null && widget.circleRoom!.isNotEmpty;
+    final hasLeaderHp = widget.leaderHp != null && widget.leaderHp!.isNotEmpty;
+    final hasClubInsta = widget.clubInsta != null && widget.clubInsta!.isNotEmpty;
 
-    if (widget.circleRoom != null && widget.circleRoom!.isNotEmpty) {
-      menuItems.add(PopoverMenuItem(
-        icon: const Icon(Icons.room_outlined),
-        label: '동아리실',
-        trailing: Text(
-          widget.circleRoom!,
-          style: TextFontWidget.fontRegularStyle(
-            fontSize: 12,
-            color: const Color(0xFF767676),
-          ),
-        ),
-      ));
-    }
-
-    if (widget.leaderHp != null && widget.leaderHp!.isNotEmpty) {
-      menuItems.add(PopoverMenuItem(
-        icon: const Icon(Icons.phone_outlined),
-        label: '회장 연락처',
-        trailing: Text(
-          widget.leaderHp!,
-          style: TextFontWidget.fontRegularStyle(
-            fontSize: 12,
-            color: const Color(0xFF767676),
-          ),
-        ),
-      ));
-    }
-
-    if (widget.clubInsta != null && widget.clubInsta!.isNotEmpty) {
-      menuItems.add(PopoverMenuItem(
-        icon: const Icon(Icons.alternate_email),
-        label: '인스타그램',
-        trailing: Text(
-          '@${widget.clubInsta}',
-          style: TextFontWidget.fontRegularStyle(
-            fontSize: 12,
-            color: const Color(0xFF767676),
-          ),
-        ),
-      ));
-    }
-
-    if (menuItems.isEmpty) {
+    if (!hasCircleRoom && !hasLeaderHp && !hasClubInsta) {
       return const SizedBox.shrink();
     }
 
@@ -350,14 +309,14 @@ class _CircleInfoTileState extends State<CircleInfoTile> {
       childAnchor: PopoverAnchor.bottomRight,
       popoverAnchor: PopoverAnchor.topRight,
       style: PopoverStyle.defaultStyle.copyWith(
-        borderRadius: 12,
+        borderRadius: 0,
       ),
-      popoverBuilder: (context, controller) => PopoverMenu(
-        items: menuItems,
-        style: PopoverMenuStyle(
-          width: 195,
-          padding: const EdgeInsets.symmetric(vertical: 12),
-        ),
+      popoverBuilder: (context, controller) => CircleDetailOverlay(
+        circleRoom: widget.circleRoom,
+        leaderHp: widget.leaderHp,
+        clubInsta: widget.clubInsta,
+        onClose: () => _popoverController.hide(),
+        width: 195,
       ),
       child: GestureDetector(
         onTap: () => _popoverController.toggle(),
