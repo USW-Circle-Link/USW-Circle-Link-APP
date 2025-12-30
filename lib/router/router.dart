@@ -20,7 +20,7 @@ import 'package:usw_circle_link/views/screens/policy_agree_screen.dart';
 import 'package:usw_circle_link/views/screens/select_circle_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_option_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_screen.dart';
-import 'package:usw_circle_link/views/screens/policy_scren.dart';
+import 'package:usw_circle_link/views/screens/policy_screen.dart';
 import 'package:usw_circle_link/views/screens/sign_up_success_screen.dart';
 import 'package:usw_circle_link/views/screens/update_profile_screen.dart';
 import 'package:usw_circle_link/views/screens/verify_password_screen.dart';

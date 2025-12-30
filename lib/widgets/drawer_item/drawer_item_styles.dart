@@ -29,8 +29,8 @@ class DrawerItemStyle {
   /// 패딩
   final EdgeInsetsGeometry padding;
 
-  /// 콘텐츠 패딩
-  final EdgeInsetsGeometry contentPadding;
+  /// 콘텐츠 패딩 (EdgeInsets 타입만 지원)
+  final EdgeInsets contentPadding;
 
   /// 애니메이션 지속시간
   final Duration animationDuration;
@@ -61,7 +61,7 @@ class DrawerItemStyle {
     double? titleFontSize,
     FontWeight? titleFontWeight,
     EdgeInsetsGeometry? padding,
-    EdgeInsetsGeometry? contentPadding,
+    EdgeInsets? contentPadding,
     Duration? animationDuration,
   }) {
     return DrawerItemStyle(

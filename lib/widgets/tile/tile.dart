@@ -2,6 +2,32 @@ import 'package:flutter/material.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'tile_styles.dart';
 
+/// 타일 컨테이너를 빌드하는 유틸리티 함수
+///
+/// [style]에 따라 배경색, 테두리, 모서리 둥글기를 적용합니다.
+Widget buildTileContainer({
+  required Widget child,
+  required TileStyle style,
+}) {
+  if (style.borderRadius == 0 && style.borderColor == null) {
+    return Container(
+      color: style.backgroundColor,
+      child: child,
+    );
+  }
+
+  return Container(
+    decoration: BoxDecoration(
+      color: style.backgroundColor,
+      borderRadius: BorderRadius.circular(style.borderRadius),
+      border: style.borderColor != null
+          ? Border.all(color: style.borderColor!, width: style.borderWidth)
+          : null,
+    ),
+    child: child,
+  );
+}
+
 /// 범용 타일 레이아웃 컴포넌트
 ///
 /// 드로어 메뉴, 리스트 아이템 등에서 사용할 수 있는 범용 레이아웃입니다.
@@ -48,9 +74,6 @@ class Tile extends StatelessWidget {
   /// 활성화 상태
   final bool enabled;
 
-  /// 선택 상태
-  final bool selected;
-
   /// 스타일
   final TileStyle style;
 
@@ -64,7 +87,6 @@ class Tile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.enabled = true,
-    this.selected = false,
     this.style = TileStyle.defaultStyle,
   });
 
@@ -155,11 +177,11 @@ class Tile extends StatelessWidget {
     );
 
     if (onTap == null && onLongPress == null) {
-      return _buildContainer(content);
+      return buildTileContainer(child: content, style: style);
     }
 
-    return _buildContainer(
-      Material(
+    return buildTileContainer(
+      child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onTap : null,
@@ -168,26 +190,7 @@ class Tile extends StatelessWidget {
           child: content,
         ),
       ),
-    );
-  }
-
-  Widget _buildContainer(Widget child) {
-    if (style.borderRadius == 0 && style.borderColor == null) {
-      return Container(
-        color: style.backgroundColor,
-        child: child,
-      );
-    }
-
-    return Container(
-      decoration: BoxDecoration(
-        color: style.backgroundColor,
-        borderRadius: BorderRadius.circular(style.borderRadius),
-        border: style.borderColor != null
-            ? Border.all(color: style.borderColor!, width: style.borderWidth)
-            : null,
-      ),
-      child: child,
+      style: style,
     );
   }
 }
@@ -205,7 +208,6 @@ class RawTile extends StatelessWidget {
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
   final bool enabled;
-  final bool selected;
   final TileStyle style;
 
   const RawTile({
@@ -215,7 +217,6 @@ class RawTile extends StatelessWidget {
     this.onTap,
     this.onLongPress,
     this.enabled = true,
-    this.selected = false,
     this.style = TileStyle.defaultStyle,
   });
 
@@ -244,11 +245,11 @@ class RawTile extends StatelessWidget {
     );
 
     if (onTap == null && onLongPress == null) {
-      return _buildContainer(content);
+      return buildTileContainer(child: content, style: style);
     }
 
-    return _buildContainer(
-      Material(
+    return buildTileContainer(
+      child: Material(
         color: Colors.transparent,
         child: InkWell(
           onTap: enabled ? onTap : null,
@@ -257,26 +258,7 @@ class RawTile extends StatelessWidget {
           child: content,
         ),
       ),
-    );
-  }
-
-  Widget _buildContainer(Widget child) {
-    if (style.borderRadius == 0 && style.borderColor == null) {
-      return Container(
-        color: style.backgroundColor,
-        child: child,
-      );
-    }
-
-    return Container(
-      decoration: BoxDecoration(
-        color: style.backgroundColor,
-        borderRadius: BorderRadius.circular(style.borderRadius),
-        border: style.borderColor != null
-            ? Border.all(color: style.borderColor!, width: style.borderWidth)
-            : null,
-      ),
-      child: child,
+      style: style,
     );
   }
 }

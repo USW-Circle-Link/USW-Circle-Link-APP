@@ -298,7 +298,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               InkWell(
-                onTap: () => context.go('/tems_of_serice'),
+                onTap: () => context.go('/terms_of_service'),
                 child: TextFontWidget.fontRegular(
                   '이용약관',
                   fontSize: widget.style.bottomMenuFontSize,
@@ -338,13 +338,18 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
   }
 
   /// 문의하기 URL 열기
-  void _launchURL() async {
+  Future<void> _launchURL() async {
     const url = inquiry;
     final Uri uri = Uri.parse(url);
     if (await canLaunchUrl(uri)) {
       await launchUrl(uri);
     } else {
-      throw 'URL을 열 수 없습니다: $url';
+      if (mounted) {
+        DialogManager.instance.showAlertDialog(
+          context: context,
+          content: '문의하기 페이지를 열 수 없습니다.',
+        );
+      }
     }
   }
 }

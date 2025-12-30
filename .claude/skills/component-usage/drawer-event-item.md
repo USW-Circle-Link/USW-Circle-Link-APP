@@ -44,4 +44,4 @@ buildDrawerEventItem(
 ## 관련 컴포넌트
 
 - [DrawerItem](drawer-item.md) - 일반 드로어 메뉴 아이템
-- [LoggedInMenu](logged-in-menu.md) - 드로어 메뉴
+- [DrawerMenu](drawer-menu.md) - 드로어 메뉴
