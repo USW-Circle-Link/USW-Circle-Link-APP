@@ -13,6 +13,7 @@ import '../popover/popover.dart';
 import '../popover/popover_controller.dart';
 import '../popover/popover_menu.dart';
 import '../popover/popover_menu_item.dart';
+import '../popover/popover_menu_item_styles.dart';
 import '../popover/popover_menu_styles.dart';
 import '../popover/popover_styles.dart';
 import '../text_font_widget/text_font_widget.dart';
@@ -414,31 +415,17 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
                 width: 16,
                 height: 16,
               ),
-              label: '동아리방',
-              trailing: floorPhotoState.when(
-                data: (data) => Text(
-                  widget.circleRoom!.isValidRoomFloor
-                      ? '학생회관 ${widget.circleRoom}호'
-                      : (widget.circleRoom ?? '정보 없음'),
-                  style: TextFontWidget.fontRegularStyle(
-                    fontSize: 12,
-                    color: data != null
-                        ? const Color(0xff6EA4EF)
-                        : const Color(0xFF767676),
-                  ),
-                ),
-                loading: () => const SizedBox(
-                  width: 12,
-                  height: 12,
-                  child: CircularProgressIndicator(strokeWidth: 2),
-                ),
-                error: (_, __) => Text(
-                  widget.circleRoom ?? '정보 없음',
-                  style: TextFontWidget.fontRegularStyle(
-                    fontSize: 12,
-                    color: const Color(0xFF767676),
-                  ),
-                ),
+              label: floorPhotoState.when(
+                data: (data) => widget.circleRoom!.isValidRoomFloor
+                    ? '학생회관 ${widget.circleRoom}호'
+                    : (widget.circleRoom ?? '정보 없음'),
+                loading: () => '로딩 중...',
+                error: (_, __) => widget.circleRoom ?? '정보 없음',
+              ),
+              style: PopoverMenuItemStyle(
+                labelColor: floorPhotoState.hasValue && floorPhotoState.value != null
+                    ? const Color(0xff6EA4EF)
+                    : const Color(0xFF767676),
               ),
               onTap: floorPhotoState.hasValue && floorPhotoState.value != null
                   ? () => _showFullScreenMap(
@@ -456,17 +443,13 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
                 width: 14,
                 height: 14,
               ),
-              label: '회장 연락처',
-              trailing: Text(
-                isLoggedIn
-                    ? (widget.leaderHp!.addDashOrNull() ?? widget.leaderHp!)
-                    : '로그인 후 이용',
-                style: TextFontWidget.fontRegularStyle(
-                  fontSize: 12,
-                  color: isLoggedIn
-                      ? const Color(0xff6EA4EF)
-                      : const Color(0xFF767676),
-                ),
+              label: isLoggedIn
+                  ? (widget.leaderHp!.addDashOrNull() ?? widget.leaderHp!)
+                  : '로그인 후 이용',
+              style: PopoverMenuItemStyle(
+                labelColor: isLoggedIn
+                    ? const Color(0xff6EA4EF)
+                    : const Color(0xFF767676),
               ),
               onTap: isLoggedIn ? () => _copyPhoneNumber(widget.leaderHp!) : null,
             ),
@@ -480,18 +463,14 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
                 height: 16,
               ),
               label: '인스타그램',
-              trailing: Text(
-                '@${_extractInstaId(widget.clubInsta!)}',
-                style: TextFontWidget.fontRegularStyle(
-                  fontSize: 12,
-                  color: const Color(0xff6EA4EF),
-                ),
+              style: const PopoverMenuItemStyle(
+                labelColor: Color(0xff6EA4EF),
               ),
               onTap: () => _openInstagram(widget.clubInsta!),
             ),
         ],
         style: const PopoverMenuStyle(
-          width: 220,
+          width: 195,
           padding: EdgeInsets.symmetric(vertical: 8),
         ),
       ),
@@ -503,17 +482,6 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
         ),
       ),
     );
-  }
-
-  /// 인스타그램 URL에서 ID만 추출
-  String _extractInstaId(String instaUrl) {
-    // https://instagram.com/xxx 형태에서 xxx만 추출
-    final uri = Uri.tryParse(instaUrl);
-    if (uri != null && uri.pathSegments.isNotEmpty) {
-      return uri.pathSegments.first;
-    }
-    // URL이 아니면 그대로 반환
-    return instaUrl;
   }
 
   BadgeStatus _toBadgeStatus(CircleInfoStatus status) {
