@@ -1,9 +1,19 @@
 import 'package:flutter/material.dart' hide Badge;
+import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:photo_view/photo_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
+import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/viewmodels/floor_photo_view_model.dart';
+import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 import '../badge/badge.dart';
-import '../circle_detail_overlay/circle_detail_overlay.dart';
 import '../popover/popover.dart';
 import '../popover/popover_controller.dart';
+import '../popover/popover_menu.dart';
+import '../popover/popover_menu_item.dart';
+import '../popover/popover_menu_styles.dart';
 import '../popover/popover_styles.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'circle_info_tile_styles.dart';
@@ -78,7 +88,7 @@ enum CircleInfoStatus {
 ///   showMoreMenu: true,
 /// )
 /// ```
-class CircleInfoTile extends StatefulWidget {
+class CircleInfoTile extends ConsumerStatefulWidget {
   /// 동아리 UUID
   final String clubUUID;
 
@@ -132,16 +142,88 @@ class CircleInfoTile extends StatefulWidget {
   });
 
   @override
-  State<CircleInfoTile> createState() => _CircleInfoTileState();
+  ConsumerState<CircleInfoTile> createState() => _CircleInfoTileState();
 }
 
-class _CircleInfoTileState extends State<CircleInfoTile> {
+class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
   final PopoverController _popoverController = PopoverController();
 
   @override
   void dispose() {
     _popoverController.dispose();
     super.dispose();
+  }
+
+  /// 층별 배치도 사진을 풀스크린으로 표시
+  void _showFullScreenMap(BuildContext context, String floorPhotoPath) {
+    _popoverController.hide();
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Stack(
+          children: [
+            Center(
+              child: floorPhotoPath.isValidUrl
+                  ? GestureDetector(
+                      onTap: () => Navigator.of(context).pop(),
+                      child: PhotoView(
+                        imageProvider: NetworkImage(floorPhotoPath),
+                        minScale: PhotoViewComputedScale.contained,
+                        maxScale: PhotoViewComputedScale.covered * 2.0,
+                        backgroundDecoration: const BoxDecoration(
+                          color: Colors.black54,
+                        ),
+                      ),
+                    )
+                  : const Center(
+                      child: Text(
+                        '이미지를 불러올 수 없습니다.',
+                        style: TextStyle(color: Colors.white, fontSize: 16.0),
+                      ),
+                    ),
+            ),
+            Positioned(
+              top: 40.0,
+              right: 20.0,
+              child: GestureDetector(
+                onTap: () => Navigator.of(context).pop(),
+                child: const CircleAvatar(
+                  radius: 20.0,
+                  backgroundColor: Colors.black54,
+                  child: Icon(Icons.close, color: Colors.white),
+                ),
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  /// 전화번호를 클립보드에 복사
+  Future<void> _copyPhoneNumber(String phone) async {
+    await Clipboard.setData(ClipboardData(text: phone));
+    _popoverController.hide();
+    if (mounted) {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          const SnackBar(content: Text('전화번호가 복사되었습니다.')),
+        );
+    }
+  }
+
+  /// 인스타그램 링크 열기
+  Future<void> _openInstagram(String instaUrl) async {
+    _popoverController.hide();
+    final Uri launchUri = Uri.parse(instaUrl);
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri, mode: LaunchMode.externalApplication);
+    } else {
+      logger.d('Could not launch Instagram profile for $instaUrl');
+    }
   }
 
   @override
@@ -296,27 +378,122 @@ class _CircleInfoTileState extends State<CircleInfoTile> {
 
   Widget _buildMoreButton() {
     // 모든 정보가 없으면 버튼 숨김
-    final hasCircleRoom = widget.circleRoom != null && widget.circleRoom!.isNotEmpty;
-    final hasLeaderHp = widget.leaderHp != null && widget.leaderHp!.isNotEmpty;
-    final hasClubInsta = widget.clubInsta != null && widget.clubInsta!.isNotEmpty;
+    final hasCircleRoom =
+        widget.circleRoom != null && widget.circleRoom!.isNotEmpty;
+    final hasLeaderHp =
+        widget.leaderHp != null && widget.leaderHp!.isNotEmpty;
+    final hasClubInsta =
+        widget.clubInsta != null && widget.clubInsta!.isNotEmpty;
 
     if (!hasCircleRoom && !hasLeaderHp && !hasClubInsta) {
       return const SizedBox.shrink();
     }
+
+    // 동아리방 정보 로드 (circleRoom이 있을 때만)
+    final floorPhotoState = hasCircleRoom && widget.circleRoom!.isValidRoomFloor
+        ? ref.watch(floorPhotoViewModelProvider(widget.circleRoom!))
+        : const AsyncData(null);
+
+    final userState = ref.watch(userViewModelProvider).state;
+    final isLoggedIn = userState.isAuthorized;
 
     return Popover(
       controller: _popoverController,
       childAnchor: PopoverAnchor.bottomRight,
       popoverAnchor: PopoverAnchor.topRight,
       style: PopoverStyle.defaultStyle.copyWith(
-        borderRadius: 0,
+        borderRadius: 12,
       ),
-      popoverBuilder: (context, controller) => CircleDetailOverlay(
-        circleRoom: widget.circleRoom,
-        leaderHp: widget.leaderHp,
-        clubInsta: widget.clubInsta,
-        onClose: () => _popoverController.hide(),
-        width: 195,
+      popoverBuilder: (context, controller) => PopoverMenu(
+        items: [
+          // 동아리방
+          if (hasCircleRoom)
+            PopoverMenuItem(
+              icon: Image.asset(
+                'assets/images/map_marker.png',
+                width: 16,
+                height: 16,
+              ),
+              label: '동아리방',
+              trailing: floorPhotoState.when(
+                data: (data) => Text(
+                  widget.circleRoom!.isValidRoomFloor
+                      ? '학생회관 ${widget.circleRoom}호'
+                      : (widget.circleRoom ?? '정보 없음'),
+                  style: TextFontWidget.fontRegularStyle(
+                    fontSize: 12,
+                    color: data != null
+                        ? const Color(0xff6EA4EF)
+                        : const Color(0xFF767676),
+                  ),
+                ),
+                loading: () => const SizedBox(
+                  width: 12,
+                  height: 12,
+                  child: CircularProgressIndicator(strokeWidth: 2),
+                ),
+                error: (_, __) => Text(
+                  widget.circleRoom ?? '정보 없음',
+                  style: TextFontWidget.fontRegularStyle(
+                    fontSize: 12,
+                    color: const Color(0xFF767676),
+                  ),
+                ),
+              ),
+              onTap: floorPhotoState.hasValue && floorPhotoState.value != null
+                  ? () => _showFullScreenMap(
+                        context,
+                        floorPhotoState.value!.data.floorPhotoPath,
+                      )
+                  : null,
+            ),
+
+          // 회장 연락처
+          if (hasLeaderHp)
+            PopoverMenuItem(
+              icon: SvgPicture.asset(
+                'assets/images/phonelogo.svg',
+                width: 14,
+                height: 14,
+              ),
+              label: '회장 연락처',
+              trailing: Text(
+                isLoggedIn
+                    ? (widget.leaderHp!.addDashOrNull() ?? widget.leaderHp!)
+                    : '로그인 후 이용',
+                style: TextFontWidget.fontRegularStyle(
+                  fontSize: 12,
+                  color: isLoggedIn
+                      ? const Color(0xff6EA4EF)
+                      : const Color(0xFF767676),
+                ),
+              ),
+              onTap: isLoggedIn ? () => _copyPhoneNumber(widget.leaderHp!) : null,
+            ),
+
+          // 인스타그램
+          if (hasClubInsta)
+            PopoverMenuItem(
+              icon: Image.asset(
+                'assets/images/Instagram_logo.png',
+                width: 16,
+                height: 16,
+              ),
+              label: '인스타그램',
+              trailing: Text(
+                '@${_extractInstaId(widget.clubInsta!)}',
+                style: TextFontWidget.fontRegularStyle(
+                  fontSize: 12,
+                  color: const Color(0xff6EA4EF),
+                ),
+              ),
+              onTap: () => _openInstagram(widget.clubInsta!),
+            ),
+        ],
+        style: const PopoverMenuStyle(
+          width: 220,
+          padding: EdgeInsets.symmetric(vertical: 8),
+        ),
       ),
       child: GestureDetector(
         onTap: () => _popoverController.toggle(),
@@ -326,6 +503,17 @@ class _CircleInfoTileState extends State<CircleInfoTile> {
         ),
       ),
     );
+  }
+
+  /// 인스타그램 URL에서 ID만 추출
+  String _extractInstaId(String instaUrl) {
+    // https://instagram.com/xxx 형태에서 xxx만 추출
+    final uri = Uri.tryParse(instaUrl);
+    if (uri != null && uri.pathSegments.isNotEmpty) {
+      return uri.pathSegments.first;
+    }
+    // URL이 아니면 그대로 반환
+    return instaUrl;
   }
 
   BadgeStatus _toBadgeStatus(CircleInfoStatus status) {
