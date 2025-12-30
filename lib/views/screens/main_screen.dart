@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usw_circle_link/widgets/category_filter_button/category_filter_button_styles.dart';
 import '../../const/analytics_const.dart';
 import '../../models/category_model.dart';
 import '../../models/circle_list_model.dart';
@@ -17,13 +18,18 @@ import '../../utils/logger/logger.dart';
 import '../../viewmodels/fcm_view_model.dart';
 import '../../viewmodels/main_view_model.dart';
 import '../../viewmodels/user_view_model.dart';
-import '../../views/widgets/category_picker.dart';
-import '../../views/widgets/logged_in_menu.dart';
-import '../../views/widgets/logged_out_menu.dart';
-import '../../views/widgets/notification_overlay.dart';
-import '../../views/widgets/text_font_widget.dart';
-import '../../views/widgets/circle_list.dart';
-import '../../views/widgets/app_bar.dart';
+import '../../widgets/category_picker/category_picker.dart';
+import '../../widgets/drawer_menu/drawer_menu.dart';
+import '../../widgets/notification_popover/notification_popover.dart';
+import '../../widgets/popover/popover.dart';
+import '../../widgets/popover/popover_controller.dart';
+import '../../widgets/popover/popover_styles.dart';
+import '../../widgets/text_font_widget/text_font_widget.dart';
+import '../../widgets/circle_list/circle_list.dart';
+import '../../widgets/app_bar/app_bar.dart';
+import '../../widgets/filter_tab_bar/filter_tab_bar.dart';
+import '../../widgets/category_filter_button/category_filter_button.dart';
+import '../../widgets/selected_category_chip_list/selected_category_chip_list.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -35,9 +41,7 @@ class MainScreen extends ConsumerStatefulWidget {
 class _MainScreenState extends ConsumerState<MainScreen> {
   bool isAllSelected = true;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final GlobalKey<NotificationOverlayState> _notificationOverlayKey =
-      GlobalKey<NotificationOverlayState>();
-  OverlayEntry? _overlayEntry;
+  final PopoverController _notificationController = PopoverController();
 
   List<CategoryData> selectedCategories = [];
 
@@ -98,24 +102,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  void _showOverlay(BuildContext context) {
-    if (_overlayEntry == null) {
-      _overlayEntry = OverlayEntry(
-        builder: (context) => NotificationOverlay(
-          key: _notificationOverlayKey,
-          onDismiss: () {
-            _overlayEntry?.remove();
-            _overlayEntry = null;
-          },
-        ),
-      );
-      Overlay.of(context).insert(_overlayEntry!);
-    } else {
-      _notificationOverlayKey.currentState?.updateList();
-    }
+  @override
+  void dispose() {
+    _notificationController.dispose();
+    super.dispose();
   }
 
-// dart
   @override
   Widget build(BuildContext context) {
     final userState = ref.watch(userViewModelProvider);
@@ -143,18 +135,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref.listen(networkConnectivityProvider, (previous, next) async {
       logger.d(next);
       if (next == false) {
-        DialogManager.instance.showAlertDialog(
-          context: context,
-          content: '네트워크에 연결되지 않았습니다.\nWi-Fi 또는 데이터를 연결해 주세요.',
-          barrierDismissible: false,
-          canPop: false,
-          onPopInvoked: () async {
-            SystemNavigator.pop();
-          },
-          onLeftButtonPressed: () async {
-            await ref.read(networkConnectivityProvider.notifier).checkNetwork();
-          },
-        );
+        // DialogManager.instance.showAlertDialog(
+        //   context: context,
+        //   content: '네트워크에 연결되지 않았습니다.\nWi-Fi 또는 데이터를 연결해 주세요.',
+        //   barrierDismissible: false,
+        //   canPop: false,
+        //   onPopInvoked: () async {
+        //     SystemNavigator.pop();
+        //   },
+        //   onLeftButtonPressed: () async {
+        //     await ref.read(networkConnectivityProvider.notifier).checkNetwork();
+        //   },
+        // );
       } else if (next == true) {
         DialogManager.instance.dismissDialog(context);
         await fetchCircleList();
@@ -184,16 +176,26 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ],
         ),
         actions: [
-          IconButton(
-            onPressed: () => _showOverlay(context),
-            icon: const Icon(MainIcons.ic_bell,
-                size: 18, color: Color(0xFF717171)),
+          Popover(
+            controller: _notificationController,
+            childAnchor: PopoverAnchor.bottomRight,
+            popoverAnchor: PopoverAnchor.topRight,
+            style: PopoverStyle.defaultStyle.copyWith(
+              borderRadius: 12,
+            ),
+            popoverBuilder: (context, controller) =>
+                const NotificationPopoverContent(),
+            child: IconButton(
+              onPressed: () => _notificationController.toggle(),
+              icon: const Icon(MainIcons.ic_bell,
+                  size: 18, color: Color(0xFF717171)),
+            ),
           ),
         ],
       ),
-      drawer: userState.state.isAuthorized
-          ? LoggedInMenu(state: userState.state)
-          : const LoggedOutMenu(),
+      drawer: DrawerMenu(
+        userState: userState.state.isAuthorized ? userState.state : null,
+      ),
       body: Column(
         children: [
           const SizedBox(height: 1),
@@ -204,151 +206,24 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Row(
-                    children: [
-                      DecoratedBox(
-                        decoration: isAllSelected
-                            ? const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.black)),
-                              )
-                            : const BoxDecoration(),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (isAllSelected) return;
-                            setState(() => isAllSelected = true);
-                            await fetchCircleList();
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xffffB052),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                            '전체',
-                            fontSize: 16,
-                            color: isAllSelected
-                                ? Colors.black
-                                : const Color(0xffA8A8A8),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                      DecoratedBox(
-                        decoration: !isAllSelected
-                            ? const BoxDecoration(
-                                border: Border(
-                                    bottom: BorderSide(color: Colors.black)),
-                              )
-                            : const BoxDecoration(),
-                        child: TextButton(
-                          onPressed: () async {
-                            if (!isAllSelected) return;
-                            setState(() => isAllSelected = false);
-                            await fetchCircleList();
-                          },
-                          style: TextButton.styleFrom(
-                            foregroundColor: const Color(0xffffB052),
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 10, vertical: 20),
-                            shape: const RoundedRectangleBorder(
-                                borderRadius: BorderRadius.zero),
-                          ),
-                          child: TextFontWidget.fontRegular(
-                            '모집 중',
-                            fontSize: 16,
-                            color: !isAllSelected
-                                ? Colors.black
-                                : const Color(0xffA8A8A8),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  OutlinedButton(
-                    onPressed: () async {
-                      final result =
-                          await showModalBottomSheet<List<CategoryData>>(
-                        context: context,
-                        useRootNavigator: false,
-                        isScrollControlled: true,
-                        builder: (ctx) {
-                          return CategoryPicker(
-                            initialCategories: selectedCategories,
-                            onSelectionChanged: (newSelection) {
-                              // Firebase Analytics: 필터 선택
-                              final userState =
-                                  ref.read(userViewModelProvider).state;
-                              analytics.logEvent(
-                                name: AnalyticsEvent.filterSelect,
-                                parameters: {
-                                  AnalyticsParam.filterCategories: newSelection
-                                      .map((c) => c.clubCategoryName)
-                                      .join(','),
-                                  'category_count': newSelection.length,
-                                  AnalyticsParam.studentNumber:
-                                      userState.studentNumber ?? '',
-                                  AnalyticsParam.userName:
-                                      userState.userName ?? '',
-                                  AnalyticsParam.major: userState.major ?? '',
-                                  AnalyticsParam.userHp: userState.userHp ?? '',
-                                  AnalyticsParam.timestamp:
-                                      DateTime.now().toIso8601String(),
-                                },
-                              );
-
-                              setState(() => selectedCategories = newSelection);
-                              fetchCircleList();
-                            },
-                          );
-                        },
-                      );
-                      if (result != null) {
-                        setState(() => selectedCategories = result);
-                        await fetchCircleList();
-                      }
+                  FilterTabBar(
+                    isAllSelected: isAllSelected,
+                    onAllSelected: () async {
+                      if (isAllSelected) return;
+                      setState(() => isAllSelected = true);
+                      await fetchCircleList();
                     },
-                    style: OutlinedButton.styleFrom(
-                      backgroundColor: selectedCategories.isEmpty
-                          ? Colors.white
-                          : const Color(0xFFFFB052),
-                      foregroundColor: selectedCategories.isEmpty
-                          ? const Color(0xFFFFB052)
-                          : Colors.white,
-                      minimumSize: Size.zero,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 12),
-                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                      side: BorderSide(
-                        color: selectedCategories.isEmpty
-                            ? const Color(0xFF959595)
-                            : const Color(0xFFFF9A21),
-                      ),
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(12)),
-                      ),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          MainIcons.ic_filter,
-                          size: 18,
-                          color: selectedCategories.isEmpty
-                              ? const Color(0xffa8a8a8)
-                              : Colors.white,
-                        ),
-                        const SizedBox(width: 4),
-                        TextFontWidget.fontRegular(
-                          '필터',
-                          fontWeight: FontWeight.w500,
-                          color: selectedCategories.isEmpty
-                              ? const Color(0xffa8a8a8)
-                              : Colors.white,
-                        ),
-                      ],
+                    onRecruitingSelected: () async {
+                      if (!isAllSelected) return;
+                      setState(() => isAllSelected = false);
+                      await fetchCircleList();
+                    },
+                  ),
+                  CategoryFilterButton(
+                    selectedCategories: selectedCategories,
+                    onPressed: _showCategoryPicker,
+                    style: CategoryFilterButtonStyle.defaultStyle.copyWith(
+                      height: 32,
                     ),
                   ),
                 ],
@@ -356,26 +231,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             ),
           ),
           const SizedBox(height: 1),
-          ...selectedCategories.isEmpty
-              ? []
-              : [
-                  Container(
-                    color: Colors.white,
-                    padding: const EdgeInsets.only(left: 24),
-                    height: 60,
-                    alignment: Alignment.centerLeft,
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Wrap(
-                        spacing: 10,
-                        children: selectedCategories.map((category) {
-                          return _buildChip(category);
-                        }).toList(),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 10),
-                ],
+          if (selectedCategories.isNotEmpty) ...[
+            SelectedCategoryChipList(
+              selectedCategories: selectedCategories,
+              onChipDeleted: (category) async {
+                setState(() {
+                  selectedCategories.remove(category);
+                });
+                await fetchCircleList();
+              },
+            ),
+            const SizedBox(height: 10),
+          ],
           Expanded(
             child: circleListState.when<Widget>(
               data: (circleList) {
@@ -433,29 +300,41 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildChip(CategoryData category) {
-    return Chip(
-      labelPadding: EdgeInsets.only(left: 10),
-      label: Text(category.clubCategoryName),
-      deleteIcon: Icon(Icons.close, size: 16),
-      onDeleted: () async {
-        setState(() {
-          selectedCategories.remove(category);
-        });
-        await fetchCircleList();
+  Future<void> _showCategoryPicker() async {
+    final result = await showModalBottomSheet<List<CategoryData>>(
+      context: context,
+      useRootNavigator: false,
+      isScrollControlled: true,
+      builder: (ctx) {
+        return CategoryPicker(
+          initialCategories: selectedCategories,
+          onSelectionChanged: (newSelection) {
+            // Firebase Analytics: 필터 선택
+            final userState = ref.read(userViewModelProvider).state;
+            analytics.logEvent(
+              name: AnalyticsEvent.filterSelect,
+              parameters: {
+                AnalyticsParam.filterCategories:
+                    newSelection.map((c) => c.clubCategoryName).join(','),
+                'category_count': newSelection.length,
+                AnalyticsParam.studentNumber: userState.studentNumber ?? '',
+                AnalyticsParam.userName: userState.userName ?? '',
+                AnalyticsParam.major: userState.major ?? '',
+                AnalyticsParam.userHp: userState.userHp ?? '',
+                AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              },
+            );
+
+            setState(() => selectedCategories = newSelection);
+            fetchCircleList();
+          },
+        );
       },
-      labelStyle: TextFontWidget.fontRegularStyle(
-        color: Color(0xFF434343),
-        fontWeight: FontWeight.w300,
-      ),
-      backgroundColor: Colors.white,
-      elevation: null,
-      shape: RoundedRectangleBorder(
-        side: BorderSide(color: Color(0xFFFF9A21)),
-        borderRadius: BorderRadius.all(Radius.circular(15)),
-      ),
-      padding: EdgeInsets.all(0),
     );
+    if (result != null) {
+      setState(() => selectedCategories = result);
+      await fetchCircleList();
+    }
   }
 
   Future<void> fetchCircleList() async {

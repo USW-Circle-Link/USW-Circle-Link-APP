@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_svg/svg.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -8,8 +7,10 @@ import '../../common/scroll_behavior.dart';
 import '../../const/data.dart';
 import '../../utils/extensions.dart';
 import '../../viewmodels/circle_view_model.dart';
-import '../widgets/circle_detail_overlay.dart';
-import '../widgets/text_font_widget.dart';
+import '../../widgets/circle_info_tile/circle_info_tile.dart';
+import '../../widgets/circle_info_tile/circle_info_tile_styles.dart';
+import '../../widgets/detail_app_bar/detail_app_bar.dart';
+import '../../widgets/text_font_widget/text_font_widget.dart';
 import '../screens/image_screen.dart';
 import '../../utils/dialog_manager.dart';
 
@@ -27,73 +28,8 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   final ScrollController _outerScrollController = ScrollController();
 
   int activeIndex = 0;
-  final GlobalKey _iconKey = GlobalKey();
-  OverlayEntry? _overlayEntry;
   late TabController tabController;
   int selectedIndex = 0;
-
-  // 추가: 버튼-오버레이 고정을 위한 링크와 정렬 플래그
-  final LayerLink _link = LayerLink();
-  bool _alignRight = false;
-
-  void _showOverlay(String? circleRoom, String? leaderHp, String? clubInsta) {
-    if (_overlayEntry != null) return;
-
-    // 우측 여백 부족 시 오른쪽 정렬 판단
-    const double overlayWidth = 195;
-    final box = _iconKey.currentContext?.findRenderObject() as RenderBox?;
-    if (box != null) {
-      final screenWidth = MediaQuery.of(context).size.width;
-      final offset = box.localToGlobal(Offset.zero);
-      final spaceRight = screenWidth - (offset.dx + box.size.width);
-      _alignRight = spaceRight < overlayWidth;
-    } else {
-      _alignRight = false;
-    }
-
-    _overlayEntry = OverlayEntry(
-      builder: (context) => Stack(
-        children: [
-          // 바깥 클릭 시 닫기
-          Positioned.fill(
-            child: GestureDetector(
-              behavior: HitTestBehavior.opaque,
-              onTap: _removeOverlay,
-              child: const SizedBox.shrink(),
-            ),
-          ),
-          CompositedTransformFollower(
-            link: _link,
-            showWhenUnlinked: false,
-            targetAnchor:
-                _alignRight ? Alignment.bottomRight : Alignment.bottomLeft,
-            followerAnchor:
-                _alignRight ? Alignment.topRight : Alignment.topLeft,
-            offset: const Offset(0, 8),
-            // 버튼과 간격
-            child: Material(
-              color: Colors.transparent,
-              child: CircleDetailOverlay(
-                width: overlayWidth,
-                circleRoom: circleRoom,
-                leaderHp: leaderHp,
-                clubInsta: clubInsta,
-                onClose: _removeOverlay,
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-
-    // 루트 오버레이에 삽입(스크롤/리사이즈에도 고정)
-    Overlay.of(context, rootOverlay: true).insert(_overlayEntry!);
-  }
-
-  void _removeOverlay() {
-    _overlayEntry?.remove();
-    _overlayEntry = null;
-  }
 
   @override
   void initState() {
@@ -109,7 +45,6 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   @override
   void dispose() {
     tabController.dispose();
-    _removeOverlay();
     _outerScrollController.dispose();
     super.dispose();
   }
@@ -146,40 +81,9 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
     return Scaffold(
         backgroundColor: Color(0xffFFFFFF),
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          scrolledUnderElevation: 0,
-          toolbarHeight: 62,
-          centerTitle: true,
-          elevation: 0.0,
-          backgroundColor: const Color(0xffFFFFFF),
-          automaticallyImplyLeading: false,
-          title: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 5.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                SizedBox(
-                  width: 52.0,
-                  height: 52.0,
-                  child: IconButton(
-                    onPressed: () {
-                      context.go('/');
-                    },
-                    icon: SvgPicture.asset(
-                      'assets/images/ic_back_arrow.svg',
-                    ),
-                  ),
-                ),
-                TextFontWidget.fontRegular(
-                  '동아리 소개',
-                  fontSize: 18.0,
-                  color: const Color(0xFF111111),
-                  fontWeight: FontWeight.w800,
-                ),
-                const SizedBox(width: 52.0, height: 52.0)
-              ],
-            ),
-          ),
+        appBar: DetailAppBar(
+          title: '동아리 소개',
+          onBackPressed: () => context.go('/'),
         ),
         bottomNavigationBar: circleDetail == null
             ? SizedBox.shrink()
@@ -331,151 +235,16 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                     }),
                                   ),
                                   const SizedBox(height: 16),
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      const SizedBox(width: 24),
-                                      Container(
-                                        width: 82,
-                                        height: 82,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: const Color(0xffc4c4c4)),
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                        ),
-                                        child: Hero(
-                                          transitionOnUserGestures: true,
-                                          tag: 'circle_${widget.clubUUID}',
-                                          child: ClipRRect(
-                                            borderRadius:
-                                                BorderRadius.circular(12),
-                                            child: circleDetail.mainPhotoPath !=
-                                                        null &&
-                                                    circleDetail.mainPhotoPath!
-                                                        .isValidUrl
-                                                ? Image.network(
-                                                    circleDetail.mainPhotoPath!,
-                                                    fit: BoxFit.cover,
-                                                    errorBuilder:
-                                                        (BuildContext context,
-                                                            Object exception,
-                                                            StackTrace?
-                                                                stackTrace) {
-                                                      return Container(
-                                                        alignment:
-                                                            Alignment.center,
-                                                        child: Image.asset(
-                                                          'assets/images/circle_default_image.png',
-                                                          fit: BoxFit.cover,
-                                                        ),
-                                                      );
-                                                    },
-                                                  )
-                                                : Image.asset(
-                                                    'assets/images/circle_default_image.png'),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 16),
-                                      Expanded(
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(height: 8),
-                                            TextFontWidget.fontRegular(
-                                              circleDetail.circleName,
-                                              overflow: TextOverflow.ellipsis,
-                                              color: Colors.black,
-                                              fontSize: 18,
-                                              fontWeight: FontWeight.w900,
-                                              height: 1,
-                                              letterSpacing: -0.45,
-                                            ),
-                                            const SizedBox(height: 5),
-                                            RichText(
-                                              overflow: TextOverflow.ellipsis,
-                                              text: TextSpan(
-                                                text: '동아리 회장 ',
-                                                style: TextFontWidget
-                                                    .fontRegularStyle(
-                                                  color:
-                                                      const Color(0xFF767676),
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400,
-                                                  height: 1,
-                                                  letterSpacing: -0.35,
-                                                ),
-                                                children: [
-                                                  TextSpan(
-                                                    text:
-                                                        circleDetail.leaderName,
-                                                    style: const TextStyle(
-                                                      color: Color(0xFF353549),
-                                                      fontWeight:
-                                                          FontWeight.w800,
-                                                      fontSize: 14,
-                                                      height: 1,
-                                                      letterSpacing: -0.35,
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            circleDetail.circleHashtag !=
-                                                        null &&
-                                                    circleDetail.circleHashtag!
-                                                        .isNotEmpty
-                                                ? SingleChildScrollView(
-                                                    scrollDirection:
-                                                        Axis.horizontal,
-                                                    child: Row(
-                                                      children: circleDetail
-                                                          .circleHashtag!
-                                                          .map((tag) =>
-                                                              _buildChip(
-                                                                  '#$tag'))
-                                                          .toList(),
-                                                    ),
-                                                  )
-                                                : const SizedBox.shrink(),
-                                          ],
-                                        ),
-                                      ),
-                                      CompositedTransformTarget(
-                                        link: _link,
-                                        child: Container(
-                                          alignment: Alignment.topCenter,
-                                          child: IconButton(
-                                            padding: EdgeInsets.zero,
-                                            constraints: const BoxConstraints(),
-                                            visualDensity:
-                                                VisualDensity.compact,
-                                            key: _iconKey,
-                                            onPressed: () {
-                                              if (_overlayEntry == null) {
-                                                _showOverlay(
-                                                  circleDetail.circleRoom,
-                                                  circleDetail.leaderHp,
-                                                  circleDetail.circleInsta,
-                                                );
-                                              } else {
-                                                _removeOverlay();
-                                              }
-                                            },
-                                            icon: const Icon(Icons.more_vert),
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                    ],
+                                  CircleInfoTile(
+                                    clubUUID: widget.clubUUID,
+                                    name: circleDetail.circleName,
+                                    leaderName: circleDetail.leaderName,
+                                    imageUrl: circleDetail.mainPhotoPath,
+                                    hashtags: circleDetail.circleHashtag,
+                                    circleRoom: circleDetail.circleRoom,
+                                    leaderHp: circleDetail.leaderHp,
+                                    clubInsta: circleDetail.circleInsta,
+                                    showMoreMenu: true,
                                   ),
                                   const SizedBox(height: 16),
                                 ],
@@ -552,27 +321,6 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                       ),
                     ),
                   ));
-  }
-
-  Widget _buildChip(String label) {
-    return Container(
-      margin: EdgeInsets.only(right: 8),
-      child: Chip(
-        label: Text(label),
-        labelStyle: TextFontWidget.fontRegularStyle(
-          color: Color(0xFFFFFFFF),
-          fontWeight: FontWeight.w400,
-        ),
-        visualDensity: VisualDensity(horizontal: 0.0, vertical: -4),
-        backgroundColor: Color(0xFFC0C0C0),
-        elevation: null,
-        shape: RoundedRectangleBorder(
-          side: BorderSide(color: Colors.transparent),
-          borderRadius: BorderRadius.all(Radius.circular(8)),
-        ),
-        padding: EdgeInsets.zero,
-      ),
-    );
   }
 
   Widget buildImage(List<String> introPhotos, int index) => GestureDetector(
