@@ -1,4 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:usw_circle_link/models/application_answer.dart';
+import 'package:usw_circle_link/models/application_set.dart';
 
 part 'application_state.freezed.dart';
 
@@ -9,5 +11,7 @@ class ApplicationState with _$ApplicationState {
     String? applicationUrl,
     String? error,
     @Default(false) bool applySuccess,
+    ApplicationSet? applicationSet,
+    @Default({}) Map<int, ApplicationAnswer> answers,
   }) = _ApplicationState;
 }

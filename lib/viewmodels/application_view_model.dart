@@ -1,5 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/analytics_const.dart';
+import 'package:usw_circle_link/models/application_answer.dart';
+import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/repositories/application_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
@@ -30,11 +32,11 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
   }) : super(ApplicationState());
 
   Future<void> getApplication(String clubUUID) async {
-    // 첫 state는 Loading 상태
     state = state.copyWith(
       isLoading: true,
-      applicationUrl: null,
       error: null,
+      applicationSet: null,
+      answers: {},
     );
 
     final result =
@@ -44,7 +46,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
       case Ok():
         state = state.copyWith(
           isLoading: false,
-          applicationUrl: result.value,
+          applicationSet: result.value,
         );
       case Error():
         var exception = result.error;
@@ -54,6 +56,7 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
             error: ErrorUtil.instance.getErrorMessage(exception.code) ??
                 '지원서 조회 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
           );
+          return;
         }
         exception =
             exception.toGlobalException(screen: 'Application_GetApplication');
@@ -67,10 +70,56 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
     }
   }
 
+  void updateAnswer({
+    required int questionId,
+    int? optionId,
+    String? answerText,
+  }) {
+    final updatedAnswers = Map<int, ApplicationAnswer>.from(state.answers);
+    updatedAnswers[questionId] = ApplicationAnswer(
+      questionId: questionId,
+      optionId: optionId,
+      answerText: answerText,
+    );
+    state = state.copyWith(answers: updatedAnswers);
+  }
+
+  bool isFormValid() {
+    if (state.applicationSet == null) return false;
+    final requiredQuestions = state.applicationSet!.questions
+        .where((q) => q.required)
+        .toList();
+    for (var question in requiredQuestions) {
+      final answer = state.answers[question.questionId];
+      if (answer == null) {
+        return false;
+      }
+      final hasOptionAnswer = answer.optionId != null;
+      final hasTextAnswer = answer.answerText != null && answer.answerText!.trim().isNotEmpty;
+      if (!hasOptionAnswer && !hasTextAnswer) {
+        return false;
+      }
+    }
+    return true;
+  }
+
   Future<void> apply({
     required String clubUUID,
   }) async {
-    // 첫 state는 Loading 상태
+    if (!isFormValid()) {
+      state = state.copyWith(
+        error: '모든 필수 질문에 답변해주세요.',
+      );
+      return;
+    }
+
+    if (state.applicationSet == null || state.applicationSet!.formId == null) {
+      state = state.copyWith(
+        error: '지원서 정보를 불러올 수 없습니다.',
+      );
+      return;
+    }
+
     state = state.copyWith(
       isLoading: true,
       error: null,
@@ -84,8 +133,8 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
         if (!canApplyResult.value) {
           state = state.copyWith(
             isLoading: false,
-            applySuccess: true,
-            error: '이미 지원한 동아리 입니다.',
+            applySuccess: false,
+            error: '현재 지원 가능한 기간이 아닙니다.',
           );
           return;
         }
@@ -103,7 +152,38 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
         break;
     }
 
-    final result = await applicationRepository.apply(clubUUID: clubUUID);
+    final answersList = <Map<String, dynamic>>[];
+    for (var question in state.applicationSet!.questions) {
+      final answer = state.answers[question.questionId];
+      if (answer != null) {
+        if (question.type == QuestionType.checkbox && answer.answerText != null) {
+          final selectedValues = answer.answerText!.split(', ');
+          for (var value in selectedValues) {
+            final option = question.options.firstWhere(
+              (opt) => opt.value == value,
+              orElse: () => question.options.first,
+            );
+            answersList.add({
+              'questionId': question.questionId,
+              'optionId': option.optionId,
+              'answerText': null,
+            });
+          }
+        } else {
+          answersList.add({
+            'questionId': answer.questionId,
+            'optionId': answer.optionId,
+            'answerText': answer.answerText,
+          });
+        }
+      }
+    }
+
+    final result = await applicationRepository.apply(
+      clubUUID: clubUUID,
+      formId: state.applicationSet!.formId!,
+      answers: answersList,
+    );
 
     switch (result) {
       case Ok():

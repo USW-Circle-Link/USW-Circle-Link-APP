@@ -20,6 +20,8 @@ mixin _$ApplicationState {
   String? get applicationUrl => throw _privateConstructorUsedError;
   String? get error => throw _privateConstructorUsedError;
   bool get applySuccess => throw _privateConstructorUsedError;
+  ApplicationSet? get applicationSet => throw _privateConstructorUsedError;
+  Map<int, ApplicationAnswer> get answers => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $ApplicationStateCopyWith<ApplicationState> get copyWith =>
@@ -36,7 +38,11 @@ abstract class $ApplicationStateCopyWith<$Res> {
       {bool isLoading,
       String? applicationUrl,
       String? error,
-      bool applySuccess});
+      bool applySuccess,
+      ApplicationSet? applicationSet,
+      Map<int, ApplicationAnswer> answers});
+
+  $ApplicationSetCopyWith<$Res>? get applicationSet;
 }
 
 /// @nodoc
@@ -56,6 +62,8 @@ class _$ApplicationStateCopyWithImpl<$Res, $Val extends ApplicationState>
     Object? applicationUrl = freezed,
     Object? error = freezed,
     Object? applySuccess = null,
+    Object? applicationSet = freezed,
+    Object? answers = null,
   }) {
     return _then(_value.copyWith(
       isLoading: null == isLoading
@@ -74,7 +82,27 @@ class _$ApplicationStateCopyWithImpl<$Res, $Val extends ApplicationState>
           ? _value.applySuccess
           : applySuccess // ignore: cast_nullable_to_non_nullable
               as bool,
+      applicationSet: freezed == applicationSet
+          ? _value.applicationSet
+          : applicationSet // ignore: cast_nullable_to_non_nullable
+              as ApplicationSet?,
+      answers: null == answers
+          ? _value.answers
+          : answers // ignore: cast_nullable_to_non_nullable
+              as Map<int, ApplicationAnswer>,
     ) as $Val);
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $ApplicationSetCopyWith<$Res>? get applicationSet {
+    if (_value.applicationSet == null) {
+      return null;
+    }
+
+    return $ApplicationSetCopyWith<$Res>(_value.applicationSet!, (value) {
+      return _then(_value.copyWith(applicationSet: value) as $Val);
+    });
   }
 }
 
@@ -90,7 +118,12 @@ abstract class _$$ApplicationStateImplCopyWith<$Res>
       {bool isLoading,
       String? applicationUrl,
       String? error,
-      bool applySuccess});
+      bool applySuccess,
+      ApplicationSet? applicationSet,
+      Map<int, ApplicationAnswer> answers});
+
+  @override
+  $ApplicationSetCopyWith<$Res>? get applicationSet;
 }
 
 /// @nodoc
@@ -108,6 +141,8 @@ class __$$ApplicationStateImplCopyWithImpl<$Res>
     Object? applicationUrl = freezed,
     Object? error = freezed,
     Object? applySuccess = null,
+    Object? applicationSet = freezed,
+    Object? answers = null,
   }) {
     return _then(_$ApplicationStateImpl(
       isLoading: null == isLoading
@@ -126,6 +161,14 @@ class __$$ApplicationStateImplCopyWithImpl<$Res>
           ? _value.applySuccess
           : applySuccess // ignore: cast_nullable_to_non_nullable
               as bool,
+      applicationSet: freezed == applicationSet
+          ? _value.applicationSet
+          : applicationSet // ignore: cast_nullable_to_non_nullable
+              as ApplicationSet?,
+      answers: null == answers
+          ? _value._answers
+          : answers // ignore: cast_nullable_to_non_nullable
+              as Map<int, ApplicationAnswer>,
     ));
   }
 }
@@ -137,7 +180,10 @@ class _$ApplicationStateImpl implements _ApplicationState {
       {this.isLoading = false,
       this.applicationUrl,
       this.error,
-      this.applySuccess = false});
+      this.applySuccess = false,
+      this.applicationSet,
+      final Map<int, ApplicationAnswer> answers = const {}})
+      : _answers = answers;
 
   @override
   @JsonKey()
@@ -149,10 +195,20 @@ class _$ApplicationStateImpl implements _ApplicationState {
   @override
   @JsonKey()
   final bool applySuccess;
+  @override
+  final ApplicationSet? applicationSet;
+  final Map<int, ApplicationAnswer> _answers;
+  @override
+  @JsonKey()
+  Map<int, ApplicationAnswer> get answers {
+    if (_answers is EqualUnmodifiableMapView) return _answers;
+    // ignore: implicit_dynamic_type
+    return EqualUnmodifiableMapView(_answers);
+  }
 
   @override
   String toString() {
-    return 'ApplicationState(isLoading: $isLoading, applicationUrl: $applicationUrl, error: $error, applySuccess: $applySuccess)';
+    return 'ApplicationState(isLoading: $isLoading, applicationUrl: $applicationUrl, error: $error, applySuccess: $applySuccess, applicationSet: $applicationSet, answers: $answers)';
   }
 
   @override
@@ -166,12 +222,21 @@ class _$ApplicationStateImpl implements _ApplicationState {
                 other.applicationUrl == applicationUrl) &&
             (identical(other.error, error) || other.error == error) &&
             (identical(other.applySuccess, applySuccess) ||
-                other.applySuccess == applySuccess));
+                other.applySuccess == applySuccess) &&
+            (identical(other.applicationSet, applicationSet) ||
+                other.applicationSet == applicationSet) &&
+            const DeepCollectionEquality().equals(other._answers, _answers));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, isLoading, applicationUrl, error, applySuccess);
+  int get hashCode => Object.hash(
+      runtimeType,
+      isLoading,
+      applicationUrl,
+      error,
+      applySuccess,
+      applicationSet,
+      const DeepCollectionEquality().hash(_answers));
 
   @JsonKey(ignore: true)
   @override
@@ -186,7 +251,9 @@ abstract class _ApplicationState implements ApplicationState {
       {final bool isLoading,
       final String? applicationUrl,
       final String? error,
-      final bool applySuccess}) = _$ApplicationStateImpl;
+      final bool applySuccess,
+      final ApplicationSet? applicationSet,
+      final Map<int, ApplicationAnswer> answers}) = _$ApplicationStateImpl;
 
   @override
   bool get isLoading;
@@ -196,6 +263,10 @@ abstract class _ApplicationState implements ApplicationState {
   String? get error;
   @override
   bool get applySuccess;
+  @override
+  ApplicationSet? get applicationSet;
+  @override
+  Map<int, ApplicationAnswer> get answers;
   @override
   @JsonKey(ignore: true)
   _$$ApplicationStateImplCopyWith<_$ApplicationStateImpl> get copyWith =>
