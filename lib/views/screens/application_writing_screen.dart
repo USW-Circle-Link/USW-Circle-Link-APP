@@ -340,6 +340,109 @@ class _ApplicationWritingScreenState
     );
     final selectedOptionId = currentAnswer?.optionId;
 
+    // TODO: 테스트용 - options가 비어있을 때 더미 옵션 표시
+    // 롤백하려면 아래 주석 처리된 코드를 활성화하고, 테스트용 코드를 주석 처리하세요
+    if (question.options.isEmpty) {
+      // 테스트용 더미 옵션 생성
+      final dummyOptions = [
+        QuestionOption(
+          optionId: 1,
+          content: '옵션 1',
+          sequence: 1,
+        ),
+        QuestionOption(
+          optionId: 2,
+          content: '옵션 2',
+          sequence: 2,
+        ),
+        QuestionOption(
+          optionId: 3,
+          content: '옵션 3',
+          sequence: 3,
+        ),
+      ];
+      
+      return Column(
+        children: dummyOptions.map((option) {
+          final isSelected = selectedOptionId == option.optionId;
+          return InkWell(
+            onTap: () {
+              ref.read(applicationViewModelProvider.notifier).updateAnswer(
+                questionId: question.questionId,
+                optionId: option.optionId,
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+              margin: const EdgeInsets.only(bottom: 8.0),
+              decoration: BoxDecoration(
+                border: Border.all(
+                  color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                  width: isSelected ? 2.0 : 1.0,
+                ),
+                borderRadius: BorderRadius.circular(_borderRadius),
+              ),
+              child: Row(
+                children: [
+                  Container(
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(
+                        color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                        width: 2.0,
+                      ),
+                      color: isSelected ? accentColor : Colors.transparent,
+                    ),
+                    child: isSelected
+                        ? Center(
+                            child: Container(
+                              width: 8,
+                              height: 8,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: Colors.white,
+                              ),
+                            ),
+                          )
+                        : null,
+                  ),
+                  const SizedBox(width: 12.0),
+                  Expanded(
+                    child: TextFontWidget.fontRegular(
+                      option.content,
+                      fontSize: 14.0,
+                      color: const Color(0xFF2c2c2c),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }).toList(),
+      );
+      
+      // 롤백용 원래 코드 (주석 해제하여 사용)
+      /*
+      return Container(
+        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: const Color(0xFFDBDBDB),
+            width: 1.0,
+          ),
+          borderRadius: BorderRadius.circular(_borderRadius),
+        ),
+        child: TextFontWidget.fontRegular(
+          '선택지가 없습니다.',
+          fontSize: 14.0,
+          color: const Color(0xFF999999),
+        ),
+      );
+      */
+    }
+
     return Column(
       children: question.options.map((option) {
         final isSelected = selectedOptionId == option.optionId;
@@ -409,15 +512,12 @@ class _ApplicationWritingScreenState
     
     if (!_checkboxSelections.containsKey(question.questionId)) {
       if (currentAnswer?.answerText != null) {
-        final selectedValues = currentAnswer!.answerText!.split(', ');
-        _checkboxSelections[question.questionId] = selectedValues
-            .map((value) => question.options.firstWhere(
-                  (opt) => opt.value == value,
-                  orElse: () => question.options.first,
-                ).optionId)
+        final selectedOptionIds = currentAnswer!.answerText!.split(', ')
+            .map((idStr) => int.tryParse(idStr))
             .where((id) => id != null)
             .cast<int>()
             .toSet();
+        _checkboxSelections[question.questionId] = selectedOptionIds;
       } else {
         _checkboxSelections[question.questionId] = {};
       }
@@ -445,9 +545,7 @@ class _ApplicationWritingScreenState
               optionId: null,
               answerText: selectedOptionIds.isEmpty
                   ? null
-                  : selectedOptionIds.map((id) => 
-                      question.options.firstWhere((opt) => opt.optionId == id).value
-                    ).join(', '),
+                  : selectedOptionIds.map((id) => id.toString()).join(', '),
             );
           },
           child: Container(

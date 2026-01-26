@@ -157,15 +157,14 @@ class ApplicationViewModel extends StateNotifier<ApplicationState> {
       final answer = state.answers[question.questionId];
       if (answer != null) {
         if (question.type == QuestionType.checkbox && answer.answerText != null) {
-          final selectedValues = answer.answerText!.split(', ');
-          for (var value in selectedValues) {
-            final option = question.options.firstWhere(
-              (opt) => opt.value == value,
-              orElse: () => question.options.first,
-            );
+          final selectedOptionIds = answer.answerText!.split(', ')
+              .map((idStr) => int.tryParse(idStr))
+              .where((id) => id != null)
+              .cast<int>();
+          for (var optionId in selectedOptionIds) {
             answersList.add({
               'questionId': question.questionId,
-              'optionId': option.optionId,
+              'optionId': optionId,
               'answerText': null,
             });
           }

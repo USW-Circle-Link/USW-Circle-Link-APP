@@ -23,7 +23,7 @@ final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
 
 // 더미 데이터 사용 여부 (개발/테스트용)
-const USE_DUMMY_APPLICATION_DATA = true; // false로 변경하면 실제 API 호출
+const USE_DUMMY_APPLICATION_DATA = false; // false로 변경하면 실제 API 호출
 
 // Storage Key
 const accessTokenKey = 'access_token';

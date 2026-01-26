@@ -48,9 +48,9 @@ class ApplicationQuestion with _$ApplicationQuestion {
 @freezed
 class QuestionOption with _$QuestionOption {
   factory QuestionOption({
-    required int sequence,
+    int? sequence,
     required String content,
-    required String value,
+    String? value,
     int? optionId,
   }) = _QuestionOption;
 

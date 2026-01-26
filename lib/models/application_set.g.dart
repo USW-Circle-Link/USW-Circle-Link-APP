@@ -62,9 +62,9 @@ const _$QuestionTypeEnumMap = {
 
 _$QuestionOptionImpl _$$QuestionOptionImplFromJson(Map<String, dynamic> json) =>
     _$QuestionOptionImpl(
-      sequence: (json['sequence'] as num).toInt(),
+      sequence: (json['sequence'] as num?)?.toInt(),
       content: json['content'] as String,
-      value: json['value'] as String,
+      value: json['value'] as String?,
       optionId: (json['optionId'] as num?)?.toInt(),
     );
 

@@ -508,9 +508,9 @@ QuestionOption _$QuestionOptionFromJson(Map<String, dynamic> json) {
 
 /// @nodoc
 mixin _$QuestionOption {
-  int get sequence => throw _privateConstructorUsedError;
+  int? get sequence => throw _privateConstructorUsedError;
   String get content => throw _privateConstructorUsedError;
-  String get value => throw _privateConstructorUsedError;
+  String? get value => throw _privateConstructorUsedError;
   int? get optionId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -525,7 +525,7 @@ abstract class $QuestionOptionCopyWith<$Res> {
           QuestionOption value, $Res Function(QuestionOption) then) =
       _$QuestionOptionCopyWithImpl<$Res, QuestionOption>;
   @useResult
-  $Res call({int sequence, String content, String value, int? optionId});
+  $Res call({int? sequence, String content, String? value, int? optionId});
 }
 
 /// @nodoc
@@ -541,24 +541,24 @@ class _$QuestionOptionCopyWithImpl<$Res, $Val extends QuestionOption>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sequence = null,
+    Object? sequence = freezed,
     Object? content = null,
-    Object? value = null,
+    Object? value = freezed,
     Object? optionId = freezed,
   }) {
     return _then(_value.copyWith(
-      sequence: null == sequence
+      sequence: freezed == sequence
           ? _value.sequence
           : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      value: null == value
+      value: freezed == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       optionId: freezed == optionId
           ? _value.optionId
           : optionId // ignore: cast_nullable_to_non_nullable
@@ -575,7 +575,7 @@ abstract class _$$QuestionOptionImplCopyWith<$Res>
       __$$QuestionOptionImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({int sequence, String content, String value, int? optionId});
+  $Res call({int? sequence, String content, String? value, int? optionId});
 }
 
 /// @nodoc
@@ -589,24 +589,24 @@ class __$$QuestionOptionImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? sequence = null,
+    Object? sequence = freezed,
     Object? content = null,
-    Object? value = null,
+    Object? value = freezed,
     Object? optionId = freezed,
   }) {
     return _then(_$QuestionOptionImpl(
-      sequence: null == sequence
+      sequence: freezed == sequence
           ? _value.sequence
           : sequence // ignore: cast_nullable_to_non_nullable
-              as int,
+              as int?,
       content: null == content
           ? _value.content
           : content // ignore: cast_nullable_to_non_nullable
               as String,
-      value: null == value
+      value: freezed == value
           ? _value.value
           : value // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       optionId: freezed == optionId
           ? _value.optionId
           : optionId // ignore: cast_nullable_to_non_nullable
@@ -619,20 +619,17 @@ class __$$QuestionOptionImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$QuestionOptionImpl implements _QuestionOption {
   _$QuestionOptionImpl(
-      {required this.sequence,
-      required this.content,
-      required this.value,
-      this.optionId});
+      {this.sequence, required this.content, this.value, this.optionId});
 
   factory _$QuestionOptionImpl.fromJson(Map<String, dynamic> json) =>
       _$$QuestionOptionImplFromJson(json);
 
   @override
-  final int sequence;
+  final int? sequence;
   @override
   final String content;
   @override
-  final String value;
+  final String? value;
   @override
   final int? optionId;
 
@@ -676,20 +673,20 @@ class _$QuestionOptionImpl implements _QuestionOption {
 
 abstract class _QuestionOption implements QuestionOption {
   factory _QuestionOption(
-      {required final int sequence,
+      {final int? sequence,
       required final String content,
-      required final String value,
+      final String? value,
       final int? optionId}) = _$QuestionOptionImpl;
 
   factory _QuestionOption.fromJson(Map<String, dynamic> json) =
       _$QuestionOptionImpl.fromJson;
 
   @override
-  int get sequence;
+  int? get sequence;
   @override
   String get content;
   @override
-  String get value;
+  String? get value;
   @override
   int? get optionId;
   @override

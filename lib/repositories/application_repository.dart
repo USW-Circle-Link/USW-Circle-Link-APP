@@ -4,6 +4,7 @@ import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/models/response/application_response.dart';
+import 'package:usw_circle_link/models/response/application_detail_response.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 import '../models/response/global_exception.dart';
@@ -35,7 +36,7 @@ class ApplicationRepository {
 
     try {
       final response = await dio.get(
-        '/api/clubs/$clubUUID/forms',
+        '/clubs/forms/$clubUUID',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -51,6 +52,11 @@ class ApplicationRepository {
         }
         final formData = data['data'];
         final status = formData['status'] as String?;
+        // status 필드가 없거나 PUBLISHED인 경우 지원 가능
+        // 활성화된 지원서가 조회되었다는 것은 지원 가능하다는 의미
+        if (status == null) {
+          return Result.ok(true);
+        }
         return Result.ok(status == 'PUBLISHED');
       } else if (response.statusCode == 404) {
         return Result.ok(false);
@@ -73,7 +79,7 @@ class ApplicationRepository {
 
     try {
       final response = await dio.get(
-        '/api/clubs/$clubUUID/forms',
+        '/clubs/forms/$clubUUID',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -96,7 +102,6 @@ class ApplicationRepository {
           'clubId': clubUUID,
           'formId': formData['formId']?.toString(),
           'title': formData['title'],
-          'description': formData['description'],
           'questions': formData['questions'] ?? [],
         });
         return Result.ok(applicationSet);
@@ -138,6 +143,38 @@ class ApplicationRepository {
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         return Result.ok(null);
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  /// 본인 지원서 질문/답변 조회
+  ///
+  /// 본인이 제출한 지원서의 문항과 답변 목록을 한꺼번에 조회합니다.
+  ///
+  /// [aplictId]: 지원서 ID
+  ///
+  /// return: ApplicationDetailResponse - 질문과 답변 목록을 포함하는 응답
+  Future<Result<ApplicationDetailResponse>> getApplicationDetail({
+    required String aplictId,
+  }) async {
+    try {
+      final response = await dio.get(
+        '/apply/applications/$aplictId',
+        options: Options(headers: {'accessToken': 'true'}),
+      );
+
+      logger.d('${response.data}');
+
+      logger.d('getApplicationDetail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      if (response.statusCode == 200) {
+        final applicationDetailResponse =
+            ApplicationDetailResponse.fromJson(response.data);
+        return Result.ok(applicationDetailResponse);
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
