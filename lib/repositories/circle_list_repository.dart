@@ -91,7 +91,7 @@ class CircleListRepository {
   /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyCircleList() async {
     final response = await dio.get(
-      '/mypages/my-clubs',
+      '/users/me/clubs',
       options: Options(
         headers: {
           'accessToken': 'true',
@@ -122,7 +122,7 @@ class CircleListRepository {
   /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
   Future<CircleDetailListModel> fetchMyApplicationList() async {
     final response = await dio.get(
-      '/mypages/aplict-clubs',
+      '/users/me/applications',
       options: Options(
         headers: {
           'accessToken': 'true',
@@ -153,7 +153,7 @@ class CircleListRepository {
   /// - CategoryModelError: 조회 중 오류가 발생한 경우
   Future<CategoryModel> fetchCategory() async {
     try {
-      final response = await dio.get('$basePath/categories');
+      final response = await dio.get('/categories');
 
       logger.d(response.data);
 

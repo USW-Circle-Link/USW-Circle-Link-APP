@@ -246,7 +246,7 @@ class _ApplicationWritingScreenState
                                 "동안 다시 지원할 수 없습니다.\n신중하게 작성하신 후 지원 완료 버튼을 눌러 주세요.\n지원서를 잘못 작성한 경우, ",
                           ),
                           TextSpan(
-                            text: "책인은 본인",
+                            text: "책임은 본인",
                             style: TextStyle(
                                 color: Color(0xffffB052),
                                 fontWeight: FontWeight.w800),

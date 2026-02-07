@@ -1,3 +1,5 @@
+import 'package:usw_circle_link/models/enums/recruitment_status.dart';
+
 class CircleDetailModel {
   final String? circleUUID;
   final String? mainPhotoPath;
@@ -5,7 +7,7 @@ class CircleDetailModel {
   final String circleName;
   final String leaderName;
   final String introContent;
-  final String recruitmentStatus;
+  final RecruitmentStatus recruitmentStatus;
   final String? leaderHp;
   final String? circleInsta;
   final String? circleRoom;
@@ -41,7 +43,9 @@ class CircleDetailModel {
       leaderHp: json['leaderHp'],
       circleInsta: json['clubInsta'],
       introContent: json['clubIntro'],
-      recruitmentStatus: json['recruitmentStatus'],
+      recruitmentStatus: RecruitmentStatus.fromString(
+        json['recruitmentStatus'] as String,
+      ),
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
       circleHashtag: List<String>.from(json['clubHashtags'] ?? []),

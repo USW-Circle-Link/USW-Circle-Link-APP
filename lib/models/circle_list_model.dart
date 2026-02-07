@@ -57,9 +57,9 @@ class CircleListData with _$CircleListData {
   factory CircleListData({
     required String clubUUID,
     required String clubName,
-    String? mainPhoto,
-    String? departmentName, // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
-    List<String>? clubHashtags,
+    @JsonKey(name: 'mainPhotoUrl') String? mainPhoto,
+    @JsonKey(name: 'department') String? departmentName, // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
+    @JsonKey(name: 'hashtags') List<String>? clubHashtags,
   }) = _CircleListData;
 
   factory CircleListData.fromJson(Map<String, dynamic> json) =>

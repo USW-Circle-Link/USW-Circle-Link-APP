@@ -36,7 +36,7 @@ class ApplicationRepository {
 
     try {
       final response = await dio.get(
-        '/clubs/forms/$clubUUID',
+        '/clubs/$clubUUID/applications/eligibility',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -50,14 +50,9 @@ class ApplicationRepository {
         if (data == null || data['data'] == null) {
           return Result.ok(false);
         }
-        final formData = data['data'];
-        final status = formData['status'] as String?;
-        // status 필드가 없거나 PUBLISHED인 경우 지원 가능
-        // 활성화된 지원서가 조회되었다는 것은 지원 가능하다는 의미
-        if (status == null) {
-          return Result.ok(true);
-        }
-        return Result.ok(status == 'PUBLISHED');
+        // eligibility API는 boolean 값을 직접 반환할 것으로 예상
+        final eligible = data['data'] as bool?;
+        return Result.ok(eligible ?? false);
       } else if (response.statusCode == 404) {
         return Result.ok(false);
       } else {
@@ -128,8 +123,9 @@ class ApplicationRepository {
 
     try {
       final response = await dio.post(
-        '/api/clubs/$clubUUID/forms/$formId/applications',
+        '/clubs/$clubUUID/applications',
         data: {
+          'formId': formId,
           'answers': answers,
         },
         options: Options(
@@ -155,15 +151,17 @@ class ApplicationRepository {
   ///
   /// 본인이 제출한 지원서의 문항과 답변 목록을 한꺼번에 조회합니다.
   ///
+  /// [clubUUID]: 동아리 UUID
   /// [aplictId]: 지원서 ID
   ///
   /// return: ApplicationDetailResponse - 질문과 답변 목록을 포함하는 응답
   Future<Result<ApplicationDetailResponse>> getApplicationDetail({
+    required String clubUUID,
     required String aplictId,
   }) async {
     try {
       final response = await dio.get(
-        '/apply/applications/$aplictId',
+        '/clubs/$clubUUID/applications/$aplictId',
         options: Options(headers: {'accessToken': 'true'}),
       );
 

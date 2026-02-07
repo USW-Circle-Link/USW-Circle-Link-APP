@@ -175,7 +175,7 @@ final routerProvider = Provider<GoRouter>((ref) {
             ],
           ),
           GoRoute(
-            path: 'tems_of_serice',
+            path: 'terms_of_service',
             builder: (_, __) => PolicyScreen(
                 policyType: PolicyType.termsOfService, isDialog: false),
           ),

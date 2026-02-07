@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/scroll_behavior.dart';
 import '../../const/data.dart';
+import '../../models/enums/recruitment_status.dart';
 import '../../viewmodels/circle_view_model.dart';
 import '../../widgets/circle_info_tile/circle_info_tile.dart';
 import '../../widgets/detail_app_bar/detail_app_bar.dart';
@@ -104,7 +105,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                   width: double.infinity,
                   height: 56,
                   child: Builder(builder: (context) {
-                    final isClosed = circleDetail.recruitmentStatus == "CLOSE";
+                    final isClosed = circleDetail.recruitmentStatus == RecruitmentStatus.close;
                     return OutlinedButton(
                       onPressed: isClosed
                           ? null
@@ -270,7 +271,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       ),
                                     ),
                                     if (circleDetail.recruitmentStatus ==
-                                        "OPEN")
+                                        RecruitmentStatus.open)
                                       Tab(
                                         child: SizedBox.expand(
                                           child: Container(
@@ -303,7 +304,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 ),
                               ),
                             ),
-                            if (circleDetail.recruitmentStatus == "OPEN")
+                            if (circleDetail.recruitmentStatus == RecruitmentStatus.open)
                               SingleChildScrollView(
                                 child: Container(
                                   alignment: Alignment.topLeft,

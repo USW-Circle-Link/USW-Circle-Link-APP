@@ -22,6 +22,9 @@ LoginData _$LoginDataFromJson(Map<String, dynamic> json) {
 mixin _$LoginData {
   String get accessToken => throw _privateConstructorUsedError;
   String get refreshToken => throw _privateConstructorUsedError;
+  UserRole get role => throw _privateConstructorUsedError;
+  @JsonKey(name: 'clubuuid')
+  String? get clubuuid => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -34,7 +37,11 @@ abstract class $LoginDataCopyWith<$Res> {
   factory $LoginDataCopyWith(LoginData value, $Res Function(LoginData) then) =
       _$LoginDataCopyWithImpl<$Res, LoginData>;
   @useResult
-  $Res call({String accessToken, String refreshToken});
+  $Res call(
+      {String accessToken,
+      String refreshToken,
+      UserRole role,
+      @JsonKey(name: 'clubuuid') String? clubuuid});
 }
 
 /// @nodoc
@@ -52,6 +59,8 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
   $Res call({
     Object? accessToken = null,
     Object? refreshToken = null,
+    Object? role = null,
+    Object? clubuuid = freezed,
   }) {
     return _then(_value.copyWith(
       accessToken: null == accessToken
@@ -62,6 +71,14 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as UserRole,
+      clubuuid: freezed == clubuuid
+          ? _value.clubuuid
+          : clubuuid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -74,7 +91,11 @@ abstract class _$$LoginDataImplCopyWith<$Res>
       __$$LoginDataImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String accessToken, String refreshToken});
+  $Res call(
+      {String accessToken,
+      String refreshToken,
+      UserRole role,
+      @JsonKey(name: 'clubuuid') String? clubuuid});
 }
 
 /// @nodoc
@@ -90,6 +111,8 @@ class __$$LoginDataImplCopyWithImpl<$Res>
   $Res call({
     Object? accessToken = null,
     Object? refreshToken = null,
+    Object? role = null,
+    Object? clubuuid = freezed,
   }) {
     return _then(_$LoginDataImpl(
       accessToken: null == accessToken
@@ -100,6 +123,14 @@ class __$$LoginDataImplCopyWithImpl<$Res>
           ? _value.refreshToken
           : refreshToken // ignore: cast_nullable_to_non_nullable
               as String,
+      role: null == role
+          ? _value.role
+          : role // ignore: cast_nullable_to_non_nullable
+              as UserRole,
+      clubuuid: freezed == clubuuid
+          ? _value.clubuuid
+          : clubuuid // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -107,7 +138,11 @@ class __$$LoginDataImplCopyWithImpl<$Res>
 /// @nodoc
 @JsonSerializable()
 class _$LoginDataImpl implements _LoginData {
-  _$LoginDataImpl({required this.accessToken, required this.refreshToken});
+  _$LoginDataImpl(
+      {required this.accessToken,
+      required this.refreshToken,
+      this.role = UserRole.user,
+      @JsonKey(name: 'clubuuid') this.clubuuid});
 
   factory _$LoginDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginDataImplFromJson(json);
@@ -116,10 +151,16 @@ class _$LoginDataImpl implements _LoginData {
   final String accessToken;
   @override
   final String refreshToken;
+  @override
+  @JsonKey()
+  final UserRole role;
+  @override
+  @JsonKey(name: 'clubuuid')
+  final String? clubuuid;
 
   @override
   String toString() {
-    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken)';
+    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken, role: $role, clubuuid: $clubuuid)';
   }
 
   @override
@@ -130,12 +171,16 @@ class _$LoginDataImpl implements _LoginData {
             (identical(other.accessToken, accessToken) ||
                 other.accessToken == accessToken) &&
             (identical(other.refreshToken, refreshToken) ||
-                other.refreshToken == refreshToken));
+                other.refreshToken == refreshToken) &&
+            (identical(other.role, role) || other.role == role) &&
+            (identical(other.clubuuid, clubuuid) ||
+                other.clubuuid == clubuuid));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, accessToken, refreshToken);
+  int get hashCode =>
+      Object.hash(runtimeType, accessToken, refreshToken, role, clubuuid);
 
   @JsonKey(ignore: true)
   @override
@@ -154,7 +199,9 @@ class _$LoginDataImpl implements _LoginData {
 abstract class _LoginData implements LoginData {
   factory _LoginData(
       {required final String accessToken,
-      required final String refreshToken}) = _$LoginDataImpl;
+      required final String refreshToken,
+      final UserRole role,
+      @JsonKey(name: 'clubuuid') final String? clubuuid}) = _$LoginDataImpl;
 
   factory _LoginData.fromJson(Map<String, dynamic> json) =
       _$LoginDataImpl.fromJson;
@@ -163,6 +210,11 @@ abstract class _LoginData implements LoginData {
   String get accessToken;
   @override
   String get refreshToken;
+  @override
+  UserRole get role;
+  @override
+  @JsonKey(name: 'clubuuid')
+  String? get clubuuid;
   @override
   @JsonKey(ignore: true)
   _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>

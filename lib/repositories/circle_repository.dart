@@ -42,7 +42,7 @@ class CircleRepository {
   Future<Result<CircleDetailModel>> fetchClubIntro(String clubUUID) async {
     try {
       final response = await dio.get(
-        '$basePath/intro/$clubUUID',
+        '$basePath/$clubUUID',
       );
 
       logger.d(response.data['data']);
@@ -58,7 +58,14 @@ class CircleRepository {
 
   Future<FloorPhotoModel> fetchFloorPhoto(FloorType floorType) async {
     try {
-      final response = await dio.get('/mypages/clubs/${floorType.name}/photo');
+      final response = await dio.get(
+        '/mypages/clubs/${floorType.name}/photo',
+        options: Options(
+          headers: {
+            'accessToken': 'true',
+          },
+        ),
+      );
 
       logger.d(response.data);
 
