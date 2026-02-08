@@ -299,9 +299,23 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 alignment: Alignment.topLeft,
                                 padding:
                                     const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                                child: Html(
-                                  data: circleDetail.introContent,
-                                ),
+                                child: circleDetail.introContent == null ||
+                                        circleDetail.introContent!.isEmpty
+                                    ? Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(32.0),
+                                          child: TextFontWidget.fontRegular(
+                                            '소개글이 등록되지 않았습니다.',
+                                            textAlign: TextAlign.center,
+                                            fontSize: 14,
+                                            color: const Color(0xFFA1A1A1),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      )
+                                    : Html(
+                                        data: circleDetail.introContent!,
+                                      ),
                               ),
                             ),
                             if (circleDetail.recruitmentStatus == RecruitmentStatus.open)

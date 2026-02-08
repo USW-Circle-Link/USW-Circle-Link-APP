@@ -14,18 +14,12 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-ApplicationDetailResponse _$ApplicationDetailResponseFromJson(
-    Map<String, dynamic> json) {
-  return _ApplicationDetailResponse.fromJson(json);
-}
-
 /// @nodoc
 mixin _$ApplicationDetailResponse {
   String get message => throw _privateConstructorUsedError;
   List<ApplicationQuestionAnswer> get data =>
       throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $ApplicationDetailResponseCopyWith<ApplicationDetailResponse> get copyWith =>
       throw _privateConstructorUsedError;
@@ -112,15 +106,13 @@ class __$$ApplicationDetailResponseImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$ApplicationDetailResponseImpl implements _ApplicationDetailResponse {
+
+class _$ApplicationDetailResponseImpl extends _ApplicationDetailResponse {
   _$ApplicationDetailResponseImpl(
       {required this.message,
       required final List<ApplicationQuestionAnswer> data})
-      : _data = data;
-
-  factory _$ApplicationDetailResponseImpl.fromJson(Map<String, dynamic> json) =>
-      _$$ApplicationDetailResponseImplFromJson(json);
+      : _data = data,
+        super._();
 
   @override
   final String message;
@@ -146,7 +138,6 @@ class _$ApplicationDetailResponseImpl implements _ApplicationDetailResponse {
             const DeepCollectionEquality().equals(other._data, _data));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
       runtimeType, message, const DeepCollectionEquality().hash(_data));
@@ -157,23 +148,14 @@ class _$ApplicationDetailResponseImpl implements _ApplicationDetailResponse {
   _$$ApplicationDetailResponseImplCopyWith<_$ApplicationDetailResponseImpl>
       get copyWith => __$$ApplicationDetailResponseImplCopyWithImpl<
           _$ApplicationDetailResponseImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$ApplicationDetailResponseImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _ApplicationDetailResponse implements ApplicationDetailResponse {
+abstract class _ApplicationDetailResponse extends ApplicationDetailResponse {
   factory _ApplicationDetailResponse(
           {required final String message,
           required final List<ApplicationQuestionAnswer> data}) =
       _$ApplicationDetailResponseImpl;
-
-  factory _ApplicationDetailResponse.fromJson(Map<String, dynamic> json) =
-      _$ApplicationDetailResponseImpl.fromJson;
+  _ApplicationDetailResponse._() : super._();
 
   @override
   String get message;
@@ -193,7 +175,8 @@ ApplicationQuestionAnswer _$ApplicationQuestionAnswerFromJson(
 /// @nodoc
 mixin _$ApplicationQuestionAnswer {
   String get question => throw _privateConstructorUsedError;
-  String get answer => throw _privateConstructorUsedError;
+  String? get answer => throw _privateConstructorUsedError;
+  int? get optionId => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -207,7 +190,7 @@ abstract class $ApplicationQuestionAnswerCopyWith<$Res> {
           $Res Function(ApplicationQuestionAnswer) then) =
       _$ApplicationQuestionAnswerCopyWithImpl<$Res, ApplicationQuestionAnswer>;
   @useResult
-  $Res call({String question, String answer});
+  $Res call({String question, String? answer, int? optionId});
 }
 
 /// @nodoc
@@ -225,17 +208,22 @@ class _$ApplicationQuestionAnswerCopyWithImpl<$Res,
   @override
   $Res call({
     Object? question = null,
-    Object? answer = null,
+    Object? answer = freezed,
+    Object? optionId = freezed,
   }) {
     return _then(_value.copyWith(
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
-      answer: null == answer
+      answer: freezed == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      optionId: freezed == optionId
+          ? _value.optionId
+          : optionId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ) as $Val);
   }
 }
@@ -249,7 +237,7 @@ abstract class _$$ApplicationQuestionAnswerImplCopyWith<$Res>
       __$$ApplicationQuestionAnswerImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String question, String answer});
+  $Res call({String question, String? answer, int? optionId});
 }
 
 /// @nodoc
@@ -266,17 +254,22 @@ class __$$ApplicationQuestionAnswerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? question = null,
-    Object? answer = null,
+    Object? answer = freezed,
+    Object? optionId = freezed,
   }) {
     return _then(_$ApplicationQuestionAnswerImpl(
       question: null == question
           ? _value.question
           : question // ignore: cast_nullable_to_non_nullable
               as String,
-      answer: null == answer
+      answer: freezed == answer
           ? _value.answer
           : answer // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      optionId: freezed == optionId
+          ? _value.optionId
+          : optionId // ignore: cast_nullable_to_non_nullable
+              as int?,
     ));
   }
 }
@@ -285,7 +278,7 @@ class __$$ApplicationQuestionAnswerImplCopyWithImpl<$Res>
 @JsonSerializable()
 class _$ApplicationQuestionAnswerImpl implements _ApplicationQuestionAnswer {
   _$ApplicationQuestionAnswerImpl(
-      {required this.question, required this.answer});
+      {required this.question, this.answer, this.optionId});
 
   factory _$ApplicationQuestionAnswerImpl.fromJson(Map<String, dynamic> json) =>
       _$$ApplicationQuestionAnswerImplFromJson(json);
@@ -293,11 +286,13 @@ class _$ApplicationQuestionAnswerImpl implements _ApplicationQuestionAnswer {
   @override
   final String question;
   @override
-  final String answer;
+  final String? answer;
+  @override
+  final int? optionId;
 
   @override
   String toString() {
-    return 'ApplicationQuestionAnswer(question: $question, answer: $answer)';
+    return 'ApplicationQuestionAnswer(question: $question, answer: $answer, optionId: $optionId)';
   }
 
   @override
@@ -307,12 +302,14 @@ class _$ApplicationQuestionAnswerImpl implements _ApplicationQuestionAnswer {
             other is _$ApplicationQuestionAnswerImpl &&
             (identical(other.question, question) ||
                 other.question == question) &&
-            (identical(other.answer, answer) || other.answer == answer));
+            (identical(other.answer, answer) || other.answer == answer) &&
+            (identical(other.optionId, optionId) ||
+                other.optionId == optionId));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, question, answer);
+  int get hashCode => Object.hash(runtimeType, question, answer, optionId);
 
   @JsonKey(ignore: true)
   @override
@@ -332,7 +329,8 @@ class _$ApplicationQuestionAnswerImpl implements _ApplicationQuestionAnswer {
 abstract class _ApplicationQuestionAnswer implements ApplicationQuestionAnswer {
   factory _ApplicationQuestionAnswer(
       {required final String question,
-      required final String answer}) = _$ApplicationQuestionAnswerImpl;
+      final String? answer,
+      final int? optionId}) = _$ApplicationQuestionAnswerImpl;
 
   factory _ApplicationQuestionAnswer.fromJson(Map<String, dynamic> json) =
       _$ApplicationQuestionAnswerImpl.fromJson;
@@ -340,7 +338,9 @@ abstract class _ApplicationQuestionAnswer implements ApplicationQuestionAnswer {
   @override
   String get question;
   @override
-  String get answer;
+  String? get answer;
+  @override
+  int? get optionId;
   @override
   @JsonKey(ignore: true)
   _$$ApplicationQuestionAnswerImplCopyWith<_$ApplicationQuestionAnswerImpl>

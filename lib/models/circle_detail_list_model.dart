@@ -38,6 +38,7 @@ class Circle with _$Circle {
     required String clubInsta,
     String? clubRoomNumber,
     String? aplictStatus,
+    String? aplictUUID,
   }) = _Circle;
 
   factory Circle.fromJson(Map<String, dynamic> json) => _$CircleFromJson(json);

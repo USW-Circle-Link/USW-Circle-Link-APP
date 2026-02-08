@@ -6,7 +6,7 @@ class CircleDetailModel {
   final List<String>? introPhotoPath;
   final String circleName;
   final String leaderName;
-  final String introContent;
+  final String? introContent;
   final RecruitmentStatus recruitmentStatus;
   final String? leaderHp;
   final String? circleInsta;
@@ -22,7 +22,7 @@ class CircleDetailModel {
     this.introPhotoPath,
     required this.circleName,
     required this.leaderName,
-    required this.introContent,
+    this.introContent,
     required this.recruitmentStatus,
     this.clubRecruitment,
     this.circleRoom,

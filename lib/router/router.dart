@@ -4,6 +4,7 @@ import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/router/refresh_observer.dart';
 import 'package:usw_circle_link/views/screens/application_writing_screen.dart';
+import 'package:usw_circle_link/views/screens/application_detail_screen.dart';
 import 'package:usw_circle_link/views/screens/change_pw_screen.dart';
 import 'package:usw_circle_link/views/screens/circle_screen.dart';
 import 'package:usw_circle_link/views/screens/delete_user_screen.dart';
@@ -141,6 +142,13 @@ final routerProvider = Provider<GoRouter>((ref) {
               final listType = parseCircleListType(typeParam);
               return CircleListScreen(listType: listType);
             },
+          ),
+          GoRoute(
+            path: 'circle_list/:type/application_detail',
+            builder: (_, state) => ApplicationDetailScreen(
+              clubUUID: state.uri.queryParameters['clubUUID']!,
+              aplictId: state.uri.queryParameters['aplictId']!,
+            ),
           ),
           GoRoute(
             path: 'update_profile',
