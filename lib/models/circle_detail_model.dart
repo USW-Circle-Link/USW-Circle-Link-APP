@@ -13,6 +13,8 @@ class CircleDetailModel {
   final String? circleRoom;
   final List<String>? circleHashtag;
   final String? clubRecruitment;
+  final String? googleFormUrl;
+  final List<String>? clubCategoryNames;
 
   CircleDetailModel({
     this.circleUUID,
@@ -27,6 +29,8 @@ class CircleDetailModel {
     this.leaderHp,
     this.circleInsta,
     this.circleHashtag,
+    this.googleFormUrl,
+    this.clubCategoryNames,
   });
 
   List<String>? getNotEmptyIntroPhotoPath() {
@@ -34,21 +38,33 @@ class CircleDetailModel {
   }
 
   factory CircleDetailModel.fromJson(Map<String, dynamic> json) {
+    final introPhotos = json['introPhotos'] ?? json['infoPhotos'];
+    final introPhotoList = introPhotos != null
+        ? (List<String>.from(introPhotos))
+            .where((path) => path != null && path.toString().isNotEmpty)
+            .map((path) => path.toString())
+            .toList()
+        : null;
+    
     return CircleDetailModel(
       circleUUID: json['clubUUID'],
       mainPhotoPath: json['mainPhoto'],
-      introPhotoPath: List<String>.from(json['introPhotos']),
+      introPhotoPath: introPhotoList,
       circleName: json['clubName'],
       leaderName: json['leaderName'],
       leaderHp: json['leaderHp'],
       circleInsta: json['clubInsta'],
-      introContent: json['clubIntro'],
+      introContent: json['clubIntro'] ?? json['clubInfo'],
       recruitmentStatus: RecruitmentStatus.fromString(
         json['recruitmentStatus'] as String,
       ),
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
       circleHashtag: List<String>.from(json['clubHashtags'] ?? []),
+      googleFormUrl: json['googleFormUrl'],
+      clubCategoryNames: json['clubCategoryNames'] != null
+          ? List<String>.from(json['clubCategoryNames'])
+          : null,
     );
   }
 

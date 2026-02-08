@@ -125,7 +125,7 @@ class ApplicationRepository {
       final response = await dio.post(
         '/clubs/$clubUUID/applications',
         data: {
-          'formId': formId,
+         
           'answers': answers,
         },
         options: Options(
@@ -136,6 +136,8 @@ class ApplicationRepository {
       logger.d('${response.data}');
 
       logger.d('apply - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      logger.d('apply - ${answers}');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         return Result.ok(null);
