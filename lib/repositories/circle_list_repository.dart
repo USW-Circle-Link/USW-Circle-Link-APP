@@ -64,13 +64,16 @@ class CircleListRepository {
   /// - CircleListModelError: 조회 중 오류가 발생한 경우
   Future<CircleListModel> fetchOpenCircleList() async {
     final response = await dio.get(
-      '$basePath/open',
+      basePath,
+      queryParameters: {
+        'open': true,
+      },
     );
 
     logger.d('${response.data}');
 
     logger.d(
-        'fetchDepartmentCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+        'fetchOpenCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
       return CircleListModel.fromJson(response.data)
@@ -181,9 +184,9 @@ class CircleListRepository {
     List<String> clubCategoryUUIDs,
   ) async {
     final response = await dio.get(
-      '$basePath/filter',
+      basePath,
       queryParameters: {
-        'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
+        'filter': clubCategoryUUIDs,
       },
     );
 
@@ -215,9 +218,10 @@ class CircleListRepository {
     List<String> clubCategoryUUIDs,
   ) async {
     final response = await dio.get(
-      '$basePath/open/filter',
+      basePath,
       queryParameters: {
-        'clubCategoryUUIDs': clubCategoryUUIDs.join(','),
+        'open': true,
+        'filter': clubCategoryUUIDs,
       },
     );
 

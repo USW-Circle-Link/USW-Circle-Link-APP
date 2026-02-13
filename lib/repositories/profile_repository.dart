@@ -104,7 +104,7 @@ class ProfileRepository {
   }) async {
     try {
       final response = await dio.post(
-        '$basePath/duplication-check',
+        '/users/profile/duplication-check',
         data: {
           'account': account,
         },

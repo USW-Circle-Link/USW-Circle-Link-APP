@@ -13,6 +13,7 @@ class LoginData with _$LoginData {
     required String refreshToken,
     @Default(UserRole.user) UserRole role,
     @JsonKey(name: 'clubuuid') String? clubuuid,
+    @Default(false) bool isAgreedTerms,
   }) = _LoginData;
 
   factory LoginData.fromJson(Map<String, dynamic> json) =>

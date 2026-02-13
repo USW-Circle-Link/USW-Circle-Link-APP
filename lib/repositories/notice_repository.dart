@@ -9,7 +9,7 @@ final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return NoticeRepository(
-    basePath: '/my-notices',
+    basePath: '/notices',
     dio: dio,
   );
 });

@@ -55,14 +55,16 @@ class CircleDetailModel {
       leaderHp: json['leaderHp'],
       circleInsta: json['clubInsta'],
       introContent: json['clubIntro'] ?? json['clubInfo'],
-      recruitmentStatus: RecruitmentStatus.fromString(
-        json['recruitmentStatus'] as String,
-      ),
+      recruitmentStatus: json['recruitmentStatus'] != null
+          ? RecruitmentStatus.fromString(json['recruitmentStatus'] as String)
+          : RecruitmentStatus.close,
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
-      circleHashtag: List<String>.from(json['clubHashtags'] ?? []),
+      circleHashtag: json['clubHashtags'] is List
+          ? List<String>.from(json['clubHashtags'])
+          : <String>[],
       googleFormUrl: json['googleFormUrl'],
-      clubCategoryNames: json['clubCategoryNames'] != null
+      clubCategoryNames: json['clubCategoryNames'] is List
           ? List<String>.from(json['clubCategoryNames'])
           : null,
     );

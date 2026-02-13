@@ -37,7 +37,7 @@ class Circle with _$Circle {
     required String leaderHp,
     required String clubInsta,
     String? clubRoomNumber,
-    String? aplictStatus,
+    @JsonKey(name: 'publicStatus') String? aplictStatus,
     String? aplictUUID,
   }) = _Circle;
 

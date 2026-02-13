@@ -57,7 +57,7 @@ class FCMRepository {
     };
 
     final response = await dio.patch(
-      '$basePath/fcmtoken',
+      '/clubs/fcmtoken',
       data: body,
       options: Options(
         headers: {

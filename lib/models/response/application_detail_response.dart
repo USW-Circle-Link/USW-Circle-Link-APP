@@ -23,10 +23,11 @@ class ApplicationDetailResponse with _$ApplicationDetailResponse {
     
     final questionAnswerList = qnaList != null && qnaList is List
         ? (qnaList as List<dynamic>)
+            .where((e) => e is Map<String, dynamic>)
             .map((e) {
               final qaJson = e as Map<String, dynamic>;
               return ApplicationQuestionAnswer(
-                question: qaJson['question'] as String,
+                question: (qaJson['question'] as String?) ?? '',
                 answer: qaJson['answer'] as String?,
                 optionId: (qaJson['optionId'] as num?)?.toInt(),
               );

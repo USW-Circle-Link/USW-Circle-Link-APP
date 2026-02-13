@@ -74,7 +74,7 @@ class ApplicationRepository {
 
     try {
       final response = await dio.get(
-        '/clubs/forms/$clubUUID',
+        '/clubs/$clubUUID/forms',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -93,11 +93,12 @@ class ApplicationRepository {
           ));
         }
         final formData = data['data'];
+        final questions = formData['questions'];
         final applicationSet = ApplicationSet.fromJson({
           'clubId': clubUUID,
           'formId': formData['formId']?.toString(),
           'title': formData['title'],
-          'questions': formData['questions'] ?? [],
+          'questions': questions is List ? questions : [],
         });
         return Result.ok(applicationSet);
       } else {

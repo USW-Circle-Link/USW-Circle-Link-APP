@@ -59,7 +59,7 @@ class CircleRepository {
   Future<FloorPhotoModel> fetchFloorPhoto(FloorType floorType) async {
     try {
       final response = await dio.get(
-        '/mypages/clubs/${floorType.name}/photo',
+        '/users/clubs/${floorType.name}/photo',
         options: Options(
           headers: {
             'accessToken': 'true',
@@ -72,9 +72,16 @@ class CircleRepository {
       logger.d(
           'fetchFloorPhoto - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      return FloorPhotoModel.fromJson(response.data);
+      final responseData = response.data;
+      if (responseData == null || responseData['data'] == null) {
+        throw FloorPhotoModelError(message: "층별 배치도 사진이 등록되지 않았습니다.");
+      }
+
+      return FloorPhotoModel.fromJson(responseData);
+    } on FloorPhotoModelError {
+      rethrow;
     } catch (e) {
-      throw FloorPhotoModelError(message: "에외발생 - $e");
+      throw FloorPhotoModelError(message: "예외발생 - $e");
     }
   }
 }

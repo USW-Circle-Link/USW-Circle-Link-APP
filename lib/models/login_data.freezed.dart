@@ -25,6 +25,7 @@ mixin _$LoginData {
   UserRole get role => throw _privateConstructorUsedError;
   @JsonKey(name: 'clubuuid')
   String? get clubuuid => throw _privateConstructorUsedError;
+  bool get isAgreedTerms => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -41,7 +42,8 @@ abstract class $LoginDataCopyWith<$Res> {
       {String accessToken,
       String refreshToken,
       UserRole role,
-      @JsonKey(name: 'clubuuid') String? clubuuid});
+      @JsonKey(name: 'clubuuid') String? clubuuid,
+      bool isAgreedTerms});
 }
 
 /// @nodoc
@@ -61,6 +63,7 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
     Object? refreshToken = null,
     Object? role = null,
     Object? clubuuid = freezed,
+    Object? isAgreedTerms = null,
   }) {
     return _then(_value.copyWith(
       accessToken: null == accessToken
@@ -79,6 +82,10 @@ class _$LoginDataCopyWithImpl<$Res, $Val extends LoginData>
           ? _value.clubuuid
           : clubuuid // ignore: cast_nullable_to_non_nullable
               as String?,
+      isAgreedTerms: null == isAgreedTerms
+          ? _value.isAgreedTerms
+          : isAgreedTerms // ignore: cast_nullable_to_non_nullable
+              as bool,
     ) as $Val);
   }
 }
@@ -95,7 +102,8 @@ abstract class _$$LoginDataImplCopyWith<$Res>
       {String accessToken,
       String refreshToken,
       UserRole role,
-      @JsonKey(name: 'clubuuid') String? clubuuid});
+      @JsonKey(name: 'clubuuid') String? clubuuid,
+      bool isAgreedTerms});
 }
 
 /// @nodoc
@@ -113,6 +121,7 @@ class __$$LoginDataImplCopyWithImpl<$Res>
     Object? refreshToken = null,
     Object? role = null,
     Object? clubuuid = freezed,
+    Object? isAgreedTerms = null,
   }) {
     return _then(_$LoginDataImpl(
       accessToken: null == accessToken
@@ -131,6 +140,10 @@ class __$$LoginDataImplCopyWithImpl<$Res>
           ? _value.clubuuid
           : clubuuid // ignore: cast_nullable_to_non_nullable
               as String?,
+      isAgreedTerms: null == isAgreedTerms
+          ? _value.isAgreedTerms
+          : isAgreedTerms // ignore: cast_nullable_to_non_nullable
+              as bool,
     ));
   }
 }
@@ -142,7 +155,8 @@ class _$LoginDataImpl implements _LoginData {
       {required this.accessToken,
       required this.refreshToken,
       this.role = UserRole.user,
-      @JsonKey(name: 'clubuuid') this.clubuuid});
+      @JsonKey(name: 'clubuuid') this.clubuuid,
+      this.isAgreedTerms = false});
 
   factory _$LoginDataImpl.fromJson(Map<String, dynamic> json) =>
       _$$LoginDataImplFromJson(json);
@@ -157,10 +171,13 @@ class _$LoginDataImpl implements _LoginData {
   @override
   @JsonKey(name: 'clubuuid')
   final String? clubuuid;
+  @override
+  @JsonKey()
+  final bool isAgreedTerms;
 
   @override
   String toString() {
-    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken, role: $role, clubuuid: $clubuuid)';
+    return 'LoginData(accessToken: $accessToken, refreshToken: $refreshToken, role: $role, clubuuid: $clubuuid, isAgreedTerms: $isAgreedTerms)';
   }
 
   @override
@@ -174,13 +191,15 @@ class _$LoginDataImpl implements _LoginData {
                 other.refreshToken == refreshToken) &&
             (identical(other.role, role) || other.role == role) &&
             (identical(other.clubuuid, clubuuid) ||
-                other.clubuuid == clubuuid));
+                other.clubuuid == clubuuid) &&
+            (identical(other.isAgreedTerms, isAgreedTerms) ||
+                other.isAgreedTerms == isAgreedTerms));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, accessToken, refreshToken, role, clubuuid);
+  int get hashCode => Object.hash(
+      runtimeType, accessToken, refreshToken, role, clubuuid, isAgreedTerms);
 
   @JsonKey(ignore: true)
   @override
@@ -201,7 +220,8 @@ abstract class _LoginData implements LoginData {
       {required final String accessToken,
       required final String refreshToken,
       final UserRole role,
-      @JsonKey(name: 'clubuuid') final String? clubuuid}) = _$LoginDataImpl;
+      @JsonKey(name: 'clubuuid') final String? clubuuid,
+      final bool isAgreedTerms}) = _$LoginDataImpl;
 
   factory _LoginData.fromJson(Map<String, dynamic> json) =
       _$LoginDataImpl.fromJson;
@@ -215,6 +235,8 @@ abstract class _LoginData implements LoginData {
   @override
   @JsonKey(name: 'clubuuid')
   String? get clubuuid;
+  @override
+  bool get isAgreedTerms;
   @override
   @JsonKey(ignore: true)
   _$$LoginDataImplCopyWith<_$LoginDataImpl> get copyWith =>

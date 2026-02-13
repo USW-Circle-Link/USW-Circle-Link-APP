@@ -13,6 +13,7 @@ _$LoginDataImpl _$$LoginDataImplFromJson(Map<String, dynamic> json) =>
       role:
           $enumDecodeNullable(_$UserRoleEnumMap, json['role']) ?? UserRole.user,
       clubuuid: json['clubuuid'] as String?,
+      isAgreedTerms: json['isAgreedTerms'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$$LoginDataImplToJson(_$LoginDataImpl instance) =>
@@ -21,6 +22,7 @@ Map<String, dynamic> _$$LoginDataImplToJson(_$LoginDataImpl instance) =>
       'refreshToken': instance.refreshToken,
       'role': _$UserRoleEnumMap[instance.role]!,
       'clubuuid': instance.clubuuid,
+      'isAgreedTerms': instance.isAgreedTerms,
     };
 
 const _$UserRoleEnumMap = {
