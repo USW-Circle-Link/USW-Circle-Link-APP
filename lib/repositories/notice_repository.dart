@@ -9,7 +9,7 @@ final noticeRepositoryProvider = Provider<NoticeRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return NoticeRepository(
-    basePath: '/my-notices',
+    basePath: '/notices',
     dio: dio,
   );
 });
@@ -23,9 +23,16 @@ class NoticeRepository {
     required this.dio,
   });
 
-  Future<NoticeModel> fetchNotices() async {
+  Future<NoticeModel> fetchNotices({
+    int page = 0,
+    int size = 10,
+  }) async {
     final response = await dio.get(
-      basePath,
+      '/notices',
+      queryParameters: {
+        'page': page,
+        'size': size,
+      },
     );
 
     logger.d(response.data);
@@ -47,7 +54,7 @@ class NoticeRepository {
     required String noticeUUID,
   }) async {
     final response = await dio.get(
-      '$basePath/$noticeUUID/details',
+      '/notices/$noticeUUID',
     );
 
     logger.d(response.data);

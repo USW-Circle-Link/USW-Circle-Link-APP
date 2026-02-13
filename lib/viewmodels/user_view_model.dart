@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../models/enums/user_role.dart';
 import '../models/response/global_exception.dart';
 import '../../const/analytics_const.dart';
 import '../../models/change_pw_model.dart';
@@ -133,6 +134,23 @@ class UserViewModel extends ChangeNotifier {
       switch (result) {
         case Ok():
           logger.d('UserViewModel - 로그인 완료! ${result.value}');
+
+          // 일반 사용자(UserRole.user)만 로그인 허용
+          if (result.value.role != UserRole.user) {
+            logger.w(
+                'UserViewModel - 로그인 거부: ${result.value.role} 역할은 앱 로그인이 불가합니다.');
+            _state = _state.copyWith(
+              isAuthorized: false,
+              error: GlobalException(
+                code: 'USR-ROLE-DENIED',
+                message: '일반 사용자 계정만 로그인할 수 있습니다.',
+              ),
+            );
+            return Result.error(GlobalException(
+              code: 'USR-ROLE-DENIED',
+              message: '일반 사용자 계정만 로그인할 수 있습니다.',
+            ));
+          }
 
           final saveResult = await _tokenRepository.saveTokens(
             accessToken: result.value.accessToken,

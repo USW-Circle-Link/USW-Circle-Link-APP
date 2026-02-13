@@ -358,7 +358,7 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
     return Container(
       margin: EdgeInsets.only(right: widget.style.hashtagSpacing),
       child: Chip(
-        label: Text('#$tag'),
+        label: Text(tag.startsWith('#') ? tag : '#$tag'),
         labelStyle: TextFontWidget.fontRegularStyle(
           color: widget.style.hashtagTextColor,
           fontSize: widget.style.hashtagFontSize,

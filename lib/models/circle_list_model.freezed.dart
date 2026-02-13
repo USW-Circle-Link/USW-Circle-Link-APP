@@ -407,9 +407,12 @@ CircleListData _$CircleListDataFromJson(Map<String, dynamic> json) {
 mixin _$CircleListData {
   String get clubUUID => throw _privateConstructorUsedError;
   String get clubName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'mainPhotoUrl')
   String? get mainPhoto => throw _privateConstructorUsedError;
+  @JsonKey(name: 'department')
   String? get departmentName =>
       throw _privateConstructorUsedError; // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
+  @JsonKey(name: 'hashtags')
   List<String>? get clubHashtags => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -427,9 +430,9 @@ abstract class $CircleListDataCopyWith<$Res> {
   $Res call(
       {String clubUUID,
       String clubName,
-      String? mainPhoto,
-      String? departmentName,
-      List<String>? clubHashtags});
+      @JsonKey(name: 'mainPhotoUrl') String? mainPhoto,
+      @JsonKey(name: 'department') String? departmentName,
+      @JsonKey(name: 'hashtags') List<String>? clubHashtags});
 }
 
 /// @nodoc
@@ -487,9 +490,9 @@ abstract class _$$CircleListDataImplCopyWith<$Res>
   $Res call(
       {String clubUUID,
       String clubName,
-      String? mainPhoto,
-      String? departmentName,
-      List<String>? clubHashtags});
+      @JsonKey(name: 'mainPhotoUrl') String? mainPhoto,
+      @JsonKey(name: 'department') String? departmentName,
+      @JsonKey(name: 'hashtags') List<String>? clubHashtags});
 }
 
 /// @nodoc
@@ -540,9 +543,9 @@ class _$CircleListDataImpl extends _CircleListData {
   _$CircleListDataImpl(
       {required this.clubUUID,
       required this.clubName,
-      this.mainPhoto,
-      this.departmentName,
-      final List<String>? clubHashtags})
+      @JsonKey(name: 'mainPhotoUrl') this.mainPhoto,
+      @JsonKey(name: 'department') this.departmentName,
+      @JsonKey(name: 'hashtags') final List<String>? clubHashtags})
       : _clubHashtags = clubHashtags,
         super._();
 
@@ -554,13 +557,16 @@ class _$CircleListDataImpl extends _CircleListData {
   @override
   final String clubName;
   @override
+  @JsonKey(name: 'mainPhotoUrl')
   final String? mainPhoto;
   @override
+  @JsonKey(name: 'department')
   final String? departmentName;
 // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   final List<String>? _clubHashtags;
 // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
   @override
+  @JsonKey(name: 'hashtags')
   List<String>? get clubHashtags {
     final value = _clubHashtags;
     if (value == null) return null;
@@ -613,11 +619,12 @@ class _$CircleListDataImpl extends _CircleListData {
 
 abstract class _CircleListData extends CircleListData {
   factory _CircleListData(
-      {required final String clubUUID,
-      required final String clubName,
-      final String? mainPhoto,
-      final String? departmentName,
-      final List<String>? clubHashtags}) = _$CircleListDataImpl;
+          {required final String clubUUID,
+          required final String clubName,
+          @JsonKey(name: 'mainPhotoUrl') final String? mainPhoto,
+          @JsonKey(name: 'department') final String? departmentName,
+          @JsonKey(name: 'hashtags') final List<String>? clubHashtags}) =
+      _$CircleListDataImpl;
   _CircleListData._() : super._();
 
   factory _CircleListData.fromJson(Map<String, dynamic> json) =
@@ -628,10 +635,13 @@ abstract class _CircleListData extends CircleListData {
   @override
   String get clubName;
   @override
+  @JsonKey(name: 'mainPhotoUrl')
   String? get mainPhoto;
   @override
+  @JsonKey(name: 'department')
   String? get departmentName;
   @override // Optional 한 이유 필터링 조회 시 분과 이름이 없을 수 있음
+  @JsonKey(name: 'hashtags')
   List<String>? get clubHashtags;
   @override
   @JsonKey(ignore: true)

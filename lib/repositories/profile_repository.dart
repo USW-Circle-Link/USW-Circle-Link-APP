@@ -26,7 +26,7 @@ class ProfileRepository {
   Future<Result<ProfileData>> getProfile() async {
     try {
       final response = await dio.get(
-        '$basePath/me',
+        '/users/me',
         options: Options(
           headers: {
             'accessToken': 'true',
@@ -74,7 +74,7 @@ class ProfileRepository {
       };
 
       final response = await dio.patch(
-        '$basePath/change',
+        '/users/me',
         options: Options(
           headers: {
             'accessToken': 'true',
@@ -93,6 +93,39 @@ class ProfileRepository {
       } else {
         return Result.error(ProfileModelError.fromJson(response.data)
             .setType(ProfileModelType.updateProfile));
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  Future<Result<bool>> checkDuplication({
+    required String account,
+  }) async {
+    try {
+      final response = await dio.post(
+        '/users/profile/duplication-check',
+        data: {
+          'account': account,
+        },
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        ),
+      );
+
+      logger.d(response.data);
+
+      logger.d(
+          'checkDuplication - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      if (response.statusCode == 200) {
+        final isDuplicated = response.data['data'] as bool?;
+        return Result.ok(isDuplicated ?? false);
+      } else {
+        return Result.error(ProfileModelError.fromJson(response.data)
+            .setType(ProfileModelType.getProfile));
       }
     } on Exception catch (e) {
       return Result.error(e);

@@ -25,7 +25,7 @@ class DeleteUserRepository {
 
   Future<bool> sendCode() async {
     final response = await dio.post(
-      '$basePath/exit/send-code',
+      '/auth/withdrawal/code',
       options: Options(
         headers: {
           'Content-Type': 'application/json',
@@ -53,7 +53,7 @@ class DeleteUserRepository {
       "authCode": code,
     };
     final response = await dio.delete(
-      '$basePath/exit',
+      '/users/me',
       data: body,
       options: Options(
         headers: {
@@ -78,7 +78,7 @@ class DeleteUserRepository {
 
   Future<String> getEmail() async {
     final response = await dio.post(
-      '$basePath/exit/email',
+      '/auth/withdrawal/code',
       options: Options(
         headers: {
           'Content-Type': 'application/json',

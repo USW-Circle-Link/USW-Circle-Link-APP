@@ -12,7 +12,8 @@ class NoticeList extends StatelessWidget {
     required this.onItemClicked,
   }) : super(key: key) {
     noticeModel = NoticeModel(
-        message: noticeModel.message, data: noticeModel.data.reversed.toList());
+        message: noticeModel.message, 
+        data: noticeModel.data.reversed.toList());
   }
 
   NoticeModel noticeModel;
@@ -54,13 +55,13 @@ class NoticeList extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: <Widget>[
                             TextFontWidget.fontRegular(
-                              noticeModel.data[index].adminName,
+                              notices[index].author,
                               fontSize: 14,
                               color: const Color(0xFF767676),
                               fontWeight: FontWeight.w400,
                             ),
                             TextFontWidget.fontRegular(
-                              noticeModel.data[index].noticeCreatedAt
+                              notices[index].noticeCreatedAt
                                   .parseDateTime()
                                   .getFormattedString(),
                               fontSize: 14,

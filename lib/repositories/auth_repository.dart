@@ -18,7 +18,7 @@ final authRepositoryProvider = Provider<AuthRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
   return AuthRepository(
-    basePath: '/users',
+    basePath: '/auth',
     dio: dio,
   );
 });
@@ -44,7 +44,7 @@ class AuthRepository {
       logger.d('sendMail - body {$body}');
 
       final response = await dio.post(
-        '$basePath/temporary/register',
+        '$basePath/signup/verification-mail',
         data: body,
         options: Options(headers: {
           'Content-Type': 'application/json',
@@ -72,7 +72,7 @@ class AuthRepository {
   }) async {
     try {
       final response = await dio.post(
-        '$basePath/email/verification',
+        '$basePath/signup/verify',
         data: {
           'email': email,
         },
@@ -98,7 +98,8 @@ class AuthRepository {
   }) async {
     try {
       final response = await dio.get(
-        '$basePath/verify-duplicate/$id',
+        '$basePath/check-Id',
+        queryParameters: {'Id': id},
       );
 
       logger.d(response.data);
@@ -120,10 +121,8 @@ class AuthRepository {
   Future<Result<bool>> verifyEmail({required String email}) async {
     try {
       final response = await dio.post(
-        '$basePath/check/email/duplicate',
-        data: {
-          'email': email,
-        },
+        '$basePath/check-Id',
+        queryParameters: {'email': email},
       );
 
       logger.d(response.data);
@@ -226,6 +225,8 @@ class AuthRepository {
         ),
       );
 
+      logger.d(body);
+
       logger.d(response.data);
 
       logger.d('login - ${response.realUri} 로 요청 성공! (${response.statusCode})');
@@ -255,7 +256,7 @@ class AuthRepository {
   }) async {
     try {
       final response = await dio.post(
-        '/integration/logout',
+        '$basePath/logout',
         options: Options(
           headers: {
             'Authorization': 'Bearer $accessToken',
@@ -289,7 +290,7 @@ class AuthRepository {
   }) async {
     try {
       final response = await dio.patch(
-        '$basePath/userpw',
+        '/users/me/password',
         data: {
           'userPw': userPw,
           'newPw': newPw,
@@ -327,8 +328,11 @@ class AuthRepository {
     required String email,
   }) async {
     try {
-      final response = await dio.get(
-        '$basePath/find-account/$email',
+      final response = await dio.post(
+        '$basePath/find-id',
+        data: {
+          'email': email,
+        },
       );
 
       logger.d(response.data);
@@ -356,7 +360,7 @@ class AuthRepository {
         "email": email,
       };
       final response = await dio.post(
-        '$basePath/auth/send-code',
+        '$basePath/password/reset-code',
         data: body,
         options: Options(
           headers: {
@@ -389,7 +393,7 @@ class AuthRepository {
         "authCode": code,
       };
       final response = await dio.post(
-        '$basePath/auth/verify-token',
+        '$basePath/password/verify',
         data: body,
         options: Options(
           headers: {
@@ -421,7 +425,7 @@ class AuthRepository {
   }) async {
     try {
       final response = await dio.patch(
-        '$basePath/reset-password',
+        '$basePath/password/reset',
         data: {
           'password': password,
           'confirmPassword': confirmPassword,
@@ -433,6 +437,8 @@ class AuthRepository {
           },
         ),
       );
+
+      logger.d('resetPW - $password $confirmPassword $uuid');
 
       logger.d(response.data);
 

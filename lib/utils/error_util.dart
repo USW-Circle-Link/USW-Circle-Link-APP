@@ -93,6 +93,8 @@ class ErrorUtil {
         return "이미 지원한 동아리 또는\n소속된 동아리입니다.";
       case "ABNORMAL-ACCESS":
         return "비정상적인 접근입니다.";
+      case "USR-ROLE-DENIED":
+        return "일반 사용자 계정만 로그인할 수 있습니다.\n동아리 회장/관리자 계정은 웹에서 이용해주세요.";
       case "CINT-202":
         return "아직 지원서가 등록되지 않았어요.";
       case "EMAIL_TOKEN-005":

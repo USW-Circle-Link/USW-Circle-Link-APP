@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
@@ -20,6 +21,9 @@ const SERVER = 'prod_server';
 final protocol = servers[SERVER]!['protocol'];
 final host = servers[SERVER]!['host'];
 final port = servers[SERVER]!['port'];
+
+// 더미 데이터 사용 여부 (개발/테스트용)
+const USE_DUMMY_APPLICATION_DATA = false; // false로 변경하면 실제 API 호출
 
 // Storage Key
 const accessTokenKey = 'access_token';
@@ -489,3 +493,130 @@ final dummyCircles = <Circle>[
     aplictStatus: "모집중",
   ),
 ];
+
+// 지원서 더미 데이터
+ApplicationSet getDummyApplicationSet(String clubUUID) {
+  return ApplicationSet(
+    clubId: clubUUID,
+    formId: 'dummy-form-001',
+    title: '2026-1학기 신입 부원 모집',
+    description: '열정 있는 개발자를 찾습니다.',
+    questions: [
+      ApplicationQuestion(
+        questionId: 101,
+        sequence: 1,
+        type: QuestionType.radio,
+        questionText: '학년을 선택해주세요.',
+        required: true,
+        options: [
+          QuestionOption(
+            sequence: 1,
+            content: '1학년',
+            value: 'GRADE_1',
+            optionId: 501,
+          ),
+          QuestionOption(
+            sequence: 2,
+            content: '2학년',
+            value: 'GRADE_2',
+            optionId: 502,
+          ),
+          QuestionOption(
+            sequence: 3,
+            content: '3학년',
+            value: 'GRADE_3',
+            optionId: 503,
+          ),
+          QuestionOption(
+            sequence: 4,
+            content: '4학년',
+            value: 'GRADE_4',
+            optionId: 504,
+          ),
+        ],
+      ),
+      ApplicationQuestion(
+        questionId: 102,
+        sequence: 2,
+        type: QuestionType.checkbox,
+        questionText: '관심 분야 (다중 선택)',
+        required: false,
+        options: [
+          QuestionOption(
+            sequence: 1,
+            content: '백엔드',
+            value: 'BACK',
+            optionId: 505,
+          ),
+          QuestionOption(
+            sequence: 2,
+            content: '프론트엔드',
+            value: 'FRONT',
+            optionId: 506,
+          ),
+          QuestionOption(
+            sequence: 3,
+            content: '모바일',
+            value: 'MOBILE',
+            optionId: 507,
+          ),
+          QuestionOption(
+            sequence: 4,
+            content: '데이터베이스',
+            value: 'DB',
+            optionId: 508,
+          ),
+        ],
+      ),
+      ApplicationQuestion(
+        questionId: 103,
+        sequence: 3,
+        type: QuestionType.dropdown,
+        questionText: '선호하는 개발 언어를 선택해주세요.',
+        required: true,
+        options: [
+          QuestionOption(
+            sequence: 1,
+            content: 'Dart/Flutter',
+            value: 'DART',
+            optionId: 509,
+          ),
+          QuestionOption(
+            sequence: 2,
+            content: 'Java',
+            value: 'JAVA',
+            optionId: 510,
+          ),
+          QuestionOption(
+            sequence: 3,
+            content: 'Python',
+            value: 'PYTHON',
+            optionId: 511,
+          ),
+          QuestionOption(
+            sequence: 4,
+            content: 'JavaScript',
+            value: 'JS',
+            optionId: 512,
+          ),
+        ],
+      ),
+      ApplicationQuestion(
+        questionId: 104,
+        sequence: 4,
+        type: QuestionType.shortText,
+        questionText: '이름을 입력해주세요.',
+        required: true,
+        options: [],
+      ),
+      ApplicationQuestion(
+        questionId: 105,
+        sequence: 5,
+        type: QuestionType.longText,
+        questionText: '지원 동기 및 포부',
+        required: true,
+        options: [],
+      ),
+    ],
+  );
+}

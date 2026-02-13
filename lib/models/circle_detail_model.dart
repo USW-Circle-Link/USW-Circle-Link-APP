@@ -1,16 +1,20 @@
+import 'package:usw_circle_link/models/enums/recruitment_status.dart';
+
 class CircleDetailModel {
   final String? circleUUID;
   final String? mainPhotoPath;
   final List<String>? introPhotoPath;
   final String circleName;
   final String leaderName;
-  final String introContent;
-  final String recruitmentStatus;
+  final String? introContent;
+  final RecruitmentStatus recruitmentStatus;
   final String? leaderHp;
   final String? circleInsta;
   final String? circleRoom;
   final List<String>? circleHashtag;
   final String? clubRecruitment;
+  final String? googleFormUrl;
+  final List<String>? clubCategoryNames;
 
   CircleDetailModel({
     this.circleUUID,
@@ -18,13 +22,15 @@ class CircleDetailModel {
     this.introPhotoPath,
     required this.circleName,
     required this.leaderName,
-    required this.introContent,
+    this.introContent,
     required this.recruitmentStatus,
     this.clubRecruitment,
     this.circleRoom,
     this.leaderHp,
     this.circleInsta,
     this.circleHashtag,
+    this.googleFormUrl,
+    this.clubCategoryNames,
   });
 
   List<String>? getNotEmptyIntroPhotoPath() {
@@ -32,19 +38,35 @@ class CircleDetailModel {
   }
 
   factory CircleDetailModel.fromJson(Map<String, dynamic> json) {
+    final introPhotos = json['introPhotos'] ?? json['infoPhotos'];
+    final introPhotoList = introPhotos != null
+        ? (List<String>.from(introPhotos))
+            .where((path) => path != null && path.toString().isNotEmpty)
+            .map((path) => path.toString())
+            .toList()
+        : null;
+    
     return CircleDetailModel(
       circleUUID: json['clubUUID'],
       mainPhotoPath: json['mainPhoto'],
-      introPhotoPath: List<String>.from(json['introPhotos']),
+      introPhotoPath: introPhotoList,
       circleName: json['clubName'],
       leaderName: json['leaderName'],
       leaderHp: json['leaderHp'],
       circleInsta: json['clubInsta'],
-      introContent: json['clubIntro'],
-      recruitmentStatus: json['recruitmentStatus'],
+      introContent: json['clubIntro'] ?? json['clubInfo'],
+      recruitmentStatus: json['recruitmentStatus'] != null
+          ? RecruitmentStatus.fromString(json['recruitmentStatus'] as String)
+          : RecruitmentStatus.close,
       clubRecruitment: json['clubRecruitment'],
       circleRoom: json['clubRoomNumber'],
-      circleHashtag: List<String>.from(json['clubHashtags'] ?? []),
+      circleHashtag: json['clubHashtags'] is List
+          ? List<String>.from(json['clubHashtags'])
+          : <String>[],
+      googleFormUrl: json['googleFormUrl'],
+      clubCategoryNames: json['clubCategoryNames'] is List
+          ? List<String>.from(json['clubCategoryNames'])
+          : null,
     );
   }
 

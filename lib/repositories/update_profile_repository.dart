@@ -26,7 +26,7 @@ class UpdateProfileRepository {
   Future<ProfileModel> getProfile() async {
     try {
       final response = await dio.get(
-        '$basePath/me',
+        '/users/me',
         options: Options(headers: {'accessToken': 'true'}),
       );
 
@@ -54,7 +54,7 @@ class UpdateProfileRepository {
     };
 
     final response = await dio.patch(
-      '$basePath/change',
+      '/users/me',
       options: Options(headers: {
         'accessToken': 'true',
         'Content-Type': 'application/json',
