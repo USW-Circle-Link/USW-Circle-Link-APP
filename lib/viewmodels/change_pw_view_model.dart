@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/change_pw_model.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/utils/result.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 final changePwViewModelProvider =
@@ -46,6 +47,17 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
 
       await userViewModel.changePW.execute(userPw, newPw, confirmNewPw);
 
+      if (userViewModel.changePW.error) {
+        final result = userViewModel.changePW.result as Error;
+        final error = result.error;
+        throw (error is ChangePwModelError)
+            ? error.setType(ChangePwModelType.changePW)
+            : ChangePwModelError(
+                message: error.toString(),
+                type: ChangePwModelType.changePW,
+              );
+      }
+
       final changePWResponse = ChangePwModel(
         message: '비밀번호가 변경되었습니다',
         type: ChangePwModelType.changePW,
@@ -84,6 +96,17 @@ class ChangePwViewModel extends StateNotifier<ChangePwModelBase?> {
       }
 
       await userViewModel.resetPW.execute(newPw, confirmNewPw, uuid);
+
+      if (userViewModel.resetPW.error) {
+        final result = userViewModel.resetPW.result as Error;
+        final error = result.error;
+        throw (error is ChangePwModelError)
+            ? error.setType(ChangePwModelType.resetPW)
+            : ChangePwModelError(
+                message: error.toString(),
+                type: ChangePwModelType.resetPW,
+              );
+      }
 
       final changePWResponse = ChangePwModel(
         message: '비밀번호가 재설정되었습니다',

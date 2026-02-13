@@ -30,16 +30,15 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
         isCodeError: false,
       );
 
-      final result = await ref
+      final email = await ref
           .read(deleteUserRepositoryProvider)
-          .sendCode(); // true or exception
+          .sendCode();
 
-      if (result) {
-        state = state.copyWith(
-          isLoading: false,
-          isSendCodeSuccess: true,
-        );
-      }
+      state = state.copyWith(
+        isLoading: false,
+        isSendCodeSuccess: true,
+        email: email,
+      );
     } on GlobalException catch (e) {
       state = state.copyWith(
         isLoading: false,

@@ -23,7 +23,8 @@ class DeleteUserRepository {
     required this.dio,
   });
 
-  Future<bool> sendCode() async {
+  /// 회원 탈퇴 인증 코드 발송 및 이메일 반환
+  Future<String> sendCode() async {
     final response = await dio.post(
       '/auth/withdrawal/code',
       options: Options(
@@ -40,7 +41,7 @@ class DeleteUserRepository {
         .d('sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
     if (response.statusCode == 200) {
-      return true;
+      return response.data['message'];
     } else {
       throw GlobalException.fromJson(response.data);
     }
