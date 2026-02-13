@@ -5,6 +5,16 @@ platform :ios do
   lane :release do
     setup_ci if ENV['CI']
 
+    # App Store Connect API Key 설정 (세션 만료 없이 영구 사용 가능)
+    if ENV['APP_STORE_CONNECT_API_KEY_KEY_ID']
+      app_store_connect_api_key(
+        key_id: ENV['APP_STORE_CONNECT_API_KEY_KEY_ID'],
+        issuer_id: ENV['APP_STORE_CONNECT_API_KEY_ISSUER_ID'],
+        key_content: ENV['APP_STORE_CONNECT_API_KEY_KEY'],
+        is_key_content_base64: true
+      )
+    end
+
     # Match로 인증서 가져오기
     match(
       type: "appstore",
