@@ -29,7 +29,7 @@ class FloorPhotoData with _$FloorPhotoData {
 }
 
 @freezed
-class FloorPhotoModelError with _$FloorPhotoModelError implements Error {
+class FloorPhotoModelError with _$FloorPhotoModelError implements Exception {
   FloorPhotoModelError._();
 
   factory FloorPhotoModelError({
@@ -40,6 +40,5 @@ class FloorPhotoModelError with _$FloorPhotoModelError implements Error {
   factory FloorPhotoModelError.fromJson(Map<String, dynamic> json) =>
       _$FloorPhotoModelErrorFromJson(json);
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }

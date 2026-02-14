@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:go_router/go_router.dart';
 import '../../const/data.dart';
 import '../../models/application_set.dart';
@@ -37,7 +39,7 @@ class _ApplicationWritingScreenState
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      ref.read(applicationViewModelProvider.notifier).getApplication(widget.clubUUID);
+      ref.read(applicationViewModelProvider).getApplication(widget.clubUUID);
     });
   }
 
@@ -52,12 +54,12 @@ class _ApplicationWritingScreenState
   @override
   Widget build(BuildContext context) {
     final isLoading = ref
-        .watch(applicationViewModelProvider.select((state) => state.isLoading));
+        .watch(applicationViewModelProvider.select((vm) => vm.isLoading));
     final applicationSet = ref.watch(
-        applicationViewModelProvider.select((state) => state.applicationSet));
+        applicationViewModelProvider.select((vm) => vm.applicationSet));
     final answers = ref.watch(
-        applicationViewModelProvider.select((state) => state.answers));
-    final viewModel = ref.read(applicationViewModelProvider.notifier);
+        applicationViewModelProvider.select((vm) => vm.answers));
+    final viewModel = ref.read(applicationViewModelProvider);
 
     if (applicationSet != null) {
       for (var question in applicationSet.questions) {
@@ -82,7 +84,7 @@ class _ApplicationWritingScreenState
       }
     }
 
-    ref.listen(applicationViewModelProvider.select((state) => state.error),
+    ref.listen(applicationViewModelProvider.select((vm) => vm.error),
         (prev, next) {
       if (next != null) {
         DialogManager.instance.showAlertDialog(
@@ -92,7 +94,7 @@ class _ApplicationWritingScreenState
       }
     });
     ref.listen(
-        applicationViewModelProvider.select((state) => state.applySuccess),
+        applicationViewModelProvider.select((vm) => vm.applySuccess),
         (prev, next) {
       if (next) {
         context
@@ -100,9 +102,12 @@ class _ApplicationWritingScreenState
       }
     });
 
-    return Scaffold(
-      appBar: const DetailAppBar(title: '지원하기'),
-      bottomNavigationBar: SafeArea(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
+        appBar: const DetailAppBar(title: '지원하기'),
+        bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.only(left: 32.0, right: 32.0, bottom: 20.0),
           child: Wrap(
@@ -151,13 +156,13 @@ class _ApplicationWritingScreenState
                     height: _buttonHeight,
                     child: Builder(
                       builder: (context) {
-                        final isFormValid = ref.read(applicationViewModelProvider.notifier).isFormValid();
+                        final isFormValid = ref.read(applicationViewModelProvider).isFormValid();
                         final canSubmit = isDone && isFormValid;
                         return OutlinedButton(
                           onPressed: canSubmit
                               ? () async {
                                   await ref
-                                      .read(applicationViewModelProvider.notifier)
+                                      .read(applicationViewModelProvider)
                                       .apply(clubUUID: widget.clubUUID);
                                 }
                               : null,
@@ -261,6 +266,7 @@ class _ApplicationWritingScreenState
                 ),
               ),
             ),
+      ),
     );
   }
 
@@ -336,111 +342,108 @@ class _ApplicationWritingScreenState
 
   Widget _buildRadioField(ApplicationQuestion question) {
     final currentAnswer = ref.watch(
-      applicationViewModelProvider.select((state) => state.answers[question.questionId]),
+      applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
     );
     final selectedOptionId = currentAnswer?.optionId;
 
-    // TODO: 테스트용 - options가 비어있을 때 더미 옵션 표시
-    // 롤백하려면 아래 주석 처리된 코드를 활성화하고, 테스트용 코드를 주석 처리하세요
     if (question.options.isEmpty) {
-      // 테스트용 더미 옵션 생성
-      final dummyOptions = [
-        QuestionOption(
-          optionId: 1,
-          content: '옵션 1',
-          sequence: 1,
-        ),
-        QuestionOption(
-          optionId: 2,
-          content: '옵션 2',
-          sequence: 2,
-        ),
-        QuestionOption(
-          optionId: 3,
-          content: '옵션 3',
-          sequence: 3,
-        ),
-      ];
-      
-      return Column(
-        children: dummyOptions.map((option) {
-          final isSelected = selectedOptionId == option.optionId;
-          return InkWell(
-            onTap: () {
-              ref.read(applicationViewModelProvider.notifier).updateAnswer(
-                questionId: question.questionId,
-                optionId: option.optionId,
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-              margin: const EdgeInsets.only(bottom: 8.0),
-              decoration: BoxDecoration(
-                border: Border.all(
-                  color: isSelected ? accentColor : const Color(0xFFDBDBDB),
-                  width: isSelected ? 2.0 : 1.0,
-                ),
-                borderRadius: BorderRadius.circular(_borderRadius),
-              ),
-              child: Row(
-                children: [
-                  Container(
-                    width: 20,
-                    height: 20,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: isSelected ? accentColor : const Color(0xFFDBDBDB),
-                        width: 2.0,
-                      ),
-                      color: isSelected ? accentColor : Colors.transparent,
-                    ),
-                    child: isSelected
-                        ? Center(
-                            child: Container(
-                              width: 8,
-                              height: 8,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white,
-                              ),
-                            ),
-                          )
-                        : null,
-                  ),
-                  const SizedBox(width: 12.0),
-                  Expanded(
-                    child: TextFontWidget.fontRegular(
-                      option.content,
-                      fontSize: 14.0,
-                      color: const Color(0xFF2c2c2c),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          );
-        }).toList(),
-      );
-      
-      // 롤백용 원래 코드 (주석 해제하여 사용)
-      /*
-      return Container(
-        padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: const Color(0xFFDBDBDB),
-            width: 1.0,
+      if (USE_DUMMY_APPLICATION_DATA) {
+        // 테스트용 더미 옵션 생성
+        final dummyOptions = [
+          QuestionOption(
+            optionId: 1,
+            content: '옵션 1',
+            sequence: 1,
           ),
-          borderRadius: BorderRadius.circular(_borderRadius),
-        ),
-        child: TextFontWidget.fontRegular(
-          '선택지가 없습니다.',
-          fontSize: 14.0,
-          color: const Color(0xFF999999),
-        ),
-      );
-      */
+          QuestionOption(
+            optionId: 2,
+            content: '옵션 2',
+            sequence: 2,
+          ),
+          QuestionOption(
+            optionId: 3,
+            content: '옵션 3',
+            sequence: 3,
+          ),
+        ];
+
+        return Column(
+          children: dummyOptions.map((option) {
+            final isSelected = selectedOptionId == option.optionId;
+            return InkWell(
+              onTap: () {
+                ref.read(applicationViewModelProvider).updateAnswer(
+                  questionId: question.questionId,
+                  optionId: option.optionId,
+                );
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+                margin: const EdgeInsets.only(bottom: 8.0),
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                    width: isSelected ? 2.0 : 1.0,
+                  ),
+                  borderRadius: BorderRadius.circular(_borderRadius),
+                ),
+                child: Row(
+                  children: [
+                    Container(
+                      width: 20,
+                      height: 20,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                          width: 2.0,
+                        ),
+                        color: isSelected ? accentColor : Colors.transparent,
+                      ),
+                      child: isSelected
+                          ? Center(
+                              child: Container(
+                                width: 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            )
+                          : null,
+                    ),
+                    const SizedBox(width: 12.0),
+                    Expanded(
+                      child: TextFontWidget.fontRegular(
+                        option.content,
+                        fontSize: 14.0,
+                        color: const Color(0xFF2c2c2c),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+        );
+      } else {
+        return Container(
+          padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: const Color(0xFFDBDBDB),
+              width: 1.0,
+            ),
+            borderRadius: BorderRadius.circular(_borderRadius),
+          ),
+          child: TextFontWidget.fontRegular(
+            '선택지가 없습니다.',
+            fontSize: 14.0,
+            color: const Color(0xFF999999),
+          ),
+        );
+      }
     }
 
     return Column(
@@ -448,7 +451,7 @@ class _ApplicationWritingScreenState
         final isSelected = selectedOptionId == option.optionId;
         return InkWell(
           onTap: () {
-            ref.read(applicationViewModelProvider.notifier).updateAnswer(
+            ref.read(applicationViewModelProvider).updateAnswer(
               questionId: question.questionId,
               optionId: option.optionId,
             );
@@ -507,7 +510,7 @@ class _ApplicationWritingScreenState
 
   Widget _buildCheckboxField(ApplicationQuestion question) {
     final currentAnswer = ref.watch(
-      applicationViewModelProvider.select((state) => state.answers[question.questionId]),
+      applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
     );
     
     if (!_checkboxSelections.containsKey(question.questionId)) {
@@ -540,7 +543,7 @@ class _ApplicationWritingScreenState
               }
               _checkboxSelections[question.questionId] = selectedOptionIds;
             });
-            ref.read(applicationViewModelProvider.notifier).updateAnswer(
+            ref.read(applicationViewModelProvider).updateAnswer(
               questionId: question.questionId,
               optionId: null,
               answerText: selectedOptionIds.isEmpty
@@ -593,7 +596,7 @@ class _ApplicationWritingScreenState
 
   Widget _buildDropdownField(ApplicationQuestion question) {
     final currentAnswer = ref.watch(
-      applicationViewModelProvider.select((state) => state.answers[question.questionId]),
+      applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
     );
     final selectedOptionId = currentAnswer?.optionId;
     QuestionOption? selectedOption;
@@ -638,7 +641,7 @@ class _ApplicationWritingScreenState
           }).toList(),
           onChanged: (value) {
             if (value != null) {
-              ref.read(applicationViewModelProvider.notifier).updateAnswer(
+              ref.read(applicationViewModelProvider).updateAnswer(
                 questionId: question.questionId,
                 optionId: value.optionId,
               );

@@ -15,7 +15,7 @@
 
 모든 API 요청은 Bearer 토큰 인증을 사용합니다.
 
-```
+```http
 Authorization: Bearer {token}
 ```
 

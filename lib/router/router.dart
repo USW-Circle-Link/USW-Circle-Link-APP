@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_list_model.dart';
@@ -145,10 +146,19 @@ final routerProvider = Provider<GoRouter>((ref) {
           ),
           GoRoute(
             path: 'circle_list/:type/application_detail',
-            builder: (_, state) => ApplicationDetailScreen(
-              clubUUID: state.uri.queryParameters['clubUUID']!,
-              aplictId: state.uri.queryParameters['aplictId']!,
-            ),
+            builder: (_, state) {
+              final clubUUID = state.uri.queryParameters['clubUUID'];
+              final aplictId = state.uri.queryParameters['aplictId'];
+              if (clubUUID == null || aplictId == null) {
+                return const Scaffold(
+                  body: Center(child: Text('잘못된 접근입니다.')),
+                );
+              }
+              return ApplicationDetailScreen(
+                clubUUID: clubUUID,
+                aplictId: aplictId,
+              );
+            },
           ),
           GoRoute(
             path: 'update_profile',

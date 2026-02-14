@@ -1,5 +1,7 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/models/response/application_detail_response.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -40,13 +42,16 @@ class ApplicationDetailScreen extends ConsumerWidget {
       );
     });
 
-    return Scaffold(
-      backgroundColor: const Color(0xffFFFFFF),
-      resizeToAvoidBottomInset: false,
-      appBar: const DetailAppBar(
-        title: '지원서 확인',
-      ),
-      body: state.when(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
+        backgroundColor: const Color(0xffFFFFFF),
+        resizeToAvoidBottomInset: false,
+        appBar: const DetailAppBar(
+          title: '지원서 확인',
+        ),
+        body: state.when(
         data: (data) {
           if (data == null || data.detailResponse.data.isEmpty) {
             return Center(
@@ -91,6 +96,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
           ),
         ),
       ),
+      ),
     );
   }
 
@@ -114,7 +120,9 @@ class ApplicationDetailScreen extends ConsumerWidget {
           }
         }
       }
-    } else if (item.answer != null && item.answer!.isNotEmpty) {
+    }
+    // optionId 매칭 실패 시 answer 텍스트가 있으면 폴백
+    if (displayAnswer == '답변 없음' && item.answer != null && item.answer!.isNotEmpty) {
       displayAnswer = item.answer!;
     }
 

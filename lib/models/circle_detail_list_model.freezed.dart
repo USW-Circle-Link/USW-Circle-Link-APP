@@ -195,6 +195,7 @@ mixin _$Circle {
   String get leaderHp => throw _privateConstructorUsedError;
   String get clubInsta => throw _privateConstructorUsedError;
   String? get clubRoomNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: 'publicStatus')
   String? get aplictStatus => throw _privateConstructorUsedError;
   String? get aplictUUID => throw _privateConstructorUsedError;
 
@@ -216,7 +217,7 @@ abstract class $CircleCopyWith<$Res> {
       String leaderHp,
       String clubInsta,
       String? clubRoomNumber,
-      String? aplictStatus,
+      @JsonKey(name: 'publicStatus') String? aplictStatus,
       String? aplictUUID});
 }
 
@@ -299,7 +300,7 @@ abstract class _$$CircleImplCopyWith<$Res> implements $CircleCopyWith<$Res> {
       String leaderHp,
       String clubInsta,
       String? clubRoomNumber,
-      String? aplictStatus,
+      @JsonKey(name: 'publicStatus') String? aplictStatus,
       String? aplictUUID});
 }
 
@@ -376,7 +377,7 @@ class _$CircleImpl implements _Circle {
       required this.leaderHp,
       required this.clubInsta,
       this.clubRoomNumber,
-      this.aplictStatus,
+      @JsonKey(name: 'publicStatus') this.aplictStatus,
       this.aplictUUID});
 
   factory _$CircleImpl.fromJson(Map<String, dynamic> json) =>
@@ -397,6 +398,7 @@ class _$CircleImpl implements _Circle {
   @override
   final String? clubRoomNumber;
   @override
+  @JsonKey(name: 'publicStatus')
   final String? aplictStatus;
   @override
   final String? aplictUUID;
@@ -468,7 +470,7 @@ abstract class _Circle implements Circle {
       required final String leaderHp,
       required final String clubInsta,
       final String? clubRoomNumber,
-      final String? aplictStatus,
+      @JsonKey(name: 'publicStatus') final String? aplictStatus,
       final String? aplictUUID}) = _$CircleImpl;
 
   factory _Circle.fromJson(Map<String, dynamic> json) = _$CircleImpl.fromJson;
@@ -488,6 +490,7 @@ abstract class _Circle implements Circle {
   @override
   String? get clubRoomNumber;
   @override
+  @JsonKey(name: 'publicStatus')
   String? get aplictStatus;
   @override
   String? get aplictUUID;

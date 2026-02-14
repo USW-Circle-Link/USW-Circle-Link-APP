@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final firebaseCloudMessagingViewModelProvider =
     StateNotifierProvider<FirebaseCloudMessagingViewModel, List<String>>((ref) {
@@ -60,8 +61,14 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     addNotification(notificationBody);
   }
 
-  Future<String> getToken() async {
-    return fcmRepository.getToken();
+  Future<String?> getToken() async {
+    final result = await fcmRepository.getToken();
+    switch (result) {
+      case Ok(:final value):
+        return value;
+      case Error():
+        return null;
+    }
   }
 
   Future<void> sendToken() async {

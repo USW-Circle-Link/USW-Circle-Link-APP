@@ -37,6 +37,8 @@ abstract class $CircleStateCopyWith<$Res> {
       bool? canApply,
       CircleDetailModel? circleDetail,
       String? error});
+
+  $CircleDetailModelCopyWith<$Res>? get circleDetail;
 }
 
 /// @nodoc
@@ -76,6 +78,18 @@ class _$CircleStateCopyWithImpl<$Res, $Val extends CircleState>
               as String?,
     ) as $Val);
   }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $CircleDetailModelCopyWith<$Res>? get circleDetail {
+    if (_value.circleDetail == null) {
+      return null;
+    }
+
+    return $CircleDetailModelCopyWith<$Res>(_value.circleDetail!, (value) {
+      return _then(_value.copyWith(circleDetail: value) as $Val);
+    });
+  }
 }
 
 /// @nodoc
@@ -91,6 +105,9 @@ abstract class _$$CircleStateImplCopyWith<$Res>
       bool? canApply,
       CircleDetailModel? circleDetail,
       String? error});
+
+  @override
+  $CircleDetailModelCopyWith<$Res>? get circleDetail;
 }
 
 /// @nodoc

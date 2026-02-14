@@ -27,23 +27,37 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   final ScrollController _outerScrollController = ScrollController();
 
   int activeIndex = 0;
-  late TabController tabController;
+  TabController? _tabController;
+  int _currentTabCount = 0;
   int selectedIndex = 0;
+
+  TabController get tabController => _tabController!;
+
+  void _initOrUpdateTabController(int tabCount) {
+    if (_currentTabCount == tabCount && _tabController != null) return;
+    _tabController?.removeListener(_onTabChanged);
+    _tabController?.dispose();
+    _currentTabCount = tabCount;
+    selectedIndex = 0;
+    _tabController = TabController(length: tabCount, vsync: this);
+    _tabController!.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    setState(() {
+      selectedIndex = _tabController!.index;
+    });
+  }
 
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this);
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex = tabController.index;
-      });
-    });
     super.initState();
   }
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController?.removeListener(_onTabChanged);
+    _tabController?.dispose();
     _outerScrollController.dispose();
     super.dispose();
   }
@@ -67,6 +81,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
     });
     final circleDetail = ref.watch(clubIntroViewModelProvider(widget.clubUUID)
         .select((state) => state.circleDetail));
+    // recruitmentStatus에 따라 TabController 동적 설정
+    if (circleDetail != null) {
+      final tabCount = circleDetail.recruitmentStatus == RecruitmentStatus.open ? 2 : 1;
+      _initOrUpdateTabController(tabCount);
+    }
     ref.listen(
         clubIntroViewModelProvider(widget.clubUUID)
             .select((state) => state.error), (prev, next) {

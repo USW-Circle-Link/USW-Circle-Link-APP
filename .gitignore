@@ -8,7 +8,6 @@
 .dart_tool/package_config.json
 .flutter-plugins
 .flutter-plugins-dependencies
-.fvm/flutter_sdk
 .packages
 .pub-cache/
 .pub/
@@ -71,10 +70,7 @@ coverage/
 **/android/**/*.xml
 **/ios/**/*.xml
 # Alternatively, specify the exact path if you only want to ignore this specific file
-.idea/workspace.xml
-.idea/vcs.xml
-.idea/.gitignore
-.idea/misc.xml
+.idea/
 
 .env
 Gemfile
@@ -92,3 +88,6 @@ Gemfile.lock
 gha-creds-*.json
 
 sentry.properties
+
+# FVM Version Cache
+.fvm/

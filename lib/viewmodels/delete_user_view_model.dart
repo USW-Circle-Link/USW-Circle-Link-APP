@@ -9,6 +9,7 @@ import 'package:usw_circle_link/viewmodels/state/delete_user_state.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 import '../models/response/global_exception.dart';
+import '../utils/result.dart';
 
 final deleteUserViewModelProvider =
     AutoDisposeNotifierProvider<DeleteUserViewModel, DeleteUserState>(
@@ -21,116 +22,123 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
   }
 
   Future<void> sendCode() async {
-    try {
-      state = state.copyWith(
-        isLoading: true,
-        error: null,
-        isSendCodeSuccess: false,
-        isVerifyCodeSuccess: false,
-        isCodeError: false,
-      );
+    state = state.copyWith(
+      isLoading: true,
+      error: null,
+      isSendCodeSuccess: false,
+      isVerifyCodeSuccess: false,
+      isCodeError: false,
+    );
 
-      final email = await ref
-          .read(deleteUserRepositoryProvider)
-          .sendCode();
-
-      state = state.copyWith(
-        isLoading: false,
-        isSendCodeSuccess: true,
-        email: email,
-      );
-    } on GlobalException catch (e) {
-      state = state.copyWith(
-        isLoading: false,
-        error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
-      );
-    } on Exception catch (e) {
-      final exception = e.toGlobalException(screen: 'DeleteUser_SendCode');
-      await ErrorUtil.instance.logError(exception);
-      state = state.copyWith(
-        isLoading: false,
-        error: '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
-      );
+    final result = await ref.read(deleteUserRepositoryProvider).sendCode();
+    switch (result) {
+      case Ok(:final value):
+        state = state.copyWith(
+          isLoading: false,
+          isSendCodeSuccess: true,
+          email: value,
+        );
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = state.copyWith(
+            isLoading: false,
+            error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+          );
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'DeleteUser_SendCode');
+          await ErrorUtil.instance.logError(exception);
+          state = state.copyWith(
+            isLoading: false,
+            error: '이메일 전송에 실패했습니다. 잠시 후 다시 시도해주세요.',
+          );
+        }
     }
   }
 
   Future<void> verifyCode() async {
-    try {
-      state = state.copyWith(
-        isLoading: true,
-        isVerifyCodeSuccess: false,
-        error: null,
-        isCodeError: false,
-      );
+    state = state.copyWith(
+      isLoading: true,
+      isVerifyCodeSuccess: false,
+      error: null,
+      isCodeError: false,
+    );
 
-      final code = state.code;
+    final code = state.code;
 
-      if (code.isEmpty) {
-        state = state.copyWith(
-          isLoading: false,
-          error: '인증코드를 입력해 주세요.',
-          isCodeError: true,
-        );
-        return;
-      }
-
-      final userState = ref.read(userViewModelProvider);
-
-      final result =
-          await ref.read(deleteUserRepositoryProvider).verifyCode(code: code);
-
-      if (result) {
-        // Firebase Analytics: 회원탈퇴 성공
-        analytics.logEvent(
-          name: AnalyticsEvent.deleteAccount,
-          parameters: {
-            AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-            AnalyticsParam.major: userState.state.major ?? 'unknown',
-            AnalyticsParam.userName: userState.state.userName ?? 'unknown',
-            AnalyticsParam.studentNumber:
-                userState.state.studentNumber ?? 'unknown',
-            AnalyticsParam.userHp: userState.state.userHp ?? 'unknown',
-          },
-        );
-
-        state = state.copyWith(
-          isLoading: false,
-          isVerifyCodeSuccess: true,
-        );
-
-        await Future.wait([
-          ref.read(secureStorageProvider).delete(key: accessTokenKey),
-          ref.read(secureStorageProvider).delete(key: refreshTokenKey),
-          ref.read(secureStorageProvider).delete(key: clubUUIDsKey),
-        ]);
-
-        await ref.read(userViewModelProvider.notifier).logout.execute();
-      }
-    } on GlobalException catch (e) {
+    if (code.isEmpty) {
       state = state.copyWith(
         isLoading: false,
-        error: ErrorUtil.instance.getErrorMessage(e.code) ??
-            '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+        error: '인증코드를 입력해 주세요.',
         isCodeError: true,
       );
-    } on Exception catch (e) {
-      final exception = e.toGlobalException(screen: 'DeleteUser_VerifyCode');
-      await ErrorUtil.instance.logError(exception);
-      state = state.copyWith(
-        isLoading: false,
-        error: '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
-        isCodeError: true,
-      );
+      return;
+    }
+
+    final userState = ref.read(userViewModelProvider);
+
+    final result =
+        await ref.read(deleteUserRepositoryProvider).verifyCode(code: code);
+    switch (result) {
+      case Ok(:final value):
+        if (value) {
+          // Firebase Analytics: 회원탈퇴 성공
+          analytics.logEvent(
+            name: AnalyticsEvent.deleteAccount,
+            parameters: {
+              AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
+              AnalyticsParam.major: userState.state.major ?? 'unknown',
+              AnalyticsParam.userName: userState.state.userName ?? 'unknown',
+              AnalyticsParam.studentNumber:
+                  userState.state.studentNumber ?? 'unknown',
+              AnalyticsParam.userHp: userState.state.userHp ?? 'unknown',
+            },
+          );
+
+          state = state.copyWith(
+            isLoading: false,
+            isVerifyCodeSuccess: true,
+          );
+
+          await Future.wait([
+            ref.read(secureStorageProvider).delete(key: accessTokenKey),
+            ref.read(secureStorageProvider).delete(key: refreshTokenKey),
+            ref.read(secureStorageProvider).delete(key: clubUUIDsKey),
+          ]);
+
+          await ref.read(userViewModelProvider.notifier).logout.execute();
+        }
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = state.copyWith(
+            isLoading: false,
+            error: ErrorUtil.instance.getErrorMessage(error.code) ??
+                '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+            isCodeError: true,
+          );
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'DeleteUser_VerifyCode');
+          await ErrorUtil.instance.logError(exception);
+          state = state.copyWith(
+            isLoading: false,
+            error: '인증 코드 확인 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.',
+            isCodeError: true,
+          );
+        }
     }
   }
 
   Future<void> getEmail() async {
     final result = await ref.read(deleteUserRepositoryProvider).getEmail();
-    logger.d(result);
-    state = state.copyWith(
-      email: result,
-    );
+    switch (result) {
+      case Ok(:final value):
+        logger.d(value);
+        state = state.copyWith(email: value);
+      case Error(:final error):
+        logger.e('getEmail 실패 - $error');
+    }
   }
 
   void setCode(String value) {

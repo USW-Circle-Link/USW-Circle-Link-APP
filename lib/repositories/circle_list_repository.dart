@@ -8,6 +8,7 @@ import 'package:usw_circle_link/models/response/circle_list_response.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 import '../models/response/global_exception.dart';
+import '../utils/result.dart';
 
 final circleListRepositoryProvider = Provider<CircleListRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -28,133 +29,112 @@ class CircleListRepository {
   });
 
   /// 모든 분과 동아리 목록 조회
-  ///
-  /// 이 함수는 모든 분과 동아리의 목록을 조회합니다.
-  ///
-  /// return: CircleListModel - 조회된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleListModel> fetchAllCircleList() async {
-    final response = await dio.get(
-      basePath,
-    );
+  Future<Result<CircleListModel>> fetchAllCircleList() async {
+    try {
+      final response = await dio.get(basePath);
 
-    logger.d('${response.data}');
+      logger.d('${response.data}');
 
-    logger.d(
-        'fetchAllCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchAllCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleListModel.fromJson(response.data)
-          .setType(CircleListModelType.all);
-    } else {
-      // Bad Request
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(
+          CircleListModel.fromJson(response.data)
+              .setType(CircleListModelType.all),
+        );
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e.toGlobalException(screen: 'CircleList_FetchAll'));
     }
   }
 
   /// 모집중인 분과 동아리 목록 조회
-  ///
-  /// 이 함수는 모집중인 분과 동아리의 목록을 조회합니다.
-  ///
-  /// return: CircleListModel - 조회된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleListModel> fetchOpenCircleList() async {
-    final response = await dio.get(
-      basePath,
-      queryParameters: {
-        'open': true,
-      },
-    );
+  Future<Result<CircleListModel>> fetchOpenCircleList() async {
+    try {
+      final response = await dio.get(
+        basePath,
+        queryParameters: {
+          'open': true,
+        },
+      );
 
-    logger.d('${response.data}');
+      logger.d('${response.data}');
 
-    logger.d(
-        'fetchOpenCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchOpenCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleListModel.fromJson(response.data)
-          .setType(CircleListModelType.department);
-    } else {
-      // Bad Request
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(
+          CircleListModel.fromJson(response.data)
+              .setType(CircleListModelType.department),
+        );
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e.toGlobalException(screen: 'CircleList_FetchOpen'));
     }
   }
 
   /// 소속 동아리 목록 조회
-  ///
-  /// 이 함수는 소속 동아리 목록을 조회합니다.
-  ///
-  /// return: CircleDetailListModel - 조회된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleDetailListModel> fetchMyCircleList() async {
-    final response = await dio.get(
-      '/users/me/clubs',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
-    );
+  Future<Result<CircleDetailListModel>> fetchMyCircleList() async {
+    try {
+      final response = await dio.get(
+        '/users/me/clubs',
+        options: Options(
+          headers: {
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-    logger.d('${response.data}');
+      logger.d('${response.data}');
 
-    logger.d(
-        'fetchMyCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchMyCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleDetailListModel.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw CircleDetailListModelError.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(CircleDetailListModel.fromJson(response.data));
+      } else {
+        return Result.error(CircleDetailListModelError.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 
   /// 내 신청 동아리 목록 조회
-  ///
-  /// 이 함수는 내 신청 동아리 목록을 조회합니다.
-  ///
-  /// return: CircleDetailListModel - 조회된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleDetailListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleDetailListModel> fetchMyApplicationList() async {
-    final response = await dio.get(
-      '/users/me/applications',
-      options: Options(
-        headers: {
-          'accessToken': 'true',
-        },
-      ),
-    );
+  Future<Result<CircleDetailListModel>> fetchMyApplicationList() async {
+    try {
+      final response = await dio.get(
+        '/users/me/applications',
+        options: Options(
+          headers: {
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-    logger.d('${response.data}');
+      logger.d('${response.data}');
 
-    logger.d(
-        'fetchMyApplicationList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchMyApplicationList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleDetailListModel.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw CircleDetailListModelError.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(CircleDetailListModel.fromJson(response.data));
+      } else {
+        return Result.error(CircleDetailListModelError.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 
   /// 분과 목록 조회
-  ///
-  /// 이 함수는 분과 목록을 조회합니다.
-  ///
-  /// return: CategoryModel - 조회된 분과 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CategoryModelError: 조회 중 오류가 발생한 경우
-  Future<CategoryModel> fetchCategory() async {
+  Future<Result<CategoryModel>> fetchCategory() async {
     try {
       final response = await dio.get('/categories');
 
@@ -163,96 +143,85 @@ class CircleListRepository {
       logger.d(
           'fetchCategory - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      return CategoryModel.fromJson(response.data);
-    } catch (e) {
-      throw CategoryModelError(message: "에외발생 - $e");
+      return Result.ok(CategoryModel.fromJson(response.data));
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 
   /// 필터링된 모든 분과 동아리 목록 조회
-  ///
-  /// 이 함수는 필터링된 모든 분과 동아리 목록을 조회합니다.
-  ///
-  /// params:
-  /// - department: 분과 목록
-  ///
-  /// return: CircleFilteredListModel - 필터링된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleFilteredListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleFilteredListModel> fetchAllFilteredCircleList(
+  Future<Result<CircleFilteredListModel>> fetchAllFilteredCircleList(
     List<String> clubCategoryUUIDs,
   ) async {
-    final response = await dio.get(
-      basePath,
-      queryParameters: {
-        'filter': clubCategoryUUIDs,
-      },
-    );
+    try {
+      final response = await dio.get(
+        basePath,
+        queryParameters: {
+          'filter': clubCategoryUUIDs,
+        },
+      );
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger.d(
-        'fetchAllFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchAllFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleFilteredListModel.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(CircleFilteredListModel.fromJson(response.data));
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(
+          e.toGlobalException(screen: 'CircleList_FetchFilteredAll'));
     }
   }
 
   /// 필터링된 모집중인 분과 동아리 목록 조회
-  ///
-  /// 이 함수는 필터링된 모집중인 분과 동아리 목록을 조회합니다.
-  ///
-  /// params:
-  /// - department: 분과 목록
-  ///
-  /// return: CircleFilteredListModel - 필터링된 동아리 목록을 포함하는 모델
-  ///
-  /// 예외:
-  /// - CircleFilteredListModelError: 조회 중 오류가 발생한 경우
-  Future<CircleFilteredListModel> fetchOpenFilteredCircleList(
+  Future<Result<CircleFilteredListModel>> fetchOpenFilteredCircleList(
     List<String> clubCategoryUUIDs,
   ) async {
-    final response = await dio.get(
-      basePath,
-      queryParameters: {
-        'open': true,
-        'filter': clubCategoryUUIDs,
-      },
-    );
+    try {
+      final response = await dio.get(
+        basePath,
+        queryParameters: {
+          'open': true,
+          'filter': clubCategoryUUIDs,
+        },
+      );
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger.d(
-        'fetchOpenFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchOpenFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleFilteredListModel.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(CircleFilteredListModel.fromJson(response.data));
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(
+          e.toGlobalException(screen: 'CircleList_FetchFilteredOpen'));
     }
   }
 
-  Future<CircleListResponse> fetchCircleList() async {
-    final response = await dio.get(
-      '$basePath/list',
-    );
+  Future<Result<CircleListResponse>> fetchCircleList() async {
+    try {
+      final response = await dio.get('$basePath/list');
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger.d(
-        'fetchCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'fetchCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return CircleListResponse.fromJson(response.data);
-    } else {
-      // Bad Request
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(CircleListResponse.fromJson(response.data));
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e.toGlobalException(screen: 'CircleList_Fetch'));
     }
   }
 }

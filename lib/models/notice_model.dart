@@ -82,11 +82,11 @@ class NoticeData with _$NoticeData {
     final nameValue = adminNameValue ?? authorNameValue ?? '';
     
     return NoticeData(
-      noticeUUID: json['noticeUUID'] as String,
-      noticeTitle: json['noticeTitle'] as String,
+      noticeUUID: json['noticeUUID'] as String? ?? '',
+      noticeTitle: json['noticeTitle'] as String? ?? '',
       adminName: nameValue,
       authorName: nameValue,
-      noticeCreatedAt: json['noticeCreatedAt'] as String,
+      noticeCreatedAt: json['noticeCreatedAt'] as String? ?? '',
     );
   }
   
@@ -104,7 +104,7 @@ extension NoticeDataExtension on NoticeData {
 }
 
 @freezed
-class NoticeModelError with _$NoticeModelError implements Error {
+class NoticeModelError with _$NoticeModelError implements Exception {
   NoticeModelError._();
   factory NoticeModelError({
     required String message,
@@ -119,6 +119,5 @@ class NoticeModelError with _$NoticeModelError implements Error {
         type: type,
       );
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }

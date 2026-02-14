@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/models/application_set.dart';
-import 'package:usw_circle_link/models/response/application_response.dart';
 import 'package:usw_circle_link/models/response/application_detail_response.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
@@ -118,7 +117,7 @@ class ApplicationRepository {
     if (USE_DUMMY_APPLICATION_DATA) {
       await Future.delayed(const Duration(milliseconds: 800));
       logger.d('더미 데이터: 지원서 제출 완료');
-      logger.d('제출된 답변: $answers');
+      logger.d('제출된 답변 수: ${answers.length}');
       return Result.ok(null);
     }
 
@@ -126,7 +125,7 @@ class ApplicationRepository {
       final response = await dio.post(
         '/clubs/$clubUUID/applications',
         data: {
-         
+          'formId': formId,
           'answers': answers,
         },
         options: Options(
@@ -138,7 +137,7 @@ class ApplicationRepository {
 
       logger.d('apply - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      logger.d('apply - ${answers}');
+      logger.d('apply - 제출된 답변 수: ${answers.length}');
 
       if (response.statusCode == 201 || response.statusCode == 200) {
         return Result.ok(null);

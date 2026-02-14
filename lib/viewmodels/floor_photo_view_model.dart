@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/floor_photo_model.dart';
 import 'package:usw_circle_link/repositories/circle_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final floorPhotoViewModelProvider = StateNotifierProvider.autoDispose
     .family<FloorPhotoViewModel, AsyncValue<FloorPhotoModel?>, String>(
@@ -28,20 +29,23 @@ class FloorPhotoViewModel extends StateNotifier<AsyncValue<FloorPhotoModel?>> {
   Future<void> getFloorPhoto({
     required String roomFloor,
   }) async {
-    try {
-      state = const AsyncValue.loading();
+    state = const AsyncValue.loading();
 
-      final response = await circleRepository.fetchFloorPhoto(
-        FloorType.parseFromCircleRoom(roomFloor),
-      );
+    final result = await circleRepository.fetchFloorPhoto(
+      FloorType.parseFromCircleRoom(roomFloor),
+    );
 
-      state = AsyncValue.data(response);
-    } on FloorPhotoModelError catch (e) {
-      logger.d(e);
-      state = AsyncValue.error(e, e.stackTrace);
-    } catch (e) {
-      final error = FloorPhotoModelError(message: "예외발생 - $e");
-      state = AsyncValue.error(error, error.stackTrace);
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncValue.data(value);
+      case Error(:final error):
+        if (error is FloorPhotoModelError) {
+          logger.d(error);
+          state = AsyncValue.error(error, error.stackTrace);
+        } else {
+          final modelError = FloorPhotoModelError(message: "예외발생 - $error");
+          state = AsyncValue.error(modelError, modelError.stackTrace);
+        }
     }
   }
 }

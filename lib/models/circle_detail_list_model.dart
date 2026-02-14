@@ -47,7 +47,7 @@ class Circle with _$Circle {
 @freezed
 class CircleDetailListModelError
     with _$CircleDetailListModelError
-    implements Error {
+    implements Exception {
   CircleDetailListModelError._();
 
   factory CircleDetailListModelError({
@@ -58,6 +58,5 @@ class CircleDetailListModelError
   factory CircleDetailListModelError.fromJson(Map<String, dynamic> json) =>
       _$CircleDetailListModelErrorFromJson(json);
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }

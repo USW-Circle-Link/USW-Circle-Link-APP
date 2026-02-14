@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
+import '../utils/result.dart';
+
 final fcmRepositoryProvider = Provider<FCMRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
@@ -24,59 +26,66 @@ class FCMRepository {
     required this.dio,
   });
 
-  Future<String> getToken() async {
-    if (Firebase.apps.isEmpty) {
-      // 초기화 되지 않은 경우 초기화
-      await Firebase.initializeApp();
-    }
+  Future<Result<String>> getToken() async {
+    try {
+      if (kIsWeb) {
+        return Result.error(FCMTokenNotFoundException());
+      }
 
-    // iOS
-    String? token;
-    if (defaultTargetPlatform == TargetPlatform.iOS ||
-        defaultTargetPlatform == TargetPlatform.macOS) {
-      token = await FirebaseMessaging.instance.getToken();
-    }
-    // Android
-    else {
-      token = await FirebaseMessaging.instance.getToken();
-    }
+      if (Firebase.apps.isEmpty) {
+        await Firebase.initializeApp();
+      }
 
-    if (token != null) {
-      return token;
-    } else {
-      throw FCMTokenNotFoundException();
+      final token = await FirebaseMessaging.instance.getToken();
+
+      if (token != null) {
+        return Result.ok(token);
+      } else {
+        return Result.error(FCMTokenNotFoundException());
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 
-  Future<void> sendToken() async {
-    final token = await getToken();
-    logger.d('FCM Token 불러오기 성공! - $token');
+  Future<Result<void>> sendToken() async {
+    try {
+      final tokenResult = await getToken();
+      switch (tokenResult) {
+        case Ok(:final value):
+          final token = value;
+          logger.d('FCM Token 불러오기 성공!');
 
-    final body = {
-      'fcmToken': token,
-    };
+          final body = {
+            'fcmToken': token,
+          };
 
-    final response = await dio.patch(
-      '/clubs/fcmtoken',
-      data: body,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': 'true',
-        },
-      ),
-    );
+          final response = await dio.patch(
+            '/clubs/fcmtoken',
+            data: body,
+            options: Options(
+              headers: {
+                'Content-Type': 'application/json',
+                'accessToken': 'true',
+              },
+            ),
+          );
 
-    logger.d(response.data);
+          logger.d(response.data);
 
-    logger.d(
-        'sendFCMToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+          logger.d(
+              'sendFCMToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      // TODO:성공 State 반환 필요
-    } else {
-      // Bad Request
-      throw Exception();
+          if (response.statusCode == 200) {
+            return Result.ok(null);
+          } else {
+            return Result.error(Exception('FCM 토큰 전송 실패'));
+          }
+        case Error(:final error):
+          return Result.error(error);
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
     }
   }
 }

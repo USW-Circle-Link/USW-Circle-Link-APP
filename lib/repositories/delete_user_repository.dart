@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../dio/Dio.dart';
 import '../models/response/global_exception.dart';
 import '../utils/logger/logger.dart';
+import '../utils/result.dart';
 
 final deleteUserRepositoryProvider = Provider<DeleteUserRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -24,79 +25,92 @@ class DeleteUserRepository {
   });
 
   /// 회원 탈퇴 인증 코드 발송 및 이메일 반환
-  Future<String> sendCode() async {
-    final response = await dio.post(
-      '/auth/withdrawal/code',
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': 'true',
-        },
-      ),
-    );
+  Future<Result<String>> sendCode() async {
+    try {
+      final response = await dio.post(
+        '/auth/withdrawal/code',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger
-        .d('sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'sendCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return response.data['message'];
-    } else {
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(response.data['message']);
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e.toGlobalException(screen: 'DeleteUser_SendCode'));
     }
   }
 
-  Future<bool> verifyCode({
+  Future<Result<bool>> verifyCode({
     required String code,
   }) async {
-    final body = {
-      "authCode": code,
-    };
-    final response = await dio.delete(
-      '/users/me',
-      data: body,
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': 'true',
-          if (!kIsWeb) 'refreshToken': 'true'
-        },
-      ),
-    );
+    try {
+      final body = {
+        "authCode": code,
+      };
+      final response = await dio.delete(
+        '/users/me',
+        data: body,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': 'true',
+            if (!kIsWeb) 'refreshToken': 'true'
+          },
+        ),
+      );
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger.d(
-        'verifyCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'verifyCode - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return true;
-    } else {
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(true);
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(
+          e.toGlobalException(screen: 'DeleteUser_VerifyCode'));
     }
   }
 
-  Future<String> getEmail() async {
-    final response = await dio.post(
-      '/auth/withdrawal/code',
-      options: Options(
-        headers: {
-          'Content-Type': 'application/json',
-          'accessToken': 'true',
-        },
-      ),
-    );
+  Future<Result<String>> getEmail() async {
+    try {
+      final response = await dio.post(
+        '/auth/withdrawal/code',
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-    logger.d(response.data);
+      logger.d(response.data);
 
-    logger
-        .d('getEmail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+      logger.d(
+          'getEmail - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-    if (response.statusCode == 200) {
-      return response.data['message'];
-    } else {
-      throw GlobalException.fromJson(response.data);
+      if (response.statusCode == 200) {
+        return Result.ok(response.data['message']);
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
+    } on Exception catch (e) {
+      return Result.error(e.toGlobalException(screen: 'DeleteUser_GetEmail'));
     }
   }
 }

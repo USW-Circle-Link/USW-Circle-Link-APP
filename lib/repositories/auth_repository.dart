@@ -151,7 +151,7 @@ class AuthRepository {
         'signupUUID': signupUUID,
         'emailTokenUUID': emailTokenUUID,
       };
-      logger.d(body);
+      logger.d('login - request sent for ${body['account']}');
       logger.d(headers);
       final response = await dio.post(
         '$basePath/signup',
@@ -184,7 +184,7 @@ class AuthRepository {
       final response =
           await dio.post('$basePath/existing/register', data: body);
 
-      logger.d(body);
+      logger.d('login - request sent for ${body['account']}');
 
       logger.d(response.data);
 
@@ -225,7 +225,9 @@ class AuthRepository {
         ),
       );
 
-      logger.d(body);
+      final sanitized = Map.from(body)..remove('password')..remove('fcmToken');
+
+      logger.d(sanitized);
 
       logger.d(response.data);
 
@@ -438,7 +440,7 @@ class AuthRepository {
         ),
       );
 
-      logger.d('resetPW - $password $confirmPassword $uuid');
+      logger.d('resetPW - request sent');
 
       logger.d(response.data);
 

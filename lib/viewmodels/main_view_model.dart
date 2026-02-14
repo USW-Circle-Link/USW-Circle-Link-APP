@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/circle_list_model.dart';
 import '../repositories/circle_list_repository.dart';
 import '../utils/logger/logger.dart';
+import '../utils/result.dart';
 
 import '../models/response/global_exception.dart';
 
@@ -23,68 +24,74 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
   }
 
   Future<void> fetchAllCircleList() async {
-    try {
-      state = AsyncValue.loading();
-
-      final response = await circleListRepository.fetchAllCircleList();
-
-      state = AsyncValue.data(response);
-    } on GlobalException catch (e) {
-      logger.d(e);
-      state = AsyncValue.error(e, e.stackTrace);
-    } on Exception catch (e) {
-      logger.e(e);
-      final exception = e.toGlobalException(screen: 'CircleList_FetchAll');
-      state = AsyncValue.error(exception, exception.stackTrace);
+    state = AsyncValue.loading();
+    final result = await circleListRepository.fetchAllCircleList();
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncValue.data(value);
+      case Error(:final error):
+        logger.d(error);
+        if (error is GlobalException) {
+          state = AsyncValue.error(error, error.stackTrace);
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'CircleList_FetchAll');
+          state = AsyncValue.error(exception, exception.stackTrace);
+        }
     }
   }
 
   Future<void> fetchOpenCircleList() async {
-    try {
-      state = AsyncValue.loading();
-
-      final response = await circleListRepository.fetchOpenCircleList();
-
-      state = AsyncValue.data(response);
-    } on GlobalException catch (e) {
-      state = AsyncValue.error(e, e.stackTrace);
-    } on Exception catch (e) {
-      logger.e(e);
-      final exception = e.toGlobalException(screen: 'CircleList_FetchOpen');
-      state = AsyncValue.error(exception, exception.stackTrace);
+    state = AsyncValue.loading();
+    final result = await circleListRepository.fetchOpenCircleList();
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncValue.data(value);
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = AsyncValue.error(error, error.stackTrace);
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'CircleList_FetchOpen');
+          state = AsyncValue.error(exception, exception.stackTrace);
+        }
     }
   }
 
   Future<void> fetchAllFilteredCircleList(
       List<String> clubCategoryUUIDs) async {
-    try {
-      state = AsyncValue.loading();
-
-      final response = await circleListRepository
-          .fetchAllFilteredCircleList(clubCategoryUUIDs);
-
-      state = AsyncValue.data(response.toCircleListModel());
-    } on GlobalException catch (e) {
-      state = AsyncValue.error(e, e.stackTrace);
-    } on Exception catch (e) {
-      final exception =
-          e.toGlobalException(screen: 'CircleList_FetchFilteredAll');
-      state = AsyncValue.error(exception, exception.stackTrace);
+    state = AsyncValue.loading();
+    final result = await circleListRepository
+        .fetchAllFilteredCircleList(clubCategoryUUIDs);
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncValue.data(value.toCircleListModel());
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = AsyncValue.error(error, error.stackTrace);
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'CircleList_FetchFilteredAll');
+          state = AsyncValue.error(exception, exception.stackTrace);
+        }
     }
   }
 
   Future<void> fetchOpenFilteredCircleList(
       List<String> clubCategoryUUIDs) async {
-    try {
-      final response = await circleListRepository
-          .fetchOpenFilteredCircleList(clubCategoryUUIDs);
-      state = AsyncValue.data(response.toCircleListModel());
-    } on GlobalException catch (e) {
-      state = AsyncValue.error(e, e.stackTrace);
-    } on Exception catch (e) {
-      final exception =
-          e.toGlobalException(screen: 'CircleList_FetchFilteredOpen');
-      state = AsyncValue.error(exception, exception.stackTrace);
+    final result = await circleListRepository
+        .fetchOpenFilteredCircleList(clubCategoryUUIDs);
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncValue.data(value.toCircleListModel());
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = AsyncValue.error(error, error.stackTrace);
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'CircleList_FetchFilteredOpen');
+          state = AsyncValue.error(exception, exception.stackTrace);
+        }
     }
   }
 }

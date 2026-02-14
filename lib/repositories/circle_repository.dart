@@ -56,7 +56,7 @@ class CircleRepository {
     }
   }
 
-  Future<FloorPhotoModel> fetchFloorPhoto(FloorType floorType) async {
+  Future<Result<FloorPhotoModel>> fetchFloorPhoto(FloorType floorType) async {
     try {
       final response = await dio.get(
         '/users/clubs/${floorType.name}/photo',
@@ -74,14 +74,18 @@ class CircleRepository {
 
       final responseData = response.data;
       if (responseData == null || responseData['data'] == null) {
-        throw FloorPhotoModelError(message: "층별 배치도 사진이 등록되지 않았습니다.");
+        return Result.error(
+          FloorPhotoModelError(message: "층별 배치도 사진이 등록되지 않았습니다."),
+        );
       }
 
-      return FloorPhotoModel.fromJson(responseData);
-    } on FloorPhotoModelError {
-      rethrow;
+      return Result.ok(FloorPhotoModel.fromJson(responseData));
+    } on FloorPhotoModelError catch (e) {
+      return Result.error(e);
     } catch (e) {
-      throw FloorPhotoModelError(message: "예외발생 - $e");
+      return Result.error(
+        FloorPhotoModelError(message: "예외발생 - $e"),
+      );
     }
   }
 }

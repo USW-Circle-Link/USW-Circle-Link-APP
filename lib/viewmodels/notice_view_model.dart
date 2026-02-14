@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/repositories/notice_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final noticeViewModelProvider =
     StateNotifierProvider.autoDispose<NoticeViewModel, AsyncValue<NoticeModel>>(
@@ -26,19 +27,20 @@ class NoticeViewModel extends StateNotifier<AsyncValue<NoticeModel>> {
   }
 
   Future<void> fetchNotices() async {
-    try {
-      final response = await noticeRepository.fetchNotices();
-      state = AsyncData(response);
-    } on NoticeModelError catch (e) {
-      // 예외처리 안 실패
-      logger.d(e);
-      state = AsyncError(e, e.stackTrace);
-    } catch (e) {
-      // 예외처리 밖 에러(네트워크 에러 ...)
-      final error = NoticeModelError(
-          message: '예외발생! - $e', type: NoticeModelType.fetchAll);
-      logger.e('예외발생 - $error');
-      state = AsyncError(error, error.stackTrace);
+    final result = await noticeRepository.fetchNotices();
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncData(value);
+      case Error(:final error):
+        if (error is NoticeModelError) {
+          logger.d(error);
+          state = AsyncError(error, error.stackTrace);
+        } else {
+          final noticeError = NoticeModelError(
+              message: '예외발생! - $error', type: NoticeModelType.fetchAll);
+          logger.e('예외발생 - $noticeError');
+          state = AsyncError(noticeError, noticeError.stackTrace);
+        }
     }
   }
 }

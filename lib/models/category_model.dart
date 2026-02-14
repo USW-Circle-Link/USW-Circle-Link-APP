@@ -31,7 +31,7 @@ class CategoryData with _$CategoryData {
 }
 
 @freezed
-class CategoryModelError with _$CategoryModelError implements Error {
+class CategoryModelError with _$CategoryModelError implements Exception {
   CategoryModelError._();
 
   factory CategoryModelError({
@@ -42,6 +42,5 @@ class CategoryModelError with _$CategoryModelError implements Error {
   factory CategoryModelError.fromJson(Map<String, dynamic> json) =>
       _$CategoryModelErrorFromJson(json);
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }
