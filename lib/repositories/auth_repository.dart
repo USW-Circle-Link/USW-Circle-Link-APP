@@ -151,8 +151,7 @@ class AuthRepository {
         'signupUUID': signupUUID,
         'emailTokenUUID': emailTokenUUID,
       };
-      logger.d('login - request sent for ${body['account']}');
-      logger.d(headers);
+      logger.d('signUpNewMember - request sent');
       final response = await dio.post(
         '$basePath/signup',
         data: body,

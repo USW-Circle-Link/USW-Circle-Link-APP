@@ -37,16 +37,16 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             final error = ProfileModelError(
                 message: result.error.toString(),
                 type: ProfileModelType.getProfile);
-            state = AsyncError(error, error.stackTrace);
+            state = AsyncError(error, StackTrace.current);
         }
       } on ProfileModelError catch (e) {
-        state = AsyncError(e, e.stackTrace);
+        state = AsyncError(e, StackTrace.current);
       } on Exception catch (e) {
         ErrorUtil.instance
             .logError(e.toGlobalException(), screen: 'Profile_GetProfile');
         final error = ProfileModelError(
             message: '예외발생! - $e', type: ProfileModelType.getProfile);
-        state = AsyncError(error, error.stackTrace);
+        state = AsyncError(error, StackTrace.current);
       }
     });
   }
@@ -126,7 +126,7 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
               screen: 'Profile_UpdateProfile');
         }
 
-        state = AsyncError(error, error.stackTrace);
+        state = AsyncError(error, StackTrace.current);
     }
   }
 }

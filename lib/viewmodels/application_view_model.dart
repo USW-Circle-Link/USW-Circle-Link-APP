@@ -5,7 +5,6 @@ import 'package:usw_circle_link/models/application_answer.dart';
 import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/repositories/application_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
-import 'package:usw_circle_link/viewmodels/user_view_model.dart';
 
 import '../models/response/global_exception.dart';
 import '../utils/command.dart';
@@ -164,13 +163,19 @@ class ApplicationViewModel extends ChangeNotifier {
             notifyListeners();
             return Result.error(Exception(_error!));
           }
+        case Error(:final error) when error is GlobalException:
+          _error = ErrorUtil.instance.getErrorMessage(error.code) ??
+              '동아리 지원 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.';
+          notifyListeners();
+          return Result.error(error);
         case Error(:final error):
-          if (error is GlobalException) {
-            _error = ErrorUtil.instance.getErrorMessage(error.code) ??
-                '동아리 지원 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.';
-            notifyListeners();
-            return Result.error(error);
-          }
+          final exception =
+              error.toGlobalException(screen: 'Application_CheckAvailable');
+          await ErrorUtil.instance.logError(exception);
+          _error = ErrorUtil.instance.getErrorMessage(exception.code) ??
+              '동아리 지원 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.';
+          notifyListeners();
+          return Result.error(error);
       }
 
       // 답변 데이터 구성
@@ -211,16 +216,11 @@ class ApplicationViewModel extends ChangeNotifier {
 
       switch (result) {
         case Ok():
-          // Firebase Analytics: 동아리 지원 성공
-          final userState = ref.read(userViewModelProvider).state;
+          // Firebase Analytics: 동아리 지원 성공 (PII 제외)
           analytics.logEvent(
             name: AnalyticsEvent.clubApply,
             parameters: {
               AnalyticsParam.clubUUID: clubUUID,
-              AnalyticsParam.studentNumber: userState.studentNumber ?? '',
-              AnalyticsParam.userName: userState.userName ?? '',
-              AnalyticsParam.major: userState.major ?? '',
-              AnalyticsParam.userHp: userState.userHp ?? '',
               AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
             },
           );

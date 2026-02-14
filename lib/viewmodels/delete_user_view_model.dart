@@ -76,31 +76,20 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
       return;
     }
 
-    final userState = ref.read(userViewModelProvider);
-
     final result =
         await ref.read(deleteUserRepositoryProvider).verifyCode(code: code);
     switch (result) {
       case Ok(:final value):
         if (value) {
-          // Firebase Analytics: 회원탈퇴 성공
+          // Firebase Analytics: 회원탈퇴 성공 (PII 제외)
           analytics.logEvent(
             name: AnalyticsEvent.deleteAccount,
             parameters: {
               AnalyticsParam.timestamp: DateTime.now().toIso8601String(),
-              AnalyticsParam.major: userState.state.major ?? 'unknown',
-              AnalyticsParam.userName: userState.state.userName ?? 'unknown',
-              AnalyticsParam.studentNumber:
-                  userState.state.studentNumber ?? 'unknown',
-              AnalyticsParam.userHp: userState.state.userHp ?? 'unknown',
             },
           );
 
-          state = state.copyWith(
-            isLoading: false,
-            isVerifyCodeSuccess: true,
-          );
-
+          // 토큰 삭제를 state 변경 전에 수행 (AutoDispose로 인한 누락 방지)
           await Future.wait([
             ref.read(secureStorageProvider).delete(key: accessTokenKey),
             ref.read(secureStorageProvider).delete(key: refreshTokenKey),
@@ -108,6 +97,11 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
           ]);
 
           await ref.read(userViewModelProvider.notifier).logout.execute();
+
+          state = state.copyWith(
+            isLoading: false,
+            isVerifyCodeSuccess: true,
+          );
         }
       case Error(:final error):
         if (error is GlobalException) {

@@ -156,7 +156,7 @@ class _ApplicationWritingScreenState
                     height: _buttonHeight,
                     child: Builder(
                       builder: (context) {
-                        final isFormValid = ref.read(applicationViewModelProvider).isFormValid();
+                        final isFormValid = ref.watch(applicationViewModelProvider).isFormValid();
                         final canSubmit = isDone && isFormValid;
                         return OutlinedButton(
                           onPressed: canSubmit
@@ -509,21 +509,8 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildCheckboxField(ApplicationQuestion question) {
-    final currentAnswer = ref.watch(
-      applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
-    );
-    
     if (!_checkboxSelections.containsKey(question.questionId)) {
-      if (currentAnswer?.answerText != null) {
-        final selectedOptionIds = currentAnswer!.answerText!.split(', ')
-            .map((idStr) => int.tryParse(idStr))
-            .where((id) => id != null)
-            .cast<int>()
-            .toSet();
-        _checkboxSelections[question.questionId] = selectedOptionIds;
-      } else {
-        _checkboxSelections[question.questionId] = {};
-      }
+      _checkboxSelections[question.questionId] = {};
     }
     
     final selectedOptionIds = _checkboxSelections[question.questionId]!;

@@ -23,6 +23,7 @@ Map<String, dynamic> _$$ProfileModelImplToJson(_$ProfileModelImpl instance) =>
 const _$ProfileModelTypeEnumMap = {
   ProfileModelType.getProfile: 'getProfile',
   ProfileModelType.updateProfile: 'updateProfile',
+  ProfileModelType.checkDuplication: 'checkDuplication',
 };
 
 _$ProfileDataImpl _$$ProfileDataImplFromJson(Map<String, dynamic> json) =>

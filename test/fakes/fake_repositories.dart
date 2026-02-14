@@ -327,6 +327,19 @@ class FakeProfileRepository implements ProfileRepository {
     }
   }
 
+  @override
+  Future<Result<bool>> checkDuplication({
+    required String account,
+  }) async {
+    await Future.delayed(const Duration(milliseconds: 100));
+
+    if (shouldSucceed) {
+      return Result.ok(false);
+    } else {
+      return Result.error(Exception('Duplication check failed'));
+    }
+  }
+
   // 테스트 헬퍼 메서드
   ProfileData? get currentProfile => _currentProfile;
 

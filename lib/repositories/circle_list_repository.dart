@@ -99,10 +99,11 @@ class CircleListRepository {
       if (response.statusCode == 200) {
         return Result.ok(CircleDetailListModel.fromJson(response.data));
       } else {
-        return Result.error(CircleDetailListModelError.fromJson(response.data));
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(
+          e.toGlobalException(screen: 'CircleList_FetchMyCircle'));
     }
   }
 
@@ -126,10 +127,11 @@ class CircleListRepository {
       if (response.statusCode == 200) {
         return Result.ok(CircleDetailListModel.fromJson(response.data));
       } else {
-        return Result.error(CircleDetailListModelError.fromJson(response.data));
+        return Result.error(GlobalException.fromJson(response.data));
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(
+          e.toGlobalException(screen: 'CircleList_FetchMyApplication'));
     }
   }
 
@@ -143,9 +145,14 @@ class CircleListRepository {
       logger.d(
           'fetchCategory - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      return Result.ok(CategoryModel.fromJson(response.data));
+      if (response.statusCode == 200) {
+        return Result.ok(CategoryModel.fromJson(response.data));
+      } else {
+        return Result.error(GlobalException.fromJson(response.data));
+      }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(
+          e.toGlobalException(screen: 'CircleList_FetchCategory'));
     }
   }
 

@@ -24,10 +24,10 @@ class CategoryViewModel extends StateNotifier<AsyncValue<CategoryModel?>> {
         state = AsyncData(value);
       case Error(:final error):
         if (error is CategoryModelError) {
-          state = AsyncError(error, error.stackTrace);
+          state = AsyncError(error, StackTrace.current);
         } else {
           final categoryError = CategoryModelError(message: '예외발생 - $error');
-          state = AsyncError(categoryError, categoryError.stackTrace);
+          state = AsyncError(categoryError, StackTrace.current);
         }
     }
   }

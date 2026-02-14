@@ -125,7 +125,7 @@ class ProfileRepository {
         return Result.ok(isDuplicated ?? false);
       } else {
         return Result.error(ProfileModelError.fromJson(response.data)
-            .setType(ProfileModelType.getProfile));
+            .setType(ProfileModelType.checkDuplication));
       }
     } on Exception catch (e) {
       return Result.error(e);

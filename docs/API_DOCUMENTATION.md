@@ -151,7 +151,7 @@ Authorization: Bearer {token}
 - **PATCH** `/users/me/password`
 - **설명**: 사용자 비밀번호 변경
 - **요청 본문**: `UpdatePwRequest`
-  - `userPw` (string, optional): 현재 비밀번호
+  - `userPw` (string, required): 현재 비밀번호
   - `newPw` (string, required): 새 비밀번호 (8-20자)
   - `confirmNewPw` (string, required): 새 비밀번호 확인
 - **응답**: `ApiResponseString`

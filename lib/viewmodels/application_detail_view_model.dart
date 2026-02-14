@@ -36,7 +36,7 @@ class ApplicationDetailParams {
           aplictId == other.aplictId;
 
   @override
-  int get hashCode => clubUUID.hashCode ^ aplictId.hashCode;
+  int get hashCode => Object.hash(clubUUID, aplictId);
 }
 
 class ApplicationDetailData {

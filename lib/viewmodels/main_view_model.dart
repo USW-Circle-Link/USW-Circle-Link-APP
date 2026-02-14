@@ -32,11 +32,11 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
       case Error(:final error):
         logger.d(error);
         if (error is GlobalException) {
-          state = AsyncValue.error(error, error.stackTrace);
+          state = AsyncValue.error(error, StackTrace.current);
         } else {
           final exception =
               error.toGlobalException(screen: 'CircleList_FetchAll');
-          state = AsyncValue.error(exception, exception.stackTrace);
+          state = AsyncValue.error(exception, StackTrace.current);
         }
     }
   }
@@ -49,11 +49,11 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
         state = AsyncValue.data(value);
       case Error(:final error):
         if (error is GlobalException) {
-          state = AsyncValue.error(error, error.stackTrace);
+          state = AsyncValue.error(error, StackTrace.current);
         } else {
           final exception =
               error.toGlobalException(screen: 'CircleList_FetchOpen');
-          state = AsyncValue.error(exception, exception.stackTrace);
+          state = AsyncValue.error(exception, StackTrace.current);
         }
     }
   }
@@ -68,17 +68,18 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
         state = AsyncValue.data(value.toCircleListModel());
       case Error(:final error):
         if (error is GlobalException) {
-          state = AsyncValue.error(error, error.stackTrace);
+          state = AsyncValue.error(error, StackTrace.current);
         } else {
           final exception =
               error.toGlobalException(screen: 'CircleList_FetchFilteredAll');
-          state = AsyncValue.error(exception, exception.stackTrace);
+          state = AsyncValue.error(exception, StackTrace.current);
         }
     }
   }
 
   Future<void> fetchOpenFilteredCircleList(
       List<String> clubCategoryUUIDs) async {
+    state = AsyncValue.loading();
     final result = await circleListRepository
         .fetchOpenFilteredCircleList(clubCategoryUUIDs);
     switch (result) {
@@ -86,11 +87,11 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
         state = AsyncValue.data(value.toCircleListModel());
       case Error(:final error):
         if (error is GlobalException) {
-          state = AsyncValue.error(error, error.stackTrace);
+          state = AsyncValue.error(error, StackTrace.current);
         } else {
           final exception =
               error.toGlobalException(screen: 'CircleList_FetchFilteredOpen');
-          state = AsyncValue.error(exception, exception.stackTrace);
+          state = AsyncValue.error(exception, StackTrace.current);
         }
     }
   }

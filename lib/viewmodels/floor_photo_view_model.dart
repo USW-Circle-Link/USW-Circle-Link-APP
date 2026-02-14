@@ -41,10 +41,10 @@ class FloorPhotoViewModel extends StateNotifier<AsyncValue<FloorPhotoModel?>> {
       case Error(:final error):
         if (error is FloorPhotoModelError) {
           logger.d(error);
-          state = AsyncValue.error(error, error.stackTrace);
+          state = AsyncValue.error(error, StackTrace.current);
         } else {
           final modelError = FloorPhotoModelError(message: "예외발생 - $error");
-          state = AsyncValue.error(modelError, modelError.stackTrace);
+          state = AsyncValue.error(modelError, StackTrace.current);
         }
     }
   }

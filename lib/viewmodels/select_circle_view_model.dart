@@ -26,11 +26,11 @@ class SelectCircleViewModel
         state = AsyncData(value);
       case Error(:final error):
         if (error is GlobalException) {
-          state = AsyncError(error, error.stackTrace);
+          state = AsyncError(error, StackTrace.current);
         } else {
           final exception =
               error.toGlobalException(screen: 'SelectCircle_FetchAll');
-          state = AsyncError(exception, exception.stackTrace);
+          state = AsyncError(exception, StackTrace.current);
         }
     }
   }

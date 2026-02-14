@@ -34,12 +34,12 @@ class NoticeViewModel extends StateNotifier<AsyncValue<NoticeModel>> {
       case Error(:final error):
         if (error is NoticeModelError) {
           logger.d(error);
-          state = AsyncError(error, error.stackTrace);
+          state = AsyncError(error, StackTrace.current);
         } else {
           final noticeError = NoticeModelError(
               message: '예외발생! - $error', type: NoticeModelType.fetchAll);
           logger.e('예외발생 - $noticeError');
-          state = AsyncError(noticeError, noticeError.stackTrace);
+          state = AsyncError(noticeError, StackTrace.current);
         }
     }
   }

@@ -37,11 +37,11 @@ class CircleListViewModel
         state = AsyncData(value);
       case Error(:final error):
         if (error is CircleDetailListModelError) {
-          state = AsyncError(error, error.stackTrace);
+          state = AsyncError(error, StackTrace.current);
         } else {
           final modelError =
-              CircleDetailListModelError(message: "에외발생! - $error");
-          state = AsyncError(modelError, modelError.stackTrace);
+              CircleDetailListModelError(message: "예외발생! - $error");
+          state = AsyncError(modelError, StackTrace.current);
         }
     }
   }
@@ -53,11 +53,11 @@ class CircleListViewModel
         state = AsyncData(value);
       case Error(:final error):
         if (error is CircleDetailListModelError) {
-          state = AsyncError(error, error.stackTrace);
+          state = AsyncError(error, StackTrace.current);
         } else {
           final modelError =
-              CircleDetailListModelError(message: "에외발생! - $error");
-          state = AsyncError(modelError, modelError.stackTrace);
+              CircleDetailListModelError(message: "예외발생! - $error");
+          state = AsyncError(modelError, StackTrace.current);
         }
     }
   }
