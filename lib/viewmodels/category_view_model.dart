@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/repositories/circle_list_repository.dart';
+import 'package:usw_circle_link/utils/result.dart';
 
 final categoryViewModelProvider = StateNotifierProvider.autoDispose<
     CategoryViewModel, AsyncValue<CategoryModel?>>((ref) {
@@ -16,15 +17,18 @@ class CategoryViewModel extends StateNotifier<AsyncValue<CategoryModel?>> {
   }
 
   Future<void> fetchCategories() async {
-    try {
-      state = AsyncLoading();
-      final response = await _repository.fetchCategory();
-      state = AsyncData(response);
-    } on CategoryModelError catch (e) {
-      state = AsyncError(e, e.stackTrace);
-    } catch (e) {
-      final error = CategoryModelError(message: '예외발생 - $e');
-      state = AsyncError(error, error.stackTrace);
+    state = AsyncLoading();
+    final result = await _repository.fetchCategory();
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncData(value);
+      case Error(:final error):
+        if (error is CategoryModelError) {
+          state = AsyncError(error, StackTrace.current);
+        } else {
+          final categoryError = CategoryModelError(message: '예외발생 - $error');
+          state = AsyncError(categoryError, StackTrace.current);
+        }
     }
   }
 }

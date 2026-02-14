@@ -195,7 +195,9 @@ mixin _$Circle {
   String get leaderHp => throw _privateConstructorUsedError;
   String get clubInsta => throw _privateConstructorUsedError;
   String? get clubRoomNumber => throw _privateConstructorUsedError;
+  @JsonKey(name: 'publicStatus')
   String? get aplictStatus => throw _privateConstructorUsedError;
+  String? get aplictUUID => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
@@ -215,7 +217,8 @@ abstract class $CircleCopyWith<$Res> {
       String leaderHp,
       String clubInsta,
       String? clubRoomNumber,
-      String? aplictStatus});
+      @JsonKey(name: 'publicStatus') String? aplictStatus,
+      String? aplictUUID});
 }
 
 /// @nodoc
@@ -239,6 +242,7 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
     Object? clubInsta = null,
     Object? clubRoomNumber = freezed,
     Object? aplictStatus = freezed,
+    Object? aplictUUID = freezed,
   }) {
     return _then(_value.copyWith(
       clubUUID: null == clubUUID
@@ -273,6 +277,10 @@ class _$CircleCopyWithImpl<$Res, $Val extends Circle>
           ? _value.aplictStatus
           : aplictStatus // ignore: cast_nullable_to_non_nullable
               as String?,
+      aplictUUID: freezed == aplictUUID
+          ? _value.aplictUUID
+          : aplictUUID // ignore: cast_nullable_to_non_nullable
+              as String?,
     ) as $Val);
   }
 }
@@ -292,7 +300,8 @@ abstract class _$$CircleImplCopyWith<$Res> implements $CircleCopyWith<$Res> {
       String leaderHp,
       String clubInsta,
       String? clubRoomNumber,
-      String? aplictStatus});
+      @JsonKey(name: 'publicStatus') String? aplictStatus,
+      String? aplictUUID});
 }
 
 /// @nodoc
@@ -314,6 +323,7 @@ class __$$CircleImplCopyWithImpl<$Res>
     Object? clubInsta = null,
     Object? clubRoomNumber = freezed,
     Object? aplictStatus = freezed,
+    Object? aplictUUID = freezed,
   }) {
     return _then(_$CircleImpl(
       clubUUID: null == clubUUID
@@ -348,6 +358,10 @@ class __$$CircleImplCopyWithImpl<$Res>
           ? _value.aplictStatus
           : aplictStatus // ignore: cast_nullable_to_non_nullable
               as String?,
+      aplictUUID: freezed == aplictUUID
+          ? _value.aplictUUID
+          : aplictUUID // ignore: cast_nullable_to_non_nullable
+              as String?,
     ));
   }
 }
@@ -363,7 +377,8 @@ class _$CircleImpl implements _Circle {
       required this.leaderHp,
       required this.clubInsta,
       this.clubRoomNumber,
-      this.aplictStatus});
+      @JsonKey(name: 'publicStatus') this.aplictStatus,
+      this.aplictUUID});
 
   factory _$CircleImpl.fromJson(Map<String, dynamic> json) =>
       _$$CircleImplFromJson(json);
@@ -383,11 +398,14 @@ class _$CircleImpl implements _Circle {
   @override
   final String? clubRoomNumber;
   @override
+  @JsonKey(name: 'publicStatus')
   final String? aplictStatus;
+  @override
+  final String? aplictUUID;
 
   @override
   String toString() {
-    return 'Circle(clubUUID: $clubUUID, mainPhotoPath: $mainPhotoPath, clubName: $clubName, leaderName: $leaderName, leaderHp: $leaderHp, clubInsta: $clubInsta, clubRoomNumber: $clubRoomNumber, aplictStatus: $aplictStatus)';
+    return 'Circle(clubUUID: $clubUUID, mainPhotoPath: $mainPhotoPath, clubName: $clubName, leaderName: $leaderName, leaderHp: $leaderHp, clubInsta: $clubInsta, clubRoomNumber: $clubRoomNumber, aplictStatus: $aplictStatus, aplictUUID: $aplictUUID)';
   }
 
   @override
@@ -410,13 +428,24 @@ class _$CircleImpl implements _Circle {
             (identical(other.clubRoomNumber, clubRoomNumber) ||
                 other.clubRoomNumber == clubRoomNumber) &&
             (identical(other.aplictStatus, aplictStatus) ||
-                other.aplictStatus == aplictStatus));
+                other.aplictStatus == aplictStatus) &&
+            (identical(other.aplictUUID, aplictUUID) ||
+                other.aplictUUID == aplictUUID));
   }
 
   @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(runtimeType, clubUUID, mainPhotoPath,
-      clubName, leaderName, leaderHp, clubInsta, clubRoomNumber, aplictStatus);
+  int get hashCode => Object.hash(
+      runtimeType,
+      clubUUID,
+      mainPhotoPath,
+      clubName,
+      leaderName,
+      leaderHp,
+      clubInsta,
+      clubRoomNumber,
+      aplictStatus,
+      aplictUUID);
 
   @JsonKey(ignore: true)
   @override
@@ -441,7 +470,8 @@ abstract class _Circle implements Circle {
       required final String leaderHp,
       required final String clubInsta,
       final String? clubRoomNumber,
-      final String? aplictStatus}) = _$CircleImpl;
+      @JsonKey(name: 'publicStatus') final String? aplictStatus,
+      final String? aplictUUID}) = _$CircleImpl;
 
   factory _Circle.fromJson(Map<String, dynamic> json) = _$CircleImpl.fromJson;
 
@@ -460,7 +490,10 @@ abstract class _Circle implements Circle {
   @override
   String? get clubRoomNumber;
   @override
+  @JsonKey(name: 'publicStatus')
   String? get aplictStatus;
+  @override
+  String? get aplictUUID;
   @override
   @JsonKey(ignore: true)
   _$$CircleImplCopyWith<_$CircleImpl> get copyWith =>

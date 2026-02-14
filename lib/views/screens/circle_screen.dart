@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../common/scroll_behavior.dart';
 import '../../const/data.dart';
+import '../../models/enums/recruitment_status.dart';
 import '../../viewmodels/circle_view_model.dart';
 import '../../widgets/circle_info_tile/circle_info_tile.dart';
 import '../../widgets/detail_app_bar/detail_app_bar.dart';
@@ -26,23 +27,37 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
   final ScrollController _outerScrollController = ScrollController();
 
   int activeIndex = 0;
-  late TabController tabController;
+  TabController? _tabController;
+  int _currentTabCount = 0;
   int selectedIndex = 0;
+
+  TabController get tabController => _tabController!;
+
+  void _initOrUpdateTabController(int tabCount) {
+    if (_currentTabCount == tabCount && _tabController != null) return;
+    _tabController?.removeListener(_onTabChanged);
+    _tabController?.dispose();
+    _currentTabCount = tabCount;
+    selectedIndex = 0;
+    _tabController = TabController(length: tabCount, vsync: this);
+    _tabController!.addListener(_onTabChanged);
+  }
+
+  void _onTabChanged() {
+    setState(() {
+      selectedIndex = _tabController!.index;
+    });
+  }
 
   @override
   void initState() {
-    tabController = TabController(length: 2, vsync: this);
-    tabController.addListener(() {
-      setState(() {
-        selectedIndex = tabController.index;
-      });
-    });
     super.initState();
   }
 
   @override
   void dispose() {
-    tabController.dispose();
+    _tabController?.removeListener(_onTabChanged);
+    _tabController?.dispose();
     _outerScrollController.dispose();
     super.dispose();
   }
@@ -66,6 +81,11 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
     });
     final circleDetail = ref.watch(clubIntroViewModelProvider(widget.clubUUID)
         .select((state) => state.circleDetail));
+    // recruitmentStatus에 따라 TabController 동적 설정
+    if (circleDetail != null) {
+      final tabCount = circleDetail.recruitmentStatus == RecruitmentStatus.open ? 2 : 1;
+      _initOrUpdateTabController(tabCount);
+    }
     ref.listen(
         clubIntroViewModelProvider(widget.clubUUID)
             .select((state) => state.error), (prev, next) {
@@ -104,7 +124,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                   width: double.infinity,
                   height: 56,
                   child: Builder(builder: (context) {
-                    final isClosed = circleDetail.recruitmentStatus == "CLOSE";
+                    final isClosed = circleDetail.recruitmentStatus == RecruitmentStatus.close;
                     return OutlinedButton(
                       onPressed: isClosed
                           ? null
@@ -270,7 +290,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                       ),
                                     ),
                                     if (circleDetail.recruitmentStatus ==
-                                        "OPEN")
+                                        RecruitmentStatus.open)
                                       Tab(
                                         child: SizedBox.expand(
                                           child: Container(
@@ -298,12 +318,26 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                 alignment: Alignment.topLeft,
                                 padding:
                                     const EdgeInsets.fromLTRB(24, 24, 24, 0),
-                                child: Html(
-                                  data: circleDetail.introContent,
-                                ),
+                                child: circleDetail.introContent == null ||
+                                        circleDetail.introContent!.isEmpty
+                                    ? Center(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(32.0),
+                                          child: TextFontWidget.fontRegular(
+                                            '소개글이 등록되지 않았습니다.',
+                                            textAlign: TextAlign.center,
+                                            fontSize: 14,
+                                            color: const Color(0xFFA1A1A1),
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      )
+                                    : Html(
+                                        data: circleDetail.introContent!,
+                                      ),
                               ),
                             ),
-                            if (circleDetail.recruitmentStatus == "OPEN")
+                            if (circleDetail.recruitmentStatus == RecruitmentStatus.open)
                               SingleChildScrollView(
                                 child: Container(
                                   alignment: Alignment.topLeft,

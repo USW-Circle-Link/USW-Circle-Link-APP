@@ -7,7 +7,7 @@ part 'profile_model.g.dart';
 
 abstract class ProfileModelBase {}
 
-enum ProfileModelType { getProfile, updateProfile }
+enum ProfileModelType { getProfile, updateProfile, checkDuplication }
 
 @freezed
 class ProfileModel extends ProfileModelBase with _$ProfileModel {

@@ -14,17 +14,15 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more information: https://github.com/rrousselGit/freezed#adding-getters-and-methods-to-our-models');
 
-NoticeModel _$NoticeModelFromJson(Map<String, dynamic> json) {
-  return _NoticeModel.fromJson(json);
-}
-
 /// @nodoc
 mixin _$NoticeModel {
-  String get message => throw _privateConstructorUsedError;
+  String? get message => throw _privateConstructorUsedError;
   List<NoticeData> get data => throw _privateConstructorUsedError;
+  int? get totalPages => throw _privateConstructorUsedError;
+  int? get totalElements => throw _privateConstructorUsedError;
+  int? get currentPage => throw _privateConstructorUsedError;
   NoticeModelType? get type => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $NoticeModelCopyWith<NoticeModel> get copyWith =>
       throw _privateConstructorUsedError;
@@ -36,7 +34,13 @@ abstract class $NoticeModelCopyWith<$Res> {
           NoticeModel value, $Res Function(NoticeModel) then) =
       _$NoticeModelCopyWithImpl<$Res, NoticeModel>;
   @useResult
-  $Res call({String message, List<NoticeData> data, NoticeModelType? type});
+  $Res call(
+      {String? message,
+      List<NoticeData> data,
+      int? totalPages,
+      int? totalElements,
+      int? currentPage,
+      NoticeModelType? type});
 }
 
 /// @nodoc
@@ -52,19 +56,34 @@ class _$NoticeModelCopyWithImpl<$Res, $Val extends NoticeModel>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = null,
+    Object? message = freezed,
     Object? data = null,
+    Object? totalPages = freezed,
+    Object? totalElements = freezed,
+    Object? currentPage = freezed,
     Object? type = freezed,
   }) {
     return _then(_value.copyWith(
-      message: null == message
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       data: null == data
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as List<NoticeData>,
+      totalPages: freezed == totalPages
+          ? _value.totalPages
+          : totalPages // ignore: cast_nullable_to_non_nullable
+              as int?,
+      totalElements: freezed == totalElements
+          ? _value.totalElements
+          : totalElements // ignore: cast_nullable_to_non_nullable
+              as int?,
+      currentPage: freezed == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -81,7 +100,13 @@ abstract class _$$NoticeModelImplCopyWith<$Res>
       __$$NoticeModelImplCopyWithImpl<$Res>;
   @override
   @useResult
-  $Res call({String message, List<NoticeData> data, NoticeModelType? type});
+  $Res call(
+      {String? message,
+      List<NoticeData> data,
+      int? totalPages,
+      int? totalElements,
+      int? currentPage,
+      NoticeModelType? type});
 }
 
 /// @nodoc
@@ -95,19 +120,34 @@ class __$$NoticeModelImplCopyWithImpl<$Res>
   @pragma('vm:prefer-inline')
   @override
   $Res call({
-    Object? message = null,
+    Object? message = freezed,
     Object? data = null,
+    Object? totalPages = freezed,
+    Object? totalElements = freezed,
+    Object? currentPage = freezed,
     Object? type = freezed,
   }) {
     return _then(_$NoticeModelImpl(
-      message: null == message
+      message: freezed == message
           ? _value.message
           : message // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
       data: null == data
           ? _value._data
           : data // ignore: cast_nullable_to_non_nullable
               as List<NoticeData>,
+      totalPages: freezed == totalPages
+          ? _value.totalPages
+          : totalPages // ignore: cast_nullable_to_non_nullable
+              as int?,
+      totalElements: freezed == totalElements
+          ? _value.totalElements
+          : totalElements // ignore: cast_nullable_to_non_nullable
+              as int?,
+      currentPage: freezed == currentPage
+          ? _value.currentPage
+          : currentPage // ignore: cast_nullable_to_non_nullable
+              as int?,
       type: freezed == type
           ? _value.type
           : type // ignore: cast_nullable_to_non_nullable
@@ -121,15 +161,17 @@ class __$$NoticeModelImplCopyWithImpl<$Res>
 @JsonSerializable(explicitToJson: true)
 class _$NoticeModelImpl extends _NoticeModel {
   _$NoticeModelImpl(
-      {required this.message, required final List<NoticeData> data, this.type})
+      {this.message,
+      required final List<NoticeData> data,
+      this.totalPages,
+      this.totalElements,
+      this.currentPage,
+      this.type})
       : _data = data,
         super._();
 
-  factory _$NoticeModelImpl.fromJson(Map<String, dynamic> json) =>
-      _$$NoticeModelImplFromJson(json);
-
   @override
-  final String message;
+  final String? message;
   final List<NoticeData> _data;
   @override
   List<NoticeData> get data {
@@ -139,11 +181,17 @@ class _$NoticeModelImpl extends _NoticeModel {
   }
 
   @override
+  final int? totalPages;
+  @override
+  final int? totalElements;
+  @override
+  final int? currentPage;
+  @override
   final NoticeModelType? type;
 
   @override
   String toString() {
-    return 'NoticeModel(message: $message, data: $data, type: $type)';
+    return 'NoticeModel(message: $message, data: $data, totalPages: $totalPages, totalElements: $totalElements, currentPage: $currentPage, type: $type)';
   }
 
   @override
@@ -153,42 +201,52 @@ class _$NoticeModelImpl extends _NoticeModel {
             other is _$NoticeModelImpl &&
             (identical(other.message, message) || other.message == message) &&
             const DeepCollectionEquality().equals(other._data, _data) &&
+            (identical(other.totalPages, totalPages) ||
+                other.totalPages == totalPages) &&
+            (identical(other.totalElements, totalElements) ||
+                other.totalElements == totalElements) &&
+            (identical(other.currentPage, currentPage) ||
+                other.currentPage == currentPage) &&
             (identical(other.type, type) || other.type == type));
   }
 
-  @JsonKey(ignore: true)
   @override
   int get hashCode => Object.hash(
-      runtimeType, message, const DeepCollectionEquality().hash(_data), type);
+      runtimeType,
+      message,
+      const DeepCollectionEquality().hash(_data),
+      totalPages,
+      totalElements,
+      currentPage,
+      type);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NoticeModelImplCopyWith<_$NoticeModelImpl> get copyWith =>
       __$$NoticeModelImplCopyWithImpl<_$NoticeModelImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$NoticeModelImplToJson(
-      this,
-    );
-  }
 }
 
 abstract class _NoticeModel extends NoticeModel {
   factory _NoticeModel(
-      {required final String message,
+      {final String? message,
       required final List<NoticeData> data,
+      final int? totalPages,
+      final int? totalElements,
+      final int? currentPage,
       final NoticeModelType? type}) = _$NoticeModelImpl;
   _NoticeModel._() : super._();
 
-  factory _NoticeModel.fromJson(Map<String, dynamic> json) =
-      _$NoticeModelImpl.fromJson;
-
   @override
-  String get message;
+  String? get message;
   @override
   List<NoticeData> get data;
+  @override
+  int? get totalPages;
+  @override
+  int? get totalElements;
+  @override
+  int? get currentPage;
   @override
   NoticeModelType? get type;
   @override
@@ -197,18 +255,16 @@ abstract class _NoticeModel extends NoticeModel {
       throw _privateConstructorUsedError;
 }
 
-NoticeData _$NoticeDataFromJson(Map<String, dynamic> json) {
-  return _NoticeData.fromJson(json);
-}
-
 /// @nodoc
 mixin _$NoticeData {
   String get noticeUUID => throw _privateConstructorUsedError;
   String get noticeTitle => throw _privateConstructorUsedError;
-  String get adminName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'adminName')
+  String? get adminName => throw _privateConstructorUsedError;
+  @JsonKey(name: 'authorName')
+  String? get authorName => throw _privateConstructorUsedError;
   String get noticeCreatedAt => throw _privateConstructorUsedError;
 
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
   @JsonKey(ignore: true)
   $NoticeDataCopyWith<NoticeData> get copyWith =>
       throw _privateConstructorUsedError;
@@ -223,7 +279,8 @@ abstract class $NoticeDataCopyWith<$Res> {
   $Res call(
       {String noticeUUID,
       String noticeTitle,
-      String adminName,
+      @JsonKey(name: 'adminName') String? adminName,
+      @JsonKey(name: 'authorName') String? authorName,
       String noticeCreatedAt});
 }
 
@@ -242,7 +299,8 @@ class _$NoticeDataCopyWithImpl<$Res, $Val extends NoticeData>
   $Res call({
     Object? noticeUUID = null,
     Object? noticeTitle = null,
-    Object? adminName = null,
+    Object? adminName = freezed,
+    Object? authorName = freezed,
     Object? noticeCreatedAt = null,
   }) {
     return _then(_value.copyWith(
@@ -254,10 +312,14 @@ class _$NoticeDataCopyWithImpl<$Res, $Val extends NoticeData>
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      adminName: null == adminName
+      adminName: freezed == adminName
           ? _value.adminName
           : adminName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
+              as String?,
       noticeCreatedAt: null == noticeCreatedAt
           ? _value.noticeCreatedAt
           : noticeCreatedAt // ignore: cast_nullable_to_non_nullable
@@ -277,7 +339,8 @@ abstract class _$$NoticeDataImplCopyWith<$Res>
   $Res call(
       {String noticeUUID,
       String noticeTitle,
-      String adminName,
+      @JsonKey(name: 'adminName') String? adminName,
+      @JsonKey(name: 'authorName') String? authorName,
       String noticeCreatedAt});
 }
 
@@ -294,7 +357,8 @@ class __$$NoticeDataImplCopyWithImpl<$Res>
   $Res call({
     Object? noticeUUID = null,
     Object? noticeTitle = null,
-    Object? adminName = null,
+    Object? adminName = freezed,
+    Object? authorName = freezed,
     Object? noticeCreatedAt = null,
   }) {
     return _then(_$NoticeDataImpl(
@@ -306,10 +370,14 @@ class __$$NoticeDataImplCopyWithImpl<$Res>
           ? _value.noticeTitle
           : noticeTitle // ignore: cast_nullable_to_non_nullable
               as String,
-      adminName: null == adminName
+      adminName: freezed == adminName
           ? _value.adminName
           : adminName // ignore: cast_nullable_to_non_nullable
-              as String,
+              as String?,
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
+              as String?,
       noticeCreatedAt: null == noticeCreatedAt
           ? _value.noticeCreatedAt
           : noticeCreatedAt // ignore: cast_nullable_to_non_nullable
@@ -319,29 +387,32 @@ class __$$NoticeDataImplCopyWithImpl<$Res>
 }
 
 /// @nodoc
-@JsonSerializable()
-class _$NoticeDataImpl implements _NoticeData {
+
+class _$NoticeDataImpl extends _NoticeData {
   _$NoticeDataImpl(
       {required this.noticeUUID,
       required this.noticeTitle,
-      required this.adminName,
-      required this.noticeCreatedAt});
-
-  factory _$NoticeDataImpl.fromJson(Map<String, dynamic> json) =>
-      _$$NoticeDataImplFromJson(json);
+      @JsonKey(name: 'adminName') this.adminName,
+      @JsonKey(name: 'authorName') this.authorName,
+      required this.noticeCreatedAt})
+      : super._();
 
   @override
   final String noticeUUID;
   @override
   final String noticeTitle;
   @override
-  final String adminName;
+  @JsonKey(name: 'adminName')
+  final String? adminName;
+  @override
+  @JsonKey(name: 'authorName')
+  final String? authorName;
   @override
   final String noticeCreatedAt;
 
   @override
   String toString() {
-    return 'NoticeData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt)';
+    return 'NoticeData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, adminName: $adminName, authorName: $authorName, noticeCreatedAt: $noticeCreatedAt)';
   }
 
   @override
@@ -355,45 +426,42 @@ class _$NoticeDataImpl implements _NoticeData {
                 other.noticeTitle == noticeTitle) &&
             (identical(other.adminName, adminName) ||
                 other.adminName == adminName) &&
+            (identical(other.authorName, authorName) ||
+                other.authorName == authorName) &&
             (identical(other.noticeCreatedAt, noticeCreatedAt) ||
                 other.noticeCreatedAt == noticeCreatedAt));
   }
 
-  @JsonKey(ignore: true)
   @override
-  int get hashCode => Object.hash(
-      runtimeType, noticeUUID, noticeTitle, adminName, noticeCreatedAt);
+  int get hashCode => Object.hash(runtimeType, noticeUUID, noticeTitle,
+      adminName, authorName, noticeCreatedAt);
 
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
   _$$NoticeDataImplCopyWith<_$NoticeDataImpl> get copyWith =>
       __$$NoticeDataImplCopyWithImpl<_$NoticeDataImpl>(this, _$identity);
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$NoticeDataImplToJson(
-      this,
-    );
-  }
 }
 
-abstract class _NoticeData implements NoticeData {
+abstract class _NoticeData extends NoticeData {
   factory _NoticeData(
       {required final String noticeUUID,
       required final String noticeTitle,
-      required final String adminName,
+      @JsonKey(name: 'adminName') final String? adminName,
+      @JsonKey(name: 'authorName') final String? authorName,
       required final String noticeCreatedAt}) = _$NoticeDataImpl;
-
-  factory _NoticeData.fromJson(Map<String, dynamic> json) =
-      _$NoticeDataImpl.fromJson;
+  _NoticeData._() : super._();
 
   @override
   String get noticeUUID;
   @override
   String get noticeTitle;
   @override
-  String get adminName;
+  @JsonKey(name: 'adminName')
+  String? get adminName;
+  @override
+  @JsonKey(name: 'authorName')
+  String? get authorName;
   @override
   String get noticeCreatedAt;
   @override

@@ -37,7 +37,8 @@ class Circle with _$Circle {
     required String leaderHp,
     required String clubInsta,
     String? clubRoomNumber,
-    String? aplictStatus,
+    @JsonKey(name: 'publicStatus') String? aplictStatus,
+    String? aplictUUID,
   }) = _Circle;
 
   factory Circle.fromJson(Map<String, dynamic> json) => _$CircleFromJson(json);
@@ -46,7 +47,7 @@ class Circle with _$Circle {
 @freezed
 class CircleDetailListModelError
     with _$CircleDetailListModelError
-    implements Error {
+    implements Exception {
   CircleDetailListModelError._();
 
   factory CircleDetailListModelError({
@@ -57,6 +58,5 @@ class CircleDetailListModelError
   factory CircleDetailListModelError.fromJson(Map<String, dynamic> json) =>
       _$CircleDetailListModelErrorFromJson(json);
 
-  @override
   StackTrace get stackTrace => StackTrace.fromString(toString());
 }

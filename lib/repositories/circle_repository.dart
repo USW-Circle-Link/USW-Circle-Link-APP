@@ -42,7 +42,7 @@ class CircleRepository {
   Future<Result<CircleDetailModel>> fetchClubIntro(String clubUUID) async {
     try {
       final response = await dio.get(
-        '$basePath/intro/$clubUUID',
+        '$basePath/$clubUUID',
       );
 
       logger.d(response.data['data']);
@@ -56,18 +56,36 @@ class CircleRepository {
     }
   }
 
-  Future<FloorPhotoModel> fetchFloorPhoto(FloorType floorType) async {
+  Future<Result<FloorPhotoModel>> fetchFloorPhoto(FloorType floorType) async {
     try {
-      final response = await dio.get('/mypages/clubs/${floorType.name}/photo');
+      final response = await dio.get(
+        '/users/clubs/${floorType.name}/photo',
+        options: Options(
+          headers: {
+            'accessToken': 'true',
+          },
+        ),
+      );
 
       logger.d(response.data);
 
       logger.d(
           'fetchFloorPhoto - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-      return FloorPhotoModel.fromJson(response.data);
+      final responseData = response.data;
+      if (responseData == null || responseData['data'] == null) {
+        return Result.error(
+          FloorPhotoModelError(message: "층별 배치도 사진이 등록되지 않았습니다."),
+        );
+      }
+
+      return Result.ok(FloorPhotoModel.fromJson(responseData));
+    } on FloorPhotoModelError catch (e) {
+      return Result.error(e);
     } catch (e) {
-      throw FloorPhotoModelError(message: "에외발생 - $e");
+      return Result.error(
+        FloorPhotoModelError(message: "예외발생 - $e"),
+      );
     }
   }
 }

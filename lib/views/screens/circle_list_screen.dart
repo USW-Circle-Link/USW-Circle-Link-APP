@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
+import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/circle_list_screen_view_model.dart';
 import 'package:usw_circle_link/widgets/circle_info_tile/circle_info_tile.dart';
@@ -47,9 +48,16 @@ class CircleListScreen extends ConsumerWidget {
                         ),
                         child: InkWell(
                           onTap: () {
-                            context.push(
-                              '/circle?clubUUID=${circle.clubUUID}',
-                            );
+                            if (listType == CircleListType.myApplications &&
+                                circle.aplictUUID != null) {
+                              context.push(
+                                '/circle_list/${listType.routeKey}/application_detail?clubUUID=${circle.clubUUID}&aplictId=${circle.aplictUUID}',
+                              );
+                            } else {
+                              context.push(
+                                '/circle?clubUUID=${circle.clubUUID}',
+                              );
+                            }
                           },
                           child: CircleInfoTile(
                             clubUUID: circle.clubUUID,

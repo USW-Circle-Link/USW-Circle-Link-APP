@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/circle_list_model.dart';
 import '../repositories/circle_list_repository.dart';
 import '../models/response/global_exception.dart';
+import '../utils/result.dart';
 
 final selectCircleViewModelProvider = StateNotifierProvider.autoDispose<
     SelectCircleViewModel, AsyncValue<CircleListModel?>>((ref) {
@@ -19,14 +20,18 @@ class SelectCircleViewModel
 
   Future<void> fetchAllCircleList() async {
     state = const AsyncLoading();
-    try {
-      final response = await _circleListRepository.fetchAllCircleList();
-      state = AsyncData(response);
-    } on GlobalException catch (e) {
-      state = AsyncError(e, e.stackTrace);
-    } on Exception catch (e) {
-      final exception = e.toGlobalException(screen: 'SelectCircle_FetchAll');
-      state = AsyncError(exception, exception.stackTrace);
+    final result = await _circleListRepository.fetchAllCircleList();
+    switch (result) {
+      case Ok(:final value):
+        state = AsyncData(value);
+      case Error(:final error):
+        if (error is GlobalException) {
+          state = AsyncError(error, StackTrace.current);
+        } else {
+          final exception =
+              error.toGlobalException(screen: 'SelectCircle_FetchAll');
+          state = AsyncError(exception, StackTrace.current);
+        }
     }
   }
 }

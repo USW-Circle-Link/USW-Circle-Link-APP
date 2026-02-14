@@ -22,11 +22,6 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      ref.read(deleteUserViewModelProvider.notifier).getEmail();
-      emailEditController.text =
-          ref.read(deleteUserViewModelProvider.select((state) => state.email));
-    });
   }
 
   @override
@@ -308,6 +303,8 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
         deleteUserViewModelProvider.select((state) => state.isSendCodeSuccess),
         (previous, next) {
       if (next) {
+        emailEditController.text = ref.read(
+            deleteUserViewModelProvider.select((state) => state.email));
         DialogManager.instance.showAlertDialog(
           context: context,
           content: "인증 코드가 전송되었습니다.\n인증을 완료해주세요.",

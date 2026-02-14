@@ -115,7 +115,9 @@ class CircleItem extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 TextFontWidget.fontRegular(
-                                  '#${circle.clubHashtags![index]}',
+                                  circle.clubHashtags![index].startsWith('#')
+                                      ? circle.clubHashtags![index]
+                                      : '#${circle.clubHashtags![index]}',
                                   textAlign: TextAlign.center,
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: style.hashtagFontSize,

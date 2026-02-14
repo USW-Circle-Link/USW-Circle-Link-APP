@@ -37,16 +37,16 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
             final error = ProfileModelError(
                 message: result.error.toString(),
                 type: ProfileModelType.getProfile);
-            state = AsyncError(error, error.stackTrace);
+            state = AsyncError(error, StackTrace.current);
         }
       } on ProfileModelError catch (e) {
-        state = AsyncError(e, e.stackTrace);
+        state = AsyncError(e, StackTrace.current);
       } on Exception catch (e) {
         ErrorUtil.instance
             .logError(e.toGlobalException(), screen: 'Profile_GetProfile');
         final error = ProfileModelError(
             message: '예외발생! - $e', type: ProfileModelType.getProfile);
-        state = AsyncError(error, error.stackTrace);
+        state = AsyncError(error, StackTrace.current);
       }
     });
   }
@@ -75,14 +75,14 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
 
     if (!studentNumberRegExp.hasMatch(studentNumber)) {
       throw ProfileModelError(
-          message: '학번이 형식에 않습니다!',
+          message: '학번이 형식에 맞지 않습니다!',
           code: "USR-F600",
           type: ProfileModelType.updateProfile);
     }
 
     if (major.isEmpty) {
       throw ProfileModelError(
-          message: '학과가 형식에 않습니다!',
+          message: '학과가 형식에 맞지 않습니다!',
           code: "USR-F700",
           type: ProfileModelType.updateProfile);
     }
@@ -126,7 +126,7 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
               screen: 'Profile_UpdateProfile');
         }
 
-        state = AsyncError(error, error.stackTrace);
+        state = AsyncError(error, StackTrace.current);
     }
   }
 }

@@ -30,7 +30,8 @@ _$CircleImpl _$$CircleImplFromJson(Map<String, dynamic> json) => _$CircleImpl(
       leaderHp: json['leaderHp'] as String,
       clubInsta: json['clubInsta'] as String,
       clubRoomNumber: json['clubRoomNumber'] as String?,
-      aplictStatus: json['aplictStatus'] as String?,
+      aplictStatus: json['publicStatus'] as String?,
+      aplictUUID: json['aplictUUID'] as String?,
     );
 
 Map<String, dynamic> _$$CircleImplToJson(_$CircleImpl instance) =>
@@ -42,7 +43,8 @@ Map<String, dynamic> _$$CircleImplToJson(_$CircleImpl instance) =>
       'leaderHp': instance.leaderHp,
       'clubInsta': instance.clubInsta,
       'clubRoomNumber': instance.clubRoomNumber,
-      'aplictStatus': instance.aplictStatus,
+      'publicStatus': instance.aplictStatus,
+      'aplictUUID': instance.aplictUUID,
     };
 
 _$CircleDetailListModelErrorImpl _$$CircleDetailListModelErrorImplFromJson(
