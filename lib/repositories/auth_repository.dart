@@ -247,7 +247,7 @@ class AuthRepository {
         return Result.error(error);
       }
     } on Exception catch (e) {
-      return Result.error(e);
+      return Result.error(e.toGlobalException());
     }
   }
 

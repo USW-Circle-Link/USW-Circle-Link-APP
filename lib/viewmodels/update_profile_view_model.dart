@@ -75,14 +75,14 @@ class UpdateProfileViewModel extends StateNotifier<AsyncValue<ProfileModel>> {
 
     if (!studentNumberRegExp.hasMatch(studentNumber)) {
       throw ProfileModelError(
-          message: '학번이 형식에 않습니다!',
+          message: '학번이 형식에 맞지 않습니다!',
           code: "USR-F600",
           type: ProfileModelType.updateProfile);
     }
 
     if (major.isEmpty) {
       throw ProfileModelError(
-          message: '학과가 형식에 않습니다!',
+          message: '학과가 형식에 맞지 않습니다!',
           code: "USR-F700",
           type: ProfileModelType.updateProfile);
     }

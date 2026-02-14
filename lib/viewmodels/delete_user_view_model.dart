@@ -102,6 +102,11 @@ class DeleteUserViewModel extends AutoDisposeNotifier<DeleteUserState> {
             isLoading: false,
             isVerifyCodeSuccess: true,
           );
+        } else {
+          state = state.copyWith(
+            isLoading: false,
+            isVerifyCodeSuccess: false,
+          );
         }
       case Error(:final error):
         if (error is GlobalException) {
