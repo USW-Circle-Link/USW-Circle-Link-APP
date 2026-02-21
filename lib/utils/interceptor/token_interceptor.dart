@@ -10,6 +10,9 @@ import '../../repositories/token_repository.dart';
 import '../result.dart';
 
 class TokenInterceptor extends Interceptor {
+  static const tokenNotFoundMessage = '저장소에 토큰이 존재하지 않습니다';
+  static const refreshFailedMessage = '토큰 재발급 실패!';
+
   final Ref ref;
   final FlutterSecureStorage storage;
 
@@ -63,7 +66,7 @@ class TokenInterceptor extends Interceptor {
           return handler.reject(
             DioException(
               requestOptions: options,
-              message: "저장소에 토큰이 존재하지 않습니다",
+              message: tokenNotFoundMessage,
               type: DioExceptionType.cancel,
             ),
           );
@@ -143,7 +146,7 @@ class TokenInterceptor extends Interceptor {
         if (response.statusCode != 200) {
           throw DioException(
             requestOptions: response.requestOptions,
-            message: "토큰 재발급 실패!",
+            message: refreshFailedMessage,
             type: DioExceptionType.cancel,
           );
         }

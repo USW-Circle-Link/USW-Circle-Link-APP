@@ -66,7 +66,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                   height: 6,
                                 ),
                                 TextFontWidget.fontRegular(
-                                  '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                  '작성자 : ${state.data.authorName ?? '작성자 정보 없음'} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
                                   fontSize: 14,
                                   color: const Color(0xFF767676),
                                   fontWeight: FontWeight.w400,
