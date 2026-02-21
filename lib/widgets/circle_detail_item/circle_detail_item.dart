@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/widgets/circle_detail_overlay/circle_detail_overlay.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 enum CircleDetailItemStatus {
@@ -131,6 +132,8 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     return Center(
       child: Column(
         children: [
@@ -138,7 +141,7 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
             width: 375,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              color: const Color(0xffFFFFFF),
+              color: theme.cardColor,
             ),
             child: Material(
               color: Colors.transparent,
@@ -177,7 +180,7 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                             height: 80,
                             width: 67,
                             decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xffc4c4c4)),
+                              border: Border.all(color: appColors.borderColor),
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: HeroMode(
@@ -203,7 +206,7 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                                 TextFontWidget.fontRegular(
                                   widget.name,
                                   overflow: TextOverflow.ellipsis,
-                                  color: Colors.black,
+                                  color: theme.colorScheme.onSurface,
                                   fontSize: 18,
                                   fontWeight: FontWeight.w900,
                                   height: 1,
@@ -215,7 +218,7 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                                   text: TextSpan(
                                     text: '동아리 회장 ',
                                     style: TextFontWidget.fontRegularStyle(
-                                      color: const Color(0xFF767676),
+                                      color: appColors.badgeText,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w400,
                                       height: 1,
@@ -225,8 +228,8 @@ class _CircleDetailItemState extends State<CircleDetailItem> {
                                       const TextSpan(text: ''),
                                       TextSpan(
                                         text: widget.leader,
-                                        style: const TextStyle(
-                                          color: Color(0xFF353549),
+                                        style: TextStyle(
+                                          color: appColors.secondaryText,
                                           fontWeight: FontWeight.w800,
                                           fontSize: 14,
                                           height: 1,

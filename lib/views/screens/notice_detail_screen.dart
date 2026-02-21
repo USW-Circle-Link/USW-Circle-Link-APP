@@ -59,16 +59,16 @@ class NoticeDetailScreen extends ConsumerWidget {
                                 TextFontWidget.fontRegular(
                                   state.data.noticeTitle,
                                   fontSize: 18,
-                                  color: const Color(0xFF000000),
+                                  color: Theme.of(context).textTheme.bodyLarge!.color,
                                   fontWeight: FontWeight.w800,
                                 ),
                                 SizedBox(
                                   height: 6,
                                 ),
                                 TextFontWidget.fontRegular(
-                                  '작성자 : ${state.data.adminName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                  '작성자 : ${state.data.authorName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
                                   fontSize: 14,
-                                  color: const Color(0xFF767676),
+                                  color: Theme.of(context).textTheme.bodySmall!.color,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 SizedBox(
@@ -83,7 +83,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                         state.data.noticePhotos!.isNotEmpty) ...[
                       Divider(
                         height: 1,
-                        color: const Color(0xFFE0E0E0),
+                        color: Theme.of(context).dividerColor,
                       ),
                       Container(
                         margin: EdgeInsets.only(
@@ -122,7 +122,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                             child: TextFontWidget.fontRegular(
                                               '이미지 없음',
                                               fontSize: 14,
-                                              color: Colors.black,
+                                              color: Theme.of(context).textTheme.bodyMedium!.color,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           );
@@ -150,7 +150,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                       child: TextFontWidget.fontRegular(
                         '공지사항을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                         fontSize: 14,
-                        color: const Color(0xFFA1A1A1),
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
                         textAlign: TextAlign.center,
                         fontWeight: FontWeight.w400,
                       ),

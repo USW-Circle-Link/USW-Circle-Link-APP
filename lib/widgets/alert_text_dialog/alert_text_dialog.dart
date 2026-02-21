@@ -45,7 +45,9 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
         child: Container(
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(widget.style.borderRadius),
-            color: widget.style.backgroundColor,
+            color: widget.style == AlertTextDialogStyle.defaultStyle
+                ? Theme.of(context).dialogTheme.backgroundColor
+                : widget.style.backgroundColor,
           ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -61,7 +63,9 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                               bottom: widget.content != null ? 8 : 0),
                           child: TextFontWidget.fontRegular(
                             widget.title!,
-                            color: widget.style.titleColor,
+                            color: widget.style == AlertTextDialogStyle.defaultStyle
+                                ? Theme.of(context).textTheme.bodyLarge!.color
+                                : widget.style.titleColor,
                             fontSize: widget.style.titleFontSize,
                             fontWeight: widget.style.titleFontWeight,
                             textAlign: TextAlign.center,
@@ -71,7 +75,9 @@ class _AlertTextDialogState extends State<AlertTextDialog> {
                     if (widget.content != null)
                       TextFontWidget.fontRegular(
                         widget.content!,
-                        color: widget.style.contentColor,
+                        color: widget.style == AlertTextDialogStyle.defaultStyle
+                            ? Theme.of(context).textTheme.bodyMedium!.color
+                            : widget.style.contentColor,
                         fontSize: widget.style.contentFontSize,
                         fontWeight: widget.style.contentFontWeight,
                         textAlign: TextAlign.center,

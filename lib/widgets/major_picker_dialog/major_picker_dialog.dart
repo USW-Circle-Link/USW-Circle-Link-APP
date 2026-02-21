@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/widgets/rounded_dropdown/rounded_dropdown.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class MajorPickerDialog extends StatefulWidget {
@@ -31,11 +32,13 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     return Dialog(
       insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
       child: Material(
-        color: Colors.white,
+        color: theme.cardColor,
         borderRadius: BorderRadius.circular(15),
         clipBehavior: Clip.antiAlias,
         child: SingleChildScrollView(
@@ -64,7 +67,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                     value: value,
                     child: TextFontWidget.fontRegular(
                       value,
-                      color: const Color(0xFF000000),
+                      color: theme.colorScheme.onSurface,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       height: 0.1,
@@ -76,13 +79,13 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                 leftBottomCornerRadius: 8,
                 rightTopCornerRadius: 8,
                 rightBottomCornerRadius: 8,
-                borderColor: const Color(0xFFCECECE),
+                borderColor: appColors.borderColor,
                 borderWidth: 1,
                 marginTop: 32,
                 marginLeft: 16,
                 marginRight: 16,
-                hintTextStyle: const TextStyle(
-                  color: Color(0xFF767676),
+                hintTextStyle: TextStyle(
+                  color: appColors.badgeText,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   height: 0.1,
@@ -105,7 +108,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                     value: value,
                     child: TextFontWidget.fontRegular(
                       value,
-                      color: const Color(0xFF000000),
+                      color: theme.colorScheme.onSurface,
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
                       height: 0.1,
@@ -117,22 +120,22 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                 leftBottomCornerRadius: 8,
                 rightTopCornerRadius: 8,
                 rightBottomCornerRadius: 8,
-                borderColor: const Color(0xFFCECECE),
+                borderColor: appColors.borderColor,
                 borderWidth: 1,
                 marginLeft: 16,
                 marginRight: 16,
-                hintTextStyle: const TextStyle(
-                  color: Color(0xFF767676),
+                hintTextStyle: TextStyle(
+                  color: appColors.badgeText,
                   fontSize: 14,
                   fontWeight: FontWeight.w400,
                   height: 0.1,
                 ),
               ),
               const SizedBox(height: 20),
-              const SizedBox(
+              SizedBox(
                 height: 1,
                 child: DecoratedBox(
-                  decoration: BoxDecoration(color: Color(0xFFCECECE)),
+                  decoration: BoxDecoration(color: appColors.borderColor),
                 ),
               ),
               TextButton(
@@ -152,7 +155,7 @@ class _MajorPickerDialogState extends State<MajorPickerDialog> {
                 ),
                 child: TextFontWidget.fontRegular(
                   "확인",
-                  color: const Color(0xFF0085FF),
+                  color: appColors.linkColor,
                   fontSize: 18,
                   fontWeight: FontWeight.w800,
                 ),

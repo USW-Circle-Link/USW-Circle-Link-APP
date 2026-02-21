@@ -92,8 +92,8 @@ class PolicyScreen extends StatelessWidget {
                     ),
             ),
           ),
-          const Divider(
-            color: Colors.grey,
+          Divider(
+            color: Theme.of(context).dividerColor,
             height: 1.0,
           ),
         ],

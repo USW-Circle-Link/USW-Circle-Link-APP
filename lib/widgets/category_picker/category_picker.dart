@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/category_model.dart';
 import 'package:usw_circle_link/utils/icons/main_icons_icons.dart';
 import 'package:usw_circle_link/viewmodels/category_view_model.dart';
@@ -45,6 +45,9 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
   @override
   Widget build(BuildContext context) {
     final state = ref.watch(categoryViewModelProvider);
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+
     return WillPopScope(
       onWillPop: () async {
         Navigator.pop(context, selectedCategories.toList());
@@ -53,7 +56,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       child: Container(
         height: MediaQuery.of(context).size.height - kToolbarHeight - 50,
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: theme.cardColor,
           borderRadius: BorderRadius.vertical(
             top: Radius.circular(17),
           ),
@@ -73,7 +76,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                   SizedBox(width: 20),
                   TextFontWidget.fontRegular(
                     '나에게 맞는 동아리 추천 받기',
-                    color: Color(0xFF989898),
+                    color: appColors.hintColor,
                     fontSize: 14,
                     fontWeight: FontWeight.w400,
                   ),
@@ -86,7 +89,13 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                       padding: EdgeInsets.zero,
                       tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                     ),
-                    icon: SvgPicture.asset('assets/images/ic_close.svg'),
+                    icon: SvgPicture.asset(
+                      'assets/images/ic_close.svg',
+                      colorFilter: ColorFilter.mode(
+                        theme.iconTheme.color!,
+                        BlendMode.srcIn,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -94,12 +103,13 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                 height: 70,
                 indent: 70,
                 endIndent: 70,
+                color: theme.dividerColor,
               ), // 카테고리 제목
               Row(
                 children: <Widget>[
                   Icon(
                     MainIcons.ic_category,
-                    color: Color(0xFF111111),
+                    color: theme.iconTheme.color,
                     size: 15,
                   ),
                   SizedBox(width: 10),
@@ -107,12 +117,13 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                     '관심 카테고리',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
+                    color: theme.textTheme.bodyLarge!.color,
                   )
                 ],
               ),
               TextFontWidget.fontRegular(
                 '* 최대 3개까지 선택해주세요.',
-                color: Color(0xff909090),
+                color: appColors.subTextColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w300,
               ),
@@ -136,12 +147,12 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                       fontSize: 14,
                       fontWeight: FontWeight.w300,
                       textAlign: TextAlign.center,
-                      color: Color(0xFFA1A1A1),
+                      color: appColors.disabledText,
                     ),
                   ),
-                  loading: () => const Center(
+                  loading: () => Center(
                     child: CircularProgressIndicator(
-                      color: accentColor,
+                      color: theme.colorScheme.primary,
                     ),
                   ),
                 ),
@@ -155,6 +166,9 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
 
   Widget _buildChip(CategoryData category) {
     final isSelected = selectedCategories.contains(category);
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+
     return FilterChip(
       label: Text(category.clubCategoryName),
       selected: isSelected,
@@ -162,16 +176,18 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
         _updateSelection(category, value);
       },
       showCheckmark: false,
-      selectedColor: Color(0xFFFFB052),
+      selectedColor: theme.colorScheme.primary,
       labelStyle: TextFontWidget.fontRegularStyle(
-        color: isSelected ? Colors.white : Color(0xFF434343),
+        color: isSelected ? Colors.white : theme.textTheme.bodyMedium!.color,
         fontWeight: FontWeight.w300,
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: theme.cardColor,
       elevation: null,
       shape: RoundedRectangleBorder(
         side: BorderSide(
-            color: isSelected ? Color(0xFFFF9A21) : Color(0xFFE5E5E5)),
+            color: isSelected
+                ? Color(0xFFFF9A21)
+                : appColors.borderColor),
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),
       padding: EdgeInsets.all(0),

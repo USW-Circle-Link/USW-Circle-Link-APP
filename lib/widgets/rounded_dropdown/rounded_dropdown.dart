@@ -1,5 +1,6 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 
 class RoundedDropdown extends StatelessWidget {
@@ -46,6 +47,8 @@ class RoundedDropdown extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     return Container(
       height: 48,
       margin: EdgeInsets.only(
@@ -56,12 +59,12 @@ class RoundedDropdown extends StatelessWidget {
       ),
       child: DropdownButtonFormField<String>(
         alignment: Alignment.centerLeft,
-        dropdownColor: Colors.white,
+        dropdownColor: theme.cardColor,
         key: globalKey,
-        decoration: setInputDecoration(),
+        decoration: _setInputDecoration(appColors),
         icon: Icon(
           SignUpIcons.ic_down_arrow,
-          color: Color(0xFF989898),
+          color: appColors.hintColor,
         ),
         iconSize: 7,
         hint: AutoSizeText(
@@ -76,16 +79,16 @@ class RoundedDropdown extends StatelessWidget {
     );
   }
 
-  InputDecoration setInputDecoration() {
+  InputDecoration _setInputDecoration(AppColors appColors) {
     return InputDecoration(
       isDense: false,
       contentPadding: EdgeInsets.fromLTRB(16, 16, 16, 8),
       filled: isBackgroundFilled,
-      fillColor: backgroundColor ?? Colors.white,
+      fillColor: backgroundColor ?? appColors.cardBackground,
       enabledBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: borderColor ?? const Color(0xFFCECECE),
-          width: borderWidth ?? 0, // borderWidth must not be null!
+          color: borderColor ?? appColors.borderColor,
+          width: borderWidth ?? 0,
         ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(leftTopCornerRadius ?? 0),
@@ -96,8 +99,8 @@ class RoundedDropdown extends StatelessWidget {
       ),
       focusedBorder: OutlineInputBorder(
         borderSide: BorderSide(
-          color: borderColor ?? const Color(0xFFCECECE),
-          width: borderWidth ?? 0, // borderWidth must not be null!
+          color: borderColor ?? appColors.borderColor,
+          width: borderWidth ?? 0,
         ),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(leftTopCornerRadius ?? 0),
@@ -107,7 +110,6 @@ class RoundedDropdown extends StatelessWidget {
         ),
       ),
       hintText: hintText ?? "",
-      //  contentPadding: EdgeInsets.only(left: 50)
     );
   }
 }

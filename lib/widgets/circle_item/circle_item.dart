@@ -47,7 +47,7 @@ class CircleItem extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(style.imageBorderRadius),
-                    border: Border.all(color: style.borderColor, width: style.borderWidth),
+                    border: Border.all(color: Theme.of(context).dividerColor, width: style.borderWidth),
                   ),
                   height: style.imageHeight,
                   child: ClipRRect(
@@ -86,6 +86,7 @@ class CircleItem extends StatelessWidget {
                   circle.clubName,
                   fontSize: style.titleFontSize,
                   fontWeight: style.titleFontWeight,
+                  color: Theme.of(context).textTheme.bodyLarge!.color,
                 ),
                 SizedBox(height: style.spacing),
                 Flexible(
@@ -109,7 +110,7 @@ class CircleItem extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(style.hashtagBorderRadius),
                               border: Border.all(
-                                  color: style.borderColor, width: style.borderWidth),
+                                  color: Theme.of(context).dividerColor, width: style.borderWidth),
                             ),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -122,6 +123,7 @@ class CircleItem extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: style.hashtagFontSize,
                                   fontWeight: style.hashtagFontWeight,
+                                  color: Theme.of(context).textTheme.bodySmall!.color,
                                 ),
                               ],
                             ),

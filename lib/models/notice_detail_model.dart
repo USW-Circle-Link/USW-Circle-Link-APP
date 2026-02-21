@@ -35,7 +35,7 @@ class NoticeDetailData with _$NoticeDetailData {
     required String noticeUUID,
     required String noticeTitle,
     required String noticeContent,
-    String? adminName,
+    String? authorName,
     required String noticeCreatedAt,
     List<String>? noticePhotos,
   }) = _NoticeDetailData;

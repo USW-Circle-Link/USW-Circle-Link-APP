@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/find_pw_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
@@ -24,6 +25,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final isSendCodeSuccess = ref.watch(
         findPwViewModelProvider.select((state) => state.isSendCodeSuccess));
     final isVerifyCodeSuccess = ref.watch(
@@ -98,7 +100,7 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                         hintStyle: TextFontWidget.fontRegularStyle(
                           fontSize: 14.0,
                           fontWeight: FontWeight.w300,
-                          color: const Color(0xFF989898),
+                          color: appColors.hintColor,
                         ),
                       ),
                       const SizedBox(height: 14.0),
@@ -127,15 +129,15 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                       ),
                       RichText(
                         textAlign: TextAlign.start,
-                        text: const TextSpan(
+                        text: TextSpan(
                           text: "* 입력하신 메일로 ",
                           style: TextStyle(
                             fontFamily: 'SUIT',
                             fontSize: 12.0,
-                            color: Color(0xFF989898),
+                            color: appColors.hintColor,
                             fontWeight: FontWeight.w400,
                           ),
-                          children: [
+                          children: const [
                             TextSpan(
                               text: "인증코드",
                               style: TextStyle(
@@ -201,10 +203,10 @@ class _FindPWScreenState extends ConsumerState<FindPwScreen> {
                             TextFontWidget.fontRegular(
                               '메일을 받지 못하셨나요?',
                               fontSize: 12.0,
-                              color: const Color(0xFF989898),
+                              color: appColors.hintColor,
                               fontWeight: FontWeight.w400,
                               textDecoration: TextDecoration.underline,
-                              decorationColor: const Color(0xFF989898),
+                              decorationColor: appColors.hintColor,
                             ),
                             TextButton(
                               style: TextButton.styleFrom(

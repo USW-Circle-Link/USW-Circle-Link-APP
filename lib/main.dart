@@ -11,10 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/viewmodels/theme_mode_notifier.dart';
 import 'package:usw_circle_link/firebase_options.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -57,6 +59,9 @@ void main() async {
   // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   await setupFlutterNotifications();
+
+  // 테마 모드 미리 로드 (깜빡임 방지)
+  await ThemeModeNotifier.loadInitialThemeMode();
 
   // await Upgrader.clearSavedSettings();
 
@@ -202,19 +207,23 @@ class CircleLink extends ConsumerWidget {
             .addNotification(message.aps.alert.body ?? '');
       }
     });
+    final themeMode = ref.watch(themeModeProvider);
+    final isDark = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
     return FlutterWebFrame(
       maximumSize: const Size(475.0, 812.0),
       enabled: kIsWeb,
+      backgroundColor: isDark
+          ? AppTheme.dark.scaffoldBackgroundColor
+          : AppTheme.light.scaffoldBackgroundColor,
       builder: (context) {
         return ClipRect(
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              appBarTheme: AppBarTheme(
-                backgroundColor: Colors.white,
-              ),
-            ),
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeMode,
             routerConfig: ref.read(routerProvider),
             builder: (context, child) {
               return UpgradeAlert(

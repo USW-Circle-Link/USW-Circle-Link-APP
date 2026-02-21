@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/category_filter_button/category_filter_button_styles.dart';
 import '../../const/analytics_const.dart';
 import '../../models/category_model.dart';
@@ -83,13 +84,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           '이전에 기존회원 가입을 하신 분들 중\n아이디/비밀번호 찾기 이후에도 로그인이 안 되시는 분들은\n[신규 회원가입] 후 자신이 속한 동아리에 지원해주세요.\n자세한 내용은 <공지사항>을 확인해 주세요.',
       leftButtonText: '더 이상 보지 않기',
       leftButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: const Color(0xffA8A8A8),
+        color: Theme.of(context).extension<AppColors>()!.disabledText,
         fontWeight: FontWeight.w700,
         fontSize: 16,
       ),
       rightButtonText: '확인',
       rightButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: const Color(0xff0085FF),
+        color: Theme.of(context).extension<AppColors>()!.linkColor,
         fontWeight: FontWeight.w800,
         fontSize: 16,
       ),
@@ -153,14 +154,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       }
     });
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: const Color(0xffF0F2F5),
+      backgroundColor: appColors.drawerBackground,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          icon: const Icon(Icons.menu, color: Color(0xff717171), size: 24),
+          icon: Icon(Icons.menu, color: appColors.subTextColor, size: 24),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,8 +191,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 const NotificationPopoverContent(),
             child: IconButton(
               onPressed: () => _notificationController.toggle(),
-              icon: const Icon(MainIcons.ic_bell,
-                  size: 18, color: Color(0xFF717171)),
+              icon: Icon(MainIcons.ic_bell,
+                  size: 18, color: appColors.subTextColor),
             ),
           ),
         ],
@@ -200,7 +204,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         children: [
           const SizedBox(height: 1),
           Container(
-            color: Colors.white,
+            color: theme.cardColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
@@ -274,7 +278,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         child: TextFontWidget.fontRegular(
                           '동아리가 없습니다',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: theme.textTheme.bodyLarge!.color,
                           fontWeight: FontWeight.w400,
                         ),
                       );
@@ -287,7 +291,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                     textAlign: TextAlign.center,
                     fontSize: 14,
-                    color: const Color(0xFFA1A1A1),
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w400,
                   ),
                 );

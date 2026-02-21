@@ -30,10 +30,10 @@ class _CircleCertificateDialogState
 
   @override
   Widget build(BuildContext context) {
-    return _buildCertificateDialog();
+    return _buildCertificateDialog(context);
   }
 
-  Widget _buildCertificateDialog() {
+  Widget _buildCertificateDialog(BuildContext context) {
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: const EdgeInsets.symmetric(horizontal: 40, vertical: 200),
@@ -183,8 +183,8 @@ class _CircleCertificateDialogState
       height: 40,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Colors.white,
-          disabledBackgroundColor: Colors.white.withValues(alpha: 0.5),
+          backgroundColor: Theme.of(context).cardColor,
+          disabledBackgroundColor: Theme.of(context).cardColor.withValues(alpha: 0.5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: isLoading
@@ -196,7 +196,7 @@ class _CircleCertificateDialogState
               },
         child: TextFontWidget.fontRegular(
           isLoading ? "로딩중..." : "확인",
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.onSurface,
           fontWeight: FontWeight.w600,
         ),
       ),

@@ -22,11 +22,13 @@ class FilterTabBar extends StatelessWidget {
     return Row(
       children: [
         _buildTabButton(
+          context: context,
           label: '전체',
           isSelected: isAllSelected,
           onPressed: onAllSelected,
         ),
         _buildTabButton(
+          context: context,
           label: '모집 중',
           isSelected: !isAllSelected,
           onPressed: onRecruitingSelected,
@@ -36,14 +38,23 @@ class FilterTabBar extends StatelessWidget {
   }
 
   Widget _buildTabButton({
+    required BuildContext context,
     required String label,
     required bool isSelected,
     required VoidCallback onPressed,
   }) {
+    final theme = Theme.of(context);
+    final selectedColor = style == FilterTabBarStyle.defaultStyle
+        ? theme.textTheme.bodyLarge!.color!
+        : style.selectedTextColor;
+    final unselectedColor = style == FilterTabBarStyle.defaultStyle
+        ? theme.colorScheme.onSurfaceVariant
+        : style.unselectedTextColor;
+
     return DecoratedBox(
       decoration: isSelected
           ? BoxDecoration(
-              border: Border(bottom: BorderSide(color: style.selectedBorderColor)),
+              border: Border(bottom: BorderSide(color: selectedColor)),
             )
           : const BoxDecoration(),
       child: TextButton(
@@ -56,7 +67,7 @@ class FilterTabBar extends StatelessWidget {
         child: TextFontWidget.fontRegular(
           label,
           fontSize: style.fontSize,
-          color: isSelected ? style.selectedTextColor : style.unselectedTextColor,
+          color: isSelected ? selectedColor : unselectedColor,
           fontWeight: style.fontWeight,
         ),
       ),

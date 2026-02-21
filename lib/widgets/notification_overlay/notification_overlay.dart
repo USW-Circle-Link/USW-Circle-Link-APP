@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/widgets/cloud_messaging/cloud_messaging.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class NotificationOverlay extends ConsumerStatefulWidget {
@@ -18,6 +19,8 @@ class NotificationOverlay extends ConsumerStatefulWidget {
 class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     final notifications = ref.watch(firebaseCloudMessagingViewModelProvider);
     return Stack(
       children: [
@@ -25,7 +28,7 @@ class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
           child: GestureDetector(
             onTap: widget.onDismiss,
             child: Container(
-              color: Colors.black.withOpacity(0.5),
+              color: appColors.overlayBarrier,
             ),
           ),
         ),
@@ -39,7 +42,7 @@ class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
               height: 220,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                color: Colors.white,
+                color: theme.cardColor,
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,

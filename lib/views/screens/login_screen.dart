@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import '../../utils/icons/sign_up_icons_icons.dart';
 import '../../widgets/detail_app_bar/detail_app_bar.dart';
 import '../../utils/logger/logger.dart';
@@ -37,6 +38,9 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       }
     });
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(),
@@ -52,7 +56,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
                   style: TextFontWidget.fontRegularStyle(
                     fontSize: 12.0,
-                    color: const Color(0xFF282828),
+                    color: theme.textTheme.bodyLarge!.color,
                     fontWeight: FontWeight.w400,
                   ),
                   children: const [],
@@ -94,12 +98,12 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 isAnimatedHint: false,
                 prefixIcon: Icon(
                   SignUpIcons.ic_person,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               const SizedBox(
@@ -120,7 +124,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                 isAnimatedHint: false,
                 prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -136,13 +140,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     passwordVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               const SizedBox(
@@ -204,16 +208,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: TextFontWidget.fontRegular(
                       '아이디 찾기',
                       fontSize: 12.0,
-                      color: const Color(0xFF767676),
+                      color: appColors.badgeText,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 2.0,
                     height: 14.0,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Color(0xFFDBDBDB),
+                        color: theme.dividerColor,
                       ),
                     ),
                   ),
@@ -224,16 +228,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: TextFontWidget.fontRegular(
                       '비밀번호 찾기',
                       fontSize: 12.0,
-                      color: const Color(0xFF767676),
+                      color: appColors.badgeText,
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     width: 2.0,
                     height: 14.0,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Color(0xFFDBDBDB),
+                        color: theme.dividerColor,
                       ),
                     ),
                   ),
@@ -244,7 +248,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                     child: TextFontWidget.fontRegular(
                       '회원가입',
                       fontSize: 12.0,
-                      color: const Color(0xFF767676),
+                      color: appColors.badgeText,
                       fontWeight: FontWeight.w400,
                     ),
                   ),

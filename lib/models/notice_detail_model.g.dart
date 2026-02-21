@@ -32,7 +32,7 @@ _$NoticeDetailDataImpl _$$NoticeDetailDataImplFromJson(
       noticeUUID: json['noticeUUID'] as String,
       noticeTitle: json['noticeTitle'] as String,
       noticeContent: json['noticeContent'] as String,
-      adminName: json['adminName'] as String?,
+      authorName: json['authorName'] as String?,
       noticeCreatedAt: json['noticeCreatedAt'] as String,
       noticePhotos: (json['noticePhotos'] as List<dynamic>?)
           ?.map((e) => e as String)
@@ -45,7 +45,7 @@ Map<String, dynamic> _$$NoticeDetailDataImplToJson(
       'noticeUUID': instance.noticeUUID,
       'noticeTitle': instance.noticeTitle,
       'noticeContent': instance.noticeContent,
-      'adminName': instance.adminName,
+      'authorName': instance.authorName,
       'noticeCreatedAt': instance.noticeCreatedAt,
       'noticePhotos': instance.noticePhotos,
     };
