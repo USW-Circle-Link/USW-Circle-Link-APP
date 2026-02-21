@@ -9,6 +9,10 @@ import 'package:usw_circle_link/utils/logger/logger.dart';
 import '../models/response/global_exception.dart';
 import '../utils/result.dart';
 
+bool _isAuthFailure(DioException e) =>
+    e.response?.statusCode == 401 ||
+    (e.response == null && e.type == DioExceptionType.cancel);
+
 final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
 
@@ -58,8 +62,7 @@ class ApplicationRepository {
         return Result.error(GlobalException.fromJson(response.data));
       }
     } on DioException catch (e) {
-      // 401 에러 (토큰 만료 + 리프레시 실패) → 로그인 필요 에러로 변환
-      if (e.response?.statusCode == 401) {
+      if (_isAuthFailure(e)) {
         return Result.error(GlobalException(
           code: "USR-F401",
           message: "로그인이 필요합니다",
@@ -114,7 +117,7 @@ class ApplicationRepository {
         return Result.error(GlobalException.fromJson(response.data));
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
+      if (_isAuthFailure(e)) {
         return Result.error(GlobalException(
           code: "USR-F401",
           message: "로그인이 필요합니다",
@@ -164,7 +167,7 @@ class ApplicationRepository {
         return Result.error(GlobalException.fromJson(response.data));
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
+      if (_isAuthFailure(e)) {
         return Result.error(GlobalException(
           code: "USR-F401",
           message: "로그인이 필요합니다",
@@ -207,7 +210,7 @@ class ApplicationRepository {
         return Result.error(GlobalException.fromJson(response.data));
       }
     } on DioException catch (e) {
-      if (e.response?.statusCode == 401) {
+      if (_isAuthFailure(e)) {
         return Result.error(GlobalException(
           code: "USR-F401",
           message: "로그인이 필요합니다",
