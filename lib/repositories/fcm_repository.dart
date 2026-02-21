@@ -88,6 +88,15 @@ class FCMRepository {
       return Result.error(e);
     }
   }
+
+  /// FCM 토큰 갱신 리스너
+  /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
+  void listenTokenRefresh({required Future<void> Function(String token) onRefresh}) {
+    FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
+      logger.d('FCM 토큰 갱신 감지: $newToken');
+      await onRefresh(newToken);
+    });
+  }
 }
 
 class FCMTokenNotFoundException implements Exception {}

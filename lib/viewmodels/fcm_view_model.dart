@@ -30,6 +30,10 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   Future<void> initializeFCM() async {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
+    // FCM 토큰 갱신 감지 (iOS에서 APNs 토큰 변경 시 자동 재전송)
+    fcmRepository.listenTokenRefresh(onRefresh: (token) async {
+      await sendToken();
+    });
   }
 
   // fcm 전경 처리 - 로컬 알림 보이기
@@ -40,9 +44,8 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     logger.d('- notification : ${message.notification?.body}');
     logger.d('- data : ${message.data}');
     RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null && !kIsWeb) {
-      // 웹이 아니면서 안드로이드이고, 알림이 있는경우
+    if (notification != null && !kIsWeb) {
+      // Android와 iOS 모두 로컬 알림 표시
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
         notification.title,
@@ -53,6 +56,11 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
             channel.name,
             channelDescription: channel.description,
             icon: 'launch_background',
+          ),
+          iOS: DarwinNotificationDetails(
+            presentAlert: true,
+            presentBadge: true,
+            presentSound: true,
           ),
         ),
       );
