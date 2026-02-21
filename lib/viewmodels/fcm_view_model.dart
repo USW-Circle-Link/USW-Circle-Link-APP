@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -18,6 +20,7 @@ final firebaseCloudMessagingViewModelProvider =
 
 class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   final FCMRepository fcmRepository;
+  StreamSubscription<String>? _tokenRefreshSubscription;
 
   FirebaseCloudMessagingViewModel({
     required this.fcmRepository,
@@ -30,10 +33,17 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   Future<void> initializeFCM() async {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
-    // FCM 토큰 갱신 감지 (iOS에서 APNs 토큰 변경 시 자동 재전송)
-    fcmRepository.listenTokenRefresh(onRefresh: (token) async {
-      await sendToken();
-    });
+    _tokenRefreshSubscription = fcmRepository.listenTokenRefresh(
+      onRefresh: (token) async {
+        await sendToken();
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _tokenRefreshSubscription?.cancel();
+    super.dispose();
   }
 
   // fcm 전경 처리 - 로컬 알림 보이기

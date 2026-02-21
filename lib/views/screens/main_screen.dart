@@ -47,9 +47,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
+    super.initState();
     // 알림 클릭시 (백그라운드 → 포그라운드)
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-    super.initState();
     _checkAndShowNoticeDialog();
     // 앱 완전 종료 상태에서 알림 탭으로 열었을 때 (Cold start)
     _checkInitialMessage();
