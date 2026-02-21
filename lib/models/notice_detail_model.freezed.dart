@@ -213,7 +213,7 @@ mixin _$NoticeDetailData {
   String get noticeUUID => throw _privateConstructorUsedError;
   String get noticeTitle => throw _privateConstructorUsedError;
   String get noticeContent => throw _privateConstructorUsedError;
-  String? get adminName => throw _privateConstructorUsedError;
+  String? get authorName => throw _privateConstructorUsedError;
   String get noticeCreatedAt => throw _privateConstructorUsedError;
   List<String>? get noticePhotos => throw _privateConstructorUsedError;
 
@@ -233,7 +233,7 @@ abstract class $NoticeDetailDataCopyWith<$Res> {
       {String noticeUUID,
       String noticeTitle,
       String noticeContent,
-      String? adminName,
+      String? authorName,
       String noticeCreatedAt,
       List<String>? noticePhotos});
 }
@@ -254,7 +254,7 @@ class _$NoticeDetailDataCopyWithImpl<$Res, $Val extends NoticeDetailData>
     Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? noticeContent = null,
-    Object? adminName = freezed,
+    Object? authorName = freezed,
     Object? noticeCreatedAt = null,
     Object? noticePhotos = freezed,
   }) {
@@ -271,9 +271,9 @@ class _$NoticeDetailDataCopyWithImpl<$Res, $Val extends NoticeDetailData>
           ? _value.noticeContent
           : noticeContent // ignore: cast_nullable_to_non_nullable
               as String,
-      adminName: freezed == adminName
-          ? _value.adminName
-          : adminName // ignore: cast_nullable_to_non_nullable
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
               as String?,
       noticeCreatedAt: null == noticeCreatedAt
           ? _value.noticeCreatedAt
@@ -299,7 +299,7 @@ abstract class _$$NoticeDetailDataImplCopyWith<$Res>
       {String noticeUUID,
       String noticeTitle,
       String noticeContent,
-      String? adminName,
+      String? authorName,
       String noticeCreatedAt,
       List<String>? noticePhotos});
 }
@@ -318,7 +318,7 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
     Object? noticeUUID = null,
     Object? noticeTitle = null,
     Object? noticeContent = null,
-    Object? adminName = freezed,
+    Object? authorName = freezed,
     Object? noticeCreatedAt = null,
     Object? noticePhotos = freezed,
   }) {
@@ -335,9 +335,9 @@ class __$$NoticeDetailDataImplCopyWithImpl<$Res>
           ? _value.noticeContent
           : noticeContent // ignore: cast_nullable_to_non_nullable
               as String,
-      adminName: freezed == adminName
-          ? _value.adminName
-          : adminName // ignore: cast_nullable_to_non_nullable
+      authorName: freezed == authorName
+          ? _value.authorName
+          : authorName // ignore: cast_nullable_to_non_nullable
               as String?,
       noticeCreatedAt: null == noticeCreatedAt
           ? _value.noticeCreatedAt
@@ -359,7 +359,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
       {required this.noticeUUID,
       required this.noticeTitle,
       required this.noticeContent,
-      this.adminName,
+      this.authorName,
       required this.noticeCreatedAt,
       final List<String>? noticePhotos})
       : _noticePhotos = noticePhotos;
@@ -374,7 +374,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
   @override
   final String noticeContent;
   @override
-  final String? adminName;
+  final String? authorName;
   @override
   final String noticeCreatedAt;
   final List<String>? _noticePhotos;
@@ -389,7 +389,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
 
   @override
   String toString() {
-    return 'NoticeDetailData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, noticeContent: $noticeContent, adminName: $adminName, noticeCreatedAt: $noticeCreatedAt, noticePhotos: $noticePhotos)';
+    return 'NoticeDetailData(noticeUUID: $noticeUUID, noticeTitle: $noticeTitle, noticeContent: $noticeContent, authorName: $authorName, noticeCreatedAt: $noticeCreatedAt, noticePhotos: $noticePhotos)';
   }
 
   @override
@@ -403,8 +403,8 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
                 other.noticeTitle == noticeTitle) &&
             (identical(other.noticeContent, noticeContent) ||
                 other.noticeContent == noticeContent) &&
-            (identical(other.adminName, adminName) ||
-                other.adminName == adminName) &&
+            (identical(other.authorName, authorName) ||
+                other.authorName == authorName) &&
             (identical(other.noticeCreatedAt, noticeCreatedAt) ||
                 other.noticeCreatedAt == noticeCreatedAt) &&
             const DeepCollectionEquality()
@@ -418,7 +418,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
       noticeUUID,
       noticeTitle,
       noticeContent,
-      adminName,
+      authorName,
       noticeCreatedAt,
       const DeepCollectionEquality().hash(_noticePhotos));
 
@@ -442,7 +442,7 @@ abstract class _NoticeDetailData implements NoticeDetailData {
       {required final String noticeUUID,
       required final String noticeTitle,
       required final String noticeContent,
-      final String? adminName,
+      final String? authorName,
       required final String noticeCreatedAt,
       final List<String>? noticePhotos}) = _$NoticeDetailDataImpl;
 
@@ -456,7 +456,7 @@ abstract class _NoticeDetailData implements NoticeDetailData {
   @override
   String get noticeContent;
   @override
-  String? get adminName;
+  String? get authorName;
   @override
   String get noticeCreatedAt;
   @override
