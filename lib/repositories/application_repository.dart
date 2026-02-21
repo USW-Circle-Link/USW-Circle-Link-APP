@@ -57,6 +57,16 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      // 401 에러 (토큰 만료 + 리프레시 실패) → 로그인 필요 에러로 변환
+      if (e.response?.statusCode == 401) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_CheckAvailableForApplication",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
@@ -103,6 +113,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_GetApplication",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
@@ -144,6 +163,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_Apply",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
@@ -178,6 +206,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_GetApplicationDetail",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
