@@ -11,18 +11,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
-<<<<<<< HEAD
 import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import 'package:usw_circle_link/viewmodels/theme_mode_notifier.dart';
-=======
-
-import 'package:usw_circle_link/router/router.dart';
-import 'package:usw_circle_link/utils/logger/logger.dart';
->>>>>>> origin/develop
 import 'package:usw_circle_link/firebase_options.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
@@ -203,26 +197,26 @@ class CircleLink extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-<<<<<<< HEAD
-    platform.setMethodCallHandler((call) async {
-      logger.d('setMethodCallHandler');
-      logger.d('call.method: ${call.method}');
-      logger.d('call.arguments: ${call.arguments}');
-      logger.d('call.arguments type: ${call.arguments.runtimeType}');
-      if (call.method == 'storeNotification') {
-        final message = APNSPayload.fromMap(call.arguments);
-        logger.d('message: $message');
-        ref
-            .read(firebaseCloudMessagingViewModelProvider.notifier)
-            .addNotification(message.aps.alert.body ?? '');
-      }
-    });
+    if (!kIsWeb) {
+      const MethodChannel platform = MethodChannel('com.usw.circle_link/notifications');
+      platform.setMethodCallHandler((call) async {
+        logger.d('setMethodCallHandler');
+        logger.d('call.method: ${call.method}');
+        logger.d('call.arguments: ${call.arguments}');
+        logger.d('call.arguments type: ${call.arguments.runtimeType}');
+        if (call.method == 'storeNotification') {
+          final message = APNSPayload.fromMap(call.arguments);
+          logger.d('message: $message');
+          ref
+              .read(firebaseCloudMessagingViewModelProvider.notifier)
+              .addNotification(message.aps.alert.body ?? '');
+        }
+      });
+    }
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark ||
         (themeMode == ThemeMode.system &&
             MediaQuery.platformBrightnessOf(context) == Brightness.dark);
-=======
->>>>>>> origin/develop
     return FlutterWebFrame(
       maximumSize: const Size(475.0, 812.0),
       enabled: kIsWeb,
