@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class EmailTextField extends StatefulWidget {
@@ -114,9 +115,11 @@ class _EmailTextFieldState extends State<EmailTextField> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final themedHintStyle = _hintTextStyle.copyWith(color: appColors.subTextColor);
     return LayoutBuilder(
       builder: (context, constraints) {
-        double maxWidth = constraints.maxWidth - _suffixWidth - 0; // 여유 공간 확보
+        double maxWidth = constraints.maxWidth - _suffixWidth - 0;
         double textFieldWidth = 0;
         if (widget.controller?.text.isEmpty ?? true) {
           textFieldWidth =
@@ -127,7 +130,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
         return Row(
           children: [
             SizedBox(
-              width: textFieldWidth, // .w 확장자 제거
+              width: textFieldWidth,
               child: TextField(
                 focusNode: widget.focusNode,
                 enabled: widget.enabled,
@@ -137,10 +140,10 @@ class _EmailTextFieldState extends State<EmailTextField> {
                 controller: widget.controller,
                 decoration: InputDecoration(
                   hintText: _hintText,
-                  hintStyle: _hintTextStyle, // 힌트 텍스트 스타일
+                  hintStyle: themedHintStyle,
                   border: InputBorder.none,
                 ),
-                style: _hintTextStyle, // 텍스트 필드 스타일
+                style: themedHintStyle,
                 readOnly: widget.readOnly,
                 maxLines: widget.maxLines,
                 keyboardType: widget.textInputType,
@@ -152,8 +155,8 @@ class _EmailTextFieldState extends State<EmailTextField> {
               _suffixText,
               style: _suffixTextStyle.copyWith(
                 color: widget.controller?.text.isEmpty ?? true
-                    ? const Color(0xFFB8B8B8)
-                    : const Color(0xFF6F6F6F),
+                    ? appColors.disabledText
+                    : appColors.subTextColor,
               ),
             ),
           ],

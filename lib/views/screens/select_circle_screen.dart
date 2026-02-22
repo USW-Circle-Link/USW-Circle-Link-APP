@@ -17,10 +17,10 @@ class SelectCircleScreen extends ConsumerStatefulWidget {
 class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
   final List<CircleListData> selectedCircles = [];
 
-  TextStyle circleNameTextStyle({bool isSelected = false}) {
+  TextStyle circleNameTextStyle({bool isSelected = false, required BuildContext context}) {
     return TextFontWidget.fontRegularStyle(
       fontSize: 16.0,
-      color: isSelected ? const Color(0xffffB052) : Colors.black,
+      color: isSelected ? const Color(0xffffB052) : Theme.of(context).textTheme.bodyLarge?.color ?? Theme.of(context).colorScheme.onSurface,
       fontWeight: FontWeight.w400,
     );
   }
@@ -50,7 +50,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                             textAlign: TextAlign.center,
                             '현재 소속되어 있는 동아리를\n모두 선택해 주세요.',
                             fontSize: 16.0,
-                            color: const Color(0xFFA1A1A1),
+                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                             fontWeight: FontWeight.w400,
                           ),
                           const SizedBox(height: 20.0),
@@ -65,7 +65,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                               final textPainter = TextPainter(
                                   text: TextSpan(
                                       text: '높이 확보용 텍스트',
-                                      style: circleNameTextStyle()),
+                                      style: circleNameTextStyle(context: context)),
                                   maxLines: 1,
                                   textDirection: TextDirection.ltr)
                                 ..layout();
@@ -172,8 +172,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                                                     color: isSelected
                                                         ? const Color(
                                                             0xffffB052)
-                                                        : const Color(
-                                                            0xFFB8B8B8),
+                                                        : Theme.of(context).dividerColor,
                                                   ),
                                                   borderRadius: borderRadius,
                                                 ),
@@ -185,7 +184,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
                                         Text(
                                           circle.clubName,
                                           style: circleNameTextStyle(
-                                              isSelected: isSelected),
+                                              isSelected: isSelected, context: context),
                                         )
                                       ],
                                     ),
@@ -240,7 +239,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
             '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
             textAlign: TextAlign.center,
             fontSize: 14.0,
-            color: const Color(0xFFA1A1A1),
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w400,
           )),
           loading: () => const Center(child: CircularProgressIndicator()),

@@ -17,6 +17,7 @@ import '../popover/popover_menu_item_styles.dart';
 import '../popover/popover_menu_styles.dart';
 import '../popover/popover_styles.dart';
 import '../text_font_widget/text_font_widget.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'circle_info_tile_styles.dart';
 
 /// 동아리 정보 상태
@@ -158,6 +159,7 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
   /// 층별 배치도 사진을 풀스크린으로 표시
   void _showFullScreenMap(BuildContext context, String floorPhotoPath) {
     _popoverController.hide();
+    final appColors = Theme.of(context).extension<AppColors>()!;
 
     showDialog(
       context: context,
@@ -173,8 +175,8 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
                         imageProvider: NetworkImage(floorPhotoPath),
                         minScale: PhotoViewComputedScale.contained,
                         maxScale: PhotoViewComputedScale.covered * 2.0,
-                        backgroundDecoration: const BoxDecoration(
-                          color: Colors.black54,
+                        backgroundDecoration: BoxDecoration(
+                          color: appColors.overlayBarrier,
                         ),
                       ),
                     )
@@ -190,10 +192,10 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
               right: 20.0,
               child: GestureDetector(
                 onTap: () => Navigator.of(context).pop(),
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 20.0,
-                  backgroundColor: Colors.black54,
-                  child: Icon(Icons.close, color: Colors.white),
+                  backgroundColor: appColors.overlayBarrier,
+                  child: const Icon(Icons.close, color: Colors.white),
                 ),
               ),
             ),
@@ -306,7 +308,7 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
         TextFontWidget.fontRegular(
           widget.name,
           overflow: TextOverflow.ellipsis,
-          color: widget.style.nameColor,
+          color: widget.style.nameColor ?? Theme.of(context).colorScheme.onSurface,
           fontSize: widget.style.nameFontSize,
           fontWeight: widget.style.nameFontWeight,
           height: 1,

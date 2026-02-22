@@ -81,11 +81,22 @@ class DrawerItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final effectiveBg = style == DrawerItemStyle.defaultStyle
+        ? theme.cardColor
+        : style.backgroundColor;
+    final effectiveTitleColor = style == DrawerItemStyle.defaultStyle
+        ? theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface
+        : style.titleColor;
+    final effectiveIconColor = style == DrawerItemStyle.defaultStyle
+        ? theme.colorScheme.onSurfaceVariant
+        : style.iconColor;
+
     return Padding(
       padding: style.padding,
       child: AppCard(
         style: AppCardStyle(
-          backgroundColor: style.backgroundColor,
+          backgroundColor: effectiveBg,
           borderRadius: style.borderRadius,
         ),
         onTap: onTap,
@@ -97,12 +108,12 @@ class DrawerItem extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Tile(
-                prefix: Icon(icon, size: iconSize, color: style.iconColor),
+                prefix: Icon(icon, size: iconSize, color: effectiveIconColor),
                 title: Text(title),
                 suffix: AnimatedRotation(
                   duration: style.animationDuration,
                   turns: isExpanded ? 0.25 : 0,
-                  child: Icon(trailingIcon, size: trailingIconSize, color: style.iconColor),
+                  child: Icon(trailingIcon, size: trailingIconSize, color: effectiveIconColor),
                 ),
                 style: TileStyle(
                   padding: EdgeInsets.only(
@@ -112,10 +123,10 @@ class DrawerItem extends StatelessWidget {
                     bottom: 12,
                   ),
                   titleFontSize: style.titleFontSize,
-                  titleColor: style.titleColor,
+                  titleColor: effectiveTitleColor,
                   titleFontWeight: style.titleFontWeight,
                   iconSize: iconSize ?? 18,
-                  iconColor: style.iconColor,
+                  iconColor: effectiveIconColor,
                   backgroundColor: Colors.transparent,
                 ),
               ),

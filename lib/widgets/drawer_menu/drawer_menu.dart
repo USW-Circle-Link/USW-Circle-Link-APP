@@ -4,6 +4,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/const/data.dart';
+import 'package:usw_circle_link/viewmodels/theme_mode_notifier.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -65,8 +67,10 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
       );
     }
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+
     return Drawer(
-      backgroundColor: widget.style.backgroundColor,
+      backgroundColor: appColors.drawerBackground,
       width: widget.style.width,
       child: Column(
         children: [
@@ -88,9 +92,10 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
 
   /// 헤더 영역 빌드
   Widget _buildHeader(BuildContext context) {
+    final theme = Theme.of(context);
     return DrawerHeader(
       decoration: BoxDecoration(
-        color: widget.style.headerBackgroundColor,
+        color: theme.cardColor,
       ),
       child: GestureDetector(
         onTap: isLoggedIn ? null : () => context.go('/login'),
@@ -114,25 +119,25 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 TextFontWidget.fontRegular(
                   widget.userState!.userName ?? '',
                   fontSize: widget.style.headerFontSize,
-                  color: widget.style.headerColor,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   fontWeight: widget.style.headerFontWeight,
                 ),
                 TextFontWidget.fontRegular(
                   ' 님',
                   fontSize: widget.style.subTextFontSize,
-                  color: widget.style.subTextColor,
+                  color: theme.colorScheme.onSurfaceVariant,
                   fontWeight: widget.style.subTextFontWeight,
                 ),
               ] else ...[
                 TextFontWidget.fontRegular(
                   '로그인',
                   fontSize: widget.style.headerFontSize,
-                  color: widget.style.headerColor,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   fontWeight: widget.style.headerFontWeight,
                 ),
                 Icon(
                   MainIcons.ic_chevron_right,
-                  color: widget.style.arrowIconColor,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   size: widget.style.arrowIconSize,
                 ),
               ],
@@ -145,6 +150,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
 
   /// 메뉴 아이템들 빌드
   List<Widget> _buildMenuItems(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     if (isLoggedIn) {
       return [
         // 내 정보 (확장 가능)
@@ -167,14 +173,14 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 child: TextFontWidget.fontRegular(
                   '내 정보 수정',
                   fontSize: 12,
-                  color: const Color(0xff353549),
+                  color: appColors.secondaryText,
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
+              SizedBox(
                 height: 16,
                 child: VerticalDivider(
-                  color: Color(0xffCECECE),
+                  color: appColors.borderColor,
                   thickness: 1,
                 ),
               ),
@@ -183,7 +189,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 child: TextFontWidget.fontRegular(
                   '비밀번호 변경',
                   fontSize: 12,
-                  color: const Color(0xff353549),
+                  color: appColors.secondaryText,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -256,8 +262,49 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
 
   /// 하단 메뉴 빌드
   Widget _buildBottomMenu(BuildContext context) {
+    final themeMode = ref.watch(themeModeProvider);
+    final brightness = MediaQuery.platformBrightnessOf(context);
+    final isDark = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system && brightness == Brightness.dark);
+    final bottomMenuColor = Theme.of(context).textTheme.bodySmall?.color ?? Theme.of(context).colorScheme.onSurfaceVariant;
     return Column(
       children: [
+        // 다크모드 토글
+        Container(
+          padding: EdgeInsets.symmetric(
+            horizontal: widget.style.bottomMenuHorizontalPadding,
+          ),
+          child: Row(
+            children: [
+              Icon(
+                isDark ? Icons.dark_mode : Icons.light_mode,
+                size: 16,
+                color: bottomMenuColor,
+              ),
+              const SizedBox(width: 6),
+              TextFontWidget.fontRegular(
+                isDark ? '다크 모드' : '라이트 모드',
+                fontSize: widget.style.bottomMenuFontSize,
+                color: bottomMenuColor,
+                fontWeight: widget.style.bottomMenuFontWeight,
+              ),
+              const Spacer(),
+              SizedBox(
+                height: 28,
+                child: Switch(
+                  value: isDark,
+                  activeColor: const Color(0xFFFFB052),
+                  onChanged: (value) {
+                    ref
+                        .read(themeModeProvider.notifier)
+                        .toggle(brightness);
+                  },
+                ),
+              ),
+            ],
+          ),
+        ),
+        const SizedBox(height: 10),
         Container(
           padding: EdgeInsets.symmetric(
             horizontal: widget.style.bottomMenuHorizontalPadding,
@@ -270,7 +317,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 child: TextFontWidget.fontRegular(
                   '문의하기',
                   fontSize: widget.style.bottomMenuFontSize,
-                  color: widget.style.bottomMenuColor,
+                  color: bottomMenuColor,
                   fontWeight: widget.style.bottomMenuFontWeight,
                 ),
               ),
@@ -281,7 +328,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                   child: TextFontWidget.fontRegular(
                     '로그아웃',
                     fontSize: widget.style.bottomMenuFontSize,
-                    color: widget.style.bottomMenuColor,
+                    color: bottomMenuColor,
                     fontWeight: widget.style.bottomMenuFontWeight,
                   ),
                 ),
@@ -302,7 +349,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 child: TextFontWidget.fontRegular(
                   '이용약관',
                   fontSize: widget.style.bottomMenuFontSize,
-                  color: widget.style.bottomMenuColor,
+                  color: bottomMenuColor,
                   fontWeight: widget.style.bottomMenuFontWeight,
                 ),
               ),
@@ -312,7 +359,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 child: TextFontWidget.fontRegular(
                   '개인정보 처리 방침',
                   fontSize: widget.style.bottomMenuFontSize,
-                  color: widget.style.bottomMenuColor,
+                  color: bottomMenuColor,
                   fontWeight: widget.style.bottomMenuFontWeight,
                 ),
               ),
