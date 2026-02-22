@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -21,13 +22,15 @@ class CircleListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     final state = ref.watch(circleListScreenViewModelProvider(listType));
     ref.listen(circleListScreenViewModelProvider(listType), (previous, next) {
       logger.d('next: $next');
     });
 
     return Scaffold(
-      backgroundColor: const Color(0xffF0F2F5),
+      backgroundColor: appColors.drawerBackground,
       resizeToAvoidBottomInset: false,
       appBar: DetailAppBar(title: listType.title),
       body: state.when(
@@ -92,7 +95,7 @@ class CircleListScreen extends ConsumerWidget {
                 : '나의 지원 현황을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
             textAlign: TextAlign.center,
             fontSize: 14,
-            color: Color(0xFFA1A1A1),
+            color: theme.colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w400,
           ),
         ),

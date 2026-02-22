@@ -308,7 +308,7 @@ class _CircleInfoTileState extends ConsumerState<CircleInfoTile> {
         TextFontWidget.fontRegular(
           widget.name,
           overflow: TextOverflow.ellipsis,
-          color: widget.style.nameColor,
+          color: widget.style.nameColor ?? Theme.of(context).colorScheme.onSurface,
           fontSize: widget.style.nameFontSize,
           fontWeight: widget.style.nameFontWeight,
           height: 1,
