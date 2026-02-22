@@ -159,7 +159,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
     return Scaffold(
       key: _scaffoldKey,
-      backgroundColor: appColors.drawerBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
@@ -278,7 +278,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         child: TextFontWidget.fontRegular(
                           '동아리가 없습니다',
                           fontSize: 14,
-                          color: theme.textTheme.bodyLarge!.color,
+                          color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w400,
                         ),
                       );

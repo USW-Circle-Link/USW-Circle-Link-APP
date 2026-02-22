@@ -86,7 +86,7 @@ class CircleItem extends StatelessWidget {
                   circle.clubName,
                   fontSize: style.titleFontSize,
                   fontWeight: style.titleFontWeight,
-                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                  color: Theme.of(context).textTheme.bodyLarge?.color ?? Theme.of(context).colorScheme.onSurface,
                 ),
                 SizedBox(height: style.spacing),
                 Flexible(
@@ -123,7 +123,7 @@ class CircleItem extends StatelessWidget {
                                   overflow: TextOverflow.ellipsis,
                                   fontSize: style.hashtagFontSize,
                                   fontWeight: style.hashtagFontWeight,
-                                  color: Theme.of(context).textTheme.bodySmall!.color,
+                                  color: Theme.of(context).textTheme.bodySmall?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
                                 ),
                               ],
                             ),

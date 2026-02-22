@@ -184,7 +184,7 @@ class _CircleCertificateDialogState
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: Theme.of(context).cardColor,
-          disabledBackgroundColor: Theme.of(context).cardColor.withValues(alpha: 0.5),
+          disabledBackgroundColor: Theme.of(context).cardColor.withOpacity(0.5),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
         ),
         onPressed: isLoading

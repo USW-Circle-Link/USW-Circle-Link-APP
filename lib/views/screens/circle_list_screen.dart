@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/circle_detail_list_model.dart';
 import 'package:usw_circle_link/router/circle_list_route.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
@@ -23,7 +22,6 @@ class CircleListScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final theme = Theme.of(context);
-    final appColors = theme.extension<AppColors>()!;
     final state = ref.watch(circleListScreenViewModelProvider(listType));
     ref.listen(circleListScreenViewModelProvider(listType), (previous, next) {
       logger.d('next: $next');

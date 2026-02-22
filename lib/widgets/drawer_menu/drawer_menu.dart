@@ -119,7 +119,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 TextFontWidget.fontRegular(
                   widget.userState!.userName ?? '',
                   fontSize: widget.style.headerFontSize,
-                  color: theme.textTheme.bodyLarge!.color,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   fontWeight: widget.style.headerFontWeight,
                 ),
                 TextFontWidget.fontRegular(
@@ -132,12 +132,12 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
                 TextFontWidget.fontRegular(
                   '로그인',
                   fontSize: widget.style.headerFontSize,
-                  color: theme.textTheme.bodyLarge!.color,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   fontWeight: widget.style.headerFontWeight,
                 ),
                 Icon(
                   MainIcons.ic_chevron_right,
-                  color: theme.textTheme.bodyLarge!.color,
+                  color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   size: widget.style.arrowIconSize,
                 ),
               ],
@@ -266,7 +266,7 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
     final brightness = MediaQuery.platformBrightnessOf(context);
     final isDark = themeMode == ThemeMode.dark ||
         (themeMode == ThemeMode.system && brightness == Brightness.dark);
-    final bottomMenuColor = Theme.of(context).textTheme.bodySmall!.color!;
+    final bottomMenuColor = Theme.of(context).textTheme.bodySmall?.color ?? Theme.of(context).colorScheme.onSurfaceVariant;
     return Column(
       children: [
         // 다크모드 토글
@@ -279,13 +279,13 @@ class _DrawerMenuState extends ConsumerState<DrawerMenu> {
               Icon(
                 isDark ? Icons.dark_mode : Icons.light_mode,
                 size: 16,
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: bottomMenuColor,
               ),
               const SizedBox(width: 6),
               TextFontWidget.fontRegular(
                 isDark ? '다크 모드' : '라이트 모드',
                 fontSize: widget.style.bottomMenuFontSize,
-                color: Theme.of(context).textTheme.bodySmall!.color,
+                color: bottomMenuColor,
                 fontWeight: widget.style.bottomMenuFontWeight,
               ),
               const Spacer(),

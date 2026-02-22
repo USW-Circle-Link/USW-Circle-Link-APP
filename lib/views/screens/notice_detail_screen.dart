@@ -59,16 +59,16 @@ class NoticeDetailScreen extends ConsumerWidget {
                                 TextFontWidget.fontRegular(
                                   state.data.noticeTitle,
                                   fontSize: 18,
-                                  color: Theme.of(context).textTheme.bodyLarge!.color,
+                                  color: Theme.of(context).textTheme.bodyLarge?.color ?? Theme.of(context).colorScheme.onSurface,
                                   fontWeight: FontWeight.w800,
                                 ),
                                 SizedBox(
                                   height: 6,
                                 ),
                                 TextFontWidget.fontRegular(
-                                  '작성자 : ${state.data.authorName} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
+                                  '작성자 : ${state.data.authorName ?? '알 수 없음'} / 작성날짜 : ${state.data.noticeCreatedAt.parseDateTime().getFormattedString()}',
                                   fontSize: 14,
-                                  color: Theme.of(context).textTheme.bodySmall!.color,
+                                  color: Theme.of(context).textTheme.bodySmall?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
                                   fontWeight: FontWeight.w400,
                                 ),
                                 SizedBox(
@@ -122,7 +122,7 @@ class NoticeDetailScreen extends ConsumerWidget {
                                             child: TextFontWidget.fontRegular(
                                               '이미지 없음',
                                               fontSize: 14,
-                                              color: Theme.of(context).textTheme.bodyMedium!.color,
+                                              color: Theme.of(context).textTheme.bodyMedium?.color ?? Theme.of(context).colorScheme.onSurfaceVariant,
                                               fontWeight: FontWeight.w400,
                                             ),
                                           );

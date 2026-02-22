@@ -86,7 +86,7 @@ class DrawerItem extends StatelessWidget {
         ? theme.cardColor
         : style.backgroundColor;
     final effectiveTitleColor = style == DrawerItemStyle.defaultStyle
-        ? theme.textTheme.bodyLarge!.color!
+        ? theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface
         : style.titleColor;
     final effectiveIconColor = style == DrawerItemStyle.defaultStyle
         ? theme.colorScheme.onSurfaceVariant

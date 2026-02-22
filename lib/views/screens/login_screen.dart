@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/app_theme.dart';
@@ -41,7 +43,10 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     final appColors = Theme.of(context).extension<AppColors>()!;
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(),
       body: SingleChildScrollView(
@@ -56,7 +61,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                   text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
                   style: TextFontWidget.fontRegularStyle(
                     fontSize: 12.0,
-                    color: theme.textTheme.bodyLarge!.color,
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w400,
                   ),
                   children: const [],
@@ -258,6 +263,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

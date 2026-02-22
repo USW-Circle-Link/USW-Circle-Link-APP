@@ -20,7 +20,7 @@ class _SelectCircleScreenState extends ConsumerState<SelectCircleScreen> {
   TextStyle circleNameTextStyle({bool isSelected = false, required BuildContext context}) {
     return TextFontWidget.fontRegularStyle(
       fontSize: 16.0,
-      color: isSelected ? const Color(0xffffB052) : Theme.of(context).textTheme.bodyLarge!.color,
+      color: isSelected ? const Color(0xffffB052) : Theme.of(context).textTheme.bodyLarge?.color ?? Theme.of(context).colorScheme.onSurface,
       fontWeight: FontWeight.w400,
     );
   }
