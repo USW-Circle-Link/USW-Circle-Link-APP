@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -87,6 +89,31 @@ class FCMRepository {
     } on Exception catch (e) {
       return Result.error(e);
     }
+  }
+
+  /// FCM 토큰 갱신 리스너
+  /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
+  StreamSubscription<String> listenTokenRefresh({
+    required Future<void> Function(String token) onRefresh,
+  }) {
+    if (kIsWeb) {
+      logger.d('웹 환경에서는 FCM 토큰 갱신 리스너를 등록하지 않습니다');
+      return const Stream<String>.empty().listen((_) {});
+    }
+
+    return FirebaseMessaging.instance.onTokenRefresh.listen(
+      (newToken) async {
+        logger.d('FCM 토큰 갱신 감지: $newToken');
+        try {
+          await onRefresh(newToken);
+        } catch (e) {
+          logger.e('FCM 토큰 갱신 콜백 오류 (token: $newToken): $e');
+        }
+      },
+      onError: (Object error) {
+        logger.e('FCM 토큰 갱신 스트림 오류: $error');
+      },
+    );
   }
 }
 
