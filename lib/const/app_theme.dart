@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// 앱 전역 테마 정의
 ///
@@ -32,6 +33,11 @@ class AppTheme {
           foregroundColor: Color(0xFF111111),
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Colors.white,
+            statusBarIconBrightness: Brightness.dark,
+            statusBarBrightness: Brightness.light,
+          ),
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Color(0xFF111111)),
@@ -80,6 +86,11 @@ class AppTheme {
           foregroundColor: Color(0xFFE1E1E1),
           elevation: 0,
           scrolledUnderElevation: 0,
+          systemOverlayStyle: SystemUiOverlayStyle(
+            statusBarColor: Color(0xFF121212),
+            statusBarIconBrightness: Brightness.light,
+            statusBarBrightness: Brightness.dark,
+          ),
         ),
         textTheme: const TextTheme(
           bodyLarge: TextStyle(color: Color(0xFFE1E1E1)),

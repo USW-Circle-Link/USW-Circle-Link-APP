@@ -44,7 +44,7 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = this.style == AppCardStyle.defaultStyle
+    final style = this.style.backgroundColor == Colors.white
         ? this.style.copyWith(backgroundColor: Theme.of(context).cardColor)
         : this.style;
 

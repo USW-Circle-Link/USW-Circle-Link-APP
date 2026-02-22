@@ -30,7 +30,7 @@ class CircleListScreen extends ConsumerWidget {
     });
 
     return Scaffold(
-      backgroundColor: appColors.drawerBackground,
+      backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: DetailAppBar(title: listType.title),
       body: state.when(
