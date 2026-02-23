@@ -7,6 +7,7 @@ import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/find_id_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
@@ -25,6 +26,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final state = ref.watch(findIdViewModelProvider);
     final _ = ref.watch(timerProvider);
     final timerNotifier = ref.watch(timerProvider.notifier);
@@ -93,7 +95,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                               style: TextStyle(
                                 fontFamily: 'SUIT',
                                 fontSize: 12.0,
-                                color: const Color(0xFF989898),
+                                color: appColors.hintColor,
                                 fontWeight: FontWeight.w400,
                               ),
                               children: const [
@@ -174,10 +176,10 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                             TextFontWidget.fontRegular(
                               '메일을 받지 못하셨나요?',
                               fontSize: 12.0,
-                              color: const Color(0xFF989898),
+                              color: appColors.hintColor,
                               fontWeight: FontWeight.w400,
                               textDecoration: TextDecoration.underline,
-                              decorationColor: const Color(0xFF989898),
+                              decorationColor: appColors.hintColor,
                             ),
                             TextButton(
                               style: TextButton.styleFrom(
@@ -208,7 +210,7 @@ class _FindIDScreenState extends ConsumerState<FindIdScreen> {
                 child: TextFontWidget.fontRegular(
                   '로그인 하러가기',
                   fontSize: 12.0,
-                  color: const Color(0xFF676767),
+                  color: appColors.subTextColor,
                   fontWeight: FontWeight.w700,
                 ),
               ),

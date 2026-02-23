@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class RoundedEmailField extends StatefulWidget {
@@ -89,6 +90,7 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Container(
       height: widget.height ?? 56.0,
       margin: EdgeInsets.only(
@@ -102,7 +104,7 @@ class _RoundedEmailFieldState extends State<RoundedEmailField> {
         border: Border.all(
           color: _focusNode.hasFocus
               ? (widget.borderColor ?? const Color(0xffffB052))
-              : (widget.borderColor ?? const Color(0xFFDBDBDB)),
+              : (widget.borderColor ?? appColors.borderColor),
           width: widget.borderWidth ?? 0,
         ),
         borderRadius: BorderRadius.only(

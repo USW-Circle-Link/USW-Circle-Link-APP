@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart' hide Badge;
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:flutter_html/flutter_html.dart';
 import "package:carousel_slider/carousel_slider.dart";
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -97,7 +98,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
       }
     });
     return Scaffold(
-        backgroundColor: Color(0xffFFFFFF),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         resizeToAvoidBottomInset: false,
         appBar: DetailAppBar(
           title: '동아리 소개',
@@ -108,7 +109,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
             : Container(
                 padding: EdgeInsets.symmetric(vertical: 12, horizontal: 12),
                 decoration: BoxDecoration(
-                  color: const Color(0xffFFFFFF),
+                color: Theme.of(context).cardColor,
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.1),
@@ -166,7 +167,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                       '동아리 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                       textAlign: TextAlign.center,
                       fontSize: 14,
-                      color: const Color(0xFFA1A1A1),
+                      color: Theme.of(context).colorScheme.onSurfaceVariant,
                       fontWeight: FontWeight.w400,
                     ),
                   )
@@ -233,8 +234,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                                           color: index ==
                                                                   activeIndex
                                                               ? accentColor
-                                                              : const Color(
-                                                                  0xFFD9D9D9),
+                                                              : Theme.of(context).extension<AppColors>()!.indicatorInactive,
                                                           borderRadius:
                                                               BorderRadius
                                                                   .circular(
@@ -274,7 +274,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                   controller: tabController,
                                   labelPadding: EdgeInsets.zero,
                                   labelColor: const Color(0xFFFFFFFF),
-                                  unselectedLabelColor: const Color(0xFFCECECE),
+                              unselectedLabelColor: Theme.of(context).colorScheme.onSurfaceVariant,
                                   indicator: const BoxDecoration(),
                                   tabs: [
                                     Tab(
@@ -283,7 +283,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                           alignment: Alignment.center,
                                           color: selectedIndex == 0
                                               ? const Color(0xFFFFB052)
-                                              : const Color(0xFFEBEBEB),
+                                              : Theme.of(context).extension<AppColors>()!.disabledBackground,
                                           child: TextFontWidget.fontRegular(
                                               '동아리 소개 글'),
                                         ),
@@ -297,7 +297,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                             alignment: Alignment.center,
                                             color: selectedIndex == 1
                                                 ? const Color(0xFFFFB052)
-                                                : const Color(0xFFEBEBEB),
+                                                : Theme.of(context).extension<AppColors>()!.disabledBackground,
                                             child: TextFontWidget.fontRegular(
                                                 '동아리 모집 글'),
                                           ),
@@ -327,7 +327,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
                                             '소개글이 등록되지 않았습니다.',
                                             textAlign: TextAlign.center,
                                             fontSize: 14,
-                                            color: const Color(0xFFA1A1A1),
+                                            color: Theme.of(context).colorScheme.onSurfaceVariant,
                                             fontWeight: FontWeight.w400,
                                           ),
                                         ),
@@ -360,7 +360,7 @@ class _CircleScreenState extends ConsumerState<CircleScreen>
           openImageViewer(context, introPhotos, index);
         },
         child: Container(
-          color: Colors.grey,
+          color: Theme.of(context).extension<AppColors>()!.imagePlaceholder,
           child: Hero(
             tag: introPhotos[index],
             child: Image.network(
@@ -410,7 +410,7 @@ class _SliverAppBarDelegate extends SliverPersistentHeaderDelegate {
   Widget build(
       BuildContext context, double shrinkOffset, bool overlapsContent) {
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: _tabBar,
     );
   }

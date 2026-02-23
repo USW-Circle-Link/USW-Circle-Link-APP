@@ -117,7 +117,7 @@ class _RoundedTextFieldState extends State<RoundedTextField> {
         border: Border.all(
           color: _focusNode.hasFocus
               ? (widget.borderColor ?? const Color(0xffffB052))
-              : (widget.borderColor ?? const Color(0xFFDBDBDB)),
+              : (widget.borderColor ?? Theme.of(context).dividerColor),
           width: widget.borderWidth ?? 0,
         ),
         borderRadius: BorderRadius.only(

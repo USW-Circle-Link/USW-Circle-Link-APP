@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/models/notice_model.dart';
 import 'package:usw_circle_link/viewmodels/notice_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class NoticeList extends StatelessWidget {
@@ -21,6 +22,8 @@ class NoticeList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     final notices = noticeModel.data.toList();
     return notices.isNotEmpty
         ? ListView.separated(
@@ -45,7 +48,7 @@ class NoticeList extends StatelessWidget {
                         TextFontWidget.fontRegular(
                           notices[index].noticeTitle,
                           fontSize: 18,
-                          color: const Color(0xFF000000),
+                          color: theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w800,
                         ),
                         SizedBox(
@@ -57,7 +60,7 @@ class NoticeList extends StatelessWidget {
                             TextFontWidget.fontRegular(
                               notices[index].author,
                               fontSize: 14,
-                              color: const Color(0xFF767676),
+                              color: appColors.badgeText,
                               fontWeight: FontWeight.w400,
                             ),
                             TextFontWidget.fontRegular(
@@ -65,7 +68,7 @@ class NoticeList extends StatelessWidget {
                                   .parseDateTime()
                                   .getFormattedString(),
                               fontSize: 14,
-                              color: const Color(0xFF767676),
+                              color: appColors.badgeText,
                               fontWeight: FontWeight.w400,
                             ),
                           ],

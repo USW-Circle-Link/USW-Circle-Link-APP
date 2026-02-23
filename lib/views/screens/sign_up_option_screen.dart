@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
@@ -16,6 +17,8 @@ class SignUpOptionScreen extends ConsumerStatefulWidget {
 class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(),
@@ -31,7 +34,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                   text: "동아리 구하는 사람 모여라!\n미루지 말고 지금,",
                   style: TextFontWidget.fontRegularStyle(
                     fontSize: 12.0,
-                    color: const Color(0xFF282828),
+                    color: theme.colorScheme.onSurface,
                     fontWeight: FontWeight.w400,
                   ),
                   children: const [],
@@ -57,7 +60,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black12),
+                  border: Border.all(color: appColors.borderColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Column(
@@ -66,7 +69,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                     TextFontWidget.fontRegular(
                       '신규 회원',
                       fontSize: 16.0,
-                      color: Colors.black,
+                      color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                     ),
                     const SizedBox(height: 8.0),
@@ -74,7 +77,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                       '지금 동구라미에서 중앙동아리에 가입해 보세요!',
                       // '아직 중앙동아리 회원이 아니신가요?',
                       fontSize: 12.0,
-                      color: Colors.black54,
+                      color: appColors.subTextColor,
                       fontWeight: FontWeight.w400,
                     ),
                     const SizedBox(height: 16.0),
@@ -113,7 +116,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                 padding: const EdgeInsets.symmetric(
                     vertical: 16.0, horizontal: 16.0),
                 decoration: BoxDecoration(
-                  border: Border.all(color: Colors.black12),
+                  border: Border.all(color: appColors.borderColor),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: Column(
@@ -122,14 +125,14 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                     TextFontWidget.fontRegular(
                       '기존 동아리 회원',
                       fontSize: 16.0,
-                      color: Colors.black,
+                      color: theme.colorScheme.onSurface,
                       fontWeight: FontWeight.w700,
                     ),
                     const SizedBox(height: 8.0),
                     TextFontWidget.fontRegular(
                       '현재 중앙동아리 회원이신가요?',
                       fontSize: 12.0,
-                      color: Colors.black54,
+                      color: appColors.subTextColor,
                       fontWeight: FontWeight.w400,
                     ),
                     const SizedBox(height: 16.0),
@@ -175,7 +178,7 @@ class _SignUpOptionScreenState extends ConsumerState<SignUpOptionScreen> {
                   TextFontWidget.fontRegular(
                     '이미 회원이신가요? ',
                     fontSize: 12.0,
-                    color: const Color(0xFFA9A9A9),
+                    color: appColors.disabledText,
                     fontWeight: FontWeight.w400,
                   ),
                   TextButton(

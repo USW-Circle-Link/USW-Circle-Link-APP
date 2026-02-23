@@ -37,7 +37,7 @@ class CircleGroup extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: 10),
       padding: EdgeInsets.only(top: 16, bottom: 16),
-      color: Colors.white,
+      color: Theme.of(context).cardColor,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -47,7 +47,7 @@ class CircleGroup extends StatelessWidget {
               TextFontWidget.fontRegular(
                 department.key.toDepartment(),
                 fontSize: 16,
-                color: Colors.black,
+                color: Theme.of(context).textTheme.bodyLarge!.color,
                 fontWeight: FontWeight.w700,
               ),
             ],

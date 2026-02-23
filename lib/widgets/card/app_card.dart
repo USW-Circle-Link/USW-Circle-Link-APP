@@ -44,6 +44,10 @@ class AppCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final style = this.style.backgroundColor == Colors.white
+        ? this.style.copyWith(backgroundColor: Theme.of(context).cardColor)
+        : this.style;
+
     final decoration = BoxDecoration(
       color: style.backgroundColor,
       borderRadius: BorderRadius.circular(style.borderRadius),

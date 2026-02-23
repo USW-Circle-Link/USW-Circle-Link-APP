@@ -29,13 +29,20 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBgColor = style == DetailAppBarStyle.defaultStyle
+        ? Theme.of(context).appBarTheme.backgroundColor ?? style.backgroundColor
+        : style.backgroundColor;
+    final effectiveTitleColor = style == DetailAppBarStyle.defaultStyle
+        ? Theme.of(context).appBarTheme.foregroundColor ?? style.titleColor
+        : style.titleColor;
+
     // 제목이 없는 경우 (뒤로가기 버튼만)
     if (title == null) {
       return AppBar(
         scrolledUnderElevation: 0,
         toolbarHeight: style.toolbarHeight,
         elevation: 0.0,
-        backgroundColor: style.backgroundColor,
+        backgroundColor: effectiveBgColor,
         automaticallyImplyLeading: false,
         titleSpacing: 0.0,
         title: Padding(
@@ -46,6 +53,10 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
                 icon: SvgPicture.asset(
                   'assets/images/ic_back_arrow.svg',
+                  colorFilter: ColorFilter.mode(
+                    effectiveTitleColor,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ],
@@ -60,7 +71,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
       toolbarHeight: style.toolbarHeight,
       centerTitle: true,
       elevation: 0.0,
-      backgroundColor: style.backgroundColor,
+      backgroundColor: effectiveBgColor,
       automaticallyImplyLeading: false,
       titleSpacing: 0.0,
       title: Padding(
@@ -76,6 +87,10 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
                 onPressed: onBackPressed ?? () => Navigator.of(context).pop(),
                 icon: SvgPicture.asset(
                   'assets/images/ic_back_arrow.svg',
+                  colorFilter: ColorFilter.mode(
+                    effectiveTitleColor,
+                    BlendMode.srcIn,
+                  ),
                 ),
               ),
             ),
@@ -83,7 +98,7 @@ class DetailAppBar extends StatelessWidget implements PreferredSizeWidget {
             TextFontWidget.fontRegular(
               title!,
               fontSize: style.titleFontSize,
-              color: style.titleColor,
+              color: effectiveTitleColor,
               fontWeight: style.titleFontWeight,
             ),
             // 우측 영역 (액션 또는 빈 공간)

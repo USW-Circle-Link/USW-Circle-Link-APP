@@ -19,9 +19,13 @@ class AppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final effectiveBgColor = style == AppBarStyle.defaultStyle
+        ? Theme.of(context).appBarTheme.backgroundColor ?? style.backgroundColor
+        : style.backgroundColor;
+
     return Container(
       decoration: BoxDecoration(
-        color: style.backgroundColor,
+        color: effectiveBgColor,
       ),
       child: Padding(
         padding: style.padding,

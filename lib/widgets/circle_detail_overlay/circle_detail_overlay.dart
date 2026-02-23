@@ -8,6 +8,7 @@ import 'package:usw_circle_link/utils/extensions.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/floor_photo_view_model.dart';
 import 'package:usw_circle_link/viewmodels/user_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class CircleDetailOverlay extends ConsumerWidget {
@@ -26,11 +27,11 @@ class CircleDetailOverlay extends ConsumerWidget {
   });
 
   void _showFullScreenMap(BuildContext context, String floorPhotoPath) {
-    // 기존 팝업 닫기 후 지도 오버레이 표시// 기존 팝업 닫기
+    final appColors = Theme.of(context).extension<AppColors>()!;
 
     showDialog(
       context: context,
-      barrierDismissible: false, // 배경 클릭으로 닫히지 않게 설정
+      barrierDismissible: false,
       builder: (BuildContext context) {
         return Stack(
           children: [
@@ -38,14 +39,14 @@ class CircleDetailOverlay extends ConsumerWidget {
               child: floorPhotoPath.isValidUrl
                   ? GestureDetector(
                       onTap: () {
-                        Navigator.of(context).pop(); // 지도 팝업 닫기
+                        Navigator.of(context).pop();
                       },
                       child: PhotoView(
                         imageProvider: NetworkImage(floorPhotoPath),
                         minScale: PhotoViewComputedScale.contained,
                         maxScale: PhotoViewComputedScale.covered * 2.0,
                         backgroundDecoration: BoxDecoration(
-                          color: Colors.black54,
+                          color: appColors.overlayBarrier,
                         ),
                       ),
                     )
@@ -64,12 +65,12 @@ class CircleDetailOverlay extends ConsumerWidget {
               right: 20.0,
               child: GestureDetector(
                 onTap: () {
-                  Navigator.of(context).pop(); // 지도 팝업 닫기
+                  Navigator.of(context).pop();
                 },
-                child: const CircleAvatar(
+                child: CircleAvatar(
                   radius: 20.0,
-                  backgroundColor: Colors.black54,
-                  child: Icon(Icons.close, color: Colors.white),
+                  backgroundColor: appColors.overlayBarrier,
+                  child: const Icon(Icons.close, color: Colors.white),
                 ),
               ),
             ),
@@ -81,6 +82,8 @@ class CircleDetailOverlay extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
     final state = circleRoom != null
         ? ref.watch(floorPhotoViewModelProvider(circleRoom!))
         : AsyncData(null);
@@ -94,10 +97,10 @@ class CircleDetailOverlay extends ConsumerWidget {
             minHeight: 100,
           ),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: theme.cardColor,
             boxShadow: [
               BoxShadow(
-                color: Colors.black26,
+                color: appColors.shadowColor,
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               ),
@@ -110,7 +113,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                 decoration: BoxDecoration(
                     border: Border(
                         bottom: BorderSide(
-                  color: const Color(0xFF767676),
+                  color: appColors.badgeText,
                   width: 1,
                 ))),
                 child: Row(
@@ -122,7 +125,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                       '동아리 정보',
                       fontSize: 13,
                       fontWeight: FontWeight.w700,
-                      color: Colors.black,
+                      color: theme.colorScheme.onSurface,
                     ),
                     SizedBox(
                       width: 90,
@@ -130,7 +133,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                     InkWell(
                       onTap: onClose,
                       child:
-                          const Icon(Icons.close, size: 20, color: Colors.grey),
+                          Icon(Icons.close, size: 20, color: appColors.imagePlaceholder),
                     ),
                   ],
                 ),
@@ -154,7 +157,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                    color: const Color(0xFF767676),
+                    color: appColors.badgeText,
                     width: 0.5,
                   ))),
                   child: Row(
@@ -200,7 +203,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                    color: const Color(0xFF767676),
+                    color: appColors.badgeText,
                     width: 0.5,
                   ))),
                   child: Row(
@@ -254,7 +257,7 @@ class CircleDetailOverlay extends ConsumerWidget {
                   decoration: BoxDecoration(
                       border: Border(
                           bottom: BorderSide(
-                    color: const Color(0xFF767676),
+                    color: appColors.badgeText,
                     width: 0.5,
                   ))),
                   child: Row(
