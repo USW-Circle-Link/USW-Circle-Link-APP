@@ -174,6 +174,13 @@ Future<void> setupFlutterNotifications() async {
       provisional: true,
       sound: true,
     );
+  } else {
+    // 웹: 브라우저 알림 권한 요청 (첫 로딩 시 "알림 허용" 프롬프트 표시)
+    await FirebaseMessaging.instance.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
   }
   // 셋팅flag 설정
   isFlutterLocalNotificationsInitialized = true;

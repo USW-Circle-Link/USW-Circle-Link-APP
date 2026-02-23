@@ -9,6 +9,8 @@ import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/result.dart';
+import 'package:usw_circle_link/utils/web_notification/web_notification_stub.dart'
+    if (dart.library.html) 'package:usw_circle_link/utils/web_notification/web_notification_web.dart';
 
 final firebaseCloudMessagingViewModelProvider =
     StateNotifierProvider<FirebaseCloudMessagingViewModel, List<String>>((ref) {
@@ -73,6 +75,12 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
             presentSound: true,
           ),
         ),
+      );
+    } else if (notification != null && kIsWeb) {
+      // 웹 브라우저 Notification API로 포그라운드 알림 표시
+      showWebNotification(
+        notification.title ?? '동구라미',
+        notification.body ?? '',
       );
     }
     final notificationBody = message.notification?.body ?? 'No message body';

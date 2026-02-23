@@ -79,15 +79,13 @@ class UserViewModel extends ChangeNotifier {
       final result = await _profileRepository.getProfile();
       switch (result) {
         case Ok<ProfileData>():
-          // FCM Token 전송 (모바일만)
-          if (!kIsWeb) {
-            final fcmResult = await _fcmRepository.sendToken();
-            switch (fcmResult) {
-              case Ok():
-                logger.d('자동 로그인 후 FCM 토큰 전송 성공');
-              case Error():
-                logger.w('자동 로그인 후 FCM 토큰 전송 실패: ${fcmResult.error}');
-            }
+          // FCM Token 전송
+          final fcmResult = await _fcmRepository.sendToken();
+          switch (fcmResult) {
+            case Ok():
+              logger.d('자동 로그인 후 FCM 토큰 전송 성공');
+            case Error():
+              logger.w('자동 로그인 후 FCM 토큰 전송 실패: ${fcmResult.error}');
           }
           logger.d('로그인 정보 확인 성공! : ${result.value}');
 
@@ -134,16 +132,14 @@ class UserViewModel extends ChangeNotifier {
   /// 로그인 처리
   Future<Result<void>> _login(String id, String password) async {
     try {
-      // FCM Token 가져오기 (모바일: 실제 토큰, 웹: 빈 문자열)
+      // FCM Token 가져오기
       String token = '';
-      if (!kIsWeb) {
-        final fcmResult = await _fcmRepository.getToken();
-        switch (fcmResult) {
-          case Ok(:final value):
-            token = value;
-          case Error():
-            logger.w('FCM 토큰 가져오기 실패, 빈 문자열로 로그인 시도');
-        }
+      final fcmResult = await _fcmRepository.getToken();
+      switch (fcmResult) {
+        case Ok(:final value):
+          token = value;
+        case Error():
+          logger.w('FCM 토큰 가져오기 실패, 빈 문자열로 로그인 시도');
       }
       logger.d('FCM Token - $token');
 

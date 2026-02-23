@@ -6,6 +6,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/dio/Dio.dart';
+import 'package:usw_circle_link/firebase_options.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 import '../utils/result.dart';
@@ -30,15 +31,13 @@ class FCMRepository {
 
   Future<Result<String>> getToken() async {
     try {
-      if (kIsWeb) {
-        return Result.error(FCMTokenNotFoundException());
-      }
-
       if (Firebase.apps.isEmpty) {
         await Firebase.initializeApp();
       }
 
-      final token = await FirebaseMessaging.instance.getToken();
+      final token = await FirebaseMessaging.instance.getToken(
+        vapidKey: kIsWeb ? DefaultFirebaseOptions.webVapidKey : null,
+      );
 
       if (token != null) {
         return Result.ok(token);
@@ -96,11 +95,6 @@ class FCMRepository {
   StreamSubscription<String> listenTokenRefresh({
     required Future<void> Function(String token) onRefresh,
   }) {
-    if (kIsWeb) {
-      logger.d('웹 환경에서는 FCM 토큰 갱신 리스너를 등록하지 않습니다');
-      return const Stream<String>.empty().listen((_) {});
-    }
-
     return FirebaseMessaging.instance.onTokenRefresh.listen(
       (newToken) async {
         logger.d('FCM 토큰 갱신 감지: $newToken');

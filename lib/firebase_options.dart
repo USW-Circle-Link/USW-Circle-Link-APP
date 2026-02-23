@@ -73,4 +73,7 @@ class DefaultFirebaseOptions {
     measurementId: 'G-5MR6EEZGX0',
   );
 
+  /// VAPID key for Firebase Cloud Messaging on Web
+  static const String webVapidKey =
+      'BLO8TetGsmaPq_Znd4-6VtZulmeh-lZz0gIiDao--LzP6tFY4AUTOcyAPAS70NyqR7hPPESVjnjWpb7LF_Pe3-c';
 }
