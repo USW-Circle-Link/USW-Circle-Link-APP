@@ -12,14 +12,14 @@ import 'package:usw_circle_link/utils/result.dart';
 import 'package:usw_circle_link/utils/command.dart';
 
 final firebaseCloudMessagingViewModelProvider =
-    StateNotifierProvider<FirebaseCloudMessagingViewModel, List<String>>((ref) {
+    StateNotifierProvider<FirebaseCloudMessagingViewModel, AsyncValue<List<String>>>((ref) {
   final fcmRepository = ref.read(fcmRepositoryProvider);
   return FirebaseCloudMessagingViewModel(
     fcmRepository: fcmRepository,
   );
 });
 
-class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
+class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<String>>> {
   final FCMRepository fcmRepository;
   StreamSubscription<String>? _tokenRefreshSubscription;
 
@@ -27,7 +27,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   FirebaseCloudMessagingViewModel({
     required this.fcmRepository,
-  }) : super([]) {
+  }) : super(const AsyncValue.loading()) {
     tokenRefreshCommand = Command1(_refreshTokenAction);
     Future.wait([
       initializeFCM(),
@@ -49,7 +49,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   Future<void> initializeFCM() async {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
     
-    final result = fcmRepository.listenTokenRefresh(
+    final result = await fcmRepository.listenTokenRefresh(
       onRefresh: (token) async {
         await tokenRefreshCommand.execute(token);
       },
@@ -119,25 +119,31 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
 
   // SharedPreferences에서 알림 목록을 불러오는 메서드
   Future<void> loadNotifications() async {
-    state = [];
-    final prefs = await SharedPreferences.getInstance();
-    state = prefs.getStringList('notifications') ?? [];
+    state = const AsyncValue.loading();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final notifications = prefs.getStringList('notifications') ?? [];
+      state = AsyncValue.data(notifications);
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
   }
 
   // 알림을 추가하고 SharedPreferences에 저장하는 메서드
   Future<void> addNotification(String notification) async {
-    if (state.contains(notification)) {
+    if (state.value == null || state.value!.contains(notification)) {
       return;
     }
-    final updatedState = [...state, notification];
-    state = updatedState;
+    final updatedState = [...state.value!, notification];
+    state = AsyncValue.data(updatedState);
     await _saveNotifications(updatedState);
   }
 
   // 알림을 삭제하고 SharedPreferences에 저장하는 메서드
   Future<void> removeNotification(int index) async {
-    final updatedState = [...state]..removeAt(index);
-    state = updatedState;
+    if (state.value == null) return;
+    final updatedState = [...state.value!]..removeAt(index);
+    state = AsyncValue.data(updatedState);
     await _saveNotifications(updatedState);
   }
 

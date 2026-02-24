@@ -56,17 +56,26 @@ class NotificationOverlayState extends ConsumerState<NotificationOverlay> {
                     ),
                   ),
                   Expanded(
-                    child: MediaQuery.removePadding(
-                      context: context,
-                      removeTop: true,
-                      child: ListView.builder(
-                        itemCount: notifications.length,
-                        itemBuilder: (context, index) {
-                          return CloudMessaging(
-                            text: notifications[index],
-                            index: index,
-                          );
-                        },
+                    child: notifications.when(
+                      data: (list) => MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return CloudMessaging(
+                              text: list[index],
+                              index: index,
+                            );
+                          },
+                        ),
+                      ),
+                      loading: () => const Center(child: CircularProgressIndicator()),
+                      error: (err, st) => Center(
+                        child: TextFontWidget.fontRegular(
+                          "알림을 불러오지 못했습니다",
+                          fontSize: 14,
+                        ),
                       ),
                     ),
                   ),

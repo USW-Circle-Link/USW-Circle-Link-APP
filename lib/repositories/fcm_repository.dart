@@ -126,12 +126,16 @@ class FCMRepository {
 
   /// FCM 토큰 갱신 리스너
   /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
-  Result<StreamSubscription<String>> listenTokenRefresh({
+  Future<Result<StreamSubscription<String>>> listenTokenRefresh({
     required Future<void> Function(String token) onRefresh,
-  }) {
+  }) async {
     if (kIsWeb) {
       logger.d('웹 환경에서는 FCM 토큰 갱신 리스너를 등록하지 않습니다');
       return Result.ok(const Stream<String>.empty().listen((_) {}));
+    }
+
+    if (Firebase.apps.isEmpty) {
+      await Firebase.initializeApp();
     }
 
     try {

@@ -194,8 +194,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       builder: (context) => Scaffold(
         backgroundColor: theme.scaffoldBackgroundColor,
         resizeToAvoidBottomInset: false,
-      appBar: const DetailAppBar(title: '내 정보 수정'),
-      body: state.when(
+        appBar: const DetailAppBar(title: '내 정보 수정'),
+        body: state.when(
         data: (data) {
           return SingleChildScrollView(
             child: Padding(
@@ -481,7 +481,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(32, 12, 32, 12),
-          decoration: BoxDecoration(color: theme.cardColor),
+          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainer),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [

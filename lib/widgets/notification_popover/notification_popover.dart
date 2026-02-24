@@ -61,28 +61,40 @@ class NotificationPopoverContent extends ConsumerWidget {
             ),
           ),
           Expanded(
-            child: notifications.isEmpty
-                ? Center(
-                    child: TextFontWidget.fontRegular(
-                      "알림이 없습니다",
-                      fontSize: style.itemFontSize,
-                      color: style.emptyMessageColor,
-                    ),
-                  )
-                : MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: ListView.builder(
-                      itemCount: notifications.length,
-                      itemBuilder: (context, index) {
-                        return _NotificationItem(
-                          text: notifications[index],
-                          index: index,
-                          style: style,
-                        );
-                      },
-                    ),
-                  ),
+            child: notifications.when(
+              data: (list) {
+                return list.isEmpty
+                    ? Center(
+                        child: TextFontWidget.fontRegular(
+                          "알림이 없습니다",
+                          fontSize: style.itemFontSize,
+                          color: style.emptyMessageColor,
+                        ),
+                      )
+                    : MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return _NotificationItem(
+                              text: list[index],
+                              index: index,
+                              style: style,
+                            );
+                          },
+                        ),
+                      );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, st) => Center(
+                child: TextFontWidget.fontRegular(
+                  "알림을 불러오지 못했습니다",
+                  fontSize: style.itemFontSize,
+                  color: style.emptyMessageColor,
+                ),
+              ),
+            ),
           ),
         ],
       ),
