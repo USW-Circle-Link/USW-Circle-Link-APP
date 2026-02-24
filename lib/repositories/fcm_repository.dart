@@ -126,30 +126,36 @@ class FCMRepository {
 
   /// FCM 토큰 갱신 리스너
   /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
-  StreamSubscription<String> listenTokenRefresh({
+  Result<StreamSubscription<String>> listenTokenRefresh({
     required Future<void> Function(String token) onRefresh,
   }) {
     if (kIsWeb) {
       logger.d('웹 환경에서는 FCM 토큰 갱신 리스너를 등록하지 않습니다');
-      return const Stream<String>.empty().listen((_) {});
+      return Result.ok(const Stream<String>.empty().listen((_) {}));
     }
 
-    return FirebaseMessaging.instance.onTokenRefresh.listen(
-      (newToken) async {
-        final redacted = newToken.length > 10
-            ? '${newToken.substring(0, 6)}...${newToken.substring(newToken.length - 4)}'
-            : '***';
-        logger.d('FCM 토큰 갱신 감지: $redacted');
-        try {
-          await onRefresh(newToken);
-        } catch (e) {
-          logger.e('FCM 토큰 갱신 콜백 오류 (token: $redacted): $e');
-        }
-      },
-      onError: (Object error) {
-        logger.e('FCM 토큰 갱신 스트림 오류: $error');
-      },
-    );
+    try {
+      final subscription = FirebaseMessaging.instance.onTokenRefresh.listen(
+        (newToken) async {
+          final redacted = newToken.length > 10
+              ? '${newToken.substring(0, 6)}...${newToken.substring(newToken.length - 4)}'
+              : '***';
+          logger.d('FCM 토큰 갱신 감지: $redacted');
+          try {
+            await onRefresh(newToken);
+          } catch (e) {
+            logger.e('FCM 토큰 갱신 콜백 오류 (token: $redacted): $e');
+          }
+        },
+        onError: (Object error) {
+          logger.e('FCM 토큰 갱신 스트림 오류: $error');
+        },
+      );
+      return Result.ok(subscription);
+    } on Exception catch (e) {
+      logger.e('FCM 토큰 갱신 리스너 등록 실패: $e');
+      return Result.error(e);
+    }
   }
 }
 

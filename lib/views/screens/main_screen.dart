@@ -170,13 +170,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final theme = Theme.of(context);
 
     return FlutterWebFrame(
-      maximumSize: const Size(475, 812),
-      enabled: kIsWeb,
       builder: (context) {
         return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: theme.scaffoldBackgroundColor,
-      resizeToAvoidBottomInset: false,
+          key: _scaffoldKey,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
@@ -319,6 +317,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       ),
     );
       },
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
     );
   }
 

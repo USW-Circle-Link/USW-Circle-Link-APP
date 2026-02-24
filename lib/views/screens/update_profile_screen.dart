@@ -191,11 +191,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     final theme = Theme.of(context);
 
     return FlutterWebFrame(
-      maximumSize: const Size(475, 812),
-      enabled: kIsWeb,
       builder: (context) => Scaffold(
-      backgroundColor: theme.scaffoldBackgroundColor,
-      resizeToAvoidBottomInset: false,
+        backgroundColor: theme.scaffoldBackgroundColor,
+        resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(title: '내 정보 수정'),
       body: state.when(
         data: (data) {
@@ -551,6 +549,8 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
         ),
       ),
     ),
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
     );
   }
 

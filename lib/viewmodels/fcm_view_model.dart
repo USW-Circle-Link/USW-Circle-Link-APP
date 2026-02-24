@@ -9,6 +9,7 @@ import 'package:usw_circle_link/main.dart';
 import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/result.dart';
+import 'package:usw_circle_link/utils/command.dart';
 
 final firebaseCloudMessagingViewModelProvider =
     StateNotifierProvider<FirebaseCloudMessagingViewModel, List<String>>((ref) {
@@ -22,33 +23,50 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
   final FCMRepository fcmRepository;
   StreamSubscription<String>? _tokenRefreshSubscription;
 
+  late final Command1<void, String> tokenRefreshCommand;
+
   FirebaseCloudMessagingViewModel({
     required this.fcmRepository,
   }) : super([]) {
+    tokenRefreshCommand = Command1(_refreshTokenAction);
     Future.wait([
       initializeFCM(),
       loadNotifications(),
     ]);
   }
 
+  Future<Result<void>> _refreshTokenAction(String token) async {
+    final result = await fcmRepository.sendTokenWith(token);
+    switch (result) {
+      case Ok():
+        logger.d('갱신된 FCM 토큰 전송 성공');
+      case Error(:final error):
+        logger.e('갱신된 FCM 토큰 전송 실패: $error');
+    }
+    return result;
+  }
+
   Future<void> initializeFCM() async {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
-    _tokenRefreshSubscription = fcmRepository.listenTokenRefresh(
+    
+    final result = fcmRepository.listenTokenRefresh(
       onRefresh: (token) async {
-        final result = await fcmRepository.sendTokenWith(token);
-        switch (result) {
-          case Ok():
-            logger.d('갱신된 FCM 토큰 전송 성공');
-          case Error(:final error):
-            logger.e('갱신된 FCM 토큰 전송 실패: $error');
-        }
+        await tokenRefreshCommand.execute(token);
       },
     );
+    
+    switch (result) {
+      case Ok(:final value):
+        _tokenRefreshSubscription = value;
+      case Error(:final error):
+        logger.e('FCM 토큰 갱신 리스너 등록 실패: $error');
+    }
   }
 
   @override
   void dispose() {
     _tokenRefreshSubscription?.cancel();
+    tokenRefreshCommand.dispose();
     super.dispose();
   }
 
