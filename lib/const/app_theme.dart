@@ -12,7 +12,7 @@ class AppTheme {
   static const Color errorColor = Color(0xFFE53935);
 
   // ─── 라이트 테마 ───
-  static ThemeData get light => ThemeData(
+  static final ThemeData light = ThemeData(
         brightness: Brightness.light,
         primaryColor: primaryColor,
         scaffoldBackgroundColor: Colors.white,
@@ -65,7 +65,7 @@ class AppTheme {
 
   // ─── 다크 테마 ───
   // Material Design 3 기반 다크 테마 (눈에 편한 표준 색상)
-  static ThemeData get dark => ThemeData(
+  static final ThemeData dark = ThemeData(
         brightness: Brightness.dark,
         primaryColor: primaryColor,
         scaffoldBackgroundColor: const Color(0xFF121212),

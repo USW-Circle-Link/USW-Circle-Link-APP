@@ -40,8 +40,14 @@ class NoticeDetailData with _$NoticeDetailData {
     List<String>? noticePhotos,
   }) = _NoticeDetailData;
 
-  factory NoticeDetailData.fromJson(Map<String, dynamic> json) =>
-      _$NoticeDetailDataFromJson(json);
+  factory NoticeDetailData.fromJson(Map<String, dynamic> json) {
+    // 레거시 키 'adminName' 지원
+    final merged = Map<String, dynamic>.from(json);
+    if (merged['authorName'] == null && merged['adminName'] != null) {
+      merged['authorName'] = merged['adminName'];
+    }
+    return _$NoticeDetailDataFromJson(merged);
+  }
 }
 
 @freezed

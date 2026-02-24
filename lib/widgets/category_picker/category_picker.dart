@@ -92,7 +92,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                     icon: SvgPicture.asset(
                       'assets/images/ic_close.svg',
                       colorFilter: ColorFilter.mode(
-                        theme.iconTheme.color!,
+                        theme.iconTheme.color ?? theme.colorScheme.onSurface,
                         BlendMode.srcIn,
                       ),
                     ),
@@ -117,7 +117,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
                     '관심 카테고리',
                     fontSize: 14,
                     fontWeight: FontWeight.w700,
-                    color: theme.textTheme.bodyLarge!.color,
+                    color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                   )
                 ],
               ),
@@ -178,7 +178,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       showCheckmark: false,
       selectedColor: theme.colorScheme.primary,
       labelStyle: TextFontWidget.fontRegularStyle(
-        color: isSelected ? Colors.white : theme.textTheme.bodyMedium!.color,
+        color: isSelected ? Colors.white : (theme.textTheme.bodyMedium?.color ?? theme.colorScheme.onSurface),
         fontWeight: FontWeight.w300,
       ),
       backgroundColor: theme.cardColor,
@@ -186,7 +186,7 @@ class _CategoryPickerState extends ConsumerState<CategoryPicker> {
       shape: RoundedRectangleBorder(
         side: BorderSide(
             color: isSelected
-                ? Color(0xFFFF9A21)
+                ? theme.colorScheme.primary
                 : appColors.borderColor),
         borderRadius: BorderRadius.all(Radius.circular(15)),
       ),

@@ -39,7 +39,7 @@ class TokenInterceptor extends Interceptor {
           logger.d("토큰 조회 실패 - ${result.error}");
           return handler.resolve(
             Response(requestOptions: options, statusCode: 401, data: {
-              'message': "저장소에 토큰이 존재하지 않습니다",
+              'message': tokenNotFoundMessage,
               'code': "USR-F401",
             }),
           );

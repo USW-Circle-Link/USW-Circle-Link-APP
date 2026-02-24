@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
@@ -188,7 +190,10 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
     final appColors = Theme.of(context).extension<AppColors>()!;
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(title: '내 정보 수정'),
@@ -545,6 +550,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
           ),
         ),
       ),
+    ),
     );
   }
 

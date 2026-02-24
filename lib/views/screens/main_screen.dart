@@ -6,6 +6,8 @@ import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/category_filter_button/category_filter_button_styles.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import '../../const/analytics_const.dart';
 import '../../models/category_model.dart';
 import '../../models/circle_list_model.dart';
@@ -50,10 +52,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   void initState() {
     super.initState();
     // 알림 클릭시 (백그라운드 → 포그라운드)
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+    if (!kIsWeb) {
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+      _checkInitialMessage();
+    }
     _checkAndShowNoticeDialog();
-    // 앱 완전 종료 상태에서 알림 탭으로 열었을 때 (Cold start)
-    _checkInitialMessage();
   }
 
   Future<void> _checkInitialMessage() async {
@@ -166,7 +169,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     final appColors = Theme.of(context).extension<AppColors>()!;
     final theme = Theme.of(context);
 
-    return Scaffold(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) {
+        return Scaffold(
       key: _scaffoldKey,
       backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
@@ -310,6 +317,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         ],
       ),
+    );
+      },
     );
   }
 

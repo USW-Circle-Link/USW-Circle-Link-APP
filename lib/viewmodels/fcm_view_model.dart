@@ -35,7 +35,13 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<List<String>> {
     FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
     _tokenRefreshSubscription = fcmRepository.listenTokenRefresh(
       onRefresh: (token) async {
-        await sendToken();
+        final result = await fcmRepository.sendTokenWith(token);
+        switch (result) {
+          case Ok():
+            logger.d('갱신된 FCM 토큰 전송 성공');
+          case Error(:final error):
+            logger.e('갱신된 FCM 토큰 전송 실패: $error');
+        }
       },
     );
   }

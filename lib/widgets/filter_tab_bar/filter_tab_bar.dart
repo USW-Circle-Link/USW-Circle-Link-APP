@@ -45,7 +45,7 @@ class FilterTabBar extends StatelessWidget {
   }) {
     final theme = Theme.of(context);
     final selectedColor = style == FilterTabBarStyle.defaultStyle
-        ? theme.textTheme.bodyLarge!.color!
+        ? theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurfaceVariant
         : style.selectedTextColor;
     final unselectedColor = style == FilterTabBarStyle.defaultStyle
         ? theme.colorScheme.onSurfaceVariant

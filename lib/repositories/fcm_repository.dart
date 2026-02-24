@@ -91,6 +91,39 @@ class FCMRepository {
     }
   }
 
+  /// 제공된 토큰을 직접 전송
+  Future<Result<void>> sendTokenWith(String token) async {
+    try {
+      final body = {
+        'fcmToken': token,
+      };
+
+      final response = await dio.patch(
+        '/clubs/fcmtoken',
+        data: body,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
+
+      logger.d(response.data);
+
+      logger.d(
+          'sendFCMTokenWith - ${response.realUri} 로 요청 성공! (${response.statusCode})');
+
+      if (response.statusCode == 200) {
+        return Result.ok(null);
+      } else {
+        return Result.error(Exception('FCM 토큰 전송 실패'));
+      }
+    } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
   /// FCM 토큰 갱신 리스너
   /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
   StreamSubscription<String> listenTokenRefresh({
@@ -103,11 +136,14 @@ class FCMRepository {
 
     return FirebaseMessaging.instance.onTokenRefresh.listen(
       (newToken) async {
-        logger.d('FCM 토큰 갱신 감지: $newToken');
+        final redacted = newToken.length > 10
+            ? '${newToken.substring(0, 6)}...${newToken.substring(newToken.length - 4)}'
+            : '***';
+        logger.d('FCM 토큰 갱신 감지: $redacted');
         try {
           await onRefresh(newToken);
         } catch (e) {
-          logger.e('FCM 토큰 갱신 콜백 오류 (token: $newToken): $e');
+          logger.e('FCM 토큰 갱신 콜백 오류 (token: $redacted): $e');
         }
       },
       onError: (Object error) {

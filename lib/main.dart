@@ -191,12 +191,17 @@ final upgrader = Upgrader(
 );
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
-class CircleLink extends ConsumerWidget {
+class CircleLink extends ConsumerStatefulWidget {
   const CircleLink({super.key});
 
-
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<CircleLink> createState() => _CircleLinkState();
+}
+
+class _CircleLinkState extends ConsumerState<CircleLink> {
+  @override
+  void initState() {
+    super.initState();
     if (!kIsWeb) {
       const MethodChannel platform = MethodChannel('com.usw.circle_link/notifications');
       platform.setMethodCallHandler((call) async {
@@ -213,6 +218,10 @@ class CircleLink extends ConsumerWidget {
         }
       });
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final themeMode = ref.watch(themeModeProvider);
     final isDark = themeMode == ThemeMode.dark ||
         (themeMode == ThemeMode.system &&
