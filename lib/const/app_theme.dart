@@ -60,6 +60,17 @@ class AppTheme {
             borderRadius: BorderRadius.circular(15),
           ),
         ),
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) return primaryColor;
+            return Colors.transparent;
+          }),
+          checkColor: WidgetStateProperty.all(Colors.white),
+          side: const BorderSide(color: Color(0xFFDBDBDB), width: 1.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2),
+          ),
+        ),
         extensions: const [AppColors.light],
       );
 
@@ -111,6 +122,17 @@ class AppTheme {
           side: const BorderSide(color: Color(0xFF3C3C3C)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15),
+          ),
+        ),
+        checkboxTheme: CheckboxThemeData(
+          fillColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) return primaryColor;
+            return Colors.transparent;
+          }),
+          checkColor: WidgetStateProperty.all(Colors.white),
+          side: const BorderSide(color: Color(0xFFE8E8E8), width: 1.5),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(2),
           ),
         ),
         extensions: const [AppColors.dark],

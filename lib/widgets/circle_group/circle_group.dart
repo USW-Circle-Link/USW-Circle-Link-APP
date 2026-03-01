@@ -34,41 +34,54 @@ class CircleGroup extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 10),
-      padding: EdgeInsets.only(top: 16, bottom: 16),
-      color: Theme.of(context).cardColor,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
+    final theme = Theme.of(context);
+    final isDark = theme.brightness == Brightness.dark;
+    // 다크모드: 섹션 배경 검은색(스캐폴드 배경) 통일 / 라이트: 카드색
+    final sectionColor = isDark ? theme.scaffoldBackgroundColor : theme.cardColor;
+    // 구분선: 다크모드 얇은 어두운 회색, 라이트모드 밝은 회색
+    final dividerColor = theme.dividerColor;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Container(
+          padding: const EdgeInsets.only(top: 16, bottom: 16),
+          color: sectionColor,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              SizedBox(width: 24),
-              TextFontWidget.fontRegular(
-                department.key.toDepartment(),
-                fontSize: 16,
-                color: Theme.of(context).textTheme.bodyLarge!.color,
-                fontWeight: FontWeight.w700,
+              Row(
+                children: [
+                  const SizedBox(width: 24),
+                  TextFontWidget.fontRegular(
+                    department.key.toDepartment(),
+                    fontSize: 16,
+                    color: theme.textTheme.bodyLarge!.color,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              SizedBox(
+                height: 204,
+                child: ListView.builder(
+                  padding: const EdgeInsets.only(left: 24, right: 16),
+                  scrollDirection: Axis.horizontal,
+                  itemCount: department.value.length,
+                  itemBuilder: (context, index) {
+                    return CircleItem(
+                      circle: department.value[index],
+                      onItemClicked: onItemClicked,
+                    );
+                  },
+                ),
               ),
             ],
           ),
-          SizedBox(height: 8), // 텍스트와 리스트 사이에 여백 추가
-          SizedBox(
-            height: 204, // ListView의 고정 높이 설정
-            child: ListView.builder(
-              padding: EdgeInsets.only(left: 24, right: 16),
-              scrollDirection: Axis.horizontal,
-              itemCount: department.value.length,
-              itemBuilder: (context, index) {
-                return CircleItem(
-                  circle: department.value[index],
-                  onItemClicked: onItemClicked,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
+        ),
+        Divider(height: 1, thickness: 1, color: dividerColor),
+        const SizedBox(height: 8),
+      ],
     );
   }
 }

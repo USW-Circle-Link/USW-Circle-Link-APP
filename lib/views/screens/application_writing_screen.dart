@@ -120,10 +120,6 @@ class _ApplicationWritingScreenState
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        side: BorderSide(width: 1),
-                        activeColor: accentColor,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         visualDensity: const VisualDensity(
                           horizontal: VisualDensity.minimumDensity,

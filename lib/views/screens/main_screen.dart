@@ -177,7 +177,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         children: [
           const SizedBox(height: 1),
           Container(
-            color: theme.cardColor,
+            color: theme.brightness == Brightness.dark
+                ? theme.scaffoldBackgroundColor
+                : theme.cardColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(

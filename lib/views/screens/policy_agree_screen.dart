@@ -46,10 +46,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   value: olderThan14YearsOld,
                   onChanged: (bool? value) {
@@ -98,8 +94,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
             Row(
               children: [
                 Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
                   value: privacyPolicyAgree,
                   onChanged: (bool? value) async {
                     final agree = await DialogManager.instance
@@ -114,8 +108,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     vertical: VisualDensity.minimumDensity,
                   ),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                 ),
                 const SizedBox(width: 12.0),
                 InkWell(
@@ -142,11 +134,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
               children: [
                 Checkbox(
                   value: personalInformationCollectionAndUsageAgreementAgree,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                   visualDensity: const VisualDensity(
                     horizontal: VisualDensity.minimumDensity,
                     vertical: VisualDensity.minimumDensity,

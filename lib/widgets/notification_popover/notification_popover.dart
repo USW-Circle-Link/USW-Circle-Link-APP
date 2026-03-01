@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'notification_popover_styles.dart';
@@ -44,20 +45,33 @@ class NotificationPopoverContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifications = ref.watch(firebaseCloudMessagingViewModelProvider);
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+    final effectiveStyle = style.copyWith(
+      backgroundColor: theme.cardColor,
+      headerColor: theme.colorScheme.onSurface,
+      itemColor: appColors.secondaryText,
+      closeIconColor: theme.colorScheme.onSurfaceVariant,
+      emptyMessageColor: theme.colorScheme.onSurfaceVariant,
+    );
 
-    return SizedBox(
-      width: style.width,
-      height: style.height,
+    return Container(
+      width: effectiveStyle.width,
+      height: effectiveStyle.height,
+      decoration: BoxDecoration(
+        color: effectiveStyle.backgroundColor,
+        borderRadius: BorderRadius.circular(effectiveStyle.borderRadius),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: style.headerPadding,
+            padding: effectiveStyle.headerPadding,
             child: TextFontWidget.fontRegular(
               "알림",
-              fontSize: style.headerFontSize,
-              fontWeight: style.headerFontWeight,
-              color: style.headerColor,
+              fontSize: effectiveStyle.headerFontSize,
+              fontWeight: effectiveStyle.headerFontWeight,
+              color: effectiveStyle.headerColor,
             ),
           ),
           Expanded(
@@ -67,8 +81,8 @@ class NotificationPopoverContent extends ConsumerWidget {
                     ? Center(
                         child: TextFontWidget.fontRegular(
                           "알림이 없습니다",
-                          fontSize: style.itemFontSize,
-                          color: style.emptyMessageColor,
+                          fontSize: effectiveStyle.itemFontSize,
+                          color: effectiveStyle.emptyMessageColor,
                         ),
                       )
                     : MediaQuery.removePadding(
@@ -80,7 +94,7 @@ class NotificationPopoverContent extends ConsumerWidget {
                             return _NotificationItem(
                               text: list[index],
                               index: index,
-                              style: style,
+                              style: effectiveStyle,
                             );
                           },
                         ),
@@ -90,8 +104,8 @@ class NotificationPopoverContent extends ConsumerWidget {
               error: (e, st) => Center(
                 child: TextFontWidget.fontRegular(
                   "알림을 불러오지 못했습니다",
-                  fontSize: style.itemFontSize,
-                  color: style.emptyMessageColor,
+                  fontSize: effectiveStyle.itemFontSize,
+                  color: effectiveStyle.emptyMessageColor,
                 ),
               ),
             ),
