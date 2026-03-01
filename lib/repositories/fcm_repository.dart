@@ -51,43 +51,13 @@ class FCMRepository {
   }
 
   Future<Result<void>> sendToken() async {
-    try {
-      final tokenResult = await getToken();
-      switch (tokenResult) {
-        case Ok(:final value):
-          final token = value;
-          logger.d('FCM Token 불러오기 성공!');
-
-          final body = {
-            'fcmToken': token,
-          };
-
-          final response = await dio.patch(
-            '/clubs/fcmtoken',
-            data: body,
-            options: Options(
-              headers: {
-                'Content-Type': 'application/json',
-                'accessToken': 'true',
-              },
-            ),
-          );
-
-          logger.d(response.data);
-
-          logger.d(
-              'sendFCMToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-          if (response.statusCode == 200) {
-            return Result.ok(null);
-          } else {
-            return Result.error(Exception('FCM 토큰 전송 실패'));
-          }
-        case Error(:final error):
-          return Result.error(error);
-      }
-    } on Exception catch (e) {
-      return Result.error(e);
+    final tokenResult = await getToken();
+    switch (tokenResult) {
+      case Ok(:final value):
+        logger.d('FCM Token 불러오기 성공!');
+        return sendTokenWith(value);
+      case Error(:final error):
+        return Result.error(error);
     }
   }
 

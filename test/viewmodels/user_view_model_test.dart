@@ -12,16 +12,19 @@ void main() {
     late FakeAuthRepository authRepository;
     late FakeTokenRepository tokenRepository;
     late FakeProfileRepository profileRepository;
+    late FakeFCMRepository fcmRepository;
 
     setUp(() {
       authRepository = FakeAuthRepository();
       tokenRepository = FakeTokenRepository();
       profileRepository = FakeProfileRepository();
+      fcmRepository = FakeFCMRepository();
 
       viewModel = UserViewModel(
         authRepository: authRepository,
         tokenRepository: tokenRepository,
         profileRepository: profileRepository,
+        fcmRepository: fcmRepository,
       );
     });
 
@@ -31,7 +34,6 @@ void main() {
       await tokenRepository.saveTokens(
         accessToken: 'test_token',
         refreshToken: 'test_refresh',
-        clubUUIDs: ['club1'],
       );
 
       // When: getMe.execute() 호출 및 완료 대기
@@ -203,16 +205,19 @@ void main() {
     late FakeAuthRepository authRepository;
     late FakeTokenRepository tokenRepository;
     late FakeProfileRepository profileRepository;
+    late FakeFCMRepository fcmRepository;
 
     setUp(() {
       authRepository = FakeAuthRepository();
       tokenRepository = FakeTokenRepository();
       profileRepository = FakeProfileRepository();
+      fcmRepository = FakeFCMRepository();
 
       viewModel = UserViewModel(
         authRepository: authRepository,
         tokenRepository: tokenRepository,
         profileRepository: profileRepository,
+        fcmRepository: fcmRepository,
       );
     });
 
@@ -322,16 +327,19 @@ void main() {
     late FakeAuthRepository authRepository;
     late FakeTokenRepository tokenRepository;
     late FakeProfileRepository profileRepository;
+    late FakeFCMRepository fcmRepository;
 
     setUp(() {
       authRepository = FakeAuthRepository();
       tokenRepository = FakeTokenRepository();
       profileRepository = FakeProfileRepository();
+      fcmRepository = FakeFCMRepository();
 
       viewModel = UserViewModel(
         authRepository: authRepository,
         tokenRepository: tokenRepository,
         profileRepository: profileRepository,
+        fcmRepository: fcmRepository,
       );
     });
 

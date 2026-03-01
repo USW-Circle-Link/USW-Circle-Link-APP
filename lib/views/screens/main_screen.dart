@@ -1,9 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/category_filter_button/category_filter_button_styles.dart';
 import 'package:flutter/foundation.dart';
@@ -56,7 +54,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
       _checkInitialMessage();
     }
-    _checkAndShowNoticeDialog();
   }
 
   Future<void> _checkInitialMessage() async {
@@ -75,44 +72,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref
         .read(firebaseCloudMessagingViewModelProvider.notifier)
         .addNotification(message.notification?.body ?? '');
-  }
-
-  Future<void> _checkAndShowNoticeDialog() async {
-    final prefs = await SharedPreferences.getInstance();
-    final dontShowAgain = prefs.getBool('notice_dont_show_again') ?? false;
-
-    if (!dontShowAgain && mounted) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showNoticeDialog();
-      });
-    }
-  }
-
-  void _showNoticeDialog() {
-    DialogManager.instance.showAlertDialog(
-      context: context,
-      title: '안내',
-      content:
-          '이전에 기존회원 가입을 하신 분들 중\n아이디/비밀번호 찾기 이후에도 로그인이 안 되시는 분들은\n[신규 회원가입] 후 자신이 속한 동아리에 지원해주세요.\n자세한 내용은 <공지사항>을 확인해 주세요.',
-      leftButtonText: '더 이상 보지 않기',
-      leftButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: Theme.of(context).extension<AppColors>()!.disabledText,
-        fontWeight: FontWeight.w700,
-        fontSize: 16,
-      ),
-      rightButtonText: '확인',
-      rightButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: Theme.of(context).extension<AppColors>()!.linkColor,
-        fontWeight: FontWeight.w800,
-        fontSize: 16,
-      ),
-      onLeftButtonPressed: () async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('notice_dont_show_again', true);
-      },
-      onRightButtonPressed: () async {},
-      barrierDismissible: true,
-    );
   }
 
   @override

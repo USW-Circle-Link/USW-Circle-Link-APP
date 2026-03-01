@@ -22,6 +22,7 @@ final firebaseCloudMessagingViewModelProvider =
 class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<String>>> {
   final FCMRepository fcmRepository;
   StreamSubscription<String>? _tokenRefreshSubscription;
+  StreamSubscription<RemoteMessage>? _onMessageSubscription;
 
   late final Command1<void, String> tokenRefreshCommand;
 
@@ -29,10 +30,8 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<Stri
     required this.fcmRepository,
   }) : super(const AsyncValue.loading()) {
     tokenRefreshCommand = Command1(_refreshTokenAction);
-    Future.wait([
-      initializeFCM(),
-      loadNotifications(),
-    ]);
+    // loadNotifications 완료 후 포그라운드 리스너 등록 (race condition 방지)
+    loadNotifications().then((_) => initializeFCM());
   }
 
   Future<Result<void>> _refreshTokenAction(String token) async {
@@ -47,8 +46,8 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<Stri
   }
 
   Future<void> initializeFCM() async {
-    FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
-    
+    _onMessageSubscription = FirebaseMessaging.onMessage.listen(_firebaseMessagingHandler);
+
     final result = await fcmRepository.listenTokenRefresh(
       onRefresh: (token) async {
         await tokenRefreshCommand.execute(token);
@@ -66,6 +65,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<Stri
   @override
   void dispose() {
     _tokenRefreshSubscription?.cancel();
+    _onMessageSubscription?.cancel();
     tokenRefreshCommand.dispose();
     super.dispose();
   }
@@ -142,6 +142,7 @@ class FirebaseCloudMessagingViewModel extends StateNotifier<AsyncValue<List<Stri
   // 알림을 삭제하고 SharedPreferences에 저장하는 메서드
   Future<void> removeNotification(int index) async {
     if (state.value == null) return;
+    if (index < 0 || index >= state.value!.length) return;
     final updatedState = [...state.value!]..removeAt(index);
     state = AsyncValue.data(updatedState);
     await _saveNotifications(updatedState);

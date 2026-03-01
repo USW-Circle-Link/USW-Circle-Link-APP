@@ -8,7 +8,10 @@ import 'package:usw_circle_link/models/response/email_verification_response.dart
 import 'package:usw_circle_link/models/response/send_mail_response.dart';
 import 'package:usw_circle_link/models/token_data.dart';
 import 'package:usw_circle_link/models/login_data.dart';
+import 'dart:async';
+
 import 'package:usw_circle_link/repositories/auth_repository.dart';
+import 'package:usw_circle_link/repositories/fcm_repository.dart';
 import 'package:usw_circle_link/repositories/profile_repository.dart';
 import 'package:usw_circle_link/repositories/token_repository.dart';
 import 'package:usw_circle_link/utils/result.dart';
@@ -188,7 +191,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<FindPwModel>> sendCode({
+  Future<Result<FindPwResponse>> sendCode({
     required String account,
     required String email,
   }) async {
@@ -196,11 +199,7 @@ class FakeAuthRepository implements AuthRepository {
 
     if (shouldSucceed) {
       return Result.ok(
-        FindPwModel(
-          message: '인증 코드가 발송되었습니다',
-          data: 'fake-uuid',
-          type: FindPwModelType.sendCode,
-        ),
+        FindPwResponse(message: '인증 코드가 발송되었습니다', data: 'fake-uuid'),
       );
     } else {
       return Result.error(Exception('Send code failed'));
@@ -208,7 +207,7 @@ class FakeAuthRepository implements AuthRepository {
   }
 
   @override
-  Future<Result<FindPwModel>> verifyCode({
+  Future<Result<FindPwResponse>> verifyCode({
     required String code,
     required String uuid,
   }) async {
@@ -216,11 +215,7 @@ class FakeAuthRepository implements AuthRepository {
 
     if (shouldSucceed) {
       return Result.ok(
-        FindPwModel(
-          message: '인증 코드 확인 성공',
-          data: uuid,
-          type: FindPwModelType.verifyCode,
-        ),
+        FindPwResponse(message: '인증 코드 확인 성공', data: uuid),
       );
     } else {
       return Result.error(Exception('Verify code failed'));
@@ -246,14 +241,13 @@ class FakeTokenRepository implements TokenRepository {
   Future<Result<void>> saveTokens({
     required String accessToken,
     required String refreshToken,
-    required List<String> clubUUIDs,
   }) async {
     await Future.delayed(const Duration(milliseconds: 50));
 
     _storedToken = TokenData(
       accessToken: accessToken,
       refreshToken: refreshToken,
-      clubUUIDs: clubUUIDs,
+      clubUUIDs: const [],
     );
     return Result.ok(null);
   }
@@ -345,5 +339,44 @@ class FakeProfileRepository implements ProfileRepository {
 
   void setProfile(ProfileData profile) {
     _currentProfile = profile;
+  }
+}
+
+/// Fake FCMRepository for testing
+class FakeFCMRepository implements FCMRepository {
+  @override
+  final String basePath = '/club-leader';
+
+  @override
+  Dio get dio => Dio();
+
+  @override
+  Future<Result<String>> getToken() async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    return Result.ok('fake-fcm-token');
+  }
+
+  @override
+  Future<Result<void>> sendToken() async {
+    final r = await getToken();
+    switch (r) {
+      case Ok(:final value):
+        return sendTokenWith(value);
+      case Error(:final error):
+        return Result.error(error);
+    }
+  }
+
+  @override
+  Future<Result<void>> sendTokenWith(String token) async {
+    await Future.delayed(const Duration(milliseconds: 50));
+    return Result.ok(null);
+  }
+
+  @override
+  Future<Result<StreamSubscription<String>>> listenTokenRefresh({
+    required Future<void> Function(String token) onRefresh,
+  }) async {
+    return Result.ok(const Stream<String>.empty().listen((_) {}));
   }
 }

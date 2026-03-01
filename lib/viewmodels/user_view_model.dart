@@ -145,7 +145,10 @@ class UserViewModel extends ChangeNotifier {
             logger.w('FCM 토큰 가져오기 실패, 빈 문자열로 로그인 시도');
         }
       }
-      logger.d('FCM Token - $token');
+      final redacted = token.length > 10
+          ? '${token.substring(0, 6)}...${token.substring(token.length - 4)}'
+          : '***';
+      logger.d('FCM Token - $redacted');
 
       final result = await _authRepository.login(
         id: id,

@@ -203,6 +203,7 @@ class _CircleLinkState extends ConsumerState<CircleLink> {
   void initState() {
     super.initState();
     if (!kIsWeb) {
+      // 네이티브(iOS/Android)에서 동일한 채널명 사용 필요 (슬래시 사용)
       const MethodChannel platform = MethodChannel('com.usw.circle_link/notifications');
       platform.setMethodCallHandler((call) async {
         logger.d('setMethodCallHandler');

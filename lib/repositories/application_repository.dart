@@ -152,7 +152,7 @@ class ApplicationRepository {
         '/clubs/$clubUUID/applications',
         data: {
           'formId': formId,
-          'answers': answers,
+          'qnaList': answers,
         },
         options: Options(
           headers: {'accessToken': 'true'},
