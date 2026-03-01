@@ -1,6 +1,8 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -28,7 +30,10 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
   Widget build(BuildContext context) {
     final appColors = Theme.of(context).extension<AppColors>()!;
     final theme = Theme.of(context);
-    return Scaffold(
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
       appBar: const DetailAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -208,6 +213,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -350,6 +350,13 @@ class FakeFCMRepository implements FCMRepository {
   @override
   Dio get dio => Dio();
 
+  final StreamController<String> _tokenRefreshController =
+      StreamController<String>.broadcast();
+
+  /// Last token passed to [sendTokenWith] for test assertions.
+  String? get lastSentToken => _lastToken;
+  String? _lastToken;
+
   @override
   Future<Result<String>> getToken() async {
     await Future.delayed(const Duration(milliseconds: 50));
@@ -369,6 +376,8 @@ class FakeFCMRepository implements FCMRepository {
 
   @override
   Future<Result<void>> sendTokenWith(String token) async {
+    _lastToken = token;
+    _tokenRefreshController.add(token);
     await Future.delayed(const Duration(milliseconds: 50));
     return Result.ok(null);
   }
@@ -377,6 +386,8 @@ class FakeFCMRepository implements FCMRepository {
   Future<Result<StreamSubscription<String>>> listenTokenRefresh({
     required Future<void> Function(String token) onRefresh,
   }) async {
-    return Result.ok(const Stream<String>.empty().listen((_) {}));
+    return Result.ok(
+      _tokenRefreshController.stream.listen((token) => onRefresh(token)),
+    );
   }
 }

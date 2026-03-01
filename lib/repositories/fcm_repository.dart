@@ -104,11 +104,10 @@ class FCMRepository {
       return Result.ok(const Stream<String>.empty().listen((_) {}));
     }
 
-    if (Firebase.apps.isEmpty) {
-      await Firebase.initializeApp();
-    }
-
     try {
+      if (Firebase.apps.isEmpty) {
+        await Firebase.initializeApp();
+      }
       final subscription = FirebaseMessaging.instance.onTokenRefresh.listen(
         (newToken) async {
           final redacted = newToken.length > 10

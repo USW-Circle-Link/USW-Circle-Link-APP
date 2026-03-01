@@ -123,6 +123,9 @@ Future<void> setupFlutterNotifications() async {
   if (isFlutterLocalNotificationsInitialized) {
     return;
   }
+  if (kIsWeb) {
+    return;
+  }
   channel = const AndroidNotificationChannel(
     'com.usw.flag.donggurami.high_importance_channel', // id
     '동구라미 알림 채널', // title
@@ -211,7 +214,12 @@ class _CircleLinkState extends ConsumerState<CircleLink> {
         logger.d('call.arguments: ${call.arguments}');
         logger.d('call.arguments type: ${call.arguments.runtimeType}');
         if (call.method == 'storeNotification') {
-          final message = APNSPayload.fromMap(call.arguments);
+          final args = call.arguments;
+          if (args is! Map<String, dynamic>) {
+            logger.w('storeNotification: unexpected arguments type ${args.runtimeType}, value: $args');
+            return;
+          }
+          final message = APNSPayload.fromMap(args);
           logger.d('message: $message');
           ref
               .read(firebaseCloudMessagingViewModelProvider.notifier)
