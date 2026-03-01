@@ -134,9 +134,9 @@ class ApplicationRepository {
     }
   }
 
+  /// 지원서 제출 (OpenAPI SubmitRequest: qnaList만 전송)
   Future<Result<void>> apply({
     required String clubUUID,
-    required String formId,
     required List<Map<String, dynamic>> answers,
   }) async {
     // 더미 데이터 사용
@@ -151,7 +151,6 @@ class ApplicationRepository {
       final response = await dio.post(
         '/clubs/$clubUUID/applications',
         data: {
-          'formId': formId,
           'qnaList': answers,
         },
         options: Options(
