@@ -77,9 +77,9 @@ class CircleListData with _$CircleListData {
 @freezed
 class CircleFilteredListData with _$CircleFilteredListData {
   factory CircleFilteredListData({
-    required String clubCategoryUUID,
-    required String clubCategoryName,
-    required List<CircleListData> clubs,
+    String? clubCategoryUUID,
+    String? clubCategoryName,
+    @Default([]) List<CircleListData> clubs,
   }) = _CircleFilteredListData;
 
   factory CircleFilteredListData.fromJson(Map<String, dynamic> json) =>

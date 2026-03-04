@@ -324,17 +324,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
       }
     } else {
-      final selectedCategoryUUIDs = selectedCategories
-          .map((category) => category.clubCategoryUUID)
+      final selectedCategoryNames = selectedCategories
+          .map((category) => category.clubCategoryName)
           .toList();
       if (isAllSelected) {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchAllFilteredCircleList(selectedCategoryUUIDs);
+            .fetchAllFilteredCircleList(selectedCategoryNames);
       } else {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchOpenFilteredCircleList(selectedCategoryUUIDs);
+            .fetchOpenFilteredCircleList(selectedCategoryNames);
       }
     }
   }

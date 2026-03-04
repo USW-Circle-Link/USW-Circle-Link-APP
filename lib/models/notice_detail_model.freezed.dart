@@ -213,6 +213,7 @@ mixin _$NoticeDetailData {
   String get noticeUUID => throw _privateConstructorUsedError;
   String get noticeTitle => throw _privateConstructorUsedError;
   String get noticeContent => throw _privateConstructorUsedError;
+  @JsonKey(readValue: _readAuthorName)
   String? get authorName => throw _privateConstructorUsedError;
   String get noticeCreatedAt => throw _privateConstructorUsedError;
   List<String>? get noticePhotos => throw _privateConstructorUsedError;
@@ -233,7 +234,7 @@ abstract class $NoticeDetailDataCopyWith<$Res> {
       {String noticeUUID,
       String noticeTitle,
       String noticeContent,
-      String? authorName,
+      @JsonKey(readValue: _readAuthorName) String? authorName,
       String noticeCreatedAt,
       List<String>? noticePhotos});
 }
@@ -299,7 +300,7 @@ abstract class _$$NoticeDetailDataImplCopyWith<$Res>
       {String noticeUUID,
       String noticeTitle,
       String noticeContent,
-      String? authorName,
+      @JsonKey(readValue: _readAuthorName) String? authorName,
       String noticeCreatedAt,
       List<String>? noticePhotos});
 }
@@ -359,7 +360,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
       {required this.noticeUUID,
       required this.noticeTitle,
       required this.noticeContent,
-      this.authorName,
+      @JsonKey(readValue: _readAuthorName) this.authorName,
       required this.noticeCreatedAt,
       final List<String>? noticePhotos})
       : _noticePhotos = noticePhotos;
@@ -374,6 +375,7 @@ class _$NoticeDetailDataImpl implements _NoticeDetailData {
   @override
   final String noticeContent;
   @override
+  @JsonKey(readValue: _readAuthorName)
   final String? authorName;
   @override
   final String noticeCreatedAt;
@@ -442,7 +444,7 @@ abstract class _NoticeDetailData implements NoticeDetailData {
       {required final String noticeUUID,
       required final String noticeTitle,
       required final String noticeContent,
-      final String? authorName,
+      @JsonKey(readValue: _readAuthorName) final String? authorName,
       required final String noticeCreatedAt,
       final List<String>? noticePhotos}) = _$NoticeDetailDataImpl;
 
@@ -456,6 +458,7 @@ abstract class _NoticeDetailData implements NoticeDetailData {
   @override
   String get noticeContent;
   @override
+  @JsonKey(readValue: _readAuthorName)
   String? get authorName;
   @override
   String get noticeCreatedAt;

@@ -35,19 +35,18 @@ class NoticeDetailData with _$NoticeDetailData {
     required String noticeUUID,
     required String noticeTitle,
     required String noticeContent,
-    String? authorName,
+    @JsonKey(readValue: _readAuthorName) String? authorName,
     required String noticeCreatedAt,
     List<String>? noticePhotos,
   }) = _NoticeDetailData;
 
-  factory NoticeDetailData.fromJson(Map<String, dynamic> json) {
-    // 레거시 키 'adminName' 지원
-    final merged = Map<String, dynamic>.from(json);
-    if (merged['authorName'] == null && merged['adminName'] != null) {
-      merged['authorName'] = merged['adminName'];
-    }
-    return _$NoticeDetailDataFromJson(merged);
-  }
+  factory NoticeDetailData.fromJson(Map<String, dynamic> json) =>
+      _$NoticeDetailDataFromJson(json);
+}
+
+/// 레거시 키 'adminName' 지원
+Object? _readAuthorName(Map json, String key) {
+  return json['authorName'] ?? json['adminName'];
 }
 
 @freezed
