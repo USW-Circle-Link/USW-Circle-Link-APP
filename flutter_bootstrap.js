@@ -32,13 +32,13 @@ addEventListener("message", eventListener);
 if (!window._flutter) {
   window._flutter = {};
 }
-_flutter.buildConfig = {"engineRevision":"3452d735bd38224ef2db85ca763d862d6326b17f","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
+_flutter.buildConfig = {"engineRevision":"052f31d115eceda8cbff1b3481fcde4330c4ae12","builds":[{"compileTarget":"dart2js","renderer":"canvaskit","mainJsPath":"main.dart.js"},{}]};
 
 _flutter.loader.load({
   serviceWorkerSettings: {
-    serviceWorkerVersion: "2240479449" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
+    serviceWorkerVersion: "3533871909" /* Flutter's service worker is deprecated and will be removed in a future Flutter release. */
   }
 });
-!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="64433f01-94fe-5e5c-8b95-ce35e570a102")}catch(e){}}();
+!function(){try{var e="undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof globalThis?globalThis:"undefined"!=typeof self?self:{},n=(new e.Error).stack;n&&(e._sentryDebugIds=e._sentryDebugIds||{},e._sentryDebugIds[n]="dce79b90-1757-535e-a11d-be945f309ed7")}catch(e){}}();
 //# sourceMappingURL=flutter.js.map
-//# debugId=64433f01-94fe-5e5c-8b95-ce35e570a102
+//# debugId=dce79b90-1757-535e-a11d-be945f309ed7
