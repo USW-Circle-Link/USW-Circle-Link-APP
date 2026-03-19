@@ -58,5 +58,11 @@ platform :ios do
     upload_to_testflight(
       skip_waiting_for_build_processing: true
     )
+
+  ensure
+    # 임시 키체인 정리
+    if ENV['CI']
+      delete_keychain(name: "fastlane_tmp_keychain") if File.exist?(File.expand_path("~/Library/Keychains/fastlane_tmp_keychain-db"))
+    end
   end
 end
