@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/widgets/email_text_field/email_text_field.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class EmailTextFieldWithButton extends StatefulWidget {
@@ -23,12 +24,13 @@ class EmailTextFieldWithButton extends StatefulWidget {
 class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Container(
-      decoration: const BoxDecoration(
+      decoration: BoxDecoration(
         border: Border(
           bottom: BorderSide(
-            color: Color(0xFFB8B8B8), // 밑줄 색상
-            width: 1.0, // 밑줄 두께
+            color: appColors.disabledText,
+            width: 1.0,
           ),
         ),
       ),
@@ -58,7 +60,7 @@ class _EmailTextFieldWithButtonState extends State<EmailTextFieldWithButton> {
               '인증 확인',
               fontSize: 12.0,
               color: widget.onPressed == null || !widget.enabled
-                  ? const Color(0xFFB8B8B8)
+                  ? appColors.disabledText
                   : Colors.white,
               fontWeight: FontWeight.w400,
             ),

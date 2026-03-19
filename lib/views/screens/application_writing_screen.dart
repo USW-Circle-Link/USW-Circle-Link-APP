@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:go_router/go_router.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import '../../const/data.dart';
 import '../../models/application_set.dart';
 import '../../models/circle_detail_list_model.dart';
@@ -53,6 +54,7 @@ class _ApplicationWritingScreenState
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final isLoading = ref
         .watch(applicationViewModelProvider.select((vm) => vm.isLoading));
     final applicationSet = ref.watch(
@@ -118,10 +120,6 @@ class _ApplicationWritingScreenState
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Checkbox(
-                        shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(5))),
-                        side: BorderSide(width: 1),
-                        activeColor: accentColor,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                         visualDensity: const VisualDensity(
                           horizontal: VisualDensity.minimumDensity,
@@ -144,7 +142,7 @@ class _ApplicationWritingScreenState
                         child: TextFontWidget.fontRegular(
                           '유의사항을 확인했습니다',
                           fontSize: 14.0,
-                          color: const Color(0xFF353549),
+                          color: appColors.secondaryText,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -169,7 +167,7 @@ class _ApplicationWritingScreenState
                           style: OutlinedButton.styleFrom(
                             backgroundColor: canSubmit
                                 ? accentColor
-                                : const Color(0xFF999999),
+                                : appColors.hintColor,
                             foregroundColor: const Color(0xFFFFFFFF),
                             side: const BorderSide(
                               width: 0.0,
@@ -202,7 +200,7 @@ class _ApplicationWritingScreenState
                   child: TextFontWidget.fontRegular(
                     '지원서를 불러올 수 없습니다.',
                     fontSize: 16.0,
-                    color: const Color(0xFF999999),
+                    color: appColors.hintColor,
                   ),
                 )
               : SingleChildScrollView(
@@ -223,7 +221,7 @@ class _ApplicationWritingScreenState
                             TextFontWidget.fontRegular(
                               '지원서 제출 시 유의사항',
                               fontSize: 16.0,
-                              color: const Color(0xFF353549),
+                              color: appColors.secondaryText,
                               fontWeight: FontWeight.w700,
                             ),
                           ],
@@ -236,7 +234,7 @@ class _ApplicationWritingScreenState
                         style: TextFontWidget.fontRegularStyle(
                           height: 2,
                           fontSize: 12,
-                          color: const Color(0xFF989898),
+                          color: appColors.hintColor,
                           fontWeight: FontWeight.w400,
                         ),
                         children: const [
@@ -271,6 +269,7 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildQuestionField(ApplicationQuestion question) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -280,7 +279,7 @@ class _ApplicationWritingScreenState
               child: TextFontWidget.fontRegular(
                 question.questionText,
                 fontSize: 16.0,
-                color: const Color(0xFF2c2c2c),
+                color: appColors.secondaryText,
                 fontWeight: FontWeight.w700,
               ),
             ),
@@ -301,6 +300,7 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildQuestionInput(ApplicationQuestion question) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     switch (question.type) {
       case QuestionType.shortText:
       case QuestionType.longText:
@@ -312,7 +312,7 @@ class _ApplicationWritingScreenState
           height: isLongText ? _longTextFieldHeight : _fieldHeight,
           maxLines: isLongText ? 5 : 1,
           borderWidth: 1.0,
-          borderColor: const Color(0xFFDBDBDB),
+          borderColor: appColors.borderColor,
           leftTopCornerRadius: _borderRadius,
           rightTopCornerRadius: _borderRadius,
           leftBottomCornerRadius: _borderRadius,
@@ -324,11 +324,11 @@ class _ApplicationWritingScreenState
           hintText: '답변을 입력해주세요',
           hintStyle: TextFontWidget.fontRegularStyle(
             fontSize: 14.0,
-            color: const Color(0xFF999999),
+            color: appColors.hintColor,
           ),
           textStyle: TextFontWidget.fontRegularStyle(
             fontSize: 14.0,
-            color: const Color(0xFF2c2c2c),
+            color: appColors.secondaryText,
           ),
         );
       case QuestionType.radio:
@@ -341,6 +341,7 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildRadioField(ApplicationQuestion question) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final currentAnswer = ref.watch(
       applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
     );
@@ -382,7 +383,7 @@ class _ApplicationWritingScreenState
                 margin: const EdgeInsets.only(bottom: 8.0),
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                    color: isSelected ? accentColor : appColors.borderColor,
                     width: isSelected ? 2.0 : 1.0,
                   ),
                   borderRadius: BorderRadius.circular(_borderRadius),
@@ -395,7 +396,7 @@ class _ApplicationWritingScreenState
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                          color: isSelected ? accentColor : appColors.borderColor,
                           width: 2.0,
                         ),
                         color: isSelected ? accentColor : Colors.transparent,
@@ -418,7 +419,7 @@ class _ApplicationWritingScreenState
                       child: TextFontWidget.fontRegular(
                         option.content,
                         fontSize: 14.0,
-                        color: const Color(0xFF2c2c2c),
+                        color: appColors.secondaryText,
                       ),
                     ),
                   ],
@@ -432,7 +433,7 @@ class _ApplicationWritingScreenState
           padding: const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
           decoration: BoxDecoration(
             border: Border.all(
-              color: const Color(0xFFDBDBDB),
+              color: appColors.borderColor,
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(_borderRadius),
@@ -440,7 +441,7 @@ class _ApplicationWritingScreenState
           child: TextFontWidget.fontRegular(
             '선택지가 없습니다.',
             fontSize: 14.0,
-            color: const Color(0xFF999999),
+            color: appColors.hintColor,
           ),
         );
       }
@@ -461,7 +462,7 @@ class _ApplicationWritingScreenState
             margin: const EdgeInsets.only(bottom: 8.0),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                color: isSelected ? accentColor : appColors.borderColor,
                 width: isSelected ? 2.0 : 1.0,
               ),
               borderRadius: BorderRadius.circular(_borderRadius),
@@ -474,7 +475,7 @@ class _ApplicationWritingScreenState
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                      color: isSelected ? accentColor : appColors.borderColor,
                       width: 2.0,
                     ),
                     color: isSelected ? accentColor : Colors.transparent,
@@ -497,7 +498,7 @@ class _ApplicationWritingScreenState
                   child: TextFontWidget.fontRegular(
                     option.content,
                     fontSize: 14.0,
-                    color: const Color(0xFF2c2c2c),
+                    color: appColors.secondaryText,
                   ),
                 ),
               ],
@@ -509,6 +510,7 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildCheckboxField(ApplicationQuestion question) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     if (!_checkboxSelections.containsKey(question.questionId)) {
       _checkboxSelections[question.questionId] = {};
     }
@@ -543,7 +545,7 @@ class _ApplicationWritingScreenState
             margin: const EdgeInsets.only(bottom: 8.0),
             decoration: BoxDecoration(
               border: Border.all(
-                color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                color: isSelected ? accentColor : appColors.borderColor,
                 width: isSelected ? 2.0 : 1.0,
               ),
               borderRadius: BorderRadius.circular(_borderRadius),
@@ -555,7 +557,7 @@ class _ApplicationWritingScreenState
                   height: 20,
                   decoration: BoxDecoration(
                     border: Border.all(
-                      color: isSelected ? accentColor : const Color(0xFFDBDBDB),
+                      color: isSelected ? accentColor : appColors.borderColor,
                       width: 2.0,
                     ),
                     borderRadius: BorderRadius.circular(4.0),
@@ -570,7 +572,7 @@ class _ApplicationWritingScreenState
                   child: TextFontWidget.fontRegular(
                     option.content,
                     fontSize: 14.0,
-                    color: const Color(0xFF2c2c2c),
+                    color: appColors.secondaryText,
                   ),
                 ),
               ],
@@ -582,6 +584,7 @@ class _ApplicationWritingScreenState
   }
 
   Widget _buildDropdownField(ApplicationQuestion question) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final currentAnswer = ref.watch(
       applicationViewModelProvider.select((vm) => vm.answers[question.questionId]),
     );
@@ -601,7 +604,7 @@ class _ApplicationWritingScreenState
       height: _fieldHeight,
       decoration: BoxDecoration(
         border: Border.all(
-          color: const Color(0xFFDBDBDB),
+          color: appColors.borderColor,
           width: 1.0,
         ),
         borderRadius: BorderRadius.circular(_borderRadius),
@@ -614,7 +617,7 @@ class _ApplicationWritingScreenState
           hint: TextFontWidget.fontRegular(
             '선택해주세요',
             fontSize: 14.0,
-            color: const Color(0xFF999999),
+            color: appColors.hintColor,
           ),
           items: question.options.map((option) {
             return DropdownMenuItem<QuestionOption>(
@@ -622,7 +625,7 @@ class _ApplicationWritingScreenState
               child: TextFontWidget.fontRegular(
                 option.content,
                 fontSize: 14.0,
-                color: const Color(0xFF2c2c2c),
+                color: appColors.secondaryText,
               ),
             );
           }).toList(),

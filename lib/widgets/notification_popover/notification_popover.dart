@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'notification_popover_styles.dart';
@@ -44,45 +45,70 @@ class NotificationPopoverContent extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final notifications = ref.watch(firebaseCloudMessagingViewModelProvider);
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+    final effectiveStyle = style.copyWith(
+      backgroundColor: theme.cardColor,
+      headerColor: theme.colorScheme.onSurface,
+      itemColor: appColors.secondaryText,
+      closeIconColor: theme.colorScheme.onSurfaceVariant,
+      emptyMessageColor: theme.colorScheme.onSurfaceVariant,
+    );
 
-    return SizedBox(
-      width: style.width,
-      height: style.height,
+    return Container(
+      width: effectiveStyle.width,
+      height: effectiveStyle.height,
+      decoration: BoxDecoration(
+        color: effectiveStyle.backgroundColor,
+        borderRadius: BorderRadius.circular(effectiveStyle.borderRadius),
+      ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
-            padding: style.headerPadding,
+            padding: effectiveStyle.headerPadding,
             child: TextFontWidget.fontRegular(
               "알림",
-              fontSize: style.headerFontSize,
-              fontWeight: style.headerFontWeight,
-              color: style.headerColor,
+              fontSize: effectiveStyle.headerFontSize,
+              fontWeight: effectiveStyle.headerFontWeight,
+              color: effectiveStyle.headerColor,
             ),
           ),
           Expanded(
-            child: notifications.isEmpty
-                ? Center(
-                    child: TextFontWidget.fontRegular(
-                      "알림이 없습니다",
-                      fontSize: style.itemFontSize,
-                      color: style.emptyMessageColor,
-                    ),
-                  )
-                : MediaQuery.removePadding(
-                    context: context,
-                    removeTop: true,
-                    child: ListView.builder(
-                      itemCount: notifications.length,
-                      itemBuilder: (context, index) {
-                        return _NotificationItem(
-                          text: notifications[index],
-                          index: index,
-                          style: style,
-                        );
-                      },
-                    ),
-                  ),
+            child: notifications.when(
+              data: (list) {
+                return list.isEmpty
+                    ? Center(
+                        child: TextFontWidget.fontRegular(
+                          "알림이 없습니다",
+                          fontSize: effectiveStyle.itemFontSize,
+                          color: effectiveStyle.emptyMessageColor,
+                        ),
+                      )
+                    : MediaQuery.removePadding(
+                        context: context,
+                        removeTop: true,
+                        child: ListView.builder(
+                          itemCount: list.length,
+                          itemBuilder: (context, index) {
+                            return _NotificationItem(
+                              text: list[index],
+                              index: index,
+                              style: effectiveStyle,
+                            );
+                          },
+                        ),
+                      );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, st) => Center(
+                child: TextFontWidget.fontRegular(
+                  "알림을 불러오지 못했습니다",
+                  fontSize: effectiveStyle.itemFontSize,
+                  color: effectiveStyle.emptyMessageColor,
+                ),
+              ),
+            ),
           ),
         ],
       ),

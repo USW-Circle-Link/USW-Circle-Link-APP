@@ -59,13 +59,13 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
   }
 
   Future<void> fetchAllFilteredCircleList(
-      List<String> clubCategoryUUIDs) async {
+      List<String> clubCategoryNames) async {
     state = AsyncValue.loading();
     final result = await circleListRepository
-        .fetchAllFilteredCircleList(clubCategoryUUIDs);
+        .fetchAllFilteredCircleList(clubCategoryNames);
     switch (result) {
       case Ok(:final value):
-        state = AsyncValue.data(value.toCircleListModel());
+        state = AsyncValue.data(value);
       case Error(:final error):
         if (error is GlobalException) {
           state = AsyncValue.error(error, StackTrace.current);
@@ -78,13 +78,13 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
   }
 
   Future<void> fetchOpenFilteredCircleList(
-      List<String> clubCategoryUUIDs) async {
+      List<String> clubCategoryNames) async {
     state = AsyncValue.loading();
     final result = await circleListRepository
-        .fetchOpenFilteredCircleList(clubCategoryUUIDs);
+        .fetchOpenFilteredCircleList(clubCategoryNames);
     switch (result) {
       case Ok(:final value):
-        state = AsyncValue.data(value.toCircleListModel());
+        state = AsyncValue.data(value);
       case Error(:final error):
         if (error is GlobalException) {
           state = AsyncValue.error(error, StackTrace.current);
@@ -94,17 +94,5 @@ class CircleViewModel extends StateNotifier<AsyncValue<CircleListModel>> {
           state = AsyncValue.error(exception, StackTrace.current);
         }
     }
-  }
-}
-
-extension on CircleFilteredListModel {
-  CircleListModel toCircleListModel() {
-    final newList = <CircleListData>[];
-    for (var category in data) {
-      final clubs = category.clubs;
-      newList.addAll(
-          clubs.map((e) => e.setDepartmentName(category.clubCategoryName)));
-    }
-    return CircleListModel(message: message, data: newList);
   }
 }

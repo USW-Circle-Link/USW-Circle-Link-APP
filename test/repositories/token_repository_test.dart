@@ -16,13 +16,11 @@ void main() {
       // Given: TokenRepository 생성
       const accessToken = 'test_access_token';
       const refreshToken = 'test_refresh_token';
-      const clubUUIDs = ['club1', 'club2'];
 
       // When: saveTokens 호출
       final result = await tokenRepository.saveTokens(
         accessToken: accessToken,
         refreshToken: refreshToken,
-        clubUUIDs: clubUUIDs,
       );
 
       // Then: Result.ok 반환 및 저장 확인
@@ -30,19 +28,17 @@ void main() {
       expect(tokenRepository.hasToken, isTrue);
       expect(tokenRepository.storedToken?.accessToken, accessToken);
       expect(tokenRepository.storedToken?.refreshToken, refreshToken);
-      expect(tokenRepository.storedToken?.clubUUIDs, clubUUIDs);
+      expect(tokenRepository.storedToken?.clubUUIDs, isEmpty);
     });
 
     test('토큰 조회 성공', () async {
       // Given: 저장된 토큰
       const accessToken = 'test_access_token';
       const refreshToken = 'test_refresh_token';
-      const clubUUIDs = ['club1', 'club2'];
 
       await tokenRepository.saveTokens(
         accessToken: accessToken,
         refreshToken: refreshToken,
-        clubUUIDs: clubUUIDs,
       );
 
       // When: getTokens 호출
@@ -53,7 +49,7 @@ void main() {
       final tokenData = (result as Ok<TokenData>).value;
       expect(tokenData.accessToken, accessToken);
       expect(tokenData.refreshToken, refreshToken);
-      expect(tokenData.clubUUIDs, clubUUIDs);
+      expect(tokenData.clubUUIDs, isEmpty);
     });
 
     test('저장된 토큰이 없을 때 에러 반환', () async {
@@ -72,7 +68,6 @@ void main() {
       await tokenRepository.saveTokens(
         accessToken: 'test_access_token',
         refreshToken: 'test_refresh_token',
-        clubUUIDs: ['club1'],
       );
       expect(tokenRepository.hasToken, isTrue);
 
@@ -93,14 +88,12 @@ void main() {
       await tokenRepository.saveTokens(
         accessToken: 'first_token',
         refreshToken: 'first_refresh',
-        clubUUIDs: ['club1'],
       );
 
       // When: 두 번째 토큰 저장
       await tokenRepository.saveTokens(
         accessToken: 'second_token',
         refreshToken: 'second_refresh',
-        clubUUIDs: ['club2', 'club3'],
       );
 
       // Then: 마지막 값만 저장됨
@@ -109,28 +102,27 @@ void main() {
       final tokenData = (result as Ok<TokenData>).value;
       expect(tokenData.accessToken, 'second_token');
       expect(tokenData.refreshToken, 'second_refresh');
-      expect(tokenData.clubUUIDs, ['club2', 'club3']);
+      expect(tokenData.clubUUIDs, isEmpty);
     });
 
-    test('빈 clubUUIDs 배열로 저장 가능', () async {
-      // Given: 빈 clubUUIDs
+    test('saveTokens 후 getTokens로 조회 가능', () async {
       const accessToken = 'test_token';
       const refreshToken = 'test_refresh';
-      const clubUUIDs = <String>[];
 
       // When: saveTokens 호출
       final result = await tokenRepository.saveTokens(
         accessToken: accessToken,
         refreshToken: refreshToken,
-        clubUUIDs: clubUUIDs,
       );
 
-      // Then: 성공적으로 저장
+      // Then: 성공적으로 저장 및 조회
       expect(result, isA<Ok<void>>());
 
       final getResult = await tokenRepository.getTokens();
       expect(getResult, isA<Ok<TokenData>>());
       final tokenData = (getResult as Ok<TokenData>).value;
+      expect(tokenData.accessToken, accessToken);
+      expect(tokenData.refreshToken, refreshToken);
       expect(tokenData.clubUUIDs, isEmpty);
     });
   });

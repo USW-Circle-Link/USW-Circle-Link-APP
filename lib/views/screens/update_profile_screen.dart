@@ -1,4 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
@@ -9,6 +11,7 @@ import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/utils/regex/Regex.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
@@ -184,11 +187,15 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       );
     });
 
-    return Scaffold(
-      backgroundColor: const Color(0xffFFFFFF),
-      resizeToAvoidBottomInset: false,
-      appBar: const DetailAppBar(title: '내 정보 수정'),
-      body: state.when(
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
+    return FlutterWebFrame(
+      builder: (context) => Scaffold(
+        backgroundColor: theme.scaffoldBackgroundColor,
+        resizeToAvoidBottomInset: false,
+        appBar: const DetailAppBar(title: '내 정보 수정'),
+        body: state.when(
         data: (data) {
           return SingleChildScrollView(
             child: Padding(
@@ -200,7 +207,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   // 이름 필드
                   TextFontWidget.fontRegular(
                     '이름',
-                    color: const Color(0xff000000),
+                    color: theme.colorScheme.onSurface,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     height: 1.12,
@@ -214,7 +221,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     leftTopCornerRadius: 8,
                     rightTopCornerRadius: 8,
                     borderColor: nameError == null
-                        ? const Color(0xffDBDBDB)
+                        ? appColors.borderColor
                         : Colors.red,
                     borderWidth: 1,
                     maxLines: 1,
@@ -223,7 +230,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     hintText: "이름",
                     prefixIcon: Icon(
                       SignUpIcons.ic_person,
-                      color: Color(0xFF989898),
+                      color: appColors.hintColor,
                       size: 15,
                     ),
                     hintStyle: TextStyle(
@@ -233,7 +240,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textStyle: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff707070),
+                      color: appColors.subTextColor,
                     ),
                   ),
                   SizedBox(
@@ -257,7 +264,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   // 전화번호 필드
                   TextFontWidget.fontRegular(
                     '전화번호',
-                    color: const Color(0xff000000),
+                    color: theme.colorScheme.onSurface,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     height: 1.12,
@@ -271,7 +278,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     leftTopCornerRadius: 8,
                     rightTopCornerRadius: 8,
                     borderColor: phoneError == null
-                        ? const Color(0xffDBDBDB)
+                        ? appColors.borderColor
                         : Colors.red,
                     borderWidth: 1,
                     maxLines: 1,
@@ -279,7 +286,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textAlign: TextAlign.left,
                     prefixIcon: Icon(
                       SignUpIcons.ic_phone,
-                      color: Color(0xFF989898),
+                      color: appColors.hintColor,
                       size: 15,
                     ),
                     hintText: "전화번호 (- 제외입력)",
@@ -290,7 +297,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textStyle: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff707070),
+                      color: appColors.subTextColor,
                     ),
                   ),
                   SizedBox(
@@ -314,7 +321,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   // 학번 필드
                   TextFontWidget.fontRegular(
                     '학번',
-                    color: const Color(0xff000000),
+                    color: theme.colorScheme.onSurface,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     height: 1.12,
@@ -328,7 +335,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     leftTopCornerRadius: 8,
                     rightTopCornerRadius: 8,
                     borderColor: studentNumberError == null
-                        ? const Color(0xffDBDBDB)
+                        ? appColors.borderColor
                         : Colors.red,
                     borderWidth: 1,
                     maxLines: 1,
@@ -336,7 +343,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textAlign: TextAlign.left,
                     prefixIcon: Icon(
                       SignUpIcons.ic_tag,
-                      color: Color(0xFF989898),
+                      color: appColors.hintColor,
                       size: 15,
                     ),
                     hintText: "학번",
@@ -347,7 +354,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textStyle: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff707070),
+                      color: appColors.subTextColor,
                     ),
                   ),
                   SizedBox(
@@ -371,7 +378,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                   // 학과 필드
                   TextFontWidget.fontRegular(
                     '학부(학과)',
-                    color: const Color(0xff000000),
+                    color: theme.colorScheme.onSurface,
                     fontSize: 16,
                     fontWeight: FontWeight.w400,
                     height: 1.12,
@@ -406,7 +413,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     leftTopCornerRadius: 8,
                     rightTopCornerRadius: 8,
                     borderColor: majorError == null
-                        ? const Color(0xffDBDBDB)
+                        ? appColors.borderColor
                         : Colors.red,
                     borderWidth: 1,
                     maxLines: 1,
@@ -419,7 +426,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     isAnimatedHint: false,
                     prefixIcon: Icon(
                       SignUpIcons.ic_bookmark,
-                      color: Color(0xFF989898),
+                      color: appColors.hintColor,
                       size: 15,
                     ),
                     hintStyle: TextStyle(
@@ -429,7 +436,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                     textStyle: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w400,
-                      color: const Color(0xff707070),
+                      color: appColors.subTextColor,
                     ),
                   ),
                   SizedBox(
@@ -460,7 +467,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
               '내 정보를 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
               textAlign: TextAlign.center,
               fontSize: 14,
-              color: Color(0xFFA1A1A1),
+              color: theme.colorScheme.onSurfaceVariant,
               fontWeight: FontWeight.w400,
             ),
           );
@@ -474,14 +481,14 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
       bottomNavigationBar: SafeArea(
         child: Container(
           padding: const EdgeInsets.fromLTRB(32, 12, 32, 12),
-          decoration: const BoxDecoration(color: Colors.white),
+          decoration: BoxDecoration(color: theme.colorScheme.surfaceContainer),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               // 안내 문구
               TextFontWidget.fontRegular(
                 '허위 정보 기재 시 서비스 이용에 제한이 있을 수 있습니다.',
-                color: const Color(0xFF868686),
+                color: appColors.subTextColor,
                 fontSize: 12,
                 fontWeight: FontWeight.w400,
               ),
@@ -532,7 +539,7 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
                 },
                 child: TextFontWidget.fontRegular(
                   '회원 탈퇴',
-                  color: const Color(0xffABABAB),
+                  color: appColors.disabledText,
                   fontSize: 16,
                   fontWeight: FontWeight.w400,
                 ),
@@ -541,6 +548,9 @@ class _UpdateProfileScreenState extends ConsumerState<UpdateProfileScreen>
           ),
         ),
       ),
+    ),
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
     );
   }
 

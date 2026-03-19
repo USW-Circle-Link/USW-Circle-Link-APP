@@ -156,15 +156,15 @@ class CircleListRepository {
     }
   }
 
-  /// 필터링된 모든 분과 동아리 목록 조회
-  Future<Result<CircleFilteredListModel>> fetchAllFilteredCircleList(
-    List<String> clubCategoryUUIDs,
+  /// 필터링된 모든 분과 동아리 목록 조회 (filter로 조회)
+  Future<Result<CircleListModel>> fetchAllFilteredCircleList(
+    List<String> clubCategoryNames,
   ) async {
     try {
       final response = await dio.get(
         basePath,
         queryParameters: {
-          'filter': clubCategoryUUIDs,
+          'filter': clubCategoryNames,
         },
       );
 
@@ -174,7 +174,10 @@ class CircleListRepository {
           'fetchAllFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
       if (response.statusCode == 200) {
-        return Result.ok(CircleFilteredListModel.fromJson(response.data));
+        return Result.ok(
+          CircleListModel.fromJson(response.data)
+              .setType(CircleListModelType.filtered_all),
+        );
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
@@ -184,16 +187,16 @@ class CircleListRepository {
     }
   }
 
-  /// 필터링된 모집중인 분과 동아리 목록 조회
-  Future<Result<CircleFilteredListModel>> fetchOpenFilteredCircleList(
-    List<String> clubCategoryUUIDs,
+  /// 필터링된 모집중인 분과 동아리 목록 조회 (filter로 조회)
+  Future<Result<CircleListModel>> fetchOpenFilteredCircleList(
+    List<String> clubCategoryNames,
   ) async {
     try {
       final response = await dio.get(
         basePath,
         queryParameters: {
           'open': true,
-          'filter': clubCategoryUUIDs,
+          'filter': clubCategoryNames,
         },
       );
 
@@ -203,7 +206,10 @@ class CircleListRepository {
           'fetchOpenFilteredCircleList - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
       if (response.statusCode == 200) {
-        return Result.ok(CircleFilteredListModel.fromJson(response.data));
+        return Result.ok(
+          CircleListModel.fromJson(response.data)
+              .setType(CircleListModelType.filtered_open),
+        );
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }

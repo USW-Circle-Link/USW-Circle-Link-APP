@@ -7,7 +7,15 @@ import 'package:usw_circle_link/models/response/application_detail_response.dart
 import 'package:usw_circle_link/utils/logger/logger.dart';
 
 import '../models/response/global_exception.dart';
+import '../utils/interceptor/token_interceptor.dart';
 import '../utils/result.dart';
+
+bool _isAuthFailure(DioException e) =>
+    e.response?.statusCode == 401 ||
+    (e.response == null &&
+        e.type == DioExceptionType.cancel &&
+        (e.message == TokenInterceptor.tokenNotFoundMessage ||
+            e.message == TokenInterceptor.refreshFailedMessage));
 
 final applicationRepositoryProvider = Provider<ApplicationRepository>((ref) {
   final dio = ref.watch(dioProvider);
@@ -57,6 +65,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (_isAuthFailure(e)) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_CheckAvailableForApplication",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
@@ -103,14 +120,23 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (_isAuthFailure(e)) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_GetApplication",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
   }
 
+  /// 지원서 제출 (OpenAPI SubmitRequest: qnaList만 전송)
   Future<Result<void>> apply({
     required String clubUUID,
-    required String formId,
     required List<Map<String, dynamic>> answers,
   }) async {
     // 더미 데이터 사용
@@ -125,8 +151,7 @@ class ApplicationRepository {
       final response = await dio.post(
         '/clubs/$clubUUID/applications',
         data: {
-          'formId': formId,
-          'answers': answers,
+          'qnaList': answers,
         },
         options: Options(
           headers: {'accessToken': 'true'},
@@ -144,6 +169,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (_isAuthFailure(e)) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_Apply",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }
@@ -178,6 +212,15 @@ class ApplicationRepository {
       } else {
         return Result.error(GlobalException.fromJson(response.data));
       }
+    } on DioException catch (e) {
+      if (_isAuthFailure(e)) {
+        return Result.error(GlobalException(
+          code: "USR-F401",
+          message: "로그인이 필요합니다",
+          screen: "Application_GetApplicationDetail",
+        ));
+      }
+      return Result.error(e);
     } on Exception catch (e) {
       return Result.error(e);
     }

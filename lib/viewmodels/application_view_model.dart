@@ -207,10 +207,9 @@ class ApplicationViewModel extends ChangeNotifier {
         }
       }
 
-      // 제출
+      // 제출 (OpenAPI SubmitRequest: qnaList만 전송)
       final result = await applicationRepository.apply(
         clubUUID: clubUUID,
-        formId: _applicationSet!.formId!,
         answers: answersList,
       );
 

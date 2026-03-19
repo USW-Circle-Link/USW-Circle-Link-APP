@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/application_set.dart';
 import 'package:usw_circle_link/models/response/application_detail_response.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
@@ -21,6 +22,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final theme = Theme.of(context);
     final params = ApplicationDetailParams(
       clubUUID: clubUUID,
       aplictId: aplictId,
@@ -46,7 +48,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
       maximumSize: const Size(475, 812),
       enabled: kIsWeb,
       builder: (context) => Scaffold(
-        backgroundColor: const Color(0xffFFFFFF),
+        backgroundColor: theme.scaffoldBackgroundColor,
         resizeToAvoidBottomInset: false,
         appBar: const DetailAppBar(
           title: '지원서 확인',
@@ -59,7 +61,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
                 '지원서 내용을 불러올 수 없습니다.',
                 textAlign: TextAlign.center,
                 fontSize: 14,
-                color: const Color(0xFFA1A1A1),
+                color: theme.colorScheme.onSurfaceVariant,
                 fontWeight: FontWeight.w400,
               ),
             );
@@ -76,7 +78,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   ...data.detailResponse.data.map((item) {
-                    return _buildQuestionAnswerItem(item, data.applicationSet);
+                    return _buildQuestionAnswerItem(context, item, data.applicationSet);
                   }).toList(),
                 ],
               ),
@@ -91,7 +93,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
             '지원서를 불러올 수 없습니다.\n잠시 후 다시 시도해주세요.',
             textAlign: TextAlign.center,
             fontSize: 14,
-            color: const Color(0xFFA1A1A1),
+            color: theme.colorScheme.onSurfaceVariant,
             fontWeight: FontWeight.w400,
           ),
         ),
@@ -101,6 +103,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
   }
 
   Widget _buildQuestionAnswerItem(
+    BuildContext context,
     ApplicationQuestionAnswer item,
     ApplicationSet? applicationSet,
   ) {
@@ -128,13 +131,14 @@ class ApplicationDetailScreen extends ConsumerWidget {
 
     final hasAnswer = displayAnswer != '답변 없음';
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextFontWidget.fontRegular(
           item.question,
           fontSize: 16.0,
-          color: const Color(0xFF2c2c2c),
+          color: appColors.secondaryText,
           fontWeight: FontWeight.w700,
         ),
         const SizedBox(height: 10.0),
@@ -143,7 +147,7 @@ class ApplicationDetailScreen extends ConsumerWidget {
           padding: const EdgeInsets.all(16.0),
           decoration: BoxDecoration(
             border: Border.all(
-              color: const Color(0xFFDBDBDB),
+              color: appColors.borderColor,
               width: 1.0,
             ),
             borderRadius: BorderRadius.circular(16.0),
@@ -152,8 +156,8 @@ class ApplicationDetailScreen extends ConsumerWidget {
             displayAnswer,
             fontSize: 14.0,
             color: hasAnswer
-                ? const Color(0xFF2c2c2c)
-                : const Color(0xFF999999),
+                ? appColors.secondaryText
+                : appColors.hintColor,
             fontWeight: FontWeight.w400,
           ),
         ),

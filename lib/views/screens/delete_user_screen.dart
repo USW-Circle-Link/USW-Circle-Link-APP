@@ -5,6 +5,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:usw_circle_link/notifier/timer_notifier.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/viewmodels/delete_user_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
@@ -44,6 +45,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
 
     _listen();
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
     return Scaffold(
       appBar: const DetailAppBar(title: '회원탈퇴'),
       body: SingleChildScrollView(
@@ -56,7 +60,7 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
               TextFontWidget.fontRegular(
                 '이메일',
                 fontSize: 16.0,
-                color: const Color(0xFF000000),
+                color: theme.colorScheme.onSurface,
                 fontWeight: FontWeight.w400,
               ),
               const SizedBox(height: 5.0),
@@ -76,9 +80,9 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                 paddingLeft: 0.0,
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
-                  color: const Color(0xFF959595),
+                  color: appColors.hintColor,
                 ),
-                backgroundColor: const Color(0xFFE6E6E6),
+                backgroundColor: appColors.disabledBackground,
               ),
               const SizedBox(height: 16.0),
               SizedBox(
@@ -131,10 +135,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                 textAlign: TextAlign.center,
                 text: TextSpan(
                   text: "* 가입하신 포털 메일로 ",
-                  style: const TextStyle(
+                  style: TextStyle(
                       fontFamily: 'SUIT',
                       fontSize: 12.0,
-                      color: Color(0xFF6F6F6F),
+                      color: appColors.subTextColor,
                       fontWeight: FontWeight.w400),
                   children: const [
                     TextSpan(
@@ -170,10 +174,10 @@ class _DeleteUserScreenState extends ConsumerState<DeleteUserScreen> {
                     TextFontWidget.fontRegular(
                       '메일을 받지 못하셨나요?',
                       fontSize: 12.0,
-                      color: const Color(0xFF989898),
+                      color: appColors.hintColor,
                       fontWeight: FontWeight.w400,
                       textDecoration: TextDecoration.underline,
-                      decorationColor: const Color(0xFF989898),
+                      decorationColor: appColors.hintColor,
                     ),
                     TextButton(
                       style: TextButton.styleFrom(

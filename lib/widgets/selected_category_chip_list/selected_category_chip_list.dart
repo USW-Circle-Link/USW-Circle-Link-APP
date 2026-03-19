@@ -28,7 +28,7 @@ class SelectedCategoryChipList extends StatelessWidget {
     }
 
     return Container(
-      color: Colors.white,
+      color: Theme.of(context).colorScheme.surface,
       padding: const EdgeInsets.only(left: 24),
       height: 60,
       alignment: Alignment.centerLeft,

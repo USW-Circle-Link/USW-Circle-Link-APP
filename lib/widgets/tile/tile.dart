@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../const/app_theme.dart';
 import '../text_font_widget/text_font_widget.dart';
 import 'tile_styles.dart';
 
@@ -108,6 +109,16 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final style = this.style == TileStyle.defaultStyle
+        ? this.style.copyWith(
+            titleColor: appColors.secondaryText,
+            subtitleColor: appColors.badgeText,
+            detailsColor: appColors.badgeText,
+            iconColor: appColors.imagePlaceholder,
+          )
+        : this.style;
+
     final content = Opacity(
       opacity: enabled ? 1.0 : style.disabledOpacity,
       child: Padding(
@@ -222,6 +233,16 @@ class RawTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final style = this.style == TileStyle.defaultStyle
+        ? this.style.copyWith(
+            titleColor: appColors.secondaryText,
+            subtitleColor: appColors.badgeText,
+            detailsColor: appColors.badgeText,
+            iconColor: appColors.imagePlaceholder,
+          )
+        : this.style;
+
     final content = Opacity(
       opacity: enabled ? 1.0 : style.disabledOpacity,
       child: Padding(

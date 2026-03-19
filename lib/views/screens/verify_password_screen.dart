@@ -4,6 +4,7 @@ import 'package:usw_circle_link/models/profile_model.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/viewmodels/update_profile_view_model.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
@@ -57,8 +58,11 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
     final profileData = widget.profileData;
     logger.d('ProfileData: $profileData');
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xffFFFFFF),
+      backgroundColor: theme.scaffoldBackgroundColor,
       resizeToAvoidBottomInset: false,
       appBar: const DetailAppBar(title: '내 정보 수정'),
       bottomNavigationBar: Container(
@@ -137,15 +141,15 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                 rightBottomCornerRadius: 8.0,
                 leftTopCornerRadius: 8.0,
                 rightTopCornerRadius: 8.0,
-                borderColor: const Color(0xffDBDBDB),
+                borderColor: appColors.borderColor,
                 borderWidth: 1.0,
                 maxLines: 1,
                 textInputType: TextInputType.text,
                 textAlign: TextAlign.left,
                 hintText: "비밀번호를 입력해주세요.",
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -161,7 +165,7 @@ class _VerifyPasswordScreenState extends ConsumerState<VerifyPasswordScreen> {
                     passwordVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),

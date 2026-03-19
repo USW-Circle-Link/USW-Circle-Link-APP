@@ -11,15 +11,21 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:upgrader/upgrader.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/models/aps_payload.dart';
 import 'package:usw_circle_link/router/router.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/viewmodels/theme_mode_notifier.dart';
 import 'package:usw_circle_link/firebase_options.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingHandler(RemoteMessage message) async {
+  // 백그라운드 핸들러는 별도 isolate에서 실행되므로 Firebase 초기화 필수
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   logger.d('백그라운드 알림 수신 완료!');
   logger.d('- contentAvailable : ${message.contentAvailable}');
   logger.d('- mutableContent : ${message.mutableContent}');
@@ -57,6 +63,9 @@ void main() async {
   // background 수신처리
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingHandler);
   await setupFlutterNotifications();
+
+  // 테마 모드 미리 로드 (깜빡임 방지)
+  await ThemeModeNotifier.loadInitialThemeMode();
 
   // await Upgrader.clearSavedSettings();
 
@@ -112,6 +121,9 @@ bool isFlutterLocalNotificationsInitialized = false; // 셋팅여부 판단 flag
 /// 셋팅 메소드
 Future<void> setupFlutterNotifications() async {
   if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  if (kIsWeb) {
     return;
   }
   channel = const AndroidNotificationChannel(
@@ -182,39 +194,60 @@ final upgrader = Upgrader(
 );
 final RouteObserver<PageRoute> routeObserver = RouteObserver<PageRoute>();
 
-class CircleLink extends ConsumerWidget {
+class CircleLink extends ConsumerStatefulWidget {
   const CircleLink({super.key});
 
-  static const platform = MethodChannel('com.usw.circle_link.notifications');
+  @override
+  ConsumerState<CircleLink> createState() => _CircleLinkState();
+}
+
+class _CircleLinkState extends ConsumerState<CircleLink> {
+  @override
+  void initState() {
+    super.initState();
+    if (!kIsWeb) {
+      // 네이티브(iOS/Android)에서 동일한 채널명 사용 필요 (슬래시 사용)
+      const MethodChannel platform = MethodChannel('com.usw.circle_link/notifications');
+      platform.setMethodCallHandler((call) async {
+        logger.d('setMethodCallHandler');
+        logger.d('call.method: ${call.method}');
+        logger.d('call.arguments: ${call.arguments}');
+        logger.d('call.arguments type: ${call.arguments.runtimeType}');
+        if (call.method == 'storeNotification') {
+          final args = call.arguments;
+          if (args is! Map<String, dynamic>) {
+            logger.w('storeNotification: unexpected arguments type ${args.runtimeType}, value: $args');
+            return;
+          }
+          final message = APNSPayload.fromMap(args);
+          logger.d('message: $message');
+          ref
+              .read(firebaseCloudMessagingViewModelProvider.notifier)
+              .addNotification(message.aps.alert.body ?? '');
+        }
+      });
+    }
+  }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    platform.setMethodCallHandler((call) async {
-      logger.d('setMethodCallHandler');
-      logger.d('call.method: ${call.method}');
-      logger.d('call.arguments: ${call.arguments}');
-      logger.d('call.arguments type: ${call.arguments.runtimeType}');
-      if (call.method == 'storeNotification') {
-        final message = APNSPayload.fromMap(call.arguments);
-        logger.d('message: $message');
-        ref
-            .read(firebaseCloudMessagingViewModelProvider.notifier)
-            .addNotification(message.aps.alert.body ?? '');
-      }
-    });
+  Widget build(BuildContext context) {
+    final themeMode = ref.watch(themeModeProvider);
+    final isDark = themeMode == ThemeMode.dark ||
+        (themeMode == ThemeMode.system &&
+            MediaQuery.platformBrightnessOf(context) == Brightness.dark);
     return FlutterWebFrame(
       maximumSize: const Size(475.0, 812.0),
       enabled: kIsWeb,
+      backgroundColor: isDark
+          ? AppTheme.dark.scaffoldBackgroundColor
+          : AppTheme.light.scaffoldBackgroundColor,
       builder: (context) {
         return ClipRect(
           child: MaterialApp.router(
             debugShowCheckedModeBanner: false,
-            theme: ThemeData(
-              scaffoldBackgroundColor: Colors.white,
-              appBarTheme: AppBarTheme(
-                backgroundColor: Colors.white,
-              ),
-            ),
+            theme: AppTheme.light,
+            darkTheme: AppTheme.dark,
+            themeMode: themeMode,
             routerConfig: ref.read(routerProvider),
             builder: (context, child) {
               return UpgradeAlert(

@@ -11,6 +11,7 @@ import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/sign_up_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/rounded_email_field/rounded_email_field.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
@@ -89,6 +90,8 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
 
     _listen();
 
+    final appColors = Theme.of(context).extension<AppColors>()!;
+
     return Scaffold(
       appBar: DetailAppBar(
         title: '${_newMemberSignUp ? "신규" : "기존 동아리"} 회원 가입',
@@ -147,7 +150,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 maxLines: 1,
                 textInputType: TextInputType.text,
@@ -162,9 +165,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       .read(signUpViewModelProvider.notifier)
                       .setIdVerified(false);
                 },
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_person,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: OutlinedButton(
@@ -183,7 +186,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                         },
                   style: OutlinedButton.styleFrom(
                     backgroundColor: idVerified
-                        ? const Color(0xFFE0E0E0)
+                        ? appColors.disabledBackground
                         : const Color(0xffffB052),
                     foregroundColor: Colors.white,
                     side: const BorderSide(
@@ -207,7 +210,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w300,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               RoundedTextField(
@@ -226,7 +229,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 obscureText: !passwordVisible,
                 textInputAction: TextInputAction.next,
@@ -234,9 +237,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 hintText: '영어,숫자,특수문자 포함 8~20자',
                 isAnimatedHint: false,
                 onChanged: (value) {},
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -252,14 +255,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     passwordVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w300,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               RoundedTextField(
@@ -283,12 +286,12 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 onChanged: (value) {},
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -304,14 +307,14 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                     passwordConfirmVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w300,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               const SizedBox(
@@ -346,19 +349,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 isAnimatedHint: false,
                 onChanged: (value) {},
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_person,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 14.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               RoundedTextField(
@@ -381,18 +384,18 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 onChanged: (value) {},
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_phone,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               RoundedTextField(
@@ -414,19 +417,19 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 isAnimatedHint: false,
                 onChanged: (value) {},
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_tag,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               RoundedTextField(
@@ -463,27 +466,27 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                 textStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color.fromARGB(255, 37, 37, 37),
+                  color: null,
                 ),
                 textInputAction: TextInputAction.done,
                 hintText: (college == null && major == null)
                     ? '단과대/학부(학과)'
                     : '${college ?? ""} / ${major ?? ""}',
                 isAnimatedHint: false,
-                suffixIcon: const Icon(
+                suffixIcon: Icon(
                   CupertinoIcons.chevron_down,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_bookmark,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 hintStyle: TextFontWidget.fontRegularStyle(
                   fontSize: 16.0,
                   fontWeight: FontWeight.w400,
-                  color: const Color(0xFF989898),
+                  color: appColors.hintColor,
                 ),
               ),
               if (!_newMemberSignUp)
@@ -499,7 +502,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   textStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w400,
-                    color: const Color.fromARGB(255, 37, 37, 37),
+                    color: null,
                   ),
                   maxLines: 1,
                   textInputType: TextInputType.text,
@@ -509,9 +512,9 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                       ? const Color(0xFFFF3F3F)
                       : null,
                   isAnimatedHint: false,
-                  prefixIcon: const Icon(
+                  prefixIcon: Icon(
                     SignUpIcons.ic_mail,
-                    color: Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 15.0,
                   ),
                   onChanged: (value) {
@@ -535,7 +538,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                           },
                     style: OutlinedButton.styleFrom(
                       backgroundColor: emailVerified
-                          ? const Color(0xFFE0E0E0)
+                          ? appColors.disabledBackground
                           : const Color(0xffffB052),
                       foregroundColor: Colors.white,
                       side: const BorderSide(
@@ -559,7 +562,7 @@ class _SignUpScreenState extends ConsumerState<SignUpScreen> {
                   hintStyle: TextFontWidget.fontRegularStyle(
                     fontSize: 16.0,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                   ),
                 ),
               const SizedBox(

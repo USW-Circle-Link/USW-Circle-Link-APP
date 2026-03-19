@@ -9,6 +9,7 @@ import '../../models/token_data.dart';
 import '../../repositories/auth_repository.dart';
 import '../../repositories/profile_repository.dart';
 import '../../repositories/token_repository.dart';
+import '../../repositories/fcm_repository.dart';
 import '../../../utils/command.dart';
 import '../../../utils/result.dart';
 import '../../../utils/logger/logger.dart';
@@ -22,11 +23,13 @@ final userViewModelProvider = ChangeNotifierProvider<UserViewModel>((ref) {
   final authRepository = ref.read(authRepositoryProvider);
   final tokenRepository = ref.read(tokenRepositoryProvider);
   final profileRepository = ref.read(profileRepositoryProvider);
+  final fcmRepository = ref.read(fcmRepositoryProvider);
 
   return UserViewModel(
     authRepository: authRepository,
     tokenRepository: tokenRepository,
     profileRepository: profileRepository,
+    fcmRepository: fcmRepository,
   );
 });
 
@@ -39,9 +42,11 @@ class UserViewModel extends ChangeNotifier {
     required AuthRepository authRepository,
     required TokenRepository tokenRepository,
     required ProfileRepository profileRepository,
+    required FCMRepository fcmRepository,
   })  : _authRepository = authRepository,
         _tokenRepository = tokenRepository,
-        _profileRepository = profileRepository {
+        _profileRepository = profileRepository,
+        _fcmRepository = fcmRepository {
     // Command 초기화 및 자동 로그인 시도
     getMe = Command0(_getMe)..execute();
     login = Command2(_login);
@@ -54,6 +59,7 @@ class UserViewModel extends ChangeNotifier {
   final AuthRepository _authRepository;
   final TokenRepository _tokenRepository;
   final ProfileRepository _profileRepository;
+  final FCMRepository _fcmRepository;
 
   // 상태 관리
   UserState _state = const UserState();
@@ -73,8 +79,16 @@ class UserViewModel extends ChangeNotifier {
       final result = await _profileRepository.getProfile();
       switch (result) {
         case Ok<ProfileData>():
-          // FCM Token 전송 (필요시)
-          // await _firebaseCloudMessagingViewModel.sendToken();
+          // FCM Token 전송 (모바일만)
+          if (!kIsWeb) {
+            final fcmResult = await _fcmRepository.sendToken();
+            switch (fcmResult) {
+              case Ok():
+                logger.d('자동 로그인 후 FCM 토큰 전송 성공');
+              case Error():
+                logger.w('자동 로그인 후 FCM 토큰 전송 실패: ${fcmResult.error}');
+            }
+          }
           logger.d('로그인 정보 확인 성공! : ${result.value}');
 
           // 토큰 확인
@@ -120,10 +134,21 @@ class UserViewModel extends ChangeNotifier {
   /// 로그인 처리
   Future<Result<void>> _login(String id, String password) async {
     try {
-      // FCM Token 가져오기
-      // final token = await _firebaseCloudMessagingViewModel.getToken();
-      final token = "dummy_token";
-      logger.d('FCM Token - $token');
+      // FCM Token 가져오기 (모바일: 실제 토큰, 웹: 빈 문자열)
+      String token = '';
+      if (!kIsWeb) {
+        final fcmResult = await _fcmRepository.getToken();
+        switch (fcmResult) {
+          case Ok(:final value):
+            token = value;
+          case Error():
+            logger.w('FCM 토큰 가져오기 실패, 빈 문자열로 로그인 시도');
+        }
+      }
+      final redacted = token.length > 10
+          ? '${token.substring(0, 6)}...${token.substring(token.length - 4)}'
+          : '***';
+      logger.d('FCM Token - $redacted');
 
       final result = await _authRepository.login(
         id: id,

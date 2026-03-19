@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -49,42 +51,82 @@ class FCMRepository {
   }
 
   Future<Result<void>> sendToken() async {
+    final tokenResult = await getToken();
+    switch (tokenResult) {
+      case Ok(:final value):
+        logger.d('FCM Token 불러오기 성공!');
+        return sendTokenWith(value);
+      case Error(:final error):
+        return Result.error(error);
+    }
+  }
+
+  /// 제공된 토큰을 직접 전송
+  Future<Result<void>> sendTokenWith(String token) async {
     try {
-      final tokenResult = await getToken();
-      switch (tokenResult) {
-        case Ok(:final value):
-          final token = value;
-          logger.d('FCM Token 불러오기 성공!');
+      final body = {
+        'fcmToken': token,
+      };
 
-          final body = {
-            'fcmToken': token,
-          };
+      final response = await dio.patch(
+        '/clubs/fcmtoken',
+        data: body,
+        options: Options(
+          headers: {
+            'Content-Type': 'application/json',
+            'accessToken': 'true',
+          },
+        ),
+      );
 
-          final response = await dio.patch(
-            '/clubs/fcmtoken',
-            data: body,
-            options: Options(
-              headers: {
-                'Content-Type': 'application/json',
-                'accessToken': 'true',
-              },
-            ),
-          );
+      logger.d(response.data);
 
-          logger.d(response.data);
+      logger.d(
+          'sendFCMTokenWith - ${response.realUri} 로 요청 성공! (${response.statusCode})');
 
-          logger.d(
-              'sendFCMToken - ${response.realUri} 로 요청 성공! (${response.statusCode})');
-
-          if (response.statusCode == 200) {
-            return Result.ok(null);
-          } else {
-            return Result.error(Exception('FCM 토큰 전송 실패'));
-          }
-        case Error(:final error):
-          return Result.error(error);
+      if (response.statusCode == 200) {
+        return Result.ok(null);
+      } else {
+        return Result.error(Exception('FCM 토큰 전송 실패'));
       }
     } on Exception catch (e) {
+      return Result.error(e);
+    }
+  }
+
+  /// FCM 토큰 갱신 리스너
+  /// iOS에서 APNs 토큰 갱신 시 FCM 토큰도 변경될 수 있으므로 자동 재전송 필요
+  Future<Result<StreamSubscription<String>>> listenTokenRefresh({
+    required Future<void> Function(String token) onRefresh,
+  }) async {
+    if (kIsWeb) {
+      logger.d('웹 환경에서는 FCM 토큰 갱신 리스너를 등록하지 않습니다');
+      return Result.ok(const Stream<String>.empty().listen((_) {}));
+    }
+
+    try {
+      if (Firebase.apps.isEmpty) {
+        await Firebase.initializeApp();
+      }
+      final subscription = FirebaseMessaging.instance.onTokenRefresh.listen(
+        (newToken) async {
+          final redacted = newToken.length > 10
+              ? '${newToken.substring(0, 6)}...${newToken.substring(newToken.length - 4)}'
+              : '***';
+          logger.d('FCM 토큰 갱신 감지: $redacted');
+          try {
+            await onRefresh(newToken);
+          } catch (e) {
+            logger.e('FCM 토큰 갱신 콜백 오류 (token: $redacted): $e');
+          }
+        },
+        onError: (Object error) {
+          logger.e('FCM 토큰 갱신 스트림 오류: $error');
+        },
+      );
+      return Result.ok(subscription);
+    } on Exception catch (e) {
+      logger.e('FCM 토큰 갱신 리스너 등록 실패: $e');
       return Result.error(e);
     }
   }

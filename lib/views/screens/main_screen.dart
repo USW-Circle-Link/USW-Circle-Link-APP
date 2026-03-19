@@ -1,10 +1,11 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart' hide AppBar;
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/category_filter_button/category_filter_button_styles.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import '../../const/analytics_const.dart';
 import '../../models/category_model.dart';
 import '../../models/circle_list_model.dart';
@@ -47,10 +48,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   void initState() {
-    // 알림 클릭시
-    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
     super.initState();
-    _checkAndShowNoticeDialog();
+    // 알림 클릭시 (백그라운드 → 포그라운드)
+    if (!kIsWeb) {
+      FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+      _checkInitialMessage();
+    }
+  }
+
+  Future<void> _checkInitialMessage() async {
+    final initialMessage = await FirebaseMessaging.instance.getInitialMessage();
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
   }
 
   void _handleMessage(RemoteMessage message) {
@@ -62,44 +72,6 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     ref
         .read(firebaseCloudMessagingViewModelProvider.notifier)
         .addNotification(message.notification?.body ?? '');
-  }
-
-  Future<void> _checkAndShowNoticeDialog() async {
-    final prefs = await SharedPreferences.getInstance();
-    final dontShowAgain = prefs.getBool('notice_dont_show_again') ?? false;
-
-    if (!dontShowAgain && mounted) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        _showNoticeDialog();
-      });
-    }
-  }
-
-  void _showNoticeDialog() {
-    DialogManager.instance.showAlertDialog(
-      context: context,
-      title: '안내',
-      content:
-          '이전에 기존회원 가입을 하신 분들 중\n아이디/비밀번호 찾기 이후에도 로그인이 안 되시는 분들은\n[신규 회원가입] 후 자신이 속한 동아리에 지원해주세요.\n자세한 내용은 <공지사항>을 확인해 주세요.',
-      leftButtonText: '더 이상 보지 않기',
-      leftButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: const Color(0xffA8A8A8),
-        fontWeight: FontWeight.w700,
-        fontSize: 16,
-      ),
-      rightButtonText: '확인',
-      rightButtonTextStyle: TextFontWidget.fontRegularStyle(
-        color: const Color(0xff0085FF),
-        fontWeight: FontWeight.w800,
-        fontSize: 16,
-      ),
-      onLeftButtonPressed: () async {
-        final prefs = await SharedPreferences.getInstance();
-        await prefs.setBool('notice_dont_show_again', true);
-      },
-      onRightButtonPressed: () async {},
-      barrierDismissible: true,
-    );
   }
 
   @override
@@ -153,14 +125,19 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       }
     });
 
-    return Scaffold(
-      key: _scaffoldKey,
-      backgroundColor: const Color(0xffF0F2F5),
-      resizeToAvoidBottomInset: false,
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+
+    return FlutterWebFrame(
+      builder: (context) {
+        return Scaffold(
+          key: _scaffoldKey,
+          backgroundColor: theme.scaffoldBackgroundColor,
+          resizeToAvoidBottomInset: false,
       appBar: AppBar(
         leading: IconButton(
           onPressed: () => _scaffoldKey.currentState?.openDrawer(),
-          icon: const Icon(Icons.menu, color: Color(0xff717171), size: 24),
+          icon: Icon(Icons.menu, color: appColors.subTextColor, size: 24),
         ),
         title: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,8 +164,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 const NotificationPopoverContent(),
             child: IconButton(
               onPressed: () => _notificationController.toggle(),
-              icon: const Icon(MainIcons.ic_bell,
-                  size: 18, color: Color(0xFF717171)),
+              icon: Icon(MainIcons.ic_bell,
+                  size: 18, color: appColors.subTextColor),
             ),
           ),
         ],
@@ -200,7 +177,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         children: [
           const SizedBox(height: 1),
           Container(
-            color: Colors.white,
+            color: theme.brightness == Brightness.dark
+                ? theme.scaffoldBackgroundColor
+                : theme.cardColor,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: 24),
               child: Row(
@@ -274,7 +253,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         child: TextFontWidget.fontRegular(
                           '동아리가 없습니다',
                           fontSize: 14,
-                          color: Colors.black,
+                          color: theme.textTheme.bodyLarge?.color ?? theme.colorScheme.onSurface,
                           fontWeight: FontWeight.w400,
                         ),
                       );
@@ -287,7 +266,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                         '동아리 목록을 불러오지 못했어요.\n잠시 후 다시 시도해주세요.',
                     textAlign: TextAlign.center,
                     fontSize: 14,
-                    color: const Color(0xFFA1A1A1),
+                    color: theme.colorScheme.onSurfaceVariant,
                     fontWeight: FontWeight.w400,
                   ),
                 );
@@ -297,6 +276,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
         ],
       ),
+    );
+      },
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
     );
   }
 
@@ -341,17 +324,17 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         await ref.read(circleViewModelProvider.notifier).fetchOpenCircleList();
       }
     } else {
-      final selectedCategoryUUIDs = selectedCategories
-          .map((category) => category.clubCategoryUUID)
+      final selectedCategoryNames = selectedCategories
+          .map((category) => category.clubCategoryName)
           .toList();
       if (isAllSelected) {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchAllFilteredCircleList(selectedCategoryUUIDs);
+            .fetchAllFilteredCircleList(selectedCategoryNames);
       } else {
         await ref
             .read(circleViewModelProvider.notifier)
-            .fetchOpenFilteredCircleList(selectedCategoryUUIDs);
+            .fetchOpenFilteredCircleList(selectedCategoryNames);
       }
     }
   }

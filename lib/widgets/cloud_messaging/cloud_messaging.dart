@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:usw_circle_link/viewmodels/fcm_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
 
 class CloudMessaging extends ConsumerStatefulWidget {
@@ -22,6 +23,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     return Padding(
       padding: EdgeInsets.fromLTRB(16, 4, 0, 4),
       child: Column(
@@ -49,7 +51,7 @@ class _CloudMessagingState extends ConsumerState<CloudMessaging> {
                 ),
                 SizedBox(width: 8),
                 IconButton(
-                  icon: Icon(Icons.close, size: 16, color: Colors.grey),
+                  icon: Icon(Icons.close, size: 16, color: appColors.subTextColor),
                   onPressed: () {
                     ref
                         .read(firebaseCloudMessagingViewModelProvider.notifier)

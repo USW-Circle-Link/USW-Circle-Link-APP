@@ -26,8 +26,8 @@ class CircleInfoTileStyle {
   /// 동아리 이름 폰트 굵기
   final FontWeight nameFontWeight;
 
-  /// 동아리 이름 색상
-  final Color nameColor;
+  /// 동아리 이름 색상 (null이면 테마의 onSurface 사용)
+  final Color? nameColor;
 
   /// 회장 라벨 폰트 크기
   final double leaderLabelFontSize;
@@ -71,7 +71,7 @@ class CircleInfoTileStyle {
     this.imageContentSpacing = 16,
     this.nameFontSize = 18,
     this.nameFontWeight = FontWeight.w900,
-    this.nameColor = Colors.black,
+    this.nameColor,
     this.leaderLabelFontSize = 14,
     this.leaderLabelColor = const Color(0xFF767676),
     this.leaderNameFontWeight = FontWeight.w800,

@@ -7,6 +7,7 @@ import 'package:usw_circle_link/utils/error_util.dart';
 import 'package:usw_circle_link/utils/icons/sign_up_icons_icons.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
 import 'package:usw_circle_link/viewmodels/change_pw_view_model.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/rounded_text_field/rounded_text_field.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
@@ -41,6 +42,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final appColors = Theme.of(context).extension<AppColors>()!;
     final state = ref.watch(changePwViewModelProvider);
     ref.listen<ChangePwModelBase?>(changePwViewModelProvider,
             (ChangePwModelBase? previous, ChangePwModelBase? next) {
@@ -165,9 +167,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                 textAlign: TextAlign.left,
                 hintText: '현재 비밀번호',
                 isAnimatedHint: false,
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -183,7 +185,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                     currentPWVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
@@ -213,9 +215,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                 textAlign: TextAlign.left,
                 hintText: '새 비밀번호',
                 isAnimatedHint: false,
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 15.0,
                 ),
                 suffixIcon: IconButton(
@@ -231,7 +233,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                     newPWVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
@@ -260,9 +262,9 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                 textAlign: TextAlign.left,
                 hintText: '비밀번호 확인',
                 isAnimatedHint: false,
-                prefixIcon: const Icon(
+                prefixIcon: Icon(
                   SignUpIcons.ic_password,
-                  color: Color(0xFF989898),
+                  color: appColors.hintColor,
                   size: 18.0,
                 ),
                 suffixIcon: IconButton(
@@ -278,7 +280,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                     newPWConfirmVisible
                         ? SignUpIcons.ic_eye_open
                         : SignUpIcons.ic_eye_slash,
-                    color: const Color(0xFF989898),
+                    color: appColors.hintColor,
                     size: 18.0,
                   ),
                 ),
@@ -297,7 +299,7 @@ class _ChangePWScreenState extends ConsumerState<ChangePwScreen> {
                     !ErrorUtil.instance
                         .isValid(state.code, FieldType.password)
                     ? const Color(0xFFFF3F3F)
-                    : const Color(0xFF707070),
+                    : appColors.subTextColor,
                 fontWeight: FontWeight.w400,
               ),
               const SizedBox(

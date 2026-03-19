@@ -1,10 +1,13 @@
 // ignore_for_file: must_be_immutable
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
 import 'package:go_router/go_router.dart';
 import 'package:usw_circle_link/const/data.dart';
 import 'package:usw_circle_link/utils/dialog_manager.dart';
 import 'package:usw_circle_link/utils/logger/logger.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import 'package:usw_circle_link/views/screens/policy_screen.dart';
 import 'package:usw_circle_link/widgets/detail_app_bar/detail_app_bar.dart';
 import 'package:usw_circle_link/widgets/text_font_widget/text_font_widget.dart';
@@ -25,7 +28,12 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
   bool personalInformationCollectionAndUsageAgreementAgree = false;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final appColors = Theme.of(context).extension<AppColors>()!;
+    final theme = Theme.of(context);
+    return FlutterWebFrame(
+      maximumSize: const Size(475, 812),
+      enabled: kIsWeb,
+      builder: (context) => Scaffold(
       appBar: const DetailAppBar(),
       body: Padding(
         padding: const EdgeInsets.all(24.0),
@@ -36,17 +44,13 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
               '동구라미 이용약관에\n동의해주세요.',
               fontSize: 20.0,
               fontWeight: FontWeight.w500,
-              color: const Color(0xFF111111),
+              color: theme.colorScheme.onSurface,
             ),
             const SizedBox(height: 48.0),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
                   value: olderThan14YearsOld,
                   onChanged: (bool? value) {
@@ -75,14 +79,14 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                         "만 14세 이상입니다. (필수)",
                         fontSize: 14.0,
                         fontWeight: FontWeight.w400,
-                        color: const Color(0xFF111111),
+                        color: theme.colorScheme.onSurface,
                       ),
                       const SizedBox(height: 12.0),
                       TextFontWidget.fontRegular(
                         '동구라미는 수원대학교 학생을 위한 서비스이며,\n인증을 통해 만 14세 이상만 가입할 수 있습니다.',
                         fontSize: 12.0,
                         fontWeight: FontWeight.w300,
-                        color: const Color(0xFF888888),
+                        color: appColors.subTextColor,
                       ),
                     ],
                   ),
@@ -95,8 +99,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
             Row(
               children: [
                 Checkbox(
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
                   value: privacyPolicyAgree,
                   onChanged: (bool? value) async {
                     final agree = await DialogManager.instance
@@ -111,8 +113,6 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     vertical: VisualDensity.minimumDensity,
                   ),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                 ),
                 const SizedBox(width: 12.0),
                 InkWell(
@@ -128,7 +128,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     "서비스 이용약관을 확인했습니다. (필수)",
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF111111),
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -139,11 +139,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
               children: [
                 Checkbox(
                   value: personalInformationCollectionAndUsageAgreementAgree,
-                  shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(2.0))),
                   materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                  side: const BorderSide(width: 1.0),
-                  activeColor: accentColor,
                   visualDensity: const VisualDensity(
                     horizontal: VisualDensity.minimumDensity,
                     vertical: VisualDensity.minimumDensity,
@@ -177,7 +173,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     "개인 정보 수집에 동의합니다. (필수)",
                     fontSize: 14.0,
                     fontWeight: FontWeight.w400,
-                    color: const Color(0xFF111111),
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
               ],
@@ -202,7 +198,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
                     privacyPolicyAgree &&
                     personalInformationCollectionAndUsageAgreementAgree
                 ? accentColor
-                : const Color(0xFFB8B8B8),
+                : appColors.disabledText,
             foregroundColor: Colors.white,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
@@ -217,6 +213,7 @@ class _PolicyAgreeScreenState extends State<PolicyAgreeScreen> {
           ),
         ),
       ),
+    ),
     );
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:usw_circle_link/const/app_theme.dart';
 import '../../models/category_model.dart';
 import '../../../utils/icons/main_icons_icons.dart';
 import '../text_font_widget/text_font_widget.dart';
@@ -21,15 +22,33 @@ class CategoryFilterButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final appColors = theme.extension<AppColors>()!;
+    final isDark = theme.brightness == Brightness.dark;
+
+    // 다크모드: copyWith(height: 32) 등으로 defaultStyle이 아니어도 테마 색 강제 적용
+    final Color unselectedBg;
+    final Color unselectedFg;
+    final Color unselectedBorderColor;
+    if (isDark) {
+      unselectedBg = theme.dividerColor; // 어두운 회색 배경으로 버튼 영역 구분
+      unselectedFg = theme.colorScheme.onSurface; // 밝은 텍스트/아이콘
+      unselectedBorderColor = appColors.borderColor;
+    } else {
+      unselectedBg = theme.cardColor;
+      unselectedFg = appColors.secondaryText;
+      unselectedBorderColor = appColors.borderColor;
+    }
+
     return OutlinedButton(
       onPressed: onPressed,
       style: OutlinedButton.styleFrom(
         backgroundColor: _hasSelection
             ? style.selectedBackgroundColor
-            : style.unselectedBackgroundColor,
+            : unselectedBg,
         foregroundColor: _hasSelection
             ? style.selectedForegroundColor
-            : style.unselectedForegroundColor,
+            : unselectedFg,
         minimumSize: Size.zero,
         fixedSize: Size.fromHeight(style.height),
         padding: style.padding,
@@ -37,7 +56,7 @@ class CategoryFilterButton extends StatelessWidget {
         side: BorderSide(
           color: _hasSelection
               ? style.selectedBorderColor
-              : style.unselectedBorderColor,
+              : unselectedBorderColor,
         ),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(style.borderRadius)),
@@ -50,7 +69,7 @@ class CategoryFilterButton extends StatelessWidget {
             size: style.iconSize,
             color: _hasSelection
                 ? style.selectedForegroundColor
-                : style.unselectedBorderColor,
+                : unselectedFg,
           ),
           SizedBox(width: style.spacing),
           TextFontWidget.fontRegular(
@@ -58,7 +77,7 @@ class CategoryFilterButton extends StatelessWidget {
             fontWeight: style.fontWeight,
             color: _hasSelection
                 ? style.selectedForegroundColor
-                : style.unselectedBorderColor,
+                : unselectedFg,
           ),
         ],
       ),
